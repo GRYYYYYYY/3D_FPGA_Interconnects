@@ -1,0 +1,29 @@
+--- original/partition_tree.cpp
++++ candidate/partition_tree.cpp
+@@ -1,3 +1,5 @@
++#include <cstdlib>
++#include <cstring>
+ #include "partition_tree.h"
+ #include <cmath>
+ #include <memory>
+@@ -195,11 +197,20 @@
+ }
+ 
+ void PartitionTree::update_nets(const std::vector<ParentNetId>& nets) {
++    // Experimental opt-in: preserve correct ownership while avoiding no-op set mutations.
++    static const bool skip_same = []() {
++        const char* value = std::getenv("VPR_CPU_SKIP_SAME_PARTITION");
++        return value && std::strcmp(value, "1") == 0;
++    }();
+     for (auto net_id : nets) {
+         PartitionTreeNode* old_ptree_node = _net_to_ptree_node[net_id];
+         PartitionTreeNode* new_ptree_node = old_ptree_node;
+         while (!net_in_ptree_node(net_id, new_ptree_node))
+             new_ptree_node = new_ptree_node->parent;
++        if (skip_same && old_ptree_node == new_ptree_node) {
++            VTR_ASSERT(net_in_ptree_node(net_id, new_ptree_node));
++            continue;
++        }
+         old_ptree_node->nets.erase(net_id);
+         new_ptree_node->nets.insert(net_id);
+         _net_to_ptree_node[net_id] = new_ptree_node;

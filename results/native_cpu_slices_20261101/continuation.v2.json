@@ -1,0 +1,32 @@
+{
+  "status": "superseded_for_diagnosis",
+  "started_utc": "2026-11-01T15:50:04.664364+00:00",
+  "steps": [
+    {
+      "name": "freeze_memory_config",
+      "command": [
+        "/usr/bin/python3",
+        "scripts/report_native_cpu_slices.py",
+        "--partial",
+        "--memory-config"
+      ],
+      "returncode": 0,
+      "finished_utc": "2026-11-01T16:11:06.519971+00:00"
+    },
+    {
+      "name": "freeze_storage_gate",
+      "command": [
+        "/usr/bin/python3",
+        "scripts/plan_native_cpu_slices.py",
+        "storage_gate",
+        "--binary",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_compact"
+      ],
+      "returncode": 0,
+      "finished_utc": "2026-11-01T16:11:06.766349+00:00"
+    }
+  ],
+  "current": "run_storage_gate",
+  "observed_utc": "2026-11-01T16:11:06.767129+00:00",
+  "reason": "Bounded diagnostic flood work is unchanged but per-flood duration increased; isolate contiguous scratch cache-line sharing before formal measurements. Only stage-advancement controller stopped; storage supervisor and solvers continue."
+}

@@ -1,0 +1,52 @@
+{
+  "scope": "Execute agreed four-group native joint comparison; no algorithm changes in this confirmation round",
+  "variants": [
+    "original_parallel",
+    "native_parallel",
+    "guard",
+    "batch"
+  ],
+  "gemm_repetitions": 3,
+  "elliptic_initial_repetitions": 1,
+  "elliptic_additional_repetitions_if_all_initial_quality_pass": 2,
+  "cpu_budget": {
+    "physical_cores": 4,
+    "logical_cpus_per_core": 1,
+    "gpu_service_in_same_affinity": true,
+    "audit_seconds": 5,
+    "exclusive_cores_claimed": false
+  },
+  "configuration": {
+    "pop_budget": 2048,
+    "batch_size": 4,
+    "batch_wait_us": 50,
+    "cooperative_blocks": 64,
+    "max_router_iterations": 200,
+    "per_vpr_timeout_seconds": 900,
+    "cuda_events": false,
+    "capture": false,
+    "native_replays": false
+  },
+  "fairness": {
+    "same_worker": true,
+    "same_input_paths": true,
+    "sequential_input_prewarm_before_each_measured_workflow": true,
+    "new_vpr_process_each_measurement": true,
+    "rotated_order_each_repeat": true,
+    "no_free_cached_lookahead": true,
+    "gpu_initialization_included": true
+  },
+  "acceptance": {
+    "reference": "original_parallel in same case and repetition",
+    "legal_zero_overuse_required": true,
+    "independent_full_sta_required": true,
+    "cpd_max_degradation_percent": 5,
+    "wirelength_max_degradation_percent": 5,
+    "native_process_and_workflow_reported_separately": true,
+    "gpu_incremental_gain_required": false,
+    "all_repeats_retained": true,
+    "no_positive_claim_from_one_run": true
+  },
+  "frozen_cpu_binary_sha256": "fb0379ea7f4bced9ec5312c395930e6ceeca12aeb5a5ac3804cccdcef0bd1b3e",
+  "future_steps": "Interpret A/B/C/D costs and elliptic overuse before choosing any algorithm change."
+}

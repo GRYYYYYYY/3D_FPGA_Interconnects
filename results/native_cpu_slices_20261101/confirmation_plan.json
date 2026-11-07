@@ -1,0 +1,902 @@
+{
+  "output": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/confirmation",
+  "runtime": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/vpr_runtime_20261025/runtime.json",
+  "binaries": {
+    "original": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+      "sha256": "37cc22c8b1b5d9d378e25379e85afcb7e56b5f1f6f72e3e9186e5e107ed5ce62"
+    },
+    "cpu": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_aligned",
+      "sha256": "a02448d32451882e5d765f10aeed75d528932aff2a634cf689fcdd1361dd74ab"
+    },
+    "frozen": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/bin/vpr_cpu",
+      "sha256": "5dee5a46baa87f602640d861c778657a20065b0ddf5cd7814f4716dfc7619c62"
+    }
+  },
+  "variants": {
+    "legacy": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_LOOKAHEAD_MODE": "legacy"
+      }
+    },
+    "refactored": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_LOOKAHEAD_MODE": "refactored"
+      }
+    },
+    "slice": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_LOOKAHEAD_MODE": "slice"
+      }
+    },
+    "compact": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_LOOKAHEAD_MODE": "compact"
+      }
+    },
+    "bounded": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_LOOKAHEAD_MODE": "bounded",
+        "VPR_CPU_LOOKAHEAD_UNALIGNED": "0",
+        "VPR_CPU_LOOKAHEAD_TEMP_BYTES": "2147483648",
+        "VPR_CPU_LOOKAHEAD_WORKSPACE_BYTES": "89128960"
+      }
+    },
+    "pipeline": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "1"
+      }
+    },
+    "frozen": {
+      "binary": "frozen",
+      "parallel": true
+    }
+  },
+  "lanes": {
+    "gemm_w4_r0": {
+      "cpu_pool": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "cases": [
+        {
+          "id": "gemm",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/scaling_20261025/gemm/vpr_case.json",
+          "phases": [
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "gemm_w8_r0": {
+      "cpu_pool": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "cases": [
+        {
+          "id": "gemm",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/scaling_20261025/gemm/vpr_case.json",
+          "phases": [
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "gemm_w4_r1": {
+      "cpu_pool": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "cases": [
+        {
+          "id": "gemm",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/scaling_20261025/gemm/vpr_case.json",
+          "phases": [
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 1,
+              "intended_execution_order": [
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice",
+                "frozen"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 1,
+              "intended_execution_order": [
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice",
+                "frozen"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "gemm_w8_r1": {
+      "cpu_pool": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "cases": [
+        {
+          "id": "gemm",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/scaling_20261025/gemm/vpr_case.json",
+          "phases": [
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 1,
+              "intended_execution_order": [
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice",
+                "frozen"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 1,
+              "intended_execution_order": [
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice",
+                "frozen"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "gemm_w4_r2": {
+      "cpu_pool": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "cases": [
+        {
+          "id": "gemm",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/scaling_20261025/gemm/vpr_case.json",
+          "phases": [
+            {
+              "name": "confirmation",
+              "variants": [
+                "bounded",
+                "compact",
+                "slice",
+                "pipeline",
+                "frozen"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 2,
+              "intended_execution_order": [
+                "slice",
+                "pipeline",
+                "frozen",
+                "bounded",
+                "compact"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "bounded",
+                "compact",
+                "slice",
+                "pipeline",
+                "frozen"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 2,
+              "intended_execution_order": [
+                "slice",
+                "pipeline",
+                "frozen",
+                "bounded",
+                "compact"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "gemm_w8_r2": {
+      "cpu_pool": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "cases": [
+        {
+          "id": "gemm",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/scaling_20261025/gemm/vpr_case.json",
+          "phases": [
+            {
+              "name": "confirmation",
+              "variants": [
+                "bounded",
+                "compact",
+                "slice",
+                "pipeline",
+                "frozen"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 2,
+              "intended_execution_order": [
+                "slice",
+                "pipeline",
+                "frozen",
+                "bounded",
+                "compact"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "bounded",
+                "compact",
+                "slice",
+                "pipeline",
+                "frozen"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 2,
+              "intended_execution_order": [
+                "slice",
+                "pipeline",
+                "frozen",
+                "bounded",
+                "compact"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "elliptic_w4": {
+      "cpu_pool": [
+        28,
+        29,
+        30,
+        31
+      ],
+      "cases": [
+        {
+          "id": "elliptic",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/scaling_elliptic_20261025/elliptic/vpr_case.json",
+          "phases": [
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 1,
+              "intended_execution_order": [
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice",
+                "frozen"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 1,
+              "intended_execution_order": [
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice",
+                "frozen"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "bounded",
+                "compact",
+                "slice",
+                "pipeline",
+                "frozen"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 2,
+              "intended_execution_order": [
+                "slice",
+                "pipeline",
+                "frozen",
+                "bounded",
+                "compact"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "bounded",
+                "compact",
+                "slice",
+                "pipeline",
+                "frozen"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 2,
+              "intended_execution_order": [
+                "slice",
+                "pipeline",
+                "frozen",
+                "bounded",
+                "compact"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "elliptic_w8": {
+      "cpu_pool": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "cases": [
+        {
+          "id": "elliptic",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/scaling_elliptic_20261025/elliptic/vpr_case.json",
+          "phases": [
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "frozen",
+                "slice",
+                "compact",
+                "pipeline",
+                "bounded"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 1,
+              "intended_execution_order": [
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice",
+                "frozen"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "frozen",
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 1,
+              "intended_execution_order": [
+                "bounded",
+                "pipeline",
+                "compact",
+                "slice",
+                "frozen"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "bounded",
+                "compact",
+                "slice",
+                "pipeline",
+                "frozen"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 2,
+              "intended_execution_order": [
+                "slice",
+                "pipeline",
+                "frozen",
+                "bounded",
+                "compact"
+              ]
+            },
+            {
+              "name": "confirmation",
+              "variants": [
+                "bounded",
+                "compact",
+                "slice",
+                "pipeline",
+                "frozen"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 2,
+              "intended_execution_order": [
+                "slice",
+                "pipeline",
+                "frozen",
+                "bounded",
+                "compact"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "timeout_seconds": 900,
+  "max_active_cpu_cores": 48,
+  "diagnostics": false,
+  "qualification_env": {
+    "VPR_CPU_LOOKAHEAD_MODE": "bounded",
+    "VPR_CPU_LOOKAHEAD_TEMP_BYTES": "2147483648",
+    "VPR_CPU_LOOKAHEAD_WORKSPACE_BYTES": "89128960",
+    "VPR_CPU_LOOKAHEAD_UNALIGNED": "0"
+  },
+  "runner_bindings": {
+    "run_native_cpu_slices.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_cpu_slices.py",
+      "sha256": "eee41289c748476a78ac4b5c7ecda5ac7826c3a245b5a0f35a2100852baf77af"
+    },
+    "supervise_native_cpu_slices.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/supervise_native_cpu_slices.py",
+      "sha256": "20bd9c9257bbf30fb6f6402e0ddf175924a15c78ce2888b598aa8a1b27816549"
+    },
+    "run_native_cpu_study.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_cpu_study.py",
+      "sha256": "ab99c84b26ad54e230e781315f0a8d766bd9e208d87cfd117a4a13e2b5ea6b16"
+    },
+    "native_cpu_budget.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/native_cpu_budget.py",
+      "sha256": "3c22823494b94ed8be9d9e693a17a24903f24e9807c3d44d65aa662ad1da4235"
+    },
+    "scaling_common.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/scaling_common.py",
+      "sha256": "9aa5e1b9ec07a3b4bd834406f6d678832fa1b3a14a0a50ce685db366eef27bf4"
+    },
+    "report_native_joint.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/report_native_joint.py",
+      "sha256": "d1146098b613eec5092b5fb7ea7cb3420f595535db54a918308ed4f742896aa8"
+    },
+    "run_native_hybrid.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_hybrid.py",
+      "sha256": "8e3bc2cf1a13bdeb5f47e5b11dc3c6afd1c69b3c233fe9d3f26efac383588f9e"
+    },
+    "prepare.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/prepare.py",
+      "sha256": "a54ac5211aecc5d68bfc13ad92082e55139666707be9855af79cec3529343113"
+    }
+  },
+  "concurrency_scope": "Disjoint physical CPU sets across lanes; same set within each comparison. Shared host and memory; no exclusivity claim.",
+  "measurement_scope": "Full VPR process including identical map serialization, native FULL/STA; fixed pack/place, identical input pre-read. Separate independent FULL/STA readback in workflow.",
+  "quality_gate": {
+    "critical_path_max_regression_percent": 5,
+    "wirelength_max_regression_percent": 5,
+    "overused_nodes": 0
+  },
+  "repeats_scope": "Runtime repeats at one fixed placement seed; retain all failures. Diagnostic runs excluded from speedup claims.",
+  "memory_config": {
+    "environment": {
+      "VPR_CPU_LOOKAHEAD_TEMP_BYTES": "2147483648",
+      "VPR_CPU_LOOKAHEAD_WORKSPACE_BYTES": "89128960"
+    },
+    "estimates": [
+      {
+        "case": "gemm",
+        "observed_peak_queue": 791790,
+        "rr_nodes": 9595752,
+        "estimated_workspace_bytes": 89128960
+      },
+      {
+        "case": "elliptic",
+        "observed_peak_queue": 143648,
+        "rr_nodes": 264994,
+        "estimated_workspace_bytes": 9437184
+      }
+    ],
+    "selection": "Fixed 2 GiB temporary target, one conservative maximum workspace estimate for both circuits and all thread counts; no speed-based tuning.",
+    "bound_scope": "Map count and workspace object count are bounded. Heap capacity, allocator retention, graph and total RSS are not hard-capped by this estimate.",
+    "evidence": {
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/diagnostic/gemm/gemm_diagnostic_w4_r0_refactored_rebuild/cpu_trace.jsonl": "2cd6150301527e2f55802efe8efed52c4ffbf00b8687bc862f87d7a483221701",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/diagnostic/elliptic/elliptic_diagnostic_w4_r0_refactored_rebuild/cpu_trace.jsonl": "59b72a6f18ad509354d34939eed14fda9e8d3fa00d5e9b4904433a59dbdc4b8e"
+    }
+  },
+  "promotion_rule": {
+    "primary": "bounded versus frozen, GEMM rebuild at both 4 and 8 cores",
+    "require_all_three_process_ratios_above": 1.0,
+    "require_median_process_ratio_above": 1.02,
+    "elliptic_and_cache_median_process_max_regression_percent": 2,
+    "all_routes_maps_quality_must_pass": true,
+    "note": "Conservative engineering selection; runtime repeats on a shared host are not a publication confidence interval."
+  },
+  "additional_control_rationale": "D0 did not reproduce the historical refactoring penalty. Include same-binary ordered pipeline to distinguish existing cross-group parallelism from scalar storage and bounded slice submission; declared before formal measurements.",
+  "planned_samples": 120
+}

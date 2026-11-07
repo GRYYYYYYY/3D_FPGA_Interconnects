@@ -1,0 +1,183 @@
+{
+  "status": "gpu_passed_pending_vpr",
+  "machine": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39",
+  "stages": [
+    {
+      "name": "device",
+      "command": [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,memory.total",
+        "--format=csv"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.11539194919168949
+    },
+    {
+      "name": "toolkit",
+      "command": [
+        "nvcc",
+        "--version"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.004503993317484856
+    },
+    {
+      "name": "configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects",
+        "-B",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957/build",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DH3D_CUDA=ON",
+        "-DCMAKE_CUDA_ARCHITECTURES=90"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 2.668921034783125
+    },
+    {
+      "name": "build",
+      "command": [
+        "cmake",
+        "--build",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957/build",
+        "-j",
+        "4"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 3.269587680697441
+    },
+    {
+      "name": "oracle",
+      "command": [
+        "ctest",
+        "--test-dir",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957/build",
+        "--output-on-failure",
+        "--timeout",
+        "180"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 1.8167057558894157
+    },
+    {
+      "name": "adapters",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.16400961950421333
+    },
+    {
+      "name": "cuda_demo",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957/build/h3d_route",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/examples/two_tier.rrg",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/examples/two_tier.nets",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957/demo.json",
+        "--backend",
+        "cuda",
+        "--threads",
+        "1",
+        "--batch",
+        "2"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.5644831191748381
+    },
+    {
+      "name": "demo_audit",
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/audit.py",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/examples/two_tier.rrg",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/examples/two_tier.nets",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957/demo.json",
+        "--output",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957/demo_audit.json"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.06394944153726101
+    },
+    {
+      "name": "benchmark",
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/benchmark.py",
+        "--case",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced",
+        "--output",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957/matrix",
+        "--binary",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957/build/h3d_route",
+        "--variants",
+        "batch_serial",
+        "parallel",
+        "cuda_dense",
+        "cuda",
+        "--repeats",
+        "3",
+        "--timeout",
+        "600"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 448.328691130504
+    }
+  ],
+  "gpu_execution_passed": true,
+  "vpr_full_check_passed": null,
+  "vpr_mode": "deferred",
+  "case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced",
+  "performance_scope": "Paired prototype CPU/CUDA process times; no speedup claim versus native VPR",
+  "source_sha256": {
+    "CMakeLists.txt": "961d81d349168f023a4136e269109231481857b7339214e42834a38c48b8cc43",
+    "hardware/candidate_cost.cpp": "e887fbe93729cc21f19e0113fac1c8c2bf22967b6f16456cf1d63d9a47bc3b14",
+    "hardware/cost.hpp": "a4ba1797c7f2bf36f7e4d4310158547a862ac941d3ec70680e56d25aa59931b8",
+    "hardware/run_hls.tcl": "32ae12cbe9ef3f6caaf24db66518e46e89b8072db48ba6b1e36a0534a705f405",
+    "include/router.hpp": "fa943e031c44f2aaaefd15e4d18df2a60fe2106a5aa100500d65ee29e59df83a",
+    "scripts/audit.py": "4d3ade64eb8782ff70101e264efda6b3e1850d4d1e9f436d968e777ec0880ab5",
+    "scripts/benchmark.py": "42bf1f0952b834f845f8393f777764e1e9637769c8751a359796917b448122a7",
+    "scripts/collect_hardware.py": "b5e13846cc6d059fd7d69eeead03ebaa33fe062411d5825c69dd2a5ae5de06af",
+    "scripts/complete_gpu_validation.py": "547adba739e99d3a23bccd179ea546a6b0217498e3d1cabbaa3fa948f26cb442",
+    "scripts/prepare.py": "a50ecae1a7bb143ac7823360282348d237ef95b720ba608773652ed403496ac7",
+    "scripts/report.py": "a668644a9653b4d06fc2b2f4a86705ca2263493aea0c667eacc6bb8ea55a1f48",
+    "scripts/run_gpu_validation.py": "eb1cfee02769da44e3724ac436e2012a57da368c46b3ab8ee39952f9024dc0a3",
+    "scripts/run_hls.py": "06ef69ae95f64e278054a4940c9c2fb39fe311f314fdecb4bae188ab93b7ae4d",
+    "scripts/vpr_validate.py": "5ecfcd63728f1c5128ceeb1fdf2017f69fd090bd54632a871112c3441e4f02c5",
+    "src/main.cpp": "10363d4d6109ba9b3b246a62bf105ba9ae3de262f19f527338758e693e2a3194",
+    "src/router.cpp": "49d272a06353eac650d6f9d9d7ec50dd7253d60a7e00b8bdc72cb703582b98d1",
+    "src/search_cuda.cu": "057f2eedcbf80c56f90e67a95142c2856b947e9542480460f824c34674b4e1b5",
+    "src/search_cuda_dense.cu": "8a85a3748a18afbebdab40852842d7e26ea78061db14c37d64ae5aec76cf2176",
+    "tests/test_adapters.py": "d69e0ac6e4a119326bb1cad812c69e88f11372b569e4d0806c29688a0d6b9b3a",
+    "tests/test_cost.cpp": "ca0cb676c05e39c6d6c32c2f2e0aee5f756516dbb2487a0b034222648b87015f",
+    "tests/test_cuda.cpp": "cf3ede8a741017ed2ee2105e749cc3e6c9ae92b99888c66a8e784592fbf72608",
+    "tests/test_router.cpp": "28ebb62e83010a8b9f2176e1208b2baa5c8c170ba306c2b475eb7de89e77881f"
+  },
+  "matrix_sha256": "40e3593aa1012e377f198bcccad51542ee5b47b1f00fa88a988265ac47f41ec6",
+  "vpr_completion_command": [
+    "/usr/bin/python3",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/complete_gpu_validation.py",
+    "--run",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957",
+    "--output",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-frontier-20261025-065957/host_vpr"
+  ]
+}

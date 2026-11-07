@@ -1,0 +1,30 @@
+{
+  "started": "2026-10-29T20:15:40.799814+00:00",
+  "status": "diagnostic_phase_complete",
+  "scope": "Native takeover instrumentation, true partial-frontier capture/replay, batch readiness diagnosis; elliptic/GEMM validation before policy changes",
+  "default_policy": "CPU; no claimed GPU gain",
+  "steps": {
+    "timing": "implemented",
+    "takeover_capture": "H3DTAK2, 576 validated captures",
+    "batch_diagnosis": "implemented",
+    "cpu_validation": "FULL/STA and exact CPU routes; 1728 repeated native continuations",
+    "gpu_validation": "2304 capture paths, 345 legacy oracle paths, 16 local smoke paths validated; all five new jobs terminal",
+    "decision": "CPU default retained; kernel and protected task publication are next priorities"
+  },
+  "constraints": [
+    "original VPR baseline and 5% CPD/wire limits",
+    "no ownership relaxation",
+    "diagnostic timings excluded from speedup evidence",
+    "preserve all previous runs"
+  ],
+  "failures": [
+    "Invalid legacy capture path rejected before submission",
+    "GPU job 202000 failed at startup because global_user path absent",
+    "First staging attempt exceeded project quota; generated copies removed; compressed staging succeeded",
+    "Worker could not see global_user path; Python never started the experiment.",
+    "All six route diagnostics completed; strict v1 offline replay then rejected missing native tree root. Elliptic batch also failed to converge with five overused nodes at iteration 200.",
+    "Preflight rejected regenerated Python bytecode cache checksum; no routing ran.",
+    "Sparse elliptic pair route succeeded; strict v1 offline replay rejected missing native tree root."
+  ],
+  "finished": "2026-10-29T21:34:45.364213+00:00"
+}

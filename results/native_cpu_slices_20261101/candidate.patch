@@ -1,0 +1,942 @@
+--- a/vpr/src/main.cpp
++++ b/vpr/src/main.cpp
+@@ -10,6 +10,7 @@
+  * 3.  globals.h - Defines the global variables used by VPR.
+  */
+ 
++#include "native_cpu_trace.h"
+ #include <cstdio>
+ #include <cstring>
+ #include <ctime>
+@@ -42,6 +43,7 @@
+  * 4.  Clean up
+  */
+ int main(int argc, const char** argv) {
++    native_cpu_trace::Scope main_scope("main_total");
+     vtr::ScopedFinishTimer t("The entire flow of VPR");
+ 
+     t_options Options = t_options();
+@@ -52,7 +54,7 @@
+         vpr_install_signal_handler();
+ 
+         /* Read options, architecture, and circuit netlist */
+-        vpr_init(argc, argv, &Options, &vpr_setup, &Arch);
++        native_cpu_trace::measure("vpr_init", [&] { vpr_init(argc, argv, &Options, &vpr_setup, &Arch); });
+         if (Options.show_version) {
+             vpr_free_all(Arch, vpr_setup);
+             return SUCCESS_EXIT_CODE;
+@@ -64,7 +66,7 @@
+             return SUCCESS_EXIT_CODE;
+         }
+ 
+-        bool flow_succeeded = vpr_flow(vpr_setup, Arch);
++        bool flow_succeeded = native_cpu_trace::measure("vpr_flow", [&] { return vpr_flow(vpr_setup, Arch); });
+         if (!flow_succeeded) {
+             VTR_LOG("VPR failed to implement circuit\n");
+             vpr_free_all(Arch, vpr_setup);
+--- a/vpr/src/base/vpr_api.cpp
++++ b/vpr/src/base/vpr_api.cpp
+@@ -1,3 +1,4 @@
++#include "native_cpu_trace.h"
+ /**
+  * @file
+  * @author Jason Luu
+@@ -447,7 +448,7 @@
+ #endif
+ 
+     { //Pack
+-        bool pack_success = vpr_pack_flow(vpr_setup, arch);
++        bool pack_success = native_cpu_trace::measure("vpr_pack_flow", [&] { return vpr_pack_flow(vpr_setup, arch); });
+ 
+         if (!pack_success) {
+             return false; //Unimplementable
+@@ -550,10 +551,10 @@
+     }
+     RouteStatus route_status;
+     { //Route
+-        route_status = vpr_route_flow(router_net_list, vpr_setup, arch, is_flat);
++        route_status = native_cpu_trace::measure("route_flow", [&] { return vpr_route_flow(router_net_list, vpr_setup, arch, is_flat); });
+     }
+     { //Analysis
+-        vpr_analysis_flow(router_net_list, vpr_setup, arch, route_status, is_flat);
++        native_cpu_trace::measure("analysis_flow", [&] { return vpr_analysis_flow(router_net_list, vpr_setup, arch, route_status, is_flat); });
+     }
+ 
+     //close the graphics
+@@ -1418,11 +1419,12 @@
+ 
+ void vpr_free_all(t_arch& Arch,
+                   t_vpr_setup& vpr_setup) {
+-    free_rr_graph();
++    native_cpu_trace::Scope scope("vpr_free_all");
++    native_cpu_trace::measure("free_rr_graph", [&] { free_rr_graph(); });
+     if (vpr_setup.RouterOpts.doRouting != e_stage_action::SKIP) {
+-        free_route_structs();
+-    }
+-    vpr_free_vpr_data_structures(Arch, vpr_setup);
++        native_cpu_trace::measure("free_route_structs", [&] { free_route_structs(); });
++    }
++    native_cpu_trace::measure("free_other_structures", [&] { vpr_free_vpr_data_structures(Arch, vpr_setup); });
+ }
+ 
+ /****************************************************************************************************
+@@ -1544,8 +1546,8 @@
+         }
+ 
+         std::string post_routing_packing_output_file_name = vpr_setup.PackerOpts.output_file + ".post_routing";
+-        write_packing_results_to_xml(Arch.architecture_id,
+-                                     post_routing_packing_output_file_name.c_str());
++        native_cpu_trace::measure("post_routing_xml", [&] { return write_packing_results_to_xml(Arch.architecture_id,
++                                     post_routing_packing_output_file_name.c_str()); });
+     } else {
+         VTR_LOG_WARN("Synchronization between packing and routing results was not applied due to illegal circuit implementation\n");
+     }
+--- a/vpr/src/util/native_cpu_trace.h
++++ b/vpr/src/util/native_cpu_trace.h
+@@ -0,0 +1,55 @@
++#pragma once
++
++#include <chrono>
++#include <cstdlib>
++#include <fstream>
++#include <mutex>
++#include <sstream>
++#include <string>
++#include <sys/resource.h>
++#include <unistd.h>
++
++/** @brief Optional whole-phase diagnostics, disabled in formal measurements. */
++namespace native_cpu_trace {
++inline const char* path() {
++    static const char* value = std::getenv("VPR_CPU_TRACE");
++    return value;
++}
++inline uint64_t now() {
++    return std::chrono::duration_cast<std::chrono::nanoseconds>(
++        std::chrono::steady_clock::now().time_since_epoch()).count();
++}
++inline uint64_t rss_kib() {
++    std::ifstream input("/proc/self/statm");
++    uint64_t size = 0, resident = 0;
++    input >> size >> resident;
++    return resident * static_cast<uint64_t>(sysconf(_SC_PAGESIZE)) / 1024;
++}
++/** @brief Append an event whose caller supplies only controlled JSON fields. */
++inline void event(const char* name, uint64_t start, const std::string& fields = "") {
++    if (!path()) return;
++    const uint64_t end = now();
++    const uint64_t rss = rss_kib();
++    static std::mutex mutex;
++    std::lock_guard<std::mutex> lock(mutex);
++    std::ofstream output(path(), std::ios::app);
++    output << "{\"event\":\"" << name << "\",\"start_ns\":" << start
++           << ",\"end_ns\":" << end << ",\"duration_ns\":" << end - start
++           << ",\"rss_kib\":" << rss << fields << "}\n";
++}
++/** @brief Record a lexical phase, including exception exits. */
++class Scope {
++  public:
++    explicit Scope(const char* name) : name_(name), start_(path() ? now() : 0) {}
++    ~Scope() { if (path()) event(name_, start_); }
++  private:
++    const char* name_; ///< Stable event name.
++    uint64_t start_; ///< Monotonic timestamp; zero when disabled.
++};
++/** @brief Time one call without changing its return value or exception. */
++template<typename Function>
++decltype(auto) measure(const char* name, Function&& function) {
++    Scope scope(name);
++    return function();
++}
++} // namespace native_cpu_trace
+--- a/vpr/src/route/router_lookahead/router_lookahead.cpp
++++ b/vpr/src/route/router_lookahead/router_lookahead.cpp
+@@ -1,3 +1,4 @@
++#include "native_cpu_trace.h"
+ #include "router_lookahead.h"
+ 
+ #include "connection_router_interface.h"
+@@ -70,7 +71,7 @@
+     }
+ 
+     if (!write_lookahead.empty()) {
+-        router_lookahead->write(write_lookahead);
++        native_cpu_trace::measure("serialize_lookahead", [&] { router_lookahead->write(write_lookahead); });
+     }
+ 
+     return router_lookahead;
+--- a/vpr/src/route/router_lookahead/router_lookahead_map.cpp
++++ b/vpr/src/route/router_lookahead/router_lookahead_map.cpp
+@@ -44,6 +44,7 @@
+ #include "vtr_ndmatrix.h"
+ #include "vtr_time.h"
+ #include "router_lookahead_map.h"
++#include "native_cpu_trace.h"
+ #include "router_lookahead_map_utils.h"
+ #include "rr_graph.h"
+ 
+@@ -153,7 +154,16 @@
+                                     util::t_routing_cost_map& routing_cost_map);
+ 
+ /* fills in missing lookahead map entries by copying the cost of the closest valid entry */
+-static void fill_in_missing_lookahead_entries(int segment_index, e_rr_type chan_type);
++static void fill_in_missing_lookahead_entries(int segment_index, e_rr_type chan_type, int only_from_layer = -1);
++
++/** @brief Copy the complete raw scalar map, including missing entries. */
++static void set_compact_lookahead_costs(const util::WireSampleGroup& group, const util::CompactCostMap& costs) {
++    const int channel = util::chan_type_to_index(group.channel);
++    for (size_t l = 0; l < costs.dim_size(0); ++l)
++        for (size_t x = 0; x < costs.dim_size(1); ++x)
++            for (size_t y = 0; y < costs.dim_size(2); ++y)
++                f_wire_cost_map[group.from_layer][l][channel][group.segment->seg_index][x][y] = costs[l][x][y].representative();
++}
+ 
+ /* returns a cost entry in the f_wire_cost_map that is near the specified coordinates (and preferably towards (0,0)) */
+ static util::Cost_Entry get_nearby_cost_entry(int from_layer_num, int x, int y, int to_layer_num, int segment_index, int chan_index);
+@@ -619,6 +629,39 @@
+ 
+     const char* task_setting = std::getenv("VPR_HYBRID_LOOKAHEAD_TASKS");
+     const bool pipeline = task_setting && std::strcmp(task_setting, "1") == 0;
++    const char* mode = std::getenv("VPR_CPU_LOOKAHEAD_MODE");
++    const bool compact = mode && std::strcmp(mode, "compact") == 0;
++    const bool bounded = mode && std::strcmp(mode, "bounded") == 0;
++    const bool deferred_slices = compact || (mode && std::strcmp(mode, "slice") == 0);
++    std::vector<std::pair<int, e_rr_type>> active_types;
++    if (bounded) {
++        // Byte flags avoid vector<bool>'s shared-word updates by distinct groups.
++        std::vector<unsigned char> completed(groups.size(), 0);
++        util::consume_routing_cost_maps_bounded(longest_seg_length, groups,
++            [&](size_t i, const util::CompactCostMap& costs) {
++                const auto& group = groups[i];
++                native_cpu_trace::measure("write_group", [&] { set_compact_lookahead_costs(group, costs); });
++                native_cpu_trace::measure("interpolate_source_layer", [&] {
++                    fill_in_missing_lookahead_entries(group.segment->seg_index, group.channel, group.from_layer);
++                });
++                completed[i] = 1;
++            }, route_verbosity, device_model_warnings);
++        for (size_t i = 0; i < groups.size(); ++i) {
++            if (!completed[i]) continue;
++            const auto type = std::make_pair(groups[i].segment->seg_index, groups[i].channel);
++            if (std::find(active_types.begin(), active_types.end(), type) == active_types.end()) active_types.push_back(type);
++        }
++        // Disabled layers still receive the original default-filled slice for a
++        // type used on another layer. Entirely unused types stay untouched.
++        for (size_t i = 0; i < groups.size(); ++i) {
++            const auto& group = groups[i];
++            const auto type = std::make_pair(group.segment->seg_index, group.channel);
++            if (!completed[i] && std::find(active_types.begin(), active_types.end(), type) != active_types.end()) {
++                fill_in_missing_lookahead_entries(type.first, type.second, group.from_layer);
++            }
++        }
++        return;
++    }
+     std::vector<util::t_routing_cost_map> sampled;
+     if (pipeline) {
+         sampled = util::get_routing_cost_maps_pipeline(longest_seg_length, groups,
+@@ -627,17 +670,45 @@
+     for (size_t i = 0; i < groups.size(); ++i) {
+         const auto& group = groups[i];
+         util::t_routing_cost_map costs;
+-        if (pipeline) {
++        util::CompactCostMap compact_costs;
++        if (compact) {
++            compact_costs = util::get_routing_cost_map_compact(longest_seg_length, group, route_verbosity, device_model_warnings);
++        } else if (pipeline) {
+             costs = std::move(sampled[i]);
+         } else {
+-            costs = util::get_routing_cost_map(longest_seg_length, group.from_layer, group.channel,
++            const bool legacy = mode && std::strcmp(mode, "legacy") == 0;
++            costs = legacy ? util::get_routing_cost_map_legacy(longest_seg_length, group.from_layer, group.channel,
++                                               *group.segment, {}, true, route_verbosity, device_model_warnings)
++                           : util::get_routing_cost_map(longest_seg_length, group.from_layer, group.channel,
+                                                *group.segment, {}, true, route_verbosity, device_model_warnings);
+         }
+-        if (costs.empty()) continue;
+-        // Filling missing entries touches multiple layers. Keep this phase in
+-        // precisely the original order, after all independent floods complete.
+-        set_lookahead_map_costs(group.from_layer, group.segment->seg_index, group.channel, costs);
+-        fill_in_missing_lookahead_entries(group.segment->seg_index, group.channel);
++        if (compact ? compact_costs.empty() : costs.empty()) continue;
++        // Each raw group overwrites its complete source-layer slice. Interpolation
++        // reads only one (from_layer, to_layer, channel, segment) slice at a time.
++        native_cpu_trace::measure("write_group", [&] {
++            if (compact) set_compact_lookahead_costs(group, compact_costs);
++            else set_lookahead_map_costs(group.from_layer, group.segment->seg_index, group.channel, costs);
++        });
++        if (deferred_slices) {
++            const auto type = std::make_pair(group.segment->seg_index, group.channel);
++            if (std::find(active_types.begin(), active_types.end(), type) == active_types.end()) {
++                active_types.push_back(type);
++            }
++        } else {
++            native_cpu_trace::measure("interpolate_all_layers", [&] {
++                fill_in_missing_lookahead_entries(group.segment->seg_index, group.channel);
++            });
++        }
++        if (native_cpu_trace::path()) {
++            native_cpu_trace::measure("release_group", [&] { costs = {}; compact_costs = {}; });
++        }
++    }
++    // Preserve defaults on inactive source layers for every used type, and leave
++    // completely unused types untouched. Within-slice x/y scan order is unchanged.
++    for (const auto& [segment, channel] : active_types) {
++        native_cpu_trace::measure("interpolate_all_layers", [&] {
++            fill_in_missing_lookahead_entries(segment, channel);
++        });
+     }
+ }
+ 
+@@ -659,7 +730,7 @@
+     }
+ }
+ 
+-static void fill_in_missing_lookahead_entries(int segment_index, e_rr_type chan_type) {
++static void fill_in_missing_lookahead_entries(int segment_index, e_rr_type chan_type, int only_from_layer) {
+     const DeviceContext& device_ctx = g_vpr_ctx.device();
+ 
+     const int chan_index = util::chan_type_to_index(chan_type);
+@@ -669,7 +740,10 @@
+     const int grid_height = device_ctx.grid.height();
+ 
+     // Find missing cost entries and fill them in by copying a nearby cost entry
+-    for (int from_layer_num = 0; from_layer_num < num_layers; from_layer_num++) {
++    const int first_layer = only_from_layer < 0 ? 0 : only_from_layer;
++    const int last_layer = only_from_layer < 0 ? num_layers : only_from_layer + 1;
++    VTR_ASSERT(first_layer >= 0 && last_layer <= num_layers);
++    for (int from_layer_num = first_layer; from_layer_num < last_layer; from_layer_num++) {
+         for (int to_layer_num = 0; to_layer_num < num_layers; ++to_layer_num) {
+             for (int ix = 0; ix < grid_width; ix++) {
+                 for (int iy = 0; iy < grid_height; iy++) {
+--- a/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp
++++ b/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp
+@@ -1,3 +1,4 @@
++#include "native_cpu_trace.h"
+ #include "router_lookahead_map_utils.h"
+ 
+ /** @file This file contains utility functions that can be shared among different
+@@ -12,6 +13,7 @@
+ 
+ #include <fstream>
+ #include <memory>
++#include <atomic>
+ #include <chrono>
+ #include <cstdlib>
+ #include <cstring>
+@@ -824,11 +826,20 @@
+         }
+     }
+ 
++    if (native_cpu_trace::path()) {
++        std::ostringstream fields;
++        fields << ",\"layer\":" << from_layer_num << ",\"segment\":" << segment_inf.seg_index
++               << ",\"channel\":" << int(chan_type) << ",\"sources\":[";
++        for (size_t i = 0; i < sample_nodes.size(); ++i) { if (i) fields << ','; fields << size_t(sample_nodes[i]); }
++        fields << ']';
++        native_cpu_trace::event("sample_selection", native_cpu_trace::now(), fields.str());
++    }
+     return sample_nodes;
+ }
+ 
+ /** @brief A flood owns its labels and output; the RR graph is immutable. */
+-static void flood_wire_sample(RRNodeId sample_node, t_dijkstra_data& scratch, t_routing_cost_map& costs,
++template<typename CostMap>
++static void flood_wire_sample(RRNodeId sample_node, t_dijkstra_data& scratch, CostMap& costs,
+                               const std::unordered_map<int, std::unordered_set<int>>& sample_locs,
+                               bool sample_all_locs) {
+     const auto& device_ctx = g_vpr_ctx.device();
+@@ -877,7 +888,192 @@
+     };
+ 
+     run_dijkstra<false>(sample_node, scratch, full_device_bb, map_lookahead_add_sample_route_to_table);
+-
++    if (native_cpu_trace::path()) {
++        size_t valid = 0;
++        for (size_t l = 0; l < grid.get_num_layers(); ++l)
++            for (size_t x = 0; x < grid.width(); ++x)
++                for (size_t y = 0; y < grid.height(); ++y) {
++                    if constexpr (std::is_same_v<CostMap, CompactCostMap>) {
++                        valid += costs[l][x][y].representative().valid();
++                    } else {
++                        valid += costs[l][x][y].get_representative_cost_entry(SMALLEST).valid();
++                    }
++                }
++        native_cpu_trace::event("sample_result", native_cpu_trace::now(),
++            ",\"source\":" + std::to_string(size_t(sample_node))
++            + ",\"sample_x\":" + std::to_string(sample_x) + ",\"sample_y\":" + std::to_string(sample_y)
++            + ",\"valid_cells\":" + std::to_string(valid));
++    }
++}
++
++/** @brief Original-order scalar reduction; equal delay retains the first sample. */
++static void merge_compact(CompactCostMap& target, const CompactCostMap& source) {
++    for (size_t l = 0; l < target.dim_size(0); ++l)
++        for (size_t x = 0; x < target.dim_size(1); ++x)
++            for (size_t y = 0; y < target.dim_size(2); ++y)
++                target[l][x][y].merge_smallest(source[l][x][y]);
++}
++
++CompactCostMap get_routing_cost_map_compact(int longest_seg_length, const WireSampleGroup& group,
++                                          int route_verbosity, bool device_model_warnings) {
++    native_cpu_trace::Scope group_scope("compact_group");
++    const auto& device_ctx = g_vpr_ctx.device();
++    const auto& grid = device_ctx.grid;
++    if (!device_ctx.inter_cluster_prog_routing_resources[group.from_layer]) return {};
++    auto nodes = select_wire_samples(longest_seg_length, group.from_layer, group.channel, *group.segment);
++    CompactCostMap result({grid.get_num_layers(), grid.width(), grid.height()});
++    if (nodes.empty()) {
++        VTR_LOGV_WARN(route_verbosity > 1 || device_model_warnings,
++                     "Unable to find any sample location for segment %s type '%s' (length %d)\n",
++                     rr_node_typename[group.channel], group.segment->name.c_str(), group.segment->length);
++        return result;
++    }
++#ifdef VPR_USE_TBB
++    const char* parallel_setting = std::getenv("VPR_HYBRID_LOOKAHEAD_PARALLEL");
++    if (parallel_setting && std::strcmp(parallel_setting, "1") == 0 && nodes.size() > 1) {
++        std::vector<CompactCostMap> samples(nodes.size());
++        tbb::enumerable_thread_specific<t_dijkstra_data> scratch;
++        tbb::parallel_for(size_t(0), nodes.size(), [&](size_t i) {
++            samples[i] = native_cpu_trace::measure("allocate_sample", [&] {
++                return CompactCostMap({grid.get_num_layers(), grid.width(), grid.height()});
++            });
++            flood_wire_sample(nodes[i], scratch.local(), samples[i], {}, true);
++        });
++        native_cpu_trace::measure("merge_group", [&] {
++            for (const auto& sample : samples) merge_compact(result, sample);
++        });
++        native_cpu_trace::measure("release_samples", [&] { samples.clear(); });
++        native_cpu_trace::measure("release_workspaces", [&] { scratch.clear(); });
++    } else
++#endif
++    {
++        t_dijkstra_data scratch;
++        for (RRNodeId node : nodes) flood_wire_sample(node, scratch, result, {}, true);
++    }
++    return result;
++}
++
++/** @brief Read a positive byte budget; defaults are conservative estimates, not
++ * a guarantee on unbounded native Dijkstra heap growth. */
++static size_t compact_budget_setting(const char* name, size_t fallback) {
++    const char* value = std::getenv(name);
++    if (!value) return fallback;
++    char* end = nullptr;
++    unsigned long long parsed = std::strtoull(value, &end, 10);
++    if (!parsed || !end || *end || value[0] == '-') {
++        VPR_FATAL_ERROR(VPR_ERROR_OTHER, "Invalid positive byte budget %s=%s", name, value);
++    }
++    return static_cast<size_t>(parsed);
++}
++
++void consume_routing_cost_maps_bounded(int longest_seg_length, const std::vector<WireSampleGroup>& groups,
++                                      const CompactGroupConsumer& consume, int route_verbosity,
++                                      bool device_model_warnings) {
++    native_cpu_trace::Scope scheduler_scope("bounded_scheduler");
++    const auto& device_ctx = g_vpr_ctx.device();
++    const auto& grid = device_ctx.grid;
++    const std::array<size_t, 3> shape{grid.get_num_layers(), grid.width(), grid.height()};
++    const size_t map_bytes = shape[0] * shape[1] * shape[2] * sizeof(SmallestCostEntry);
++    const size_t budget = compact_budget_setting("VPR_CPU_LOOKAHEAD_TEMP_BYTES", size_t(512) << 20);
++    const size_t workspace_estimate = compact_budget_setting("VPR_CPU_LOOKAHEAD_WORKSPACE_BYTES",
++        device_ctx.rr_graph.num_nodes() * (sizeof(float) + sizeof(PQ_Entry)) + (size_t(1) << 20));
++    size_t workers = 1;
++#ifdef VPR_USE_TBB
++    workers = tbb::global_control::active_value(tbb::global_control::max_allowed_parallelism);
++#endif
++    workers = std::max(size_t(1), std::min(workers, budget / (workspace_estimate + map_bytes)));
++    const size_t estimated_scratch = workers * workspace_estimate;
++    const size_t result_budget = budget > estimated_scratch ? budget - estimated_scratch : map_bytes;
++    const size_t map_limit = std::max(size_t(1), std::min(2 * workers, result_budget / map_bytes));
++
++    // Only source IDs and group metadata are retained globally, never G cost maps.
++    std::vector<std::vector<RRNodeId>> sources(groups.size());
++    std::vector<size_t> active;
++    for (size_t i = 0; i < groups.size(); ++i) {
++        const auto& group = groups[i];
++        if (!device_ctx.inter_cluster_prog_routing_resources[group.from_layer]) continue;
++        sources[i] = select_wire_samples(longest_seg_length, group.from_layer, group.channel, *group.segment);
++        active.push_back(i);
++        if (sources[i].empty()) {
++            VTR_LOGV_WARN(route_verbosity > 1 || device_model_warnings,
++                         "Unable to find any sample location for segment %s type '%s' (length %d)\n",
++                         rr_node_typename[group.channel], group.segment->name.c_str(), group.segment->length);
++        }
++    }
++    VTR_LOG("Bounded lookahead: %zu workspace slots, %zu result maps maximum (%zu bytes/map); "
++            "scratch estimate %zu bytes/slot, temporary budget %zu bytes.\n",
++            workers, map_limit, map_bytes, workspace_estimate, budget);
++    native_cpu_trace::event("scheduler_budget", native_cpu_trace::now(),
++        ",\"workers\":" + std::to_string(workers) + ",\"map_limit\":" + std::to_string(map_limit)
++        + ",\"map_bytes\":" + std::to_string(map_bytes) + ",\"workspace_estimate\":" + std::to_string(workspace_estimate)
++        + ",\"budget_bytes\":" + std::to_string(budget));
++    std::vector<t_dijkstra_data> scratch(workers);
++    size_t next_group = 0;
++    while (next_group < active.size()) {
++        const size_t first_id = active[next_group];
++        // Unusually large groups or a very small map budget use a single map,
++        // inserting samples in order. This respects the map bound even at P=1.
++        if (sources[first_id].size() > map_limit || sources[first_id].empty()) {
++            CompactCostMap map(shape);
++            for (RRNodeId node : sources[first_id]) flood_wire_sample(node, scratch[0], map, {}, true);
++            consume(first_id, map);
++            ++next_group;
++            continue;
++        }
++        /** @brief Per-active-group storage and completion publication. */
++        struct GroupState {
++            size_t id; ///< Original group index.
++            std::vector<CompactCostMap> maps; ///< One exclusively owned map per sample.
++            std::atomic<size_t> remaining; ///< Release sequence publishes completed maps.
++            GroupState(size_t group_id, size_t count) : id(group_id), maps(count), remaining(count) {}
++        };
++        std::vector<std::unique_ptr<GroupState>> batch;
++        std::vector<std::pair<size_t, size_t>> jobs;
++        while (next_group < active.size()) {
++            const size_t id = active[next_group];
++            const size_t count = sources[id].size();
++            if (count == 0 || jobs.size() + count > map_limit) break;
++            const size_t batch_id = batch.size();
++            batch.push_back(std::make_unique<GroupState>(id, count));
++            for (size_t sample = 0; sample < count; ++sample) jobs.emplace_back(batch_id, sample);
++            ++next_group;
++        }
++        VTR_ASSERT(!jobs.empty());
++        std::atomic<size_t> next_job{0};
++        const uint64_t ready = native_cpu_trace::path() ? native_cpu_trace::now() : 0;
++        auto run_slot = [&](size_t slot) {
++            while (true) {
++                const size_t job = next_job.fetch_add(1, std::memory_order_relaxed);
++                if (job >= jobs.size()) break;
++                const auto [batch_id, sample] = jobs[job];
++                auto& state = *batch[batch_id];
++                const uint64_t start = native_cpu_trace::path() ? native_cpu_trace::now() : 0;
++                state.maps[sample] = native_cpu_trace::measure("allocate_sample", [&] { return CompactCostMap(shape); });
++                flood_wire_sample(sources[state.id][sample], scratch[slot], state.maps[sample], {}, true);
++                if (native_cpu_trace::path()) {
++                    native_cpu_trace::event("scheduled_sample", start,
++                        ",\"group\":" + std::to_string(state.id) + ",\"sample\":" + std::to_string(sample)
++                        + ",\"slot\":" + std::to_string(slot) + ",\"ready_ns\":" + std::to_string(ready)
++                        + ",\"queue_wait_ns\":" + std::to_string(start - ready));
++                }
++                // acq_rel ensures the final worker sees all samples. No worker
++                // waits for a predecessor, and all merges use original sample order.
++                if (state.remaining.fetch_sub(1, std::memory_order_acq_rel) == 1) {
++                    native_cpu_trace::measure("merge_group", [&] {
++                        for (size_t j = 1; j < state.maps.size(); ++j) merge_compact(state.maps[0], state.maps[j]);
++                    });
++                    consume(state.id, state.maps[0]);
++                    native_cpu_trace::measure("release_samples", [&] { state.maps.clear(); });
++                }
++            }
++        };
++#ifdef VPR_USE_TBB
++        tbb::parallel_for(size_t(0), std::min(workers, jobs.size()), run_slot);
++#else
++        run_slot(0);
++#endif
++    }
++    native_cpu_trace::measure("release_workspaces", [&] { scratch.clear(); });
+ }
+ 
+ t_routing_cost_map get_routing_cost_map(int longest_seg_length,
+--- a/vpr/src/route/router_lookahead/router_lookahead_map_utils.h
++++ b/vpr/src/route/router_lookahead/router_lookahead_map_utils.h
+@@ -16,6 +16,7 @@
+ 
+ #include <cmath>
+ #include <cstdint>
++#include <functional>
+ #include <limits>
+ #include <vector>
+ #include <queue>
+@@ -65,6 +66,7 @@
+     bool profile = false; ///< Optional whole-flood timings; no per-node clock reads.
+     uint64_t init_ns = 0; ///< Allocation, clearing and first queue entry.
+     uint64_t search_ns = 0; ///< Flood including sample-map recording.
++    uint64_t pushes = 0, pops = 0, expanded = 0, edge_visits = 0, peak_queue = 0; ///< Per-flood diagnostic counters.
+     uint64_t floods = 0; ///< Completed floods in this scratch context.
+ };
+ 
+@@ -375,11 +377,62 @@
+     const t_segment_inf* segment;
+ };
+ 
++/** @brief Scalar storage specialized for SMALLEST. Occupancy is separate from
++ * floating-point validity, preserving first-entry and NaN comparison semantics.
++ * A recorded entry always has fill=false, just like Expansion_Cost_Entry. */
++class SmallestCostEntry {
++  public:
++    void add_cost_entry(e_representative_entry_method method, float delay, float congestion) {
++        VTR_ASSERT(method == SMALLEST);
++        if (!occupied_ || delay < delay_) {
++            delay_ = delay;
++            congestion_ = congestion;
++            occupied_ = true;
++        }
++    }
++    void merge_smallest(const SmallestCostEntry& other) {
++        if (other.occupied_) add_cost_entry(SMALLEST, other.delay_, other.congestion_);
++    }
++    Cost_Entry representative() const {
++        return occupied_ ? Cost_Entry(delay_, congestion_) : Cost_Entry();
++    }
++    bool occupied() const { return occupied_; }
++  private:
++    float delay_ = std::numeric_limits<float>::quiet_NaN(); ///< Minimum recorded delay.
++    float congestion_ = std::numeric_limits<float>::quiet_NaN(); ///< Associated congestion.
++    bool occupied_ = false; ///< Whether any sample was inserted, including a NaN.
++};
++
++using CompactCostMap = vtr::NdMatrix<SmallestCostEntry, 3>;
++using CompactGroupConsumer = std::function<void(size_t, const CompactCostMap&)>;
++
++/** @brief Same per-group sample scheduling as the control, with scalar maps. */
++CompactCostMap get_routing_cost_map_compact(int longest_seg_length, const WireSampleGroup& group,
++                                          int route_verbosity, bool device_model_warnings);
++
++/** @brief Bounded batches of groups with private workspace slots. The last
++ * completed sample reduces its group in original sample order and consumes it.
++ * Result maps are bounded by the budget; scratch/heap estimates are reported
++ * separately and do not constitute a hard cap on total process memory. */
++void consume_routing_cost_maps_bounded(int longest_seg_length, const std::vector<WireSampleGroup>& groups,
++                                      const CompactGroupConsumer& consume, int route_verbosity,
++                                      bool device_model_warnings);
++
+ /** @brief Sample all groups through a bounded pipeline with serial-order
+  * reduction. Returned maps follow request order; interpolation stays serial. */
+ std::vector<t_routing_cost_map> get_routing_cost_maps_pipeline(
+     int longest_seg_length, const std::vector<WireSampleGroup>& groups,
+     int route_verbosity, bool device_model_warnings);
++
++/** @brief Prior per-group implementation retained for same-binary attribution. */
++t_routing_cost_map get_routing_cost_map_legacy(int longest_seg_length,
++                                        unsigned from_layer_num,
++                                        const e_rr_type chan_type,
++                                        const t_segment_inf& segment_inf,
++                                        const std::unordered_map<int, std::unordered_set<int>>& sample_locs,
++                                        bool sample_all_locs,
++                                        int route_verbosity,
++                                        bool device_model_warnings);
+ 
+ t_routing_cost_map get_routing_cost_map(int longest_seg_length,
+                                         unsigned from_layer_num,
+--- a/vpr/src/route/router_lookahead/router_lookahead_sampling_utils.h
++++ b/vpr/src/route/router_lookahead/router_lookahead_sampling_utils.h
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include "native_cpu_trace.h"
+ #include <algorithm>
+ #include <chrono>
+ 
+@@ -22,7 +23,7 @@
+                                 vtr::vector<RRNodeId, float>& node_visited_costs,
+                                 vtr::vector<RRNodeId, bool>& node_expanded,
+                                 std::priority_queue<util::PQ_Entry>& pq,
+-                                const t_bb& bb) {
++                                const t_bb& bb, util::t_dijkstra_data* stats = nullptr) {
+     const DeviceContext& device_ctx = g_vpr_ctx.device();
+     const RRGraphView& rr_graph = device_ctx.rr_graph;
+ 
+@@ -30,6 +31,7 @@
+     RRSegmentId parent_segment_id = rr_graph.node_segment(parent);
+ 
+     for (t_edge_size edge : rr_graph.edges(parent)) {
++        if (stats) ++stats->edge_visits;
+         RRNodeId child_node = rr_graph.edge_sink_node(parent, edge);
+         // Don't expand the nodes inside the clusters since the intra-cluster lookahead
+         // is computed separately.
+@@ -83,6 +85,7 @@
+         // Finally, record the cost with which the child was visited and put the child entry on the queue
+         node_visited_costs[child_node] = child_entry.cost;
+         pq.push(child_entry);
++        if (stats) { ++stats->pushes; stats->peak_queue = std::max(stats->peak_queue, uint64_t(pq.size())); }
+     }
+ }
+ 
+@@ -102,6 +105,9 @@
+                   util::t_dijkstra_data& data,
+                   const t_bb& bb,
+                   FindIpinCallback find_ipin_callback) {
++    const bool detail = native_cpu_trace::path() != nullptr;
++    const uint64_t trace_start = detail ? native_cpu_trace::now() : 0;
++    if (detail) { data.pushes = 1; data.pops = 0; data.expanded = 0; data.edge_visits = 0; data.peak_queue = 1; }
+     using ProfileClock = std::chrono::steady_clock;
+     auto profile_start = data.profile ? ProfileClock::now() : ProfileClock::time_point{};
+     const DeviceContext& device_ctx = g_vpr_ctx.device();
+@@ -134,6 +140,7 @@
+     while (!pq.empty()) {
+         util::PQ_Entry current = pq.top();
+         pq.pop();
++        if (detail) ++data.pops;
+ 
+         RRNodeId curr_node = current.rr_node;
+ 
+@@ -151,8 +158,17 @@
+             find_ipin_callback(current);
+         }
+ 
+-        util::expand_dijkstra_neighbours<RestrictToBoundingBox>(current, node_visited_costs, node_expanded, pq, bb);
++        util::expand_dijkstra_neighbours<RestrictToBoundingBox>(current, node_visited_costs, node_expanded, pq, bb, detail ? &data : nullptr);
++        if (detail) ++data.expanded;
+         node_expanded[curr_node] = true;
++    }
++    if (detail) {
++        std::ostringstream fields;
++        fields << ",\"source\":" << size_t(start_node) << ",\"rr_nodes\":" << rr_graph.num_nodes()
++               << ",\"pushes\":" << data.pushes << ",\"pops\":" << data.pops
++               << ",\"expanded\":" << data.expanded << ",\"edge_visits\":" << data.edge_visits
++               << ",\"peak_queue\":" << data.peak_queue;
++        native_cpu_trace::event("flood", trace_start, fields.str());
+     }
+     if (data.profile) {
+         data.search_ns += std::chrono::duration_cast<std::chrono::nanoseconds>(ProfileClock::now() - search_start).count();
+--- a/vpr/src/route/router_lookahead/router_lookahead_legacy.cpp
++++ b/vpr/src/route/router_lookahead/router_lookahead_legacy.cpp
+@@ -0,0 +1,247 @@
++#include "router_lookahead_map_utils.h"
++#include <fstream>
++#include <chrono>
++#include <cstdlib>
++#include <cstring>
++#include <tbb/enumerable_thread_specific.h>
++#include <tbb/parallel_for.h>
++#include <ranges>
++#include "globals.h"
++#include "physical_types.h"
++#include "physical_types_util.h"
++#include "rr_graph_fwd.h"
++#include "vpr_context.h"
++#include "vpr_error.h"
++#include "vpr_utils.h"
++#include "vpr_types.h"
++#include "vtr_assert.h"
++#include "vtr_math.h"
++#include "vtr_time.h"
++#include "route_common.h"
++#include "route_debug.h"
++#include "vtr_util.h"
++#include "router_lookahead_sampling_utils.h"
++static constexpr int MAX_TRACK_OFFSET = 1;
++namespace util {
++t_routing_cost_map get_routing_cost_map_legacy(int longest_seg_length,
++                                        unsigned from_layer_num,
++                                        const e_rr_type chan_type,
++                                        const t_segment_inf& segment_inf,
++                                        const std::unordered_map<int, std::unordered_set<int>>& sample_locs,
++                                        bool sample_all_locs,
++                                        int route_verbosity,
++                                        bool device_model_warnings) {
++    const auto& device_ctx = g_vpr_ctx.device();
++    const auto& rr_graph = device_ctx.rr_graph;
++    const auto& grid = device_ctx.grid;
++
++    const char* profile_path = std::getenv("VPR_HYBRID_LOOKAHEAD_REPORT");
++    using ProfileClock = std::chrono::steady_clock;
++    auto profile_start = profile_path ? ProfileClock::now() : ProfileClock::time_point{};
++    const t_bb full_device_bb(0, grid.width() - 1, 0, grid.height() - 1, 0, grid.get_num_layers() - 1);
++
++    // Start sampling at the lower left non-corner
++    int ref_x = 1;
++    int ref_y = 1;
++
++    // Sample from locations near the reference location (to capture maximum distance paths)
++    // Also sample from locations at least the longest wire length away from the edge (to avoid
++    // edge effects for shorter distances)
++    std::vector<int> ref_increments{0, 1, longest_seg_length, longest_seg_length + 1};
++
++    // Uniquify the increments to avoid sampling the same locations repeatedly if they happen to overlap
++    vtr::uniquify(ref_increments);
++
++    // Upper right non-corner
++    const int target_x = device_ctx.grid.width() - 2;
++    const int target_y = device_ctx.grid.height() - 2;
++
++    // If arch file specifies die_number="layer_num" doesn't have inter-cluster
++    // programmable routing resources, then we shouldn't profile wire segment types in
++    // the current layer
++    if (!device_ctx.inter_cluster_prog_routing_resources[from_layer_num]) {
++        return t_routing_cost_map();
++    }
++
++    // First try to pick good representative sample locations for each type
++    std::vector<RRNodeId> sample_nodes;
++
++    for (int ref_inc : ref_increments) {
++        int sample_x = ref_x + ref_inc;
++        int sample_y = ref_y + ref_inc;
++
++        if (sample_x >= int(grid.width())) continue;
++        if (sample_y >= int(grid.height())) continue;
++
++        for (int track_offset = 0; track_offset < MAX_TRACK_OFFSET; track_offset += 2) {
++            // Get the rr node index from which to start routing
++
++            RRNodeId start_node;
++            if (is_chanxy(chan_type)) {
++                start_node = get_chanxy_start_node(from_layer_num, sample_x, sample_y,
++                                                   target_x, target_y,
++                                                   chan_type, segment_inf.seg_index, track_offset);
++            } else {
++                VTR_ASSERT(is_chanz(chan_type));
++                Direction direction = (from_layer_num == 0) ? Direction::DEC : Direction::INC;
++                start_node = get_chanz_start_node(sample_x, sample_x, segment_inf.seg_index, track_offset, direction);
++            }
++
++            if (start_node) {
++                sample_nodes.emplace_back(start_node);
++            }
++        }
++    }
++
++    // If we failed to find any representative sample locations, search exhaustively
++    // This is to ensure we sample 'unusual' wire types which may not exist in all channels (e.g. clock routing)
++    if (sample_nodes.empty()) {
++        // Try an exhaustive search to find a suitable sample point
++        for (RRNodeId rr_node : rr_graph.nodes()) {
++            e_rr_type rr_type = rr_graph.node_type(rr_node);
++            if (rr_type != chan_type) continue;
++            if (is_chanxy(rr_type) && rr_graph.node_layer_low(rr_node) != (int)from_layer_num) continue;
++            if (is_chanz(rr_type) && rr_graph.node_direction(rr_node) == Direction::INC && from_layer_num != 1) continue;
++            if (is_chanz(rr_type) && rr_graph.node_direction(rr_node) == Direction::DEC && from_layer_num != 0) continue;
++
++            RRIndexedDataId cost_index = rr_graph.node_cost_index(rr_node);
++            VTR_ASSERT(cost_index != RRIndexedDataId(UNDEFINED));
++
++            int seg_index = device_ctx.rr_indexed_data[cost_index].seg_index;
++
++            if (seg_index == segment_inf.seg_index) {
++                sample_nodes.push_back(rr_node);
++            }
++
++            if (sample_nodes.size() >= ref_increments.size()) {
++                break;
++            }
++        }
++    }
++
++    auto samples_ready = profile_path ? ProfileClock::now() : ProfileClock::time_point{};
++    t_dijkstra_data dijkstra_data;
++    dijkstra_data.profile = profile_path != nullptr;
++    bool parallel_samples = false;
++#ifdef VPR_USE_TBB
++    const char* parallel_setting = std::getenv("VPR_HYBRID_LOOKAHEAD_PARALLEL");
++    parallel_samples = parallel_setting && std::strcmp(parallel_setting, "1") == 0 && sample_nodes.size() > 1;
++#endif
++    uint64_t merge_ns = 0;
++
++    // Finally, now that we have a list of sample locations, run a Dijkstra flood from
++    // each sample location to profile the routing network from this type
++
++    t_routing_cost_map routing_cost_map({device_ctx.grid.get_num_layers(), device_ctx.grid.width(), device_ctx.grid.height()});
++
++    if (sample_nodes.empty()) {
++        VTR_LOGV_WARN(route_verbosity > 1 || device_model_warnings,
++                      "Unable to find any sample location for segment %s type '%s' (length %d)\n",
++                      rr_node_typename[chan_type],
++                      segment_inf.name.c_str(),
++                      segment_inf.length);
++    } else {
++        // reset cost for this segment
++        routing_cost_map.fill(Expansion_Cost_Entry());
++
++        // to avoid multiple memory allocation and de-allocations in run_dijkstra()
++        // dijkstra_data is created outside the for loop and passed by reference to dijkstra_data()
++        auto flood_sample = [&](RRNodeId sample_node, t_dijkstra_data& scratch, t_routing_cost_map& costs) {
++            int sample_x = rr_graph.node_xlow(sample_node);
++            int sample_y = rr_graph.node_ylow(sample_node);
++
++            if (rr_graph.node_direction(sample_node) == Direction::DEC) {
++                sample_x = rr_graph.node_xhigh(sample_node);
++                sample_y = rr_graph.node_yhigh(sample_node);
++            }
++
++            auto map_lookahead_add_sample_route_to_table = [&](PQ_Entry current) {
++                RRNodeId curr_node = current.rr_node;
++
++                VTR_ASSERT_SAFE(rr_graph.node_xlow(curr_node) == rr_graph.node_xhigh(curr_node));
++                VTR_ASSERT_SAFE(rr_graph.node_ylow(curr_node) == rr_graph.node_yhigh(curr_node));
++                int ipin_x = rr_graph.node_xlow(curr_node);
++                int ipin_y = rr_graph.node_ylow(curr_node);
++                int ipin_layer = rr_graph.node_layer_low(curr_node);
++
++                if (ipin_x >= sample_x && ipin_y >= sample_y) {
++                    auto [delta_x, delta_y] = util::get_xy_deltas(sample_node, curr_node);
++                    delta_x = std::abs(delta_x);
++                    delta_y = std::abs(delta_y);
++
++                    // CompressedMapLookahead records only the selected sample locations.
++                    // We check if sample_locs contains (delta_x, delta_y) and don't save
++                    // the sample route to the routing cost map table if not.
++                    if (!sample_all_locs) {
++                        auto it = sample_locs.find(delta_x);
++                        if (it == sample_locs.end() || !it->second.contains(delta_y)) {
++                            // This is inside a lambda, returning only means we don't save the sample route
++                            // in the cost table
++                            return;
++                        }
++                    }
++
++                    costs[ipin_layer][delta_x][delta_y].add_cost_entry(util::e_representative_entry_method::SMALLEST,
++                                                                                  current.delay,
++                                                                                  current.congestion_upstream);
++                }
++            };
++
++            run_dijkstra<false>(sample_node, scratch, full_device_bb, map_lookahead_add_sample_route_to_table);
++        };
++
++#ifdef VPR_USE_TBB
++        if (parallel_samples) {
++            // Each flood owns its search labels and cost map. Only the immutable
++            // resource graph is shared. The enclosing VPR global_control and
++            // process affinity retain the caller's CPU budget.
++            std::vector<t_routing_cost_map> sample_maps(sample_nodes.size());
++            tbb::enumerable_thread_specific<t_dijkstra_data> scratch;
++            tbb::parallel_for(size_t(0), sample_nodes.size(), [&](size_t i) {
++                auto& local = scratch.local();
++                local.profile = profile_path != nullptr;
++                sample_maps[i] = t_routing_cost_map({grid.get_num_layers(), grid.width(), grid.height()});
++                flood_sample(sample_nodes[i], local, sample_maps[i]);
++            });
++            auto merge_start = profile_path ? ProfileClock::now() : ProfileClock::time_point{};
++            // Strict sample order is essential: equal-delay entries retain
++            // the first congestion cost in the original implementation.
++            for (const auto& costs : sample_maps) {
++                for (size_t layer = 0; layer < grid.get_num_layers(); ++layer) {
++                    for (size_t x = 0; x < grid.width(); ++x) {
++                        for (size_t y = 0; y < grid.height(); ++y) {
++                            routing_cost_map[layer][x][y].merge_smallest(costs[layer][x][y]);
++                        }
++                    }
++                }
++            }
++            if (profile_path) {
++                merge_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(ProfileClock::now() - merge_start).count();
++                for (const auto& local : scratch) {
++                    dijkstra_data.init_ns += local.init_ns;
++                    dijkstra_data.search_ns += local.search_ns;
++                    dijkstra_data.floods += local.floods;
++                }
++            }
++        } else
++#endif
++        {
++            for (RRNodeId sample_node : sample_nodes) {
++                flood_sample(sample_node, dijkstra_data, routing_cost_map);
++            }
++        }
++    }
++
++    if (profile_path) {
++        std::ofstream report(profile_path, std::ios::app);
++        report << "{\"layer\":" << from_layer_num << ",\"segment\":" << segment_inf.seg_index
++               << ",\"channel\":" << int(chan_type) << ",\"samples\":" << sample_nodes.size()
++               << ",\"selection_ns\":" << std::chrono::duration_cast<std::chrono::nanoseconds>(samples_ready - profile_start).count()
++               << ",\"init_ns\":" << dijkstra_data.init_ns << ",\"search_ns\":" << dijkstra_data.search_ns
++               << ",\"parallel\":" << (parallel_samples ? "true" : "false") << ",\"merge_ns\":" << merge_ns
++               << ",\"floods\":" << dijkstra_data.floods
++               << ",\"wall_ns\":" << std::chrono::duration_cast<std::chrono::nanoseconds>(ProfileClock::now() - profile_start).count() << "}\n";
++    }
++    return routing_cost_map;
++}
++}

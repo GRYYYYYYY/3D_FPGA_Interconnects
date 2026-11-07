@@ -1,0 +1,7 @@
+{
+  "status": "identified_pending_terminal_independent_audit",
+  "scope": "Metadata only; native processes and independent checks unchanged",
+  "cause": "The new frozen runner calls log_evidence before writing measurement.json; fallback last-iteration overuse requires saved routing_success, so successful routes get final_overused_nodes=None and success=False.",
+  "example": "bnn_s2_cached_tasks0_r0 native rc0, native/independent FULL pass, CPD and wirelength agree, final iteration75 overuse0.",
+  "remedy": "audit_native_cpu_large_diagnostic.py will independently recompute success and write verified_summary/verified_analysis/verified_report, preserving all original records; no solver restart."
+}

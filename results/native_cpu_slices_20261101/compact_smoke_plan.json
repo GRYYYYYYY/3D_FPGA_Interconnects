@@ -1,0 +1,149 @@
+{
+  "output": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/compact_smoke",
+  "runtime": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/vpr_runtime_20261025/runtime.json",
+  "binaries": {
+    "original": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+      "sha256": "37cc22c8b1b5d9d378e25379e85afcb7e56b5f1f6f72e3e9186e5e107ed5ce62"
+    },
+    "cpu": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_compact",
+      "sha256": "93c21c4c7f92d15585acbfe181c1d6f245df6c2ecb81e00a9ce54ca97b86e698"
+    },
+    "frozen": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/bin/vpr_cpu",
+      "sha256": "5dee5a46baa87f602640d861c778657a20065b0ddf5cd7814f4716dfc7619c62"
+    }
+  },
+  "variants": {
+    "legacy": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_LOOKAHEAD_MODE": "legacy"
+      }
+    },
+    "refactored": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_LOOKAHEAD_MODE": "refactored"
+      }
+    },
+    "slice": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_LOOKAHEAD_MODE": "slice"
+      }
+    },
+    "compact": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_LOOKAHEAD_MODE": "compact"
+      }
+    },
+    "bounded": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_LOOKAHEAD_MODE": "bounded"
+      }
+    },
+    "pipeline": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "1"
+      }
+    },
+    "frozen": {
+      "binary": "frozen",
+      "parallel": true
+    }
+  },
+  "lanes": {
+    "small": {
+      "cpu_pool": [
+        16,
+        17,
+        18,
+        19
+      ],
+      "cases": [
+        {
+          "id": "ex5p",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/scaling_20261025/ex5p/vpr_case.json",
+          "phases": [
+            {
+              "name": "smoke",
+              "variants": [
+                "slice",
+                "compact",
+                "bounded"
+              ],
+              "workers": [
+                4
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "timeout_seconds": 900,
+  "max_active_cpu_cores": 48,
+  "diagnostics": true,
+  "qualification_env": {
+    "VPR_CPU_LOOKAHEAD_MODE": "bounded"
+  },
+  "runner_bindings": {
+    "run_native_cpu_slices.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_cpu_slices.py",
+      "sha256": "eee41289c748476a78ac4b5c7ecda5ac7826c3a245b5a0f35a2100852baf77af"
+    },
+    "supervise_native_cpu_slices.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/supervise_native_cpu_slices.py",
+      "sha256": "20bd9c9257bbf30fb6f6402e0ddf175924a15c78ce2888b598aa8a1b27816549"
+    },
+    "run_native_cpu_study.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_cpu_study.py",
+      "sha256": "ab99c84b26ad54e230e781315f0a8d766bd9e208d87cfd117a4a13e2b5ea6b16"
+    },
+    "native_cpu_budget.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/native_cpu_budget.py",
+      "sha256": "3c22823494b94ed8be9d9e693a17a24903f24e9807c3d44d65aa662ad1da4235"
+    },
+    "scaling_common.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/scaling_common.py",
+      "sha256": "9aa5e1b9ec07a3b4bd834406f6d678832fa1b3a14a0a50ce685db366eef27bf4"
+    },
+    "report_native_joint.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/report_native_joint.py",
+      "sha256": "d1146098b613eec5092b5fb7ea7cb3420f595535db54a918308ed4f742896aa8"
+    },
+    "run_native_hybrid.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_hybrid.py",
+      "sha256": "8e3bc2cf1a13bdeb5f47e5b11dc3c6afd1c69b3c233fe9d3f26efac383588f9e"
+    },
+    "prepare.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/prepare.py",
+      "sha256": "a54ac5211aecc5d68bfc13ad92082e55139666707be9855af79cec3529343113"
+    }
+  },
+  "concurrency_scope": "Disjoint physical CPU sets across lanes; same set within each comparison. Shared host and memory; no exclusivity claim.",
+  "measurement_scope": "Full VPR process including identical map serialization, native FULL/STA; fixed pack/place, identical input pre-read. Separate independent FULL/STA readback in workflow.",
+  "quality_gate": {
+    "critical_path_max_regression_percent": 5,
+    "wirelength_max_regression_percent": 5,
+    "overused_nodes": 0
+  },
+  "repeats_scope": "Runtime repeats at one fixed placement seed; retain all failures. Diagnostic runs excluded from speedup claims.",
+  "planned_samples": 3
+}

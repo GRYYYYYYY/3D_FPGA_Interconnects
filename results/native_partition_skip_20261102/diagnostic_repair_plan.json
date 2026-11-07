@@ -1,0 +1,161 @@
+{
+  "output": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_partition_skip_20261102/diagnostic_repair",
+  "runtime": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/vpr_runtime_20261025/runtime.json",
+  "binaries": {
+    "original": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+      "sha256": "37cc22c8b1b5d9d378e25379e85afcb7e56b5f1f6f72e3e9186e5e107ed5ce62"
+    },
+    "cpu": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_partition_skip_20261102/bin/vpr_plain",
+      "sha256": "6e95e2482604d6b2e9f071cdea7fb3e556cb38c442c60a70d237b98edcb2bf18"
+    },
+    "frozen": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/bin/vpr_cpu",
+      "sha256": "5dee5a46baa87f602640d861c778657a20065b0ddf5cd7814f4716dfc7619c62"
+    },
+    "diag": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_partition_skip_20261102/bin/vpr_diag",
+      "sha256": "15cc8c49aa87294b18ddd64485de0a0865ec183d72417339b43fe14e5fe29974"
+    }
+  },
+  "variants": {
+    "tracectrl": {
+      "binary": "diag",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_REPAIR_MODE": "both",
+        "VPR_CPU_STATE_TRACE": "1",
+        "VPR_CPU_STATE_TRACE_ITERS": "5",
+        "VPR_CPU_SKIP_SAME_PARTITION": "0"
+      }
+    },
+    "traceskip": {
+      "binary": "diag",
+      "parallel": true,
+      "env": {
+        "VPR_CPU_REPAIR_MODE": "both",
+        "VPR_CPU_STATE_TRACE": "1",
+        "VPR_CPU_STATE_TRACE_ITERS": "5",
+        "VPR_CPU_SKIP_SAME_PARTITION": "1"
+      }
+    }
+  },
+  "lanes": {
+    "serial": {
+      "cpu_pool": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "cases": [
+        {
+          "id": "s38417_s1",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/s38417_s1/vpr_case.json",
+          "phases": [
+            {
+              "name": "diagnostic_repair",
+              "variants": [
+                "tracectrl",
+                "traceskip"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "tracectrl",
+                "traceskip"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s38417_s2",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/s38417_s2/vpr_case.json",
+          "phases": [
+            {
+              "name": "diagnostic_repair",
+              "variants": [
+                "tracectrl",
+                "traceskip"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "tracectrl",
+                "traceskip"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "timeout_seconds": 900,
+  "max_active_cpu_cores": 8,
+  "diagnostics": false,
+  "qualification_env": {},
+  "runner_bindings": {
+    "run_native_cpu_slices.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_cpu_slices.py",
+      "sha256": "eee41289c748476a78ac4b5c7ecda5ac7826c3a245b5a0f35a2100852baf77af"
+    },
+    "supervise_native_cpu_slices.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/supervise_native_cpu_slices.py",
+      "sha256": "20bd9c9257bbf30fb6f6402e0ddf175924a15c78ce2888b598aa8a1b27816549"
+    },
+    "run_native_cpu_study.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_cpu_study.py",
+      "sha256": "ab99c84b26ad54e230e781315f0a8d766bd9e208d87cfd117a4a13e2b5ea6b16"
+    },
+    "native_cpu_budget.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/native_cpu_budget.py",
+      "sha256": "3c22823494b94ed8be9d9e693a17a24903f24e9807c3d44d65aa662ad1da4235"
+    },
+    "scaling_common.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/scaling_common.py",
+      "sha256": "9aa5e1b9ec07a3b4bd834406f6d678832fa1b3a14a0a50ce685db366eef27bf4"
+    },
+    "report_native_joint.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/report_native_joint.py",
+      "sha256": "d1146098b613eec5092b5fb7ea7cb3420f595535db54a918308ed4f742896aa8"
+    },
+    "run_native_hybrid.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_hybrid.py",
+      "sha256": "8e3bc2cf1a13bdeb5f47e5b11dc3c6afd1c69b3c233fe9d3f26efac383588f9e"
+    },
+    "prepare.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/prepare.py",
+      "sha256": "a54ac5211aecc5d68bfc13ad92082e55139666707be9855af79cec3529343113"
+    }
+  },
+  "concurrency_scope": "One sequential lane; physical cores starting at CPU32, one NUMA node; no owned preparation or solver overlaps. Shared host; no hardware exclusivity.",
+  "measurement_scope": "Correctly enabled diagnostic only. Prior4 diagnostic arms had suffix-matched control/candidate env and were not instrumented; preserve and exclude them from diagnostic claims. Candidate already fails plain quality gate.",
+  "quality_gate": {
+    "critical_path_max_regression_percent": 5,
+    "wirelength_max_regression_percent": 5,
+    "overused_nodes": 0
+  },
+  "repeats_scope": "Triad/scaling: three runtime repeats of fixed placement. Generalization: two newly generated placements per circuit, one runtime sample per arm/cache/placement.",
+  "promotion_rule": {
+    "gate": "All routes legal with independent checks, CPD/WL no worse than5%; gate control endpoint equals frozen; diagnostic containment all iterations zero violations.",
+    "formal": "Only after gate and elliptic guard pass. Three repeats; report all pairs. Candidate recommendation requires all quality checks, geometric mean>1.02 and no layout/cache median<0.98. No automatic default change."
+  },
+  "planned_samples": 4
+}

@@ -1,0 +1,87 @@
+{
+  "as_of": "2026-11-01",
+  "scope": "针对当前原生 CPU map lookahead 构建方法的定向查新；不构成穷尽文献或专利检索。",
+  "sources": [
+    {
+      "id": "petelin2016",
+      "kind": "conference_paper",
+      "title": "The Speed of Diversity: Exploring Complex FPGA Routing Topologies for the Global Metal Layer",
+      "authors": "Oleg Petelin; Vaughn Betz",
+      "venue_year": "FPL 2016",
+      "url": "https://www.eecg.utoronto.ca/~vaughn/papers/fpl2016_complex_routing.pdf",
+      "location": "Section IV-D, Figure 4",
+      "established": "按线型和方向采样，用 Dijkstra 建立最小延迟及对应基础代价表；严格较小才更新。",
+      "our_difference": "并行执行独立采样并保留既有选择语义；不主张采样模型或最小延迟表为新方法。"
+    },
+    {
+      "id": "singer2024",
+      "kind": "conference_paper",
+      "title": "MultiQueue-Based FPGA Routing: Relaxed A* Priority Ordering for Improved Parallelism",
+      "authors": "Alexandre Singer; Hang Yan; Guozheng Zhang; Mark C. Jeffrey; Mirjana Stojilovic; Vaughn Betz",
+      "venue_year": "FPT 2024",
+      "url": "https://www.eecg.utoronto.ca/~mcj/papers/2024.mqrouter.fpt.pdf",
+      "location": "Abstract; Section VI",
+      "established": "单次路径搜索内部的 MultiQueue 并行；Dijkstra/A* 的确定性和串行等价；提出在时间预算内增加 lookahead 采样的后续方向。",
+      "our_difference": "我们并行不同采样，保持每次 flood 不变。论文中的 lookahead 应用是展望，不能写成已验证我们的采样调度。"
+    },
+    {
+      "id": "poolad2026",
+      "kind": "author_manuscript",
+      "title": "Modeling, Optimizing and Exploring Multi-Die FPGA Routing Architectures",
+      "authors": "Amirhossein Poolad; Soheil Gholami Shahrouz; Andrew Boutros; Vaughn Betz",
+      "version_date": "arXiv:2606.06421v3, 2026-06-30",
+      "url": "https://arxiv.org/html/2606.06421v3",
+      "location": "Sections IV-B1 and IV-B2",
+      "established": "显式 CHANZ 建模；针对 2.5D 的片内 lookahead 与跨芯粒代价分离。",
+      "our_difference": "当前工作沿用原生图和代价表，优化构建；不是首次三维 RR 建模，也不是该文的 2.5D 代价分解。"
+    },
+    {
+      "id": "vtr_compressed",
+      "kind": "official_software_documentation",
+      "url": "https://github.com/verilog-to-routing/vtr-verilog-to-routing/blob/master/doc/src/vpr/command_line_usage.rst",
+      "established": "compressed_map 通过稀疏采样减少构建时间和内存。",
+      "our_difference": "保留现有采样结果语义的并行方法；两种方法的模型/质量边界不同。"
+    },
+    {
+      "id": "vtr3751",
+      "kind": "public_issue",
+      "date": "2026-08-06",
+      "url": "https://github.com/verilog-to-routing/vtr-verilog-to-routing/issues/3751",
+      "established": "动态 BB 更新列表按值传递，导致分区树收不到更新。",
+      "our_difference": "与第一处修复直接重合；只能主张本工程复现、修复及验证。第二处全量重载漏通知没有在本次查新中确认首发归属。"
+    },
+    {
+      "id": "vtr3913",
+      "kind": "public_issue",
+      "date": "2026-10-15",
+      "url": "https://github.com/verilog-to-routing/vtr-verilog-to-routing/issues/3913",
+      "established": "提出用 flood 编号避免 separable lookahead 的 visited 全数组清零。",
+      "our_difference": "不是我们的采样并行；epoch 清零不应包装为首创新算法。"
+    },
+    {
+      "id": "vtr3730",
+      "kind": "public_issue",
+      "date": "2026-07-29",
+      "url": "https://github.com/verilog-to-routing/vtr-verilog-to-routing/issues/3730",
+      "established": "讨论缺失项邻域插值、回退坐标选择及替代插值。",
+      "our_difference": "本次分析不改变插值数值规则，检查其读写依赖和重复扫描；不能将整个插值问题称为首次发现。"
+    },
+    {
+      "id": "onetbb_pipeline",
+      "kind": "official_library_documentation",
+      "url": "https://www.intel.com/content/www/us/en/docs/onetbb/developer-guide-api-reference/2021-9/working-on-the-assembly-line-parallel-pipeline.html",
+      "established": "parallel_pipeline 已提供有限在途 token、并行过滤器及按序串行过滤器。",
+      "our_difference": "直接使用有界 token 和按序归并本身不构成新的调度原语。"
+    }
+  ],
+  "conclusion": "未确认完全相同的已发表实现，但不能由此推断创新充分。候选贡献需具体到语义依赖分解、减少的工作/存储及原生流程收益。",
+  "search_queries": [
+    "FPGA router lookahead parallel construction samples Dijkstra",
+    "FPGA router lookahead parallel precomputation",
+    "FPGA lookahead multi-source",
+    "VPR lookahead interpolation parallel",
+    "Modeling, Optimizing and Exploring Multi-Die FPGA Routing Architectures",
+    "oneTBB parallel_pipeline tokens"
+  ],
+  "excluded_topics": ["NoC 分组转发 lookahead", "LLM lookahead decoding", "逻辑电路 carry lookahead"]
+}

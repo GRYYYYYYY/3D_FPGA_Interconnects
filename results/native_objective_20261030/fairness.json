@@ -1,0 +1,95 @@
+{
+  "basis": "Verified locked original baseline source and previous same-job original_parallel execution. User asks whether CPU worker mismatch is fair.",
+  "original_supports_parallel_routing": true,
+  "original_parallel_options": [
+    "--router_algorithm",
+    "parallel",
+    "--num_workers",
+    "4"
+  ],
+  "cpu_parallel_partition_framework": "Reused from original VPR; enabling four workers is not a new algorithm contribution.",
+  "our_added_mechanisms": [
+    "native partial-search GPU takeover",
+    "GPU service and batching",
+    "resident state and sparse update synchronization",
+    "resource ownership protection",
+    "capture and diagnostic evidence"
+  ],
+  "primary_comparison": "Original VPR parallel vs joint CPU-GPU with the same CPU core budget, explicit GPU allocation, same inputs and quality; four routing workers is the current configuration.",
+  "cpu_budget_note": "Four workers means software routing workers, not four CPU sockets. Record CPU quota/affinity and account for GPU service threads within that budget.",
+  "single_thread_comparison": "Secondary scaling reference, insufficient alone to establish superiority over the original parallel implementation.",
+  "incremental_gpu_gain_required": false,
+  "historical_same_job_observations": [
+    {
+      "case": "gemm",
+      "repeat": 0,
+      "variant": "original_vpr",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-native-hybrid-20261028-002456/gemm_0_original_vpr",
+      "status": "completed",
+      "success": true,
+      "returncode": 0,
+      "diagnostic": false,
+      "native_process_seconds": 401.35313013500127,
+      "workflow_seconds": 580.4744115360081,
+      "routing_seconds": 74.44,
+      "critical_path_ns": 13.2667,
+      "wirelength": 4092250,
+      "outcome": "legal_route"
+    },
+    {
+      "case": "gemm",
+      "repeat": 0,
+      "variant": "original_parallel",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-native-hybrid-20261028-002456/gemm_0_original_parallel",
+      "status": "completed",
+      "success": true,
+      "returncode": 0,
+      "diagnostic": false,
+      "native_process_seconds": 356.54510375199607,
+      "workflow_seconds": 534.1745804989914,
+      "routing_seconds": 34.96,
+      "critical_path_ns": 13.2667,
+      "wirelength": 4095331,
+      "outcome": "legal_route"
+    },
+    {
+      "case": "gemm",
+      "repeat": 0,
+      "variant": "native_parallel",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-native-hybrid-20261028-002456/gemm_0_native_parallel",
+      "status": "completed",
+      "success": true,
+      "returncode": 0,
+      "diagnostic": false,
+      "native_process_seconds": 355.84546451100323,
+      "workflow_seconds": 535.4745760260121,
+      "routing_seconds": 35.17,
+      "critical_path_ns": 13.2667,
+      "wirelength": 4095331,
+      "outcome": "legal_route"
+    },
+    {
+      "case": "gemm",
+      "repeat": 0,
+      "variant": "batch",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-native-hybrid-20261028-002456/gemm_0_batch",
+      "status": "completed",
+      "success": true,
+      "returncode": 0,
+      "diagnostic": false,
+      "native_process_seconds": 362.1049530260061,
+      "workflow_seconds": 539.5331298780075,
+      "routing_seconds": 42.2,
+      "critical_path_ns": 13.2667,
+      "wirelength": 4093499,
+      "outcome": "legal_route"
+    }
+  ],
+  "historical_scope": "20261028-002456; previous code/configuration, not a direct control for the 20261029 318-second batch run. Do not form cross-job ratios.",
+  "source_bindings": {
+    "results/native_hybrid_comparison_final.json": "2a2fb708102c59365c3a2ecfe647d2ab5b4967c69ca54ba08aaeab1a8ee4f0e5",
+    "vendor/vtr_hybrid/vpr/src/route/ParallelNetlistRouter.tpp": "94fc8c7c1012369c07b794d11bcbd8d0f87146c6c7f28d3d651800fdbd2cf241",
+    "scripts/run_native_hybrid.py": "e0f39e0969f02f0a9c717e3257f68ec8eb76080ff5ae00dcd8b5f52776dee99c"
+  },
+  "next_confirmation": "GEMM same-node repeated original_parallel, improved CPU/guard and joint, with explicit equal CPU budgets; single-thread original supplementary. Quality gates unchanged."
+}

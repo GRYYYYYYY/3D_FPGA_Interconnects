@@ -1,0 +1,166 @@
+"""Write the final report from audited native lookahead experiments."""
+import json
+from pathlib import Path
+import statistics
+
+OUT = Path(__file__).resolve().parents[1] / 'results/native_cpu_slices_20261101'
+
+
+def load(name):
+    return json.loads((OUT / name).read_text())
+
+
+def main():
+    analysis = load('analysis.json')
+    audit = load('formal_attribution_audit.json')
+    acceptance = load('acceptance.json')
+    evidence = load('evidence_verification.json')
+    if analysis['status'] != 'complete' or audit['status'] != 'passed' or evidence['status'] != 'passed':
+        raise RuntimeError('Only complete, audited data can produce a final report')
+    pairs = {(p['case'], p['workers'], p['cache_mode'], p['control'], p['candidate']): p
+             for p in analysis['paired_comparisons']}
+    configs = {(p['case'], p['workers'], p['cache_mode'], p['variant']): p for p in audit['configurations']}
+    lines = ['# 原生 CPU lookahead 切片、存储与有界调度实验', '']
+    def add(text=''):
+        lines.extend(text.splitlines())
+        lines.append('')
+    def table(header):
+        lines.extend(header.splitlines())
+    add(f"已完成 D0–D3 及布局隔离验证：共 {acceptance['completed_native_samples']} 项原生样本，"
+        f"{acceptance['successful_native_samples']} 项合法，{acceptance['maps_equal_to_original_serial']} 个 map 与原版串行资格产物逐字节一致。"
+        '其中正式性能矩阵 120 项，五变体、两电路、4/8 核、重建/缓存、各三次运行重复；诊断样本不进入正式速度比。')
+    if acceptance['promotion_rule_passed']:
+        add('**新 bounded 通过预先冻结的工程选型门槛，可进入后续独立确认。** 本轮保留实验开关，未改变 solver 默认选项。'
+            '该门槛不等同于统计显著性，也不证明相对旧 pipeline 的独有增益或论文新颖性。')
+    else:
+        add('**新 bounded 未通过预先冻结的整体选型门槛，继续保留已有组内采样 CPU 主线。** '
+            '本轮完成实现与验证，候选默认关闭；局部阶段加速不能替代完整进程和缓存对照。')
+    g4 = pairs['gemm', 4, 'rebuild', 'frozen', 'bounded']['process_ratio']
+    g8 = pairs['gemm', 8, 'rebuild', 'frozen', 'bounded']['process_ratio']
+    old8 = pairs['gemm', 8, 'rebuild', 'frozen', 'pipeline']['process_ratio']
+    increment = pairs['gemm', 8, 'rebuild', 'pipeline', 'bounded']['process_ratio']
+    add(f"GEMM 重建时，新 bounded 相对既有组内 CPU 的四核/八核配对进程速度比中位为 {g4['median']:.4f}× / {g8['median']:.4f}×。"
+        f"旧 pipeline 八核为 {old8['median']:.4f}×，三次范围 {old8['min']:.4f}–{old8['max']:.4f}；"
+        f"新 bounded 相对它仅 {increment['median']:.4f}×（{increment['min']:.4f}–{increment['max']:.4f}）。"
+        '本轮支持继续确认已有八核跨组调度，但没有建立新 bounded 相对它的稳定增量。')
+    add('## 正式结果与公平对照')
+    add('以下基线 `frozen` 是上一轮已经优化的 CPU 组内采样实现，**不是未优化原版 VPR**。'
+        '本轮没有重新测量原版并行性能，不能将本轮增量速度比与历史实验直接相乘。'
+        '主进程包含固定布局下的 RR 读取、lookahead、布线、检查、分析及一致的 map 序列化；不包含重新打包布局。'
+        'workflow 另计独立原版 FULL/STA 读回。速度比为每次配对的控制时间/候选时间，中位数与三次观测范围分开报告。'
+        '时间中位数之比通常不等于配对速度比中位数，以下表格分别报告，选型采用预先约定的配对统计。')
+    table('| 电路 | 核数 | 模式 | slice / frozen | compact / frozen | pipeline / frozen | bounded / frozen |\n'
+        '|---|---:|---|---:|---:|---:|---:|')
+    for case in ['gemm', 'elliptic']:
+        for workers in [4, 8]:
+            for cache in ['rebuild', 'reuse']:
+                vals = [pairs[case, workers, cache, 'frozen', candidate]['process_ratio']['median']
+                        for candidate in ['slice', 'compact', 'pipeline', 'bounded']]
+                lines.append(f'| {case} | {workers} | {cache} | ' + ' | '.join(f'{v:.4f}×' for v in vals) + ' |')
+    lines.append('')
+    add('表头表示“候选相对控制的速度比”，数值大于 1 表示候选更快。所有单次值在 [完整分析](analysis.json) 中保留。'
+        '图：[PDF](figures/paired_process.pdf)、[SVG](figures/paired_process.svg)、[PNG](figures/paired_process.png)。'
+        '图中误差线是三次观测最小/最大值，不是置信区间。')
+    table('| 电路 | 核数 | 模式 | frozen / bounded 进程中位秒 | 配对进程速度比中位 [范围] | workflow 速度比中位 |\n'
+        '|---|---:|---|---:|---:|---:|')
+    for case in ['gemm', 'elliptic']:
+        for workers in [4, 8]:
+            for cache in ['rebuild', 'reuse']:
+                p = pairs[case, workers, cache, 'frozen', 'bounded']; d = p['process_ratio']
+                a = configs[case, workers, cache, 'frozen']; b = configs[case, workers, cache, 'bounded']
+                lines.append(f"| {case} | {workers} | {cache} | {a['process_median_seconds']:.3f} / {b['process_median_seconds']:.3f} | "
+                             f"{d['median']:.4f} [{d['min']:.4f}, {d['max']:.4f}] | {p['workflow_ratio']['median']:.4f} |")
+    lines.append('')
+    table('| 电路 | 核数 | frozen / bounded lookahead 中位秒（rebuild） | 配对阶段速度比中位 |\n'
+        '|---|---:|---:|---:|')
+    for case in ['gemm', 'elliptic']:
+        for workers in [4, 8]:
+            a = configs[case, workers, 'rebuild', 'frozen']['stage_medians_seconds']['lookahead_build']
+            b = configs[case, workers, 'rebuild', 'bounded']['stage_medians_seconds']['lookahead_build']
+            p = pairs[case, workers, 'rebuild', 'frozen', 'bounded']
+            ratio = statistics.median(q['lookahead_ratio'] for q in p['pairs'])
+            lines.append(f'| {case} | {workers} | {a:.3f} / {b:.3f} | {ratio:.4f} |')
+    lines.append('')
+    add('## 新方法相对已有 pipeline')
+    add('旧 pipeline 同样使用本轮最终候选二进制，作为正式控制在测量前加入计划。'
+        '这避免将已有跨组并行的全部收益归于新标量存储、有界组批或切片提交。')
+    table('| 电路 | 核数 | 模式 | bounded 相对 pipeline 进程速度比中位 [范围] |\n'
+        '|---|---:|---|---:|')
+    for case in ['gemm', 'elliptic']:
+        for workers in [4, 8]:
+            for cache in ['rebuild', 'reuse']:
+                d = pairs[case, workers, cache, 'pipeline', 'bounded']['process_ratio']
+                lines.append(f"| {case} | {workers} | {cache} | {d['median']:.4f} [{d['min']:.4f}, {d['max']:.4f}] |")
+    lines.append('')
+    add('归因边界：frozen→slice 同时含重构与插值重排；slice→compact 是同二进制存储对照；'
+        'compact→bounded 包含跨组调度、工作区复用/对齐与切片提交的组合。各部分并非都获得了独立性能归因。'
+        '原插值本身很短，切片重排的主要作用是允许独立提交，不能声称省掉插值计算就产生大幅提速。')
+    add('## 预先声明的选型规则')
+    add('GEMM 重建在四核和八核分别要求三次配对进程速度比均大于 1、其中位数大于 1.02；'
+        'elliptic 与缓存模式要求中位进程退化不超过 2%；所有路线、map 与质量均须通过。'
+        '门槛未按已见到的正式结果修改。')
+    table('| 电路 | 核数 | 模式 | 门槛结果 |\n|---|---:|---|---|')
+    for row in acceptance['promotion_checks']:
+        lines.append(f"| {row['case']} | {row['workers']} | {row['cache_mode']} | {'通过' if row['passed'] else '未通过'} |")
+    lines.append('')
+    cache4 = pairs['elliptic', 4, 'reuse', 'frozen', 'bounded']['process_ratio']['median']
+    if cache4 < 1 / 1.02:
+        add(f'elliptic 四核共同缓存的中位时间退化约 {(1 / cache4 - 1) * 100:.2f}%，超过 2% 门槛。'
+            '缓存路径跳过本轮优化的构建过程，因此不能把这项退化直接归因于 bounded 的 flood 或插值开销。'
+            '共享资源与其他阶段的波动尚未隔离；按既定规则保留该结果，不剔除或放宽门槛。')
+    add('## 实现与诊断结论')
+    add('1. 明确插值只依赖固定 `(from_layer,to_layer,channel,segment)` 二维切片，保留原 x/y 扫描顺序及未采样层默认值。\n'
+        '2. 将仅用于 SMALLEST 代表值的临时单元改为 12 字节标量，保留 occupied 位、严格 `<` 与等值首条目规则。\n'
+        '3. 有界组批限制活跃样本表数量，工作槽私有；最后完成者按原样本顺序归并到首样本表，再提交自己的 source-layer 切片。批间仍有屏障。\n'
+        '4. 未改变原生 flood 起点、堆顺序、图扩展、采样数和最终查询模型；没有新 GPU 接管策略。')
+    add('D0 没有复现历史约 12 秒重构退步，不能宣布根因已修复。GEMM 同二进制 legacy/refactored/pipeline '
+        '顶层 timer 外残差为 42.485/41.676/40.127 秒；XML 与清理仅解释其中一部分。'
+        '两电路均执行 40 次 flood、36 个不同起点，重复来自跨源层 CHANZ；本轮未实现起点复用。')
+    add('另外发现并隔离了本轮诊断扰动：五个计数器把工作区扩至 168 字节，相邻槽可能发生缓存行争用。'
+        '同二进制四核 GEMM 未对齐/对齐诊断调度为 62.951/37.826 秒，计数、map 和路由主体相同。'
+        '证据支持布局争用，但未采集硬件 cache-to-cache 计数器，不能将这项 1.664× 诊断差值作为未诊断算法收益。'
+        '详细分项见 [诊断报告](diagnostic_report.md)。')
+    add('临时预算在正式测量前固定为 2 GiB，单工作区估计 85 MiB，两个电路共用；GEMM 每个标量样本表为 743424 字节。'
+        '活跃表与工作区对象数量有界，原生优先队列、分配器保留、RR 图及最终 map 不受这一估算硬性封顶。'
+        '峰值进程内存受 RR XML 读取影响，不能据峰值 RSS 反推临时表上界是否生效。'
+        '源码公式与限制见 [实现方法](../../docs/native_cpu_slices.md)。')
+    add('## 质量与证据审计')
+    table('| 阶段 | 完成 / 计划 | 合法 |\n|---|---:|---:|')
+    for stage in analysis['stages']:
+        lines.append(f"| {stage['stage']} | {stage['completed']} / {stage['planned']} | {stage['successful']} |")
+    lines.append('')
+    add(f"保留证据审计通过 {evidence['frozen_files_checked']} 个冻结文件绑定，逐项核对输入、二进制、计划、CPU 亲和性、"
+        'map、零超用、原生与独立 FULL/STA、路由 SHA。另核对正式实际环境与执行顺序、关闭诊断、共享缓存字节以及最终九个源码快照。'
+        '标量语义验证包含 100000 个夹具、1551076 次字段逐位比较，零差异，并检出故意破坏的等值规则。')
+    table('| 电路 | 核数 | 正式 CPD(ns) 集合 | 线长集合 | 布线迭代数集合 | 路由主体种数 |\n|---|---:|---|---|---|---:|')
+    for row in audit['quality_by_case_workers']:
+        lines.append(f"| {row['case']} | {row['workers']} | {row['critical_path_ns']} | {row['wirelength']} | {row['iterations']} | {len(row['route_body_sha256'])} |")
+    lines.append('')
+    varying = [r for r in audit['quality_by_case_workers'] if len(r['route_body_sha256']) > 1]
+    if varying:
+        add('正式数据存在路由主体差异，发生于：' + '、'.join(f"{r['case']} {r['workers']}核" for r in varying) +
+            '。所有 map 仍逐字节一致，合法性与独立 FULL/STA 均通过；配对质量另按冻结的 CPD/线长门槛检查。'
+            '因此不能声称所有正式路由主体完全一致，也不能将微小线长差别当作 lookahead 候选的质量改进。'
+            '差异来源未通过本轮实验单独隔离，完整进程速度比也包含布线迭代数变化的影响。')
+    add('原 runner 的 `execution_settings.diagnostics=false` 固定字段不适用于早期诊断样本；'
+        '有效标志取冻结 plan、顶层 `diagnostic_sample` 及实际 env。原始记录未重写。正式 120 项已另行核对诊断关闭。')
+    add('## 适用范围与后续策略')
+    add('本轮只覆盖两种主电路、固定布局种子的运行重复。原生门槛另覆盖 ex5p 单/双层，三层及以上仍只有前序合成插值验证。'
+        '比较在相同物理核集合内配对，八个 lane 合计使用 48 个不同物理核，宿主、内存与存储仍共享。'
+        'cgroup 节流和内存事件覆盖重叠任务，不能把各样本区间差值相加。没有资源独占或统计置信度保证。')
+    add('已有 CPU 组内采样相对原版的历史收益仍是独立证据；本轮是进一步改进的验证。'
+        '后续方法选择应同时看 frozen 与 pipeline 对照、完整进程和共同缓存，优先在更多独立电路/布局及隔离资源上确认。'
+        '本轮不保证论文新颖性，不宣称首创三维寻路、确定性并行或 pipeline 原语。'
+        '来源与贡献边界见 [查新分析](../../docs/native_lookahead_novelty_analysis.md)。')
+    add('具体后续顺序：先在隔离资源和留出电路/布局上确认已有八核 pipeline；如继续研究 bounded，'
+        '再单独捕获八核批次尾部等待和工作区生命周期成本，排除诊断扰动。重复起点复用仍只是未实现候选，'
+        '需要先验证精确语义，再看完整进程收益。以上是后续建议，本轮没有启动新增实验。')
+    add('证据入口：[验收](acceptance.json)、[完整分析](analysis.json)、[原始证据审计](evidence_verification.json)、'
+        '[正式归因审计](formal_attribution_audit.json)、[实现审计](implementation_audit.json)、'
+        '[布局补丁审计](aligned_implementation_audit.json)、[冻结计划](confirmation_plan.json)。')
+    (OUT / 'report.md').write_text('\n'.join(lines), encoding='utf-8')
+    print(OUT / 'report.md')
+
+
+if __name__ == '__main__':
+    main()

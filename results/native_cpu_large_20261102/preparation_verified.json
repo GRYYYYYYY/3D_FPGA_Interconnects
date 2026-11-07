@@ -1,0 +1,635 @@
+{
+  "status": "completed",
+  "started_utc": "2026-11-02T18:42:03.810128+00:00",
+  "cpu_budget": {
+    "cores": 1,
+    "cpu_set": [
+      32
+    ],
+    "allowed_before": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "topology": [
+      {
+        "cpu": 32,
+        "socket": 1,
+        "core": 0,
+        "node": 1
+      },
+      {
+        "cpu": 33,
+        "socket": 1,
+        "core": 1,
+        "node": 1
+      },
+      {
+        "cpu": 34,
+        "socket": 1,
+        "core": 2,
+        "node": 1
+      },
+      {
+        "cpu": 35,
+        "socket": 1,
+        "core": 3,
+        "node": 1
+      },
+      {
+        "cpu": 36,
+        "socket": 1,
+        "core": 4,
+        "node": 1
+      },
+      {
+        "cpu": 37,
+        "socket": 1,
+        "core": 5,
+        "node": 1
+      },
+      {
+        "cpu": 38,
+        "socket": 1,
+        "core": 6,
+        "node": 1
+      },
+      {
+        "cpu": 39,
+        "socket": 1,
+        "core": 7,
+        "node": 1
+      }
+    ],
+    "preferred_gpu_numa_node": null,
+    "cgroup": {
+      "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 4081503648789\nuser_usec 2773034147263\nsystem_usec 1308469501526\nnr_periods 13010467\nnr_throttled 944\nthrottled_usec 2382810869\n",
+      "/proc/self/cgroup": "0::/\n",
+      "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.max": "322122547200\n"
+    },
+    "scope": "One logical CPU per distinct physical core. Every VPR and CUDA service thread inherits this same set; no exclusivity against other workloads claimed."
+  },
+  "runs": [
+    {
+      "case": "dla_like.medium_s1",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/dla_like.medium_s1",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/dla_like.medium.blif",
+        "--pack",
+        "--place",
+        "--route_chan_width",
+        "100",
+        "--place_chan_width",
+        "100",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "1",
+        "--num_workers",
+        "1",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/dla_like.medium_s1/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/dla_like.medium_s1/fixed.place",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/dla_like.medium_s1/rr_graph.xml",
+        "--timing_report_npaths",
+        "10"
+      ],
+      "status": "completed",
+      "started_utc": "2026-11-02T18:42:04.059617+00:00",
+      "timeout_seconds": 3600,
+      "returncode": 0,
+      "process_seconds": 801.6782557293773,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32
+        ],
+        "samples": 161,
+        "max_threads": 1,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4081505186630\nuser_usec 2773035020937\nsystem_usec 1308470165693\nnr_periods 13010469\nnr_throttled 944\nthrottled_usec 2382810869\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 3709200,
+        "peak_observed_hwm_kib": 3967884,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 780.200337,
+        "cpu_system_seconds": 18.881878,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4085468051408\nuser_usec 2776074896041\nsystem_usec 1309393155367\nnr_periods 13018486\nnr_throttled 948\nthrottled_usec 2399153984\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "inputs_ready": true,
+      "finished_utc": "2026-11-02T18:57:01.430237+00:00",
+      "original_validation_error": "AssertionError()",
+      "geometry": {
+        "placed_blocks": 28507,
+        "placement_layers": {
+          "1": 15050,
+          "0": 13457
+        },
+        "coordinate_sha256": "5b5231e43a8427dd1393a142a7dc9f8104202b0fb0b12dce312949ba81c9c957",
+        "grid": [
+          "154 x 154 logic blocks"
+        ],
+        "rr_nodes": 7312040,
+        "rr_edges": 64251424,
+        "rr_bytes": 5633292633
+      },
+      "case_binding": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/dla_like.medium_s1/vpr_case.json",
+        "sha256": "1a3d81e2a3ab747d66d8a0b065524448b3c21e95da53585ea6d319e16f74ff1e"
+      }
+    },
+    {
+      "case": "dla_like.medium_s2",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/dla_like.medium_s2",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/dla_like.medium.blif",
+        "--pack",
+        "--place",
+        "--route_chan_width",
+        "100",
+        "--place_chan_width",
+        "100",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "2",
+        "--num_workers",
+        "1",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/dla_like.medium_s2/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/dla_like.medium_s2/fixed.place",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/dla_like.medium_s2/rr_graph.xml",
+        "--timing_report_npaths",
+        "10"
+      ],
+      "status": "completed",
+      "started_utc": "2026-11-02T18:57:01.758571+00:00",
+      "timeout_seconds": 3600,
+      "returncode": 0,
+      "process_seconds": 816.8786865212023,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32
+        ],
+        "samples": 164,
+        "max_threads": 1,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4085882797484\nuser_usec 2776381420317\nsystem_usec 1309501377167\nnr_periods 13019446\nnr_throttled 948\nthrottled_usec 2399153984\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 3931644,
+        "peak_observed_hwm_kib": 3968084,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 796.043044,
+        "cpu_system_seconds": 18.791410999999997,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4089327843223\nuser_usec 2778995572495\nsystem_usec 1310332270727\nnr_periods 13027615\nnr_throttled 948\nthrottled_usec 2399153984\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "inputs_ready": true,
+      "finished_utc": "2026-11-02T19:12:14.925895+00:00",
+      "original_validation_error": "AssertionError()",
+      "geometry": {
+        "placed_blocks": 28507,
+        "placement_layers": {
+          "0": 14502,
+          "1": 14005
+        },
+        "coordinate_sha256": "2cc233f18e4b5551662b5407e7cce4b5bc8ad503b605da8074c51e88a66055ee",
+        "grid": [
+          "154 x 154 logic blocks"
+        ],
+        "rr_nodes": 7312040,
+        "rr_edges": 64251424,
+        "rr_bytes": 5633292633
+      },
+      "case_binding": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/dla_like.medium_s2/vpr_case.json",
+        "sha256": "4ebf973ad9885aa8821e1c26074e6a69e20e414db67cd41344e8cbf9bfbc645a"
+      }
+    },
+    {
+      "case": "lstm_s1",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s1",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/lstm.blif",
+        "--pack",
+        "--place",
+        "--route_chan_width",
+        "100",
+        "--place_chan_width",
+        "100",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "1",
+        "--num_workers",
+        "1",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s1/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s1/fixed.place",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s1/rr_graph.xml",
+        "--timing_report_npaths",
+        "10"
+      ],
+      "status": "completed",
+      "started_utc": "2026-11-02T19:12:15.099271+00:00",
+      "timeout_seconds": 3600,
+      "returncode": 0,
+      "process_seconds": 391.6452167965472,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32
+        ],
+        "samples": 79,
+        "max_threads": 1,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4089654958687\nuser_usec 2779233649892\nsystem_usec 1310421308795\nnr_periods 13028580\nnr_throttled 948\nthrottled_usec 2399153984\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 1951772,
+        "peak_observed_hwm_kib": 2111916,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 384.110355,
+        "cpu_system_seconds": 7.247365000000002,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4091050800249\nuser_usec 2780213569446\nsystem_usec 1310837230802\nnr_periods 13032496\nnr_throttled 948\nthrottled_usec 2399153984\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "inputs_ready": true,
+      "finished_utc": "2026-11-02T19:19:38.198806+00:00",
+      "original_validation_error": "AssertionError()",
+      "geometry": {
+        "placed_blocks": 17432,
+        "placement_layers": {
+          "1": 9120,
+          "0": 8312
+        },
+        "coordinate_sha256": "10e05c6d0fd1cdc103eabcd72ff00b9518604722f147268f0c1c4de4ce5703ca",
+        "grid": [
+          "113 x 113 logic blocks"
+        ],
+        "rr_nodes": 3929844,
+        "rr_edges": 34459546,
+        "rr_bytes": 3013743411
+      },
+      "case_binding": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/lstm_s1/vpr_case.json",
+        "sha256": "a2d2a3506653d8f63ea596a948ff9e3906c84c44a395cb77735982a9de8894cb"
+      }
+    },
+    {
+      "case": "lstm_s2",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s2",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/lstm.blif",
+        "--pack",
+        "--place",
+        "--route_chan_width",
+        "100",
+        "--place_chan_width",
+        "100",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "2",
+        "--num_workers",
+        "1",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s2/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s2/fixed.place",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s2/rr_graph.xml",
+        "--timing_report_npaths",
+        "10"
+      ],
+      "status": "completed",
+      "started_utc": "2026-11-02T19:19:38.376002+00:00",
+      "timeout_seconds": 3600,
+      "returncode": 0,
+      "process_seconds": 392.39752301201224,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32
+        ],
+        "samples": 79,
+        "max_threads": 1,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4091232417436\nuser_usec 2780344515766\nsystem_usec 1310887901669\nnr_periods 13033012\nnr_throttled 948\nthrottled_usec 2399153984\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 2111980,
+        "peak_observed_hwm_kib": 2111980,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 383.9299659999999,
+        "cpu_system_seconds": 7.790092000000001,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4092592663429\nuser_usec 2781332130792\nsystem_usec 1311260532636\nnr_periods 13036936\nnr_throttled 948\nthrottled_usec 2399153984\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "inputs_ready": true,
+      "finished_utc": "2026-11-02T19:27:04.169777+00:00",
+      "original_validation_error": "AssertionError()",
+      "geometry": {
+        "placed_blocks": 17432,
+        "placement_layers": {
+          "1": 8322,
+          "0": 9110
+        },
+        "coordinate_sha256": "d37b19ae104f7d77c2357a1fc50bcbffb782b38cceea9803d73852a74f5a7c98",
+        "grid": [
+          "113 x 113 logic blocks"
+        ],
+        "rr_nodes": 3929844,
+        "rr_edges": 34459546,
+        "rr_bytes": 3013743411
+      },
+      "case_binding": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/lstm_s2/vpr_case.json",
+        "sha256": "7f84e143d9a9b38e1c9912792dc6f780f604e298f2808c39be0bcff793f3a10c"
+      }
+    },
+    {
+      "case": "bnn_s1",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/bnn_s1",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/bnn.blif",
+        "--pack",
+        "--place",
+        "--route_chan_width",
+        "100",
+        "--place_chan_width",
+        "100",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "1",
+        "--num_workers",
+        "1",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/bnn_s1/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/bnn_s1/fixed.place",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/bnn_s1/rr_graph.xml",
+        "--timing_report_npaths",
+        "10"
+      ],
+      "status": "completed",
+      "started_utc": "2026-11-02T19:27:04.446110+00:00",
+      "timeout_seconds": 3600,
+      "returncode": 0,
+      "process_seconds": 359.5973716005683,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32
+        ],
+        "samples": 72,
+        "max_threads": 1,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4092786687046\nuser_usec 2781468903378\nsystem_usec 1311317783668\nnr_periods 13037473\nnr_throttled 948\nthrottled_usec 2399153984\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 2019776,
+        "peak_observed_hwm_kib": 2165640,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 351.6999430000001,
+        "cpu_system_seconds": 7.490721000000001,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4094079310049\nuser_usec 2782379609726\nsystem_usec 1311699700323\nnr_periods 13041069\nnr_throttled 948\nthrottled_usec 2399153984\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "inputs_ready": true,
+      "finished_utc": "2026-11-02T19:33:55.893351+00:00",
+      "original_validation_error": "AssertionError()",
+      "geometry": {
+        "placed_blocks": 15331,
+        "placement_layers": {
+          "1": 7651,
+          "0": 7680
+        },
+        "coordinate_sha256": "b0f84860ce35c300950e242cd1df914ccc39ba86a6052f5ec59062ebeeb976ac",
+        "grid": [
+          "112 x 112 logic blocks"
+        ],
+        "rr_nodes": 3869928,
+        "rr_edges": 33889468,
+        "rr_bytes": 2964366120
+      },
+      "case_binding": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/bnn_s1/vpr_case.json",
+        "sha256": "b845a439dc5156d1cf44cc7a70a0874b6c6317a0b511d6c478276c6ba428f8a9"
+      }
+    },
+    {
+      "case": "bnn_s2",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/bnn_s2",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/bnn.blif",
+        "--pack",
+        "--place",
+        "--route_chan_width",
+        "100",
+        "--place_chan_width",
+        "100",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "2",
+        "--num_workers",
+        "1",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/bnn_s2/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/bnn_s2/fixed.place",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/bnn_s2/rr_graph.xml",
+        "--timing_report_npaths",
+        "10"
+      ],
+      "status": "completed",
+      "started_utc": "2026-11-02T19:33:56.095865+00:00",
+      "timeout_seconds": 3600,
+      "returncode": 0,
+      "process_seconds": 360.0620308332145,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32
+        ],
+        "samples": 72,
+        "max_threads": 1,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4094257334863\nuser_usec 2782510949994\nsystem_usec 1311746384868\nnr_periods 13041590\nnr_throttled 948\nthrottled_usec 2399153984\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 2006036,
+        "peak_observed_hwm_kib": 2165892,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 351.7362240000002,
+        "cpu_system_seconds": 7.114871999999998,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4095825534614\nuser_usec 2783635551191\nsystem_usec 1312189983422\nnr_periods 13045190\nnr_throttled 958\nthrottled_usec 2434893381\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "inputs_ready": true,
+      "finished_utc": "2026-11-02T19:40:48.629165+00:00",
+      "original_validation_error": "AssertionError()",
+      "geometry": {
+        "placed_blocks": 15331,
+        "placement_layers": {
+          "1": 7840,
+          "0": 7491
+        },
+        "coordinate_sha256": "0dc1ef5d2d8aa8001db8cd950551efd9ab228b99243071c1bed4c0bca8ad0510",
+        "grid": [
+          "112 x 112 logic blocks"
+        ],
+        "rr_nodes": 3869928,
+        "rr_edges": 33889468,
+        "rr_bytes": 2964366120
+      },
+      "case_binding": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/bnn_s2/vpr_case.json",
+        "sha256": "d5508a992390fb9442a26e9fb66e145ecf86ca17a13643c681cb3ed66352fa91"
+      }
+    }
+  ],
+  "different_layouts": true,
+  "finished_utc": "2026-11-02T19:42:53.159393+00:00",
+  "correction": "Only XML tag counting/derived metadata; original solver runs retained, no re-execution.",
+  "source_receipt": {
+    "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/preparation.json",
+    "sha256": "95abb747f1fcd1688fd4c88f3f4abd52a4a02bb8915cf1553c72eef6596067bd"
+  }
+}

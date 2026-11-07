@@ -1,0 +1,704 @@
+{
+  "status": "completed",
+  "completed_utc": "2026-10-31T22:05:38.935296+00:00",
+  "scope": "CPU-only paper evidence matrix, exact lookahead optimization, bounded global sample candidate, fair same-core controls and quality/architecture/strong-baseline checks.",
+  "execution_complete": true,
+  "performance_outcome": "Existing per-group sample implementation improves lookahead-rebuild workflows; the global pipeline does not justify replacing it.",
+  "counts": {
+    "attempted": 290,
+    "successful": 284,
+    "skipped": 4,
+    "cache_qualifications": 30,
+    "maps_checked": 88,
+    "unsuccessful": 6,
+    "planned_including_skips": 294,
+    "frozen_runtime_files_checked": 503
+  },
+  "checks": {
+    "terminal_studies": "passed",
+    "native_and_independent_FULL_STA_zero_overuse": "passed_for_284_successful_results",
+    "cache_and_map_equivalence": "passed",
+    "runtime_file_bindings": "passed",
+    "implementation_build_audit": "passed",
+    "report_tests": {
+      "passed": 6
+    },
+    "figure_review": "passed",
+    "owned_solvers_active": 0,
+    "gpu_jobs": 0,
+    "default_flags_changed": false
+  },
+  "main_metrics": {
+    "rebuild": {
+      "cases": [
+        "clstm_large",
+        "elliptic",
+        "ex5p",
+        "gemm",
+        "reduction",
+        "softmax"
+      ],
+      "geomean_paired_process_speedup": 1.3509212776543986,
+      "worst_case_median_speedup": 1.0287771461119808
+    },
+    "reuse": {
+      "cases": [
+        "clstm_large",
+        "elliptic",
+        "ex5p",
+        "gemm",
+        "reduction",
+        "softmax"
+      ],
+      "geomean_paired_process_speedup": 0.9945555645563621,
+      "worst_case_median_speedup": 0.9701905226140518
+    }
+  },
+  "original_comparison": [
+    {
+      "case": "clstm_large",
+      "pairs": 3,
+      "valid": 3,
+      "quality_pass": 0,
+      "process_speedup": null,
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 17.169728484859537,
+        "min": 17.169728484859537,
+        "max": 17.169728484859537
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": 0.028670194465840737,
+        "min": 0.028670194465840737,
+        "max": 0.028670194465840737
+      }
+    },
+    {
+      "case": "elliptic",
+      "pairs": 1,
+      "valid": 0,
+      "quality_pass": 0,
+      "process_speedup": null,
+      "cpd_change_percent": null,
+      "wire_change_percent": null
+    },
+    {
+      "case": "ex5p",
+      "pairs": 3,
+      "valid": 3,
+      "quality_pass": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 1.4084064205347964,
+        "min": 1.402627427109348,
+        "max": 1.4574409763232232
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": -1.7499162867828821,
+        "min": -1.7499162867828821,
+        "max": -1.7499162867828821
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": -0.33117644061751994,
+        "min": -0.33117644061751994,
+        "max": -0.33117644061751994
+      }
+    },
+    {
+      "case": "gemm",
+      "pairs": 3,
+      "valid": 3,
+      "quality_pass": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 1.502675306812013,
+        "min": 1.4745601703224276,
+        "max": 1.5072634877452988
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": -0.0037359617574228565,
+        "min": -0.0037359617574228565,
+        "max": -0.0037359617574228565
+      }
+    },
+    {
+      "case": "reduction",
+      "pairs": 3,
+      "valid": 3,
+      "quality_pass": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 1.5094591635078334,
+        "min": 1.4446667089106733,
+        "max": 1.5116780525164166
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": 0.05493581129496494,
+        "min": 0.05493581129496494,
+        "max": 0.05493581129496494
+      }
+    },
+    {
+      "case": "softmax",
+      "pairs": 3,
+      "valid": 3,
+      "quality_pass": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 1.375570063326492,
+        "min": 1.3368856187548548,
+        "max": 1.4076130275297394
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": 0.03526854477666763,
+        "min": 0.03526854477666763,
+        "max": 0.03526854477666763
+      }
+    }
+  ],
+  "pipeline_4core": [
+    {
+      "case": "gemm",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "contrast": "optimized:tasks",
+      "pairs": 3,
+      "valid": 3,
+      "accepted": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 0.9370172964807617,
+        "min": 0.9317304581288137,
+        "max": 0.9420122293837896
+      },
+      "workflow_speedup": {
+        "n": 3,
+        "median": 0.9682308973298763,
+        "min": 0.9561839944254481,
+        "max": 0.9791748551241314
+      },
+      "routing_speedup": {
+        "n": 3,
+        "median": 0.9898801597869509,
+        "min": 0.9793650793650795,
+        "max": 0.9997317596566524
+      },
+      "lookahead_speedup": {
+        "n": 3,
+        "median": 0.9140260950605777,
+        "min": 0.9080962800875273,
+        "max": 0.9638386648122391
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "route_bodies_equal": true
+    },
+    {
+      "case": "clstm_large",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "contrast": "optimized:tasks",
+      "pairs": 3,
+      "valid": 3,
+      "accepted": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 1.0702276917504963,
+        "min": 0.900365130799963,
+        "max": 1.0803428639959982
+      },
+      "workflow_speedup": {
+        "n": 3,
+        "median": 1.0133843597549277,
+        "min": 0.9266767686409706,
+        "max": 1.0407666032288414
+      },
+      "routing_speedup": {
+        "n": 3,
+        "median": 0.9738372093023256,
+        "min": 0.9663461538461539,
+        "max": 0.9862475442043221
+      },
+      "lookahead_speedup": {
+        "n": 3,
+        "median": 1.1300675675675675,
+        "min": 1.0412698412698413,
+        "max": 1.1393298059964727
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "route_bodies_equal": true
+    },
+    {
+      "case": "elliptic",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "contrast": "optimized:tasks",
+      "pairs": 3,
+      "valid": 3,
+      "accepted": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 1.0138256944500996,
+        "min": 1.0127461587096134,
+        "max": 1.0238917174874984
+      },
+      "workflow_speedup": {
+        "n": 3,
+        "median": 1.011956886210873,
+        "min": 1.0062133344529705,
+        "max": 1.0243042628813974
+      },
+      "routing_speedup": {
+        "n": 3,
+        "median": 1.0092675635276531,
+        "min": 1.002662445132043,
+        "max": 1.0213399143500037
+      },
+      "lookahead_speedup": {
+        "n": 3,
+        "median": 1.7752808988764046,
+        "min": 1.7586206896551724,
+        "max": 1.8390804597701151
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "route_bodies_equal": true
+    },
+    {
+      "case": "ex5p",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "contrast": "optimized:tasks",
+      "pairs": 3,
+      "valid": 3,
+      "accepted": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 1.2222156333558378,
+        "min": 1.1222301122244045,
+        "max": 1.2261769614550229
+      },
+      "workflow_speedup": {
+        "n": 3,
+        "median": 1.1314447965001784,
+        "min": 1.1291265281687646,
+        "max": 1.205423401140521
+      },
+      "routing_speedup": {
+        "n": 3,
+        "median": 0.9824561403508774,
+        "min": 0.9642857142857143,
+        "max": 1.0
+      },
+      "lookahead_speedup": {
+        "n": 3,
+        "median": 1.653061224489796,
+        "min": 1.6288659793814435,
+        "max": 1.7386363636363638
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "route_bodies_equal": true
+    },
+    {
+      "case": "reduction",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "contrast": "optimized:tasks",
+      "pairs": 3,
+      "valid": 3,
+      "accepted": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 0.9811116110341391,
+        "min": 0.9359330777055046,
+        "max": 0.993773055292994
+      },
+      "workflow_speedup": {
+        "n": 3,
+        "median": 0.992875908075752,
+        "min": 0.9443027982617824,
+        "max": 0.995786039605029
+      },
+      "routing_speedup": {
+        "n": 3,
+        "median": 1.0096153846153846,
+        "min": 0.994572591587517,
+        "max": 1.0168185003503853
+      },
+      "lookahead_speedup": {
+        "n": 3,
+        "median": 1.0674897119341564,
+        "min": 1.0100931677018632,
+        "max": 1.0740117746005045
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "route_bodies_equal": true
+    },
+    {
+      "case": "softmax",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "contrast": "optimized:tasks",
+      "pairs": 3,
+      "valid": 3,
+      "accepted": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 1.0146126446211523,
+        "min": 0.8454999136830349,
+        "max": 1.0744190329188439
+      },
+      "workflow_speedup": {
+        "n": 3,
+        "median": 0.9724739251109115,
+        "min": 0.9518421942748732,
+        "max": 1.0756850694549587
+      },
+      "routing_speedup": {
+        "n": 3,
+        "median": 0.9644670050761421,
+        "min": 0.9392265193370165,
+        "max": 0.9895287958115183
+      },
+      "lookahead_speedup": {
+        "n": 3,
+        "median": 1.3650793650793651,
+        "min": 1.3248730964467004,
+        "max": 1.4098360655737705
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "route_bodies_equal": true
+    }
+  ],
+  "pipeline_gemm_8core": [
+    {
+      "case": "gemm",
+      "workers": 8,
+      "cache_mode": "rebuild",
+      "contrast": "optimized:tasks",
+      "pairs": 3,
+      "valid": 3,
+      "accepted": 3,
+      "process_speedup": {
+        "n": 3,
+        "median": 1.0097767524775805,
+        "min": 0.9975029868370071,
+        "max": 1.015402679195303
+      },
+      "workflow_speedup": {
+        "n": 3,
+        "median": 0.9958812035657892,
+        "min": 0.9891035105715547,
+        "max": 1.0216587594937478
+      },
+      "routing_speedup": {
+        "n": 3,
+        "median": 1.0063868613138687,
+        "min": 0.9910661107802264,
+        "max": 1.025744416873449
+      },
+      "lookahead_speedup": {
+        "n": 3,
+        "median": 1.9243391066545121,
+        "min": 1.6799496644295302,
+        "max": 1.9692898272552783
+      },
+      "cpd_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 3,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "route_bodies_equal": true
+    }
+  ],
+  "strategy": {
+    "primary": "Retain the existing per-group sample implementation for lookahead-rebuild CPU experiments; share valid caches equally.",
+    "global_pipeline": "Keep experimental: four-core GEMM regresses and eight-core whole-process gain is small and inconsistent.",
+    "next_diagnosis": "Instrument unscoped work in the refactored build before changing global scheduling further; the same-binary pilot is not a replicated cause identification.",
+    "gpu": "No new GPU work; retain existing evidence without making a GPU contribution a publication requirement."
+  },
+  "limitations": [
+    "Only six pre-existing circuits, fixed placement seed and shared host.",
+    "CPD/length quality gates apply separately from routing legality. CLSTM parallel regresses against original; decomp confirmation is reported separately.",
+    "No valid original parallel elliptic speed comparison.",
+    "Common-cache trials remove the measured precomputation gain; no routing-search acceleration claim.",
+    "Global-pipeline attribution is a single exploratory triple; exact extra-cost cause and paper novelty remain unproven."
+  ],
+  "artifacts": {
+    "results/native_cpu_paper_20261031/report.md": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/report.md",
+      "sha256": "6bda5a325dd4552274cf90be6f196f4d3455382a17396521ee61c2007f0d1fe3"
+    },
+    "results/native_cpu_paper_20261031/conclusions.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/conclusions.json",
+      "sha256": "6d17b6da191bc5a689f2a4c764916e76c24c056786cfd2f1c2daa1a530eec90c"
+    },
+    "results/native_cpu_paper_20261031/analysis.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/analysis.json",
+      "sha256": "25555ad91300fbc733972b131f368f8aaeb9ec7e85416e381163a62b8a55f96d"
+    },
+    "results/native_cpu_paper_20261031/architecture_analysis.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/architecture_analysis.json",
+      "sha256": "cc8a641aac288d1de9069394f01b3b482749c5d9ce65c4283e4d2651ac8e1c4f"
+    },
+    "results/native_cpu_paper_20261031/tasks_analysis.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_analysis.json",
+      "sha256": "9d7af9c359f9e9dc57d5d84f40f5e668e24c44a00bc1a6cbc0588179622eff27"
+    },
+    "results/native_cpu_paper_20261031/tasks_extension_analysis.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_extension_analysis.json",
+      "sha256": "b48d07b44adb37db6a2f358d64204609127f1652d7cb85ae8fe9a440b5cb5b30"
+    },
+    "results/native_cpu_paper_20261031/clstm_quality_analysis.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/clstm_quality_analysis.json",
+      "sha256": "d99c0ab7e68a3d5a1876b68eacb487d2938d6e2d9c4587cdb0d479a2ad72d1f1"
+    },
+    "results/native_cpu_paper_20261031/multiqueue_analysis.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/multiqueue_analysis.json",
+      "sha256": "9a5028732569112b649a9d61dbbc6c4d58d00f30dac93b06d14b1105c087c3a9"
+    },
+    "results/native_cpu_paper_20261031/tasks_attribution_analysis.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution_analysis.json",
+      "sha256": "b9f5727f8474f816c9a479a14e93207488a60ec8f8fcac9f349efdd19e3fa906"
+    },
+    "results/native_cpu_paper_20261031/evidence_verification.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/evidence_verification.json",
+      "sha256": "c96154fd50dc21c0c8060c3f76732b556e89d56b1a03df2d55a657c1de41a58f"
+    },
+    "results/native_cpu_paper_20261031/implementation_verification.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/implementation_verification.json",
+      "sha256": "68bfe3dc4d9da0d4f9662be68c5ed47d8ccc9baf27d5a8ee7f19ae2ca1a3451d"
+    },
+    "results/native_cpu_paper_20261031/figure_review.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/figure_review.json",
+      "sha256": "8ff1d0c2f366f35e08b2e94f5667f37e9699c7ffa624b6d5f17fef310bd425bb"
+    },
+    "results/native_cpu_paper_20261031/report_tests.log": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/report_tests.log",
+      "sha256": "65378dcad145da2497120819bebfc3c46534dce9714ce064b3d809a56654aca2"
+    },
+    "results/native_cpu_paper_20261031/source_provenance.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/source_provenance.json",
+      "sha256": "60bded85e741a5eeee030187442d1395ca2704e3e25ccffc5a21e51b7a656ad6"
+    },
+    "results/native_cpu_paper_20261031/tasks_provenance.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_provenance.json",
+      "sha256": "567851d52407963d0c2e2c82420a2f26b7874f48156ba57e0370a3a474b6a159"
+    },
+    "results/native_cpu_paper_20261031/cpu_changes.patch": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/cpu_changes.patch",
+      "sha256": "b342c57c090f11fe9441abde9ea89b8d3294f1b33646fad5c1cc4ec85f0da312"
+    },
+    "results/native_cpu_paper_20261031/tasks_changes.patch": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_changes.patch",
+      "sha256": "892917dde6c288fa4852403505fcfb158d536854e15d9d80bd239cf3514eee6c"
+    },
+    "results/native_cpu_paper_20261031/cpu_hardware.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/cpu_hardware.json",
+      "sha256": "6a2518925097fc4d3c40e7d5eef3fbd7e544dca37edeb6b7f94712f8165c81a4"
+    },
+    "results/native_cpu_paper_20261031/plot_dependencies.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/plot_dependencies.json",
+      "sha256": "a1c4ce98d5c865e6ca859ebdb722c4b655619aac0cf41295b732f903c7c23a19"
+    },
+    "results/native_cpu_paper_20261031/solver_process_check.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/solver_process_check.json",
+      "sha256": "9ac7a97eda2fa4f06bebdc3ad907043c9a4a2dcd4802f90e91fbda9d1a7f07fd"
+    },
+    "results/native_cpu_paper_20261031/build_directory_link.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/build_directory_link.json",
+      "sha256": "237d0603450b4924fb1901a7f1065d114c3126c34f74eb661df9d56bda925be3"
+    },
+    "results/native_cpu_paper_20261031/HANDOFF.completed.md": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/HANDOFF.completed.md",
+      "sha256": "1fed79b84e7eff92497ab8c17dc027dd2397a03b5ae7aa4e3e22a335b87ddad6"
+    },
+    "results/native_cpu_paper_20261031/figures/cpu_study.png": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/figures/cpu_study.png",
+      "sha256": "f46376acb2dcdfe88fc23cf9135fd116dc2ae5d018ccbaeef24a622b5eed6a10"
+    },
+    "results/native_cpu_paper_20261031/figures/cpu_study.pdf": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/figures/cpu_study.pdf",
+      "sha256": "89c24820552a25de4857c177c9297d52727dc33cd3c38a29208b56d544f4ee19"
+    },
+    "results/native_cpu_paper_20261031/figures/cpu_study.svg": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/figures/cpu_study.svg",
+      "sha256": "2dd32f1ca5150f036d3d63b92967497c286dfb8b84a0b931377a24b2b3afe801"
+    },
+    "results/native_cpu_paper_20261031/figures/caption.txt": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/figures/caption.txt",
+      "sha256": "43428ba5944f39c976b2daa9f5ae1adbf9a01b3a636d8244e5e46ca147564102"
+    },
+    "results/native_cpu_paper_20261031/plan.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/plan.json",
+      "sha256": "adb1e4cb261649e57437357c8df6dddf4a684f25071b873f90b8a43a57b264e2"
+    },
+    "results/native_cpu_paper_20261031/architecture_plan.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/architecture_plan.json",
+      "sha256": "6fb269099083c94c6a65fa4564d3387200335ab466c97ee49e3868c1b1026714"
+    },
+    "results/native_cpu_paper_20261031/tasks_plan.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_plan.json",
+      "sha256": "9834880c606cd2d68194caedcb36f08af57183ff6a52bec750363ac886a8c433"
+    },
+    "results/native_cpu_paper_20261031/tasks_extension_plan.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_extension_plan.json",
+      "sha256": "0c9e2ebe714a2b5631a0df4831dc5258c4c3fabc62e5070b04421a88b3aaa0e1"
+    },
+    "results/native_cpu_paper_20261031/clstm_quality_plan.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/clstm_quality_plan.json",
+      "sha256": "60175b06fc35e254c6d98407038b2452fb6d2b36658b808da090af1c9d005e3f"
+    },
+    "results/native_cpu_paper_20261031/multiqueue_plan.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/multiqueue_plan.json",
+      "sha256": "00ed68cc35eb46faa6dfd5211e4ecf41c0fb927588dd0c74b498eb929bd84bcd"
+    },
+    "results/native_cpu_paper_20261031/tasks_attribution_plan.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution_plan.json",
+      "sha256": "d71f3c9435bf3c0312c61d704609047df9bf506ac0cef02d2bed2bfdfb4fc68e"
+    },
+    "results/native_cpu_paper_20261031/smoke_v2_plan.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/smoke_v2_plan.json",
+      "sha256": "2d6b7e2ee7dd1e514f9988583a0b5ed6a52be0a6fa991c0bef6c66fc0f449e71"
+    },
+    "results/native_cpu_paper_20261031/tasks_smoke_plan.json": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_smoke_plan.json",
+      "sha256": "cc1a82519cb6a7584ed934a587bd7d36494a6d0b223eee2497ce0486dfb16af9"
+    },
+    "HANDOFF.md": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/HANDOFF.md",
+      "sha256": "1fed79b84e7eff92497ab8c17dc027dd2397a03b5ae7aa4e3e22a335b87ddad6"
+    },
+    "docs/native_cpu_paper_study.md": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/docs/native_cpu_paper_study.md",
+      "sha256": "04bb11f525c98acf1534e64a5c6642435851d08c4e430a3783b1a87fa5c174c3"
+    },
+    "docs/native_cpu_sample_pipeline.md": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/docs/native_cpu_sample_pipeline.md",
+      "sha256": "569f52cfd939aca8046039c0de9070a97be7f7c3ebbabd91f2d8de50a14da424"
+    },
+    "docs/native_joint_objective.md": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/docs/native_joint_objective.md",
+      "sha256": "73e950ed3869c061b103777ba96cb0f68bca53f29a9c683a5d73df259d7054cf"
+    },
+    "scripts/report_native_cpu_study.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/report_native_cpu_study.py",
+      "sha256": "12fbc8f552b193f24285c95e5760f7e5b55715f8357e14bcb26f1088c56c0c94"
+    },
+    "scripts/verify_native_cpu_study.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/verify_native_cpu_study.py",
+      "sha256": "d0f5305c0483192d50895046acfe83b87ea5e00094fcae1f67afd6b6f111e23f"
+    },
+    "scripts/plot_native_cpu_study.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/plot_native_cpu_study.py",
+      "sha256": "bf439a4ab849af75aa98f42fb6564a2d85657d2cf934a6f33480d0e3d9d0a85f"
+    },
+    "scripts/summarize_native_cpu_paper.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/summarize_native_cpu_paper.py",
+      "sha256": "362dff46c3cade58d372cab7b8fc614298f8d28c4911a122e3d14bf9eb4627f2"
+    },
+    "scripts/finalize_native_cpu_paper.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/finalize_native_cpu_paper.py",
+      "sha256": "86c9d309768068afdb2d816ef156011827e870da499021ea89f8fc58cce73c63"
+    },
+    "tests/test_native_cpu_study_report.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/tests/test_native_cpu_study_report.py",
+      "sha256": "912e202ea4eb7e17316764c1b1bf39ac17f2e65f4a57114c04bb6390cf8397a0"
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "status": "complete_with_reported_limitations",
+  "completed_at": "2026-10-28T01:53:10.288263+00:00",
+  "scope": "Execution of the native CPU/GPU implementation and measurement plan; not certification of acceleration or generic-RC support",
+  "requirements": [
+    {
+      "id": "native",
+      "requirement": "Integrate into isolated original VPR CPU routing framework, retaining original STA, criticality, lookahead, route-tree updates and congestion negotiation.",
+      "status": "complete"
+    },
+    {
+      "id": "paired_queries",
+      "requirement": "Measure CPU/GPU connection search on identical graph, occupancy/history, seeds, timing and objective snapshots, including preparation/synchronization/return cost; validate results.",
+      "status": "complete"
+    },
+    {
+      "id": "dispatch",
+      "requirement": "Selective offload using measured work/parallelism thresholds; preserve sequential commit in first comparison; retain CPU fallback.",
+      "status": "complete",
+      "result": "Experimental budget and CPU fallback implemented/calibrated. No profitable default region established; production default stays CPU."
+    },
+    {
+      "id": "resident",
+      "requirement": "Resident GPU graph/state and sparse coherent updates; CPU and GPU use matching native timing and congestion semantics.",
+      "status": "complete"
+    },
+    {
+      "id": "batch",
+      "requirement": "Batch independent connections from different nets and overlap independent CPU work; validate resource independence, conflict retry and dependent same-tree ordering.",
+      "status": "complete",
+      "result": "Actual independent-net batching and CPU/GPU overlap validated. Resource conflicts wait before state reads; expanded old-tree domains protected. Guarded CPU comparison remains infeasible on elliptic."
+    },
+    {
+      "id": "in_process",
+      "requirement": "Reuse native in-process RRG, route trees and STA to remove redundant intermediate export/reload, retaining final legality/timing validation.",
+      "status": "complete"
+    },
+    {
+      "id": "experiments",
+      "requirement": "Same-worker original VPR, CPU control, selective and batched hybrid comparisons on six frozen real circuits; full workflow and search timing, legality, CPD, wire, movement and dispatch metrics; repeat positive findings and report 5% quality budget failures.",
+      "status": "complete",
+      "result": "Six-case same-worker matrix complete, including failures. Cooperative elliptic follow-ups and three local CPU repeats complete. No positive GPU candidate requires confirmation."
+    },
+    {
+      "id": "reproducibility",
+      "requirement": "Record source/input bindings, commands, platform terminal status and independent verification; document measured dispatch policy and all limitations without extrapolating unmeasured acceleration.",
+      "status": "complete",
+      "result": "25 submitted jobs terminal; frozen 18 bundles/5 CUDA builds/26 inputs audited; all failures retained; final timing parser and attribution tests pass."
+    }
+  ],
+  "gpu_end_to_end_speedup_demonstrated": false,
+  "submitted_jobs_terminal": 25,
+  "native_experiment_snapshots": 18,
+  "cuda_builds": 5,
+  "distinct_frozen_inputs": 26,
+  "resident_replay_validated_queries": 645,
+  "full_state_barriers": 228,
+  "primary_matrix_cases": 6,
+  "h100_measurements": 91,
+  "local_cpu_repeats": {
+    "original_parallel_successes": 1,
+    "native_parallel_successes": 0,
+    "attempts_each": 3,
+    "scope": "repeatability diagnostic only"
+  },
+  "reporting_tests": {
+    "command": "python3 -m unittest discover -s tests -p test_native_hybrid_reporting.py -v",
+    "passed": 8
+  },
+  "artifacts": {
+    "results/native_hybrid_comparison_final.json": "2a2fb708102c59365c3a2ecfe647d2ab5b4967c69ca54ba08aaeab1a8ee4f0e5",
+    "results/hybrid_work.json": "8b88a86edc33bd7e113e7687a0a88fc49d2243fc7ae237a989722777d53074cf",
+    "results/native_dispatch_policy_20261028.json": "7a76b952d1cd921839f71b593fc80436eeff2bb4fcae0d6e52e937d66b70e560",
+    "results/native_artifact_audit_20261028.json": "0caf96a83e9125d7bcbe100a4820b07d2073d8e3c9f21fc1b40068e20b315da3",
+    "results/native_baseline_audit.json": "a739472dcc7578e83dceb3c1bcfccbd1f68b2d140116e4040a83b9d2f27661e7",
+    "results/native_job_registry.json": "a610a62d0fdf1e96761a2e9fab367263fc7bf02d3c837e7a5683e8043acd1188",
+    "results/native_parallel_cpu_repeats_20261028/summary.json": "c92334524c6cc2a38330bdcf05ba26f91151a80c35c3cc705dbd79d1ba53f70d",
+    "README.md": "37d66fcfbbfb1f0715bfa75f608e07c566fcfcf688e4b4dbacfec20af3b3c3f1",
+    "scripts/report_native_hybrid.py": "1d00e5b9200c1bfe98bdc5c681c3b03c62d21135863b02f9eed36dd246ed11a6",
+    "scripts/scaling_common.py": "9aa5e1b9ec07a3b4bd834406f6d678832fa1b3a14a0a50ce685db366eef27bf4",
+    "tests/test_native_hybrid_reporting.py": "c3487408c73116999a99d6e5b6a421035d1f83736457b5b250e0ab90c1408d3c"
+  },
+  "limitations": [
+    "No native hybrid GPU end-to-end acceleration demonstrated; 2048-pop offload is experimental, not a proven profitable default.",
+    "GPU implementation supports validated zero-RC/nonflat MapLookahead/SM90 only; batch additionally requires fanout-invariant base costs and no nonconfigurable cross-region groups.",
+    "Primary one-CTA elliptic timed out and old batch ownership checks failed. Later cooperative versions route legally but remain slower than serial VPR.",
+    "Latest matched guarded CPU control is infeasible after 200 iterations; no speedup ratio is calculated against it.",
+    "Original parallel and modified CPU controls are unstable in local repeats (signals/timeouts); root causes are unresolved. Local measurements are not mixed with H100 timing.",
+    "Successful cooperative elliptic follow-ups use different configurations from the primary six-case matrix; no claim that one configuration completed all six with acceleration.",
+    "State bytes exclude static graph upload and logical query payload. Parallel search timers sum worker elapsed time, not critical-path wall time."
+  ]
+}

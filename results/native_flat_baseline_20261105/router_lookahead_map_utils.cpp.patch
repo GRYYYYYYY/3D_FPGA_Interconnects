@@ -1,0 +1,74 @@
+--- /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/vendor/vtr_cpu_slices/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp
++++ /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_flat_baseline_20261105/source/router_lookahead_map_utils.cpp
+@@ -1,3 +1,4 @@
++#include "native_stage_memory.h"
+ #include "native_cpu_trace.h"
+ #include "router_lookahead_map_utils.h"
+ 
+@@ -1157,6 +1158,8 @@
+                 sample_maps[i] = t_routing_cost_map({grid.get_num_layers(), grid.width(), grid.height()});
+                 flood_wire_sample(sample_nodes[i], local, sample_maps[i], sample_locs, sample_all_locs);
+             });
++            native_stage_memory::storage("per_group", scratch, sample_nodes.size(),
++                sample_nodes.size(), 1, grid.get_num_layers() * grid.width() * grid.height() * sizeof(Expansion_Cost_Entry));
+             auto merge_start = profile_path ? ProfileClock::now() : ProfileClock::time_point{};
+             // Strict sample order is essential: equal-delay entries retain
+             // the first congestion cost in the original implementation.
+@@ -1236,9 +1239,33 @@
+     const size_t tokens = std::min(jobs.size(), std::max(size_t(1),
+         2 * tbb::global_control::active_value(tbb::global_control::max_allowed_parallelism)));
+     tbb::enumerable_thread_specific<t_dijkstra_data> scratch;
++    const char* scheduler_setting = std::getenv("VPR_CPU_GLOBAL_SCHEDULER");
++    const bool flat = scheduler_setting && std::strcmp(scheduler_setting, "flat") == 0;
++    VTR_ASSERT(!scheduler_setting || flat || std::strcmp(scheduler_setting, "pipeline") == 0);
++    VTR_LOG("CPU_GLOBAL_SCHEDULER=%s samples=%zu groups=%zu\n", flat ? "flat" : "pipeline", jobs.size(), groups.size());
+     size_t next = 0;
+     using Result = std::shared_ptr<SampleResult>;
+-    if (!jobs.empty()) {
++    if (flat) {
++        // Direct global parallel_for: retain every sample until the global join,
++        // then reduce in the same group/sample order as the original builder.
++        std::vector<t_routing_cost_map> sample_maps(jobs.size());
++        tbb::parallel_for(size_t(0), jobs.size(), [&](size_t i) {
++            auto& local = scratch.local();
++            local.profile = profile_path != nullptr;
++            sample_maps[i] = t_routing_cost_map({grid.get_num_layers(), grid.width(), grid.height()});
++            flood_wire_sample(jobs[i].node, local, sample_maps[i], {}, true);
++        });
++        for (size_t i = 0; i < jobs.size(); ++i) {
++            auto& target = results[jobs[i].group];
++            for (size_t layer = 0; layer < grid.get_num_layers(); ++layer) {
++                for (size_t x = 0; x < grid.width(); ++x) {
++                    for (size_t y = 0; y < grid.height(); ++y) {
++                        target[layer][x][y].merge_smallest(sample_maps[i][layer][x][y]);
++                    }
++                }
++            }
++        }
++    } else if (!jobs.empty()) {
+         tbb::parallel_pipeline(tokens,
+             tbb::make_filter<void, Result>(tbb::filter_mode::serial_in_order,
+                 [&](tbb::flow_control& flow) -> Result {
+@@ -1270,6 +1297,13 @@
+                     }
+                 }));
+     }
++    size_t active_group_maps = 0;
++    if (native_stage_memory::path()) {
++        for (const auto& map : results) if (!map.empty()) ++active_group_maps;
++        native_stage_memory::storage(flat ? "flat_parallel_for" : "ordered_pipeline", scratch,
++            jobs.size(), flat ? jobs.size() : tokens, active_group_maps,
++            grid.get_num_layers() * grid.width() * grid.height() * sizeof(Expansion_Cost_Entry));
++    }
+     if (profile_path) {
+         uint64_t init_ns = 0, search_ns = 0, floods = 0;
+         for (const auto& local : scratch) {
+@@ -1278,7 +1312,7 @@
+             floods += local.floods;
+         }
+         std::ofstream report(profile_path, std::ios::app);
+-        report << "{\"scheduler\":\"ordered_pipeline\",\"groups\":" << groups.size()
++        report << "{\"scheduler\":\"" << (flat ? "flat_parallel_for" : "ordered_pipeline") << "\",\"groups\":" << groups.size()
+                << ",\"samples\":" << jobs.size() << ",\"tokens\":" << tokens
+                << ",\"workspaces\":" << scratch.size() << ",\"floods\":" << floods
+                << ",\"init_ns\":" << init_ns << ",\"search_ns\":" << search_ns

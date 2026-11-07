@@ -1,0 +1,29 @@
+DAC论文扩展工作稿说明（2026-11-05）
+
+当前稿件：main.pdf / main.tex / references.bib。
+中文贡献与证据梳理：contribution_review_zh.txt。
+本轮按用户要求扩展内容，不强行压缩为6页。当前正文12页、参考文献1页，采用IEEEtran双栏10pt；属于待后续删减的研究工作稿，不是页数合规的最终投稿版。
+
+本稿已经纳入2026-11-04/05新增且终态审计通过的构建、多核、Flat、大型二维、完整流程、缓存和内存实验。603项正式观测与90项缓存序列等附加队列分开；全文主报告均值±样本标准差。具体来源、适用范围和方法贡献见中文梳理。
+
+主要交付：
+main.pdf：扩展英文论文。
+submission_source.zip：匿名排版源码包（名称沿用，但当前稿超过投稿页数限制）。
+statistics_expanded.zip：本轮正式统计包，含原值、分组均值/SD、配对值、数据集和核验说明。
+figures/expanded_*：五幅新矢量图及SVG/PNG版本。
+evidence/expanded_20261105：新增实验冻结快照、来源哈希及实际RR图规模扫描。
+claim_evidence.json：本稿主张和证据映射。
+format_check.json / visual_review.json / source_archive_build_check.json：排版、视觉、源码独立编译检查。
+revisions/before_expanded_20261105：本轮扩展前版本。statistics/及statistics_data.zip为先前222项观测的历史完整包；本轮总包是statistics_expanded.zip。
+
+在paper/dac2027内重生成当前稿件：
+  ../../.venv-report/bin/python expand_artifacts.py
+  ../../.venv-report/bin/python audit_expanded_artifacts.py
+  tools/tectonic -k --keep-logs main.tex
+  ../../.venv-report/bin/python check_paper.py
+
+expand_artifacts.py读取冻结来源并重算图表，不运行VPR。如果上游研究报告发生变化，它会拒绝静默替换已冻结证据；需另外建版本。make_artifacts.py与paper_statistics.py保留用于历史版本，不应当作当前扩展稿的完整构建入口。
+可选scan_input_graphs.py直接读取大型RR XML、重计节点/边/CHANZ并计算SHA-256，属于耗I/O的只读操作。
+匿名源码包只含排版所需文件，可用Tectonic，或标准pdflatex/bibtex流程独立编译；内部证据含绝对路径，不在该包中。
+
+本轮没有启动、终止或修改VPR实验，没有修改原始结果、研究源码或活跃任务，没有启动Vivado，也未对外提交或发布论文。

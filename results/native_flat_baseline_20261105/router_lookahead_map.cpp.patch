@@ -1,0 +1,15 @@
+--- /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/vendor/vtr_cpu_slices/vpr/src/route/router_lookahead/router_lookahead_map.cpp
++++ /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_flat_baseline_20261105/source/router_lookahead_map.cpp
+@@ -1,3 +1,4 @@
++#include "native_stage_memory.h"
+ /*
+  * The router lookahead provides an estimate of the cost from an intermediate node to the target node
+  * during directed (A*-like) routing.
+@@ -473,6 +474,7 @@
+ }
+ 
+ void MapLookahead::compute(const std::vector<t_segment_inf>& segment_inf) {
++    native_stage_memory::Scope stage_memory;
+     vtr::ScopedStartFinishTimer timer("Computing router lookahead map");
+ 
+     // First compute the delay map when starting from the various wire types

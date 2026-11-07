@@ -1,0 +1,467 @@
+{
+  "key": "softmax_confirm_w8_r1_frozen_reuse",
+  "case": "softmax",
+  "phase": "confirm",
+  "variant": "frozen",
+  "repeat": 1,
+  "workers": 8,
+  "cache_mode": "reuse",
+  "status": "completed",
+  "success": true,
+  "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_pipeline_confirm_20261102/runs/serial8/softmax_confirm_w8_r1_frozen_reuse",
+  "cpu_budget": {
+    "cores": 8,
+    "cpu_set": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "allowed_before": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "topology": [
+      {
+        "cpu": 32,
+        "socket": 1,
+        "core": 0,
+        "node": 1
+      },
+      {
+        "cpu": 33,
+        "socket": 1,
+        "core": 1,
+        "node": 1
+      },
+      {
+        "cpu": 34,
+        "socket": 1,
+        "core": 2,
+        "node": 1
+      },
+      {
+        "cpu": 35,
+        "socket": 1,
+        "core": 3,
+        "node": 1
+      },
+      {
+        "cpu": 36,
+        "socket": 1,
+        "core": 4,
+        "node": 1
+      },
+      {
+        "cpu": 37,
+        "socket": 1,
+        "core": 5,
+        "node": 1
+      },
+      {
+        "cpu": 38,
+        "socket": 1,
+        "core": 6,
+        "node": 1
+      },
+      {
+        "cpu": 39,
+        "socket": 1,
+        "core": 7,
+        "node": 1
+      }
+    ],
+    "preferred_gpu_numa_node": null,
+    "cgroup": {
+      "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 3689453067417\nuser_usec 2496349995119\nsystem_usec 1193103072297\nnr_periods 12197039\nnr_throttled 812\nthrottled_usec 2082712765\n",
+      "/proc/self/cgroup": "0::/\n",
+      "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.max": "322122547200\n"
+    },
+    "scope": "One logical CPU per distinct physical core. Every VPR and CUDA service thread inherits this same set; no exclusivity against other workloads claimed."
+  },
+  "inputs": {
+    "architecture": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+      "sha256": "b19507fc7eeb0f87208a8565fe09b6313aafd1d6006b057c1e284ae2c549ef60"
+    },
+    "circuit": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/softmax.blif",
+      "sha256": "dcfd605705d3ee5efbbba6b991536de53f239d26aa488776abcefc1ce2537cf7"
+    },
+    "packed_netlist": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_softmax_seed1/packed.net",
+      "sha256": "4a0e6358a3c0fb8299cafed863859850c49120a282fb3e670920af98a0256dcc"
+    },
+    "placement": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_softmax_seed1/fixed.place",
+      "sha256": "7a66322e7ae1a371693fdef313337a2411ab341123a750b45a5a113e9b1e626a"
+    },
+    "rr_graph": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_softmax_seed1/rr_graph.xml",
+      "sha256": "e9f98b8a2a129f8f47b1b7d8f0729147064c7c6f123f38b3429024b325aff9a9"
+    }
+  },
+  "lookahead_cache_sha256": "5ea268a6299789aa95e161f8bff8bf85af7afb26a84b43c08212f5402532d6f5",
+  "execution_settings": {
+    "parallel_lookahead": true,
+    "router": "parallel",
+    "lookahead": "map",
+    "gpu_enabled": false,
+    "diagnostics": false
+  },
+  "input_prewarm": {
+    "seconds": 0.1172778457403183,
+    "bytes": 434867192,
+    "scope": "Equal sequential pre-read before timing; no filesystem cold-cache claim."
+  },
+  "binary_sha256": "5dee5a46baa87f602640d861c778657a20065b0ddf5cd7814f4716dfc7619c62",
+  "command": [
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/bin/vpr_cpu",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/softmax.blif",
+    "--route_chan_width",
+    "100",
+    "--device_width",
+    "0",
+    "--target_utilization",
+    "0.6",
+    "--seed",
+    "1",
+    "--num_workers",
+    "8",
+    "--router_algorithm",
+    "parallel",
+    "--flat_routing",
+    "off",
+    "--check_route",
+    "full",
+    "--net_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_pipeline_confirm_20261102/runs/serial8/softmax_confirm_w8_r1_frozen_reuse/packed.net",
+    "--place_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_pipeline_confirm_20261102/runs/serial8/softmax_confirm_w8_r1_frozen_reuse/fixed.place",
+    "--route_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_pipeline_confirm_20261102/runs/serial8/softmax_confirm_w8_r1_frozen_reuse/routed.route",
+    "--read_rr_graph",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_softmax_seed1/rr_graph.xml",
+    "--timing_report_npaths",
+    "10",
+    "--analysis",
+    "--route",
+    "--routing_failure_predictor",
+    "off",
+    "--max_router_iterations",
+    "200",
+    "--congested_routing_iteration_threshold",
+    "0.25",
+    "--router_lookahead",
+    "map",
+    "--generate_rr_node_overuse_report",
+    "on",
+    "--read_router_lookahead",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_pipeline_confirm_20261102/runs/serial8/softmax_cache_original/lookahead.bin",
+    "--write_router_lookahead",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_pipeline_confirm_20261102/runs/serial8/softmax_confirm_w8_r1_frozen_reuse/wire_map.bin"
+  ],
+  "timeout_seconds": 900,
+  "returncode": 0,
+  "process_seconds": 8.473709426820278,
+  "cpu_budget_audit": {
+    "permitted_cpu_set": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "samples": 2,
+    "max_threads": 1,
+    "affinity_violations": [],
+    "cgroup_before": {
+      "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 3689626381832\nuser_usec 2496506863577\nsystem_usec 1193119518255\nnr_periods 12197207\nnr_throttled 812\nthrottled_usec 2082712765\n",
+      "/proc/self/cgroup": "0::/\n",
+      "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.max": "322122547200\n"
+    },
+    "peak_observed_rss_kib": 501240,
+    "peak_observed_hwm_kib": 915956,
+    "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+    "cpu_user_seconds": 11.826820999999654,
+    "cpu_system_seconds": 0.8790479999999548,
+    "cgroup_after": {
+      "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 3689713900312\nuser_usec 2496587892267\nsystem_usec 1193126008044\nnr_periods 12197292\nnr_throttled 812\nthrottled_usec 2082712765\n",
+      "/proc/self/cgroup": "0::/\n",
+      "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.max": "322122547200\n"
+    },
+    "verified": true
+  },
+  "diagnostic_sample": false,
+  "candidate_environment": {
+    "VPR_HYBRID_LOOKAHEAD_PARALLEL": "1"
+  },
+  "wire_map_sha256": "5ea268a6299789aa95e161f8bff8bf85af7afb26a84b43c08212f5402532d6f5",
+  "wire_map_matches_serial": true,
+  "critical_path_ns": 7.63947,
+  "wirelength": 138983,
+  "routing_seconds": 1.7,
+  "iterations": 14,
+  "heap_pushes": 3273845,
+  "heap_pops": 634351,
+  "search_seconds": 0.704,
+  "search_timer_seconds": [
+    0.0,
+    0.0,
+    0.051,
+    0.053,
+    0.035,
+    0.022,
+    0.094,
+    0.013,
+    0.341,
+    0.095
+  ],
+  "search_timer_max_seconds": 0.341,
+  "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+  "full_check": true,
+  "routing_success": true,
+  "native_process_seconds": 8.473709426820278,
+  "route_sha256": "ab78a62cca7bba7d78f791f4d4aaa2e82c1de5fcc657c0f64d1e6d8500e80bda",
+  "route_body_sha256": "34b59dd623b1828aa1a410714f05ceb9b911f0266f0dfe689840e0964e54646d",
+  "independent_check": {
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/softmax.blif",
+      "--route_chan_width",
+      "100",
+      "--device_width",
+      "0",
+      "--target_utilization",
+      "0.6",
+      "--seed",
+      "1",
+      "--num_workers",
+      "1",
+      "--router_algorithm",
+      "timing_driven",
+      "--flat_routing",
+      "off",
+      "--check_route",
+      "full",
+      "--net_file",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_pipeline_confirm_20261102/runs/serial8/softmax_confirm_w8_r1_frozen_reuse/packed.net",
+      "--place_file",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_pipeline_confirm_20261102/runs/serial8/softmax_confirm_w8_r1_frozen_reuse/fixed.place",
+      "--route_file",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_pipeline_confirm_20261102/runs/serial8/softmax_confirm_w8_r1_frozen_reuse/routed.route",
+      "--read_rr_graph",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_softmax_seed1/rr_graph.xml",
+      "--timing_report_npaths",
+      "10",
+      "--analysis"
+    ],
+    "timeout_seconds": 900,
+    "status": "completed",
+    "returncode": 0,
+    "process_seconds": 7.821773685514927,
+    "cpu_budget_audit": {
+      "permitted_cpu_set": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "samples": 2,
+      "max_threads": 1,
+      "affinity_violations": [],
+      "cgroup_before": {
+        "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+        "/sys/fs/cgroup/cpu.stat": "usage_usec 3689714743971\nuser_usec 2496588727945\nsystem_usec 1193126016025\nnr_periods 12197293\nnr_throttled 812\nthrottled_usec 2082712765\n",
+        "/proc/self/cgroup": "0::/\n",
+        "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+        "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+        "/sys/fs/cgroup/memory.max": "322122547200\n"
+      },
+      "peak_observed_rss_kib": 888508,
+      "peak_observed_hwm_kib": 915884,
+      "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+      "cpu_user_seconds": 6.990059000000656,
+      "cpu_system_seconds": 0.8002360000000408,
+      "cgroup_after": {
+        "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+        "/sys/fs/cgroup/cpu.stat": "usage_usec 3689800602569\nuser_usec 2496664162455\nsystem_usec 1193136440113\nnr_periods 12197371\nnr_throttled 812\nthrottled_usec 2082712765\n",
+        "/proc/self/cgroup": "0::/\n",
+        "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+        "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+        "/sys/fs/cgroup/memory.max": "322122547200\n"
+      },
+      "verified": true
+    },
+    "diagnostic_sample": false,
+    "candidate_environment": {}
+  },
+  "independent_metrics": {
+    "critical_path_ns": 7.63947,
+    "wirelength": 138983,
+    "routing_seconds": 0.81,
+    "iterations": null,
+    "heap_pushes": null,
+    "heap_pops": null,
+    "search_seconds": null,
+    "search_timer_seconds": [],
+    "search_timer_max_seconds": null,
+    "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+    "full_check": true,
+    "routing_success": true
+  },
+  "workflow_seconds": 16.43497107550502,
+  "finished_utc": "2026-11-01T20:06:54.287032+00:00",
+  "log_evidence": {
+    "stage_seconds": {
+      "rr_graph_load": 2.52,
+      "lookahead_build": null,
+      "routing": 1.7
+    },
+    "iterations": [
+      {
+        "iteration": 1,
+        "seconds": 0.2,
+        "present_factor": 0.0,
+        "rerouted_nets": 11320,
+        "rerouted_connections": 29902,
+        "overused_nodes": 10956
+      },
+      {
+        "iteration": 2,
+        "seconds": 0.2,
+        "present_factor": 0.5,
+        "rerouted_nets": 7215,
+        "rerouted_connections": 23065,
+        "overused_nodes": 3461
+      },
+      {
+        "iteration": 3,
+        "seconds": 0.2,
+        "present_factor": 0.6,
+        "rerouted_nets": 3949,
+        "rerouted_connections": 13140,
+        "overused_nodes": 2250
+      },
+      {
+        "iteration": 4,
+        "seconds": 0.1,
+        "present_factor": 0.8,
+        "rerouted_nets": 2702,
+        "rerouted_connections": 9470,
+        "overused_nodes": 1514
+      },
+      {
+        "iteration": 5,
+        "seconds": 0.1,
+        "present_factor": 1.1,
+        "rerouted_nets": 1869,
+        "rerouted_connections": 6912,
+        "overused_nodes": 962
+      },
+      {
+        "iteration": 6,
+        "seconds": 0.1,
+        "present_factor": 1.4,
+        "rerouted_nets": 1256,
+        "rerouted_connections": 4627,
+        "overused_nodes": 562
+      },
+      {
+        "iteration": 7,
+        "seconds": 0.1,
+        "present_factor": 1.9,
+        "rerouted_nets": 776,
+        "rerouted_connections": 2827,
+        "overused_nodes": 325
+      },
+      {
+        "iteration": 8,
+        "seconds": 0.1,
+        "present_factor": 2.4,
+        "rerouted_nets": 431,
+        "rerouted_connections": 1661,
+        "overused_nodes": 181
+      },
+      {
+        "iteration": 9,
+        "seconds": 0.0,
+        "present_factor": 3.1,
+        "rerouted_nets": 242,
+        "rerouted_connections": 869,
+        "overused_nodes": 92
+      },
+      {
+        "iteration": 10,
+        "seconds": 0.1,
+        "present_factor": 4.1,
+        "rerouted_nets": 134,
+        "rerouted_connections": 462,
+        "overused_nodes": 45
+      },
+      {
+        "iteration": 11,
+        "seconds": 0.0,
+        "present_factor": 5.3,
+        "rerouted_nets": 59,
+        "rerouted_connections": 226,
+        "overused_nodes": 10
+      },
+      {
+        "iteration": 12,
+        "seconds": 0.0,
+        "present_factor": 6.9,
+        "rerouted_nets": 14,
+        "rerouted_connections": 42,
+        "overused_nodes": 3
+      },
+      {
+        "iteration": 13,
+        "seconds": 0.0,
+        "present_factor": 9.0,
+        "rerouted_nets": 4,
+        "rerouted_connections": 11,
+        "overused_nodes": 1
+      },
+      {
+        "iteration": 14,
+        "seconds": 0.0,
+        "present_factor": 11.6,
+        "rerouted_nets": 1,
+        "rerouted_connections": 1,
+        "overused_nodes": 0
+      }
+    ],
+    "final_overused_nodes": 0,
+    "last_observed_overused_nodes": 0,
+    "overuse_report": null
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "status": "analysis_phase_completed",
+  "completed_utc": "2026-10-30T19:52:04.455254+00:00",
+  "research_acceleration_goal_achieved": false,
+  "routing_algorithm_changed_this_round": false,
+  "gpu_incremental_gain_required": false,
+  "primary_reference": "same-job original_parallel with equal four-physical-core budget",
+  "gemm": {
+    "measurements": 12,
+    "all_legal_and_quality_passed": true,
+    "matched_repeats": 3,
+    "joint_process_faster_repeats": 0,
+    "joint_workflow_faster_repeats": 0,
+    "positive_joint_candidate": false
+  },
+  "elliptic": {
+    "initial_measurements": 4,
+    "batch_legal_full_sta": true,
+    "batch_cpd_ns": 13.6102,
+    "same_job_parallel_reference_legal": false,
+    "formal_same_job_quality_comparison": "unavailable_due_to_failed_reference",
+    "performance_comparison_eligible": false,
+    "historical_serial_reference_inputs_identical": true,
+    "historical_cpd_increase_percent": 20.55626909960584,
+    "historical_cpd_within_5_percent": false,
+    "additional_repeats": "skipped_by_predeclared_initial_quality_gate"
+  },
+  "integrity": "evidence_verification.json",
+  "crash_diagnosis": "crash_analysis.json",
+  "failures": "diagnosis.json",
+  "initial_infrastructure_failure": "initial_failure.json",
+  "all_jobs_terminal": true,
+  "default_policy": "Keep existing CPU default and ownership protection; current batch not accepted for default use.",
+  "next_steps": [
+    "Diagnose invalid predecessor and SIGKILL; restore elliptic stability and CPD under protection.",
+    "Profile GEMM lookahead internals and evaluate CPU/data-layout/coarse GPU work with fair reuse controls.",
+    "Use validated true-state snapshots and held-out networks/iterations for kernel and guarded task-release changes; accept by complete joint performance."
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "status": "specified_not_submitted",
+  "new_solver_runs": 0,
+  "purpose": "Extend map-equivalent CPU lookahead coverage while separating state repair from parallel construction.",
+  "selection_rule": "Top three local input directive-instance counts outside the existing six-circuit mainline, with all subckt model names present in the fixed architecture. No measured candidate runtime used in selection.",
+  "circuits": [
+    {
+      "name": "dla_like.medium",
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/dla_like.medium.blif",
+      "sha256": "d3103dbbbb18a45013d9b28e96a159e5ef3f1d5f94b866c3d4426416936c30e2",
+      "bytes": 113880749,
+      "directives": {
+        ".model": 1,
+        ".inputs": 1,
+        ".outputs": 1,
+        ".names": 235938,
+        ".latch": 187154,
+        ".subckt": 928,
+        ".end": 1
+      },
+      "subcircuit_models": {
+        "two_mult_18x19": 736,
+        "spram2048x10": 192
+      },
+      "approximate_instances": 424020,
+      "models_missing_from_architecture": [],
+      "already_in_mainline_six_circuit_suite": false,
+      "historical_references": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/architecture_flow_20261027/runs/heldout_dla_like.medium_s21_cb_o_n200_w100_p0_a0/manifest.json",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/architecture_flow_20261027/runs/heldout_dla_like.medium_s21_cb_o_n200_w100_p0_b2/manifest.json",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/architecture_flow_20261027/runs/heldout_dla_like.medium_s21_cb_o_n200_w100_p0_critical_c5/manifest.json"
+      ],
+      "prior_use_status": "prior_reference_found_not_independent"
+    },
+    {
+      "name": "lstm",
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/lstm.blif",
+      "sha256": "38ecd31e85c8afa11a8f8840b4d62f89d763506d0d936417d78650afe4be09b1",
+      "bytes": 34503786,
+      "directives": {
+        ".model": 1,
+        ".inputs": 1,
+        ".outputs": 1,
+        ".names": 116186,
+        ".latch": 85381,
+        ".subckt": 967,
+        ".end": 1
+      },
+      "subcircuit_models": {
+        "two_mult_18x19": 659,
+        "spram512x40": 304,
+        "spram1024x20": 4
+      },
+      "approximate_instances": 202534,
+      "models_missing_from_architecture": [],
+      "already_in_mainline_six_circuit_suite": false,
+      "historical_references": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/architecture_flow_20261027/runs/heldout_lstm_s21_cb_o_n125_w100_p0_a0/manifest.json",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/architecture_flow_20261027/runs/heldout_lstm_s21_cb_o_n125_w100_p0_b2/manifest.json",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/architecture_flow_20261027/runs/heldout_lstm_s21_cb_o_n125_w100_p0_critical_c5/manifest.json"
+      ],
+      "prior_use_status": "prior_reference_found_not_independent"
+    },
+    {
+      "name": "bnn",
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/bnn.blif",
+      "sha256": "e41a79e8dbbbd119b856b975680a87152af047b4c8781dd464489e9211b2629a",
+      "bytes": 74401773,
+      "directives": {
+        ".model": 1,
+        ".inputs": 1,
+        ".outputs": 1,
+        ".names": 127676,
+        ".latch": 52405,
+        ".subckt": 125,
+        ".end": 1
+      },
+      "subcircuit_models": {
+        "two_mult_18x19": 125
+      },
+      "approximate_instances": 180206,
+      "models_missing_from_architecture": [],
+      "already_in_mainline_six_circuit_suite": false,
+      "historical_references": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/architecture_flow_20261027/runs/balance_literal_bnn_s11_cb_o_n125_w100_p1_a0/manifest.json",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/architecture_flow_20261027/runs/balance_literal_bnn_s11_cb_o_n125_w100_p1_b2/manifest.json",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/architecture_flow_20261027/runs/balance_literal_bnn_s11_cb_o_n125_w100_p1_critical_c5/manifest.json"
+      ],
+      "prior_use_status": "prior_reference_found_not_independent"
+    }
+  ],
+  "scope": "Existing Koios inputs, all previously referenced in adjacent project metadata; not independent benchmarks. Input counts do not establish larger RR graphs than GEMM.",
+  "architecture": {
+    "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+    "sha256": "b19507fc7eeb0f87208a8565fe09b6313aafd1d6006b057c1e284ae2c549ef60"
+  },
+  "binaries": {
+    "original": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+      "sha256": "37cc22c8b1b5d9d378e25379e85afcb7e56b5f1f6f72e3e9186e5e107ed5ce62"
+    },
+    "cpu": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_aligned",
+      "sha256": "a02448d32451882e5d765f10aeed75d528932aff2a634cf689fcdd1361dd74ab"
+    },
+    "frozen": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/bin/vpr_cpu",
+      "sha256": "5dee5a46baa87f602640d861c778657a20065b0ddf5cd7814f4716dfc7619c62"
+    }
+  },
+  "variants": {
+    "stock": {
+      "binary": "original",
+      "parallel": false,
+      "router": "parallel"
+    },
+    "fixed_serial": {
+      "binary": "cpu",
+      "parallel": false,
+      "router": "parallel",
+      "env": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "0"
+      }
+    },
+    "per_group": {
+      "binary": "cpu",
+      "parallel": true,
+      "router": "parallel",
+      "env": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "0"
+      }
+    },
+    "pipeline": {
+      "binary": "cpu",
+      "parallel": true,
+      "router": "parallel",
+      "env": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "1"
+      }
+    }
+  },
+  "environment": "Clean inherited VPR_CPU_* and VPR_HYBRID_* overrides using the frozen runner; enable only the declared lookahead controls. GPU and trace off; skip-same-partition off; both state fixes on for all three corrected arms. Capture actual environment and affinity.",
+  "seeds": [
+    1,
+    2
+  ],
+  "workers": 8,
+  "runtime_repeats": 3,
+  "cache_modes": [
+    "rebuild",
+    "reuse"
+  ],
+  "planned_formal_samples_if_all_qualify": 144,
+  "preparation": {
+    "fresh_pack_and_place": true,
+    "target_utilization": 0.6,
+    "initial_channel_width": 100,
+    "geometry": "Use fixed native 3D architecture; verify actual occupancy on both layers and record RR nodes/edges, grid size and packed blocks.",
+    "failure_policy": "Retain unsupported, failed and timed-out inputs; no replacement based on speed. If width 100 is unroutable, record it and freeze a separately versioned common-width protocol before any timed comparison.",
+    "configuration_binding": "Hash BLIF, architecture, packed netlist, placement, RR graph, map, binaries and runner before formal runs."
+  },
+  "qualification": {
+    "plain_endpoint": "Compare same-ELF per_group with the old frozen per-group binary for map, route-body, CPD, wirelength and iterations. Failure blocks strict attribution and requires diagnosis, not candidate-specific tuning.",
+    "correctness": "Require byte-equivalent map, native FULL and independent stock FULL/STA; log any route-body difference separately.",
+    "quality": "For each corrected optimization require CPD and wirelength <=1.05 times fixed_serial and per_group controls. Report raw-stock comparisons separately; never hide stock illegality or repair costs.",
+    "timed_trace": false
+  },
+  "execution": {
+    "lane": "One solver at a time; same eight physical cores on one NUMA node for every arm.",
+    "exclusivity": "Prefer exclusive reservation if available; otherwise explicitly label shared-host results and capture load/cgroup metadata.",
+    "order": "Use a frozen balanced rotation of the four arm orders across six layouts and three repeats; alternate cache-mode order. Pair by circuit/placement/repeat.",
+    "cache": "Identical pre-read for all arms; reuse one qualified byte-identical map. Rebuild means rebuild lookahead, not cold filesystem cache.",
+    "limits": "Use existing 900-second routing timeout per attempt; retain timeouts as failures and revisit only under a versioned protocol. Freeze a separate bounded pack/place timeout before preparing execution manifests."
+  },
+  "metrics": [
+    "process wall seconds",
+    "internal VPR flow seconds (sensitivity only)",
+    "workflow seconds including independent check",
+    "disjoint phase wall seconds",
+    "lookahead wall seconds",
+    "CPD",
+    "wirelength",
+    "route iterations",
+    "route-body equality",
+    "RR node/edge counts",
+    "actual CPU affinity",
+    "peak RSS with measurement method"
+  ],
+  "primary_comparisons": [
+    "same-ELF fixed_serial -> per_group",
+    "same-ELF per_group -> pipeline",
+    "same-ELF fixed_serial -> pipeline"
+  ],
+  "secondary_comparison": "stock -> pipeline is system-level, includes state fixes; all arms have eight routing workers.",
+  "aggregation": "Median of paired time ratios for each layout; geometric mean across layouts within circuit, then equal weight across circuits. Publish all samples, quality failures and cache negative cases; no aggregate omitting failed members.",
+  "promotion_gate": "All legality/map/QoR gates pass; rebuild process geometric mean >=1.03 over per_group, each circuit >=1.00, and no layout cache process median regression >3%. Otherwise report bounded applicability and leave defaults unchanged. This engineering rule is not statistical significance.",
+  "conditional_extension_not_in_144": "Only after qualified eight-core results, 16-core per_group/pipeline rebuild on the same three circuits/two layouts/three repeats (36 runs). Interleave core-count blocks if making scaling claims.",
+  "remaining_launch_work": [
+    "Verify binary hashes and endpoint behavior",
+    "Freeze pack/place commands and timeout, materialize runner-specific manifests",
+    "Prepare six layouts, check map/legality/QoR, then evaluate qualification"
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "status": "completed_cpu_and_repeated_gpu_quality_restored",
+  "direct_evidence": {
+    "event": "live_label_collision",
+    "node": 207790,
+    "operation": "relax",
+    "location": [
+      5,
+      16,
+      1
+    ],
+    "owner": {
+      "net": 1120,
+      "sink": 109381,
+      "box": [
+        4,
+        13,
+        16,
+        26,
+        1,
+        1
+      ]
+    },
+    "contender": {
+      "net": 1473,
+      "sink": 102100,
+      "box": [
+        1,
+        11,
+        5,
+        16,
+        1,
+        1
+      ]
+    }
+  },
+  "raw_event_sha256": "fed56089150ee20ca240dfe21aac9c668cb3146fdcfcb9ccb6934fd50134d1b9",
+  "normalization": "Only raw layer byte 0x01 converted to numeric 1 for JSON; original bytes retained. Diagnostic writer fixed to int().",
+  "cause": "dynamic_update_bounding_boxes passes out_bb_updated_nets by value; shared route_bb expands but caller list and partition membership are stale; concurrent siblings can overlap and overwrite live search labels.",
+  "fix": "Pass output vector by reference in declaration and definition; check per-net box containment in scheduled partition.",
+  "related_audit": "Tree reset writes now instrumented; their relevance to the old crash remains unproven. Old SIGKILL cause is not inferred.",
+  "old_core_limit": "This demonstrates a concrete precursor in a reproduction; it cannot reconstruct the precise upstream writer in the previous core.",
+  "second_failure": {
+    "run": "parallel_fixed_audit_0",
+    "returncode": -6,
+    "after_iteration": 50,
+    "failed_check": "net bounding box not contained in scheduled partition",
+    "source": "route.cpp conflicted-mode load_route_bb after earlier handle_bb_updated_nets"
+  },
+  "second_fix": "Notify all nets on conflicted-mode reload; move partition notification after both dynamic/reload changes.",
+  "validation": {
+    "audit": "parallel_both_fixed_audit_0",
+    "unaudited": "elliptic_cpu_quality/elliptic_0_native_parallel",
+    "guard": "elliptic_cpu_quality/elliptic_0_guard",
+    "all_independent_full_sta": true,
+    "critical_path_ns": 10.841,
+    "wirelength": 97461,
+    "iterations": 160,
+    "original_serial_same_matrix": {
+      "critical_path_ns": 11.2895,
+      "wirelength": 99232,
+      "iterations": 194
+    },
+    "cpd_change_percent": -3.9727180123123373,
+    "wirelength_change_percent": -1.7847065462753942,
+    "audit_and_unaudited_route_body_sha256": "9d8a8e0a65e6b0026d64262cb49b6c6b1a3d2d3c4daac138b79ce0dc1af50dfc"
+  },
+  "gpu_validation": {
+    "success": true,
+    "critical_path_ns": 10.1561,
+    "wirelength": 96683,
+    "iterations": 162,
+    "hybrid": {
+      "mode": "batch",
+      "pop_budget": 2048,
+      "queries": 101412,
+      "offload_attempts": 9054,
+      "committed": 9054,
+      "fallbacks": 0,
+      "errors": 0,
+      "state_bytes": 20020812,
+      "gpu_visits": 181640326,
+      "gpu_initialized": true,
+      "native_sta_and_tree_commit": true,
+      "parallel_dispatch": true,
+      "spatial_ownership": true,
+      "diagnostic": false,
+      "true_takeover_captures": 0,
+      "prepare_ns": 653957023,
+      "batches": 9054,
+      "multi_query_batches": 0,
+      "max_batch_size": 1,
+      "cpu_queries_finished_during_gpu": 72,
+      "lease_conflict_waits": 0,
+      "trace_cost_recomputed": 0,
+      "expanded_tree_leases": 116,
+      "pair_stride": 1,
+      "static_payload_bytes": 86666616,
+      "initial_state_bytes": 2119952,
+      "logical_query_payload_bytes": 1027505316,
+      "logical_result_payload_bytes": 578684,
+      "verified_state_barriers": 0
+    },
+    "cpu_budget_audit": {
+      "permitted_cpu_set": [
+        48,
+        49,
+        50,
+        51
+      ],
+      "samples": 51,
+      "max_threads": 7,
+      "affinity_violations": [],
+      "cgroup_before": {
+        "/sys/fs/cgroup/cpu.max": "1000000 100000\n",
+        "/sys/fs/cgroup/cpu.stat": "usage_usec 528233916\nuser_usec 512581563\nsystem_usec 15652353\nnr_periods 5201\nnr_throttled 0\nthrottled_usec 0\n",
+        "/proc/self/cgroup": "0::/\n",
+        "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\n",
+        "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\n",
+        "/sys/fs/cgroup/memory.max": "214748364800\n"
+      },
+      "peak_observed_rss_kib": 262152,
+      "peak_observed_hwm_kib": 433728,
+      "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+      "cpu_user_seconds": 247.57068900000007,
+      "cpu_system_seconds": 1.7551099999999997,
+      "cgroup_after": {
+        "/sys/fs/cgroup/cpu.max": "1000000 100000\n",
+        "/sys/fs/cgroup/cpu.stat": "usage_usec 780910557\nuser_usec 761200584\nsystem_usec 19709972\nnr_periods 7730\nnr_throttled 0\nthrottled_usec 0\n",
+        "/proc/self/cgroup": "0::/\n",
+        "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\n",
+        "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\n",
+        "/sys/fs/cgroup/memory.max": "214748364800\n"
+      },
+      "verified": true
+    },
+    "route_body_sha256": "8fc72197a418d5f66ca5667a3c5ba1843f69fa020cf3ccc843d2f8ebbabb31a4"
+  },
+  "final_confirmation": "repair_analysis.json and evidence_verification.json"
+}

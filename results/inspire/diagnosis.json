@@ -1,0 +1,28 @@
+{
+  "job_id": "job-4d87ce2a-b414-4a91-b696-4874b6182b7d",
+  "diagnosed_at_utc": "2026-10-25T06:47:20.022776+00:00",
+  "failed_stage": "vpr_cuda_0",
+  "loader_error": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr: error while loading shared libraries: libtcl8.6.so: cannot open shared object file: No such file or directory",
+  "failure_chain": {
+    "vpr_exit_code": 127,
+    "validator_exit_code": 2,
+    "job_wrapper_exit_code": 1
+  },
+  "cause": "The CUDA container could not resolve libtcl8.6.so required by the pinned VPR binary. The locked runtime bundles TBB libraries and relies on the system Tcl library. No VPR dependency preflight ran before the GPU benchmark.",
+  "gpu_execution_passed": true,
+  "source_files_unchanged_since_gpu_run": true,
+  "host_recheck": {
+    "path": "results/gpu_vpr_recheck_20261025/validation.json",
+    "vpr_full_check": true,
+    "critical_path_ns": 7.80663,
+    "same_route_and_vpr_binary": true
+  },
+  "all_cpu_cuda_routes_identical": true,
+  "process_seconds": {
+    "batch_serial": 54.685433776001446,
+    "parallel": 36.207594726933166,
+    "cuda": 71.04557165899314
+  },
+  "measurement_limit": "One paired run on a shared worker; no GPU kernel/transfer breakdown or speedup versus original VPR.",
+  "original_job_record_preserved": true
+}

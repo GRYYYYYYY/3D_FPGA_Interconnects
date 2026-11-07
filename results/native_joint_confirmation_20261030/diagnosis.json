@@ -1,0 +1,141 @@
+{
+  "gemm_stage_median_seconds": {
+    "original_parallel": {
+      "rr_graph_load": 45.26,
+      "lookahead_build": 164.76,
+      "routing": 34.65
+    },
+    "native_parallel": {
+      "rr_graph_load": 46.2,
+      "lookahead_build": 170.25,
+      "routing": 34.65
+    },
+    "guard": {
+      "rr_graph_load": 45.7,
+      "lookahead_build": 169.99,
+      "routing": 36.23
+    },
+    "batch": {
+      "rr_graph_load": 47.17,
+      "lookahead_build": 166.79,
+      "routing": 42.32
+    }
+  },
+  "gpu_host_accounting": [
+    {
+      "case": "gemm",
+      "repeat": 0,
+      "committed": 111,
+      "batch_size_histogram": {
+        "1": 109,
+        "2": 1
+      },
+      "runtime_prepare_seconds": 3.594145084,
+      "query_state_prepare_seconds": 0.220796401,
+      "commit_seconds": 0.002853168,
+      "update_host_call_seconds": 0.026335619,
+      "search_host_call_seconds": 0.414684769,
+      "scope": "Host call totals deduplicated by batch; not pure kernel time. Overlapping CPU/GPU totals must not be added to end-to-end wall time."
+    },
+    {
+      "case": "gemm",
+      "repeat": 1,
+      "committed": 101,
+      "batch_size_histogram": {
+        "1": 101
+      },
+      "runtime_prepare_seconds": 3.577409535,
+      "query_state_prepare_seconds": 0.196761901,
+      "commit_seconds": 0.002359613,
+      "update_host_call_seconds": 0.026501064,
+      "search_host_call_seconds": 0.356241389,
+      "scope": "Host call totals deduplicated by batch; not pure kernel time. Overlapping CPU/GPU totals must not be added to end-to-end wall time."
+    },
+    {
+      "case": "gemm",
+      "repeat": 2,
+      "committed": 116,
+      "batch_size_histogram": {
+        "1": 116
+      },
+      "runtime_prepare_seconds": 3.579542964,
+      "query_state_prepare_seconds": 0.239510818,
+      "commit_seconds": 0.003001445,
+      "update_host_call_seconds": 0.027051041,
+      "search_host_call_seconds": 0.429517123,
+      "scope": "Host call totals deduplicated by batch; not pure kernel time. Overlapping CPU/GPU totals must not be added to end-to-end wall time."
+    },
+    {
+      "case": "elliptic",
+      "repeat": 0,
+      "committed": 7264,
+      "batch_size_histogram": {
+        "1": 7264
+      },
+      "runtime_prepare_seconds": 0.751612437,
+      "query_state_prepare_seconds": 8.966853098,
+      "commit_seconds": 0.132432678,
+      "update_host_call_seconds": 0.108923633,
+      "search_host_call_seconds": 139.69384002,
+      "scope": "Host call totals deduplicated by batch; not pure kernel time. Overlapping CPU/GPU totals must not be added to end-to-end wall time."
+    }
+  ],
+  "failures": [
+    {
+      "case": "elliptic",
+      "variant": "original_parallel",
+      "returncode": -11,
+      "status": "failed",
+      "seconds": 104.48108438099734,
+      "signal": "SIGSEGV",
+      "root_cause": "Not established by the exit signal alone; no OOM/deadlock attribution."
+    },
+    {
+      "case": "elliptic",
+      "variant": "native_parallel",
+      "returncode": -9,
+      "status": "failed",
+      "seconds": 467.7852410110063,
+      "signal": "SIGKILL",
+      "root_cause": "Not established by the exit signal alone; no OOM/deadlock attribution."
+    },
+    {
+      "case": "elliptic",
+      "variant": "guard",
+      "returncode": 2,
+      "status": "failed",
+      "seconds": 151.17690792499343,
+      "signal": null,
+      "final_overused_nodes": 1,
+      "overuse_report": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_joint_confirmation_20261030/artifacts/run/elliptic_initial/elliptic_0_guard/report_overused_nodes.rpt",
+      "conflict": {
+        "rr_node": 245362,
+        "type": "CHANY",
+        "occupancy": 2,
+        "capacity": 1,
+        "net_ids": [
+          353,
+          2529
+        ],
+        "net_names": [
+          "n_n8389",
+          "n_n7966"
+        ]
+      }
+    }
+  ],
+  "elliptic_historical_quality": {
+    "reference": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_diagnostics_20261029/artifacts_203702/run/routing/summary.json",
+    "reference_variant": "original_vpr (serial)",
+    "reference_route_sha256": "fd43657ce9a8dbbcaf5a7549bd40896aa6d78dafba1387603aada7c976266fc9",
+    "identical_input_hashes": true,
+    "reference_cpd_ns": 11.2895,
+    "candidate_cpd_ns": 13.6102,
+    "cpd_change_fraction": 0.2055626909960584,
+    "reference_wirelength": 99232,
+    "candidate_wirelength": 98441,
+    "scope": "Historical quality cross-check only; no cross-job timing ratio and no substitute for the failed same-job parallel reference."
+  },
+  "same_job_parallel_reference_missing_for_elliptic": true,
+  "elliptic_performance_repeats_skipped_by_predeclared_gate": true
+}

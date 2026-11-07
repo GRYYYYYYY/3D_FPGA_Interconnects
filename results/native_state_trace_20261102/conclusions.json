@@ -1,0 +1,62 @@
+{
+  "status": "complete",
+  "samples": 24,
+  "legal_samples": 24,
+  "proof": [
+    {
+      "case": "s38417_s1",
+      "generated_notifications": 151,
+      "delivered_none": 0,
+      "delivered_both": 151,
+      "first_moves": 9,
+      "first_same_partition_reinsertions": 142,
+      "stale_none": [
+        0,
+        9,
+        19,
+        28,
+        32
+      ],
+      "stale_both": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "case": "s38417_s2",
+      "generated_notifications": 139,
+      "delivered_none": 0,
+      "delivered_both": 139,
+      "first_moves": 8,
+      "first_same_partition_reinsertions": 131,
+      "stale_none": [
+        0,
+        8,
+        14,
+        21,
+        27
+      ],
+      "stale_both": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "performance_claim": false,
+  "default_changed": false,
+  "conclusion": "First iteration generates equal dynamic BB update sets; missing delivery leaves stale partition ownership at iteration2 with identical net BBs. Fixed runs maintain the original 2D containment predicate in all captured iterations. This establishes the notification-to-assignment mechanism in these traces, not the full origin of all timing or predecessor-state nondeterminism.",
+  "order_finding": "Most delivered updates erase/reinsert nets without changing partition. Notification sets repeat but delivery order can vary; per-partition orders can differ despite equal BBs and ownership. Existing stable fanout sort inherits unordered-set tie order. Skipping no-op reinsertion/canonical tie order are candidates, not validated optimizations.",
+  "perturbation": "Both-fixed controls agree across old/trace-off/trace-on for all4 case-repeat pairs. One of4 no-fix off/on pairs differs; tracing perturbation cannot be excluded. No speedup from diagnostic timings.",
+  "limits": [
+    "Only first5 iterations, two layouts and two repeats.",
+    "No RR predecessor write tracing or direct data-race proof.",
+    "The previous full parallel no-fix endpoint gate remains failed.",
+    "The prior small same-ELF cached runtime regression remains unresolved."
+  ]
+}

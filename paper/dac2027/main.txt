@@ -1,0 +1,863 @@
+PAGE 1
+ Exposing Cross-Group Parallelism in Layer-Aware
+  Lookahead Construction for 3D FPGA Routing
+
+
+                                    Anonymous Authors
+
+
+
+  Abstract—Native multicore routing leaves  costly lookahead  model used by timing-driven routing. Equal-delay samples
+construction insufﬁciently parallelized. We present a semantics-   carry associated congestion costs; completion-order reduction
+preserving decomposition for 3D FPGA lookahead: independent                                                         can change  the  selected  pair.  In 3D,  results  additionally
+layer-aware ﬂoods, ordered cost reduction, and cross-group exe-
+                                                                  distinguish source and target layers, vertical wire directions,cution with reusable private workspaces. Slice-local interpolation
+and compact storage further expose scheduling and memory  and missing slices. Naively parallelizing the surrounding loops
+tradeoffs. On eight-core GEMM, construction falls from 149.56   can introduce write conﬂicts during interpolation.
+to 20.95 seconds and process speedup  is 1.638 ± 0.005×. On   We address these issues by separating native semantics
+two large 3D graphs, Pipeline scales approximately 12× from
+                                                      from execution order. Each unchanged sample ﬂood operatesone to sixteen cores while group-local execution saturates. Native
+equivalence checks, full-routing experiments, and direct global-  on private search state and produces a layer-indexed result.
+task controls establish the beneﬁt of removing group barriers  An ordered reduction preserves the native delay/congestion
+and a veriﬁed task boundary for future hardware acceleration.    winner, while a global task stream removes group barriers. The
+  Index Terms—3D FPGA, routing lookahead, multicore CAD,   implementation uses VPR’s existing oneTBB worker budget.
+deterministic reduction, architecture exploration
+                                     A bounded-token Pipeline overlaps searches and reductions; a
+                                                                      direct global parallel loop provides an independent execution
+                            I. INTRODUCTION
+                                                                       realization. We also analyze slice-local interpolation and com-
+  Three-dimensional FPGA integration expands the architec-   pact intermediate storage to expose additional dependencies
+ture design space through stacked active fabrics, heterogeneous  and resource tradeoffs.
+resources, and programmable vertical interconnects. Evaluat-    Our contributions are the following.
+ing this space requires CAD tools that can both represent these
+                                                                  1) A semantics-preserving parallel decomposition. Westructures and process their resource graphs efﬁciently. LaZa-
+                                                                          identify  independent  sample  ﬂoods,  retain  source-gna demonstrates ﬂexible architecture generation and evalu-
+                                                                              relative coordinates and strict-delay tie semantics, andation, while Escaping Flatland improves placement through
+                                                                   formulate ordered reduction as the correctness boundarylayer assignment, delay modeling, and 3D move operators [1],
+                                                             between concurrent execution and the native map.[2]. These advances increase  the value of a  fast routing
+                                                                  2) Cross-group execution inside native VPR. We replacebackend: more candidate architectures and placements can be
+                                                                    group-limited concurrency with global sample schedul-assessed within a ﬁxed exploration budget. Changing connec-
+                                                                           ing, reusable private workspaces, and bounded in-ﬂighttivity or calibrated costs can require a new lookahead table
+                                                                                 results. Direct global-loop controls establish which im-even when the subsequent router already supports multiple
+                                                              provements arise from removing group barriers, ratherCPU cores.
+                                                                   than attributing all gains to a particular library primitive.  VPR’s native parallel router does not make every part of
+                                                                  3) Explicit support for layer-aware construction anda routing invocation parallel. The map-lookahead construction
+                                                                     storage. We preserve CHANZ sampling, all target-layerin our locked baseline enumerates representative wire samples
+                                                                                  slices, native inter-layer cost semantics, and unsampled-and executes their graph searches sequentially. Increasing the
+                                                                        layer completion. A slice dependency analysis permitsrouting worker budget therefore leaves a substantial initializa-
+                                                                      equivalent commit schedules and reduces redundant in-tion bottleneck. On a two-layer GEMM resource graph, stock
+                                                                         terpolation scans; compact cells and a budgeted variantVPR with eight physical cores spends 149.56 ± 1.32 seconds
+                                                                     quantify the resulting storage/performance tradeoffs.constructing lookahead, compared with 30.64 ± 0.38 seconds
+                                                                  4) Native validation from construction to routing work-in routing, within a 331.05±1.36-second process. Construction
+                                                            ﬂows. We evaluate 603 formal measurements acrossaccounts for approximately 45% of this process, including
+                                               2D and two-layer 3D inputs, separating 414 legal full-loading and checks. Optimizing only the routing search cannot
+                                                 ﬂow runs from 189 construction-only  runs. Scaling,remove that cost.
+                                                                 same-executable controls, cache sequences, memory di- A  direct  ﬁrst  step  is  to execute  the samples  of each
+                                                                         agnostics, and independent route checks connect thewire group concurrently. However, representative groups often
+                                                                     algorithmic decomposition to  its practical beneﬁt andcontain only four samples. With a barrier after every group,
+                                                                remaining costs.assigning eight or sixteen workers still exposes at most four
+simultaneous sample searches. The challenge  is to expose     Pipeline achieves 1.638±0.005× paired process speedup on
+parallelism  across groups while  preserving  the numerical   eight-core GEMM. On BNN and DLA 3D graphs, its one-to-
+
+PAGE 2
+                                              ∑
+sixteen-core construction speedups are 12.006 ± 0.167× and     Let tg,j denote                                                                                        ideal sample-search work, Wg =    j tg,j,                              ∑
+12.253±0.296×, respectively. These results establish effective  and W =    g Wg. Ignoring synchronization, memory con-
+use of parallelism beyond individual groups. They also expose   tention, allocation, and reduction, lower bounds on search time
+a concrete acceleration boundary for future GPU or FPGA   under P workers are
+                         ∑engines: independent searches may be replaced while retaining
+                                                                         Tgroup ≥   max{Wg/P, max tg,j},          (2)
+an ordered, testable map-construction interface.                                                                        j
+                                                                                            g
+      II. BACKGROUND AND PROBLEM FORMULATION                      Tglobal ≥max{W/P, max tg,j}.               (3)                                                                                                                             g,j
+A. 3D Resource Graphs and Lookahead Semantics          The second schedule allows work from one group to occupy
+  An FPGA routing-resource graph is a directed graph R =   workers unavailable to the ﬁrst. For ten groups of four equal-
+(V, E) whose  vertices represent wires and  pins, with ca-   cost samples, group-local execution requires ten waves at both
+pacity, location, type, and cost information. PathFinder-style   eight and sixteen cores. Global execution needs ﬁve and three
+negotiation resolves contention between routed nets [3]. VPR   waves, respectively. The sixteen-core discrete speedup limit
+combines congestion and timing costs with an estimate of the   of this example is 40/3 = 13.33 relative to one core, rather
+remaining cost to a sink [4], [5]. The sampled map-lookahead   than sixteen. This illustrates available task parallelism;  it is
+approach constructs these estimates by ﬂooding representative   not a measured CPU-utilization percentage or a guarantee of
+wire starts and recording costs at relative destination coordi-   optimal scheduling.
+nates [6].                                                          C. Related Parallel and 3D CAD Methods
+  For a layered architecture, let the wire-cost table be
+                                                         MultiQueue routing exposes parallelism within an individ-
+              F[ℓs, ℓt, c, s, ∆x, ∆y] = (d, q),             (1)   ual connection search using relaxed priority ordering [9]. Our
+                                                                    unit of concurrency is an unchanged ﬂood: we parallelize in-
+where ℓs and ℓt are source and target layers, c is channel   dependent samples and groups while maintaining each ﬂood’s
+type, s  is segment  type, and  d, q  are the  retained delay   native search order. The two granularities can potentially be
+and congestion estimates. A sampling group g = (ℓs, s, c)   combined, but that composition requires separate validation.
+contains an ordered  list of starts Rg = (rg,0, . . . , rg,ng−1).   VPR  offers  alternative  routing  algorithms,  compressed
+Each sample can reach destinations on every layer. Missing   lookahead, and  table read/write support  [10]. Compressed
+entries are completed using native interpolation. Source/OPIN   lookahead trades representation and sampling choices against
+preprocessing and derived minima are additional parts of the   construction cost; our main comparisons preserve the original
+full construction stage.                                   map. The locked compressed implementation accepts only a
+  Our 3D inputs model two active fabric layers containing   single layer, so its rejection of a two-layer input is treated as an
+logic, DSP, and memory resources, connected by  explicit   applicability limitation. Compatible 2D alternatives are evalu-
+vertical segments and inter-layer switches. The architecture   ated separately. Global parallel_for, private workspaces,
+speciﬁes axis=z segments, upward/downward links, and fan-  and ordered pipelines are existing oneTBB mechanisms [11];
+in-dependent switch delays. Actual routes contain CHANZ   the contribution is the dependency decomposition and equiva-
+transitions between (x, y, 0) and (x, y, 1). Thus the 3D classiﬁ-   lent native integration that make those mechanisms useful for
+cation follows from architecture, connectivity, and routed paths   layer-aware construction.
+together, rather than layer labels alone. We adopt the existing    LaZagna expands the range of realizable 3D architectures,
+VTR multi-die model [7], [8]; our contribution is its parallel   including vertical connection patterns and heterogeneous lay-
+construction, not the invention of vertical routing resources.     ers [1]. Escaping Flatland improves the quality of placements
+  The native wire ﬂood uses its existing indexed delay and  on such architectures [2]. Our work complements these ob-
+congestion model. We preserve these computations, graph   jectives by reducing the cost of constructing an unchanged
+edges, sample choices, and traversal semantics. We do not   routing heuristic. A faster backend can support more archi-
+replace the cost model with Manhattan distance or claim a new   tecture candidates and repeated placement evaluation without
+per-edge physical-delay model. In particular, the placement-   confounding algorithmic quality with a changed heuristic.
+delay reﬁnement in Escaping Flatland [2] is a distinct contri-
+                                                                                    III. SEMANTICS-PRESERVING CROSS-GROUPbution that motivates, but is not implemented by, this work.
+                                                               CONSTRUCTION
+B. Available Threads Versus Available Work                   A. Independent Floods With Private State
+  The stock executable already receives the same physical-     For each  native group  g, sample  selection follows  the
+core budget and enables native parallel routing in our process   original reference locations, segment and direction ﬁlters, and
+comparisons. Its wire-sampling loop remains sequential. Our   fallback search for unusual wire types. We retain groups for
+within-group implementation, GROUP, ﬁrst exposes sample   supported X, Y, and Z channel types and respect layers without
+concurrency, but synchronizes before the next group. The   inter-cluster programmable resources. A task descriptor iden-
+cross-group implementations instead expose the union of all   tiﬁes its group, sample index, and start RR node. Its output
+independent sample tasks.                                        Cg,j[ℓt, ∆x, ∆y] includes every destination layer.
+
+PAGE 3
+      (a) Layer-aware resource and cost model                      (b) Repeated CAD evaluation
+
+
+
+
+      Active fabric layer 1                                         Architecture             Parallel lookahead          Native routing
+                                         + resource graph        construction (ours)     + QoR evaluation
+
+
+
+
+                             CHANZ
+                      + switch delay                                                                       changed topology / costs: rebuild
+      Active fabric layer 0
+
+                                                  Same compatible graph: reuse the table
+                                                             Layer assignment alone need not invalidate it
+
+                                                                 Architecture exploration and placement evaluation
+      F[ℓs, ℓt, c, s, Δx, Δy]                                      benefit from a faster, equivalent routing backend
+
+
+
+Fig. 1.  Research context. (a) Two active fabric layers connect through modeled vertical routing resources; the lookahead retains source/target layer identity.
+(b) Faster equivalent construction reduces the cost of evaluating changed resource graphs. Reusing a compatible graph permits caching; changing placement
+alone does not necessarily require reconstruction. The schematic is conceptual, not a physical implementation measurement.
+
+
+                     (a) Same eight-core budget                        (b) Construction drives process savings
+     175                                               400
+                                                                                                             Lookahead
+    (s) 150     149.56                                                 331.05                       Routing
+                                                                                                                   Other process work
+                                                      300
+     125                                                                        (s)
+     100                                                                           219.17        202.07              construction                                                  200                                                                                                                                                                                                      process      75
+                                                                                     VPR
+      50                     37.88                       100
+                                             20.95           Lookahead  25
+
+       0                                                 0
+             Stock VPR        Group           Pipeline                  Stock VPR       Group          Pipeline
+
+
+Fig. 2. Measured GEMM motivation at the same eight-physical-core budget, three repeats per implementation. (a) Complete lookahead construction: Stock
+149.56 ± 1.32 s, Group 37.88 ± 0.37 s, Pipeline 20.95 ± 0.64 s. (b) Full ﬁxed-input VPR process; the residual includes loading, checking, and all other
+process work. Bars show means; error bars show sample SD. Stock already enables native parallel routing. Group is our within-group implementation, not an
+upstream baseline.
+
+
+  Every worker owns an expanded bitmap, visited-cost array,   Consequently, shared destinations do not justify replacing the
+priority queue, and sample output. The resource graph and   samples with a single unlabeled multi-source ﬂood. Even
+cost data are read-only during construction. A worker may   repeated start RR IDs require matching recording context and
+reuse its allocated workspace for subsequent tasks, but resets   search constraints before exact reuse is valid. We retain all
+search state for every new ﬂood. Reuse of storage therefore   selected samples.
+does not merge searches or propagate labels from a different
+source. The original full-device bounding box spans all layers,
+                                                             B. Ordered Reduction and Correctness
+so paths can traverse native CHANZ resources while retaining
+layer-dependent costs.                                   The native smallest-entry rule replaces a populated cell only
+                                                 when the new delay is strictly smaller. Its congestion value  Source identity must survive the decomposition. Consider
+                                                      must remain paired with that delay. For ﬁnite valid values, thetwo starts at x = 0 and x = 5 reaching a pin at x = 6 with
+                                                         winner at a cell u isdelays 1 and 2. The native samples contribute to displacement
+buckets 6 and 1, respectively. A nearest-source search keeping
+                                                                    j∗(u) = arg    min                j).         (4)only the cheaper label at the pin loses the second contribution.                              j:Cg,j(u) occupied(dg,j(u),
+
+PAGE 4
+Algorithm 1 Layer-aware cross-group Pipeline construction   parallel_for, then reduces all results in descriptor order
+Require: RR graph R, native cost data, worker budget P                    after the join. Workspace allocation is thread-local and spans
+Ensure: Native-equivalent wire table F
+                                                              groups. This schedule isolates the effect of globally exposing 1: G ←native ordered (ℓs, s, c) groups
+ 2: J ←[ ]; initialize native-empty group tables Bg                      the task set without an ordered pipeline.
+ 3: for g ∈G in native order do                                Ordered pipeline execution. Algorithm 1 uses an ordered
+ 4:   Rg ←NATIVESELECT(R, g)
+ 5:     for j = 0, . . . , |Rg| −1 do                                   producer, parallel ﬂood body, and ordered consumer. At most
+ 6:       append (g, j, Rg[j]) to J                             min(S, 2P) sample results are in ﬂight for S total samples.
+ 7:    end for                                                   Later groups can execute while an  earlier group  is  still
+ 8: end for
+ 9: Q ←min(|J|, 2P) in-ﬂight sample tokens                          outstanding. Results are reduced and released incrementally;
+    Ordered producer:                                      commits retain native group order. Head-of-line waiting at
+10: Emit descriptors from J in order, subject to Q                       the consumer and per-ﬂood imbalance can still limit speed.
+    Parallel worker for descriptor (g, j, r):
+11: Wt ←private reusable workspace; reset its labels/queue            FLAT and PIPELINE  share  task enumeration, ﬂood code,
+12: C ←NATIVEFLOOD(R, r, Wt)                                       result representation, and native commit order in their direct
+13: Publish (g, j, C) with all target-layer cells                         comparison.
+    Ordered consumer, in descriptor order:
+14: Bg ←NATIVESTRICTMERGE(Bg, C)                         The global implementations also change allocation lifetimes
+15: Release C and its token                                   and search/reduction overlap. We therefore interpret Flat-to-
+    After pipeline completion:
+16: for g ∈G in native order do                                      Pipeline measurements as a comparison of complete execution
+17:   F ←NATIVECOMMITANDINTERPOLATE(F, g, Bg)                 realizations, not a measurement of scheduling overhead alone.
+18: end for                                           The TBB budget limits allowed parallelism, while observed
+19: Run unchanged source/OPIN and derived-minimum construction
+                                                        workspace count is measured separately; it is not assumed to
+                                                             equal the thread budget in every run.
+
+The cell contains (dg,j∗, qg,j∗), not two independently min-
+imized scalars. We implement the native insertion and oc-                                                      D. What the Algorithm Preserves for 3D FPGA Routing
+cupancy predicates directly, rather than relying on a generic
+ﬂoating-point tuple minimum.                             The layer dimension affects the algorithm at several speciﬁc
+  Proposition 1: Assume native sample selection and within-   points.
+ﬂood visitation are unchanged, recorded valid delays are ﬁnite,
+                                                                  1) Layer- and direction-aware task enumeration. Theand ﬁnal commits and interpolation follow the native order.
+                                                                        task key retains source layer, segment, and channel type,Private sample execution followed by original-order  strict-
+                                                                     including CHANZ. Native vertical direction selectiondelay reduction yields the same wire-cost table as serial sample
+                                                            and fallback behavior are preserved. These are inheritedexecution.
+                                                               graph semantics explicitly maintained by the parallelProof. At  each  cell,  one  sample’s  representative  is  the
+                                                                  implementation.
+minimum-delay entry ﬁrst encountered within that sample.
+                                                                  2) Cross-layer search and destination recording. Each
+Native serial execution concatenates these per-sample visita-
+                                                        ﬂood uses the complete multilayer graph. Its result is
+tion sequences. Reducing their representatives in sample order
+                                                                indexed by  target layer as well as displacement, so
+selects the minimum delay in the concatenation and retains its
+                                                                   equal (∆x, ∆y) on different layers cannot alias. Layer
+earliest associated congestion on ties. Thus each populated cell
+                                                                     crossing is represented by native resources and costs,
+agrees; missing cells retain the same occupancy state. Identical
+                                                                    not an assumed constant geometric penalty.
+commits and interpolation then produce identical ﬁnal cells.
+                                                                  3) Layer-pair-speciﬁc reduction and completion. PrivateThe argument is independent of task completion order. □
+                                                                             results merge only into the matching source-layer group,
+  This proposition does not license arbitrary reassociation
+                                                                         retaining all target layers. Interpolation operates within
+of exceptional ﬂoating-point values. NaNs, invalid sentinels,
+                                                          ﬁxed layer-pair slices, with native completion for un-
+signed zeros, and occupied-but-invalid states are handled by
+                                                             sampled or disabled source layers.
+the native insertion rules and separate representation  tests.
+                                                                  4) Resource scaling with layers. Private maps contain
+It also does not require ﬁnal parallel route ﬁles to be byte-
+                                 LWH cells and the ﬁnal map contains layer-pair slices.
+identical: routing has its own concurrent state and trajectory.
+                                                          Token limits and the optional compact representation
+C. Three Execution Schedules                              make this cost explicit instead of silently replicating the
+                                                                            entire global map per worker.
+  Group-local execution. GROUP allocates private sample
+results for one group, executes  its ﬂoods in  parallel, and  The current native CHANZ selection path includes assump-
+reduces them in original order. The next group starts after   tions speciﬁc to the tested one-/two-layer conﬁgurations. Syn-
+this barrier. This establishes sample independence but limits   thetic higher-layer interpolation tests do not establish a native
+active work to the current group’s sample count.                 arbitrary-layer implementation. The algorithmic treatment is
+  Direct global execution. FLAT materializes the same or-   layer-aware, but performance portability to other layer counts
+dered descriptors for all groups, executes them with one global  and vertical fabrics remains a separate evaluation.
+
+PAGE 5
+                  (a) Group barriers                    (b) Cross-group tasks                 (c) Pipeline execution contract
+
+
+     0        g0              g1          0        g0              g2                        Ordered (group, sample) jobs
+
+                g0              g1                      g0              g2
+
+                g0              g1                      g0              g2                                Private native floods
+
+     3        g0              g1          3        g0              g2       Worker                                                   g1              g3
+                                                                                                  Ordered delay/congestion merge
+
+                                                        g1              g3
+
+                                                        g1              g3
+                                                                                                                 Layer-pair commit + interpolation
+     7                              7        g1              g3
+
+                     Illustrative time                          Illustrative time
+
+
+Fig. 3. From local concurrency to global task parallelism. The equal-length schedule is illustrative: a four-sample group cannot occupy eight workers, whereas
+samples from successive groups can. The actual implementation preserves the ordered map-reduction boundary while allowing independent ﬂoods to complete
+out of order.
+
+
+    IV. SLICE DEPENDENCIES AND RESOURCE-AWARE      Algorithm 2 Equivalent source-layer slice completion
+                   VARIANTS                               Require: Completed group table Bg, g = (ℓs, s, c)
+                                                                                      1: Commit every raw cell of Bg to F[ℓs, :, c, s, :, :]
+A. Equivalent Slice Completion                                            2: for every target layer ℓt do
+                                                                                      3:   U ←F[ℓs, ℓt, c, s, :, :]
+  An interpolation call may traverse multiple layers without                                                                                      4:     for x in native outer-loop order do
+creating a numerical dependence between them. Inspection     5:        for y in native inner-loop order do
+of both native neighbor helpers shows that (ℓs, ℓt, c, s) stays     6:                if U[x, y] requires completion then
+                                                                                      7:             Apply native neighbor rule in native summation order
+ﬁxed: only (∆x, ∆y) varies. Thus distinct layer-pair slices are                                                                                      8:          end if
+independent, while entries within a slice can depend on earlier     9:       end for
+ﬁlled entries. The original outer-x, inner-y scan and ﬂoating-    10:    end for
+                                                                             11: end for
+point accumulation order must remain unchanged.                                                                             12: Publish group completion; release its intermediates
+  The commit for a group overwrites its complete source-layer        After all sampled groups complete:
+region, including initially invalid entries. Earlier provisional    13: for each used (s, c) and unsampled source layer ℓs do
+                                                                             14:    Apply the same native slice completion for every ℓtinterpolation in that region is therefore superseded. Once a                                                                             15: end for
+completed slice is ﬁlled, subsequent native calls retain valid    16: Leave entirely unused (s, c) combinations untouched
+entries. Under unique group keys, full-region commits, and no
+partial-map consumer, these properties permit two equivalent
+schedules: defer interpolation until all raw groups have been
+                                                               bytes before any element allocation, while the scalar  cell
+committed, then ﬁll each used channel/segment combination
+                                                            occupies 12 bytes. This reduction concerns the intermediate
+once; or commit and ﬁll only each completed group’s source-
+                                                                   representation, not the entire process RSS.
+layer slices, followed by defaults for unsampled layers. Algo-
+                                                     The BOUNDED variant allocates a bounded set of privaterithm 2 gives the latter.
+                                                        sample tables and search workspaces. When a group’s ﬁnal  Let L be the number of layers, K the used channel/segment
+                                                        sample completes, its worker performs the original-order re-combinations, and A = WH.  If every layer supplies ev-
+ery group, repeated whole-table  traversal performs KL3A   duction into the ﬁrst table, commits and ﬁlls that group’s
+                                                                           slices, and releases the remaining tables. An acquire/releasemissing-cell checks. Completing each ﬁnal slice once requires
+KL2A. This reduces redundant interpolation scans;  it does   completion counter publishes preceding writes. The implemen-
+                                                                      tation uses bounded batches with barriers; a group exceedingnot reduce the number of ﬂoods or imply an L-fold overall
+                                                                 the table budget falls back to serial insertion into one table.speedup.  Its  additional value  is enabling  early  release of
+                                                                    Slice-only, compact-cell, and bounded variants are evaluatedcompleted groups.
+                                                                 separately from the primary Pipeline.
+B. Compact Cells and Bounded Active Results                                                            For M = LWH, G allocated group tables, and S total sam-
+  In native smallest-entry mode, an intermediate cell needs   ples, the table-count relationships are summarized in Table I.
+one occupied ﬂag and the retained (d, q) pair. We implement  Group metadata and task descriptors add O(G + S) storage.
+a scalar cell preserving the vector-based insertion semantics,   Search labels, priority queues, allocator  state, the resource
+including the distinction between occupancy and numerical   graph, and the ﬁnal map are additional. A workspace estimate
+validity. On the measured ABI, a vector header occupies 24   cannot provide a hard RSS limit because queues and allocator
+
+PAGE 6
+                      TABLE I                             B. Cohorts and Experimental Boundaries
+  INTERMEDIATE-TABLE STRUCTURE. COUNTS EXCLUDE THE COMMON
+  FINAL MAP AND RESOURCE GRAPH; VECTOR PAYLOADS AND SEARCH
+ WORKSPACES ARE ADDITIONAL. Sg IS THE CURRENT GROUP’S SAMPLE     The evidence comprises 603 formal records: 414 legal full-
+         COUNT; Ka IS THE BOUNDED ACTIVE-SLOT COUNT.         ﬂow runs and 189 construction-only measurements. Table III
+                                                                 separates the cohorts so neither repeated controls nor suc-
+     Method   Sample tables Group tables  Cell backing                 cessful subsets inﬂate the workload count. The original 222
+     Group           Sg           1 24M(Sg + 1)              full-ﬂow records contain GEMM timing/scaling, fresh-layout
+      Flat            S      G 24M(S + G)                 studies, three-circuit conﬁrmation, and storage ablation. New
+      Pipeline   min(S, 2P)      G 24M[G + min(S, 2P)]
+     Bounded       Ka       in-place 12MKa                 complete-ﬂow cohorts add a three-layout 3D  subset, four
+                                                     k6 layouts, clma, and BNN-2D. Separate construction-only
+                                                               cohorts include all three large 3D graphs, regardless of their
+                                                                route outcome.caches can grow.
+                                                     The three-layout width-120 full-ﬂow subset was selected
+C. Native Integration and Layered Validation               by a declared baseline qualiﬁcation: LSTM seed 2 and both
+  The implementation operates inside native VPR rather than  BNN seeds. The original six-layout set retains three successes
+replacing its router with a graph-only proxy. Two bounding-  and three failures; DLA seeds 1/2 and LSTM seed 1 are
+box  notiﬁcation  repairs  are shared by  the CPU  variants;   not silently replaced. All three graphs remain in the graph-
+these maintain parallel-router state but can change routing   only construction study. Construction experiments stop native
+trajectories relative to Stock. We therefore distinguish Stock   routing after one iteration; their valid construction timers and
+comparisons from same-repair, same-executable method com-  maps do not establish legal complete routes. Pilots, 36 new
+parisons. The repairs are integration prerequisites, not claimed   full-ﬂow qualiﬁcation runs, 18 instrumented diagnostics, six
+ﬁrst discoveries of those upstream issues.                   compressed-map alternatives, and 90 cache-batch processes
+  Validation has complementary  layers. Ordered-reduction   are reported outside the 603 formal records.
+enumeration covers 21,825 permutations. Extracted native in-
+terpolation tests cover 2,400 sparse ﬁxtures over 1, 2, 3, 4, and
+8 layers, including unsampled slices; two equivalent reorder-   C. Baselines, Platform, and Timing
+ings yield 4,800 bitwise comparisons with zero differences.
+Mutations that exchange the x/y scan or omit unsampled-    The baseline is VTR commit 0b912334fdd8, with GNU
+layer completion fail 1,905 and 1,902 ﬁxtures, respectively.  C++ 11.4 release builds and assertion level 2. Stock uses the
+Scalar-cell tests cover 100,000 ﬁxtures and 1,551,076 bitwise   original executable. Fixed-serial retains the same CPU-variant
+ﬁeld comparisons, including exceptional values. Finally, native   state repairs with sample parallelism disabled; Group enables
+runs compare serialized wire maps and, for complete routes,   per-group sample parallelism; Flat and Pipeline expose  all
+apply native FULL checking and independent original-VPR   groups. All full-ﬂow arms use native parallel routing, the same
+FULL/STA veriﬁcation. Wire-map equality does not assert   worker budget, the same ﬁxed inputs, and comparable map-
+equality of every derived source/OPIN structure or ﬁnal route   output settings. Flat here denotes globally ﬂattened lookahead
+trajectory.                                                            tasks, not VPR’s separate ﬂat-routing mode, which is disabled.
+                                                        Measurements use Intel Xeon Gold 6530 CPU instances
+           V. EXPERIMENTAL METHODOLOGY
+                                                           with one logical CPU per selected physical core and afﬁnity
+A. Input Workloads and 3D Classiﬁcation                     within one NUMA node. Original/width-120/k6 measurements
+  Table  II  lists the inputs used in the main performance   use the original instance; scaling and ﬂat-control cohorts use
+studies.  They  combine  neural-network  compute  circuits,   additional shared instances. We retain the actual command,
+DSP/arithmetic designs, and traditional logic benchmarks. A   environment, topology, afﬁnity, executable hash, and input
+case consists of architecture XML, BLIF, a packed netlist,   hashes. Cohorts on different instances are never paired or
+ﬁxed placement, and frozen RR graph. Input matrices or   pooled. Physical-core exclusivity is not established.
+neural-network training samples are not supplied to the router;     Construction time TLA  is the complete native lookahead
+these are hardware netlists mapped onto the listed fabrics.      timer: wire sampling, interpolation, source/OPIN work, and
+  The KOIOS-derived 3D model and Hecate 3D model con-   derived minima, excluding RR loading and map serializa-
+tain two active layers and explicit CHANZ resources. The   tion. Process time Tproc includes ﬁxed-input loading, looka-
+native k6 architecture and original KOIOS 2D architecture are   head, routing, native checking/STA, and uniform map output.
+single-layer controls without CHANZ nodes. BNN appears  Workﬂow time  additionally includes independent  original-
+on both a 3D and a separately prepared 2D  fabric;  this  VPR readback/checking. These process measurements do not
+tests applicability, not a matched physical-quality comparison   execute new synthesis, packing, placement, or RR genera-
+between 2D and 3D. Different placement seeds on a ﬁxed   tion. Performance runs disable diagnostic counters. A shared-
+architecture can share a resource graph and are not counted   cache comparison uses the same qualiﬁed wire map; native
+as independent graph topologies.                           source/OPIN work may still execute.
+
+PAGE 7
+                                                TABLE II
+DATASET INVENTORY. GRID DIMENSIONS ARE X × Y × L; L = 2 ROWS ARE 3D, L = 1 ROWS ARE 2D. NODES AND EDGES ARE IN MILLIONS; CHANZ
+  COUNTS ARE EXACT. NETS EXCLUDE GLOBAL/UNROUTED-EMPTY NETS. BLOCKS ARE PLACED CLUSTERED BLOCKS. WIDTH IS 100 FOR THE FIRST
+ SEVEN ROWS AND NATIVE K6 CASES, 120 FOR BNN-3D/LSTM/DLA AND BNN-2D. THE LATTER 3D GRAPH COUNTS ARE TAKEN FROM THE ACTUAL
+                             WIDTH-120 XML. TWO LAYOUTS OF A CIRCUIT SHARE THE REPORTED SIZE.
+
+
+                               Circuit    Workload type   Fabric              Grid  Layouts  Blocks     Nets  Nodes (M)  Edges (M) CHANZ
+
+                   gemm     Matrix multiply  KOIOS-3D 176×176×2       1  38,568  206,155       9.596     84.214  185,856
+                          softmax  NN softmax    KOIOS-3D   42×42×2       1   2,544   11,320       0.527       4.590   10,584
+                             reduction NN reduction   KOIOS-3D 102×102×2       1  12,380   50,369       3.224     28.136   62,424
+                                   elliptic   DSP ﬁlter       Hecate      30×30×2       1    506    2,849       0.265       2.366     6,658
+                            alu4      Logic / ALU    Hecate      10×10×2       2    133     713       0.022       0.197      576
+                               diffeq     Arithmetic       Hecate      10×10×2       2    206    1,084       0.022       0.197      576
+                         s38417    Sequential logic  Hecate      20×20×2       2    556    4,444       0.121       1.019     2,936
+                    BNN-3D  Binary NN     KOIOS-3D 112×112×2       2  15,331   78,308       4.103     39.481   75,264
+                  LSTM    Recurrent NN   KOIOS-3D 113×113×2       2  17,432  105,855       4.167     40.142   76,614
+                  DLA    DL accelerator  KOIOS-3D 154×154×2       2  28,507  154,021       7.752     74.858  142,296
+                             tseng      Arithmetic      k6         30×30×1       2    284     572       0.093       0.860        0
+                           des       Cryptographic   k6         40×40×1       2    680     954       0.167       1.570        0
+                         clma      Logic          k6         44×44×1       1   1,080    4,585       0.203       1.918        0
+                    BNN-2D  Binary NN     KOIOS-2D 177×177×1       1  15,331   78,308       5.018     44.368        0
+
+
+                                                TABLE III
+   FORMAL EVIDENCE COHORTS. RUNTIME REPEATS ARE WITHIN FIXED CONFIGURATIONS, NORMALLY n = 3; FRESH LAYOUTS HAVE ONE TIMING
+             OBSERVATION PER CONFIGURATION. HOST LABELS DISTINGUISH EXECUTION COHORTS, NOT RESOURCE EXCLUSIVITY.
+
+
+                Cohort                    Scope       Runs  Host  Design and purpose
+
+                  Original three-way/extension  Full ﬂow       66 A   GEMM:   three   variants   and   4/8/16-core   extension;
+                                                                              alu4/diffeq/s38417: two fresh layouts each.
+                Independent conﬁrmation      Full ﬂow       36 A   GEMM, softmax, reduction; Group/Pipeline; rebuild/cache.
+                 Representation ablation        Full ﬂow      120 A     GEMM/elliptic;   ﬁve    implementations;    4/8    cores;
+                                                                                rebuild/cache.
+                Large 3D construction        Construction    36 A    BNN/LSTM/DLA; Stock, ﬁxed-serial, Group, Pipeline; eight
+                                                                                  cores.
+                Qualiﬁed large 3D subset      Full ﬂow       72 A     Three layouts, two circuits; four arms; rebuild/cache; eight
+                                                                                  cores.
+                Independent k6 architecture   Full ﬂow       96 A     tseng/des, two layouts each; four arms; rebuild/cache.
+               Core scaling                  Construction    90 B    BNN/DLA/tseng; Group/Pipeline; 1/2/4/8/16 cores.
+                  Direct global-loop controls    Construction    54 C    BNN/DLA/clma; Group/Flat/Pipeline; 8/16 cores.
+               clma complete routing         Full ﬂow       12 C    One layout; Stock/Group/Flat/Pipeline; eight cores.
+                  Original KOIOS 2D BNN    Both           21 C     Twelve full-ﬂow and nine construction runs; eight cores.
+
+
+
+D. Statistics, Quality, and Audit                               Full-ﬂow acceptance requires zero overuse, native and inde-
+                                                          pendent FULL/STA checks, preserved route identity through
+  For each ﬁxed conﬁguration, times and paired ratios are                                                           independent readback, and CPD and wirelength each within
+reported as arithmetic mean ± sample SD. For repeat r,                                      +5% of the paired control. Map-equivalent comparisons ad-
+                 √∑                ditionally require the reference wire-map bytes. Construction-
+         Tcontrol,r        1 ∑                 r(sr −¯s)2    only validity requires a complete positive build timer before sr =                   ,    ¯s =       sr,  σs =                         .
+       Tcandidate,r      n                                  n −1         routing, reference-map equality, and the prescribed capped                                 r
+                                                              (5)   exit. Failed qualiﬁcations are retained in their attempted de-
+We compute ratios before averaging; dividing mean times   nominators. These distinctions prevent construction success
+is a different statistic. SD describes the observed repetition  from being interpreted as routing success.
+variability and is not a conﬁdence interval. Single-observation
+                                                                             VI. RESULTSconﬁgurations have no estimated SD. Figures show mean/SD
+and, where space permits, individual observations. All raw   A. From Native Parallel Routing to Parallel Construction
+measurements are retained in the artifact.                        Figure 2 shows the distinction between requesting multiple
+   Cross-circuit summaries ﬁrst take the geometric mean of   routing workers and exposing construction work. On the same
+per-layout mean paired ratios within each circuit, then the ge-   eight-core GEMM input, mean construction time falls from
+ometric mean across circuits. This gives equal circuit weights;   149.56 s in Stock to 37.88 s in Group and 20.95 s in Pipeline.
+BNN’s two layouts do not receive twice LSTM’s weight.  The paired Stock-to-Pipeline construction speedup is 7.144 ±
+Separate cache modes, timing scopes, and host cohorts are not   0.266×, and its process speedup is 1.638 ± 0.005×. This is
+combined. This manuscript consistently recomputes mean/SD   an observed bottleneck in the locked native ﬂow, not a claim
+summaries from frozen observations; original experimental   that every VPR routing algorithm has poor scaling on every
+protocols and selection records are retained unchanged.         design.
+
+PAGE 8
+  The construction-only study repeats the comparison across   failed layouts remain outside this conditional full-ﬂow claim
+all three large 3D graphs (Table IV), including those whose full  and inside the broader construction evaluation.
+routes fail qualiﬁcation. Same-executable ﬁxed-serial controls     For the 72 formal conditional-subset runs, all native and
+distinguish the sample-parallel contribution from the integra-   independent legality checks pass. Pipeline’s largest CPD in-
+tion repairs. Group reduces construction substantially; Pipeline   crease relative to Stock  is 0%, with maximum wirelength
+further improves it by approximately 1.9–2.0× at eight cores.   increase about 0.091%. Relative to Group, the largest CPD
+Serial and Group results demonstrate why the cross-group step  and wirelength increases are about 0.165% and 0.041%. These
+matters beyond simply enabling a parallel option.             changes satisfy the quality gate while showing that equal
+                                                           wire maps do not force identical parallel routing trajectories.
+B. Scaling Beyond the Group Width                         Stock includes the  state-repair  difference; the same-repair
+                                                                  controls and phase/cache measurements provide more speciﬁc  Figure 4 reports a separate 1/2/4/8/16-core construction
+                                                                        attribution.cohort on three graphs. BNN and DLA have ten nonempty
+                                                     The  original independent conﬁrmation also  retains ninegroups with four samples each. Their Group construction time
+                                                         improving  rebuild  pairs on GEMM, softmax, and reduc-saturates after four cores, while Pipeline continues improving
+                                                                         tion. Group-to-Pipeline process speedups are 1.091 ± 0.008×,through sixteen. Relative to its own one-core implementation,
+                                                    1.121±0.030×, and 1.092±0.008×. The new k6 architecturePipeline obtains 12.006 ± 0.167× on BNN and 12.253 ±
+                                                                  yields an equal-circuit Stock-to-Pipeline rebuild aggregate of0.296× on DLA. At sixteen cores, its gains over Group are
+                                                        1.129×; individual small-design timings have greater relative3.123 ± 0.033× and 3.123 ± 0.001×. This directly supports
+                                                                    uncertainty. On the original KOIOS 2D BNN, the full-processremoving the group-local parallel-width limit.
+                                                                Stock-to-Pipeline result is 1.356±0.028×. Its Flat-to-Pipeline  The beneﬁt depends on task  availability and  cost. The
+                                                              process ratio is 1.028±0.024×, whereas the construction ratiotseng 2D input has only eight samples, so sixteen workers
+                                                              within those same full runs is 1.002±0.044×. A small processcannot expose sixteen independent ﬂoods. Its subsecond stage
+                                                                  difference therefore cannot automatically be assigned entirelyis also sensitive to timer granularity. DLA’s four-core Group-
+                                                                    to construction scheduling.to-Pipeline ratio is 0.954 ± 0.003×, showing that cross-group
+overhead can outweigh  its beneﬁt when a group already   E. Cache Reuse and Repeated Evaluation
+supplies enough work. Approximately twelvefold sixteen-core
+                                      A cache hit bypasses the wire construction being optimized.
+scaling  therefore  establishes  substantial  additional concur-                                          GEMM’s common-cache Stock-to-Pipeline result is 1.000 ±
+rency, not perfect utilization or a universal speedup guarantee.                                                        0.009×, consistent with removal of the measured bottleneck.
+                                           On the 3D conditional subset, equal-circuit cache aggregates
+C. Direct Global-Loop Controls
+                                                                 are 1.012× versus Stock and 0.996× versus Group. These
+  Table V compares Group, Flat, and Pipeline using one exe-   controls support construction as the main source of rebuild
+cutable and the same task-generation/ﬂood code. Both global   beneﬁt; a speedup on a bypassed stage is not a requirement
+implementations substantially outperform Group on large 3D   of the method.
+graphs at eight and sixteen cores. Their mutual differences     Actual cache sequences on tseng and des evaluate three
+are much smaller: the BNN/DLA Flat-to-Pipeline mean ratios   repeated batches per arm. Each batch ﬁrst builds and writes its
+range from 0.995 to 1.029. Thus the dominant result is the  own equivalent table, then performs four requests using that
+beneﬁt of exposing all independent groups. Pipeline’s incre-   table. For preﬁx length K, the measured batch time is
+mental release and bounded in-ﬂight sample tables provide                        K                            ∑
+a distinct implementation tradeoff, but the current evidence                                   (1)              (k)
+                                                       Ba(K) = T a,build +   T a,reuse.            (6)
+does not establish that it is universally faster than direct global
+                                                                                    k=2
+execution.
+                                                            Table VII reports paired  ratios of these sums. The K =
+  The larger 2D BNN also beneﬁts: Group construction takes
+                                                                    1, 2, 5 preﬁxes share observations and are not independent
+7.75±0.27 s, compared with 4.23±0.13 s for Flat and 4.16±
+                                                             experiments; the ﬁve requests use the same ﬁxed design.
+0.10 s for Pipeline. The tiny clma stage has greater relative
+                                                       These measured sequences demonstrate amortization without
+variability; retaining all observations prevents an apparently
+                                                        assuming that every placement change requires rebuilding a
+large ratio from being interpreted as a stable scheduling effect.
+                                                           compatible table.
+
+D. Legal Full-Flow Beneﬁt and Quality                           F. Storage, Memory, and Representation Ablation
+
+  Table VI combines  absolute  process  times and  paired     Table VIII measures approximate stage RSS on  instru-
+speedups, retaining the cohort and cache distinction. On the  mented eight-core runs after RR loading. Global scheduling
+declared 3D conditional subset, Stock-to-Pipeline mean ratios   increases workspace count from four to eight on the larger
+are 1.638, 1.702, and 1.747 for LSTM seed 2 and BNN   inputs, making additional concurrency a real memory tradeoff.
+seeds 1/2. The equal-circuit geometric aggregate is 1.681×;   For BNN-3D, observed growth is 162.0 MiB for Group, 231.7
+the Group-to-Pipeline aggregate is 1.090×. All nine rebuild  MiB for Pipeline, and 241.1 MiB for Flat. Pipeline’s sample-
+pairs improve over both Stock and Group. The original three   table bound is sixteen rather than Flat’s forty. On BNN-2D,
+
+PAGE 9
+                                                TABLE IV
+  COMPLETE LOOKAHEAD CONSTRUCTION ON ALL THREE WIDTH-120 3D GRAPHS AT EIGHT PHYSICAL CORES. TIMES ARE SECONDS; ENTRIES ARE
+  MEAN ± SAMPLE SD (n = 3). RATIO COLUMNS ARE PAIRED CONSTRUCTION SPEEDUPS. THE ONE-ITERATION ROUTE TAILS ARE NOT COUNTED AS
+                                                 LEGAL FULL ROUTES.
+
+
+                   Graph           Stock       Fixed-serial        Group         Pipeline    Stock/Pipeline   Group/Pipeline
+
+                   bnn      66.05 ± 1.07    67.25 ± 0.20   17.44 ± 0.13    8.83 ± 0.29   7.480 ± 0.164   1.976 ± 0.072
+                      lstm     65.85 ± 0.19    67.31 ± 0.91   17.29 ± 0.05    8.87 ± 0.09   7.427 ± 0.061   1.951 ± 0.022
+              DLA   130.74 ± 1.77   131.71 ± 1.20   33.69 ± 0.36   17.88 ± 0.29   7.316 ± 0.209   1.885 ± 0.016
+
+
+             BNN (3D)                    DLA (3D)                        tseng (2D)
+                                    150
+                                Group                                  Group                                  Group
+    (s) 60                              Pipeline    125                              Pipeline    0.25                              Pipeline
+
+                                    100     time
+     40                                                                      0.20
+                                     75
+
+                                     50
+     20                                                                      0.15           Lookahead
+                                     25
+
+     core     1     2     4     8    16        1     2     4     8    16        1     2     4     8    16
+
+ 1
+  at 15                               15                               15
+       method 10                               10                               10
+     same
+      5                                5                                5
+    vs.
+
+
+      0                                0                                0        Speedup     1     2     4     8    16        1     2     4     8    16        1     2     4     8    16
+                   Physical cores                           Physical cores                           Physical cores
+
+
+Fig. 4.  Construction scaling on host B, with three repeats at each core count. Top: mean construction wall time and sample SD. Bottom: paired speedup
+relative to the same method at one core; the dotted line is ideal linear scaling. Group saturates near the four-sample group width on BNN/DLA, while Pipeline
+exposes forty samples globally. tseng has only eight tasks. No process speedup or legal-route claim is derived from this capped-routing cohort.
+
+
+both global implementations have sixteen-sample bounds and  and storage results remain useful methodological contribu-
+nearly equal observed peaks.                                        tions, while Pipeline  is retained as the main performance
+  The sampler targets 2 ms but actual gaps can be much   implementation.
+longer; observations can miss peaks. Earlier whole-process
+                                                      G. Alternative Models and Retained Failureshigh-water marks were dominated by RR parsing and could
+not  isolate construction growth. The newer measurements    The compatible compressed-map control  is evaluated on
+address that ambiguity, while remaining insufﬁcient to claim   tseng/des with its own quality gate rather than byte equality
+a stable process-memory saving for Pipeline. The bounded   to the original map. Its des CPD changes by approximately
+representation limits a different object set and is not validated  +3.95%, illustrating that alternative-model comparisons in-
+by subtracting these RSS samples.                            volve quality as well as runtime.  It  is not combined with
+  Table IX retains the full storage/scheduling ablation. Com-   the map-equivalent speedup aggregate. The locked compressed
+pact  cells and  equivalent  slice completion  pass semantic   implementation’s multilayer assertion is retained as an incom-
+checks,  but  the  budgeted  combination  does  not  consis-   patibility, not counted as a victory for our method.
+tently improve process time over  Pipeline. For eight-core      Earlier width-100 qualiﬁcation attempted thirty runs across
+GEMM, Bounded achieves 1.057 ± 0.046× relative to Group,  ﬁve variants and six large-design layouts: seventeen timed
+versus 1.093 ± 0.003×  for  Pipeline;  the paired  Pipeline-   out, three stock runs crashed, ﬁve failed to converge, and ﬁve
+time/Bounded-time ratio is 0.968 ± 0.042×. The dependency  BNN-seed-2 runs were legal. The original formal matrix was
+
+PAGE 10
+                                                TABLE V
+ DIRECT GLOBAL-TASK CONTROLS ON HOST C. ENTRIES ARE MEAN ± SAMPLE SD (n = 3); TIMES ARE COMPLETE CONSTRUCTION SECONDS, RATIOS
+ ARE PAIRED STAGE SPEEDUPS. FLAT IS GLOBAL PA R A L L E L_FOR WITH ORIGINAL-ORDER REDUCTION. BNN AND DLA ROWS WITHOUT A 2D SUFFIX
+                                                      ARE 3D.
+
+
+                      Graph     Cores        Group              Flat         Pipeline       Group/Flat      Flat/Pipeline
+
+                      bnn          8   17.41 ± 0.33    9.32 ± 0.15    9.36 ± 0.11   1.869 ± 0.061   0.995 ± 0.010
+                      bnn         16   17.68 ± 0.33    5.51 ± 0.03    5.39 ± 0.08   3.211 ± 0.049   1.021 ± 0.012
+                DLA         8   34.82 ± 0.32   19.55 ± 0.62   18.99 ± 0.12   1.782 ± 0.060   1.029 ± 0.031
+                DLA        16   33.99 ± 0.66   10.90 ± 0.04   10.85 ± 0.04   3.119 ± 0.072   1.005 ± 0.006
+                      clma_2d      8    0.35 ± 0.08    0.25 ± 0.07    0.21 ± 0.01   1.516 ± 0.637   1.167 ± 0.293
+                      clma_2d     16    0.31 ± 0.01    0.21 ± 0.01    0.21 ± 0.00   1.469 ± 0.012   1.016 ± 0.027
+                      bnn_2d       8    7.75 ± 0.27    4.23 ± 0.13    4.16 ± 0.10   1.836 ± 0.108   1.017 ± 0.007
+
+
+                                                TABLE VI
+ LEGAL FULL-PROCESS RESULTS AT EIGHT PHYSICAL CORES, MEAN ± SAMPLE SD (n = 3). B: REBUILD; C: COMMON CACHE. TIMES ARE SECONDS;
+FINAL COLUMNS ARE PAIRED PROCESS SPEEDUPS. GEMM AND THE LARGE-3D/K6 ROWS ARE SEPARATE HOST-A COHORTS; CLMA/BNN-2D ARE HOST
+     C. FIXED-S IS THE REPAIRED SERIAL-CONSTRUCTION CONTROL. “–” DENOTES AN ARM NOT PRESENT IN THAT COHORT. PREPARATION AND
+                              INDEPENDENT-CHECK TIME ARE EXCLUDED FROM THESE PROCESS TIMES.
+
+
+                 Case    Mode           Stock         Fixed-S         Group          Pipeline             Flat    Stock/Pipeline   Group/Pipeline
+
+             gemm   B    331.05 ± 1.36              – 219.17 ± 1.26 202.07 ± 1.06             – 1.638 ± 0.005 1.085 ± 0.001
+             gemm   C    181.48 ± 1.47              – 184.43 ± 4.76 181.46 ± 0.29             – 1.000 ± 0.009 1.016 ± 0.027
+                  lstm_s2  B    148.96 ± 1.10 149.08 ± 1.17  97.42 ± 0.71  90.97 ± 1.89             – 1.638 ± 0.041 1.071 ± 0.014
+                  lstm_s2  C      81.60 ± 0.80  81.14 ± 0.97  80.63 ± 0.56  81.56 ± 1.03             – 1.001 ± 0.022 0.989 ± 0.009
+                 bnn_s1  B    138.62 ± 0.33 139.08 ± 0.60  90.53 ± 0.56  81.45 ± 0.54             – 1.702 ± 0.011 1.112 ± 0.007
+                 bnn_s1  C      73.76 ± 1.18  73.23 ± 0.44  72.70 ± 0.55  72.71 ± 0.39             – 1.014 ± 0.013 1.000 ± 0.010
+                 bnn_s2  B    142.87 ± 2.80 140.29 ± 0.57  90.51 ± 0.54  81.78 ± 0.30             – 1.747 ± 0.028 1.107 ± 0.009
+                 bnn_s2  C      75.40 ± 0.62  72.73 ± 0.51  73.32 ± 0.68  72.92 ± 0.50             – 1.034 ± 0.012 1.006 ± 0.011
+                   tseng_s1 B       1.48 ± 0.14    1.42 ± 0.13    1.33 ± 0.03    1.28 ± 0.03             – 1.155 ± 0.104 1.039 ± 0.039
+                   tseng_s1 C       1.25 ± 0.19    1.10 ± 0.03    1.12 ± 0.00    1.13 ± 0.08             – 1.108 ± 0.239 0.988 ± 0.065
+                   tseng_s2 B       1.42 ± 0.05    1.38 ± 0.03    1.33 ± 0.03    1.32 ± 0.00             – 1.076 ± 0.038 1.012 ± 0.021
+                   tseng_s2 C       1.15 ± 0.03    1.25 ± 0.12    1.13 ± 0.03    1.18 ± 0.08             – 0.974 ± 0.064 0.959 ± 0.040
+                  des_s1  B       2.22 ± 0.09    2.22 ± 0.05    2.19 ± 0.08    1.95 ± 0.03             – 1.137 ± 0.039 1.120 ± 0.055
+                  des_s1  C       1.79 ± 0.03    1.82 ± 0.10    1.79 ± 0.03    1.79 ± 0.06             – 1.000 ± 0.028 1.002 ± 0.029
+                  des_s2  B       2.57 ± 0.09    2.59 ± 0.08    2.34 ± 0.03    2.24 ± 0.06             – 1.149 ± 0.009 1.045 ± 0.040
+                  des_s2  C       2.09 ± 0.03    2.07 ± 0.05    2.07 ± 0.05    2.20 ± 0.08             – 0.948 ± 0.047 0.940 ± 0.034
+                clma_2d B       5.53 ± 0.09              –    5.22 ± 0.22    5.05 ± 0.10   5.02 ± 0.13 1.095 ± 0.027 1.034 ± 0.042
+                bnn_2d  B    104.91 ± 2.55              –  81.46 ± 0.77  77.36 ± 0.53 79.51 ± 2.33 1.356 ± 0.028 1.053 ± 0.016
+
+
+
+                     TABLE VII                              architecture candidates [1]. Each changed graph or cost model
+ MEASURED CACHE-SEQUENCE SPEEDUPS, CONTROL/PIPELINE, MEAN ±   can require rebuilding lookahead. Our result reduces this re-
+   SAMPLE SD OVER THREE BATCHES. PREFIXES ARE CORRELATED.
+                                                             peated precomputation while preserving the baseline model, so
+      Case      Control     K = 1     K = 2     K = 5        architecture-quality comparisons can retain the same heuristic
+       tseng_s1  Stock   1.107 ± 0.061  1.057 ± 0.054  0.996 ± 0.055        deﬁnition across CPU schedules. Cache reuse remains the
+       tseng_s1  Group   1.041 ± 0.041  1.035 ± 0.012  0.979 ± 0.038        preferred option when the graph and relevant cost state are
+                ±                        ±                                 ±                      1.127                             0.028                                    1.098                                            0.014                                                  1.067       des_s1                Stock                                                          0.032        compatible.                ±                        ±                                 ±                      1.042                             0.038                                    1.018                                            0.015                                                  1.015                                                          0.017       des_s1              Group
+                                                            Escaping Flatland demonstrates the importance of accurate
+                                                              layer-dependent delay estimates and richer layer-assignment
+                                                                exploration  [2].  Its four-dimensional placement-delay tablenot launched. Width-120 qualiﬁcation retained three legal and
+                                                       and our six-index wire lookahead are related CAD compo-three failed layouts. These results motivated separate all-graph
+                                                                   nents, not identical artifacts. Its improvements change place-construction and qualiﬁed full-ﬂow studies, not selective re-
+                                                     ment guidance and quality; our experiments accelerate con-moval of unfavorable performance observations. Fresh-layout
+                                                                    struction of an unchanged routing model. A future integrationsmall-design measurements and low-core regressions are like-
+                                                           could combine improved placement with a  faster routing-wise retained. The raw artifact distinguishes qualiﬁcations,
+                                                                evaluation backend, and could apply the same independent-diagnostics, capped routes, and complete formal runs.
+                                                              search decomposition to other precomputed delay tables after
+    VII. IMPLICATIONS FOR 3D CAD AND HARDWARE        their own equivalence analysis. We have not measured that
+                 ACCELERATION                     combined ﬂow, and do not  attribute  its reported runtime
+                                                          overhead to our lookahead stage.
+A. A Faster Backend for Architecture and Placement Explo-                                                     The practical opportunity is therefore a larger exploration
+ration                                                              budget: more architecture conﬁgurations, more placement can-
+  LaZagna’s customizable vertical connectivity and heteroge-   didates, or higher-ﬁdelity models can be evaluated in a given
+neous layer organization increase the number of meaningful   time. A placement-only sweep may amortize construction
+
+PAGE 11
+                      (a) Conditional 3D subset                            (b) Independent 2D architecture
+
+                                                            Rebuild     1.5                                                  Rebuild
+      1.8                                           Cache                                                    Cache
+                                                                1.4         Pipeline
+ / 1.6                                                       1.3
+      Stock                                                           1.2
+      1.4
+                                                                1.1
+      1.2         speedup:                                                           1.0
+
+      1.0                                                       0.9
+        Process                                                           0.8
+      0.8
+              lstm s2             bnn s1              bnn s2            tseng s1       tseng s2        des s1         des s2
+
+
+Fig. 5. Full-process paired speedups on two distinct cohorts. Markers and error bars show mean ± sample SD; small dots show all three pairs. The 3D subset
+was qualiﬁed in advance; k6 provides independent 2D architecture evidence. Shared-cache controls remove wire construction and support attribution, while
+retaining residual runtime variability.
+
+
+                                               TABLE VIII
+    STAGE MEMORY DIAGNOSTICS ON HOST C, ONE INSTRUMENTED OBSERVATION PER METHOD (NOT PERFORMANCE REPEATS). RSS AND LABEL
+     CAPACITIES ARE MIB. PEAK IS THE MAXIMUM OBSERVED DURING CONSTRUCTION, NOT AN EXACT OR GUARANTEED PEAK. LABELS COUNT
+  WIRE-FLOOD EXPANDED/VISITED ARRAYS ONLY; TABLE BOUNDS EXCLUDE VECTOR PAYLOADS, QUEUES, ALLOCATOR STATE, AND COMMON DATA.
+
+
+                Graph    Method   Entry RSS  Peak RSS  Growth  Label capacity  Workspaces  Sample bound  Group tables
+
+                bnn      Group       2661.6     2823.7    162.0            64.6           4             4           1
+                bnn       Pipeline      2661.6     2893.3    231.7          129.1           8            16          10
+                bnn        Flat         2661.5     2902.6    241.1          129.1           8            40          10
+            DLA     Group       3881.4     4119.7    238.4          122.0           4             4           1
+            DLA      Pipeline      3881.4     4259.8    378.4          244.0           8            16          10
+            DLA      Flat         3881.5     4274.6    393.0          244.0           8            40          10
+                 clma_2d  Group        223.2      233.7     10.6              3.2           4             4           1
+                 clma_2d  Pipeline       223.2      244.9     21.7              6.4           8             8           2
+                 clma_2d   Flat           223.1      245.1     22.0              6.4           8             8           2
+                bnn_2d   Group       2196.0     2320.8    124.7            79.0           4             4           1
+                bnn_2d    Pipeline      2196.0     2404.8    208.8          157.9           8            16           6
+                bnn_2d    Flat         2196.1     2405.4    209.3          157.9           8            16           6
+
+
+
+through caching; a topology/cost sweep  is more  likely to   cells reduce the structural cost of buffering their results. These
+repeatedly invoke it. Distinguishing these regimes makes the   are concrete design inputs for a replicated CPU/GPU/FPGA
+value proposition concrete without assuming universal recon-   search engine, rather than a claim that CPU speedup transfers
+struction.                                                    numerically to a device.
+                                                                 Several  costs remain hardware-dependent:  irregular RR
+B. An Execution Contract for Future Accelerators                                                memory access,  priority queues,  label  initialization, graph
+  The present work resolves a dependency problem that addi-   transfer, queue/result buffering, and the precision/order needed
+tional hardware alone would not solve. If a host still dispatches   for equivalent  costs. Wire-label  capacities and stage RSS
+one four-sample group and waits at its boundary, adding more   quantify part of the replication cost, but not off-chip bandwidth
+engines cannot expose the forty independent searches already   or accelerator area. A hardware prototype must additionally
+available in the graph. Our decomposition supplies a global   demonstrate host/device transfer accounting, numerical equiv-
+task interface and a deterministic consumer boundary that can   alence, and a legal full-ﬂow beneﬁt. The CPU implementation
+be retained when changing the execution backend.             provides a validated functional reference and task-level work-
+ A future accelerator can receive descriptors (g, j, rg,j), read   load for that evaluation; no FPGA-board or GPU performance
+shared graph/cost data, maintain private search labels, and   result is inferred here.
+return layer-indexed (d, q) records tagged with their original
+                                                          C. Limits of the Current Evidenceordinal. An ordered collector then applies the same strict-delay
+rule and commits to the native layer-pair map. Pipeline token    The method exposes available sample parallelism, not un-
+bounds provide backpressure at the result interface. The slice   limited parallelism in every stage. Source/OPIN work, inter-
+analysis identiﬁes independent completion regions; compact   polation, ordered reduction, graph loading, and route checking
+
+PAGE 12
+                                                TABLE IX
+ REPRESENTATION/SCHEDULING ABLATION: CONTROL GROUP TIME DIVIDED BY CANDIDATE TIME, MEAN ± SAMPLE SD (n = 3). ALL 120 FORMAL
+  NATIVE RUNS ARE LEGAL AND RETAIN THE REFERENCE WIRE-MAP BYTES. SLICE ALSO INCLUDES A REFACTOR; COMPACT VERSUS SLICE ISOLATES
+             REPRESENTATION IN ONE EXECUTABLE, WHILE BOUNDED CHANGES SCHEDULING AND COMMIT LIFETIMES TOGETHER.
+
+
+                              Circuit   Cores   Mode             Slice       Compact          Pipeline       Bounded
+
+                GEMM  4        rebuild   0.989 ± 0.007   0.993 ± 0.010   0.995 ± 0.014   0.991 ± 0.012
+                GEMM  4         reuse   1.008 ± 0.009   1.003 ± 0.018   1.004 ± 0.013   1.005 ± 0.018
+                GEMM  8        rebuild   1.005 ± 0.016   1.003 ± 0.007   1.093 ± 0.003   1.057 ± 0.046
+                GEMM  8         reuse   0.993 ± 0.014   0.996 ± 0.002   0.997 ± 0.004   0.995 ± 0.007
+                                   elliptic   4        rebuild   0.981 ± 0.028   0.998 ± 0.020   0.999 ± 0.021   0.984 ± 0.013
+                                   elliptic   4         reuse   0.980 ± 0.030   0.990 ± 0.027   1.006 ± 0.016   0.975 ± 0.018
+                                   elliptic   8        rebuild   0.993 ± 0.007   1.002 ± 0.027   0.998 ± 0.027   0.985 ± 0.023
+                                   elliptic   8         reuse   0.976 ± 0.082   0.965 ± 0.064   0.976 ± 0.040   0.990 ± 0.014
+
+
+
+can become  residual  bottlenecks.  If construction occupies
+fraction f of a process and accelerates by a, an unchanged-
+other-work model gives
+
+                            1
+                   Sproc =                                 (7)                       1 −f + f/a.
+
+For optimized eight-core GEMM, the construction fraction is
+(10.37 ± 0.33)%; halving it would yield only about 1.055×
+in  that  idealized model. Further end-to-end gains  require
+examining the remaining work, not continuing to extrapolate
+ﬂood scaling.
+  Native 3D validation covers two layers and a limited set
+of vertical fabrics. More layers, different vertical resource
+densities, and heterogeneous sampling patterns require ad-
+ditional evaluation. Shared hosts and three runtime repeats
+limit inference about small differences; repeats do not replace
+independent circuits or layouts. The clma stage is short, and a
+preserved storage-preﬂight pause separates one BNN-2D stage
+pair. No rerun was substituted, but the interruption further
+limits interpretation of small stage differences. The substantive
+results are the large construction reductions, scaling beyond
+the group width, preserved native semantics, and measured
+beneﬁts on qualiﬁed complete ﬂows.
+
+                   VIII. CONCLUSION
+
+  Multicore routing support does not by  itself expose the
+parallelism available during lookahead construction. We de-
+compose layer-aware  native  construction  into independent
+ﬂoods, original-order cost reduction, and explicitly bounded
+execution/commit interfaces. Cross-group scheduling removes
+the four-sample group bottleneck and enables approximately
+twelvefold one-to-sixteen-core construction scaling on two
+large 3D graphs. At eight cores, GEMM process speedup is
+1.638 ± 0.005×; a qualiﬁed large 3D subset and independent
+2D architectures corroborate full-ﬂow beneﬁt. Direct global-
+loop controls identify the source of the gain, while slice and
+storage studies expose further resource tradeoffs. The resulting
+execution contract provides an equivalent, measurable founda-
+tion for faster 3D architecture exploration and future hardware-
+parallel routing-cost computation.
+
+PAGE 13
+                 REFERENCES
+
+ [1]  I. Youssef, H. Yang, and C. Hao, “LaZagna: An open-source framework
+      for ﬂexible 3D FPGA  architectural  exploration,” arXiv:2505.05579,
+     2025. [Online]. Available: https://arxiv.org/abs/2505.05579
+ [2] C. Hao, A. B. Kahng, B. Pramanik, and I. Youssef, “Escaping ﬂatland:
+   A placement ﬂow for enabling 3D FPGAs,” in Proceedings of the 63rd
+    ACM/IEEE Design Automation Conference (DAC), 2026.  [Online].
+      Available: https://doi.org/10.1145/3770743.3804424
+ [3] L. McMurchie and  C.  Ebeling,  “PathFinder: A  negotiation-based
+     performance-driven router for FPGAs,” in Proceedings of the ACM
+      International Symposium on Field-Programmable Gate Arrays, 1995,
+     pp. 111–117. [Online]. Available: https://janders.eecg.utoronto.ca/1387_
+     2015/readings/pathﬁnder.pdf
+ [4] K. E. Murray, O.  Petelin, S. Zhong,  J. M. Wang, M. ElDafrawy,
+       J.-P.  Legault,  E.  Sha, A. G. Graham,  J. Wu, M.  J.  P.  Walker,
+     H. Zeng, P. Patros, J. Luu, K. B. Kent, and V. Betz, “VTR 8: High
+     performance CAD and customizable FPGA architecture modelling,”
+   ACM Transactions on Reconﬁgurable Technology and Systems, 2020.
+      [Online]. Available: https://aarongraham9.github.io/vtr8_trets.pdf
+ [5] M. A. Elgammal, A. Mohaghegh,  S. G. Shahrouz,  F. Mahmoudi,
+      F. Kosar, K.  Talaei,  J.  Fife, D. Khadivi, K. Murray, A. Boutros,
+     K. B. Kent, J. Goeders, and V. Betz, “VTR 9: Open-source CAD for
+      fabric and beyond FPGA architecture exploration,” ACM Transactions
+     on Reconﬁgurable Technology and Systems, 2025. [Online]. Available:
+      https://docs.verilogtorouting.org/en/latest/zreferences/
+ [6] O.  Petelin  and  V.  Betz,  “The  speed  of  diversity:  Exploring
+     complex FPGA  routing  topologies  for  the  global  metal  layer,”
+      in  International  Conference  on  Field  Programmable  Logic  and
+     Applications  (FPL),  2016.  [Online].  Available:  https://www.eecg.
+     utoronto.ca/~vaughn/papers/fpl2016_complex_routing.pdf
+ [7] A. Boutros,  F. Mahmoudi, A. Mohaghegh, S. More, and V. Betz,
+      “Into  the  third  dimension:  Architecture  exploration  tools  for 3D
+     reconﬁgurable  acceleration  devices,”  in  International  Conference
+     on  Field-Programmable  Technology  (ICFPT),  2023,  pp.  198–208.
+      [Online].  Available:  https://andrewboutros.github.io/assets/pdf/papers/
+     026_fpt2023_3dfpga.pdf
+ [8] A. Poolad,  S. G. Shahrouz, A. Boutros, and V. Betz, “Modeling,
+     optimizing  and  exploring  multi-die FPGA  routing  architectures,”
+     arXiv:2606.06421v3, 2026, author manuscript  of FPL 2026  paper.
+      [Online]. Available: https://arxiv.org/abs/2606.06421v3
+ [9] A.  Singer, H. Yan, G. Zhang, M. C.  Jeffrey, M.  Stojilovic, and
+     V.  Betz,  “MultiQueue-based FPGA  routing:  Relaxed A*  priority
+     ordering  for improved  parallelism,”  in International Conference on
+     Field-Programmable  Technology  (FPT),  2024.  [Online].  Available:
+     https://www.eecg.utoronto.ca/~mcj/papers/2024.mqrouter.fpt.pdf
+[10] Verilog-to-Routing  Project,  “VPR  command-line  options,”  2026,
+     accessed November  4, 2026; experiments use a  separately locked
+      revision. [Online]. Available: https://docs.verilogtorouting.org/en/latest/
+     vpr/command_line_usage/
+[11]  Intel, “Working on  the assembly  line:  parallel_pipeline,” oneTBB
+     Developer Guide and API Reference, version 2021.9, 2023. [Online].
+      Available:       https://www.intel.com/content/www/us/en/docs/onetbb/
+     developer-guide-api-reference/2021-9/working-on-the-assembly-line-
+      parallel-pipeline.html

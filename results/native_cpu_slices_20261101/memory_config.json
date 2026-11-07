@@ -1,0 +1,26 @@
+{
+  "environment": {
+    "VPR_CPU_LOOKAHEAD_TEMP_BYTES": "2147483648",
+    "VPR_CPU_LOOKAHEAD_WORKSPACE_BYTES": "89128960"
+  },
+  "estimates": [
+    {
+      "case": "gemm",
+      "observed_peak_queue": 791790,
+      "rr_nodes": 9595752,
+      "estimated_workspace_bytes": 89128960
+    },
+    {
+      "case": "elliptic",
+      "observed_peak_queue": 143648,
+      "rr_nodes": 264994,
+      "estimated_workspace_bytes": 9437184
+    }
+  ],
+  "selection": "Fixed 2 GiB temporary target, one conservative maximum workspace estimate for both circuits and all thread counts; no speed-based tuning.",
+  "bound_scope": "Map count and workspace object count are bounded. Heap capacity, allocator retention, graph and total RSS are not hard-capped by this estimate.",
+  "evidence": {
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/diagnostic/gemm/gemm_diagnostic_w4_r0_refactored_rebuild/cpu_trace.jsonl": "2cd6150301527e2f55802efe8efed52c4ffbf00b8687bc862f87d7a483221701",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/diagnostic/elliptic/elliptic_diagnostic_w4_r0_refactored_rebuild/cpu_trace.jsonl": "59b72a6f18ad509354d34939eed14fda9e8d3fa00d5e9b4904433a59dbdc4b8e"
+  }
+}

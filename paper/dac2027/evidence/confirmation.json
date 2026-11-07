@@ -1,0 +1,249 @@
+{
+  "status": "complete",
+  "samples": 36,
+  "comparisons": [
+    {
+      "case": "gemm",
+      "cache": "rebuild",
+      "pairs": [
+        {
+          "repeat": 0,
+          "ratio": 1.0975911227863295,
+          "workflow_ratio": 1.0582668393343928,
+          "same_route": true
+        },
+        {
+          "repeat": 1,
+          "ratio": 1.0941919036066976,
+          "workflow_ratio": 1.0550656560760947,
+          "same_route": false
+        },
+        {
+          "repeat": 2,
+          "ratio": 1.0816418124935272,
+          "workflow_ratio": 1.0428739798662616,
+          "same_route": true
+        }
+      ],
+      "median": 1.0941919036066976,
+      "min": 1.0816418124935272,
+      "max": 1.0975911227863295,
+      "passed": true
+    },
+    {
+      "case": "gemm",
+      "cache": "reuse",
+      "pairs": [
+        {
+          "repeat": 0,
+          "ratio": 1.0185107325305642,
+          "workflow_ratio": 1.0105314443727567,
+          "same_route": false
+        },
+        {
+          "repeat": 1,
+          "ratio": 1.0005528063797953,
+          "workflow_ratio": 0.9983859088042863,
+          "same_route": true
+        },
+        {
+          "repeat": 2,
+          "ratio": 1.014943721479769,
+          "workflow_ratio": 1.002000189464895,
+          "same_route": false
+        }
+      ],
+      "median": 1.014943721479769,
+      "min": 1.0005528063797953,
+      "max": 1.0185107325305642,
+      "passed": true
+    },
+    {
+      "case": "softmax",
+      "cache": "rebuild",
+      "pairs": [
+        {
+          "repeat": 0,
+          "ratio": 1.1286413834520623,
+          "workflow_ratio": 1.0709550589781311,
+          "same_route": true
+        },
+        {
+          "repeat": 1,
+          "ratio": 1.1473962261735053,
+          "workflow_ratio": 1.0951755930263167,
+          "same_route": true
+        },
+        {
+          "repeat": 2,
+          "ratio": 1.0881905369866418,
+          "workflow_ratio": 1.0437335905550953,
+          "same_route": true
+        }
+      ],
+      "median": 1.1286413834520623,
+      "min": 1.0881905369866418,
+      "max": 1.1473962261735053,
+      "passed": true
+    },
+    {
+      "case": "softmax",
+      "cache": "reuse",
+      "pairs": [
+        {
+          "repeat": 0,
+          "ratio": 0.9650036855498624,
+          "workflow_ratio": 0.9645583687509258,
+          "same_route": true
+        },
+        {
+          "repeat": 1,
+          "ratio": 1.000165623885365,
+          "workflow_ratio": 0.9940375581993854,
+          "same_route": true
+        },
+        {
+          "repeat": 2,
+          "ratio": 1.0293937890613383,
+          "workflow_ratio": 1.0142145053901077,
+          "same_route": true
+        }
+      ],
+      "median": 1.000165623885365,
+      "min": 0.9650036855498624,
+      "max": 1.0293937890613383,
+      "passed": true
+    },
+    {
+      "case": "reduction",
+      "cache": "rebuild",
+      "pairs": [
+        {
+          "repeat": 0,
+          "ratio": 1.0828670836831795,
+          "workflow_ratio": 1.0456814458540893,
+          "same_route": true
+        },
+        {
+          "repeat": 1,
+          "ratio": 1.0929557685184739,
+          "workflow_ratio": 1.0615406731484924,
+          "same_route": true
+        },
+        {
+          "repeat": 2,
+          "ratio": 1.0988512151486047,
+          "workflow_ratio": 1.0617128007858763,
+          "same_route": true
+        }
+      ],
+      "median": 1.0929557685184739,
+      "min": 1.0828670836831795,
+      "max": 1.0988512151486047,
+      "passed": true
+    },
+    {
+      "case": "reduction",
+      "cache": "reuse",
+      "pairs": [
+        {
+          "repeat": 0,
+          "ratio": 1.0000072518911027,
+          "workflow_ratio": 1.000882545258029,
+          "same_route": true
+        },
+        {
+          "repeat": 1,
+          "ratio": 0.9906776165818026,
+          "workflow_ratio": 0.9892866348533536,
+          "same_route": true
+        },
+        {
+          "repeat": 2,
+          "ratio": 1.002779063615013,
+          "workflow_ratio": 1.0042907859581962,
+          "same_route": true
+        }
+      ],
+      "median": 1.0000072518911027,
+      "min": 0.9906776165818026,
+      "max": 1.002779063615013,
+      "passed": true
+    }
+  ],
+  "promotion_rule_passed": true,
+  "scope": "Single serial lane, eight distinct physical CPUs 32-39 on one NUMA node; eliminates own experiment concurrency, host not exclusive.",
+  "limitations": "Fixed placement runtime repeats, shared host, extensions are prior project circuits held out from previous eight-core selection; no new independent benchmark claim.",
+  "quality": [
+    {
+      "case": "gemm",
+      "critical_path_ns": [
+        13.2667
+      ],
+      "wirelength": [
+        4094294,
+        4095178
+      ],
+      "iterations": [
+        15,
+        16
+      ]
+    },
+    {
+      "case": "softmax",
+      "critical_path_ns": [
+        7.63947
+      ],
+      "wirelength": [
+        138983
+      ],
+      "iterations": [
+        14
+      ]
+    },
+    {
+      "case": "reduction",
+      "critical_path_ns": [
+        11.2973
+      ],
+      "wirelength": [
+        963471
+      ],
+      "iterations": [
+        15
+      ]
+    }
+  ],
+  "stage_medians": [
+    {
+      "case": "gemm",
+      "variant": "frozen",
+      "lookahead_seconds": 39.49
+    },
+    {
+      "case": "gemm",
+      "variant": "pipeline",
+      "lookahead_seconds": 23.34
+    },
+    {
+      "case": "softmax",
+      "variant": "frozen",
+      "lookahead_seconds": 2.49
+    },
+    {
+      "case": "softmax",
+      "variant": "pipeline",
+      "lookahead_seconds": 1.09
+    },
+    {
+      "case": "reduction",
+      "variant": "frozen",
+      "lookahead_seconds": 12.82
+    },
+    {
+      "case": "reduction",
+      "variant": "pipeline",
+      "lookahead_seconds": 6.94
+    }
+  ]
+}

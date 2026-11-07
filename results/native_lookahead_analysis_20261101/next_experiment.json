@@ -1,0 +1,65 @@
+{
+  "status": "analysis_complete_native_implementation_not_started",
+  "research_question": "保持原生 map 数值语义，能否通过切片依赖分解和有界结果存储改善超过四核时的完整流程性能？",
+  "controls": {
+    "production_reference": "results/native_cpu_paper_20261031/bin/vpr_cpu",
+    "experimental_reference": "results/native_cpu_paper_20261031/bin/vpr_tasks",
+    "do_not_modify": ["冻结二进制、输入和历史结果", "默认 CPU/GPU 开关", "原生 flood 的样本及堆顺序", "图和时序/拥塞目标"]
+  },
+  "stages": [
+    {
+      "id": "D0",
+      "purpose": "先判断收益上界并定位已有重构残差",
+      "cases": ["gemm", "elliptic"],
+      "workers": [4],
+      "variants": ["旧组内实现", "重构组内控制", "重构全局 pipeline"],
+      "diagnostics_only": true,
+      "record": [
+        "样本 RRNodeId、原始序号、相对坐标映射参数、完全相同起点重复数",
+        "每次 flood 的 pop/push/expanded/edge_visit、峰值堆大小、有效表项数",
+        "任务 ready/start/end、结果归并、切片写入及插值、队列等待",
+        "结果表分配/释放、工作区释放、序列化、最终输出、全局清理及退出",
+        "每阶段 RSS 和 cgroup 内存；工作线程数与 CPU 亲和性"
+      ],
+      "decision": "先以当前实现测量，避免将新增诊断开销计入正式性能。归并/插值若占比太小，不把独立优化它们当作主要速度贡献。"
+    },
+    {
+      "id": "D1",
+      "purpose": "验证最小原生语义改动",
+      "change": "每个实际使用的 segment/channel 只执行一次全层插值，保持每个二维切片的原 x/y 扫描顺序；显式处理未采样层。",
+      "qualification": ["ex5p 单层与双层", "elliptic", "gemm"],
+      "workers": [1, 4, 8],
+      "gates": ["每个输出 map 与原版串行逐字节相同", "完整路由零超用", "原生及独立 FULL/STA 通过", "同配置路由主体/CPD/线长对照"],
+      "failure_action": "保留失败并停止推广；不得通过增加容差掩盖语义变化。"
+    },
+    {
+      "id": "D2",
+      "purpose": "单独隔离存储表示与调度收益",
+      "variants": [
+        "组内采样控制",
+        "仅改 SMALLEST 临时表为连续标量存储",
+        "相同标量存储加有界活跃组和切片完成即提交"
+      ],
+      "memory_bound": "调度前由测得工作区高水位、单表大小及指定内存预算确定活跃组/token 上限；最终全局表和图单列。",
+      "requirements": ["相同二进制开关消融", "保留样本序号的稳定最小值或组内原序归并", "不预分配全部 G 个中间组表", "不占用 CPU worker 忙等后续任务"]
+    },
+    {
+      "id": "D3",
+      "purpose": "确认完整流程额外收益",
+      "cases": ["gemm", "elliptic"],
+      "workers": [4, 8],
+      "repeats": 3,
+      "cache_modes": ["两边都重建", "两边读取同一缓存"],
+      "comparison": "相同物理核、同输入/布局 seed，交替变体顺序；不跨核组或作业拼接速度比。",
+      "report": ["配对进程速度比及范围", "lookahead 与 routing 分项", "峰值内存", "独立回验 workflow", "全部失败"],
+      "promotion_gate": "仅在 map 等价、合法性/质量门槛通过且完整进程重复确认有增益时考虑替换；八核仅阶段加速不足以推广。"
+    }
+  ],
+  "deprioritized": {
+    "epoch_reset": "已有公开先例，现有 GEMM 串行诊断初始化仅占累计 init+search 约0.15%。",
+    "unranked_multisource": "丢失来源相关的相对坐标桶，有可执行反例。",
+    "blind_pipeline_tokens": "先解决残差归因和真实内存需求，不凭电路结果选择最优阈值。",
+    "gpu": "本轮分析不需要 GPU；保留后续扩展。"
+  },
+  "claim_gate": "本计划若成功，证明的是预计算语义保持及资源效率改进；并不自动证明论文首创性。"
+}

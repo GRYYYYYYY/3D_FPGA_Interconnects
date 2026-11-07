@@ -1,0 +1,103 @@
+// Synthetic raw cost maps exercise the actual extracted interpolation functions.
+// This is not a standalone VPR router or a routing performance benchmark.
+using Cell = util::Cost_Entry;
+struct Group { int from, segment, channel; };
+static std::vector<std::array<uint32_t, 3>> snapshot() {
+    std::vector<std::array<uint32_t, 3>> result;
+    const Cell* cells = f_wire_cost_map[0][0][0][0][0].data();
+    for (size_t i = 0; i < f_wire_cost_map.size(); ++i) {
+        const auto& cell = cells[i];
+        uint32_t delay, congestion;
+        std::memcpy(&delay, &cell.delay, 4);
+        std::memcpy(&congestion, &cell.congestion, 4);
+        result.push_back({delay, congestion, uint32_t(cell.fill)});
+    }
+    return result;
+}
+int main() {
+    std::mt19937 rng(20261101);
+    size_t checks = 0, bad_xy_detected = 0, bad_inactive_detected = 0;
+    size_t repeated_visits = 0, once_visits = 0;
+    for (int fixture = 0; fixture < 2400; ++fixture) {
+        const size_t layers[] = {1, 2, 3, 4, 8};
+        size_t l = layers[fixture % 5], w = 1 + rng()%12, h = 1 + rng()%12;
+        const size_t channels = l == 1 ? 2 : 3, segments = 3;
+        g_vpr_ctx.ctx.grid = {int(l), int(w), int(h)};
+        std::array<size_t,6> shape{l,l,channels,segments,w,h};
+        Map raw(shape);
+        Cell* raw_cells = raw[0][0][0][0][0].data();
+        for (size_t i = 0; i < raw.size(); ++i) {
+            auto& cell = raw_cells[i];
+            if (rng()%100 >= unsigned(fixture%101)) continue;
+            cell = Cell(float(rng()%1000)*0.125f, float(rng()%200)*0.25f);
+        }
+        std::vector<Group> groups;
+        bool active[3][3]{};
+        bool written[8][3][3]{};
+        for (size_t from=0; from<l; ++from)
+            for (size_t seg=0; seg<segments; ++seg)
+                for (size_t ch=0; ch<channels; ++ch) {
+                    if (rng()%5 == 0) continue; // Disabled source layer/group.
+                    groups.push_back({int(from),int(seg),int(ch)});
+                    active[seg][ch] = true;
+                    written[from][seg][ch] = true;
+                }
+        auto write = [&](Group g) {
+            for (size_t to=0; to<l; ++to)
+                for (size_t x=0; x<w; ++x)
+                    for (size_t y=0; y<h; ++y)
+                        f_wire_cost_map[g.from][to][g.channel][g.segment][x][y] =
+                            raw[g.from][to][g.channel][g.segment][x][y];
+        };
+        f_wire_cost_map = Map(shape);
+        for (auto g : groups) {
+            write(g);
+            fill_in_missing_lookahead_entries(g.segment, e_rr_type(g.channel));
+            repeated_visits += l*l*w*h;
+        }
+        auto expected = snapshot();
+        std::shuffle(groups.begin(), groups.end(), rng);
+        // All raw groups may be written in any order, then one fill per key.
+        f_wire_cost_map = Map(shape);
+        for (auto g : groups) write(g);
+        for (size_t seg=0; seg<segments; ++seg)
+            for (size_t ch=0; ch<channels; ++ch)
+                if (active[seg][ch]) {
+                    fill_in_missing_lookahead_entries(seg,e_rr_type(ch));
+                    once_visits += l*l*w*h;
+                }
+        if (snapshot()!=expected) return 2;
+        ++checks;
+        // Each completed group can fill its source slice immediately.
+        f_wire_cost_map = Map(shape);
+        for (auto g : groups) {
+            write(g);
+            fill_one_source(g.from,g.segment,e_rr_type(g.channel));
+        }
+        // A wrong implementation forgetting inactive slices must be caught.
+        if (snapshot()!=expected) ++bad_inactive_detected;
+        for (size_t from=0; from<l; ++from)
+            for (size_t seg=0; seg<segments; ++seg)
+                for (size_t ch=0; ch<channels; ++ch)
+                    if (active[seg][ch] && !written[from][seg][ch])
+                        fill_one_source(from,seg,e_rr_type(ch));
+        if (snapshot()!=expected) return 3;
+        ++checks;
+        // Within-slice x/y order remains semantically significant.
+        f_wire_cost_map = Map(shape);
+        for (auto g : groups) write(g);
+        for (size_t seg=0; seg<segments; ++seg)
+            for (size_t ch=0; ch<channels; ++ch)
+                if (active[seg][ch]) fill_wrong_xy_order(seg,e_rr_type(ch));
+        if (snapshot()!=expected) ++bad_xy_detected;
+    }
+    if (!bad_xy_detected || !bad_inactive_detected) return 4;
+    std::cout << "{\"fixtures\":2400,\"equivalence_checks\":" << checks
+              << ",\"mismatches\":0,\"wrong_xy_order_detected\":" << bad_xy_detected
+              << ",\"missing_inactive_slice_detected\":" << bad_inactive_detected
+              << ",\"baseline_scan_cell_visits\":" << repeated_visits
+              << ",\"once_per_key_scan_cell_visits\":" << once_visits
+              << ",\"cost_entry_bytes\":" << sizeof(Cell)
+              << ",\"vector_header_bytes\":" << sizeof(std::vector<Cell>)
+              << ",\"layers\":[1,2,3,4,8],\"scope\":\"synthetic tables using extracted native interpolation; field bitwise comparison, excludes padding; no native solver timing\"}\n";
+}

@@ -1,0 +1,105 @@
+{
+  "objective": "VPR-native selective CPU/GPU routing with measured dispatch and independent-query batching",
+  "status": "complete",
+  "baseline_commit": "0b912334fdd83bb754b302146ac0d1ec9edc9a0e",
+  "baseline_lock": "../FPGA_accelerate_FPGA/G_3d_routing/configs/vpr.lock.json",
+  "source": "vendor/vtr_hybrid",
+  "requirements": [
+    {
+      "id": "native",
+      "requirement": "Integrate into isolated original VPR CPU routing framework, retaining original STA, criticality, lookahead, route-tree updates and congestion negotiation.",
+      "status": "complete"
+    },
+    {
+      "id": "paired_queries",
+      "requirement": "Measure CPU/GPU connection search on identical graph, occupancy/history, seeds, timing and objective snapshots, including preparation/synchronization/return cost; validate results.",
+      "status": "complete"
+    },
+    {
+      "id": "dispatch",
+      "requirement": "Selective offload using measured work/parallelism thresholds; preserve sequential commit in first comparison; retain CPU fallback.",
+      "status": "complete",
+      "result": "Experimental budget and CPU fallback implemented/calibrated. No profitable default region established; production default stays CPU."
+    },
+    {
+      "id": "resident",
+      "requirement": "Resident GPU graph/state and sparse coherent updates; CPU and GPU use matching native timing and congestion semantics.",
+      "status": "complete"
+    },
+    {
+      "id": "batch",
+      "requirement": "Batch independent connections from different nets and overlap independent CPU work; validate resource independence, conflict retry and dependent same-tree ordering.",
+      "status": "complete",
+      "result": "Actual independent-net batching and CPU/GPU overlap validated. Resource conflicts wait before state reads; expanded old-tree domains protected. Guarded CPU comparison remains infeasible on elliptic."
+    },
+    {
+      "id": "in_process",
+      "requirement": "Reuse native in-process RRG, route trees and STA to remove redundant intermediate export/reload, retaining final legality/timing validation.",
+      "status": "complete"
+    },
+    {
+      "id": "experiments",
+      "requirement": "Same-worker original VPR, CPU control, selective and batched hybrid comparisons on six frozen real circuits; full workflow and search timing, legality, CPD, wire, movement and dispatch metrics; repeat positive findings and report 5% quality budget failures.",
+      "status": "complete",
+      "result": "Six-case same-worker matrix complete, including failures. Cooperative elliptic follow-ups and three local CPU repeats complete. No positive GPU candidate requires confirmation."
+    },
+    {
+      "id": "reproducibility",
+      "requirement": "Record source/input bindings, commands, platform terminal status and independent verification; document measured dispatch policy and all limitations without extrapolating unmeasured acceleration.",
+      "status": "complete",
+      "result": "25 submitted jobs terminal; frozen 18 bundles/5 CUDA builds/26 inputs audited; all failures retained; final timing parser and attribution tests pass."
+    }
+  ],
+  "monitoring": {
+    "luna_available": false,
+    "owner": "current main session",
+    "policy": "bounded tool polling; no resubmission on observation timeout"
+  },
+  "active_jobs": [],
+  "evidence": {
+    "native_control": "results/hybrid_native_control_ex5p_20261027/summary.json",
+    "native_profile_ex5p": "results/hybrid_native_profile_ex5p_20261027/summary.json",
+    "native_profile_other_five": "results/hybrid_native_profile_scale_20261027/summary.json",
+    "lookahead_equivalence": "results/hybrid_native_model_check_ex5p.json",
+    "snapshot_replay": "results/h3d-native-replay-20261027-233625/summary.json",
+    "snapshot_replay_job": "job-f7907afc-2f43-44aa-acb9-3b445fbd6b4c",
+    "snapshot_replay_platform_status": "job_succeeded",
+    "resident_capture": "results/hybrid_native_state_capture_20261027/summary.json",
+    "resident_replay": "results/h3d-native-replay-20261027-235002/summary.json",
+    "native_online_smoke": "results/h3d-native-hybrid-20261027-235927/summary.json",
+    "native_query_distribution": "results/hybrid_profile_summary.json",
+    "native_batch_smoke": "results/h3d-native-hybrid-20261028-002054/summary.json",
+    "query_crossover": "results/h3d-native-hybrid-20261028-001803/summary.json",
+    "matrix": "results/native_hybrid_matrix_20261028.json",
+    "comparison": "results/native_hybrid_comparison_final.json",
+    "state_barrier_audit": "results/h3d-native-hybrid-20261028-003910/summary.json",
+    "cooperative_oracle": "results/h3d-native-replay-20261028-003909/summary.json",
+    "cooperative_pilot": "results/h3d-native-hybrid-20261028-003234/summary.json",
+    "job_registry": "results/native_job_registry.json",
+    "cooperative_tuning": "results/native_cooperative_tuning_20261028.json",
+    "cooperative_optimized_pilot": "results/h3d-native-hybrid-20261028-004249/summary.json",
+    "tree_ownership_regression": "results/h3d-native-hybrid-20261028-003234/elliptic_0_batch/process.log",
+    "tree_ownership_fix_trial": "results/h3d-native-hybrid-20261028-005804/summary.json",
+    "tree_ownership_state_audit": "results/h3d-native-hybrid-20261028-010307/summary.json",
+    "original_parallel_variance": "results/native_parallel_cpu_repeats_20261028/summary.json",
+    "artifact_audit": "results/native_artifact_audit_20261028.json",
+    "baseline_integrity": "results/native_baseline_audit.json",
+    "guard_control_pilot": "results/h3d-native-hybrid-20261028-012018/summary.json",
+    "guard_smoke": "results/native_guard_smoke_20261028/summary.json",
+    "dispatch_policy": "results/native_dispatch_policy_20261028.json",
+    "final_audit": "results/native_hybrid_acceptance_20261028.json"
+  },
+  "current_step": "Implementation, GPU validation, six-case comparison, repeat controls and artifact/report audit finished. No native-hybrid GPU speedup established; CPU remains default.",
+  "limitations": [
+    "No native hybrid GPU end-to-end acceleration demonstrated; 2048-pop offload is experimental, not a proven profitable default.",
+    "GPU implementation supports validated zero-RC/nonflat MapLookahead/SM90 only; batch additionally requires fanout-invariant base costs and no nonconfigurable cross-region groups.",
+    "Primary one-CTA elliptic timed out and old batch ownership checks failed. Later cooperative versions route legally but remain slower than serial VPR.",
+    "Latest matched guarded CPU control is infeasible after 200 iterations; no speedup ratio is calculated against it.",
+    "Original parallel and modified CPU controls are unstable in local repeats (signals/timeouts); root causes are unresolved. Local measurements are not mixed with H100 timing.",
+    "Successful cooperative elliptic follow-ups use different configurations from the primary six-case matrix; no claim that one configuration completed all six with acceleration.",
+    "State bytes exclude static graph upload and logical query payload. Parallel search timers sum worker elapsed time, not critical-path wall time."
+  ],
+  "local_sessions": {},
+  "remaining": [],
+  "completed_at": "2026-10-28T01:53:10.288263+00:00"
+}

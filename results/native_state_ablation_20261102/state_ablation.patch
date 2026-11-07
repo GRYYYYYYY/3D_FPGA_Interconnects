@@ -1,0 +1,73 @@
+--- /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/vendor/vtr_cpu_paper/vpr/src/route/route.cpp
++++ /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_state_ablation_20261102/source/route.cpp
+@@ -1,3 +1,5 @@
++#include <cstdlib>
++#include <cstring>
+ #include "choke_points.h"
+ #include "concrete_timing_info.h"
+ #include "connection_based_routing.h"
+@@ -252,6 +254,14 @@
+     // Reset router iteration in the current route attempt.
+     get_bp_state_globals()->get_glob_breakpoint_state()->router_iter = 0;
+ #endif
++    // Experimental attribution only; the normal default retains both fixes.
++    const char* repair_mode = std::getenv("VPR_CPU_REPAIR_MODE");
++    if (!repair_mode) repair_mode = "both";
++    VTR_ASSERT(std::strcmp(repair_mode, "none") == 0 || std::strcmp(repair_mode, "dynamic") == 0
++               || std::strcmp(repair_mode, "reload") == 0 || std::strcmp(repair_mode, "both") == 0);
++    const bool repair_dynamic = std::strcmp(repair_mode, "both") == 0 || std::strcmp(repair_mode, "dynamic") == 0;
++    const bool repair_reload = std::strcmp(repair_mode, "both") == 0 || std::strcmp(repair_mode, "reload") == 0;
++    VTR_LOG("CPU_REPAIR mode=%s dynamic=%d reload=%d\n", repair_mode, repair_dynamic, repair_reload);
+     for (itry = 1; itry <= router_opts.max_router_iterations; ++itry) {
+         /* Reset "is_routed" and "is_fixed" flags to indicate nets not pre-routed (yet) */
+         for (auto net_id : net_list.nets()) {
+@@ -436,9 +446,20 @@
+          * Prepare for the next iteration
+          */
+         if (router_opts.route_bb_update == e_route_bb_update::DYNAMIC) {
+-            dynamic_update_bounding_boxes(iter_results.rerouted_nets, iter_results.bb_updated_nets);
+-        }
+-
++            if (repair_dynamic) {
++                dynamic_update_bounding_boxes(iter_results.rerouted_nets, iter_results.bb_updated_nets);
++            } else {
++                // Reproduce the original by-value output: boxes change, notifications are discarded.
++                auto discarded_notifications = iter_results.bb_updated_nets;
++                dynamic_update_bounding_boxes(iter_results.rerouted_nets, discarded_notifications);
++            }
++        }
++
++
++        if (!repair_reload) {
++            num_net_bounding_boxes_updated = iter_results.bb_updated_nets.size();
++            netlist_router->handle_bb_updated_nets(iter_results.bb_updated_nets);
++        }
+ 
+         if (itry >= high_effort_congestion_mode_iteration_threshold) {
+             //We are approaching the maximum number of routing iterations,
+@@ -512,16 +533,20 @@
+ 
+                 route_ctx.route_bb = load_route_bb(net_list, bb_fac);
+                 // Full box reload invalidates every parallel partition assignment.
+-                auto all_nets = net_list.nets();
+-                iter_results.bb_updated_nets.assign(all_nets.begin(), all_nets.end());
++                if (repair_reload) {
++                    auto all_nets = net_list.nets();
++                    iter_results.bb_updated_nets.assign(all_nets.begin(), all_nets.end());
++                }
+             }
+ 
+             ++itry_conflicted_mode;
+         }
+ 
+-        // Notify only after both dynamic box growth and conflicted-mode reloads.
+-        num_net_bounding_boxes_updated = iter_results.bb_updated_nets.size();
+-        netlist_router->handle_bb_updated_nets(iter_results.bb_updated_nets);
++        // Notify after full reload only when the second fix is enabled.
++        if (repair_reload) {
++            num_net_bounding_boxes_updated = iter_results.bb_updated_nets.size();
++            netlist_router->handle_bb_updated_nets(iter_results.bb_updated_nets);
++        }
+ 
+ 
+         if (router_opts.with_timing_analysis) {

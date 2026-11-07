@@ -1,0 +1,842 @@
+diff --git a/vpr/CMakeLists.txt b/vpr/CMakeLists.txt
+index 316f1f8..d837d7a 100644
+--- a/vpr/CMakeLists.txt
++++ b/vpr/CMakeLists.txt
+@@ -76,6 +76,8 @@ add_library(libvpr STATIC
+ )
+ 
+ target_include_directories(libvpr PUBLIC ${LIB_INCLUDE_DIRS})
++target_include_directories(libvpr PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../../native")
++target_link_libraries(libvpr ${CMAKE_DL_LIBS})
+ 
+ 
+ # Use the bundled Eigen headers for the analytical placement solvers.
+diff --git a/vpr/src/route/ParallelNetlistRouter.tpp b/vpr/src/route/ParallelNetlistRouter.tpp
+index 07a6fa7..1eea4f5 100644
+--- a/vpr/src/route/ParallelNetlistRouter.tpp
++++ b/vpr/src/route/ParallelNetlistRouter.tpp
+@@ -5,6 +5,7 @@
+ #include <string>
+ #include "netlist_routers.h"
+ #include "route_net.h"
++#include "h3d_native_runtime.h"
+ #include "vtr_time.h"
+ 
+ template<typename HeapType>
+@@ -29,6 +30,7 @@ inline RouteIterResults ParallelNetlistRouter<HeapType>::route_netlist(int itry,
+ 
+     /* Put the root node on the task queue, which will add its child nodes when it's finished. Wait until the entire tree gets routed. */
+     tbb::task_group group;
++    h3d_native_partition_queued();
+     route_partition_tree_node(group, _tree->root());
+     group.wait();
+     PartitionTreeDebug::log("Routing all nets took " + std::to_string(timer.elapsed_sec()) + " s");
+@@ -46,6 +48,8 @@ inline RouteIterResults ParallelNetlistRouter<HeapType>::route_netlist(int itry,
+ 
+ template<typename HeapType>
+ void ParallelNetlistRouter<HeapType>::route_partition_tree_node(tbb::task_group& g, PartitionTreeNode& node) {
++    int depth=0;for(auto*p=node.parent;p;p=p->parent)++depth;
++    H3DNativePartitionScope hybrid_partition(&node,depth,bool(node.left),node.nets.size(),_itry);
+     auto& route_ctx = g_vpr_ctx.mutable_routing();
+ 
+     /* node.nets is an unordered set, copy into vector to sort */
+@@ -58,6 +62,12 @@ void ParallelNetlistRouter<HeapType>::route_partition_tree_node(tbb::task_group&
+ 
+     vtr::Timer timer;
+     for (auto net_id : nets) {
++        // Dynamic bounding-box growth must be reflected in partition ownership
++        // before siblings run concurrently; otherwise shared search labels race.
++        const t_bb& net_bb = route_ctx.route_bb[net_id];
++        VTR_ASSERT(net_bb.xmin >= node.bb.xmin && net_bb.xmax <= node.bb.xmax);
++        VTR_ASSERT(net_bb.ymin >= node.bb.ymin && net_bb.ymax <= node.bb.ymax);
++        hybrid_partition.net_started();
+         auto flags = route_net(
+             _routers_th.local(),
+             _net_list,
+@@ -101,9 +111,11 @@ void ParallelNetlistRouter<HeapType>::route_partition_tree_node(tbb::task_group&
+ 
+     /* This node is finished: add left & right branches to the task queue */
+     if (node.left && node.right) {
++        h3d_native_partition_queued();
+         g.run([&]() {
+             route_partition_tree_node(g, *node.left);
+         });
++        h3d_native_partition_queued();
+         g.run([&]() {
+             route_partition_tree_node(g, *node.right);
+         });
+diff --git a/vpr/src/route/check_route.cpp b/vpr/src/route/check_route.cpp
+index 8cdf996..46c61aa 100644
+--- a/vpr/src/route/check_route.cpp
++++ b/vpr/src/route/check_route.cpp
+@@ -504,8 +504,10 @@ void recompute_occupancy_from_scratch(const Netlist<>& net_list, bool is_flat) {
+     auto& block_locs = g_vpr_ctx.placement().block_locs();
+ 
+     /* First set the occupancy of everything to zero. */
+-    for (RRNodeId inode : device_ctx.rr_graph.nodes())
++    for (RRNodeId inode : device_ctx.rr_graph.nodes()) {
+         route_ctx.rr_node_route_inf[inode].set_occ(0);
++        h3d_native_mark_dirty(inode);
++    }
+ 
+     // Bus-based mux bit counts are recounted with the node occupancy.
+     VTR_ASSERT(route_ctx.bus_mux_route_inf.size() == device_ctx.rr_bus_muxes.size());
+@@ -526,6 +528,7 @@ void recompute_occupancy_from_scratch(const Netlist<>& net_list, bool is_flat) {
+         for (auto& rt_node : route_ctx.route_trees[net_id].value().all_nodes()) {
+             RRNodeId inode = rt_node.inode;
+             route_ctx.rr_node_route_inf[inode].set_occ(route_ctx.rr_node_route_inf[inode].occ() + 1);
++            h3d_native_mark_dirty(inode);
+             if (has_bus_muxes) {
+                 pathfinder_update_bus_mux_occupancy(route_ctx.bus_mux_route_inf, rt_node, 1);
+             }
+@@ -547,6 +550,7 @@ void recompute_occupancy_from_scratch(const Netlist<>& net_list, bool is_flat) {
+                     RRNodeId inode = route_ctx.clb_opins_used_locally[cluster_blk_id][iclass][ipin];
+                     VTR_ASSERT(inode && size_t(inode) < device_ctx.rr_graph.num_nodes());
+                     route_ctx.rr_node_route_inf[inode].set_occ(route_ctx.rr_node_route_inf[inode].occ() + 1);
++                    h3d_native_mark_dirty(inode);
+                 }
+             }
+         }
+diff --git a/vpr/src/route/d_ary_heap.h b/vpr/src/route/d_ary_heap.h
+index 4d44a46..a2d6d5e 100644
+--- a/vpr/src/route/d_ary_heap.h
++++ b/vpr/src/route/d_ary_heap.h
+@@ -65,6 +65,11 @@ class DAryHeap : public HeapInterface {
+         return (bool)(pq_.empty());
+     }
+ 
++    // Diagnostic/offload view only; entry zero is the queue's sentinel.
++    // Exposing a const view preserves ordering for a resumable CPU fallback.
++    const std::vector<HeapNode>& hybrid_heap_entries() const { return pq_.heap_; }
++    void hybrid_restore_heap(const std::vector<HeapNode>& entries) { pq_.heap_ = entries; }
++
+   private:
+     priority_queue pq_;
+ };
+diff --git a/vpr/src/route/route.cpp b/vpr/src/route/route.cpp
+index 47732a4..33ea498 100644
+--- a/vpr/src/route/route.cpp
++++ b/vpr/src/route/route.cpp
+@@ -7,6 +7,7 @@
+ #include "read_route.h"
+ #include "route.h"
+ #include "route_common.h"
++#include "h3d_native_runtime.h"
+ #include "route_debug.h"
+ #include "route_profiling.h"
+ #include "route_utils.h"
+@@ -214,6 +215,7 @@ bool route(const Netlist<>& net_list,
+         timing_info,
+         is_flat);
+ 
++    h3d_native_prepare(*router_lookahead, router_opts);
+     std::unique_ptr<NetlistRouter> netlist_router = make_netlist_router(
+         net_list,
+         router_lookahead,
+@@ -281,6 +283,7 @@ bool route(const Netlist<>& net_list,
+             netlist_router->set_timing_info(timing_info);
+ 
+         /* Route each net */
++        h3d_native_iteration_barrier();
+         RouteIterResults iter_results = netlist_router->route_netlist(itry, pres_fac, worst_negative_slack);
+ 
+         if (!iter_results.is_routable) { /* Disconnected RRG */
+@@ -439,9 +442,6 @@ bool route(const Netlist<>& net_list,
+             dynamic_update_bounding_boxes(iter_results.rerouted_nets, iter_results.bb_updated_nets);
+         }
+ 
+-        num_net_bounding_boxes_updated = iter_results.bb_updated_nets.size();
+-        netlist_router->handle_bb_updated_nets(iter_results.bb_updated_nets);
+-
+         if (itry >= high_effort_congestion_mode_iteration_threshold) {
+             //We are approaching the maximum number of routing iterations,
+             //and still do not have a legal routing. Switch to a mode which
+@@ -513,11 +513,20 @@ bool route(const Netlist<>& net_list,
+                 bb_fac = std::min<int>(max_grid_dim, bb_fac * BB_SCALE_FACTOR);
+ 
+                 route_ctx.route_bb = load_route_bb(net_list, bb_fac);
++                // Reloading every box also invalidates parallel partition
++                // assignments, including nets not rerouted this iteration.
++                auto all_nets = net_list.nets();
++                iter_results.bb_updated_nets.assign(all_nets.begin(), all_nets.end());
+             }
+ 
+             ++itry_conflicted_mode;
+         }
+ 
++        // Apply notifications only after both dynamic growth and conflicted-mode
++        // reloads, before any parallel tasks start the next iteration.
++        num_net_bounding_boxes_updated = iter_results.bb_updated_nets.size();
++        netlist_router->handle_bb_updated_nets(iter_results.bb_updated_nets);
++
+         if (router_opts.with_timing_analysis) {
+             if (itry == 1) {
+                 // first iteration sets up the lower bound connection delays since only timing is optimized for
+diff --git a/vpr/src/route/route_common.cpp b/vpr/src/route/route_common.cpp
+index 5a15329..4a1ccbc 100644
+--- a/vpr/src/route/route_common.cpp
++++ b/vpr/src/route/route_common.cpp
+@@ -1,5 +1,6 @@
+ /** @file Impls for more router utils */
+ 
++#include "h3d_label_audit.h"
+ #include "route_common.h"
+ 
+ #include "bus_mux_routing.h"
+@@ -213,6 +214,7 @@ void pathfinder_update_single_node_occupancy(RRNodeId inode, int add_or_sub) {
+ 
+     int occ = route_ctx.rr_node_route_inf[inode].occ() + add_or_sub;
+     route_ctx.rr_node_route_inf[inode].set_occ(occ);
++    h3d_native_mark_dirty(inode);
+     // can't have negative occupancy
+     VTR_ASSERT(occ >= 0);
+ }
+@@ -237,6 +239,7 @@ void pathfinder_update_acc_cost_and_overuse_info(float acc_fac, OveruseInfo& ove
+         // If not, do nothing
+         if (overuse > 0) {
+             route_ctx.rr_node_route_inf[rr_id].acc_cost += overuse * acc_fac;
++            h3d_native_mark_dirty(rr_id);
+ 
+             ++overused_nodes.local();
+             total_overuse.local() += overuse;
+@@ -258,6 +261,7 @@ void pathfinder_update_acc_cost_and_overuse_info(float acc_fac, OveruseInfo& ove
+         // If not, do nothing
+         if (overuse > 0) {
+             route_ctx.rr_node_route_inf[rr_id].acc_cost += overuse * acc_fac;
++            h3d_native_mark_dirty(rr_id);
+ 
+             ++overused_nodes;
+             total_overuse += overuse;
+@@ -329,9 +333,11 @@ void reset_path_costs(const std::vector<RRNodeId>& visited_rr_nodes) {
+     auto& route_ctx = g_vpr_ctx.mutable_routing();
+ 
+     for (auto node : visited_rr_nodes) {
++        h3d_label_claim(node, "reset");
+         route_ctx.rr_node_route_inf[node].path_cost = std::numeric_limits<float>::infinity();
+         route_ctx.rr_node_route_inf[node].backward_path_cost = std::numeric_limits<float>::infinity();
+         route_ctx.rr_node_route_inf[node].prev_edge = RREdgeId::INVALID();
++        h3d_label_release(node);
+         // Note: R_upstream of each node is intentionally not reset here.
+         // For the reasons and details, please refer to the `Update R_upstream`
+         // in `evaluate_timing_driven_node_costs` in `connection_router.cpp`.
+@@ -512,6 +518,7 @@ void reset_rr_node_route_structs(const t_router_opts& route_opts) {
+         node_inf.path_cost = std::numeric_limits<float>::infinity();
+         node_inf.backward_path_cost = std::numeric_limits<float>::infinity();
+         node_inf.set_occ(0);
++        h3d_native_mark_dirty(rr_id);
+     }
+ 
+     reset_bus_mux_route_inf(device_ctx.rr_bus_muxes, route_ctx.bus_mux_route_inf);
+@@ -935,6 +942,8 @@ static void adjust_one_rr_occ_and_acc_cost(RRNodeId inode, int add_or_sub, float
+             route_ctx.rr_node_route_inf[inode].acc_cost += (new_occ - capacity) * acc_fac;
+         }
+     }
++    // Publish occupancy and accumulated cost together, after both mutations.
++    h3d_native_mark_dirty(inode);
+ }
+ 
+ //Print information about an invalid routing, caused by overused routing resources
+diff --git a/vpr/src/route/route_common.h b/vpr/src/route/route_common.h
+index 06f1253..ee0ba77 100644
+--- a/vpr/src/route/route_common.h
++++ b/vpr/src/route/route_common.h
+@@ -103,6 +103,8 @@ t_bb load_net_route_bb(const Netlist<>& net_list,
+                        int bb_factor);
+ 
+ void pathfinder_update_single_node_occupancy(RRNodeId inode, int add_or_sub);
++// Optional GPU state journal; a no-op until a native GPU context is initialized.
++void h3d_native_mark_dirty(RRNodeId inode);
+ 
+ void pathfinder_update_acc_cost_and_overuse_info(float acc_fac, OveruseInfo& overuse_info);
+ 
+diff --git a/vpr/src/route/route_net.cpp b/vpr/src/route/route_net.cpp
+index f281d60..b617454 100644
+--- a/vpr/src/route/route_net.cpp
++++ b/vpr/src/route/route_net.cpp
+@@ -1,6 +1,8 @@
+ /** @file Impls for non-templated net routing fns & utils */
+ 
+ #include "route_net.h"
++#include "h3d_label_audit.h"
++#include "h3d_native_runtime.h"
+ #include "bus_mux_routing.h"
+ #include "connection_based_routing.h"
+ #include "timing_util.h"
+@@ -23,6 +25,8 @@ void setup_net(int itry,
+                const route_budgets& budgeting_inf) {
+     auto& route_ctx = g_vpr_ctx.mutable_routing();
+ 
++    H3DLabelScope label_scope(net_id, RRNodeId::INVALID(), route_ctx.route_bb[net_id]);
++
+     /* "tree" points to this net's spot in the global context here, so re-initializing it etc. changes the global state */
+     vtr::optional<RouteTree>& tree = route_ctx.route_trees[net_id];
+ 
+@@ -101,6 +105,9 @@ void setup_net(int itry,
+ }
+ 
+ void update_rr_base_costs(int fanout) {
++    // The hybrid parallel path verifies all T_quadratic==0 and initializes
++    // these constants before workers start. Avoid concurrent equal writes.
++    if (h3d_native_static_base_costs()) return;
+     auto& device_ctx = g_vpr_ctx.mutable_device();
+ 
+     /* Other reasonable values for factor include fanout and 1 */
+@@ -120,6 +127,7 @@ void update_rr_route_inf_from_tree(const RouteTreeNode& rt_node) {
+ 
+     for (auto& node : rt_node.all_nodes()) {
+         RRNodeId inode = node.inode;
++        h3d_label_claim(inode, "tree_reset");
+         route_ctx.rr_node_route_inf[inode].prev_edge = RREdgeId::INVALID();
+ 
+         // path cost should be unset
+diff --git a/vpr/src/route/route_net.tpp b/vpr/src/route/route_net.tpp
+index 48fa425..768249e 100644
+--- a/vpr/src/route/route_net.tpp
++++ b/vpr/src/route/route_net.tpp
+@@ -2,9 +2,11 @@
+ 
+ /** @file Header implementations for templated net routing fns. */
+ 
++#include "h3d_label_audit.h"
+ #include "device_grid.h"
+ #include "physical_types.h"
+ #include "route_net.h"
++#include "h3d_native_runtime.h"
+ 
+ #include <algorithm>
+ #include <limits>
+@@ -74,6 +76,9 @@ inline NetResultFlags route_net(ConnectionRouterType& router,
+     NetResultFlags flags;
+     flags.success = true;
+ 
++    // should_route_net itself reads the old tree's occupancy. Acquire before
++    // that decision as well as before rip-up/search/commit.
++    H3DNativeNetLease hybrid_lease(net_id, net_bb, itry);
+     if (!should_route_net(net_list, net_id, connections_inf, budgeting_inf, worst_negative_slack, true))
+         return flags;
+ 
+@@ -414,6 +419,7 @@ inline NetResultFlags pre_route_to_clock_root(ConnectionRouterType& router,
+     profiling::sink_criticality_start();
+ 
+     t_bb bounding_box = route_ctx.route_bb[net_id];
++    H3DLabelScope label_scope(net_id, sink_node, bounding_box);
+ 
+     router.clear_modified_rr_node_info();
+ 
+@@ -450,6 +456,7 @@ inline NetResultFlags pre_route_to_clock_root(ConnectionRouterType& router,
+     }
+ 
+     profiling::sink_criticality_end(cost_params.criticality);
++    H3DNativeCommitScope hybrid_commit(sink_node);
+ 
+     /* This is a special pre-route to a sink that does not correspond to any    *
+      * netlist pin, but which can be reached from the global clock root drive   *
+@@ -477,6 +484,7 @@ inline NetResultFlags pre_route_to_clock_root(ConnectionRouterType& router,
+     // - free up virtual sink occupancy
+     tree.freeze();
+     m_route_ctx.rr_node_route_inf[sink_node].set_occ(0);
++    h3d_native_mark_dirty(sink_node);
+ 
+     // routed to a sink successfully
+     out.success = true;
+@@ -527,6 +535,7 @@ inline NetResultFlags route_sink(ConnectionRouterType& router,
+     profiling::sink_criticality_start();
+ 
+     RRNodeId sink_node = route_ctx.net_rr_terminals[net_id][target_pin];
++    H3DLabelScope label_scope(net_id, sink_node, net_bb);
+     VTR_LOGV_DEBUG(f_router_debug, "Net %zu Target %d (%s)\n", size_t(net_id), itarget, describe_rr_node(device_ctx.rr_graph, device_ctx.grid, device_ctx.rr_indexed_data, sink_node, is_flat).c_str());
+ 
+     router.clear_modified_rr_node_info();
+@@ -581,6 +590,7 @@ inline NetResultFlags route_sink(ConnectionRouterType& router,
+     }
+ 
+     profiling::sink_criticality_end(cost_params.criticality);
++    H3DNativeCommitScope hybrid_commit(sink_node);
+ 
+     vtr::optional<const RouteTreeNode&> new_branch, new_sink;
+     std::tie(new_branch, new_sink) = tree.update_from_heap(&cheapest, target_pin, ((high_fanout) ? &spatial_rt_lookup : nullptr), is_flat);
+diff --git a/vpr/src/route/route_tree.cpp b/vpr/src/route/route_tree.cpp
+index d55b450..abd5881 100644
+--- a/vpr/src/route/route_tree.cpp
++++ b/vpr/src/route/route_tree.cpp
+@@ -536,15 +536,24 @@ RouteTree::add_subtree_from_heap(RTExploredNode* hptr, int target_net_pin_index,
+      * new_branch_inodes: [sink, nodeN-1, nodeN-2, ... node 1] of length N
+      * and new_branch_iswitches: [N-1->sink, N-2->N-1, ... 2->1, 1->found_node] of length N */
+     RREdgeId edge = hptr->prev_edge;
++    if (edge == RREdgeId::INVALID() || size_t(edge) >= rr_graph.rr_nodes().all_edges().size() || rr_graph.edge_sink_node(edge) != sink_inode) {
++        VPR_FATAL_ERROR(VPR_ERROR_ROUTE, "Invalid initial predecessor edge for sink %zu", size_t(sink_inode));
++    }
+     RRNodeId new_inode = rr_graph.edge_src_node(edge);
+     RRSwitchId new_iswitch = RRSwitchId(rr_graph.rr_nodes().edge_switch(edge));
+ 
+     /* build a path, looking up rr nodes and switches from rr_node_route_inf */
+     new_branch_inodes.push_back(sink_inode);
+     while (!_rr_node_to_rt_node.contains(new_inode)) {
++        if (!main_branch_visited.insert(new_inode).second) {
++            VPR_FATAL_ERROR(VPR_ERROR_ROUTE, "Cyclic predecessor chain at RR node %zu for sink %zu", size_t(new_inode), size_t(sink_inode));
++        }
+         new_branch_inodes.push_back(new_inode);
+         new_branch_iswitches.push_back(new_iswitch);
+         edge = route_ctx.rr_node_route_inf[new_inode].prev_edge;
++        if (edge == RREdgeId::INVALID() || size_t(edge) >= rr_graph.rr_nodes().all_edges().size() || rr_graph.edge_sink_node(edge) != new_inode) {
++            VPR_FATAL_ERROR(VPR_ERROR_ROUTE, "Invalid predecessor edge at RR node %zu for sink %zu", size_t(new_inode), size_t(sink_inode));
++        }
+         new_inode = rr_graph.edge_src_node(edge);
+         new_iswitch = RRSwitchId(rr_graph.rr_nodes().edge_switch(edge));
+     }
+diff --git a/vpr/src/route/route_utils.cpp b/vpr/src/route/route_utils.cpp
+index 971a3d9..7ed7060 100644
+--- a/vpr/src/route/route_utils.cpp
++++ b/vpr/src/route/route_utils.cpp
+@@ -87,7 +87,7 @@ bool check_net_delays(const Netlist<>& net_list, NetPinsMatrix<float>& net_delay
+ // Typically, only a small minority of nets (typically > 10%) have their BBs updated
+ // each routing iteration.
+ void dynamic_update_bounding_boxes(const std::vector<ParentNetId>& rerouted_nets,
+-                                   std::vector<ParentNetId> out_bb_updated_nets) {
++                                   std::vector<ParentNetId>& out_bb_updated_nets) {
+     auto& device_ctx = g_vpr_ctx.device();
+     auto& route_ctx = g_vpr_ctx.mutable_routing();
+ 
+diff --git a/vpr/src/route/route_utils.h b/vpr/src/route/route_utils.h
+index d6bfd8e..2216b17 100644
+--- a/vpr/src/route/route_utils.h
++++ b/vpr/src/route/route_utils.h
+@@ -45,8 +45,9 @@ WirelengthInfo calculate_wirelength_info(const Netlist<>& net_list, size_t avail
+  * routing match those computed from scratch by the net_delay.cpp module. */
+ bool check_net_delays(const Netlist<>& net_list, NetPinsMatrix<float>& net_delay);
+ 
+-/** Update bounding box for net if existing routing is close to boundary */
+-void dynamic_update_bounding_boxes(const std::vector<ParentNetId>& rerouted_nets, std::vector<ParentNetId> out_bb_updated_nets);
++/** Update bounding boxes near routing boundaries and append changed nets to the
++ * caller-owned list, so parallel partition assignments follow the expanded boxes. */
++void dynamic_update_bounding_boxes(const std::vector<ParentNetId>& rerouted_nets, std::vector<ParentNetId>& out_bb_updated_nets);
+ 
+ /** Early exit code for cases where it is obvious that a successful route will not be found
+  * Heuristic: If total wirelength used in first routing iteration is X% of total available wirelength, exit */
+diff --git a/vpr/src/route/router_lookahead/router_lookahead_map.cpp b/vpr/src/route/router_lookahead/router_lookahead_map.cpp
+index e85960d..87907c8 100644
+--- a/vpr/src/route/router_lookahead/router_lookahead_map.cpp
++++ b/vpr/src/route/router_lookahead/router_lookahead_map.cpp
+@@ -42,6 +42,7 @@
+ #include "vtr_ndmatrix.h"
+ #include "vtr_time.h"
+ #include "router_lookahead_map.h"
++#include "model_io.hpp"
+ #include "router_lookahead_map_utils.h"
+ #include "rr_graph.h"
+ 
+@@ -460,6 +461,68 @@ std::pair<float, float> MapLookahead::get_expected_delay_and_cong_global(RRNodeI
+     return std::make_pair(expected_delay_cost, expected_cong_cost);
+ }
+ 
++bool MapLookahead::export_hybrid_model(h3d_native::Model& model) const {
++    if (is_flat_ || has_interposer_cuts_) return false;
++    using namespace h3d_native;
++    const auto& d=g_vpr_ctx.device();const auto& rr=d.rr_graph;
++    auto kind=[](e_rr_type t)->uint32_t {
++        switch(t){
++            case e_rr_type::SOURCE:return Source;case e_rr_type::SINK:return Sink;
++            case e_rr_type::IPIN:return Ipin;case e_rr_type::OPIN:return Opin;
++            case e_rr_type::CHANX:return ChanX;case e_rr_type::CHANY:return ChanY;case e_rr_type::CHANZ:return ChanZ;
++            default:throw std::runtime_error("unsupported native RR node kind");
++        }
++    };
++    auto& h=model.header;
++    h.width=d.grid.width();h.height=d.grid.height();h.layers=d.grid.get_num_layers();
++    h.channels=f_wire_cost_map.dim_size(2);h.segments=f_wire_cost_map.dim_size(3);
++    h.sink_base=d.rr_indexed_data[RRIndexedDataId(SINK_COST_INDEX)].base_cost;
++    h.reserved=SINK_COST_INDEX;
++    h.sentinel=ROUTER_LOOKAHEAD_NO_PATH_SENTINEL;h.base_count=d.rr_indexed_data.size();
++    model.wires.reserve(uint64_t(h.layers)*h.layers*h.channels*h.segments*h.width*h.height);
++    for(uint32_t from=0;from<h.layers;++from)for(uint32_t to=0;to<h.layers;++to)
++    for(uint32_t type=0;type<h.channels;++type)for(uint32_t seg=0;seg<h.segments;++seg)
++    for(uint32_t x=0;x<h.width;++x)for(uint32_t y=0;y<h.height;++y){
++        const auto&c=f_wire_cost_map[from][to][type][seg][x][y];model.wires.push_back({c.delay,c.congestion});
++    }
++    std::map<std::tuple<int,int,int>,std::pair<uint32_t,uint32_t>> reach_cache;
++    model.nodes.resize(rr.num_nodes());
++    for(auto id:rr.nodes()){
++        auto& n=model.nodes[size_t(id)];
++        n.xlo=rr.node_xlow(id);n.xhi=rr.node_xhigh(id);n.ylo=rr.node_ylow(id);n.yhi=rr.node_yhigh(id);
++        n.zlo=rr.node_layer_low(id);n.zhi=rr.node_layer_high(id);
++        std::tie(n.adjx,n.adjy)=util::get_adjusted_rr_position(id);
++        n.kind=kind(rr.node_type(id));auto dir=rr.node_direction(id);
++        n.dir=dir==Direction::INC?0:(dir==Direction::DEC?1:2);
++        n.cost_index=size_t(rr.node_cost_index(id));n.capacity=rr.node_capacity(id);
++        n.segment=d.rr_indexed_data[rr.node_cost_index(id)].seg_index;
++        if(n.kind==Source || n.kind==Opin){
++            auto tile=d.grid.get_physical_type({n.xlo,n.ylo,n.zlo});
++            int tile_id=std::distance(&d.physical_tile_types[0],tile),ptc=rr.node_ptc_num(id);
++            auto key=std::make_tuple(n.zlo,tile_id,ptc);auto it=reach_cache.find(key);
++            if(it==reach_cache.end()){
++                uint32_t start=model.reachable.size();
++                for(uint32_t layer=0;layer<h.layers;++layer){
++                    const auto& reachable=src_opin_delays.at(n.zlo).at(tile_id).at(ptc).at(layer);
++                    if(reachable.empty())model.reachable.push_back({Sentinel,0,layer,h.sentinel,h.sentinel});
++                    for(const auto& item:reachable){const auto&r=item.second;
++                        model.reachable.push_back({kind(r.wire_rr_type),uint32_t(r.wire_seg_index),uint32_t(r.layer_number),r.delay,r.congestion});
++                    }
++                }
++                it=reach_cache.emplace(key,std::make_pair(start,uint32_t(model.reachable.size()-start))).first;
++            }
++            std::tie(n.reach_begin,n.reach_count)=it->second;
++        }
++        auto group=d.rr_node_to_non_config_node_set.find(id);
++        n.group_begin=model.groups.size();
++        if(group!=d.rr_node_to_non_config_node_set.end())
++            for(auto member:d.rr_non_config_node_sets[group->second])model.groups.push_back(size_t(member));
++        n.group_count=model.groups.size()-n.group_begin;
++    }
++    h.nodes=model.nodes.size();h.wires=model.wires.size();h.reachable=model.reachable.size();h.groups=model.groups.size();
++    return true;
++}
++
+ void MapLookahead::compute(const std::vector<t_segment_inf>& segment_inf) {
+     vtr::ScopedStartFinishTimer timer("Computing router lookahead map");
+ 
+diff --git a/vpr/src/route/router_lookahead/router_lookahead_map.h b/vpr/src/route/router_lookahead/router_lookahead_map.h
+index 4a9f5c4..25733d6 100644
+--- a/vpr/src/route/router_lookahead/router_lookahead_map.h
++++ b/vpr/src/route/router_lookahead/router_lookahead_map.h
+@@ -10,6 +10,7 @@
+ #include "router_lookahead.h"
+ #include "router_lookahead_map_utils.h"
+ #include "router_lookahead_interposer.h"
++namespace h3d_native { struct Model; }
+ 
+ /**
+  * @brief Current VPR RouterLookahead implementation. This lookahead uses a table
+@@ -24,6 +25,7 @@
+ class MapLookahead final : public RouterLookahead {
+   public:
+     explicit MapLookahead(const t_det_routing_arch& det_routing_arch, bool is_flat, int route_verbosity, bool device_model_warnings, float interposer_base_cost_multiplier);
++    bool export_hybrid_model(h3d_native::Model&) const;
+ 
+   private:
+     float get_expected_cost_flat_router(RRNodeId current_node, RRNodeId target_node, const t_conn_cost_params& params, float R_upstream) const;
+diff --git a/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp b/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp
+index 09b576e..9729e02 100644
+--- a/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp
++++ b/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp
+@@ -11,6 +11,13 @@
+  * To access the utility functions, the util namespace needs to be used. */
+ 
+ #include <fstream>
++#include <chrono>
++#include <cstdlib>
++#include <cstring>
++#ifdef VPR_USE_TBB
++#include <tbb/enumerable_thread_specific.h>
++#include <tbb/parallel_for.h>
++#endif
+ #include <ranges>
+ #include "globals.h"
+ #include "physical_types.h"
+@@ -741,6 +748,9 @@ t_routing_cost_map get_routing_cost_map(int longest_seg_length,
+     const auto& rr_graph = device_ctx.rr_graph;
+     const auto& grid = device_ctx.grid;
+ 
++    const char* profile_path = std::getenv("VPR_HYBRID_LOOKAHEAD_REPORT");
++    using ProfileClock = std::chrono::steady_clock;
++    auto profile_start = profile_path ? ProfileClock::now() : ProfileClock::time_point{};
+     const t_bb full_device_bb(0, grid.width() - 1, 0, grid.height() - 1, 0, grid.get_num_layers() - 1);
+ 
+     // Start sampling at the lower left non-corner
+@@ -822,6 +832,16 @@ t_routing_cost_map get_routing_cost_map(int longest_seg_length,
+         }
+     }
+ 
++    auto samples_ready = profile_path ? ProfileClock::now() : ProfileClock::time_point{};
++    t_dijkstra_data dijkstra_data;
++    dijkstra_data.profile = profile_path != nullptr;
++    bool parallel_samples = false;
++#ifdef VPR_USE_TBB
++    const char* parallel_setting = std::getenv("VPR_HYBRID_LOOKAHEAD_PARALLEL");
++    parallel_samples = parallel_setting && std::strcmp(parallel_setting, "1") == 0 && sample_nodes.size() > 1;
++#endif
++    uint64_t merge_ns = 0;
++
+     // Finally, now that we have a list of sample locations, run a Dijkstra flood from
+     // each sample location to profile the routing network from this type
+ 
+@@ -839,9 +859,7 @@ t_routing_cost_map get_routing_cost_map(int longest_seg_length,
+ 
+         // to avoid multiple memory allocation and de-allocations in run_dijkstra()
+         // dijkstra_data is created outside the for loop and passed by reference to dijkstra_data()
+-        t_dijkstra_data dijkstra_data;
+-
+-        for (RRNodeId sample_node : sample_nodes) {
++        auto flood_sample = [&](RRNodeId sample_node, t_dijkstra_data& scratch, t_routing_cost_map& costs) {
+             int sample_x = rr_graph.node_xlow(sample_node);
+             int sample_y = rr_graph.node_ylow(sample_node);
+ 
+@@ -876,16 +894,67 @@ t_routing_cost_map get_routing_cost_map(int longest_seg_length,
+                         }
+                     }
+ 
+-                    routing_cost_map[ipin_layer][delta_x][delta_y].add_cost_entry(util::e_representative_entry_method::SMALLEST,
++                    costs[ipin_layer][delta_x][delta_y].add_cost_entry(util::e_representative_entry_method::SMALLEST,
+                                                                                   current.delay,
+                                                                                   current.congestion_upstream);
+                 }
+             };
+ 
+-            run_dijkstra<false>(sample_node, dijkstra_data, full_device_bb, map_lookahead_add_sample_route_to_table);
++            run_dijkstra<false>(sample_node, scratch, full_device_bb, map_lookahead_add_sample_route_to_table);
++        };
++
++#ifdef VPR_USE_TBB
++        if (parallel_samples) {
++            // Each flood owns its search labels and cost map. Only the immutable
++            // resource graph is shared. The enclosing VPR global_control and
++            // process affinity retain the caller's CPU budget.
++            std::vector<t_routing_cost_map> sample_maps(sample_nodes.size());
++            tbb::enumerable_thread_specific<t_dijkstra_data> scratch;
++            tbb::parallel_for(size_t(0), sample_nodes.size(), [&](size_t i) {
++                auto& local = scratch.local();
++                local.profile = profile_path != nullptr;
++                sample_maps[i] = t_routing_cost_map({grid.get_num_layers(), grid.width(), grid.height()});
++                flood_sample(sample_nodes[i], local, sample_maps[i]);
++            });
++            auto merge_start = profile_path ? ProfileClock::now() : ProfileClock::time_point{};
++            // Strict sample order is essential: equal-delay entries retain
++            // the first congestion cost in the original implementation.
++            for (const auto& costs : sample_maps) {
++                for (size_t layer = 0; layer < grid.get_num_layers(); ++layer) {
++                    for (size_t x = 0; x < grid.width(); ++x) {
++                        for (size_t y = 0; y < grid.height(); ++y) {
++                            routing_cost_map[layer][x][y].merge_smallest(costs[layer][x][y]);
++                        }
++                    }
++                }
++            }
++            if (profile_path) {
++                merge_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(ProfileClock::now() - merge_start).count();
++                for (const auto& local : scratch) {
++                    dijkstra_data.init_ns += local.init_ns;
++                    dijkstra_data.search_ns += local.search_ns;
++                    dijkstra_data.floods += local.floods;
++                }
++            }
++        } else
++#endif
++        {
++            for (RRNodeId sample_node : sample_nodes) {
++                flood_sample(sample_node, dijkstra_data, routing_cost_map);
++            }
+         }
+     }
+ 
++    if (profile_path) {
++        std::ofstream report(profile_path, std::ios::app);
++        report << "{\"layer\":" << from_layer_num << ",\"segment\":" << segment_inf.seg_index
++               << ",\"channel\":" << int(chan_type) << ",\"samples\":" << sample_nodes.size()
++               << ",\"selection_ns\":" << std::chrono::duration_cast<std::chrono::nanoseconds>(samples_ready - profile_start).count()
++               << ",\"init_ns\":" << dijkstra_data.init_ns << ",\"search_ns\":" << dijkstra_data.search_ns
++               << ",\"parallel\":" << (parallel_samples ? "true" : "false") << ",\"merge_ns\":" << merge_ns
++               << ",\"floods\":" << dijkstra_data.floods
++               << ",\"wall_ns\":" << std::chrono::duration_cast<std::chrono::nanoseconds>(ProfileClock::now() - profile_start).count() << "}\n";
++    }
+     return routing_cost_map;
+ }
+ 
+diff --git a/vpr/src/route/router_lookahead/router_lookahead_map_utils.h b/vpr/src/route/router_lookahead/router_lookahead_map_utils.h
+index 22f0de7..24d4440 100644
+--- a/vpr/src/route/router_lookahead/router_lookahead_map_utils.h
++++ b/vpr/src/route/router_lookahead/router_lookahead_map_utils.h
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include <cmath>
++#include <cstdint>
+ #include <limits>
+ #include <vector>
+ #include <queue>
+@@ -61,6 +62,10 @@ struct t_dijkstra_data {
+     vtr::vector<RRNodeId, float> node_visited_costs;
+     /* a priority queue for expansion */
+     std::priority_queue<PQ_Entry> pq;
++    bool profile = false; ///< Optional whole-flood timings; no per-node clock reads.
++    uint64_t init_ns = 0; ///< Allocation, clearing and first queue entry.
++    uint64_t search_ns = 0; ///< Flood including sample-map recording.
++    uint64_t floods = 0; ///< Completed floods in this scratch context.
+ };
+ 
+ /* when a list of delay/congestion entries at a coordinate in Cost_Entry is boiled down to a single
+@@ -144,6 +149,14 @@ class Expansion_Cost_Entry {
+             this->cost_vector.push_back(cost_entry);
+         }
+     }
++    /** @brief Merge an independently sampled minimum, retaining the earlier
++     * sample on equal delay, exactly as sequential SMALLEST insertion does. */
++    void merge_smallest(const Expansion_Cost_Entry& other) {
++        if (!other.cost_vector.empty()) {
++            const auto& entry = other.cost_vector.front();
++            add_cost_entry(SMALLEST, entry.delay, entry.congestion);
++        }
++    }
+     void clear_cost_entries() {
+         this->cost_vector.clear();
+     }
+diff --git a/vpr/src/route/router_lookahead/router_lookahead_sampling_utils.h b/vpr/src/route/router_lookahead/router_lookahead_sampling_utils.h
+index 83b28f9..97d5626 100644
+--- a/vpr/src/route/router_lookahead/router_lookahead_sampling_utils.h
++++ b/vpr/src/route/router_lookahead/router_lookahead_sampling_utils.h
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include <algorithm>
++#include <chrono>
+ 
+ #include "globals.h"
+ #include "router_lookahead_map_utils.h"
+@@ -101,6 +102,8 @@ void run_dijkstra(RRNodeId start_node,
+                   util::t_dijkstra_data& data,
+                   const t_bb& bb,
+                   FindIpinCallback find_ipin_callback) {
++    using ProfileClock = std::chrono::steady_clock;
++    auto profile_start = data.profile ? ProfileClock::now() : ProfileClock::time_point{};
+     const DeviceContext& device_ctx = g_vpr_ctx.device();
+     const RRGraphView& rr_graph = device_ctx.rr_graph;
+ 
+@@ -125,6 +128,8 @@ void run_dijkstra(RRNodeId start_node,
+     // First entry has no upstream delay or congestion
+     pq.emplace(start_node, UNDEFINED, 0, 0, 0, true);
+ 
++    auto search_start = data.profile ? ProfileClock::now() : ProfileClock::time_point{};
++    if (data.profile) data.init_ns += std::chrono::duration_cast<std::chrono::nanoseconds>(search_start - profile_start).count();
+     // Now do routing
+     while (!pq.empty()) {
+         util::PQ_Entry current = pq.top();
+@@ -149,4 +154,8 @@ void run_dijkstra(RRNodeId start_node,
+         util::expand_dijkstra_neighbours<RestrictToBoundingBox>(current, node_visited_costs, node_expanded, pq, bb);
+         node_expanded[curr_node] = true;
+     }
++    if (data.profile) {
++        data.search_ns += std::chrono::duration_cast<std::chrono::nanoseconds>(ProfileClock::now() - search_start).count();
++        ++data.floods;
++    }
+ }
+diff --git a/vpr/src/route/serial_connection_router.cpp b/vpr/src/route/serial_connection_router.cpp
+index 97f829d..1a21bf8 100644
+--- a/vpr/src/route/serial_connection_router.cpp
++++ b/vpr/src/route/serial_connection_router.cpp
+@@ -1,9 +1,12 @@
++#include "h3d_label_audit.h"
+ #include "serial_connection_router.h"
+ 
+ #include <algorithm>
+ #include "d_ary_heap.h"
+ #include "rr_graph_fwd.h"
+ #include "vpr_context.h"
++#include "h3d_native_profile.h"
++#include "h3d_native_runtime.h"
+ 
+ /** Used to update router statistics for serial connection router */
+ inline void update_serial_router_stats(RouterStats* router_stats,
+@@ -19,6 +22,16 @@ void SerialConnectionRouter<Heap>::timing_driven_find_single_shortest_path_from_
+     const DeviceContext& device_ctx = g_vpr_ctx.device();
+     RoutingContext& route_ctx = g_vpr_ctx.mutable_routing();
+ 
++    std::unique_ptr<H3DNativeProfile> hybrid_profile;
++    if (H3DNativeProfile::enabled()) {
++        hybrid_profile = std::make_unique<H3DNativeProfile>(sink_node, cost_params, bounding_box, target_bb,
++            this->modified_rr_node_inf_, this->router_lookahead_, *this->conn_params_, *this->router_stats_,
++            !this->is_flat_ && !this->has_bus_muxes_ && !this->rcv_path_manager.is_enabled());
++    }
++
++    const uint32_t hybrid_budget=(!this->is_flat_ && !this->has_bus_muxes_ && !this->rcv_path_manager.is_enabled())?h3d_native_pop_budget():0;
++    uint64_t hybrid_pops=0;
++    H3DNativeSearchScope hybrid_search_scope;
+     HeapNode cheapest;
+     while (this->heap_.try_pop(cheapest)) {
+         // Pop a new inode with the cheapest total cost in current route tree to be expanded on
+@@ -53,7 +66,53 @@ void SerialConnectionRouter<Heap>::timing_driven_find_single_shortest_path_from_
+                                       cost_params,
+                                       bounding_box,
+                                       target_bb);
++        if(hybrid_budget && ++hybrid_pops==hybrid_budget && !this->heap_.is_empty_heap()) {
++            // A diagnostic replay uses the exact native heap order/labels and
++            // expansion implementation, then restores the resumable CPU search.
++            auto native_resume=[&]() {
++                using Clock=std::chrono::steady_clock;
++                auto saved_heap=this->heap_.hybrid_heap_entries();
++                auto saved_modified=this->modified_rr_node_inf_;
++                std::vector<t_rr_node_route_inf> saved_labels;
++                for(auto n:saved_modified)saved_labels.push_back(this->rr_node_route_inf_[n]);
++                auto saved_stats=*this->router_stats_;
++                auto restore=[&]() {
++                    ::reset_path_costs(this->modified_rr_node_inf_);
++                    for(size_t i=0;i<saved_modified.size();++i) {
++                        h3d_label_claim(saved_modified[i], "replay_restore");
++                        this->rr_node_route_inf_[saved_modified[i]]=saved_labels[i];
++                    }
++                    this->modified_rr_node_inf_=saved_modified;this->heap_.hybrid_restore_heap(saved_heap);
++                    *this->router_stats_=saved_stats;
++                };
++                h3d_native::NativeSample sample;
++                try {
++                    auto tick=Clock::now();HeapNode next;
++                    while(this->heap_.try_pop(next)) {
++                        ++sample.pops;
++                        update_serial_router_stats(this->router_stats_,false,next.node,this->rr_graph_);
++                        if(next.node==sink_node)break;
++                        timing_driven_expand_cheapest(next.node,next.prio,sink_node,cost_params,bounding_box,target_bb);
++                    }
++                    sample.search_ns=std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now()-tick).count();
++                    sample.cost=this->rr_node_route_inf_[sink_node].backward_path_cost;
++                    if(std::isfinite(sample.cost)) {
++                        auto n=sink_node;
++                        while(this->rr_node_route_inf_[n].prev_edge!=RREdgeId::INVALID()) {
++                            auto e=this->rr_node_route_inf_[n].prev_edge;sample.path.push_back(size_t(e));n=this->rr_graph_->edge_src_node(e);
++                            h3d_native::require(sample.path.size()<=this->rr_graph_->num_nodes(),"native replay path cycle");
++                        }
++                        std::reverse(sample.path.begin(),sample.path.end());
++                    }
++                    restore();return sample;
++                } catch(...) {restore();throw;}
++            };
++            if(h3d_native_offload(sink_node,cost_params,bounding_box,target_bb,this->router_lookahead_,
++                                 this->modified_rr_node_inf_,*this->conn_params_,hybrid_pops,this->heap_.hybrid_heap_entries(),Heap::arg_D,native_resume))break;
++        }
+     }
++    h3d_native_query_finished(sink_node);
++    if (hybrid_profile) hybrid_profile->finish(*this->router_stats_);
+ }
+ 
+ template<typename Heap>
+@@ -449,6 +508,7 @@ void SerialConnectionRouter<Heap>::add_route_tree_node_to_heap(
+                        tot_cost,
+                        describe_rr_node(device_ctx.rr_graph, device_ctx.grid, device_ctx.rr_indexed_data, inode, this->is_flat_).c_str());
+ 
++        h3d_label_claim(inode, "seed");
+         if (tot_cost > this->rr_node_route_inf_[inode].path_cost) {
+             return;
+         }
+@@ -461,6 +521,7 @@ void SerialConnectionRouter<Heap>::add_route_tree_node_to_heap(
+     } else {
+         float expected_total_cost = this->compute_node_cost_using_rcv(cost_params, inode, target_node, rt_node.Tdel, 0, R_upstream);
+ 
++        h3d_label_claim(inode, "seed_rcv");
+         add_to_mod_list(inode);
+         this->rr_node_route_inf_[inode].path_cost = expected_total_cost;
+         this->rr_node_route_inf_[inode].prev_edge = RREdgeId::INVALID();
+diff --git a/vpr/src/route/serial_connection_router.h b/vpr/src/route/serial_connection_router.h
+index ab32a57..bf609da 100644
+--- a/vpr/src/route/serial_connection_router.h
++++ b/vpr/src/route/serial_connection_router.h
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include "h3d_label_audit.h"
+ #include "connection_router.h"
+ 
+ /**
+@@ -104,6 +105,7 @@ class SerialConnectionRouter : public ConnectionRouter<HeapImplementation> {
+      */
+     inline void update_cheapest(RTExploredNode& cheapest, const RRNodeId& from_node) {
+         const RRNodeId& inode = cheapest.index;
++        h3d_label_claim(inode, "relax");
+         add_to_mod_list(inode);
+         this->rr_node_route_inf_[inode].prev_edge = cheapest.prev_edge;
+         this->rr_node_route_inf_[inode].path_cost = cheapest.total_cost;

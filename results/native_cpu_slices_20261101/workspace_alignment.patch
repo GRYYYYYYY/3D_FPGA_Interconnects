@@ -1,0 +1,75 @@
+--- unaligned/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp
++++ aligned/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp
+@@ -14,6 +14,7 @@
+ #include <fstream>
+ #include <memory>
+ #include <atomic>
++#include <new>
+ #include <chrono>
+ #include <cstdlib>
+ #include <cstring>
+@@ -1000,14 +1001,35 @@
+                          rr_node_typename[group.channel], group.segment->name.c_str(), group.segment->length);
+         }
+     }
++    /** @brief Keep each slot's mutable queue headers and counters off neighbours'
++     * cache lines. Thread-private ownership alone does not prevent false sharing. */
++#if defined(__cpp_lib_hardware_interference_size)
++    constexpr size_t workspace_alignment = std::hardware_destructive_interference_size;
++#else
++    // libstdc++ 11 lacks the standard constant. This conservative fallback
++    // covers the tested host's 64-byte lines without changing public ABI.
++    constexpr size_t workspace_alignment = 128;
++#endif
++    struct alignas(workspace_alignment) WorkspaceSlot {
++        t_dijkstra_data data; ///< Exclusively accessed by this logical worker slot.
++    };
++    const char* unaligned_setting = std::getenv("VPR_CPU_LOOKAHEAD_UNALIGNED");
++    const bool unaligned = unaligned_setting && std::strcmp(unaligned_setting, "1") == 0;
+     VTR_LOG("Bounded lookahead: %zu workspace slots, %zu result maps maximum (%zu bytes/map); "
+             "scratch estimate %zu bytes/slot, temporary budget %zu bytes.\n",
+             workers, map_limit, map_bytes, workspace_estimate, budget);
+     native_cpu_trace::event("scheduler_budget", native_cpu_trace::now(),
+         ",\"workers\":" + std::to_string(workers) + ",\"map_limit\":" + std::to_string(map_limit)
+         + ",\"map_bytes\":" + std::to_string(map_bytes) + ",\"workspace_estimate\":" + std::to_string(workspace_estimate)
+-        + ",\"budget_bytes\":" + std::to_string(budget));
+-    std::vector<t_dijkstra_data> scratch(workers);
++        + ",\"budget_bytes\":" + std::to_string(budget)
++        + ",\"workspace_stride\":" + std::to_string(unaligned ? sizeof(t_dijkstra_data) : sizeof(WorkspaceSlot))
++        + ",\"workspace_alignment_bytes\":" + std::to_string(workspace_alignment)
++        + ",\"aligned_workspaces\":" + (unaligned ? "false" : "true"));
++    std::vector<t_dijkstra_data> unaligned_scratch(unaligned ? workers : 0);
++    std::vector<WorkspaceSlot> aligned_scratch(unaligned ? 0 : workers);
++    auto workspace = [&](size_t slot) -> t_dijkstra_data& {
++        return unaligned ? unaligned_scratch[slot] : aligned_scratch[slot].data;
++    };
+     size_t next_group = 0;
+     while (next_group < active.size()) {
+         const size_t first_id = active[next_group];
+@@ -1015,7 +1037,7 @@
+         // inserting samples in order. This respects the map bound even at P=1.
+         if (sources[first_id].size() > map_limit || sources[first_id].empty()) {
+             CompactCostMap map(shape);
+-            for (RRNodeId node : sources[first_id]) flood_wire_sample(node, scratch[0], map, {}, true);
++            for (RRNodeId node : sources[first_id]) flood_wire_sample(node, workspace(0), map, {}, true);
+             consume(first_id, map);
+             ++next_group;
+             continue;
+@@ -1049,7 +1071,7 @@
+                 auto& state = *batch[batch_id];
+                 const uint64_t start = native_cpu_trace::path() ? native_cpu_trace::now() : 0;
+                 state.maps[sample] = native_cpu_trace::measure("allocate_sample", [&] { return CompactCostMap(shape); });
+-                flood_wire_sample(sources[state.id][sample], scratch[slot], state.maps[sample], {}, true);
++                flood_wire_sample(sources[state.id][sample], workspace(slot), state.maps[sample], {}, true);
+                 if (native_cpu_trace::path()) {
+                     native_cpu_trace::event("scheduled_sample", start,
+                         ",\"group\":" + std::to_string(state.id) + ",\"sample\":" + std::to_string(sample)
+@@ -1073,7 +1095,7 @@
+         run_slot(0);
+ #endif
+     }
+-    native_cpu_trace::measure("release_workspaces", [&] { scratch.clear(); });
++    native_cpu_trace::measure("release_workspaces", [&] { aligned_scratch.clear(); unaligned_scratch.clear(); });
+ }
+ 
+ t_routing_cost_map get_routing_cost_map(int longest_seg_length,

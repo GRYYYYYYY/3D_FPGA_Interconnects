@@ -1,0 +1,15 @@
+case,type,architecture,layers,layouts,nets,placed_blocks,grid,placed_layer_counts,rr_nodes,rr_edges,chanz,role
+gemm,Matrix multiply,KOIOS-3D,2,1,206155,38568,"[176, 176, 2]","{'0': 19418, '1': 19150}",9595752,84213916,185856,"Full, ablation"
+softmax,NN softmax,KOIOS-3D,2,1,11320,2544,"[42, 42, 2]","{'0': 1373, '1': 1171}",526632,4589920,10584,Full confirmation
+reduction,NN reduction,KOIOS-3D,2,1,50369,12380,"[102, 102, 2]","{'1': 5879, '0': 6501}",3223896,28136272,62424,Full confirmation
+elliptic,DSP filter,Hecate,2,1,2849,506,"[30, 30, 2]","{'1': 501, '0': 5}",264994,2366014,6658,"Full, ablation"
+alu4,Logic / ALU,Hecate,2,2,713,133,"[10, 10, 2]","{'0': 77, '1': 56}",22364,197480,576,Fresh layouts
+diffeq,Arithmetic,Hecate,2,2,1084,206,"[10, 10, 2]","{'0': 91, '1': 115}",22364,197480,576,Fresh layouts
+s38417,Sequential logic,Hecate,2,2,4444,556,"[20, 20, 2]","{'0': 307, '1': 249}",121180,1019215,2936,Fresh layouts
+BNN-3D,Binary NN,KOIOS-3D,2,2,78308,15331,"[112, 112, 2]","{'1': 7651, '0': 7680}",4102608,39480616,75264,Stage; conditional full
+LSTM,Recurrent NN,KOIOS-3D,2,2,105855,17432,"[113, 113, 2]","{'1': 9120, '0': 8312}",4166724,40142314,76614,Stage; conditional full
+DLA,DL accelerator,KOIOS-3D,2,2,154021,28507,"[154, 154, 2]","{'1': 15050, '0': 13457}",7751904,74858392,142296,Stage; failed full
+tseng,Arithmetic,k6,1,2,572,284,"[30, 30, 1]",{'0': 284},93276,860020,0,"Full, scaling"
+des,Cryptographic,k6,1,2,954,680,"[40, 40, 1]",{'0': 680},167320,1570011,0,"Full, scaling"
+clma,Logic,k6,1,1,4585,1080,"[44, 44, 1]",{'0': 1080},203044,1917637,0,"Full, flat control"
+BNN-2D,Binary NN,KOIOS-2D,1,1,78308,15331,"[177, 177, 1]",{'0': 15331},5018311,44368339,0,"Full, flat control"

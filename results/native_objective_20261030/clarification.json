@@ -1,0 +1,45 @@
+{
+  "source": "User clarification 2026-10-30: CPU improvements and GPU improvements jointly count; overall CPU-GPU faster than original VPR is the primary goal.",
+  "primary_goal": "Quality-qualified end-to-end CPU-GPU workflow improvement over explicitly configured original VPR.",
+  "ideal_result": "T_joint < T_improved_cpu < T_original",
+  "acceptable_result": "T_joint < T_original; incremental GPU gain over improved CPU is desirable, not a prerequisite for joint improvement.",
+  "attribution": "Measure improved CPU and original multithreaded controls to explain benefits and select the best configuration; do not use missing GPU-only attribution to dismiss joint benefits.",
+  "quality": {
+    "legal": true,
+    "zero_overuse": true,
+    "independent_full_sta": true,
+    "cpd_max_degradation": 0.05,
+    "wirelength_max_degradation": 0.05
+  },
+  "existing_gemm_observation": {
+    "scope": "single diagnostic run, not production confirmation",
+    "original_cpu_workers": 1,
+    "joint_cpu_workers": 4,
+    "gpu_commits": 118,
+    "native_process_seconds": {
+      "original": 349.6260327589989,
+      "joint": 318.18333468599303
+    },
+    "observed_process_time_reduction": 0.08993237095327988,
+    "workflow_seconds": {
+      "original": 501.9888771709957,
+      "joint": 472.60505744599504
+    },
+    "observed_workflow_time_reduction": 0.05853480238565412,
+    "full_sta": true,
+    "cpd_degradation": 0,
+    "wirelength_degradation": 0.00037900910257193665
+  },
+  "next_steps": [
+    "First confirm GEMM joint end-to-end behavior without diagnostic events/capture/replay, using repeated same-worker original and joint runs with fixed inputs and explicit thread counts.",
+    "Include original four-CPU and improved CPU/guard controls as attribution and configuration evidence; a GPU-only incremental win is not the joint-success gate.",
+    "Optimize CPU scheduling, partition/task publication, data handling and lookahead as well as GPU search, prioritized by whole-process cost.",
+    "Resolve elliptic convergence and verify quality before reporting speedup."
+  ],
+  "historical_files_unchanged": {
+    "results/native_diagnostics_20261029/report.md": "343471c10e2dba2da5323448e4913f43d74887726427ea9b8b32a1ae6153d504",
+    "results/native_diagnostics_20261029/acceptance.json": "82b02685f0b888f3c6db0e0b4175062d7750ee4468f916a6493260906c7a8ad9",
+    "results/native_diagnostics_20261029/provenance.json": "bc21b77968a9c3a99dce89bfe9f5324ba63afd8dfc1c3e00d832c1d46e7b83df",
+    "results/native_diagnostics_20261029/main_diagnostics.json": "a821900cc0ae16b49462d57b53aed2a19050803cb0c737dd1acfec969cc23817"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "scope": "Cached diagnostics skip wire lookahead sampling/construction; native src/opin lookahead is still computed after loading the wire map. Thus cached mode does not remove every preprocessing operation.",
+  "evidence": "bnn_s2_cached_tasks0_r0 process.log: Loading router wire lookahead map 0.04s, Computing src/opin lookahead 0.34s. Both TASKS arms set PARALLEL=1 and reuse identical wire map.",
+  "restriction": "Do not attribute route differences solely to routing races or claim all preprocessing is absent. This clarification does not change frozen commands, samples, gates or input files.",
+  "source_evidence": {
+    "vendor/vtr_cpu_slices/vpr/src/route/router_lookahead/router_lookahead.cpp": "dc49f679b4d7f0cd6fd460600179635b8f74946d3721f0fce9b3604cfd713e21",
+    "vendor/vtr_cpu_slices/vpr/src/route/router_lookahead/router_lookahead_map.cpp": "c24b0c68c4b06bfb9121f43ebcaeb8fd665f079b938fb77d916feed4a55694fc"
+  },
+  "source_observation": "make_router_lookahead selects read() when a cache path is supplied; MapLookahead::read loads wire costs and computes src/opin costs. The TASKS selection occurs in wire-map construction."
+}

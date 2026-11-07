@@ -1,0 +1,207 @@
+{
+  "output": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/generalization_tail",
+  "runtime": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/vpr_runtime_20261025/runtime.json",
+  "binaries": {
+    "original": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+      "sha256": "37cc22c8b1b5d9d378e25379e85afcb7e56b5f1f6f72e3e9186e5e107ed5ce62"
+    },
+    "cpu": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_aligned",
+      "sha256": "a02448d32451882e5d765f10aeed75d528932aff2a634cf689fcdd1361dd74ab"
+    },
+    "frozen": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/bin/vpr_cpu",
+      "sha256": "5dee5a46baa87f602640d861c778657a20065b0ddf5cd7814f4716dfc7619c62"
+    }
+  },
+  "variants": {
+    "stock": {
+      "binary": "original",
+      "parallel": false
+    },
+    "frozen": {
+      "binary": "frozen",
+      "parallel": true
+    },
+    "pipeline": {
+      "binary": "cpu",
+      "parallel": true,
+      "env": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "1"
+      }
+    }
+  },
+  "lanes": {
+    "serial": {
+      "cpu_pool": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "cases": [
+        {
+          "id": "s38417_s1",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/s38417_s1/vpr_case.json",
+          "phases": [
+            {
+              "name": "generalization",
+              "variants": [
+                "stock",
+                "frozen",
+                "pipeline"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "stock",
+                "frozen",
+                "pipeline"
+              ]
+            },
+            {
+              "name": "generalization",
+              "variants": [
+                "stock",
+                "frozen",
+                "pipeline"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "stock",
+                "frozen",
+                "pipeline"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s38417_s2",
+          "vpr_case": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/s38417_s2/vpr_case.json",
+          "phases": [
+            {
+              "name": "generalization",
+              "variants": [
+                "stock",
+                "frozen",
+                "pipeline"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "rebuild"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "stock",
+                "frozen",
+                "pipeline"
+              ]
+            },
+            {
+              "name": "generalization",
+              "variants": [
+                "stock",
+                "frozen",
+                "pipeline"
+              ],
+              "workers": [
+                8
+              ],
+              "cache_modes": [
+                "reuse"
+              ],
+              "repeats": 1,
+              "repeat_start": 0,
+              "intended_execution_order": [
+                "stock",
+                "frozen",
+                "pipeline"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "timeout_seconds": 900,
+  "max_active_cpu_cores": 8,
+  "diagnostics": false,
+  "qualification_env": {
+    "VPR_HYBRID_LOOKAHEAD_TASKS": "1"
+  },
+  "runner_bindings": {
+    "run_native_cpu_slices.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_cpu_slices.py",
+      "sha256": "eee41289c748476a78ac4b5c7ecda5ac7826c3a245b5a0f35a2100852baf77af"
+    },
+    "supervise_native_cpu_slices.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/supervise_native_cpu_slices.py",
+      "sha256": "20bd9c9257bbf30fb6f6402e0ddf175924a15c78ce2888b598aa8a1b27816549"
+    },
+    "run_native_cpu_study.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_cpu_study.py",
+      "sha256": "ab99c84b26ad54e230e781315f0a8d766bd9e208d87cfd117a4a13e2b5ea6b16"
+    },
+    "native_cpu_budget.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/native_cpu_budget.py",
+      "sha256": "3c22823494b94ed8be9d9e693a17a24903f24e9807c3d44d65aa662ad1da4235"
+    },
+    "scaling_common.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/scaling_common.py",
+      "sha256": "9aa5e1b9ec07a3b4bd834406f6d678832fa1b3a14a0a50ce685db366eef27bf4"
+    },
+    "report_native_joint.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/report_native_joint.py",
+      "sha256": "d1146098b613eec5092b5fb7ea7cb3420f595535db54a918308ed4f742896aa8"
+    },
+    "run_native_hybrid.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_hybrid.py",
+      "sha256": "8e3bc2cf1a13bdeb5f47e5b11dc3c6afd1c69b3c233fe9d3f26efac383588f9e"
+    },
+    "prepare.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/prepare.py",
+      "sha256": "a54ac5211aecc5d68bfc13ad92082e55139666707be9855af79cec3529343113"
+    },
+    "run_native_cpu_evidence_tail.py": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/run_native_cpu_evidence_tail.py",
+      "sha256": "c00238dc72143408f1eb1152ac4e49b6a0e11901376a91a8d7b62dcdd8df08f8"
+    }
+  },
+  "concurrency_scope": "One sequential lane; physical cores starting at CPU32, one NUMA node; no owned preparation or solver overlaps. Shared host; no hardware exclusivity.",
+  "measurement_scope": "Full VPR process including identical map serialization, native FULL/STA; fixed pack/place, identical input pre-read. Separate independent FULL/STA readback in workflow.",
+  "quality_gate": {
+    "critical_path_max_regression_percent": 5,
+    "wirelength_max_regression_percent": 5,
+    "overused_nodes": 0
+  },
+  "repeats_scope": "Triad/scaling: three runtime repeats of fixed placement. Generalization: two newly generated placements per circuit, one runtime sample per arm/cache/placement.",
+  "promotion_rule": {
+    "quality": "Both routes legal, independent FULL/STA, CPD and wirelength regression <=5%",
+    "triad": "Pipeline/stock GEMM rebuild all three process ratios >1, median >1.05; frozen/pipeline attribution separately reported",
+    "heldout": "Per-placement quality required; report each placement and circuit equally, do not pool placements as independent circuits. All failed cases retained.",
+    "scope": "Evidence development, no automatic default switch. Stock variant deliberately avoids inherited original-failure skipping so all planned repetitions remain attempted."
+  },
+  "planned_samples": 12,
+  "qualification_exception": "Disable overuse report only for one-iteration cache builders; all measured commands unchanged."
+}

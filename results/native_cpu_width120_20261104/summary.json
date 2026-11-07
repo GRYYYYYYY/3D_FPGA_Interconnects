@@ -1,0 +1,4986 @@
+{
+  "status": "completed",
+  "pid": 1447474,
+  "started_utc": "2026-11-04T02:49:26.094075+00:00",
+  "plan_binding": {
+    "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/plan.json",
+    "sha256": "6b118955dc3d24b66b063849021b5b02ab0407946753904b6c742a1f2d783acd"
+  },
+  "measurements": [
+    {
+      "case": "dla_like.medium_s1",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s1",
+      "status": "timeout",
+      "success": false,
+      "cpu_budget": {
+        "cores": 8,
+        "cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "allowed_before": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "topology": [
+          {
+            "cpu": 32,
+            "socket": 1,
+            "core": 0,
+            "node": 1
+          },
+          {
+            "cpu": 33,
+            "socket": 1,
+            "core": 1,
+            "node": 1
+          },
+          {
+            "cpu": 34,
+            "socket": 1,
+            "core": 2,
+            "node": 1
+          },
+          {
+            "cpu": 35,
+            "socket": 1,
+            "core": 3,
+            "node": 1
+          },
+          {
+            "cpu": 36,
+            "socket": 1,
+            "core": 4,
+            "node": 1
+          },
+          {
+            "cpu": 37,
+            "socket": 1,
+            "core": 5,
+            "node": 1
+          },
+          {
+            "cpu": 38,
+            "socket": 1,
+            "core": 6,
+            "node": 1
+          },
+          {
+            "cpu": 39,
+            "socket": 1,
+            "core": 7,
+            "node": 1
+          }
+        ],
+        "preferred_gpu_numa_node": null,
+        "cgroup": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4696186264888\nuser_usec 3249109049866\nsystem_usec 1447077215022\nnr_periods 14166890\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "scope": "One logical CPU per distinct physical core. Every VPR and CUDA service thread inherits this same set; no exclusivity against other workloads claimed."
+      },
+      "environment": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "0",
+        "VPR_HYBRID_LOOKAHEAD_PARALLEL": "0"
+      },
+      "source_case": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/dla_like.medium_s1/vpr_case.json",
+        "sha256": "1a3d81e2a3ab747d66d8a0b065524448b3c21e95da53585ea6d319e16f74ff1e"
+      },
+      "binary_sha256": "a02448d32451882e5d765f10aeed75d528932aff2a634cf689fcdd1361dd74ab",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_aligned",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/dla_like.medium.blif",
+        "--route_chan_width",
+        "120",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "1",
+        "--num_workers",
+        "8",
+        "--router_algorithm",
+        "parallel",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s1/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s1/fixed.place",
+        "--route_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s1/routed.route",
+        "--timing_report_npaths",
+        "10",
+        "--analysis",
+        "--route",
+        "--routing_failure_predictor",
+        "off",
+        "--max_router_iterations",
+        "200",
+        "--congested_routing_iteration_threshold",
+        "0.25",
+        "--router_lookahead",
+        "map",
+        "--generate_rr_node_overuse_report",
+        "on",
+        "--place_chan_width",
+        "120",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s1/rr_graph.xml",
+        "--write_router_lookahead",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s1/wire_map.bin"
+      ],
+      "timeout_seconds": 900,
+      "returncode": -15,
+      "process_seconds": 900.2646376527846,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "samples": 180,
+        "max_threads": 8,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4696188336282\nuser_usec 3249110081393\nsystem_usec 1447078254889\nnr_periods 14166898\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 4262892,
+        "peak_observed_hwm_kib": 4262892,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 1035.8426590000001,
+        "cpu_system_seconds": 20.591551,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4699447477479\nuser_usec 3251435979827\nsystem_usec 1448011497652\nnr_periods 14175901\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "critical_path_ns": null,
+      "wirelength": null,
+      "routing_seconds": null,
+      "iterations": null,
+      "heap_pushes": null,
+      "heap_pops": null,
+      "search_seconds": 0.0,
+      "search_timer_seconds": [
+        0.0
+      ],
+      "search_timer_max_seconds": 0.0,
+      "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+      "full_check": false,
+      "routing_success": false,
+      "log_evidence": {
+        "stage_seconds": {
+          "rr_graph_load": null,
+          "lookahead_build": 130.36,
+          "routing": null
+        },
+        "iterations": [
+          {
+            "iteration": 1,
+            "seconds": 2.3,
+            "present_factor": 0.0,
+            "rerouted_nets": 154021,
+            "rerouted_connections": 359055,
+            "overused_nodes": 160563
+          },
+          {
+            "iteration": 2,
+            "seconds": 2.2,
+            "present_factor": 0.5,
+            "rerouted_nets": 105366,
+            "rerouted_connections": 286770,
+            "overused_nodes": 55541
+          },
+          {
+            "iteration": 3,
+            "seconds": 1.9,
+            "present_factor": 0.6,
+            "rerouted_nets": 59359,
+            "rerouted_connections": 167189,
+            "overused_nodes": 39830
+          },
+          {
+            "iteration": 4,
+            "seconds": 1.8,
+            "present_factor": 0.8,
+            "rerouted_nets": 45968,
+            "rerouted_connections": 133721,
+            "overused_nodes": 30353
+          },
+          {
+            "iteration": 5,
+            "seconds": 1.8,
+            "present_factor": 1.1,
+            "rerouted_nets": 35699,
+            "rerouted_connections": 107608,
+            "overused_nodes": 20803
+          },
+          {
+            "iteration": 6,
+            "seconds": 1.7,
+            "present_factor": 1.4,
+            "rerouted_nets": 25699,
+            "rerouted_connections": 78881,
+            "overused_nodes": 13585
+          },
+          {
+            "iteration": 7,
+            "seconds": 1.6,
+            "present_factor": 1.9,
+            "rerouted_nets": 17837,
+            "rerouted_connections": 53984,
+            "overused_nodes": 9100
+          },
+          {
+            "iteration": 8,
+            "seconds": 1.7,
+            "present_factor": 2.4,
+            "rerouted_nets": 12333,
+            "rerouted_connections": 35515,
+            "overused_nodes": 5766
+          },
+          {
+            "iteration": 9,
+            "seconds": 1.7,
+            "present_factor": 3.1,
+            "rerouted_nets": 8250,
+            "rerouted_connections": 21748,
+            "overused_nodes": 3721
+          },
+          {
+            "iteration": 10,
+            "seconds": 1.8,
+            "present_factor": 4.1,
+            "rerouted_nets": 5617,
+            "rerouted_connections": 13865,
+            "overused_nodes": 2628
+          },
+          {
+            "iteration": 11,
+            "seconds": 1.6,
+            "present_factor": 5.3,
+            "rerouted_nets": 4039,
+            "rerouted_connections": 9078,
+            "overused_nodes": 1855
+          },
+          {
+            "iteration": 12,
+            "seconds": 1.8,
+            "present_factor": 6.9,
+            "rerouted_nets": 2995,
+            "rerouted_connections": 6591,
+            "overused_nodes": 1418
+          },
+          {
+            "iteration": 13,
+            "seconds": 1.9,
+            "present_factor": 9.0,
+            "rerouted_nets": 2255,
+            "rerouted_connections": 4915,
+            "overused_nodes": 1032
+          },
+          {
+            "iteration": 14,
+            "seconds": 1.9,
+            "present_factor": 11.6,
+            "rerouted_nets": 1808,
+            "rerouted_connections": 4167,
+            "overused_nodes": 800
+          },
+          {
+            "iteration": 15,
+            "seconds": 1.9,
+            "present_factor": 15.1,
+            "rerouted_nets": 1407,
+            "rerouted_connections": 2913,
+            "overused_nodes": 648
+          },
+          {
+            "iteration": 16,
+            "seconds": 1.9,
+            "present_factor": 19.7,
+            "rerouted_nets": 1194,
+            "rerouted_connections": 2489,
+            "overused_nodes": 543
+          },
+          {
+            "iteration": 17,
+            "seconds": 1.8,
+            "present_factor": 25.6,
+            "rerouted_nets": 1005,
+            "rerouted_connections": 2218,
+            "overused_nodes": 480
+          },
+          {
+            "iteration": 18,
+            "seconds": 1.9,
+            "present_factor": 33.3,
+            "rerouted_nets": 1056,
+            "rerouted_connections": 2308,
+            "overused_nodes": 413
+          },
+          {
+            "iteration": 19,
+            "seconds": 2.0,
+            "present_factor": 43.3,
+            "rerouted_nets": 971,
+            "rerouted_connections": 2111,
+            "overused_nodes": 363
+          },
+          {
+            "iteration": 20,
+            "seconds": 2.1,
+            "present_factor": 56.2,
+            "rerouted_nets": 822,
+            "rerouted_connections": 1886,
+            "overused_nodes": 335
+          },
+          {
+            "iteration": 21,
+            "seconds": 1.9,
+            "present_factor": 73.1,
+            "rerouted_nets": 808,
+            "rerouted_connections": 1732,
+            "overused_nodes": 296
+          },
+          {
+            "iteration": 22,
+            "seconds": 1.6,
+            "present_factor": 95.0,
+            "rerouted_nets": 803,
+            "rerouted_connections": 1715,
+            "overused_nodes": 281
+          },
+          {
+            "iteration": 23,
+            "seconds": 1.7,
+            "present_factor": 123.5,
+            "rerouted_nets": 804,
+            "rerouted_connections": 1714,
+            "overused_nodes": 260
+          },
+          {
+            "iteration": 24,
+            "seconds": 1.6,
+            "present_factor": 160.6,
+            "rerouted_nets": 763,
+            "rerouted_connections": 1585,
+            "overused_nodes": 233
+          },
+          {
+            "iteration": 25,
+            "seconds": 1.5,
+            "present_factor": 208.8,
+            "rerouted_nets": 770,
+            "rerouted_connections": 1635,
+            "overused_nodes": 214
+          },
+          {
+            "iteration": 26,
+            "seconds": 1.5,
+            "present_factor": 271.4,
+            "rerouted_nets": 711,
+            "rerouted_connections": 1573,
+            "overused_nodes": 209
+          },
+          {
+            "iteration": 27,
+            "seconds": 1.6,
+            "present_factor": 352.8,
+            "rerouted_nets": 633,
+            "rerouted_connections": 1351,
+            "overused_nodes": 193
+          },
+          {
+            "iteration": 28,
+            "seconds": 1.5,
+            "present_factor": 458.7,
+            "rerouted_nets": 504,
+            "rerouted_connections": 1071,
+            "overused_nodes": 197
+          },
+          {
+            "iteration": 29,
+            "seconds": 1.6,
+            "present_factor": 596.3,
+            "rerouted_nets": 652,
+            "rerouted_connections": 1392,
+            "overused_nodes": 187
+          },
+          {
+            "iteration": 30,
+            "seconds": 1.5,
+            "present_factor": 775.1,
+            "rerouted_nets": 660,
+            "rerouted_connections": 1372,
+            "overused_nodes": 179
+          },
+          {
+            "iteration": 31,
+            "seconds": 1.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 658,
+            "rerouted_connections": 1361,
+            "overused_nodes": 174
+          },
+          {
+            "iteration": 32,
+            "seconds": 1.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 431,
+            "rerouted_connections": 871,
+            "overused_nodes": 164
+          },
+          {
+            "iteration": 33,
+            "seconds": 1.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 543,
+            "rerouted_connections": 1094,
+            "overused_nodes": 156
+          },
+          {
+            "iteration": 34,
+            "seconds": 1.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 459,
+            "rerouted_connections": 917,
+            "overused_nodes": 149
+          },
+          {
+            "iteration": 35,
+            "seconds": 1.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 463,
+            "rerouted_connections": 930,
+            "overused_nodes": 145
+          },
+          {
+            "iteration": 36,
+            "seconds": 1.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 446,
+            "rerouted_connections": 889,
+            "overused_nodes": 142
+          },
+          {
+            "iteration": 37,
+            "seconds": 1.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 442,
+            "rerouted_connections": 893,
+            "overused_nodes": 136
+          },
+          {
+            "iteration": 38,
+            "seconds": 1.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 456,
+            "rerouted_connections": 896,
+            "overused_nodes": 136
+          },
+          {
+            "iteration": 39,
+            "seconds": 1.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 439,
+            "rerouted_connections": 888,
+            "overused_nodes": 135
+          },
+          {
+            "iteration": 40,
+            "seconds": 1.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 439,
+            "rerouted_connections": 869,
+            "overused_nodes": 129
+          },
+          {
+            "iteration": 41,
+            "seconds": 1.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 517,
+            "rerouted_connections": 1041,
+            "overused_nodes": 128
+          },
+          {
+            "iteration": 42,
+            "seconds": 2.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 569,
+            "rerouted_connections": 1148,
+            "overused_nodes": 122
+          },
+          {
+            "iteration": 43,
+            "seconds": 2.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 555,
+            "rerouted_connections": 1122,
+            "overused_nodes": 120
+          },
+          {
+            "iteration": 44,
+            "seconds": 1.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 570,
+            "rerouted_connections": 1138,
+            "overused_nodes": 120
+          },
+          {
+            "iteration": 45,
+            "seconds": 2.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 574,
+            "rerouted_connections": 1127,
+            "overused_nodes": 116
+          },
+          {
+            "iteration": 46,
+            "seconds": 2.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 516,
+            "rerouted_connections": 1014,
+            "overused_nodes": 113
+          },
+          {
+            "iteration": 47,
+            "seconds": 2.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 579,
+            "rerouted_connections": 1141,
+            "overused_nodes": 107
+          },
+          {
+            "iteration": 48,
+            "seconds": 1.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 570,
+            "rerouted_connections": 1134,
+            "overused_nodes": 107
+          },
+          {
+            "iteration": 49,
+            "seconds": 1.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 568,
+            "rerouted_connections": 1111,
+            "overused_nodes": 104
+          },
+          {
+            "iteration": 50,
+            "seconds": 1.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 553,
+            "rerouted_connections": 1092,
+            "overused_nodes": 103
+          },
+          {
+            "iteration": 51,
+            "seconds": 2.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 201,
+            "rerouted_connections": 386,
+            "overused_nodes": 103
+          },
+          {
+            "iteration": 52,
+            "seconds": 2.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 197,
+            "rerouted_connections": 370,
+            "overused_nodes": 102
+          },
+          {
+            "iteration": 53,
+            "seconds": 2.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 179,
+            "rerouted_connections": 329,
+            "overused_nodes": 100
+          },
+          {
+            "iteration": 54,
+            "seconds": 1.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 194,
+            "rerouted_connections": 374,
+            "overused_nodes": 99
+          },
+          {
+            "iteration": 55,
+            "seconds": 1.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 185,
+            "rerouted_connections": 353,
+            "overused_nodes": 100
+          },
+          {
+            "iteration": 56,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 181,
+            "rerouted_connections": 349,
+            "overused_nodes": 98
+          },
+          {
+            "iteration": 57,
+            "seconds": 3.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 189,
+            "rerouted_connections": 377,
+            "overused_nodes": 99
+          },
+          {
+            "iteration": 58,
+            "seconds": 3.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 174,
+            "rerouted_connections": 336,
+            "overused_nodes": 98
+          },
+          {
+            "iteration": 59,
+            "seconds": 3.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 174,
+            "rerouted_connections": 362,
+            "overused_nodes": 98
+          },
+          {
+            "iteration": 60,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 194,
+            "rerouted_connections": 412,
+            "overused_nodes": 101
+          },
+          {
+            "iteration": 61,
+            "seconds": 11.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 176,
+            "rerouted_connections": 372,
+            "overused_nodes": 97
+          },
+          {
+            "iteration": 62,
+            "seconds": 7.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 172,
+            "rerouted_connections": 351,
+            "overused_nodes": 98
+          },
+          {
+            "iteration": 63,
+            "seconds": 8.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 193,
+            "rerouted_connections": 395,
+            "overused_nodes": 96
+          },
+          {
+            "iteration": 64,
+            "seconds": 8.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 183,
+            "rerouted_connections": 367,
+            "overused_nodes": 96
+          },
+          {
+            "iteration": 65,
+            "seconds": 7.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 178,
+            "rerouted_connections": 362,
+            "overused_nodes": 97
+          },
+          {
+            "iteration": 66,
+            "seconds": 19.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 176,
+            "rerouted_connections": 366,
+            "overused_nodes": 96
+          },
+          {
+            "iteration": 67,
+            "seconds": 19.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 174,
+            "rerouted_connections": 359,
+            "overused_nodes": 100
+          },
+          {
+            "iteration": 68,
+            "seconds": 17.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 180,
+            "rerouted_connections": 387,
+            "overused_nodes": 95
+          },
+          {
+            "iteration": 69,
+            "seconds": 21.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 181,
+            "rerouted_connections": 379,
+            "overused_nodes": 95
+          },
+          {
+            "iteration": 70,
+            "seconds": 20.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 176,
+            "rerouted_connections": 355,
+            "overused_nodes": 96
+          },
+          {
+            "iteration": 71,
+            "seconds": 49.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 172,
+            "rerouted_connections": 342,
+            "overused_nodes": 97
+          },
+          {
+            "iteration": 72,
+            "seconds": 54.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 180,
+            "rerouted_connections": 353,
+            "overused_nodes": 96
+          },
+          {
+            "iteration": 73,
+            "seconds": 48.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 174,
+            "rerouted_connections": 347,
+            "overused_nodes": 97
+          },
+          {
+            "iteration": 74,
+            "seconds": 36.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 179,
+            "rerouted_connections": 383,
+            "overused_nodes": 96
+          },
+          {
+            "iteration": 75,
+            "seconds": 47.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 181,
+            "rerouted_connections": 394,
+            "overused_nodes": 96
+          },
+          {
+            "iteration": 76,
+            "seconds": 50.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 174,
+            "rerouted_connections": 371,
+            "overused_nodes": 96
+          },
+          {
+            "iteration": 77,
+            "seconds": 52.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 188,
+            "rerouted_connections": 410,
+            "overused_nodes": 97
+          },
+          {
+            "iteration": 78,
+            "seconds": 38.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 170,
+            "rerouted_connections": 377,
+            "overused_nodes": 97
+          }
+        ],
+        "final_overused_nodes": null,
+        "last_observed_overused_nodes": 97,
+        "overuse_report": null
+      },
+      "rr_channel_header": {
+        "chan_width_max": "120",
+        "x_max": "120",
+        "x_min": "120",
+        "y_max": "120",
+        "y_min": "120"
+      },
+      "generated_rr_graph": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s1/rr_graph.xml",
+        "sha256": "91f444c49aad104dfdf66d903e2ba422089cfe84c758f7566ad4238f0be5741a"
+      },
+      "wire_map_sha256": "f4903ce0f5c8368136ed1a6630225cc3981a97bb3136c909450d078525c9fe4f",
+      "finished_utc": "2026-11-04T03:04:35.140004+00:00"
+    },
+    {
+      "case": "dla_like.medium_s2",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s2",
+      "status": "timeout",
+      "success": false,
+      "cpu_budget": {
+        "cores": 8,
+        "cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "allowed_before": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "topology": [
+          {
+            "cpu": 32,
+            "socket": 1,
+            "core": 0,
+            "node": 1
+          },
+          {
+            "cpu": 33,
+            "socket": 1,
+            "core": 1,
+            "node": 1
+          },
+          {
+            "cpu": 34,
+            "socket": 1,
+            "core": 2,
+            "node": 1
+          },
+          {
+            "cpu": 35,
+            "socket": 1,
+            "core": 3,
+            "node": 1
+          },
+          {
+            "cpu": 36,
+            "socket": 1,
+            "core": 4,
+            "node": 1
+          },
+          {
+            "cpu": 37,
+            "socket": 1,
+            "core": 5,
+            "node": 1
+          },
+          {
+            "cpu": 38,
+            "socket": 1,
+            "core": 6,
+            "node": 1
+          },
+          {
+            "cpu": 39,
+            "socket": 1,
+            "core": 7,
+            "node": 1
+          }
+        ],
+        "preferred_gpu_numa_node": null,
+        "cgroup": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4696186264888\nuser_usec 3249109049866\nsystem_usec 1447077215022\nnr_periods 14166890\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "scope": "One logical CPU per distinct physical core. Every VPR and CUDA service thread inherits this same set; no exclusivity against other workloads claimed."
+      },
+      "environment": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "0",
+        "VPR_HYBRID_LOOKAHEAD_PARALLEL": "0"
+      },
+      "source_case": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/dla_like.medium_s2/vpr_case.json",
+        "sha256": "4ebf973ad9885aa8821e1c26074e6a69e20e414db67cd41344e8cbf9bfbc645a"
+      },
+      "binary_sha256": "a02448d32451882e5d765f10aeed75d528932aff2a634cf689fcdd1361dd74ab",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_aligned",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/dla_like.medium.blif",
+        "--route_chan_width",
+        "120",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "2",
+        "--num_workers",
+        "8",
+        "--router_algorithm",
+        "parallel",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s2/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s2/fixed.place",
+        "--route_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s2/routed.route",
+        "--timing_report_npaths",
+        "10",
+        "--analysis",
+        "--route",
+        "--routing_failure_predictor",
+        "off",
+        "--max_router_iterations",
+        "200",
+        "--congested_routing_iteration_threshold",
+        "0.25",
+        "--router_lookahead",
+        "map",
+        "--generate_rr_node_overuse_report",
+        "on",
+        "--place_chan_width",
+        "120",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s2/rr_graph.xml",
+        "--write_router_lookahead",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s2/wire_map.bin"
+      ],
+      "timeout_seconds": 900,
+      "returncode": -15,
+      "process_seconds": 900.2645293548703,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "samples": 180,
+        "max_threads": 8,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4699485827793\nuser_usec 3251465141876\nsystem_usec 1448020685916\nnr_periods 14175991\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 4219752,
+        "peak_observed_hwm_kib": 4219752,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 1016.9299169999999,
+        "cpu_system_seconds": 21.216708,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4706644865492\nuser_usec 3257317210860\nsystem_usec 1449327654632\nnr_periods 14184994\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "critical_path_ns": null,
+      "wirelength": null,
+      "routing_seconds": null,
+      "iterations": null,
+      "heap_pushes": null,
+      "heap_pops": null,
+      "search_seconds": 0.0,
+      "search_timer_seconds": [
+        0.0
+      ],
+      "search_timer_max_seconds": 0.0,
+      "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+      "full_check": false,
+      "routing_success": false,
+      "log_evidence": {
+        "stage_seconds": {
+          "rr_graph_load": null,
+          "lookahead_build": 131.95,
+          "routing": null
+        },
+        "iterations": [
+          {
+            "iteration": 1,
+            "seconds": 2.3,
+            "present_factor": 0.0,
+            "rerouted_nets": 154021,
+            "rerouted_connections": 359055,
+            "overused_nodes": 158592
+          },
+          {
+            "iteration": 2,
+            "seconds": 2.1,
+            "present_factor": 0.5,
+            "rerouted_nets": 104944,
+            "rerouted_connections": 286557,
+            "overused_nodes": 53448
+          },
+          {
+            "iteration": 3,
+            "seconds": 1.8,
+            "present_factor": 0.6,
+            "rerouted_nets": 57757,
+            "rerouted_connections": 164645,
+            "overused_nodes": 38209
+          },
+          {
+            "iteration": 4,
+            "seconds": 1.6,
+            "present_factor": 0.8,
+            "rerouted_nets": 44256,
+            "rerouted_connections": 129354,
+            "overused_nodes": 28615
+          },
+          {
+            "iteration": 5,
+            "seconds": 1.6,
+            "present_factor": 1.1,
+            "rerouted_nets": 33815,
+            "rerouted_connections": 102952,
+            "overused_nodes": 19611
+          },
+          {
+            "iteration": 6,
+            "seconds": 1.5,
+            "present_factor": 1.4,
+            "rerouted_nets": 24208,
+            "rerouted_connections": 74707,
+            "overused_nodes": 12958
+          },
+          {
+            "iteration": 7,
+            "seconds": 1.4,
+            "present_factor": 1.9,
+            "rerouted_nets": 16946,
+            "rerouted_connections": 50966,
+            "overused_nodes": 8609
+          },
+          {
+            "iteration": 8,
+            "seconds": 1.4,
+            "present_factor": 2.4,
+            "rerouted_nets": 11612,
+            "rerouted_connections": 33574,
+            "overused_nodes": 5552
+          },
+          {
+            "iteration": 9,
+            "seconds": 1.3,
+            "present_factor": 3.1,
+            "rerouted_nets": 7863,
+            "rerouted_connections": 20918,
+            "overused_nodes": 3613
+          },
+          {
+            "iteration": 10,
+            "seconds": 1.3,
+            "present_factor": 4.1,
+            "rerouted_nets": 5433,
+            "rerouted_connections": 13157,
+            "overused_nodes": 2510
+          },
+          {
+            "iteration": 11,
+            "seconds": 1.2,
+            "present_factor": 5.3,
+            "rerouted_nets": 3784,
+            "rerouted_connections": 8666,
+            "overused_nodes": 1771
+          },
+          {
+            "iteration": 12,
+            "seconds": 1.3,
+            "present_factor": 6.9,
+            "rerouted_nets": 2846,
+            "rerouted_connections": 6926,
+            "overused_nodes": 1258
+          },
+          {
+            "iteration": 13,
+            "seconds": 1.4,
+            "present_factor": 9.0,
+            "rerouted_nets": 2066,
+            "rerouted_connections": 4342,
+            "overused_nodes": 930
+          },
+          {
+            "iteration": 14,
+            "seconds": 1.4,
+            "present_factor": 11.6,
+            "rerouted_nets": 1587,
+            "rerouted_connections": 3394,
+            "overused_nodes": 705
+          },
+          {
+            "iteration": 15,
+            "seconds": 1.4,
+            "present_factor": 15.1,
+            "rerouted_nets": 1273,
+            "rerouted_connections": 2692,
+            "overused_nodes": 569
+          },
+          {
+            "iteration": 16,
+            "seconds": 1.4,
+            "present_factor": 19.7,
+            "rerouted_nets": 1023,
+            "rerouted_connections": 2124,
+            "overused_nodes": 472
+          },
+          {
+            "iteration": 17,
+            "seconds": 1.4,
+            "present_factor": 25.6,
+            "rerouted_nets": 875,
+            "rerouted_connections": 1819,
+            "overused_nodes": 405
+          },
+          {
+            "iteration": 18,
+            "seconds": 1.5,
+            "present_factor": 33.3,
+            "rerouted_nets": 756,
+            "rerouted_connections": 1557,
+            "overused_nodes": 354
+          },
+          {
+            "iteration": 19,
+            "seconds": 1.7,
+            "present_factor": 43.3,
+            "rerouted_nets": 660,
+            "rerouted_connections": 1370,
+            "overused_nodes": 310
+          },
+          {
+            "iteration": 20,
+            "seconds": 1.2,
+            "present_factor": 56.2,
+            "rerouted_nets": 591,
+            "rerouted_connections": 1243,
+            "overused_nodes": 278
+          },
+          {
+            "iteration": 21,
+            "seconds": 1.2,
+            "present_factor": 73.1,
+            "rerouted_nets": 716,
+            "rerouted_connections": 1642,
+            "overused_nodes": 250
+          },
+          {
+            "iteration": 22,
+            "seconds": 1.2,
+            "present_factor": 95.0,
+            "rerouted_nets": 686,
+            "rerouted_connections": 1585,
+            "overused_nodes": 230
+          },
+          {
+            "iteration": 23,
+            "seconds": 1.0,
+            "present_factor": 123.5,
+            "rerouted_nets": 648,
+            "rerouted_connections": 1473,
+            "overused_nodes": 213
+          },
+          {
+            "iteration": 24,
+            "seconds": 1.2,
+            "present_factor": 160.6,
+            "rerouted_nets": 631,
+            "rerouted_connections": 1434,
+            "overused_nodes": 192
+          },
+          {
+            "iteration": 25,
+            "seconds": 1.4,
+            "present_factor": 208.8,
+            "rerouted_nets": 503,
+            "rerouted_connections": 1103,
+            "overused_nodes": 170
+          },
+          {
+            "iteration": 26,
+            "seconds": 1.1,
+            "present_factor": 271.4,
+            "rerouted_nets": 517,
+            "rerouted_connections": 1171,
+            "overused_nodes": 162
+          },
+          {
+            "iteration": 27,
+            "seconds": 1.1,
+            "present_factor": 352.8,
+            "rerouted_nets": 394,
+            "rerouted_connections": 829,
+            "overused_nodes": 148
+          },
+          {
+            "iteration": 28,
+            "seconds": 1.2,
+            "present_factor": 458.7,
+            "rerouted_nets": 438,
+            "rerouted_connections": 993,
+            "overused_nodes": 142
+          },
+          {
+            "iteration": 29,
+            "seconds": 1.3,
+            "present_factor": 596.3,
+            "rerouted_nets": 524,
+            "rerouted_connections": 1157,
+            "overused_nodes": 136
+          },
+          {
+            "iteration": 30,
+            "seconds": 1.1,
+            "present_factor": 775.1,
+            "rerouted_nets": 547,
+            "rerouted_connections": 1197,
+            "overused_nodes": 131
+          },
+          {
+            "iteration": 31,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 412,
+            "rerouted_connections": 905,
+            "overused_nodes": 123
+          },
+          {
+            "iteration": 32,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 272,
+            "rerouted_connections": 570,
+            "overused_nodes": 117
+          },
+          {
+            "iteration": 33,
+            "seconds": 1.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 529,
+            "rerouted_connections": 1167,
+            "overused_nodes": 119
+          },
+          {
+            "iteration": 34,
+            "seconds": 1.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 487,
+            "rerouted_connections": 1046,
+            "overused_nodes": 112
+          },
+          {
+            "iteration": 35,
+            "seconds": 1.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 523,
+            "rerouted_connections": 1132,
+            "overused_nodes": 110
+          },
+          {
+            "iteration": 36,
+            "seconds": 1.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 531,
+            "rerouted_connections": 1166,
+            "overused_nodes": 105
+          },
+          {
+            "iteration": 37,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 523,
+            "rerouted_connections": 1147,
+            "overused_nodes": 101
+          },
+          {
+            "iteration": 38,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 343,
+            "rerouted_connections": 746,
+            "overused_nodes": 101
+          },
+          {
+            "iteration": 39,
+            "seconds": 1.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 519,
+            "rerouted_connections": 1145,
+            "overused_nodes": 99
+          },
+          {
+            "iteration": 40,
+            "seconds": 1.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 506,
+            "rerouted_connections": 1121,
+            "overused_nodes": 93
+          },
+          {
+            "iteration": 41,
+            "seconds": 1.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 495,
+            "rerouted_connections": 1093,
+            "overused_nodes": 95
+          },
+          {
+            "iteration": 42,
+            "seconds": 0.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 514,
+            "rerouted_connections": 1151,
+            "overused_nodes": 87
+          },
+          {
+            "iteration": 43,
+            "seconds": 1.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 493,
+            "rerouted_connections": 1079,
+            "overused_nodes": 83
+          },
+          {
+            "iteration": 44,
+            "seconds": 1.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 209,
+            "rerouted_connections": 427,
+            "overused_nodes": 81
+          },
+          {
+            "iteration": 45,
+            "seconds": 1.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 489,
+            "rerouted_connections": 1066,
+            "overused_nodes": 80
+          },
+          {
+            "iteration": 46,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 493,
+            "rerouted_connections": 1067,
+            "overused_nodes": 79
+          },
+          {
+            "iteration": 47,
+            "seconds": 1.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 486,
+            "rerouted_connections": 1051,
+            "overused_nodes": 82
+          },
+          {
+            "iteration": 48,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 470,
+            "rerouted_connections": 1012,
+            "overused_nodes": 78
+          },
+          {
+            "iteration": 49,
+            "seconds": 1.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 489,
+            "rerouted_connections": 1061,
+            "overused_nodes": 76
+          },
+          {
+            "iteration": 50,
+            "seconds": 1.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 482,
+            "rerouted_connections": 1050,
+            "overused_nodes": 75
+          },
+          {
+            "iteration": 51,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 127,
+            "rerouted_connections": 245,
+            "overused_nodes": 71
+          },
+          {
+            "iteration": 52,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 129,
+            "rerouted_connections": 263,
+            "overused_nodes": 72
+          },
+          {
+            "iteration": 53,
+            "seconds": 1.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 130,
+            "rerouted_connections": 261,
+            "overused_nodes": 72
+          },
+          {
+            "iteration": 54,
+            "seconds": 1.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 139,
+            "rerouted_connections": 281,
+            "overused_nodes": 75
+          },
+          {
+            "iteration": 55,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 138,
+            "rerouted_connections": 283,
+            "overused_nodes": 71
+          },
+          {
+            "iteration": 56,
+            "seconds": 2.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 130,
+            "rerouted_connections": 270,
+            "overused_nodes": 71
+          },
+          {
+            "iteration": 57,
+            "seconds": 1.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 122,
+            "rerouted_connections": 255,
+            "overused_nodes": 70
+          },
+          {
+            "iteration": 58,
+            "seconds": 1.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 145,
+            "rerouted_connections": 308,
+            "overused_nodes": 69
+          },
+          {
+            "iteration": 59,
+            "seconds": 1.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 122,
+            "rerouted_connections": 245,
+            "overused_nodes": 68
+          },
+          {
+            "iteration": 60,
+            "seconds": 1.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 122,
+            "rerouted_connections": 268,
+            "overused_nodes": 68
+          },
+          {
+            "iteration": 61,
+            "seconds": 5.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 135,
+            "rerouted_connections": 290,
+            "overused_nodes": 67
+          },
+          {
+            "iteration": 62,
+            "seconds": 6.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 126,
+            "rerouted_connections": 269,
+            "overused_nodes": 65
+          },
+          {
+            "iteration": 63,
+            "seconds": 7.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 117,
+            "rerouted_connections": 242,
+            "overused_nodes": 64
+          },
+          {
+            "iteration": 64,
+            "seconds": 8.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 125,
+            "rerouted_connections": 256,
+            "overused_nodes": 65
+          },
+          {
+            "iteration": 65,
+            "seconds": 6.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 116,
+            "rerouted_connections": 241,
+            "overused_nodes": 63
+          },
+          {
+            "iteration": 66,
+            "seconds": 20.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 117,
+            "rerouted_connections": 248,
+            "overused_nodes": 64
+          },
+          {
+            "iteration": 67,
+            "seconds": 25.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 125,
+            "rerouted_connections": 250,
+            "overused_nodes": 64
+          },
+          {
+            "iteration": 68,
+            "seconds": 14.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 124,
+            "rerouted_connections": 258,
+            "overused_nodes": 63
+          },
+          {
+            "iteration": 69,
+            "seconds": 23.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 124,
+            "rerouted_connections": 248,
+            "overused_nodes": 63
+          },
+          {
+            "iteration": 70,
+            "seconds": 19.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 111,
+            "rerouted_connections": 221,
+            "overused_nodes": 63
+          },
+          {
+            "iteration": 71,
+            "seconds": 32.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 106,
+            "rerouted_connections": 223,
+            "overused_nodes": 64
+          },
+          {
+            "iteration": 72,
+            "seconds": 31.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 120,
+            "rerouted_connections": 284,
+            "overused_nodes": 63
+          },
+          {
+            "iteration": 73,
+            "seconds": 50.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 126,
+            "rerouted_connections": 249,
+            "overused_nodes": 64
+          },
+          {
+            "iteration": 74,
+            "seconds": 38.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 115,
+            "rerouted_connections": 236,
+            "overused_nodes": 65
+          },
+          {
+            "iteration": 75,
+            "seconds": 35.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 120,
+            "rerouted_connections": 233,
+            "overused_nodes": 66
+          },
+          {
+            "iteration": 76,
+            "seconds": 29.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 127,
+            "rerouted_connections": 270,
+            "overused_nodes": 65
+          },
+          {
+            "iteration": 77,
+            "seconds": 32.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 121,
+            "rerouted_connections": 250,
+            "overused_nodes": 65
+          },
+          {
+            "iteration": 78,
+            "seconds": 30.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 122,
+            "rerouted_connections": 250,
+            "overused_nodes": 64
+          },
+          {
+            "iteration": 79,
+            "seconds": 37.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 112,
+            "rerouted_connections": 225,
+            "overused_nodes": 62
+          },
+          {
+            "iteration": 80,
+            "seconds": 34.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 121,
+            "rerouted_connections": 252,
+            "overused_nodes": 62
+          },
+          {
+            "iteration": 81,
+            "seconds": 44.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 122,
+            "rerouted_connections": 241,
+            "overused_nodes": 62
+          }
+        ],
+        "final_overused_nodes": null,
+        "last_observed_overused_nodes": 62,
+        "overuse_report": null
+      },
+      "rr_channel_header": {
+        "chan_width_max": "120",
+        "x_max": "120",
+        "x_min": "120",
+        "y_max": "120",
+        "y_min": "120"
+      },
+      "generated_rr_graph": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/dla_like.medium_s2/rr_graph.xml",
+        "sha256": "91f444c49aad104dfdf66d903e2ba422089cfe84c758f7566ad4238f0be5741a"
+      },
+      "wire_map_sha256": "f4903ce0f5c8368136ed1a6630225cc3981a97bb3136c909450d078525c9fe4f",
+      "finished_utc": "2026-11-04T03:19:44.340540+00:00"
+    },
+    {
+      "case": "lstm_s1",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s1",
+      "status": "failed",
+      "success": false,
+      "cpu_budget": {
+        "cores": 8,
+        "cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "allowed_before": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "topology": [
+          {
+            "cpu": 32,
+            "socket": 1,
+            "core": 0,
+            "node": 1
+          },
+          {
+            "cpu": 33,
+            "socket": 1,
+            "core": 1,
+            "node": 1
+          },
+          {
+            "cpu": 34,
+            "socket": 1,
+            "core": 2,
+            "node": 1
+          },
+          {
+            "cpu": 35,
+            "socket": 1,
+            "core": 3,
+            "node": 1
+          },
+          {
+            "cpu": 36,
+            "socket": 1,
+            "core": 4,
+            "node": 1
+          },
+          {
+            "cpu": 37,
+            "socket": 1,
+            "core": 5,
+            "node": 1
+          },
+          {
+            "cpu": 38,
+            "socket": 1,
+            "core": 6,
+            "node": 1
+          },
+          {
+            "cpu": 39,
+            "socket": 1,
+            "core": 7,
+            "node": 1
+          }
+        ],
+        "preferred_gpu_numa_node": null,
+        "cgroup": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4696186264888\nuser_usec 3249109049866\nsystem_usec 1447077215022\nnr_periods 14166890\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "scope": "One logical CPU per distinct physical core. Every VPR and CUDA service thread inherits this same set; no exclusivity against other workloads claimed."
+      },
+      "environment": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "0",
+        "VPR_HYBRID_LOOKAHEAD_PARALLEL": "0"
+      },
+      "source_case": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/lstm_s1/vpr_case.json",
+        "sha256": "a2d2a3506653d8f63ea596a948ff9e3906c84c44a395cb77735982a9de8894cb"
+      },
+      "binary_sha256": "a02448d32451882e5d765f10aeed75d528932aff2a634cf689fcdd1361dd74ab",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_aligned",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/lstm.blif",
+        "--route_chan_width",
+        "120",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "1",
+        "--num_workers",
+        "8",
+        "--router_algorithm",
+        "parallel",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s1/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s1/fixed.place",
+        "--route_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s1/routed.route",
+        "--timing_report_npaths",
+        "10",
+        "--analysis",
+        "--route",
+        "--routing_failure_predictor",
+        "off",
+        "--max_router_iterations",
+        "200",
+        "--congested_routing_iteration_threshold",
+        "0.25",
+        "--router_lookahead",
+        "map",
+        "--generate_rr_node_overuse_report",
+        "on",
+        "--place_chan_width",
+        "120",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s1/rr_graph.xml",
+        "--write_router_lookahead",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s1/wire_map.bin"
+      ],
+      "timeout_seconds": 900,
+      "returncode": 2,
+      "process_seconds": 623.6473093740642,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "samples": 125,
+        "max_threads": 8,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4706693502936\nuser_usec 3257353338563\nsystem_usec 1449340164373\nnr_periods 14185079\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 2334548,
+        "peak_observed_hwm_kib": 2431248,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 821.537311,
+        "cpu_system_seconds": 10.484782000000003,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4710661353742\nuser_usec 3260098399578\nsystem_usec 1450562954163\nnr_periods 14191315\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "critical_path_ns": 12.6426,
+      "wirelength": 1748556,
+      "routing_seconds": 490.59,
+      "iterations": null,
+      "heap_pushes": 660544634,
+      "heap_pops": 549691181,
+      "search_seconds": 446.58200000000005,
+      "search_timer_seconds": [
+        0.0,
+        0.0,
+        2.528,
+        3.189,
+        3.061,
+        2.464,
+        3.169,
+        2.026,
+        427.891,
+        2.254
+      ],
+      "search_timer_max_seconds": 427.891,
+      "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+      "full_check": false,
+      "routing_success": false,
+      "log_evidence": {
+        "stage_seconds": {
+          "rr_graph_load": null,
+          "lookahead_build": 67.37,
+          "routing": 490.59
+        },
+        "iterations": [
+          {
+            "iteration": 1,
+            "seconds": 2.2,
+            "present_factor": 0.0,
+            "rerouted_nets": 105855,
+            "rerouted_connections": 207452,
+            "overused_nodes": 106341
+          },
+          {
+            "iteration": 2,
+            "seconds": 2.2,
+            "present_factor": 0.5,
+            "rerouted_nets": 77870,
+            "rerouted_connections": 169071,
+            "overused_nodes": 40833
+          },
+          {
+            "iteration": 3,
+            "seconds": 2.1,
+            "present_factor": 0.6,
+            "rerouted_nets": 47766,
+            "rerouted_connections": 107575,
+            "overused_nodes": 29893
+          },
+          {
+            "iteration": 4,
+            "seconds": 2.2,
+            "present_factor": 0.8,
+            "rerouted_nets": 36546,
+            "rerouted_connections": 89077,
+            "overused_nodes": 21465
+          },
+          {
+            "iteration": 5,
+            "seconds": 2.1,
+            "present_factor": 1.1,
+            "rerouted_nets": 27280,
+            "rerouted_connections": 74743,
+            "overused_nodes": 13951
+          },
+          {
+            "iteration": 6,
+            "seconds": 1.9,
+            "present_factor": 1.4,
+            "rerouted_nets": 18213,
+            "rerouted_connections": 55133,
+            "overused_nodes": 8254
+          },
+          {
+            "iteration": 7,
+            "seconds": 1.5,
+            "present_factor": 1.9,
+            "rerouted_nets": 11147,
+            "rerouted_connections": 36394,
+            "overused_nodes": 4675
+          },
+          {
+            "iteration": 8,
+            "seconds": 1.0,
+            "present_factor": 2.4,
+            "rerouted_nets": 5737,
+            "rerouted_connections": 16948,
+            "overused_nodes": 2036
+          },
+          {
+            "iteration": 9,
+            "seconds": 0.7,
+            "present_factor": 3.1,
+            "rerouted_nets": 2591,
+            "rerouted_connections": 7874,
+            "overused_nodes": 778
+          },
+          {
+            "iteration": 10,
+            "seconds": 0.6,
+            "present_factor": 4.1,
+            "rerouted_nets": 1004,
+            "rerouted_connections": 2632,
+            "overused_nodes": 278
+          },
+          {
+            "iteration": 11,
+            "seconds": 0.5,
+            "present_factor": 5.3,
+            "rerouted_nets": 364,
+            "rerouted_connections": 812,
+            "overused_nodes": 88
+          },
+          {
+            "iteration": 12,
+            "seconds": 0.4,
+            "present_factor": 6.9,
+            "rerouted_nets": 122,
+            "rerouted_connections": 222,
+            "overused_nodes": 43
+          },
+          {
+            "iteration": 13,
+            "seconds": 0.4,
+            "present_factor": 9.0,
+            "rerouted_nets": 71,
+            "rerouted_connections": 103,
+            "overused_nodes": 25
+          },
+          {
+            "iteration": 14,
+            "seconds": 0.4,
+            "present_factor": 11.6,
+            "rerouted_nets": 46,
+            "rerouted_connections": 52,
+            "overused_nodes": 17
+          },
+          {
+            "iteration": 15,
+            "seconds": 0.4,
+            "present_factor": 15.1,
+            "rerouted_nets": 32,
+            "rerouted_connections": 32,
+            "overused_nodes": 15
+          },
+          {
+            "iteration": 16,
+            "seconds": 0.4,
+            "present_factor": 19.7,
+            "rerouted_nets": 22,
+            "rerouted_connections": 28,
+            "overused_nodes": 9
+          },
+          {
+            "iteration": 17,
+            "seconds": 0.4,
+            "present_factor": 25.6,
+            "rerouted_nets": 19,
+            "rerouted_connections": 19,
+            "overused_nodes": 9
+          },
+          {
+            "iteration": 18,
+            "seconds": 0.3,
+            "present_factor": 33.3,
+            "rerouted_nets": 15,
+            "rerouted_connections": 16,
+            "overused_nodes": 9
+          },
+          {
+            "iteration": 19,
+            "seconds": 0.3,
+            "present_factor": 43.3,
+            "rerouted_nets": 17,
+            "rerouted_connections": 19,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 20,
+            "seconds": 0.4,
+            "present_factor": 56.2,
+            "rerouted_nets": 19,
+            "rerouted_connections": 20,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 21,
+            "seconds": 0.3,
+            "present_factor": 73.1,
+            "rerouted_nets": 16,
+            "rerouted_connections": 17,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 22,
+            "seconds": 0.3,
+            "present_factor": 95.0,
+            "rerouted_nets": 14,
+            "rerouted_connections": 14,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 23,
+            "seconds": 0.3,
+            "present_factor": 123.5,
+            "rerouted_nets": 15,
+            "rerouted_connections": 17,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 24,
+            "seconds": 0.3,
+            "present_factor": 160.6,
+            "rerouted_nets": 18,
+            "rerouted_connections": 20,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 25,
+            "seconds": 0.3,
+            "present_factor": 208.8,
+            "rerouted_nets": 14,
+            "rerouted_connections": 14,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 26,
+            "seconds": 0.3,
+            "present_factor": 271.4,
+            "rerouted_nets": 19,
+            "rerouted_connections": 26,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 27,
+            "seconds": 0.3,
+            "present_factor": 352.8,
+            "rerouted_nets": 14,
+            "rerouted_connections": 19,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 28,
+            "seconds": 0.3,
+            "present_factor": 458.7,
+            "rerouted_nets": 15,
+            "rerouted_connections": 16,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 29,
+            "seconds": 0.3,
+            "present_factor": 596.3,
+            "rerouted_nets": 13,
+            "rerouted_connections": 14,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 30,
+            "seconds": 0.3,
+            "present_factor": 775.1,
+            "rerouted_nets": 17,
+            "rerouted_connections": 21,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 31,
+            "seconds": 0.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 17,
+            "rerouted_connections": 17,
+            "overused_nodes": 8
+          },
+          {
+            "iteration": 32,
+            "seconds": 0.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 16,
+            "rerouted_connections": 16,
+            "overused_nodes": 7
+          },
+          {
+            "iteration": 33,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 13,
+            "rerouted_connections": 13,
+            "overused_nodes": 7
+          },
+          {
+            "iteration": 34,
+            "seconds": 0.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 15,
+            "rerouted_connections": 15,
+            "overused_nodes": 7
+          },
+          {
+            "iteration": 35,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 14,
+            "rerouted_connections": 14,
+            "overused_nodes": 7
+          },
+          {
+            "iteration": 36,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 12,
+            "rerouted_connections": 12,
+            "overused_nodes": 7
+          },
+          {
+            "iteration": 37,
+            "seconds": 0.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 16,
+            "rerouted_connections": 16,
+            "overused_nodes": 7
+          },
+          {
+            "iteration": 38,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 12,
+            "rerouted_connections": 12,
+            "overused_nodes": 6
+          },
+          {
+            "iteration": 39,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 11,
+            "rerouted_connections": 13,
+            "overused_nodes": 6
+          },
+          {
+            "iteration": 40,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 16,
+            "rerouted_connections": 18,
+            "overused_nodes": 6
+          },
+          {
+            "iteration": 41,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 13,
+            "rerouted_connections": 13,
+            "overused_nodes": 6
+          },
+          {
+            "iteration": 42,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 9,
+            "overused_nodes": 6
+          },
+          {
+            "iteration": 43,
+            "seconds": 0.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 9,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 44,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 13,
+            "rerouted_connections": 13,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 45,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 10,
+            "rerouted_connections": 10,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 46,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 9,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 47,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 48,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 12,
+            "rerouted_connections": 14,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 49,
+            "seconds": 0.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 50,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 10,
+            "rerouted_connections": 10,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 51,
+            "seconds": 0.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 52,
+            "seconds": 0.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 9,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 53,
+            "seconds": 0.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 9,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 54,
+            "seconds": 0.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 10,
+            "rerouted_connections": 12,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 55,
+            "seconds": 0.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 10,
+            "rerouted_connections": 12,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 56,
+            "seconds": 0.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 13,
+            "rerouted_connections": 15,
+            "overused_nodes": 6
+          },
+          {
+            "iteration": 57,
+            "seconds": 0.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 12,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 58,
+            "seconds": 0.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 59,
+            "seconds": 0.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 9,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 60,
+            "seconds": 0.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 11,
+            "rerouted_connections": 11,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 61,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 62,
+            "seconds": 1.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 10,
+            "rerouted_connections": 10,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 63,
+            "seconds": 1.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 64,
+            "seconds": 1.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 13,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 65,
+            "seconds": 1.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 12,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 66,
+            "seconds": 2.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 10,
+            "rerouted_connections": 14,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 67,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 68,
+            "seconds": 4.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 69,
+            "seconds": 5.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 70,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 71,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 10,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 72,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 73,
+            "seconds": 5.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 9,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 74,
+            "seconds": 3.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 75,
+            "seconds": 5.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 11,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 76,
+            "seconds": 1.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 11,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 77,
+            "seconds": 4.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 11,
+            "rerouted_connections": 15,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 78,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 79,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 80,
+            "seconds": 1.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 81,
+            "seconds": 5.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 9,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 82,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 83,
+            "seconds": 1.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 84,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 9,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 85,
+            "seconds": 3.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 86,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 8,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 87,
+            "seconds": 4.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 10,
+            "rerouted_connections": 11,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 88,
+            "seconds": 4.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 10,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 89,
+            "seconds": 4.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 8,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 90,
+            "seconds": 1.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 8,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 91,
+            "seconds": 1.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 9,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 92,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 9,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 93,
+            "seconds": 5.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 8,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 94,
+            "seconds": 5.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 9,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 95,
+            "seconds": 4.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 96,
+            "seconds": 2.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 97,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 98,
+            "seconds": 1.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 99,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 100,
+            "seconds": 2.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 101,
+            "seconds": 5.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 10,
+            "rerouted_connections": 10,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 102,
+            "seconds": 4.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 103,
+            "seconds": 4.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 5
+          },
+          {
+            "iteration": 104,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 105,
+            "seconds": 6.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 11,
+            "rerouted_connections": 11,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 106,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 107,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 9,
+            "rerouted_connections": 9,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 108,
+            "seconds": 4.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 109,
+            "seconds": 5.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 110,
+            "seconds": 3.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 111,
+            "seconds": 2.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 112,
+            "seconds": 5.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 113,
+            "seconds": 5.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 114,
+            "seconds": 5.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 115,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 116,
+            "seconds": 3.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 10,
+            "overused_nodes": 4
+          },
+          {
+            "iteration": 117,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 118,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 119,
+            "seconds": 1.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 9,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 120,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 9,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 121,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 9,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 122,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 123,
+            "seconds": 4.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 9,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 124,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 125,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 126,
+            "seconds": 1.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 127,
+            "seconds": 5.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 128,
+            "seconds": 5.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 129,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 130,
+            "seconds": 3.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 131,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 132,
+            "seconds": 1.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 133,
+            "seconds": 5.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 10,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 134,
+            "seconds": 5.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 135,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 136,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 137,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 138,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 139,
+            "seconds": 4.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 140,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 141,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 142,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 143,
+            "seconds": 1.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 3,
+            "rerouted_connections": 3,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 144,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 145,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 146,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 147,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 148,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 149,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 150,
+            "seconds": 1.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 151,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 152,
+            "seconds": 0.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 153,
+            "seconds": 2.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 154,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 155,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 156,
+            "seconds": 1.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 157,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 158,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 159,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 160,
+            "seconds": 4.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 161,
+            "seconds": 4.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 162,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 163,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 164,
+            "seconds": 4.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 165,
+            "seconds": 5.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 166,
+            "seconds": 1.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 3,
+            "rerouted_connections": 3,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 167,
+            "seconds": 4.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 168,
+            "seconds": 3.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 169,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 170,
+            "seconds": 5.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 171,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 172,
+            "seconds": 4.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 173,
+            "seconds": 5.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 174,
+            "seconds": 5.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 175,
+            "seconds": 3.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 176,
+            "seconds": 4.3,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 177,
+            "seconds": 5.0,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 178,
+            "seconds": 3.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 179,
+            "seconds": 4.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 180,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 181,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 182,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 183,
+            "seconds": 4.1,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 184,
+            "seconds": 3.2,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 185,
+            "seconds": 4.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 186,
+            "seconds": 1.8,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 187,
+            "seconds": 6.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 7,
+            "rerouted_connections": 7,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 188,
+            "seconds": 3.5,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 189,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 9,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 190,
+            "seconds": 2.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 191,
+            "seconds": 1.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 192,
+            "seconds": 2.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 193,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 194,
+            "seconds": 4.9,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 195,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 196,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 8,
+            "rerouted_connections": 8,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 197,
+            "seconds": 2.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 198,
+            "seconds": 2.7,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 199,
+            "seconds": 2.6,
+            "present_factor": 1000.0,
+            "rerouted_nets": 5,
+            "rerouted_connections": 5,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 200,
+            "seconds": 3.4,
+            "present_factor": 1000.0,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 3
+          }
+        ],
+        "final_overused_nodes": 3,
+        "last_observed_overused_nodes": 3,
+        "overuse_report": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s1/report_overused_nodes.rpt"
+      },
+      "rr_channel_header": {
+        "chan_width_max": "120",
+        "x_max": "120",
+        "x_min": "120",
+        "y_max": "120",
+        "y_min": "120"
+      },
+      "generated_rr_graph": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s1/rr_graph.xml",
+        "sha256": "ce2c7ec3387ea8fd644083c8925e31421ad6cd34a1a9aac4ab1b9b7b5f91a364"
+      },
+      "wire_map_sha256": "f50e1490420b3f36d47199eda8ce3e494758edac9ffaafc2ed3759bcb1386f3f",
+      "finished_utc": "2026-11-04T03:30:13.392751+00:00"
+    },
+    {
+      "case": "lstm_s2",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2",
+      "status": "completed",
+      "success": true,
+      "cpu_budget": {
+        "cores": 8,
+        "cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "allowed_before": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "topology": [
+          {
+            "cpu": 32,
+            "socket": 1,
+            "core": 0,
+            "node": 1
+          },
+          {
+            "cpu": 33,
+            "socket": 1,
+            "core": 1,
+            "node": 1
+          },
+          {
+            "cpu": 34,
+            "socket": 1,
+            "core": 2,
+            "node": 1
+          },
+          {
+            "cpu": 35,
+            "socket": 1,
+            "core": 3,
+            "node": 1
+          },
+          {
+            "cpu": 36,
+            "socket": 1,
+            "core": 4,
+            "node": 1
+          },
+          {
+            "cpu": 37,
+            "socket": 1,
+            "core": 5,
+            "node": 1
+          },
+          {
+            "cpu": 38,
+            "socket": 1,
+            "core": 6,
+            "node": 1
+          },
+          {
+            "cpu": 39,
+            "socket": 1,
+            "core": 7,
+            "node": 1
+          }
+        ],
+        "preferred_gpu_numa_node": null,
+        "cgroup": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4696186264888\nuser_usec 3249109049866\nsystem_usec 1447077215022\nnr_periods 14166890\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "scope": "One logical CPU per distinct physical core. Every VPR and CUDA service thread inherits this same set; no exclusivity against other workloads claimed."
+      },
+      "environment": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "0",
+        "VPR_HYBRID_LOOKAHEAD_PARALLEL": "0"
+      },
+      "source_case": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/lstm_s2/vpr_case.json",
+        "sha256": "7f84e143d9a9b38e1c9912792dc6f780f604e298f2808c39be0bcff793f3a10c"
+      },
+      "binary_sha256": "a02448d32451882e5d765f10aeed75d528932aff2a634cf689fcdd1361dd74ab",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_aligned",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/lstm.blif",
+        "--route_chan_width",
+        "120",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "2",
+        "--num_workers",
+        "8",
+        "--router_algorithm",
+        "parallel",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/fixed.place",
+        "--route_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/routed.route",
+        "--timing_report_npaths",
+        "10",
+        "--analysis",
+        "--route",
+        "--routing_failure_predictor",
+        "off",
+        "--max_router_iterations",
+        "200",
+        "--congested_routing_iteration_threshold",
+        "0.25",
+        "--router_lookahead",
+        "map",
+        "--generate_rr_node_overuse_report",
+        "on",
+        "--place_chan_width",
+        "120",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/rr_graph.xml",
+        "--write_router_lookahead",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/wire_map.bin"
+      ],
+      "timeout_seconds": 900,
+      "returncode": 0,
+      "process_seconds": 157.79328714311123,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "samples": 32,
+        "max_threads": 8,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4710689298257\nuser_usec 3260115204683\nsystem_usec 1450574093574\nnr_periods 14191369\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 2643516,
+        "peak_observed_hwm_kib": 2650748,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 193.7218069999999,
+        "cpu_system_seconds": 7.705936999999999,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4711626668479\nuser_usec 3260726251788\nsystem_usec 1450900416691\nnr_periods 14192947\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "critical_path_ns": 11.7483,
+      "wirelength": 1714427,
+      "routing_seconds": 19.79,
+      "iterations": 20,
+      "heap_pushes": 136326934,
+      "heap_pops": 31627521,
+      "search_seconds": 27.497,
+      "search_timer_seconds": [
+        0.0,
+        0.0,
+        2.057,
+        2.468,
+        2.662,
+        2.781,
+        2.524,
+        2.158,
+        10.62,
+        2.227
+      ],
+      "search_timer_max_seconds": 10.62,
+      "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+      "full_check": true,
+      "routing_success": true,
+      "log_evidence": {
+        "stage_seconds": {
+          "rr_graph_load": null,
+          "lookahead_build": 66.99,
+          "routing": 19.79
+        },
+        "iterations": [
+          {
+            "iteration": 1,
+            "seconds": 2.1,
+            "present_factor": 0.0,
+            "rerouted_nets": 105855,
+            "rerouted_connections": 207452,
+            "overused_nodes": 105373
+          },
+          {
+            "iteration": 2,
+            "seconds": 2.1,
+            "present_factor": 0.5,
+            "rerouted_nets": 77432,
+            "rerouted_connections": 168625,
+            "overused_nodes": 40095
+          },
+          {
+            "iteration": 3,
+            "seconds": 1.9,
+            "present_factor": 0.6,
+            "rerouted_nets": 47120,
+            "rerouted_connections": 107544,
+            "overused_nodes": 29129
+          },
+          {
+            "iteration": 4,
+            "seconds": 1.8,
+            "present_factor": 0.8,
+            "rerouted_nets": 35597,
+            "rerouted_connections": 84929,
+            "overused_nodes": 20762
+          },
+          {
+            "iteration": 5,
+            "seconds": 1.8,
+            "present_factor": 1.1,
+            "rerouted_nets": 25703,
+            "rerouted_connections": 65292,
+            "overused_nodes": 13125
+          },
+          {
+            "iteration": 6,
+            "seconds": 1.7,
+            "present_factor": 1.4,
+            "rerouted_nets": 17041,
+            "rerouted_connections": 46647,
+            "overused_nodes": 7700
+          },
+          {
+            "iteration": 7,
+            "seconds": 1.4,
+            "present_factor": 1.9,
+            "rerouted_nets": 10374,
+            "rerouted_connections": 30221,
+            "overused_nodes": 4125
+          },
+          {
+            "iteration": 8,
+            "seconds": 1.1,
+            "present_factor": 2.4,
+            "rerouted_nets": 5305,
+            "rerouted_connections": 15171,
+            "overused_nodes": 1847
+          },
+          {
+            "iteration": 9,
+            "seconds": 0.8,
+            "present_factor": 3.1,
+            "rerouted_nets": 2394,
+            "rerouted_connections": 7012,
+            "overused_nodes": 755
+          },
+          {
+            "iteration": 10,
+            "seconds": 0.5,
+            "present_factor": 4.1,
+            "rerouted_nets": 986,
+            "rerouted_connections": 2471,
+            "overused_nodes": 274
+          },
+          {
+            "iteration": 11,
+            "seconds": 0.3,
+            "present_factor": 5.3,
+            "rerouted_nets": 373,
+            "rerouted_connections": 922,
+            "overused_nodes": 108
+          },
+          {
+            "iteration": 12,
+            "seconds": 0.3,
+            "present_factor": 6.9,
+            "rerouted_nets": 164,
+            "rerouted_connections": 356,
+            "overused_nodes": 32
+          },
+          {
+            "iteration": 13,
+            "seconds": 0.3,
+            "present_factor": 9.0,
+            "rerouted_nets": 46,
+            "rerouted_connections": 89,
+            "overused_nodes": 11
+          },
+          {
+            "iteration": 14,
+            "seconds": 0.3,
+            "present_factor": 11.6,
+            "rerouted_nets": 16,
+            "rerouted_connections": 23,
+            "overused_nodes": 6
+          },
+          {
+            "iteration": 15,
+            "seconds": 0.2,
+            "present_factor": 15.1,
+            "rerouted_nets": 9,
+            "rerouted_connections": 12,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 16,
+            "seconds": 0.2,
+            "present_factor": 19.7,
+            "rerouted_nets": 6,
+            "rerouted_connections": 6,
+            "overused_nodes": 2
+          },
+          {
+            "iteration": 17,
+            "seconds": 0.2,
+            "present_factor": 25.6,
+            "rerouted_nets": 4,
+            "rerouted_connections": 4,
+            "overused_nodes": 1
+          },
+          {
+            "iteration": 18,
+            "seconds": 0.2,
+            "present_factor": 33.3,
+            "rerouted_nets": 2,
+            "rerouted_connections": 2,
+            "overused_nodes": 1
+          },
+          {
+            "iteration": 19,
+            "seconds": 0.2,
+            "present_factor": 43.3,
+            "rerouted_nets": 2,
+            "rerouted_connections": 2,
+            "overused_nodes": 1
+          },
+          {
+            "iteration": 20,
+            "seconds": 0.2,
+            "present_factor": 56.2,
+            "rerouted_nets": 2,
+            "rerouted_connections": 2,
+            "overused_nodes": 0
+          }
+        ],
+        "final_overused_nodes": 0,
+        "last_observed_overused_nodes": 0,
+        "overuse_report": null
+      },
+      "rr_channel_header": {
+        "chan_width_max": "120",
+        "x_max": "120",
+        "x_min": "120",
+        "y_max": "120",
+        "y_min": "120"
+      },
+      "generated_rr_graph": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/rr_graph.xml",
+        "sha256": "ce2c7ec3387ea8fd644083c8925e31421ad6cd34a1a9aac4ab1b9b7b5f91a364"
+      },
+      "wire_map_sha256": "f50e1490420b3f36d47199eda8ce3e494758edac9ffaafc2ed3759bcb1386f3f",
+      "route_sha256": "8968e4b382c738d5444bb20afd3b82749375273deb3d4f1c9679af90a9dc65f9",
+      "route_body_sha256": "485b12caa3d780a232425ac4edd4e48c7b24a4f3e3104af265ee712dec04f3c2",
+      "independent_check": {
+        "command": [
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/lstm.blif",
+          "--route_chan_width",
+          "120",
+          "--device_width",
+          "0",
+          "--target_utilization",
+          "0.6",
+          "--seed",
+          "2",
+          "--num_workers",
+          "1",
+          "--router_algorithm",
+          "timing_driven",
+          "--flat_routing",
+          "off",
+          "--check_route",
+          "full",
+          "--net_file",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/packed.net",
+          "--place_file",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/fixed.place",
+          "--route_file",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/routed.route",
+          "--read_rr_graph",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/rr_graph.xml",
+          "--timing_report_npaths",
+          "10",
+          "--analysis"
+        ],
+        "timeout_seconds": 900,
+        "status": "completed",
+        "returncode": 0,
+        "process_seconds": 67.66583037376404,
+        "cpu_budget_audit": {
+          "permitted_cpu_set": [
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ],
+          "samples": 14,
+          "max_threads": 1,
+          "affinity_violations": [],
+          "cgroup_before": {
+            "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+            "/sys/fs/cgroup/cpu.stat": "usage_usec 4711659563867\nuser_usec 3260747413881\nsystem_usec 1450912149985\nnr_periods 14192996\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+            "/proc/self/cgroup": "0::/\n",
+            "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.max": "322122547200\n"
+          },
+          "peak_observed_rss_kib": 7336536,
+          "peak_observed_hwm_kib": 7489096,
+          "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+          "cpu_user_seconds": 59.56903700000021,
+          "cpu_system_seconds": 7.313110000000002,
+          "cgroup_after": {
+            "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+            "/sys/fs/cgroup/cpu.stat": "usage_usec 4712088411926\nuser_usec 3261031224858\nsystem_usec 1451057187068\nnr_periods 14193672\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+            "/proc/self/cgroup": "0::/\n",
+            "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.max": "322122547200\n"
+          },
+          "verified": true
+        }
+      },
+      "independent_metrics": {
+        "critical_path_ns": 11.7483,
+        "wirelength": 1714427,
+        "routing_seconds": 6.56,
+        "iterations": null,
+        "heap_pushes": null,
+        "heap_pops": null,
+        "search_seconds": null,
+        "search_timer_seconds": [],
+        "search_timer_max_seconds": null,
+        "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+        "full_check": true,
+        "routing_success": true
+      },
+      "finished_utc": "2026-11-04T03:34:04.542026+00:00"
+    },
+    {
+      "case": "bnn_s1",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1",
+      "status": "completed",
+      "success": true,
+      "cpu_budget": {
+        "cores": 8,
+        "cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "allowed_before": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "topology": [
+          {
+            "cpu": 32,
+            "socket": 1,
+            "core": 0,
+            "node": 1
+          },
+          {
+            "cpu": 33,
+            "socket": 1,
+            "core": 1,
+            "node": 1
+          },
+          {
+            "cpu": 34,
+            "socket": 1,
+            "core": 2,
+            "node": 1
+          },
+          {
+            "cpu": 35,
+            "socket": 1,
+            "core": 3,
+            "node": 1
+          },
+          {
+            "cpu": 36,
+            "socket": 1,
+            "core": 4,
+            "node": 1
+          },
+          {
+            "cpu": 37,
+            "socket": 1,
+            "core": 5,
+            "node": 1
+          },
+          {
+            "cpu": 38,
+            "socket": 1,
+            "core": 6,
+            "node": 1
+          },
+          {
+            "cpu": 39,
+            "socket": 1,
+            "core": 7,
+            "node": 1
+          }
+        ],
+        "preferred_gpu_numa_node": null,
+        "cgroup": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4696186264888\nuser_usec 3249109049866\nsystem_usec 1447077215022\nnr_periods 14166890\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "scope": "One logical CPU per distinct physical core. Every VPR and CUDA service thread inherits this same set; no exclusivity against other workloads claimed."
+      },
+      "environment": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "0",
+        "VPR_HYBRID_LOOKAHEAD_PARALLEL": "0"
+      },
+      "source_case": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/bnn_s1/vpr_case.json",
+        "sha256": "b845a439dc5156d1cf44cc7a70a0874b6c6317a0b511d6c478276c6ba428f8a9"
+      },
+      "binary_sha256": "a02448d32451882e5d765f10aeed75d528932aff2a634cf689fcdd1361dd74ab",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_aligned",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/bnn.blif",
+        "--route_chan_width",
+        "120",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "1",
+        "--num_workers",
+        "8",
+        "--router_algorithm",
+        "parallel",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/fixed.place",
+        "--route_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/routed.route",
+        "--timing_report_npaths",
+        "10",
+        "--analysis",
+        "--route",
+        "--routing_failure_predictor",
+        "off",
+        "--max_router_iterations",
+        "200",
+        "--congested_routing_iteration_threshold",
+        "0.25",
+        "--router_lookahead",
+        "map",
+        "--generate_rr_node_overuse_report",
+        "on",
+        "--place_chan_width",
+        "120",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/rr_graph.xml",
+        "--write_router_lookahead",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/wire_map.bin"
+      ],
+      "timeout_seconds": 900,
+      "returncode": 0,
+      "process_seconds": 147.94107099995017,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "samples": 30,
+        "max_threads": 8,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4712094654588\nuser_usec 3261033832025\nsystem_usec 1451060822563\nnr_periods 14193681\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 2708540,
+        "peak_observed_hwm_kib": 2708540,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 172.26392299999998,
+        "cpu_system_seconds": 7.936570000000003,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4712967265018\nuser_usec 3261596649565\nsystem_usec 1451370615453\nnr_periods 14195161\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "critical_path_ns": 11.0943,
+      "wirelength": 1538209,
+      "routing_seconds": 14.49,
+      "iterations": 19,
+      "heap_pushes": 52748815,
+      "heap_pops": 8204426,
+      "search_seconds": 9.662,
+      "search_timer_seconds": [
+        0.0,
+        0.0,
+        0.901,
+        0.858,
+        0.922,
+        0.764,
+        0.823,
+        1.004,
+        3.159,
+        1.231
+      ],
+      "search_timer_max_seconds": 3.159,
+      "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+      "full_check": true,
+      "routing_success": true,
+      "log_evidence": {
+        "stage_seconds": {
+          "rr_graph_load": null,
+          "lookahead_build": 65.62,
+          "routing": 14.49
+        },
+        "iterations": [
+          {
+            "iteration": 1,
+            "seconds": 1.4,
+            "present_factor": 0.0,
+            "rerouted_nets": 78308,
+            "rerouted_connections": 230379,
+            "overused_nodes": 111616
+          },
+          {
+            "iteration": 2,
+            "seconds": 1.4,
+            "present_factor": 0.5,
+            "rerouted_nets": 56239,
+            "rerouted_connections": 191391,
+            "overused_nodes": 42478
+          },
+          {
+            "iteration": 3,
+            "seconds": 1.1,
+            "present_factor": 0.6,
+            "rerouted_nets": 36981,
+            "rerouted_connections": 125263,
+            "overused_nodes": 31800
+          },
+          {
+            "iteration": 4,
+            "seconds": 1.1,
+            "present_factor": 0.8,
+            "rerouted_nets": 29033,
+            "rerouted_connections": 99881,
+            "overused_nodes": 23556
+          },
+          {
+            "iteration": 5,
+            "seconds": 1.0,
+            "present_factor": 1.1,
+            "rerouted_nets": 21893,
+            "rerouted_connections": 77241,
+            "overused_nodes": 15636
+          },
+          {
+            "iteration": 6,
+            "seconds": 0.9,
+            "present_factor": 1.4,
+            "rerouted_nets": 15430,
+            "rerouted_connections": 56221,
+            "overused_nodes": 10055
+          },
+          {
+            "iteration": 7,
+            "seconds": 0.7,
+            "present_factor": 1.9,
+            "rerouted_nets": 10151,
+            "rerouted_connections": 36188,
+            "overused_nodes": 5759
+          },
+          {
+            "iteration": 8,
+            "seconds": 0.7,
+            "present_factor": 2.4,
+            "rerouted_nets": 6687,
+            "rerouted_connections": 26495,
+            "overused_nodes": 3271
+          },
+          {
+            "iteration": 9,
+            "seconds": 0.6,
+            "present_factor": 3.1,
+            "rerouted_nets": 3535,
+            "rerouted_connections": 11806,
+            "overused_nodes": 1365
+          },
+          {
+            "iteration": 10,
+            "seconds": 0.5,
+            "present_factor": 4.1,
+            "rerouted_nets": 1729,
+            "rerouted_connections": 5520,
+            "overused_nodes": 512
+          },
+          {
+            "iteration": 11,
+            "seconds": 0.3,
+            "present_factor": 5.3,
+            "rerouted_nets": 818,
+            "rerouted_connections": 2779,
+            "overused_nodes": 184
+          },
+          {
+            "iteration": 12,
+            "seconds": 0.3,
+            "present_factor": 6.9,
+            "rerouted_nets": 416,
+            "rerouted_connections": 1182,
+            "overused_nodes": 34
+          },
+          {
+            "iteration": 13,
+            "seconds": 0.3,
+            "present_factor": 9.0,
+            "rerouted_nets": 282,
+            "rerouted_connections": 771,
+            "overused_nodes": 6
+          },
+          {
+            "iteration": 14,
+            "seconds": 0.4,
+            "present_factor": 11.6,
+            "rerouted_nets": 243,
+            "rerouted_connections": 675,
+            "overused_nodes": 1
+          },
+          {
+            "iteration": 15,
+            "seconds": 0.2,
+            "present_factor": 15.1,
+            "rerouted_nets": 239,
+            "rerouted_connections": 672,
+            "overused_nodes": 1
+          },
+          {
+            "iteration": 16,
+            "seconds": 0.3,
+            "present_factor": 19.7,
+            "rerouted_nets": 239,
+            "rerouted_connections": 677,
+            "overused_nodes": 1
+          },
+          {
+            "iteration": 17,
+            "seconds": 0.2,
+            "present_factor": 25.6,
+            "rerouted_nets": 241,
+            "rerouted_connections": 682,
+            "overused_nodes": 1
+          },
+          {
+            "iteration": 18,
+            "seconds": 0.2,
+            "present_factor": 33.3,
+            "rerouted_nets": 239,
+            "rerouted_connections": 677,
+            "overused_nodes": 1
+          },
+          {
+            "iteration": 19,
+            "seconds": 0.2,
+            "present_factor": 43.3,
+            "rerouted_nets": 241,
+            "rerouted_connections": 682,
+            "overused_nodes": 0
+          }
+        ],
+        "final_overused_nodes": 0,
+        "last_observed_overused_nodes": 0,
+        "overuse_report": null
+      },
+      "rr_channel_header": {
+        "chan_width_max": "120",
+        "x_max": "120",
+        "x_min": "120",
+        "y_max": "120",
+        "y_min": "120"
+      },
+      "generated_rr_graph": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/rr_graph.xml",
+        "sha256": "f1215d1648db24d6d023e4754f738f654b96dba5dd4c0ea6536c34998df9007e"
+      },
+      "wire_map_sha256": "09bf285622e67c738e2b7c3f660eca157093bdb80976b045db6dd79f35a47efe",
+      "route_sha256": "08161dcfbccd3d5e3abb642297290b76a39b497cac6f71b2531896e3a12b9a88",
+      "route_body_sha256": "7326b98b488671b4d1b4c77e9bc4a6baabe2ab1f0087851c21eee174701b48e0",
+      "independent_check": {
+        "command": [
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/bnn.blif",
+          "--route_chan_width",
+          "120",
+          "--device_width",
+          "0",
+          "--target_utilization",
+          "0.6",
+          "--seed",
+          "1",
+          "--num_workers",
+          "1",
+          "--router_algorithm",
+          "timing_driven",
+          "--flat_routing",
+          "off",
+          "--check_route",
+          "full",
+          "--net_file",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/packed.net",
+          "--place_file",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/fixed.place",
+          "--route_file",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/routed.route",
+          "--read_rr_graph",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/rr_graph.xml",
+          "--timing_report_npaths",
+          "10",
+          "--analysis"
+        ],
+        "timeout_seconds": 900,
+        "status": "completed",
+        "returncode": 0,
+        "process_seconds": 65.01096422225237,
+        "cpu_budget_audit": {
+          "permitted_cpu_set": [
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ],
+          "samples": 13,
+          "max_threads": 1,
+          "affinity_violations": [],
+          "cgroup_before": {
+            "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+            "/sys/fs/cgroup/cpu.stat": "usage_usec 4712998941286\nuser_usec 3261617263199\nsystem_usec 1451381678087\nnr_periods 14195211\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+            "/proc/self/cgroup": "0::/\n",
+            "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.max": "322122547200\n"
+          },
+          "peak_observed_rss_kib": 7398540,
+          "peak_observed_hwm_kib": 7437612,
+          "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+          "cpu_user_seconds": 57.80095399999982,
+          "cpu_system_seconds": 6.835166999999998,
+          "cgroup_after": {
+            "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+            "/sys/fs/cgroup/cpu.stat": "usage_usec 4713391724298\nuser_usec 3261869074580\nsystem_usec 1451522649718\nnr_periods 14195861\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+            "/proc/self/cgroup": "0::/\n",
+            "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.max": "322122547200\n"
+          },
+          "verified": true
+        }
+      },
+      "independent_metrics": {
+        "critical_path_ns": 11.0943,
+        "wirelength": 1538209,
+        "routing_seconds": 7.13,
+        "iterations": null,
+        "heap_pushes": null,
+        "heap_pops": null,
+        "search_seconds": null,
+        "search_timer_seconds": [],
+        "search_timer_max_seconds": null,
+        "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+        "full_check": true,
+        "routing_success": true
+      },
+      "finished_utc": "2026-11-04T03:37:43.398717+00:00"
+    },
+    {
+      "case": "bnn_s2",
+      "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2",
+      "status": "completed",
+      "success": true,
+      "cpu_budget": {
+        "cores": 8,
+        "cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "allowed_before": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "topology": [
+          {
+            "cpu": 32,
+            "socket": 1,
+            "core": 0,
+            "node": 1
+          },
+          {
+            "cpu": 33,
+            "socket": 1,
+            "core": 1,
+            "node": 1
+          },
+          {
+            "cpu": 34,
+            "socket": 1,
+            "core": 2,
+            "node": 1
+          },
+          {
+            "cpu": 35,
+            "socket": 1,
+            "core": 3,
+            "node": 1
+          },
+          {
+            "cpu": 36,
+            "socket": 1,
+            "core": 4,
+            "node": 1
+          },
+          {
+            "cpu": 37,
+            "socket": 1,
+            "core": 5,
+            "node": 1
+          },
+          {
+            "cpu": 38,
+            "socket": 1,
+            "core": 6,
+            "node": 1
+          },
+          {
+            "cpu": 39,
+            "socket": 1,
+            "core": 7,
+            "node": 1
+          }
+        ],
+        "preferred_gpu_numa_node": null,
+        "cgroup": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4696186264888\nuser_usec 3249109049866\nsystem_usec 1447077215022\nnr_periods 14166890\nnr_throttled 1031\nthrottled_usec 2626688462\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "scope": "One logical CPU per distinct physical core. Every VPR and CUDA service thread inherits this same set; no exclusivity against other workloads claimed."
+      },
+      "environment": {
+        "VPR_HYBRID_LOOKAHEAD_TASKS": "0",
+        "VPR_HYBRID_LOOKAHEAD_PARALLEL": "0"
+      },
+      "source_case": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared_verified/bnn_s2/vpr_case.json",
+        "sha256": "d5508a992390fb9442a26e9fb66e145ecf86ca17a13643c681cb3ed66352fa91"
+      },
+      "binary_sha256": "a02448d32451882e5d765f10aeed75d528932aff2a634cf689fcdd1361dd74ab",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_slices_20261101/bin/vpr_aligned",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/bnn.blif",
+        "--route_chan_width",
+        "120",
+        "--device_width",
+        "0",
+        "--target_utilization",
+        "0.6",
+        "--seed",
+        "2",
+        "--num_workers",
+        "8",
+        "--router_algorithm",
+        "parallel",
+        "--flat_routing",
+        "off",
+        "--check_route",
+        "full",
+        "--net_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2/packed.net",
+        "--place_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2/fixed.place",
+        "--route_file",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2/routed.route",
+        "--timing_report_npaths",
+        "10",
+        "--analysis",
+        "--route",
+        "--routing_failure_predictor",
+        "off",
+        "--max_router_iterations",
+        "200",
+        "--congested_routing_iteration_threshold",
+        "0.25",
+        "--router_lookahead",
+        "map",
+        "--generate_rr_node_overuse_report",
+        "on",
+        "--place_chan_width",
+        "120",
+        "--write_rr_graph",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2/rr_graph.xml",
+        "--write_router_lookahead",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2/wire_map.bin"
+      ],
+      "timeout_seconds": 900,
+      "returncode": 0,
+      "process_seconds": 148.79216485843062,
+      "cpu_budget_audit": {
+        "permitted_cpu_set": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "samples": 30,
+        "max_threads": 8,
+        "affinity_violations": [],
+        "cgroup_before": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4713395364904\nuser_usec 3261871154759\nsystem_usec 1451524210144\nnr_periods 14195869\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "peak_observed_rss_kib": 2532204,
+        "peak_observed_hwm_kib": 2532204,
+        "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+        "cpu_user_seconds": 171.8332519999999,
+        "cpu_system_seconds": 7.656491000000003,
+        "cgroup_after": {
+          "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 4714256892574\nuser_usec 3262419526451\nsystem_usec 1451837366122\nnr_periods 14197357\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+          "/sys/fs/cgroup/memory.max": "322122547200\n"
+        },
+        "verified": true
+      },
+      "critical_path_ns": 11.4813,
+      "wirelength": 1643783,
+      "routing_seconds": 14.75,
+      "iterations": 17,
+      "heap_pushes": 55989316,
+      "heap_pops": 8414098,
+      "search_seconds": 9.649000000000001,
+      "search_timer_seconds": [
+        0.0,
+        0.0,
+        0.701,
+        0.864,
+        0.743,
+        0.746,
+        0.824,
+        1.358,
+        3.379,
+        1.034
+      ],
+      "search_timer_max_seconds": 3.379,
+      "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+      "full_check": true,
+      "routing_success": true,
+      "log_evidence": {
+        "stage_seconds": {
+          "rr_graph_load": null,
+          "lookahead_build": 66.59,
+          "routing": 14.75
+        },
+        "iterations": [
+          {
+            "iteration": 1,
+            "seconds": 1.6,
+            "present_factor": 0.0,
+            "rerouted_nets": 78308,
+            "rerouted_connections": 230379,
+            "overused_nodes": 115052
+          },
+          {
+            "iteration": 2,
+            "seconds": 1.6,
+            "present_factor": 0.5,
+            "rerouted_nets": 56919,
+            "rerouted_connections": 193069,
+            "overused_nodes": 44982
+          },
+          {
+            "iteration": 3,
+            "seconds": 1.4,
+            "present_factor": 0.6,
+            "rerouted_nets": 38555,
+            "rerouted_connections": 136146,
+            "overused_nodes": 34290
+          },
+          {
+            "iteration": 4,
+            "seconds": 1.3,
+            "present_factor": 0.8,
+            "rerouted_nets": 30365,
+            "rerouted_connections": 107383,
+            "overused_nodes": 25950
+          },
+          {
+            "iteration": 5,
+            "seconds": 1.1,
+            "present_factor": 1.1,
+            "rerouted_nets": 23614,
+            "rerouted_connections": 88453,
+            "overused_nodes": 17631
+          },
+          {
+            "iteration": 6,
+            "seconds": 1.1,
+            "present_factor": 1.4,
+            "rerouted_nets": 17811,
+            "rerouted_connections": 75482,
+            "overused_nodes": 12083
+          },
+          {
+            "iteration": 7,
+            "seconds": 0.8,
+            "present_factor": 1.9,
+            "rerouted_nets": 11377,
+            "rerouted_connections": 42318,
+            "overused_nodes": 6908
+          },
+          {
+            "iteration": 8,
+            "seconds": 0.6,
+            "present_factor": 2.4,
+            "rerouted_nets": 7043,
+            "rerouted_connections": 25445,
+            "overused_nodes": 3469
+          },
+          {
+            "iteration": 9,
+            "seconds": 0.6,
+            "present_factor": 3.1,
+            "rerouted_nets": 3842,
+            "rerouted_connections": 13019,
+            "overused_nodes": 1485
+          },
+          {
+            "iteration": 10,
+            "seconds": 0.5,
+            "present_factor": 4.1,
+            "rerouted_nets": 1895,
+            "rerouted_connections": 5929,
+            "overused_nodes": 565
+          },
+          {
+            "iteration": 11,
+            "seconds": 0.4,
+            "present_factor": 5.3,
+            "rerouted_nets": 830,
+            "rerouted_connections": 2477,
+            "overused_nodes": 168
+          },
+          {
+            "iteration": 12,
+            "seconds": 0.3,
+            "present_factor": 6.9,
+            "rerouted_nets": 401,
+            "rerouted_connections": 1162,
+            "overused_nodes": 33
+          },
+          {
+            "iteration": 13,
+            "seconds": 0.3,
+            "present_factor": 9.0,
+            "rerouted_nets": 256,
+            "rerouted_connections": 715,
+            "overused_nodes": 11
+          },
+          {
+            "iteration": 14,
+            "seconds": 0.2,
+            "present_factor": 11.6,
+            "rerouted_nets": 229,
+            "rerouted_connections": 620,
+            "overused_nodes": 3
+          },
+          {
+            "iteration": 15,
+            "seconds": 0.3,
+            "present_factor": 15.1,
+            "rerouted_nets": 223,
+            "rerouted_connections": 608,
+            "overused_nodes": 2
+          },
+          {
+            "iteration": 16,
+            "seconds": 0.2,
+            "present_factor": 19.7,
+            "rerouted_nets": 222,
+            "rerouted_connections": 609,
+            "overused_nodes": 1
+          },
+          {
+            "iteration": 17,
+            "seconds": 0.2,
+            "present_factor": 25.6,
+            "rerouted_nets": 222,
+            "rerouted_connections": 607,
+            "overused_nodes": 0
+          }
+        ],
+        "final_overused_nodes": 0,
+        "last_observed_overused_nodes": 0,
+        "overuse_report": null
+      },
+      "rr_channel_header": {
+        "chan_width_max": "120",
+        "x_max": "120",
+        "x_min": "120",
+        "y_max": "120",
+        "y_min": "120"
+      },
+      "generated_rr_graph": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2/rr_graph.xml",
+        "sha256": "f1215d1648db24d6d023e4754f738f654b96dba5dd4c0ea6536c34998df9007e"
+      },
+      "wire_map_sha256": "09bf285622e67c738e2b7c3f660eca157093bdb80976b045db6dd79f35a47efe",
+      "route_sha256": "6d6b54a747d1372264b5240d753240134905e4cfcefdee7f99bda5dee8cbf834",
+      "route_body_sha256": "95fc489d59c88d508783b1b12cfe4e753f9e199646dceb1f50826b8dd17310ea",
+      "independent_check": {
+        "command": [
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/bnn.blif",
+          "--route_chan_width",
+          "120",
+          "--device_width",
+          "0",
+          "--target_utilization",
+          "0.6",
+          "--seed",
+          "2",
+          "--num_workers",
+          "1",
+          "--router_algorithm",
+          "timing_driven",
+          "--flat_routing",
+          "off",
+          "--check_route",
+          "full",
+          "--net_file",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2/packed.net",
+          "--place_file",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2/fixed.place",
+          "--route_file",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2/routed.route",
+          "--read_rr_graph",
+          "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s2/rr_graph.xml",
+          "--timing_report_npaths",
+          "10",
+          "--analysis"
+        ],
+        "timeout_seconds": 900,
+        "status": "completed",
+        "returncode": 0,
+        "process_seconds": 65.07427078485489,
+        "cpu_budget_audit": {
+          "permitted_cpu_set": [
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ],
+          "samples": 14,
+          "max_threads": 1,
+          "affinity_violations": [],
+          "cgroup_before": {
+            "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+            "/sys/fs/cgroup/cpu.stat": "usage_usec 4714282171383\nuser_usec 3262435077921\nsystem_usec 1451847093462\nnr_periods 14197409\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+            "/proc/self/cgroup": "0::/\n",
+            "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.max": "322122547200\n"
+          },
+          "peak_observed_rss_kib": 7419960,
+          "peak_observed_hwm_kib": 7437648,
+          "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+          "cpu_user_seconds": 57.89753500000006,
+          "cpu_system_seconds": 6.718321999999986,
+          "cgroup_after": {
+            "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+            "/sys/fs/cgroup/cpu.stat": "usage_usec 4714641782320\nuser_usec 3262652282951\nsystem_usec 1451989499368\nnr_periods 14198060\nnr_throttled 1033\nthrottled_usec 2628052678\n",
+            "/proc/self/cgroup": "0::/\n",
+            "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+            "/sys/fs/cgroup/memory.max": "322122547200\n"
+          },
+          "verified": true
+        }
+      },
+      "independent_metrics": {
+        "critical_path_ns": 11.4813,
+        "wirelength": 1643783,
+        "routing_seconds": 7.24,
+        "iterations": null,
+        "heap_pushes": null,
+        "heap_pops": null,
+        "search_seconds": null,
+        "search_timer_seconds": [],
+        "search_timer_max_seconds": null,
+        "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+        "full_check": true,
+        "routing_success": true
+      },
+      "finished_utc": "2026-11-04T03:41:23.291379+00:00"
+    }
+  ],
+  "default_changed": false,
+  "finished_utc": "2026-11-04T03:41:32.092132+00:00"
+}

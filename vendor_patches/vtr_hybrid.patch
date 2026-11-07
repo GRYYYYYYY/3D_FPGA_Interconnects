@@ -1,0 +1,1708 @@
+--- a/vpr/CMakeLists.txt
++++ b/vpr/CMakeLists.txt
+@@ -76,6 +76,8 @@
+ )
+ 
+ target_include_directories(libvpr PUBLIC ${LIB_INCLUDE_DIRS})
++target_include_directories(libvpr PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../../native")
++target_link_libraries(libvpr ${CMAKE_DL_LIBS})
+ 
+ 
+ # Use the bundled Eigen headers for the analytical placement solvers.
+--- a/vpr/src/route/ParallelNetlistRouter.tpp
++++ b/vpr/src/route/ParallelNetlistRouter.tpp
+@@ -5,6 +5,7 @@
+ #include <string>
+ #include "netlist_routers.h"
+ #include "route_net.h"
++#include "h3d_native_runtime.h"
+ #include "vtr_time.h"
+ 
+ template<typename HeapType>
+@@ -29,6 +30,7 @@
+ 
+     /* Put the root node on the task queue, which will add its child nodes when it's finished. Wait until the entire tree gets routed. */
+     tbb::task_group group;
++    h3d_native_partition_queued();
+     route_partition_tree_node(group, _tree->root());
+     group.wait();
+     PartitionTreeDebug::log("Routing all nets took " + std::to_string(timer.elapsed_sec()) + " s");
+@@ -46,6 +48,8 @@
+ 
+ template<typename HeapType>
+ void ParallelNetlistRouter<HeapType>::route_partition_tree_node(tbb::task_group& g, PartitionTreeNode& node) {
++    int depth=0;for(auto*p=node.parent;p;p=p->parent)++depth;
++    H3DNativePartitionScope hybrid_partition(&node,depth,bool(node.left),node.nets.size(),_itry);
+     auto& route_ctx = g_vpr_ctx.mutable_routing();
+ 
+     /* node.nets is an unordered set, copy into vector to sort */
+@@ -58,6 +62,12 @@
+ 
+     vtr::Timer timer;
+     for (auto net_id : nets) {
++        // Dynamic bounding-box growth must be reflected in partition ownership
++        // before siblings run concurrently; otherwise shared search labels race.
++        const t_bb& net_bb = route_ctx.route_bb[net_id];
++        VTR_ASSERT(net_bb.xmin >= node.bb.xmin && net_bb.xmax <= node.bb.xmax);
++        VTR_ASSERT(net_bb.ymin >= node.bb.ymin && net_bb.ymax <= node.bb.ymax);
++        hybrid_partition.net_started();
+         auto flags = route_net(
+             _routers_th.local(),
+             _net_list,
+@@ -101,9 +111,11 @@
+ 
+     /* This node is finished: add left & right branches to the task queue */
+     if (node.left && node.right) {
++        h3d_native_partition_queued();
+         g.run([&]() {
+             route_partition_tree_node(g, *node.left);
+         });
++        h3d_native_partition_queued();
+         g.run([&]() {
+             route_partition_tree_node(g, *node.right);
+         });
+--- a/vpr/src/route/check_route.cpp
++++ b/vpr/src/route/check_route.cpp
+@@ -504,8 +504,10 @@
+     auto& block_locs = g_vpr_ctx.placement().block_locs();
+ 
+     /* First set the occupancy of everything to zero. */
+-    for (RRNodeId inode : device_ctx.rr_graph.nodes())
++    for (RRNodeId inode : device_ctx.rr_graph.nodes()) {
+         route_ctx.rr_node_route_inf[inode].set_occ(0);
++        h3d_native_mark_dirty(inode);
++    }
+ 
+     // Bus-based mux bit counts are recounted with the node occupancy.
+     VTR_ASSERT(route_ctx.bus_mux_route_inf.size() == device_ctx.rr_bus_muxes.size());
+@@ -526,6 +528,7 @@
+         for (auto& rt_node : route_ctx.route_trees[net_id].value().all_nodes()) {
+             RRNodeId inode = rt_node.inode;
+             route_ctx.rr_node_route_inf[inode].set_occ(route_ctx.rr_node_route_inf[inode].occ() + 1);
++            h3d_native_mark_dirty(inode);
+             if (has_bus_muxes) {
+                 pathfinder_update_bus_mux_occupancy(route_ctx.bus_mux_route_inf, rt_node, 1);
+             }
+@@ -547,6 +550,7 @@
+                     RRNodeId inode = route_ctx.clb_opins_used_locally[cluster_blk_id][iclass][ipin];
+                     VTR_ASSERT(inode && size_t(inode) < device_ctx.rr_graph.num_nodes());
+                     route_ctx.rr_node_route_inf[inode].set_occ(route_ctx.rr_node_route_inf[inode].occ() + 1);
++                    h3d_native_mark_dirty(inode);
+                 }
+             }
+         }
+--- a/vpr/src/route/d_ary_heap.h
++++ b/vpr/src/route/d_ary_heap.h
+@@ -65,6 +65,11 @@
+         return (bool)(pq_.empty());
+     }
+ 
++    // Diagnostic/offload view only; entry zero is the queue's sentinel.
++    // Exposing a const view preserves ordering for a resumable CPU fallback.
++    const std::vector<HeapNode>& hybrid_heap_entries() const { return pq_.heap_; }
++    void hybrid_restore_heap(const std::vector<HeapNode>& entries) { pq_.heap_ = entries; }
++
+   private:
+     priority_queue pq_;
+ };
+--- a/vpr/src/route/route.cpp
++++ b/vpr/src/route/route.cpp
+@@ -7,6 +7,7 @@
+ #include "read_route.h"
+ #include "route.h"
+ #include "route_common.h"
++#include "h3d_native_runtime.h"
+ #include "route_debug.h"
+ #include "route_profiling.h"
+ #include "route_utils.h"
+@@ -214,6 +215,7 @@
+         timing_info,
+         is_flat);
+ 
++    h3d_native_prepare(*router_lookahead, router_opts);
+     std::unique_ptr<NetlistRouter> netlist_router = make_netlist_router(
+         net_list,
+         router_lookahead,
+@@ -281,6 +283,7 @@
+             netlist_router->set_timing_info(timing_info);
+ 
+         /* Route each net */
++        h3d_native_iteration_barrier();
+         RouteIterResults iter_results = netlist_router->route_netlist(itry, pres_fac, worst_negative_slack);
+ 
+         if (!iter_results.is_routable) { /* Disconnected RRG */
+@@ -438,9 +441,6 @@
+         if (router_opts.route_bb_update == e_route_bb_update::DYNAMIC) {
+             dynamic_update_bounding_boxes(iter_results.rerouted_nets, iter_results.bb_updated_nets);
+         }
+-
+-        num_net_bounding_boxes_updated = iter_results.bb_updated_nets.size();
+-        netlist_router->handle_bb_updated_nets(iter_results.bb_updated_nets);
+ 
+         if (itry >= high_effort_congestion_mode_iteration_threshold) {
+             //We are approaching the maximum number of routing iterations,
+@@ -513,10 +513,19 @@
+                 bb_fac = std::min<int>(max_grid_dim, bb_fac * BB_SCALE_FACTOR);
+ 
+                 route_ctx.route_bb = load_route_bb(net_list, bb_fac);
++                // Reloading every box also invalidates parallel partition
++                // assignments, including nets not rerouted this iteration.
++                auto all_nets = net_list.nets();
++                iter_results.bb_updated_nets.assign(all_nets.begin(), all_nets.end());
+             }
+ 
+             ++itry_conflicted_mode;
+         }
++
++        // Apply notifications only after both dynamic growth and conflicted-mode
++        // reloads, before any parallel tasks start the next iteration.
++        num_net_bounding_boxes_updated = iter_results.bb_updated_nets.size();
++        netlist_router->handle_bb_updated_nets(iter_results.bb_updated_nets);
+ 
+         if (router_opts.with_timing_analysis) {
+             if (itry == 1) {
+--- a/vpr/src/route/route_common.cpp
++++ b/vpr/src/route/route_common.cpp
+@@ -1,5 +1,6 @@
+ /** @file Impls for more router utils */
+ 
++#include "h3d_label_audit.h"
+ #include "route_common.h"
+ 
+ #include "bus_mux_routing.h"
+@@ -213,6 +214,7 @@
+ 
+     int occ = route_ctx.rr_node_route_inf[inode].occ() + add_or_sub;
+     route_ctx.rr_node_route_inf[inode].set_occ(occ);
++    h3d_native_mark_dirty(inode);
+     // can't have negative occupancy
+     VTR_ASSERT(occ >= 0);
+ }
+@@ -237,6 +239,7 @@
+         // If not, do nothing
+         if (overuse > 0) {
+             route_ctx.rr_node_route_inf[rr_id].acc_cost += overuse * acc_fac;
++            h3d_native_mark_dirty(rr_id);
+ 
+             ++overused_nodes.local();
+             total_overuse.local() += overuse;
+@@ -258,6 +261,7 @@
+         // If not, do nothing
+         if (overuse > 0) {
+             route_ctx.rr_node_route_inf[rr_id].acc_cost += overuse * acc_fac;
++            h3d_native_mark_dirty(rr_id);
+ 
+             ++overused_nodes;
+             total_overuse += overuse;
+@@ -329,9 +333,11 @@
+     auto& route_ctx = g_vpr_ctx.mutable_routing();
+ 
+     for (auto node : visited_rr_nodes) {
++        h3d_label_claim(node, "reset");
+         route_ctx.rr_node_route_inf[node].path_cost = std::numeric_limits<float>::infinity();
+         route_ctx.rr_node_route_inf[node].backward_path_cost = std::numeric_limits<float>::infinity();
+         route_ctx.rr_node_route_inf[node].prev_edge = RREdgeId::INVALID();
++        h3d_label_release(node);
+         // Note: R_upstream of each node is intentionally not reset here.
+         // For the reasons and details, please refer to the `Update R_upstream`
+         // in `evaluate_timing_driven_node_costs` in `connection_router.cpp`.
+@@ -512,6 +518,7 @@
+         node_inf.path_cost = std::numeric_limits<float>::infinity();
+         node_inf.backward_path_cost = std::numeric_limits<float>::infinity();
+         node_inf.set_occ(0);
++        h3d_native_mark_dirty(rr_id);
+     }
+ 
+     reset_bus_mux_route_inf(device_ctx.rr_bus_muxes, route_ctx.bus_mux_route_inf);
+@@ -935,6 +942,8 @@
+             route_ctx.rr_node_route_inf[inode].acc_cost += (new_occ - capacity) * acc_fac;
+         }
+     }
++    // Publish occupancy and accumulated cost together, after both mutations.
++    h3d_native_mark_dirty(inode);
+ }
+ 
+ //Print information about an invalid routing, caused by overused routing resources
+--- a/vpr/src/route/route_common.h
++++ b/vpr/src/route/route_common.h
+@@ -103,6 +103,8 @@
+                        int bb_factor);
+ 
+ void pathfinder_update_single_node_occupancy(RRNodeId inode, int add_or_sub);
++// Optional GPU state journal; a no-op until a native GPU context is initialized.
++void h3d_native_mark_dirty(RRNodeId inode);
+ 
+ void pathfinder_update_acc_cost_and_overuse_info(float acc_fac, OveruseInfo& overuse_info);
+ 
+--- a/vpr/src/route/route_net.cpp
++++ b/vpr/src/route/route_net.cpp
+@@ -1,6 +1,8 @@
+ /** @file Impls for non-templated net routing fns & utils */
+ 
+ #include "route_net.h"
++#include "h3d_label_audit.h"
++#include "h3d_native_runtime.h"
+ #include "bus_mux_routing.h"
+ #include "connection_based_routing.h"
+ #include "timing_util.h"
+@@ -23,6 +25,8 @@
+                const route_budgets& budgeting_inf) {
+     auto& route_ctx = g_vpr_ctx.mutable_routing();
+ 
++    H3DLabelScope label_scope(net_id, RRNodeId::INVALID(), route_ctx.route_bb[net_id]);
++
+     /* "tree" points to this net's spot in the global context here, so re-initializing it etc. changes the global state */
+     vtr::optional<RouteTree>& tree = route_ctx.route_trees[net_id];
+ 
+@@ -101,6 +105,9 @@
+ }
+ 
+ void update_rr_base_costs(int fanout) {
++    // The hybrid parallel path verifies all T_quadratic==0 and initializes
++    // these constants before workers start. Avoid concurrent equal writes.
++    if (h3d_native_static_base_costs()) return;
+     auto& device_ctx = g_vpr_ctx.mutable_device();
+ 
+     /* Other reasonable values for factor include fanout and 1 */
+@@ -120,6 +127,7 @@
+ 
+     for (auto& node : rt_node.all_nodes()) {
+         RRNodeId inode = node.inode;
++        h3d_label_claim(inode, "tree_reset");
+         route_ctx.rr_node_route_inf[inode].prev_edge = RREdgeId::INVALID();
+ 
+         // path cost should be unset
+--- a/vpr/src/route/route_net.tpp
++++ b/vpr/src/route/route_net.tpp
+@@ -2,9 +2,11 @@
+ 
+ /** @file Header implementations for templated net routing fns. */
+ 
++#include "h3d_label_audit.h"
+ #include "device_grid.h"
+ #include "physical_types.h"
+ #include "route_net.h"
++#include "h3d_native_runtime.h"
+ 
+ #include <algorithm>
+ #include <limits>
+@@ -74,6 +76,9 @@
+     NetResultFlags flags;
+     flags.success = true;
+ 
++    // should_route_net itself reads the old tree's occupancy. Acquire before
++    // that decision as well as before rip-up/search/commit.
++    H3DNativeNetLease hybrid_lease(net_id, net_bb, itry);
+     if (!should_route_net(net_list, net_id, connections_inf, budgeting_inf, worst_negative_slack, true))
+         return flags;
+ 
+@@ -414,6 +419,7 @@
+     profiling::sink_criticality_start();
+ 
+     t_bb bounding_box = route_ctx.route_bb[net_id];
++    H3DLabelScope label_scope(net_id, sink_node, bounding_box);
+ 
+     router.clear_modified_rr_node_info();
+ 
+@@ -450,6 +456,7 @@
+     }
+ 
+     profiling::sink_criticality_end(cost_params.criticality);
++    H3DNativeCommitScope hybrid_commit(sink_node);
+ 
+     /* This is a special pre-route to a sink that does not correspond to any    *
+      * netlist pin, but which can be reached from the global clock root drive   *
+@@ -477,6 +484,7 @@
+     // - free up virtual sink occupancy
+     tree.freeze();
+     m_route_ctx.rr_node_route_inf[sink_node].set_occ(0);
++    h3d_native_mark_dirty(sink_node);
+ 
+     // routed to a sink successfully
+     out.success = true;
+@@ -527,6 +535,7 @@
+     profiling::sink_criticality_start();
+ 
+     RRNodeId sink_node = route_ctx.net_rr_terminals[net_id][target_pin];
++    H3DLabelScope label_scope(net_id, sink_node, net_bb);
+     VTR_LOGV_DEBUG(f_router_debug, "Net %zu Target %d (%s)\n", size_t(net_id), itarget, describe_rr_node(device_ctx.rr_graph, device_ctx.grid, device_ctx.rr_indexed_data, sink_node, is_flat).c_str());
+ 
+     router.clear_modified_rr_node_info();
+@@ -581,6 +590,7 @@
+     }
+ 
+     profiling::sink_criticality_end(cost_params.criticality);
++    H3DNativeCommitScope hybrid_commit(sink_node);
+ 
+     vtr::optional<const RouteTreeNode&> new_branch, new_sink;
+     std::tie(new_branch, new_sink) = tree.update_from_heap(&cheapest, target_pin, ((high_fanout) ? &spatial_rt_lookup : nullptr), is_flat);
+--- a/vpr/src/route/route_tree.cpp
++++ b/vpr/src/route/route_tree.cpp
+@@ -536,15 +536,24 @@
+      * new_branch_inodes: [sink, nodeN-1, nodeN-2, ... node 1] of length N
+      * and new_branch_iswitches: [N-1->sink, N-2->N-1, ... 2->1, 1->found_node] of length N */
+     RREdgeId edge = hptr->prev_edge;
++    if (edge == RREdgeId::INVALID() || size_t(edge) >= rr_graph.rr_nodes().all_edges().size() || rr_graph.edge_sink_node(edge) != sink_inode) {
++        VPR_FATAL_ERROR(VPR_ERROR_ROUTE, "Invalid initial predecessor edge for sink %zu", size_t(sink_inode));
++    }
+     RRNodeId new_inode = rr_graph.edge_src_node(edge);
+     RRSwitchId new_iswitch = RRSwitchId(rr_graph.rr_nodes().edge_switch(edge));
+ 
+     /* build a path, looking up rr nodes and switches from rr_node_route_inf */
+     new_branch_inodes.push_back(sink_inode);
+     while (!_rr_node_to_rt_node.contains(new_inode)) {
++        if (!main_branch_visited.insert(new_inode).second) {
++            VPR_FATAL_ERROR(VPR_ERROR_ROUTE, "Cyclic predecessor chain at RR node %zu for sink %zu", size_t(new_inode), size_t(sink_inode));
++        }
+         new_branch_inodes.push_back(new_inode);
+         new_branch_iswitches.push_back(new_iswitch);
+         edge = route_ctx.rr_node_route_inf[new_inode].prev_edge;
++        if (edge == RREdgeId::INVALID() || size_t(edge) >= rr_graph.rr_nodes().all_edges().size() || rr_graph.edge_sink_node(edge) != new_inode) {
++            VPR_FATAL_ERROR(VPR_ERROR_ROUTE, "Invalid predecessor edge at RR node %zu for sink %zu", size_t(new_inode), size_t(sink_inode));
++        }
+         new_inode = rr_graph.edge_src_node(edge);
+         new_iswitch = RRSwitchId(rr_graph.rr_nodes().edge_switch(edge));
+     }
+--- a/vpr/src/route/route_utils.cpp
++++ b/vpr/src/route/route_utils.cpp
+@@ -87,7 +87,7 @@
+ // Typically, only a small minority of nets (typically > 10%) have their BBs updated
+ // each routing iteration.
+ void dynamic_update_bounding_boxes(const std::vector<ParentNetId>& rerouted_nets,
+-                                   std::vector<ParentNetId> out_bb_updated_nets) {
++                                   std::vector<ParentNetId>& out_bb_updated_nets) {
+     auto& device_ctx = g_vpr_ctx.device();
+     auto& route_ctx = g_vpr_ctx.mutable_routing();
+ 
+--- a/vpr/src/route/route_utils.h
++++ b/vpr/src/route/route_utils.h
+@@ -45,8 +45,9 @@
+  * routing match those computed from scratch by the net_delay.cpp module. */
+ bool check_net_delays(const Netlist<>& net_list, NetPinsMatrix<float>& net_delay);
+ 
+-/** Update bounding box for net if existing routing is close to boundary */
+-void dynamic_update_bounding_boxes(const std::vector<ParentNetId>& rerouted_nets, std::vector<ParentNetId> out_bb_updated_nets);
++/** Update bounding boxes near routing boundaries and append changed nets to the
++ * caller-owned list, so parallel partition assignments follow the expanded boxes. */
++void dynamic_update_bounding_boxes(const std::vector<ParentNetId>& rerouted_nets, std::vector<ParentNetId>& out_bb_updated_nets);
+ 
+ /** Early exit code for cases where it is obvious that a successful route will not be found
+  * Heuristic: If total wirelength used in first routing iteration is X% of total available wirelength, exit */
+--- a/vpr/src/route/router_lookahead/router_lookahead_map.cpp
++++ b/vpr/src/route/router_lookahead/router_lookahead_map.cpp
+@@ -42,6 +42,7 @@
+ #include "vtr_ndmatrix.h"
+ #include "vtr_time.h"
+ #include "router_lookahead_map.h"
++#include "model_io.hpp"
+ #include "router_lookahead_map_utils.h"
+ #include "rr_graph.h"
+ 
+@@ -458,6 +459,68 @@
+     expected_cong_cost *= (1.0f - params.criticality);
+ 
+     return std::make_pair(expected_delay_cost, expected_cong_cost);
++}
++
++bool MapLookahead::export_hybrid_model(h3d_native::Model& model) const {
++    if (is_flat_ || has_interposer_cuts_) return false;
++    using namespace h3d_native;
++    const auto& d=g_vpr_ctx.device();const auto& rr=d.rr_graph;
++    auto kind=[](e_rr_type t)->uint32_t {
++        switch(t){
++            case e_rr_type::SOURCE:return Source;case e_rr_type::SINK:return Sink;
++            case e_rr_type::IPIN:return Ipin;case e_rr_type::OPIN:return Opin;
++            case e_rr_type::CHANX:return ChanX;case e_rr_type::CHANY:return ChanY;case e_rr_type::CHANZ:return ChanZ;
++            default:throw std::runtime_error("unsupported native RR node kind");
++        }
++    };
++    auto& h=model.header;
++    h.width=d.grid.width();h.height=d.grid.height();h.layers=d.grid.get_num_layers();
++    h.channels=f_wire_cost_map.dim_size(2);h.segments=f_wire_cost_map.dim_size(3);
++    h.sink_base=d.rr_indexed_data[RRIndexedDataId(SINK_COST_INDEX)].base_cost;
++    h.reserved=SINK_COST_INDEX;
++    h.sentinel=ROUTER_LOOKAHEAD_NO_PATH_SENTINEL;h.base_count=d.rr_indexed_data.size();
++    model.wires.reserve(uint64_t(h.layers)*h.layers*h.channels*h.segments*h.width*h.height);
++    for(uint32_t from=0;from<h.layers;++from)for(uint32_t to=0;to<h.layers;++to)
++    for(uint32_t type=0;type<h.channels;++type)for(uint32_t seg=0;seg<h.segments;++seg)
++    for(uint32_t x=0;x<h.width;++x)for(uint32_t y=0;y<h.height;++y){
++        const auto&c=f_wire_cost_map[from][to][type][seg][x][y];model.wires.push_back({c.delay,c.congestion});
++    }
++    std::map<std::tuple<int,int,int>,std::pair<uint32_t,uint32_t>> reach_cache;
++    model.nodes.resize(rr.num_nodes());
++    for(auto id:rr.nodes()){
++        auto& n=model.nodes[size_t(id)];
++        n.xlo=rr.node_xlow(id);n.xhi=rr.node_xhigh(id);n.ylo=rr.node_ylow(id);n.yhi=rr.node_yhigh(id);
++        n.zlo=rr.node_layer_low(id);n.zhi=rr.node_layer_high(id);
++        std::tie(n.adjx,n.adjy)=util::get_adjusted_rr_position(id);
++        n.kind=kind(rr.node_type(id));auto dir=rr.node_direction(id);
++        n.dir=dir==Direction::INC?0:(dir==Direction::DEC?1:2);
++        n.cost_index=size_t(rr.node_cost_index(id));n.capacity=rr.node_capacity(id);
++        n.segment=d.rr_indexed_data[rr.node_cost_index(id)].seg_index;
++        if(n.kind==Source || n.kind==Opin){
++            auto tile=d.grid.get_physical_type({n.xlo,n.ylo,n.zlo});
++            int tile_id=std::distance(&d.physical_tile_types[0],tile),ptc=rr.node_ptc_num(id);
++            auto key=std::make_tuple(n.zlo,tile_id,ptc);auto it=reach_cache.find(key);
++            if(it==reach_cache.end()){
++                uint32_t start=model.reachable.size();
++                for(uint32_t layer=0;layer<h.layers;++layer){
++                    const auto& reachable=src_opin_delays.at(n.zlo).at(tile_id).at(ptc).at(layer);
++                    if(reachable.empty())model.reachable.push_back({Sentinel,0,layer,h.sentinel,h.sentinel});
++                    for(const auto& item:reachable){const auto&r=item.second;
++                        model.reachable.push_back({kind(r.wire_rr_type),uint32_t(r.wire_seg_index),uint32_t(r.layer_number),r.delay,r.congestion});
++                    }
++                }
++                it=reach_cache.emplace(key,std::make_pair(start,uint32_t(model.reachable.size()-start))).first;
++            }
++            std::tie(n.reach_begin,n.reach_count)=it->second;
++        }
++        auto group=d.rr_node_to_non_config_node_set.find(id);
++        n.group_begin=model.groups.size();
++        if(group!=d.rr_node_to_non_config_node_set.end())
++            for(auto member:d.rr_non_config_node_sets[group->second])model.groups.push_back(size_t(member));
++        n.group_count=model.groups.size()-n.group_begin;
++    }
++    h.nodes=model.nodes.size();h.wires=model.wires.size();h.reachable=model.reachable.size();h.groups=model.groups.size();
++    return true;
+ }
+ 
+ void MapLookahead::compute(const std::vector<t_segment_inf>& segment_inf) {
+--- a/vpr/src/route/router_lookahead/router_lookahead_map.h
++++ b/vpr/src/route/router_lookahead/router_lookahead_map.h
+@@ -10,6 +10,7 @@
+ #include "router_lookahead.h"
+ #include "router_lookahead_map_utils.h"
+ #include "router_lookahead_interposer.h"
++namespace h3d_native { struct Model; }
+ 
+ /**
+  * @brief Current VPR RouterLookahead implementation. This lookahead uses a table
+@@ -24,6 +25,7 @@
+ class MapLookahead final : public RouterLookahead {
+   public:
+     explicit MapLookahead(const t_det_routing_arch& det_routing_arch, bool is_flat, int route_verbosity, bool device_model_warnings, float interposer_base_cost_multiplier);
++    bool export_hybrid_model(h3d_native::Model&) const;
+ 
+   private:
+     float get_expected_cost_flat_router(RRNodeId current_node, RRNodeId target_node, const t_conn_cost_params& params, float R_upstream) const;
+--- a/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp
++++ b/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp
+@@ -11,6 +11,13 @@
+  * To access the utility functions, the util namespace needs to be used. */
+ 
+ #include <fstream>
++#include <chrono>
++#include <cstdlib>
++#include <cstring>
++#ifdef VPR_USE_TBB
++#include <tbb/enumerable_thread_specific.h>
++#include <tbb/parallel_for.h>
++#endif
+ #include <ranges>
+ #include "globals.h"
+ #include "physical_types.h"
+@@ -741,6 +748,9 @@
+     const auto& rr_graph = device_ctx.rr_graph;
+     const auto& grid = device_ctx.grid;
+ 
++    const char* profile_path = std::getenv("VPR_HYBRID_LOOKAHEAD_REPORT");
++    using ProfileClock = std::chrono::steady_clock;
++    auto profile_start = profile_path ? ProfileClock::now() : ProfileClock::time_point{};
+     const t_bb full_device_bb(0, grid.width() - 1, 0, grid.height() - 1, 0, grid.get_num_layers() - 1);
+ 
+     // Start sampling at the lower left non-corner
+@@ -822,6 +832,16 @@
+         }
+     }
+ 
++    auto samples_ready = profile_path ? ProfileClock::now() : ProfileClock::time_point{};
++    t_dijkstra_data dijkstra_data;
++    dijkstra_data.profile = profile_path != nullptr;
++    bool parallel_samples = false;
++#ifdef VPR_USE_TBB
++    const char* parallel_setting = std::getenv("VPR_HYBRID_LOOKAHEAD_PARALLEL");
++    parallel_samples = parallel_setting && std::strcmp(parallel_setting, "1") == 0 && sample_nodes.size() > 1;
++#endif
++    uint64_t merge_ns = 0;
++
+     // Finally, now that we have a list of sample locations, run a Dijkstra flood from
+     // each sample location to profile the routing network from this type
+ 
+@@ -839,9 +859,7 @@
+ 
+         // to avoid multiple memory allocation and de-allocations in run_dijkstra()
+         // dijkstra_data is created outside the for loop and passed by reference to dijkstra_data()
+-        t_dijkstra_data dijkstra_data;
+-
+-        for (RRNodeId sample_node : sample_nodes) {
++        auto flood_sample = [&](RRNodeId sample_node, t_dijkstra_data& scratch, t_routing_cost_map& costs) {
+             int sample_x = rr_graph.node_xlow(sample_node);
+             int sample_y = rr_graph.node_ylow(sample_node);
+ 
+@@ -876,16 +894,67 @@
+                         }
+                     }
+ 
+-                    routing_cost_map[ipin_layer][delta_x][delta_y].add_cost_entry(util::e_representative_entry_method::SMALLEST,
++                    costs[ipin_layer][delta_x][delta_y].add_cost_entry(util::e_representative_entry_method::SMALLEST,
+                                                                                   current.delay,
+                                                                                   current.congestion_upstream);
+                 }
+             };
+ 
+-            run_dijkstra<false>(sample_node, dijkstra_data, full_device_bb, map_lookahead_add_sample_route_to_table);
+-        }
+-    }
+-
++            run_dijkstra<false>(sample_node, scratch, full_device_bb, map_lookahead_add_sample_route_to_table);
++        };
++
++#ifdef VPR_USE_TBB
++        if (parallel_samples) {
++            // Each flood owns its search labels and cost map. Only the immutable
++            // resource graph is shared. The enclosing VPR global_control and
++            // process affinity retain the caller's CPU budget.
++            std::vector<t_routing_cost_map> sample_maps(sample_nodes.size());
++            tbb::enumerable_thread_specific<t_dijkstra_data> scratch;
++            tbb::parallel_for(size_t(0), sample_nodes.size(), [&](size_t i) {
++                auto& local = scratch.local();
++                local.profile = profile_path != nullptr;
++                sample_maps[i] = t_routing_cost_map({grid.get_num_layers(), grid.width(), grid.height()});
++                flood_sample(sample_nodes[i], local, sample_maps[i]);
++            });
++            auto merge_start = profile_path ? ProfileClock::now() : ProfileClock::time_point{};
++            // Strict sample order is essential: equal-delay entries retain
++            // the first congestion cost in the original implementation.
++            for (const auto& costs : sample_maps) {
++                for (size_t layer = 0; layer < grid.get_num_layers(); ++layer) {
++                    for (size_t x = 0; x < grid.width(); ++x) {
++                        for (size_t y = 0; y < grid.height(); ++y) {
++                            routing_cost_map[layer][x][y].merge_smallest(costs[layer][x][y]);
++                        }
++                    }
++                }
++            }
++            if (profile_path) {
++                merge_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(ProfileClock::now() - merge_start).count();
++                for (const auto& local : scratch) {
++                    dijkstra_data.init_ns += local.init_ns;
++                    dijkstra_data.search_ns += local.search_ns;
++                    dijkstra_data.floods += local.floods;
++                }
++            }
++        } else
++#endif
++        {
++            for (RRNodeId sample_node : sample_nodes) {
++                flood_sample(sample_node, dijkstra_data, routing_cost_map);
++            }
++        }
++    }
++
++    if (profile_path) {
++        std::ofstream report(profile_path, std::ios::app);
++        report << "{\"layer\":" << from_layer_num << ",\"segment\":" << segment_inf.seg_index
++               << ",\"channel\":" << int(chan_type) << ",\"samples\":" << sample_nodes.size()
++               << ",\"selection_ns\":" << std::chrono::duration_cast<std::chrono::nanoseconds>(samples_ready - profile_start).count()
++               << ",\"init_ns\":" << dijkstra_data.init_ns << ",\"search_ns\":" << dijkstra_data.search_ns
++               << ",\"parallel\":" << (parallel_samples ? "true" : "false") << ",\"merge_ns\":" << merge_ns
++               << ",\"floods\":" << dijkstra_data.floods
++               << ",\"wall_ns\":" << std::chrono::duration_cast<std::chrono::nanoseconds>(ProfileClock::now() - profile_start).count() << "}\n";
++    }
+     return routing_cost_map;
+ }
+ 
+--- a/vpr/src/route/router_lookahead/router_lookahead_map_utils.h
++++ b/vpr/src/route/router_lookahead/router_lookahead_map_utils.h
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include <cmath>
++#include <cstdint>
+ #include <limits>
+ #include <vector>
+ #include <queue>
+@@ -61,6 +62,10 @@
+     vtr::vector<RRNodeId, float> node_visited_costs;
+     /* a priority queue for expansion */
+     std::priority_queue<PQ_Entry> pq;
++    bool profile = false; ///< Optional whole-flood timings; no per-node clock reads.
++    uint64_t init_ns = 0; ///< Allocation, clearing and first queue entry.
++    uint64_t search_ns = 0; ///< Flood including sample-map recording.
++    uint64_t floods = 0; ///< Completed floods in this scratch context.
+ };
+ 
+ /* when a list of delay/congestion entries at a coordinate in Cost_Entry is boiled down to a single
+@@ -144,6 +149,14 @@
+             this->cost_vector.push_back(cost_entry);
+         }
+     }
++    /** @brief Merge an independently sampled minimum, retaining the earlier
++     * sample on equal delay, exactly as sequential SMALLEST insertion does. */
++    void merge_smallest(const Expansion_Cost_Entry& other) {
++        if (!other.cost_vector.empty()) {
++            const auto& entry = other.cost_vector.front();
++            add_cost_entry(SMALLEST, entry.delay, entry.congestion);
++        }
++    }
+     void clear_cost_entries() {
+         this->cost_vector.clear();
+     }
+--- a/vpr/src/route/router_lookahead/router_lookahead_sampling_utils.h
++++ b/vpr/src/route/router_lookahead/router_lookahead_sampling_utils.h
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include <algorithm>
++#include <chrono>
+ 
+ #include "globals.h"
+ #include "router_lookahead_map_utils.h"
+@@ -101,6 +102,8 @@
+                   util::t_dijkstra_data& data,
+                   const t_bb& bb,
+                   FindIpinCallback find_ipin_callback) {
++    using ProfileClock = std::chrono::steady_clock;
++    auto profile_start = data.profile ? ProfileClock::now() : ProfileClock::time_point{};
+     const DeviceContext& device_ctx = g_vpr_ctx.device();
+     const RRGraphView& rr_graph = device_ctx.rr_graph;
+ 
+@@ -125,6 +128,8 @@
+     // First entry has no upstream delay or congestion
+     pq.emplace(start_node, UNDEFINED, 0, 0, 0, true);
+ 
++    auto search_start = data.profile ? ProfileClock::now() : ProfileClock::time_point{};
++    if (data.profile) data.init_ns += std::chrono::duration_cast<std::chrono::nanoseconds>(search_start - profile_start).count();
+     // Now do routing
+     while (!pq.empty()) {
+         util::PQ_Entry current = pq.top();
+@@ -149,4 +154,8 @@
+         util::expand_dijkstra_neighbours<RestrictToBoundingBox>(current, node_visited_costs, node_expanded, pq, bb);
+         node_expanded[curr_node] = true;
+     }
++    if (data.profile) {
++        data.search_ns += std::chrono::duration_cast<std::chrono::nanoseconds>(ProfileClock::now() - search_start).count();
++        ++data.floods;
++    }
+ }
+--- a/vpr/src/route/serial_connection_router.cpp
++++ b/vpr/src/route/serial_connection_router.cpp
+@@ -1,9 +1,12 @@
++#include "h3d_label_audit.h"
+ #include "serial_connection_router.h"
+ 
+ #include <algorithm>
+ #include "d_ary_heap.h"
+ #include "rr_graph_fwd.h"
+ #include "vpr_context.h"
++#include "h3d_native_profile.h"
++#include "h3d_native_runtime.h"
+ 
+ /** Used to update router statistics for serial connection router */
+ inline void update_serial_router_stats(RouterStats* router_stats,
+@@ -19,6 +22,16 @@
+     const DeviceContext& device_ctx = g_vpr_ctx.device();
+     RoutingContext& route_ctx = g_vpr_ctx.mutable_routing();
+ 
++    std::unique_ptr<H3DNativeProfile> hybrid_profile;
++    if (H3DNativeProfile::enabled()) {
++        hybrid_profile = std::make_unique<H3DNativeProfile>(sink_node, cost_params, bounding_box, target_bb,
++            this->modified_rr_node_inf_, this->router_lookahead_, *this->conn_params_, *this->router_stats_,
++            !this->is_flat_ && !this->has_bus_muxes_ && !this->rcv_path_manager.is_enabled());
++    }
++
++    const uint32_t hybrid_budget=(!this->is_flat_ && !this->has_bus_muxes_ && !this->rcv_path_manager.is_enabled())?h3d_native_pop_budget():0;
++    uint64_t hybrid_pops=0;
++    H3DNativeSearchScope hybrid_search_scope;
+     HeapNode cheapest;
+     while (this->heap_.try_pop(cheapest)) {
+         // Pop a new inode with the cheapest total cost in current route tree to be expanded on
+@@ -53,7 +66,53 @@
+                                       cost_params,
+                                       bounding_box,
+                                       target_bb);
+-    }
++        if(hybrid_budget && ++hybrid_pops==hybrid_budget && !this->heap_.is_empty_heap()) {
++            // A diagnostic replay uses the exact native heap order/labels and
++            // expansion implementation, then restores the resumable CPU search.
++            auto native_resume=[&]() {
++                using Clock=std::chrono::steady_clock;
++                auto saved_heap=this->heap_.hybrid_heap_entries();
++                auto saved_modified=this->modified_rr_node_inf_;
++                std::vector<t_rr_node_route_inf> saved_labels;
++                for(auto n:saved_modified)saved_labels.push_back(this->rr_node_route_inf_[n]);
++                auto saved_stats=*this->router_stats_;
++                auto restore=[&]() {
++                    ::reset_path_costs(this->modified_rr_node_inf_);
++                    for(size_t i=0;i<saved_modified.size();++i) {
++                        h3d_label_claim(saved_modified[i], "replay_restore");
++                        this->rr_node_route_inf_[saved_modified[i]]=saved_labels[i];
++                    }
++                    this->modified_rr_node_inf_=saved_modified;this->heap_.hybrid_restore_heap(saved_heap);
++                    *this->router_stats_=saved_stats;
++                };
++                h3d_native::NativeSample sample;
++                try {
++                    auto tick=Clock::now();HeapNode next;
++                    while(this->heap_.try_pop(next)) {
++                        ++sample.pops;
++                        update_serial_router_stats(this->router_stats_,false,next.node,this->rr_graph_);
++                        if(next.node==sink_node)break;
++                        timing_driven_expand_cheapest(next.node,next.prio,sink_node,cost_params,bounding_box,target_bb);
++                    }
++                    sample.search_ns=std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now()-tick).count();
++                    sample.cost=this->rr_node_route_inf_[sink_node].backward_path_cost;
++                    if(std::isfinite(sample.cost)) {
++                        auto n=sink_node;
++                        while(this->rr_node_route_inf_[n].prev_edge!=RREdgeId::INVALID()) {
++                            auto e=this->rr_node_route_inf_[n].prev_edge;sample.path.push_back(size_t(e));n=this->rr_graph_->edge_src_node(e);
++                            h3d_native::require(sample.path.size()<=this->rr_graph_->num_nodes(),"native replay path cycle");
++                        }
++                        std::reverse(sample.path.begin(),sample.path.end());
++                    }
++                    restore();return sample;
++                } catch(...) {restore();throw;}
++            };
++            if(h3d_native_offload(sink_node,cost_params,bounding_box,target_bb,this->router_lookahead_,
++                                 this->modified_rr_node_inf_,*this->conn_params_,hybrid_pops,this->heap_.hybrid_heap_entries(),Heap::arg_D,native_resume))break;
++        }
++    }
++    h3d_native_query_finished(sink_node);
++    if (hybrid_profile) hybrid_profile->finish(*this->router_stats_);
+ }
+ 
+ template<typename Heap>
+@@ -449,6 +508,7 @@
+                        tot_cost,
+                        describe_rr_node(device_ctx.rr_graph, device_ctx.grid, device_ctx.rr_indexed_data, inode, this->is_flat_).c_str());
+ 
++        h3d_label_claim(inode, "seed");
+         if (tot_cost > this->rr_node_route_inf_[inode].path_cost) {
+             return;
+         }
+@@ -461,6 +521,7 @@
+     } else {
+         float expected_total_cost = this->compute_node_cost_using_rcv(cost_params, inode, target_node, rt_node.Tdel, 0, R_upstream);
+ 
++        h3d_label_claim(inode, "seed_rcv");
+         add_to_mod_list(inode);
+         this->rr_node_route_inf_[inode].path_cost = expected_total_cost;
+         this->rr_node_route_inf_[inode].prev_edge = RREdgeId::INVALID();
+--- a/vpr/src/route/serial_connection_router.h
++++ b/vpr/src/route/serial_connection_router.h
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include "h3d_label_audit.h"
+ #include "connection_router.h"
+ 
+ /**
+@@ -104,6 +105,7 @@
+      */
+     inline void update_cheapest(RTExploredNode& cheapest, const RRNodeId& from_node) {
+         const RRNodeId& inode = cheapest.index;
++        h3d_label_claim(inode, "relax");
+         add_to_mod_list(inode);
+         this->rr_node_route_inf_[inode].prev_edge = cheapest.prev_edge;
+         this->rr_node_route_inf_[inode].path_cost = cheapest.total_cost;
+--- /dev/null
++++ b/vpr/src/route/h3d_label_audit.cpp
+@@ -0,0 +1,99 @@
++#include "h3d_label_audit.h"
++
++#include <cstdlib>
++#include <fstream>
++#include <map>
++#include <mutex>
++#include <thread>
++#include <vector>
++#include "globals.h"
++#include "vpr_error.h"
++
++namespace {
++struct LabelContext {
++    size_t net;
++    size_t sink;
++    t_bb box;
++};
++struct Audit {
++    std::mutex mutex;
++    std::vector<uint64_t> owners;
++    std::map<uint64_t, LabelContext> contexts;
++    uint64_t next = 0;
++};
++thread_local uint64_t token = 0;
++thread_local std::vector<RRNodeId> claimed;
++
++/** @brief Return the optional report path, cached before any connection writes. */
++const char* report_path() {
++    static const char* path = std::getenv("VPR_HYBRID_LABEL_AUDIT");
++    return path;
++}
++/** @brief Process-wide audit state; synchronization changes are diagnostic only. */
++Audit& audit() {
++    static Audit value;
++    return value;
++}
++/** @brief Write the network and box associated with one active connection. */
++void context_json(std::ostream& out, const LabelContext& c) {
++    out << "{\"net\":" << c.net << ",\"sink\":" << c.sink
++        << ",\"box\":[" << c.box.xmin << ',' << c.box.xmax << ',' << c.box.ymin << ',' << c.box.ymax
++        << ',' << c.box.layer_min << ',' << c.box.layer_max << "]}";
++}
++}
++
++H3DLabelScope::H3DLabelScope(ParentNetId net, RRNodeId sink, const t_bb& box) {
++    if (!report_path()) return;
++    VTR_ASSERT(token == 0);
++    Audit& a = audit();
++    std::lock_guard<std::mutex> lock(a.mutex);
++    if (a.owners.empty()) a.owners.resize(g_vpr_ctx.device().rr_graph.num_nodes(), 0);
++    token = ++a.next;
++    a.contexts.emplace(token, LabelContext{size_t(net), size_t(sink), box});
++    active_ = true;
++}
++
++H3DLabelScope::~H3DLabelScope() {
++    if (!active_) return;
++    Audit& a = audit();
++    std::lock_guard<std::mutex> lock(a.mutex);
++    for (RRNodeId node : claimed) {
++        if (a.owners[size_t(node)] == token) a.owners[size_t(node)] = 0;
++    }
++    claimed.clear();
++    a.contexts.erase(token);
++    token = 0;
++}
++
++void h3d_label_claim(RRNodeId node, const char* operation) {
++    if (!token) return;
++    Audit& a = audit();
++    std::lock_guard<std::mutex> lock(a.mutex);
++    uint64_t& owner = a.owners.at(size_t(node));
++    if (owner != 0 && owner != token) {
++        const auto& rr = g_vpr_ctx.device().rr_graph;
++        std::ofstream out(report_path(), std::ios::app);
++        out << "{\"event\":\"live_label_collision\",\"node\":" << size_t(node)
++            << ",\"operation\":\"" << operation << "\",\"location\":["
++            << rr.node_xlow(node) << ',' << rr.node_ylow(node) << ',' << int(rr.node_layer_low(node))
++            << "],\"owner\":";
++        context_json(out, a.contexts.at(owner));
++        out << ",\"contender\":";
++        context_json(out, a.contexts.at(token));
++        out << "}\n";
++        out.flush();
++        VPR_FATAL_ERROR(VPR_ERROR_ROUTE, "Live predecessor label collision at RR node %zu; see %s", size_t(node), report_path());
++    }
++    if (owner == 0) {
++        owner = token;
++        claimed.push_back(node);
++    }
++}
++
++void h3d_label_release(RRNodeId node) {
++    if (!token) return;
++    Audit& a = audit();
++    std::lock_guard<std::mutex> lock(a.mutex);
++    VTR_ASSERT(a.owners.at(size_t(node)) == token);
++    a.owners[size_t(node)] = 0;
++}
+--- /dev/null
++++ b/vpr/src/route/h3d_label_audit.h
+@@ -0,0 +1,20 @@
++#pragma once
++
++#include "rr_graph_fwd.h"
++#include "vpr_types.h"
++
++/** @brief Optional diagnostic ownership of live per-connection search labels. */
++class H3DLabelScope {
++  public:
++    H3DLabelScope(ParentNetId net, RRNodeId sink, const t_bb& box);
++    ~H3DLabelScope();
++    H3DLabelScope(const H3DLabelScope&) = delete;
++    H3DLabelScope& operator=(const H3DLabelScope&) = delete;
++  private:
++    bool active_ = false; ///< Whether the audit is enabled for this connection.
++};
++
++/** @brief Claim a label before a seed/relax/reset write; reject foreign live labels. */
++void h3d_label_claim(RRNodeId node, const char* operation);
++/** @brief Release a label only after its search state has been reset. */
++void h3d_label_release(RRNodeId node);
+--- /dev/null
++++ b/vpr/src/route/h3d_native_profile.cpp
+@@ -0,0 +1,172 @@
++#include "h3d_native_profile.h"
++#include <algorithm>
++#include <array>
++#include <cmath>
++#include <cstdlib>
++#include <filesystem>
++#include <fstream>
++#include <iomanip>
++#include <limits>
++#include <stdexcept>
++#include <string>
++#include "vpr_context.h"
++#include "router_lookahead_map.h"
++#include "model_io.hpp"
++#include "gpu_api.hpp"
++
++namespace {
++using Clock = std::chrono::steady_clock;
++uint64_t ns(Clock::time_point a) {
++    return std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now()-a).count();
++}
++template<class T> void write(std::ofstream& f, const T& v) {
++    f.write(reinterpret_cast<const char*>(&v), sizeof(v));
++}
++template<class T> void write_vector(std::ofstream& f, const std::vector<T>& v) {
++    f.write(reinterpret_cast<const char*>(v.data()), sizeof(T)*v.size());
++}
++struct Recorder {
++    std::filesystem::path directory;
++    std::ofstream csv;
++    uint64_t sequence = 0, captured = 0;
++    std::array<unsigned,64> bins{};
++    bool graph_written = false, graph_supported = true;
++    bool model_attempted = false;
++    std::vector<h3d_native::State> last_state;
++    Recorder() {
++        directory = std::getenv("VPR_HYBRID_PROFILE");
++        if (!std::filesystem::create_directory(directory))
++            throw std::runtime_error("VPR_HYBRID_PROFILE directory must not already exist");
++        csv.open(directory/"queries.csv");
++        csv.exceptions(std::ios::badbit | std::ios::failbit);
++        csv << "sequence,net,pin,sink,criticality,seeds,box_volume,cpu_ns,heap_pops,heap_pushes,found,cost,capture,prepare_ns\n";
++        csv << std::setprecision(9);
++    }
++    bool graph() {
++        if (graph_written) return graph_supported;
++        graph_written = true;
++        const auto& d = g_vpr_ctx.device(); const auto& rr = d.rr_graph;
++        for (auto n:rr.nodes()) if (rr.node_R(n)!=0.f || rr.node_C(n)!=0.f) graph_supported=false;
++        for (const auto& sw:rr.rr_switch()) if (sw.R!=0.f) graph_supported=false;
++        if (!graph_supported) return false;
++        h3d_native::GraphHeader header;
++        size_t edge_count=0;for(auto n:rr.nodes())edge_count+=rr.num_edges(n);
++        header.nodes=rr.num_nodes(); header.edges=edge_count;
++        if (size_t(header.nodes)!=rr.num_nodes() || size_t(header.edges)!=edge_count)
++            throw std::runtime_error("native snapshot exceeds 32-bit graph ABI");
++        std::vector<h3d_native::Node> nodes(header.nodes);
++        std::vector<h3d_native::Edge> edges; edges.reserve(header.edges);
++        for (auto n:rr.nodes()) {
++            nodes[size_t(n)]={uint32_t(edges.size()),0};
++            for (auto e:rr.edge_range(n)) {
++                auto to=rr.edge_sink_node(e);
++                auto ft=rr.node_type(n),tt=rr.node_type(to);
++                bool bend=(ft==e_rr_type::CHANX && tt==e_rr_type::CHANY) || (ft==e_rr_type::CHANY && tt==e_rr_type::CHANX);
++                edges.push_back({uint32_t(size_t(n)),uint32_t(size_t(to)),uint32_t(size_t(e)),
++                    get_rr_node_delay_cost(to,e),uint32_t(rr.rr_switch()[RRSwitchId(rr.edge_switch(e))].configurable()),uint32_t(bend)});
++                ++nodes[size_t(n)].count;
++            }
++        }
++        if (edges.size()!=header.edges) throw std::runtime_error("native snapshot edge coverage mismatch");
++        std::ofstream f(directory/"graph.bin",std::ios::binary);
++        f.exceptions(std::ios::badbit | std::ios::failbit);
++        write(f,header);write_vector(f,nodes);write_vector(f,edges);
++        return true;
++    }
++};
++Recorder& recorder() { static Recorder r; return r; }
++}
++
++bool H3DNativeProfile::enabled() {
++    static const bool value=std::getenv("VPR_HYBRID_PROFILE")!=nullptr;
++    return value;
++}
++H3DNativeProfile::H3DNativeProfile(RRNodeId sink,const t_conn_cost_params& params,
++    const t_bb& box,const t_bb& target,const std::vector<RRNodeId>& modified,
++    const RouterLookahead& lookahead,const ConnectionParameters& connection,
++    const RouterStats& stats,bool supported)
++    :sink_(sink),params_(params),box_(box),target_(target),lookahead_(lookahead),
++     net_(size_t(connection.net_id_)),pin_(connection.target_pin_num_),
++     sequence_(recorder().sequence++),pops_(stats.heap_pops),pushes_(stats.heap_pushes),supported_(supported) {
++    const auto& info=g_vpr_ctx.routing().rr_node_route_inf;
++    for(auto n:modified) {
++        const auto& s=info[n];
++        if (s.prev_edge!=RREdgeId::INVALID() || !std::isfinite(s.backward_path_cost))
++            throw std::runtime_error("native snapshot seed invariant failed");
++        seeds_.push_back({uint32_t(size_t(n)),s.backward_path_cost,s.path_cost});
++    }
++    start_=Clock::now();
++}
++
++void H3DNativeProfile::finish(const RouterStats& stats) {
++    const uint64_t cpu_ns=ns(start_),pops=stats.heap_pops-pops_,pushes=stats.heap_pushes-pushes_;
++    const auto& d=g_vpr_ctx.device();const auto& rr=d.rr_graph;
++    const auto& info=g_vpr_ctx.routing().rr_node_route_inf;
++    const float cost=info[sink_].backward_path_cost;
++    bool found=std::isfinite(info[sink_].path_cost);
++    auto& r=recorder();unsigned bin=0;for(auto n=cpu_ns;n>1;n>>=1)++bin;
++    uint64_t prep=0;std::string capture;
++    // Stratify by native CPU duration; at most two per power-of-two bin and 32 total.
++    // Sampling is diagnostic only; no speedup claim may use these instrumented runs.
++    if (found && supported_ && r.bins[bin]<2 && r.captured<32 && r.graph()) {
++        if(!r.model_attempted){
++            r.model_attempted=true;
++            if(const auto* map=dynamic_cast<const MapLookahead*>(&lookahead_)){
++                h3d_native::Model model;
++                if(map->export_hybrid_model(model))model.save((r.directory/"model.bin").string());
++            }
++        }
++        auto begin=Clock::now();std::vector<h3d_native::Entry> entries;
++        for(auto n:rr.nodes()) {
++            if(!inside_bb(rr,n,box_))continue;
++            if(rr.node_type(n)==e_rr_type::IPIN &&
++               (rr.node_xlow(n)<target_.xmin || rr.node_xhigh(n)>target_.xmax ||
++                rr.node_ylow(n)<target_.ymin || rr.node_yhigh(n)>target_.ymax ||
++                rr.node_layer_low(n)<target_.layer_min || rr.node_layer_low(n)>target_.layer_max))continue;
++            float expected=lookahead_.get_expected_cost(n,sink_,params_,0.f);
++            float h=params_.astar_fac*std::max(0.f,expected-params_.astar_offset);
++            float c=get_rr_cong_cost(n,params_.pres_fac);
++            if(!std::isfinite(c) || c<0 || !std::isfinite(h) || h<0)
++                throw std::runtime_error("non-finite native snapshot cost");
++            entries.push_back({uint32_t(size_t(n)),c,h});
++        }
++        std::vector<uint32_t> path;auto n=sink_;
++        while(info[n].prev_edge!=RREdgeId::INVALID()) {
++            auto e=info[n].prev_edge;path.push_back(size_t(e));n=rr.edge_src_node(e);
++            if(path.size()>rr.num_nodes())throw std::runtime_error("native reference path cycle");
++        }
++        std::reverse(path.begin(),path.end());
++        prep=ns(begin);
++        h3d_native::QueryHeader q;
++        q.sink=size_t(sink_);q.entries=entries.size();q.seeds=seeds_.size();q.reference_edges=path.size();
++        q.net=net_;q.pin=pin_;q.sequence=sequence_;q.cpu_ns=cpu_ns;q.prepare_ns=prep;q.heap_pops=pops;
++        q.criticality=params_.criticality;q.astar=params_.astar_fac;q.astar_offset=params_.astar_offset;
++        q.bend_cost=params_.bend_cost;q.present=params_.pres_fac;q.reference_cost=cost;
++        q.box[0]=box_.xmin;q.box[1]=box_.xmax;q.box[2]=box_.ymin;q.box[3]=box_.ymax;q.box[4]=box_.layer_min;q.box[5]=box_.layer_max;
++        capture="query_"+std::to_string(sequence_)+".bin";
++        std::ofstream f(r.directory/capture,std::ios::binary);f.exceptions(std::ios::badbit|std::ios::failbit);
++        write(f,q);write_vector(f,entries);write_vector(f,seeds_);write_vector(f,path);
++        // Capture sparse state transitions between selected snapshots. The
++        // first snapshot initializes the complete state; replay in sequence order.
++        std::vector<h3d_native::StateDelta> changes;
++        bool first=r.last_state.empty();
++        if(first)r.last_state.resize(rr.num_nodes());
++        for(auto node:rr.nodes()){
++            auto& old=r.last_state[size_t(node)];h3d_native::State current{info[node].occ(),info[node].acc_cost};
++            if(first || current.occupancy!=old.occupancy || current.accumulated!=old.accumulated){
++                changes.push_back({uint32_t(size_t(node)),current});old=current;
++            }
++        }
++        std::vector<float> base;for(const auto& indexed:d.rr_indexed_data)base.push_back(indexed.base_cost);
++        h3d_native::StateHeader sh;sh.nodes=rr.num_nodes();sh.base_count=base.size();sh.deltas=changes.size();
++        sh.target[0]=target_.xmin;sh.target[1]=target_.xmax;sh.target[2]=target_.ymin;sh.target[3]=target_.ymax;
++        sh.target[4]=target_.layer_min;sh.target[5]=target_.layer_max;
++        std::ofstream sf(r.directory/("state_"+std::to_string(sequence_)+".bin"),std::ios::binary);
++        sf.exceptions(std::ios::badbit|std::ios::failbit);write(sf,sh);write_vector(sf,base);write_vector(sf,changes);
++        ++r.captured;++r.bins[bin];
++    }
++    uint64_t volume=uint64_t(box_.xmax-box_.xmin+1)*(box_.ymax-box_.ymin+1)*(box_.layer_max-box_.layer_min+1);
++    r.csv<<sequence_<<','<<net_<<','<<pin_<<','<<size_t(sink_)<<','<<params_.criticality<<','<<seeds_.size()<<','<<volume<<','
++         <<cpu_ns<<','<<pops<<','<<pushes<<','<<found<<','<<cost<<','<<capture<<','<<prep<<'\n';
++    if(sequence_%4096==0)r.csv.flush();
++}
+--- /dev/null
++++ b/vpr/src/route/h3d_native_profile.h
+@@ -0,0 +1,31 @@
++#pragma once
++#include <chrono>
++#include <vector>
++#include "connection_router_interface.h"
++#include "route_common.h"
++#include "router_lookahead.h"
++#include "hybrid_snapshot.hpp"
++
++// Diagnostic only: disabled mode has no snapshot allocation or graph traversal.
++// Enabled runs must not be used as end-to-end performance measurements.
++class H3DNativeProfile {
++  public:
++    static bool enabled();
++    H3DNativeProfile(RRNodeId sink, const t_conn_cost_params& params,
++                     const t_bb& box, const t_bb& target,
++                     const std::vector<RRNodeId>& modified,
++                     const RouterLookahead& lookahead,
++                     const ConnectionParameters& connection,
++                     const RouterStats& stats, bool supported);
++    void finish(const RouterStats& stats);
++  private:
++    RRNodeId sink_;
++    t_conn_cost_params params_;
++    t_bb box_, target_;
++    const RouterLookahead& lookahead_;
++    uint32_t net_, pin_;
++    uint64_t sequence_, pops_, pushes_;
++    bool supported_;
++    std::vector<h3d_native::Seed> seeds_;
++    std::chrono::steady_clock::time_point start_;
++};
+--- /dev/null
++++ b/vpr/src/route/h3d_native_runtime.cpp
+@@ -0,0 +1,513 @@
++#include "h3d_label_audit.h"
++#include "h3d_native_runtime.h"
++#include "gpu_api.hpp"
++#include "model_io.hpp"
++#include "router_lookahead_map.h"
++#include "route_common.h"
++#include "route_net.h"
++#include "vpr_context.h"
++#include <atomic>
++#include <chrono>
++#include <condition_variable>
++#include <deque>
++#include <cstdlib>
++#include <dlfcn.h>
++#include <filesystem>
++#include <fstream>
++#include <iomanip>
++#include <memory>
++#include <mutex>
++#include <thread>
++#include <unordered_map>
++#include <unordered_set>
++
++namespace {
++using namespace h3d_native;using Clock=std::chrono::steady_clock;
++uint64_t ns(Clock::time_point start){return std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now()-start).count();}
++void check(const char*e){if(e)throw std::runtime_error(e);}
++uint64_t option(const char*key,uint64_t fallback){const char*v=std::getenv(key);if(!v)return fallback;std::string text(v);size_t end;auto value=std::stoull(text,&end);require(end==text.size(),"invalid hybrid integer option");return value;}
++struct Journal {
++    std::mutex mutex;
++    std::vector<uint8_t> marked;
++    std::vector<uint32_t> ids;
++    std::vector<State> state;
++    explicit Journal(const std::vector<State>& initial):marked(initial.size(),0),state(initial){}
++    void verify_at_barrier(){
++        std::lock_guard<std::mutex> lock(mutex);
++        const auto&info=g_vpr_ctx.routing().rr_node_route_inf;
++        for(size_t n=0;n<state.size();++n)
++            if(state[n].occupancy!=info[RRNodeId(n)].occ()||state[n].accumulated!=info[RRNodeId(n)].acc_cost)
++                throw std::runtime_error("native sparse-state journal missed mutation at node "+std::to_string(n));
++    }
++    void mark(uint32_t n){
++        // Called by the node's native owner immediately after its mutation.
++        // Drain never reads concurrently changing VPR state.
++        const auto& info=g_vpr_ctx.routing().rr_node_route_inf[RRNodeId(n)];
++        State value{info.occ(),info.acc_cost};
++        std::lock_guard<std::mutex> lock(mutex);
++        state.at(n)=value;
++        if(!marked[n]){marked[n]=1;ids.push_back(n);}
++    }
++    std::vector<StateDelta> snapshot_pending(){
++        std::lock_guard<std::mutex> lock(mutex);std::vector<StateDelta> out;
++        for(auto n:ids)out.push_back({n,state[n]});
++        return out;
++    }
++    std::vector<StateDelta> drain(){
++        std::lock_guard<std::mutex> lock(mutex);
++        std::vector<StateDelta> out;out.reserve(ids.size());
++        for(auto n:ids){out.push_back({n,state[n]});marked[n]=0;}
++        ids.clear();return out;
++    }
++};
++std::atomic<Journal*>active_journal{nullptr};
++struct Pending {
++    bool valid=false,delayed=false,ran=false,committed=false;
++    uint64_t sequence=0,cpu_pops=0,init_ns=0,update_ns=0,search_ns=0,commit_ns=0,state_bytes=0,dispatch_ns=0;
++    uint32_t net=0,pin=0,batch_size=1;uint64_t batch_id=0,queue_ns=0;
++    uint64_t state_prepare_ns=0,capture_ns=0,native_replay_ns=0;
++    uint32_t iteration=0,partition_depth=0;uintptr_t partition=0;
++    bool captured=false;std::vector<NativeSample>cpu_samples;
++    bool done=false;std::string failure;t_bb lease_box{};
++    GpuQuery query{};GpuResult result{};
++    t_conn_cost_params params;const RouterLookahead*lookahead=nullptr;
++    std::unordered_map<uint32_t,uint32_t>original_prev;
++    std::vector<Seed>seeds;std::vector<float>base;std::vector<uint32_t>path,active;
++    Clock::time_point resume;
++};
++thread_local Pending pending;
++thread_local bool commit_ready=false;
++thread_local uint32_t current_iteration=0,current_depth=0;
++thread_local uintptr_t current_partition=0;
++thread_local size_t current_remaining_nets=0;
++struct Lease {uint32_t net; t_bb box;};
++thread_local std::unique_ptr<Lease> local_lease;
++bool disjoint(const t_bb&a,const t_bb&b){
++    return a.xmax<b.xmin||b.xmax<a.xmin||a.ymax<b.ymin||b.ymax<a.ymin||
++           a.layer_max<b.layer_min||b.layer_max<a.layer_min;
++}
++class Runtime {
++  public:
++    uint64_t budget=option("VPR_HYBRID_POP_BUDGET",2048),limit=option("VPR_HYBRID_MAX_OFFLOADS",UINT64_MAX);
++    uint64_t pair_stride=option("VPR_HYBRID_PAIR_STRIDE",1);
++    std::atomic<uint64_t> eligible{0};
++    std::atomic<uint64_t> queries{0},attempts{0},commits{0},fallbacks{0},errors{0},state_bytes{0},gpu_visits{0};
++    uint64_t batches=0,multi_batches=0,max_batch=0,overlap_queries=0,lease_waits=0,expanded_leases=0,prepare_ns=0;
++    uint64_t trace_cost_recomputed=0;
++    bool verify_state=option("VPR_HYBRID_VERIFY_STATE",0)!=0;uint64_t verified_state_barriers=0;
++    uint64_t static_payload_bytes=0,initial_state_bytes=0,query_payload_bytes=0,result_payload_bytes=0;
++    std::atomic<bool> gpu_busy{false},disabled{false};
++    bool pair=false,batch=false,guard=false,capture_cpu=false,static_base=false,initialized=false;
++    bool diagnostic=option("VPR_HYBRID_DIAGNOSTICS",0)!=0;
++    uint64_t capture_limit=option("VPR_HYBRID_CAPTURE_LIMIT",32),capture_stride=option("VPR_HYBRID_CAPTURE_STRIDE",5),captured=0;
++    uint64_t native_repeats=option("VPR_HYBRID_NATIVE_REPEATS",3);
++    std::string capture_dir;
++    std::atomic<uint64_t> partitions_active{0},partitions_queued{0},branch_parents{0},searches_active{0},lease_waiters{0},leases_held{0},ready_queries{0};
++    Clock::time_point epoch=Clock::now();
++    std::ofstream batch_csv,event_csv,commit_csv;
++    std::mutex event_mutex;
++    TimingFn timing_fn=nullptr;
++    uint32_t slots=uint32_t(option("VPR_HYBRID_BATCH_SIZE",4));
++    uint64_t wait_us=option("VPR_HYBRID_BATCH_WAIT_US",50);
++    std::thread::id owner=std::this_thread::get_id();
++    std::string report;std::ofstream csv;std::mutex report_mutex;
++    std::mutex service_mutex;std::condition_variable service_cv;std::deque<Pending*> queue;
++    std::thread service;bool stopping=false;
++    std::mutex lease_mutex;std::condition_variable lease_cv;std::vector<Lease> leases;
++    void*library=nullptr;void*gpu=nullptr;CreateFn create=nullptr;UpdateFn update=nullptr;ExecuteFn execute=nullptr;DestroyFn destroy=nullptr;
++    std::unique_ptr<Journal>journal;
++    std::vector<std::vector<uint32_t>>path_storage;
++    Runtime(){
++        require(budget>0 && budget<=UINT32_MAX,"hybrid pop budget must be in [1,2^32-1]");
++        require(pair_stride>0,"paired-query sample stride must be positive");
++        const char*mode=std::getenv("VPR_HYBRID_MODE");std::string m=mode?mode:"select";
++        require(m=="pair"||m=="select"||m=="batch"||m=="guard"||m=="capture","VPR_HYBRID_MODE must be pair, select, batch, guard or capture");
++        capture_cpu=m=="capture";pair=m=="pair";guard=m=="guard";batch=m=="batch"||guard;
++        require(slots>0&&slots<=32&&wait_us<=10000,"invalid native GPU batch configuration");
++        if(!batch)slots=1;
++        if(const char*d=std::getenv("VPR_HYBRID_CAPTURE")){
++            require(pair||capture_cpu,"true takeover captures require serial pair/capture mode");
++            require(capture_stride>0&&native_repeats>0&&native_repeats<=20,"invalid capture/replay limits");
++            capture_dir=d;require(std::filesystem::create_directory(capture_dir),"takeover capture directory already exists");
++        }
++        require(!capture_cpu||!capture_dir.empty(),"capture mode requires VPR_HYBRID_CAPTURE");
++        const char*path=std::getenv("VPR_HYBRID_REPORT");report=path?path:"hybrid_native.json";
++        require(!std::filesystem::exists(report)&&!std::filesystem::exists(report+".queries.csv"),"hybrid report already exists");
++        csv.open(report+".queries.csv");csv.exceptions(std::ios::badbit|std::ios::failbit);
++        csv<<"sequence,net,sink,mode,pair_order,cpu_pops,seeds,init_ns,update_ns,search_ns,commit_ns,dispatch_ns,cpu_remaining_ns,state_bytes,native_cost,gpu_cost,gpu_visits,gpu_rounds,committed,status,batch_id,batch_size,queue_ns,active_seeds,trace_cost_recomputed,state_prepare_ns,capture_ns,native_replay_ns,captured,iteration,pin,partition,partition_depth,ran,failed\n"<<std::setprecision(9);
++        if(diagnostic){
++            require(!std::filesystem::exists(report+".batches.csv")&&!std::filesystem::exists(report+".events.csv"),"diagnostic reports already exist");
++            require(!std::filesystem::exists(report+".commits.csv"),"commit report exists");
++            commit_csv.open(report+".commits.csv");commit_csv.exceptions(std::ios::badbit|std::ios::failbit);
++            commit_csv<<"sequence,batch_id,net,sink,native_tree_commit_ns\n";
++            batch_csv.open(report+".batches.csv");batch_csv.exceptions(std::ios::badbit|std::ios::failbit);
++            event_csv.open(report+".events.csv");event_csv.exceptions(std::ios::badbit|std::ios::failbit);
++            batch_csv<<"batch_id,size,dispatch_elapsed_ns,queue_depth,ready_queries,active_partitions,queued_partitions,branch_parents,active_searches,lease_waiters,leases_held,drain_ns,input_prepare_ns,update_call_ns,execute_call_ns,result_prepare_ns,timing_enabled,update_host_ns,execute_host_ns,allocation_host_ns,state_h2d_host_ns,query_h2d_host_ns,launch_host_ns,sync_host_ns,d2h_host_ns,event_collect_host_ns,state_h2d_event_ns,update_kernel_event_ns,query_h2d_event_ns,search_kernel_event_ns,d2h_event_ns,h2d_bytes,d2h_bytes,failed\n";
++            event_csv<<"elapsed_ns,event,thread,iteration,partition,depth,remaining_partition_nets,net,active_partitions,queued_partitions,branch_parents,active_searches,lease_waiters,leases_held,ready_queries,conflicting_leases,expanded_only_conflicts\n";
++        }
++    }
++    void event(const char*kind,uint64_t net=UINT64_MAX,uint64_t conflicts=0,uint64_t expanded_only=0){
++        if(!diagnostic)return;
++        std::lock_guard<std::mutex> lock(event_mutex);
++        event_csv<<ns(epoch)<<','<<kind<<','<<std::hash<std::thread::id>{}(std::this_thread::get_id())<<','<<current_iteration<<','<<current_partition<<','<<current_depth<<','<<current_remaining_nets<<','<<net<<','
++                 <<partitions_active<<','<<partitions_queued<<','<<branch_parents<<','<<searches_active<<','<<lease_waiters<<','<<leases_held<<','<<ready_queries<<','<<conflicts<<','<<expanded_only<<'\n';
++    }
++    ~Runtime(){
++        {std::lock_guard<std::mutex> lock(service_mutex);stopping=true;}service_cv.notify_all();
++        if(service.joinable())service.join();
++        active_journal.store(nullptr);if(gpu&&destroy)destroy(gpu);if(library)dlclose(library);
++        std::ofstream f(report);
++        f<<"{\"mode\":\""<<(capture_cpu?"capture":(guard?"guard":(pair?"pair":(batch?"batch":"select"))))<<"\",\"pop_budget\":"<<(guard?0:budget)<<",\"queries\":"<<queries
++         <<",\"offload_attempts\":"<<attempts<<",\"committed\":"<<commits<<",\"fallbacks\":"<<fallbacks<<",\"errors\":"<<errors
++         <<",\"state_bytes\":"<<state_bytes<<",\"gpu_visits\":"<<gpu_visits<<",\"gpu_initialized\":"<<(gpu?"true":"false")
++         <<",\"native_sta_and_tree_commit\":true,\"parallel_dispatch\":"<<(batch&&!guard?"true":"false")
++         <<",\"spatial_ownership\":"<<(batch?"true":"false")
++         <<",\"diagnostic\":"<<(diagnostic?"true":"false")<<",\"true_takeover_captures\":"<<captured<<",\"prepare_ns\":"<<prepare_ns<<",\"batches\":"<<batches<<",\"multi_query_batches\":"<<multi_batches
++         <<",\"max_batch_size\":"<<max_batch<<",\"cpu_queries_finished_during_gpu\":"<<overlap_queries
++         <<",\"lease_conflict_waits\":"<<lease_waits<<",\"trace_cost_recomputed\":"<<trace_cost_recomputed
++         <<",\"expanded_tree_leases\":"<<expanded_leases
++         <<",\"pair_stride\":"<<pair_stride<<",\"static_payload_bytes\":"<<static_payload_bytes
++         <<",\"initial_state_bytes\":"<<initial_state_bytes<<",\"logical_query_payload_bytes\":"<<query_payload_bytes
++         <<",\"logical_result_payload_bytes\":"<<result_payload_bytes<<",\"verified_state_barriers\":"<<verified_state_barriers<<"}\n";
++    }
++    void ensure_owner(){require(batch||std::this_thread::get_id()==owner,"native hybrid select/pair requires serial netlist dispatch");}
++    void initialize(const RouterLookahead&lookahead){
++        if(initialized)return;
++        const auto*map=dynamic_cast<const MapLookahead*>(&lookahead);require(map,"native GPU requires MapLookahead");
++        const auto&d=g_vpr_ctx.device();const auto&rr=d.rr_graph;const auto&info=g_vpr_ctx.routing().rr_node_route_inf;
++        for(auto n:rr.nodes())require(rr.node_R(n)==0.f&&rr.node_C(n)==0.f,"native GPU currently supports zero-RC graphs only");
++        for(const auto&sw:rr.rr_switch())require(sw.R==0.f,"native GPU currently supports zero switch R only");
++        Model model;require(map->export_hybrid_model(model),"native GPU does not support flat/interposer lookahead");
++        if(batch){
++            require(model.header.groups==0,"parallel GPU requires no nonconfigurable cross-region groups");
++            for(const auto&v:d.rr_indexed_data)require(v.T_quadratic==0.f,"parallel GPU requires fanout-invariant base costs");
++        }
++        std::vector<Node>nodes(rr.num_nodes());std::vector<Edge>edges;std::vector<uint32_t>ids;
++        std::vector<State>state(rr.num_nodes());
++        size_t edge_count=0;for(auto n:rr.nodes())edge_count+=rr.num_edges(n);
++        require(edge_count<UINT32_MAX && rr.num_nodes()<UINT32_MAX,"native graph exceeds GPU ABI");edges.reserve(edge_count);ids.resize(edge_count);
++        for(auto n:rr.nodes()){
++            nodes[size_t(n)]={uint32_t(edges.size()),uint32_t(rr.num_edges(n))};state[size_t(n)]={info[n].occ(),info[n].acc_cost};
++            for(auto e:rr.edge_range(n)){auto to=rr.edge_sink_node(e);auto a=rr.node_type(n),b=rr.node_type(to);
++                bool bend=(a==e_rr_type::CHANX&&b==e_rr_type::CHANY)||(a==e_rr_type::CHANY&&b==e_rr_type::CHANX);
++                ids[size_t(e)]=edges.size();edges.push_back({uint32_t(size_t(n)),uint32_t(size_t(to)),uint32_t(size_t(e)),get_rr_node_delay_cost(to,e),
++                    uint32_t(rr.rr_switch()[RRSwitchId(rr.edge_switch(e))].configurable()),uint32_t(bend)});
++            }
++        }
++        if(!capture_dir.empty()){
++            GraphHeader header;header.nodes=nodes.size();header.edges=edges.size();
++            std::ofstream f(capture_dir+"/graph.bin",std::ios::binary);f.exceptions(std::ios::badbit|std::ios::failbit);
++            f.write(reinterpret_cast<const char*>(&header),sizeof(header));
++            f.write(reinterpret_cast<const char*>(nodes.data()),nodes.size()*sizeof(Node));
++            f.write(reinterpret_cast<const char*>(edges.data()),edges.size()*sizeof(Edge));
++            model.save(capture_dir+"/model.bin");
++        }
++        if(capture_cpu){initialized=true;return;}
++        library=dlopen(std::getenv("VPR_HYBRID_LIBRARY"),RTLD_NOW|RTLD_LOCAL);if(!library)throw std::runtime_error(dlerror());
++        create=reinterpret_cast<CreateFn>(dlsym(library,"h3d_gpu_create"));update=reinterpret_cast<UpdateFn>(dlsym(library,"h3d_gpu_update"));
++        execute=reinterpret_cast<ExecuteFn>(dlsym(library,"h3d_gpu_execute"));destroy=reinterpret_cast<DestroyFn>(dlsym(library,"h3d_gpu_destroy"));
++        timing_fn=reinterpret_cast<TimingFn>(dlsym(library,"h3d_gpu_timing"));
++        require(create&&update&&execute&&destroy&&timing_fn,"native GPU library API v3 mismatch");
++        GpuStatic input;input.slots=slots;input.graph.nodes=nodes.size();input.graph.edges=edges.size();input.nodes=nodes.data();input.edges=edges.data();
++        input.native_to_edge=ids.data();input.model=model.view();input.state=state.data();check(create(&input,&gpu));
++        static_payload_bytes=nodes.size()*sizeof(Node)+edges.size()*sizeof(Edge)+ids.size()*sizeof(uint32_t)
++            +model.nodes.size()*sizeof(ModelNode)+model.wires.size()*sizeof(Cost)
++            +model.reachable.size()*sizeof(Reach)+model.groups.size()*sizeof(uint32_t);
++        initial_state_bytes=state.size()*sizeof(State);
++        journal=std::make_unique<Journal>(state);path_storage.resize(slots);
++        for(auto& path:path_storage)path.resize(nodes.size());
++        active_journal.store(journal.get());initialized=true;
++    }
++    void execute_batch(const std::vector<Pending*>& work,size_t queue_depth=0){
++        for(size_t i=0;i<work.size();++i)for(size_t j=0;j<i;++j)
++            require(work[i]->net!=work[j]->net&&disjoint(work[i]->lease_box,work[j]->lease_box),"dependent queries in GPU batch");
++        auto dispatch_elapsed=ns(epoch);
++        uint64_t ready=ready_queries,pa=partitions_active,pq=partitions_queued,bp=branch_parents,sa=searches_active,lw=lease_waiters,lh=leases_held;
++        ++batches;if(work.size()>1)++multi_batches;max_batch=std::max<uint64_t>(max_batch,work.size());
++        for(auto*p:work){p->batch_id=batches;p->batch_size=work.size();}
++        uint64_t drain_time=0,update_time=0,input_time=0,search_time=0,result_time=0;GpuTiming timing{};bool failed=false;
++        try{
++            auto start=Clock::now();auto changes=journal->drain();drain_time=ns(start);
++            start=Clock::now();check(update(gpu,changes.data(),changes.size()));update_time=ns(start);
++            state_bytes+=changes.size()*sizeof(StateDelta);
++            start=Clock::now();std::vector<GpuQuery> inputs;std::vector<GpuResult> outputs(work.size());
++            for(size_t i=0;i<work.size();++i){auto&p=*work[i];
++                p.update_ns=update_time;p.state_bytes=i==0?changes.size()*sizeof(StateDelta):0;
++                p.query.seeds=p.seeds.data();p.query.base_costs=p.base.data();p.query.active_count=p.active.size();p.query.active=p.active.data();inputs.push_back(p.query);
++                query_payload_bytes+=p.seeds.size()*sizeof(Seed)+p.active.size()*sizeof(uint32_t)+p.base.size()*sizeof(float)+sizeof(GpuQuery);
++                outputs[i].path=path_storage[i].data();outputs[i].path_capacity=path_storage[i].size();
++            }
++            input_time=ns(start);start=Clock::now();gpu_busy.store(true);
++            const char* failure=execute(gpu,inputs.data(),outputs.data(),work.size());
++            gpu_busy.store(false);search_time=ns(start);check(failure);check(timing_fn(gpu,&timing));
++            start=Clock::now();
++            for(size_t i=0;i<work.size();++i){auto&p=*work[i];p.result=outputs[i];p.search_ns=search_time;p.ran=true;
++                gpu_visits+=p.result.visits;trace_cost_recomputed+=p.result.reserved;
++                result_payload_bytes+=sizeof(GpuResult)+p.result.length*sizeof(uint32_t);
++                if(p.result.status)p.failure="native GPU kernel status "+std::to_string(p.result.status);
++                else if(!std::isfinite(p.result.cost))p.failure="GPU found no path; CPU fallback required";
++                else p.path.assign(path_storage[i].begin(),path_storage[i].begin()+p.result.length);
++                failed|=!p.failure.empty();
++            }
++            result_time=ns(start);
++        }catch(const std::exception&e){gpu_busy.store(false);failed=true;for(auto*p:work)p->failure=e.what();}
++        if(diagnostic){
++            batch_csv<<batches<<','<<work.size()<<','<<dispatch_elapsed<<','<<queue_depth<<','<<ready<<','<<pa<<','<<pq<<','<<bp<<','<<sa<<','<<lw<<','<<lh<<','
++                <<drain_time<<','<<input_time<<','<<update_time<<','<<search_time<<','<<result_time<<','<<timing.enabled<<','
++                <<timing.update_host_ns<<','<<timing.execute_host_ns<<','<<timing.allocation_host_ns<<','<<timing.state_h2d_host_ns<<','<<timing.query_h2d_host_ns<<','<<timing.launch_host_ns<<','
++                <<timing.sync_host_ns<<','<<timing.d2h_host_ns<<','<<timing.event_collect_host_ns<<','<<timing.state_h2d_event_ns<<','<<timing.update_kernel_event_ns<<','
++                <<timing.query_h2d_event_ns<<','<<timing.search_kernel_event_ns<<','<<timing.d2h_event_ns<<','<<timing.h2d_bytes<<','<<timing.d2h_bytes<<','<<failed<<'\n';
++            batch_csv.flush();
++        }
++    }
++    void serve(){
++        while(true){
++            std::vector<Pending*> work;size_t queue_depth=0;
++            {
++                std::unique_lock<std::mutex> lock(service_mutex);
++                service_cv.wait(lock,[&]{return stopping||!queue.empty();});
++                if(stopping&&queue.empty())return;
++                auto deadline=Clock::now()+std::chrono::microseconds(wait_us);
++                service_cv.wait_until(lock,deadline,[&]{return stopping||queue.size()>=slots;});
++                queue_depth=queue.size();
++                while(!queue.empty()&&work.size()<slots){auto*p=queue.front();queue.pop_front();p->queue_ns=ns(p->resume);work.push_back(p);}
++            }
++            try{execute_batch(work,queue_depth);}catch(const std::exception&e){gpu_busy.store(false);for(auto*p:work)p->failure=e.what();}
++            {std::lock_guard<std::mutex> lock(service_mutex);for(auto*p:work)p->done=true;}
++            service_cv.notify_all();
++        }
++    }
++    void run(){
++        auto&p=pending;
++        ++ready_queries;event("ready",p.net);
++        if(batch){
++            p.resume=Clock::now();std::unique_lock<std::mutex> lock(service_mutex);
++            queue.push_back(&p);service_cv.notify_all();service_cv.wait(lock,[&]{return p.done;});
++        }else execute_batch({&p});
++        --ready_queries;event("returned",p.net);
++        require(p.failure.empty(),p.failure);
++    }
++    void capture(const std::vector<RRNodeId>&modified,const std::vector<HeapNode>&heap,uint32_t arity,const std::function<NativeSample()>&resume){
++        auto&p=pending;
++        if(capture_dir.empty()||captured>=capture_limit||p.sequence%capture_stride)return;
++        auto tick=Clock::now();Takeover t;auto&h=t.header;auto&q=h.query;const auto&rr=g_vpr_ctx.device().rr_graph;
++        const auto&info=g_vpr_ctx.routing().rr_node_route_inf;
++        q.sink=p.query.sink;q.net=p.net;q.pin=p.pin;q.sequence=p.sequence;q.heap_pops=p.cpu_pops;
++        q.criticality=p.query.criticality;q.astar=p.query.astar;q.astar_offset=p.query.astar_offset;q.bend_cost=p.query.bend_cost;q.present=p.query.present;
++        std::copy(p.query.box,p.query.box+6,q.box);std::copy(p.query.target,p.query.target+6,h.target);
++        h.post_target_prune_fac=p.params.post_target_prune_fac;h.post_target_prune_offset=p.params.post_target_prune_offset;
++        if(p.params.delay_budget){const auto&b=*p.params.delay_budget;h.delay_budget_present=1;h.delay_budget_algorithm=uint32_t(b.routing_budgets_algorithm);
++            h.short_path_criticality=b.short_path_criticality;h.min_delay=b.min_delay;h.target_delay=b.target_delay;h.max_delay=b.max_delay;}
++        h.heap_arity=arity;h.iteration=p.iteration;h.nodes=rr.num_nodes();h.max_rounds=p.query.max_rounds;h.bucket_relative=p.query.bucket_relative;
++        for(auto n:rr.nodes())t.state.push_back({info[n].occ(),info[n].acc_cost});
++        for(auto n:modified){const auto&v=info[n];t.labels.push_back({uint32_t(size_t(n)),uint32_t(size_t(v.prev_edge)),v.backward_path_cost,v.path_cost,v.R_upstream});}
++        for(size_t i=1;i<heap.size();++i)t.heap.push_back({heap[i].prio,uint32_t(size_t(heap[i].node))});
++        const auto&tree=g_vpr_ctx.routing().route_trees[ParentNetId(p.net)];
++        require(bool(tree),"takeover lacks native route tree");
++        for(const auto&n:tree->all_nodes())t.tree.push_back({uint32_t(size_t(n.inode)),n.parent()?uint32_t(size_t(n.parent()->inode)):invalid,uint32_t(n.re_expand),n.Tdel,n.R_upstream,n.C_downstream});
++        t.seeds=p.seeds;t.active=p.active;t.base=p.base;h.labels=t.labels.size();h.heap=t.heap.size();h.active=t.active.size();h.base=t.base.size();h.tree=t.tree.size();q.seeds=t.seeds.size();
++        if(journal)t.deltas=journal->snapshot_pending();
++        h.pending_deltas=t.deltas.size();
++        auto prefix=capture_dir+"/takeover_"+std::to_string(p.sequence);
++        t.save(prefix+".bin");p.capture_ns=ns(tick);p.captured=true;++captured;
++        tick=Clock::now();
++        std::ofstream out(prefix+".native.csv");out.exceptions(std::ios::badbit|std::ios::failbit);
++        out<<"repeat,sequence,net,iteration,cpu_remaining_ns,pops,cost,path_edges,identical\n"<<std::setprecision(9);
++        for(uint64_t rep=0;rep<native_repeats;++rep){
++            auto sample=resume();bool same=p.cpu_samples.empty()||(sample.cost==p.cpu_samples[0].cost&&sample.path==p.cpu_samples[0].path);
++            out<<rep<<','<<p.sequence<<','<<p.net<<','<<p.iteration<<','<<sample.search_ns<<','<<sample.pops<<','<<sample.cost<<','<<sample.path.size()<<','<<same<<'\n';out.flush();
++            require(same,"native restored takeover replay changed path/cost");p.cpu_samples.push_back(std::move(sample));
++        }
++        const auto&path=p.cpu_samples.front().path;std::ofstream f(prefix+".native_path.bin",std::ios::binary);f.exceptions(std::ios::badbit|std::ios::failbit);
++        f.write(reinterpret_cast<const char*>(path.data()),path.size()*sizeof(uint32_t));p.native_replay_ns=ns(tick);
++    }
++    bool commit(std::vector<RRNodeId>&modified,const t_conn_cost_params&params,const RouterLookahead&lookahead){
++        auto&p=pending;auto start=Clock::now();const auto&rr=g_vpr_ctx.device().rr_graph;auto&info=g_vpr_ctx.mutable_routing().rr_node_route_inf;
++        RRNodeId first=p.path.empty()?RRNodeId(p.query.sink):rr.edge_src_node(RREdgeId(p.path.front()));
++        float cost=INFINITY;for(auto s:p.seeds)if(s.node==size_t(first))cost=std::min(cost,s.backward);
++        require(std::isfinite(cost),"GPU result has no native prefix seed");
++        std::unordered_map<uint32_t,uint32_t>overlay;std::vector<float>costs;auto previous=first;
++        for(auto id:p.path){RREdgeId edge(id);auto to=rr.edge_sink_node(edge);
++            require(rr.edge_src_node(edge)==previous&&overlay.emplace(size_t(to),id).second,"GPU path disconnected or cyclic");
++            require(inside_bb(rr,to,t_bb{p.query.box[0],p.query.box[1],p.query.box[2],p.query.box[3],p.query.box[4],p.query.box[5]}),"GPU path outside native bounding box");
++            const auto&sw=rr.rr_switch()[RRSwitchId(rr.edge_switch(edge))];
++            float congestion=sw.configurable()?get_rr_cong_cost(to,params.pres_fac):0.f;
++            cost+= (1.-params.criticality)*congestion;cost+=params.criticality*get_rr_node_delay_cost(to,edge);
++            auto ft=rr.node_type(previous),tt=rr.node_type(to);
++            if((ft==e_rr_type::CHANX&&tt==e_rr_type::CHANY)||(ft==e_rr_type::CHANY&&tt==e_rr_type::CHANX))cost+=params.bend_cost;
++            costs.push_back(cost);previous=to;
++        }
++        require(size_t(previous)==p.query.sink,"GPU path missed native sink");
++        require(std::abs(cost-p.result.cost)<=std::max(1e-20f,std::abs(cost)*2e-6f),"GPU native backward cost mismatch");
++        // Check the complete predecessor chain with the proposed overlay BEFORE
++        // modifying native state; a failed candidate leaves CPU A* resumable.
++        std::unordered_set<uint32_t>seen;auto node=RRNodeId(p.query.sink);
++        while(true){require(seen.insert(size_t(node)).second,"GPU splice creates a native prefix cycle");
++            auto it=overlay.find(size_t(node));
++            if(it==overlay.end())require(p.original_prev.count(size_t(node)),"GPU splice prefix absent from original snapshot");
++            auto edge=it==overlay.end()?RREdgeId(p.original_prev.at(size_t(node))):RREdgeId(it->second);
++            if(edge==RREdgeId::INVALID())break;
++            node=rr.edge_src_node(edge);
++        }
++        if(pair){p.commit_ns=ns(start);return false;}
++        for(size_t i=0;i<p.path.size();++i){RREdgeId edge(p.path[i]);auto to=rr.edge_sink_node(edge);
++            h3d_label_claim(to, "gpu_commit");
++            if(std::isinf(info[to].path_cost))modified.push_back(to);
++            info[to].prev_edge=edge;info[to].backward_path_cost=costs[i];info[to].R_upstream=0.f;
++            info[to].path_cost=costs[i]+params.astar_fac*std::max(0.f,lookahead.get_expected_cost(to,RRNodeId(p.query.sink),params,0.f)-params.astar_offset);
++        }
++        p.commit_ns=ns(start);p.committed=true;++commits;return true;
++    }
++};
++Runtime&runtime(){static Runtime r;return r;}
++bool requested(){static bool value=std::getenv("VPR_HYBRID_LIBRARY")!=nullptr||
++    (std::getenv("VPR_HYBRID_MODE")&&(std::string(std::getenv("VPR_HYBRID_MODE"))=="guard"||std::string(std::getenv("VPR_HYBRID_MODE"))=="capture"));return value;}
++}
++
++uint32_t h3d_native_pop_budget(){return requested()&&!runtime().guard?uint32_t(runtime().budget):0;}
++void h3d_native_mark_dirty(RRNodeId node){if(auto*j=active_journal.load(std::memory_order_relaxed))j->mark(size_t(node));}
++bool h3d_native_static_base_costs(){return requested()&&runtime().static_base;}
++void h3d_native_iteration_barrier(){
++    if(!requested())return;
++    auto&r=runtime();
++    if(r.verify_state&&r.journal){r.journal->verify_at_barrier();++r.verified_state_barriers;}
++}
++void h3d_native_prepare(const RouterLookahead&lookahead,const t_router_opts&opts){
++    if(!requested())return;
++    auto&r=runtime();if(!r.batch)return;
++    require(opts.router_algorithm==e_router_algorithm::PARALLEL,"batch GPU requires native parallel netlist router");
++    auto tick=Clock::now();
++    if(r.guard){
++        const auto&d=g_vpr_ctx.device();
++        require(d.rr_node_to_non_config_node_set.empty(),"CPU spatial guard requires no nonconfigurable cross-region groups");
++        for(const auto&v:d.rr_indexed_data)require(v.T_quadratic==0.f,"CPU spatial guard requires fanout-invariant base costs");
++        update_rr_base_costs(1);r.static_base=true;r.prepare_ns=ns(tick);return;
++    }
++    update_rr_base_costs(1);
++    r.initialize(lookahead);r.static_base=true;
++    r.service=std::thread([&r]{r.serve();});r.prepare_ns=ns(tick);
++}
++H3DNativeNetLease::H3DNativeNetLease(ParentNetId net,const t_bb&box,int iteration){
++    current_iteration=iteration;
++    if(!requested()||!runtime().batch)return;
++    auto&r=runtime();require(!local_lease,"nested native net lease");
++    // VPR can retain old tree resources outside a later connection/net BB.
++    // Reserve their reference points as well before rip-up or label writes.
++    // This changes only synchronization, never VPR's search bounding box.
++    t_bb domain=box;bool expanded=false;
++    const auto&tree=g_vpr_ctx.routing().route_trees[net];
++    const auto&rr=g_vpr_ctx.device().rr_graph;
++    if(tree)for(const auto&n:tree->root().all_nodes()){
++        if(inside_bb(n.inode,domain))continue;
++        expanded=true;bool dec=rr.node_direction(n.inode)==Direction::DEC;
++        int x=dec?rr.node_xhigh(n.inode):rr.node_xlow(n.inode);
++        int y=dec?rr.node_yhigh(n.inode):rr.node_ylow(n.inode);
++        int z=dec?rr.node_layer_high(n.inode):rr.node_layer_low(n.inode);
++        domain.xmin=std::min(domain.xmin,x);domain.xmax=std::max(domain.xmax,x);
++        domain.ymin=std::min(domain.ymin,y);domain.ymax=std::max(domain.ymax,y);
++        domain.layer_min=std::min(domain.layer_min,z);domain.layer_max=std::max(domain.layer_max,z);
++    }
++    std::unique_lock<std::mutex> lock(r.lease_mutex);
++    if(expanded)++r.expanded_leases;
++    auto available=[&]{for(auto other:r.leases)if(other.net==size_t(net)||!disjoint(other.box,domain))return false;return true;};
++    if(!available()){
++        ++r.lease_waits;++r.lease_waiters;uint64_t conflicts=0,expanded_only=0;
++        for(auto other:r.leases)if(other.net==size_t(net)||!disjoint(other.box,domain)){++conflicts;if(disjoint(other.box,box))++expanded_only;}
++        r.event("lease_wait",size_t(net),conflicts,expanded_only);r.lease_cv.wait(lock,available);--r.lease_waiters;r.event("lease_acquired_after_wait",size_t(net));
++    }
++    local_lease=std::make_unique<Lease>(Lease{uint32_t(size_t(net)),domain});r.leases.push_back(*local_lease);++r.leases_held;held_=true;
++}
++H3DNativeNetLease::~H3DNativeNetLease(){
++    if(!held_)return;
++    auto&r=runtime();
++    {std::lock_guard<std::mutex> lock(r.lease_mutex);
++     auto it=std::find_if(r.leases.begin(),r.leases.end(),[](const Lease&v){return v.net==local_lease->net;});
++     r.leases.erase(it);--r.leases_held;local_lease.reset();}
++    r.lease_cv.notify_all();
++}
++bool h3d_native_offload(RRNodeId sink,const t_conn_cost_params&params,const t_bb&box,const t_bb&target,
++    const RouterLookahead&lookahead,std::vector<RRNodeId>&modified,const ConnectionParameters&connection,uint64_t pops,const std::vector<HeapNode>&heap,uint32_t arity,const std::function<NativeSample()>&native_resume){
++    auto&r=runtime();r.ensure_owner();if(r.disabled||r.attempts>=r.limit)return false;
++    auto candidate=r.eligible.fetch_add(1);
++    if(r.pair&&candidate%r.pair_stride)return false;
++    auto offload_start=Clock::now();
++    auto ticket=r.attempts.fetch_add(1);if(ticket>=r.limit){r.attempts.fetch_sub(1);return false;}
++    pending=Pending{};auto&p=pending;p.valid=true;p.sequence=ticket;p.net=size_t(connection.net_id_);p.pin=connection.target_pin_num_;p.cpu_pops=pops;
++    p.iteration=current_iteration;p.partition=current_partition;p.partition_depth=current_depth;
++    p.params=params;p.lookahead=&lookahead;
++    try{
++        auto start=Clock::now();if(!r.batch)r.initialize(lookahead);p.init_ns=ns(start);
++        if(r.batch){require(local_lease&&local_lease->net==p.net,"GPU query without native net ownership");p.lease_box=local_lease->box;}
++        auto prepare_start=Clock::now();
++        const auto&info=g_vpr_ctx.routing().rr_node_route_inf;
++        for(auto node:modified){const auto&s=info[node];require(s.R_upstream==0.f,"native prefix has nonzero upstream R");
++            if(r.batch)require(inside_bb(node,p.lease_box),"CPU seed outside native net ownership");
++            if(std::isfinite(s.backward_path_cost)){
++                p.seeds.push_back({uint32_t(size_t(node)),s.backward_path_cost,s.path_cost});
++                p.original_prev.emplace(size_t(node),uint32_t(size_t(s.prev_edge)));
++            }
++        }
++        std::unordered_set<uint32_t> active_seen;
++        for(size_t i=1;i<heap.size();++i){const auto&h=heap[i];
++            if(h.prio<=info[h.node].path_cost&&active_seen.insert(size_t(h.node)).second)p.active.push_back(size_t(h.node));
++        }
++        require(!p.active.empty(),"CPU heap has no live frontier for offload");
++        for(const auto&v:g_vpr_ctx.device().rr_indexed_data)p.base.push_back(v.base_cost);
++        auto&q=p.query;q.sink=size_t(sink);q.seed_count=p.seeds.size();q.base_count=p.base.size();
++        q.box[0]=box.xmin;q.box[1]=box.xmax;q.box[2]=box.ymin;q.box[3]=box.ymax;q.box[4]=box.layer_min;q.box[5]=box.layer_max;
++        q.target[0]=target.xmin;q.target[1]=target.xmax;q.target[2]=target.ymin;q.target[3]=target.ymax;q.target[4]=target.layer_min;q.target[5]=target.layer_max;
++        q.criticality=params.criticality;q.astar=params.astar_fac;q.astar_offset=params.astar_offset;q.bend_cost=params.bend_cost;q.present=params.pres_fac;
++        p.state_prepare_ns=ns(prepare_start);
++        r.capture(modified,heap,arity,native_resume);
++        if(r.capture_cpu){p.dispatch_ns=ns(offload_start);p.resume=Clock::now();return false;}
++        p.delayed=r.pair&&(ticket%2==1);
++        if(!p.delayed){r.run();bool committed=r.commit(modified,params,lookahead);p.dispatch_ns=ns(offload_start);p.resume=Clock::now();return committed;}
++    }catch(const std::exception&e){p.failure=e.what();++r.errors;++r.fallbacks;VTR_LOG_WARN("Native GPU fallback: %s\n",e.what());if(!r.gpu)r.disabled=true;}
++    p.dispatch_ns=ns(offload_start);p.resume=Clock::now();return false;
++}
++void h3d_native_query_finished(RRNodeId sink){
++    if(!requested())return;
++    auto&r=runtime();r.ensure_owner();++r.queries;auto&p=pending;commit_ready=false;
++    if(!p.valid){if(r.gpu_busy.load()){std::lock_guard<std::mutex> lock(r.report_mutex);++r.overlap_queries;}return;}
++    commit_ready=true;
++    auto remaining=ns(p.resume);
++    if(p.delayed){auto tick=Clock::now();try{r.run();std::vector<RRNodeId>unused;r.commit(unused,p.params,*p.lookahead);}catch(const std::exception&e){++r.errors;++r.fallbacks;VTR_LOG_WARN("Native paired GPU query failed: %s\n",e.what());}p.dispatch_ns+=ns(tick);}
++    float native=g_vpr_ctx.routing().rr_node_route_inf[sink].backward_path_cost;
++    if(p.captured&&!p.cpu_samples.empty()){
++        std::vector<uint32_t> path;const auto&info=g_vpr_ctx.routing().rr_node_route_inf;const auto&rr=g_vpr_ctx.device().rr_graph;auto n=sink;
++        if(std::isfinite(native))while(info[n].prev_edge!=RREdgeId::INVALID()){auto e=info[n].prev_edge;path.push_back(size_t(e));n=rr.edge_src_node(e);require(path.size()<=rr.num_nodes(),"actual native path cycle");}
++        std::reverse(path.begin(),path.end());
++        require(native==p.cpu_samples[0].cost&&path==p.cpu_samples[0].path,"capture/replay changed actual native continuation");
++    }
++    std::lock_guard<std::mutex> lock(r.report_mutex);
++    r.csv<<p.sequence<<','<<p.net<<','<<size_t(sink)<<','<<(r.capture_cpu?"capture":(r.pair?"pair":(r.batch?"batch":"select")))<<','<<(p.delayed?"cpu_gpu":"gpu_cpu")<<','<<p.cpu_pops<<','<<p.seeds.size()<<','
++        <<p.init_ns<<','<<p.update_ns<<','<<p.search_ns<<','<<p.commit_ns<<','<<p.dispatch_ns<<','<<remaining<<','<<p.state_bytes<<','<<native<<','<<p.result.cost<<','<<p.result.visits<<','<<p.result.rounds<<','<<p.committed<<','<<p.result.status<<','<<p.batch_id<<','<<p.batch_size<<','<<p.queue_ns<<','<<p.active.size()<<','<<p.result.reserved<<','<<p.state_prepare_ns<<','<<p.capture_ns<<','<<p.native_replay_ns<<','<<p.captured<<','<<p.iteration<<','<<p.pin<<','<<p.partition<<','<<p.partition_depth<<','<<p.ran<<','<<(!p.failure.empty())<<'\n';
++    r.csv.flush();p.valid=false;
++}
++
++void h3d_native_partition_queued(){if(requested()&&runtime().diagnostic)++runtime().partitions_queued;}
++H3DNativePartitionScope::H3DNativePartitionScope(const void*id,int depth,bool children,size_t nets,int iteration){
++    if(!requested()||!runtime().diagnostic)return;
++    enabled_=true;branch_=children;current_iteration=iteration;auto&r=runtime();current_partition=reinterpret_cast<uintptr_t>(id);current_depth=depth;current_remaining_nets=nets;
++    --r.partitions_queued;++r.partitions_active;if(branch_)++r.branch_parents;r.event("partition_begin");
++}
++H3DNativePartitionScope::~H3DNativePartitionScope(){
++    if(!enabled_)return;
++    auto&r=runtime();r.event("partition_end");--r.partitions_active;if(branch_)--r.branch_parents;
++    current_partition=0;current_depth=0;current_remaining_nets=0;
++}
++void H3DNativePartitionScope::net_started(){if(enabled_&&current_remaining_nets)--current_remaining_nets;}
++H3DNativeSearchScope::H3DNativeSearchScope(){if(requested()&&runtime().diagnostic){enabled_=true;++runtime().searches_active;}}
++H3DNativeSearchScope::~H3DNativeSearchScope(){if(enabled_)--runtime().searches_active;}
++
++H3DNativeCommitScope::H3DNativeCommitScope(RRNodeId sink){
++    if(requested()&&runtime().diagnostic&&commit_ready&&pending.query.sink==size_t(sink)){
++        enabled_=true;commit_ready=false;start_=Clock::now();
++    }
++}
++H3DNativeCommitScope::~H3DNativeCommitScope(){
++    if(!enabled_)return;
++    auto elapsed=ns(start_);auto&r=runtime();auto&p=pending;
++    std::lock_guard<std::mutex> lock(r.report_mutex);
++    r.commit_csv<<p.sequence<<','<<p.batch_id<<','<<p.net<<','<<p.query.sink<<','<<elapsed<<'\n';
++}
+--- /dev/null
++++ b/vpr/src/route/h3d_native_runtime.h
+@@ -0,0 +1,48 @@
++#pragma once
++#include "connection_router_interface.h"
++#include "router_lookahead.h"
++#include <vector>
++#include <functional>
++#include <chrono>
++#include "takeover_snapshot.hpp"
++
++uint32_t h3d_native_pop_budget();
++// Prepare the resident device before parallel workers can mutate routing state.
++void h3d_native_prepare(const RouterLookahead&, const t_router_opts&);
++void h3d_native_iteration_barrier();
++bool h3d_native_static_base_costs();
++class H3DNativeNetLease {
++  public:
++    H3DNativeNetLease(ParentNetId, const t_bb&, int iteration);
++    ~H3DNativeNetLease();
++    H3DNativeNetLease(const H3DNativeNetLease&) = delete;
++    H3DNativeNetLease& operator=(const H3DNativeNetLease&) = delete;
++  private:
++    bool held_ = false;
++};
++bool h3d_native_offload(RRNodeId sink,const t_conn_cost_params&,const t_bb& box,const t_bb& target,
++                       const RouterLookahead&,std::vector<RRNodeId>& modified,
++                       const ConnectionParameters&,uint64_t cpu_pops,const std::vector<HeapNode>& heap,uint32_t heap_arity,
++                       const std::function<h3d_native::NativeSample()>& native_resume);
++void h3d_native_query_finished(RRNodeId sink);
++
++// Observes the actual native partition scheduler; does not release work early.
++void h3d_native_partition_queued();
++class H3DNativePartitionScope {
++  public:
++    H3DNativePartitionScope(const void* id,int depth,bool has_children,size_t nets,int iteration);
++    ~H3DNativePartitionScope();
++    void net_started();
++  private:
++    bool enabled_=false,branch_=false;
++};
++class H3DNativeSearchScope {
++  public:H3DNativeSearchScope();~H3DNativeSearchScope();
++  private:bool enabled_=false;
++};
++
++// Tree insertion, timing-prefix update, occupancy update and label cleanup.
++class H3DNativeCommitScope {
++  public:explicit H3DNativeCommitScope(RRNodeId);~H3DNativeCommitScope();
++  private:bool enabled_=false;std::chrono::steady_clock::time_point start_;
++};

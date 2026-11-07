@@ -1,0 +1,124 @@
+{
+  "status": "passed",
+  "native_build_logs": [
+    "build.log",
+    "build_final.log",
+    "build_commit_timing.log",
+    "build_large_replay.log",
+    "build_capture_v2.log"
+  ],
+  "binary_sha256": "fb0379ea7f4bced9ec5312c395930e6ceeca12aeb5a5ac3804cccdcef0bd1b3e",
+  "python_tests": {
+    "native_hybrid_reporting": 8,
+    "scaling": 3,
+    "native_diagnostics": 8
+  },
+  "capture_corruption_rejections": 6,
+  "cpu_runs": [
+    {
+      "run": "cpu_capture_smoke",
+      "status": "completed",
+      "outcomes": [
+        {
+          "variant": "original_vpr",
+          "success": true,
+          "critical_path_ns": 5.61388,
+          "wirelength": 19666,
+          "route_body_sha256": "f6268d1e7624887310e1104c323b9868b0102b69cd24a9a26fa9bcac9d412b95"
+        },
+        {
+          "variant": "native_cpu",
+          "success": true,
+          "critical_path_ns": 5.61388,
+          "wirelength": 19666,
+          "route_body_sha256": "f6268d1e7624887310e1104c323b9868b0102b69cd24a9a26fa9bcac9d412b95"
+        },
+        {
+          "variant": "capture",
+          "success": true,
+          "critical_path_ns": 5.61388,
+          "wirelength": 19666,
+          "route_body_sha256": "f6268d1e7624887310e1104c323b9868b0102b69cd24a9a26fa9bcac9d412b95"
+        }
+      ]
+    },
+    {
+      "run": "cpu_capture_v1",
+      "status": "completed",
+      "outcomes": [
+        {
+          "variant": "native_cpu",
+          "success": true,
+          "critical_path_ns": 5.61388,
+          "wirelength": 19666,
+          "route_body_sha256": "f6268d1e7624887310e1104c323b9868b0102b69cd24a9a26fa9bcac9d412b95"
+        },
+        {
+          "variant": "capture",
+          "success": true,
+          "critical_path_ns": 5.61388,
+          "wirelength": 19666,
+          "route_body_sha256": "f6268d1e7624887310e1104c323b9868b0102b69cd24a9a26fa9bcac9d412b95"
+        }
+      ]
+    },
+    {
+      "run": "commit_timing_smoke",
+      "status": "completed",
+      "outcomes": [
+        {
+          "variant": "native_cpu",
+          "success": true,
+          "critical_path_ns": 5.61388,
+          "wirelength": 19666,
+          "route_body_sha256": "f6268d1e7624887310e1104c323b9868b0102b69cd24a9a26fa9bcac9d412b95"
+        },
+        {
+          "variant": "capture",
+          "success": true,
+          "critical_path_ns": 5.61388,
+          "wirelength": 19666,
+          "route_body_sha256": "f6268d1e7624887310e1104c323b9868b0102b69cd24a9a26fa9bcac9d412b95"
+        }
+      ]
+    },
+    {
+      "run": "cpu_capture_v2",
+      "status": "completed",
+      "outcomes": [
+        {
+          "variant": "native_cpu",
+          "success": true,
+          "critical_path_ns": 5.61388,
+          "wirelength": 19666,
+          "route_body_sha256": "f6268d1e7624887310e1104c323b9868b0102b69cd24a9a26fa9bcac9d412b95"
+        },
+        {
+          "variant": "capture",
+          "success": true,
+          "critical_path_ns": 5.61388,
+          "wirelength": 19666,
+          "route_body_sha256": "f6268d1e7624887310e1104c323b9868b0102b69cd24a9a26fa9bcac9d412b95"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Historical small v1 smokes passed on their selected queries but v1 root export was incomplete on broader traces; superseded by H3DTAK2.",
+    "v2 smoke captures four states; CPU repeats and actual continuation agree, FULL/STA passes, route matches native CPU and the historical original ex5p body.",
+    "Six corruptions rejected: missing root, wrong active frontier, invalid predecessor, negative occupancy, invalid heap node, altered seed. Reconstructed payload matches the native snapshot.",
+    "Diagnostic tests do not establish an end-to-end GPU acceleration claim."
+  ],
+  "current_format": "H3DTAK2",
+  "v1_reader_rejection": {
+    "command": [
+      "results/native_diagnostics_20261029/takeover_replay_v2",
+      "validate",
+      "results/native_diagnostics_20261029/cpu_capture_v1/ex5p_0_capture/takeovers",
+      "3"
+    ],
+    "returncode": 1,
+    "stderr": "bad takeover ABI\n",
+    "expected_rejection": true
+  }
+}

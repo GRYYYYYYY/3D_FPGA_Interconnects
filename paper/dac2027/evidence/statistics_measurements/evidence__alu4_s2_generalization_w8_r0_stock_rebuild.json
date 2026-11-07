@@ -1,0 +1,520 @@
+{
+  "key": "alu4_s2_generalization_w8_r0_stock_rebuild",
+  "case": "alu4_s2",
+  "phase": "generalization",
+  "variant": "stock",
+  "repeat": 0,
+  "workers": 8,
+  "cache_mode": "rebuild",
+  "status": "completed",
+  "success": true,
+  "directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/generalization/serial/alu4_s2_generalization_w8_r0_stock_rebuild",
+  "cpu_budget": {
+    "cores": 8,
+    "cpu_set": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "allowed_before": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "topology": [
+      {
+        "cpu": 32,
+        "socket": 1,
+        "core": 0,
+        "node": 1
+      },
+      {
+        "cpu": 33,
+        "socket": 1,
+        "core": 1,
+        "node": 1
+      },
+      {
+        "cpu": 34,
+        "socket": 1,
+        "core": 2,
+        "node": 1
+      },
+      {
+        "cpu": 35,
+        "socket": 1,
+        "core": 3,
+        "node": 1
+      },
+      {
+        "cpu": 36,
+        "socket": 1,
+        "core": 4,
+        "node": 1
+      },
+      {
+        "cpu": 37,
+        "socket": 1,
+        "core": 5,
+        "node": 1
+      },
+      {
+        "cpu": 38,
+        "socket": 1,
+        "core": 6,
+        "node": 1
+      },
+      {
+        "cpu": 39,
+        "socket": 1,
+        "core": 7,
+        "node": 1
+      }
+    ],
+    "preferred_gpu_numa_node": null,
+    "cgroup": {
+      "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 3886934216914\nuser_usec 2653449128127\nsystem_usec 1233485088787\nnr_periods 12524368\nnr_throttled 855\nthrottled_usec 2202690546\n",
+      "/proc/self/cgroup": "0::/\n",
+      "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.max": "322122547200\n"
+    },
+    "scope": "One logical CPU per distinct physical core. Every VPR and CUDA service thread inherits this same set; no exclusivity against other workloads claimed."
+  },
+  "inputs": {
+    "architecture": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/sources/architecture.xml",
+      "sha256": "1e9d59fb5d6d3a39b1f95e0eee7b0d528e67d3c763cd6e1c99e649c63da4ce54"
+    },
+    "circuit": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/sources/alu4.blif",
+      "sha256": "2e83026772493ee6ed422873be2197a01a81be9296f72b9fe0ada7d268599b50"
+    },
+    "packed_netlist": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/alu4_s2/packed.net",
+      "sha256": "a5cae197bcd964411268381cd44c7cb9f42f8d703764643d95288b8f6352f454"
+    },
+    "placement": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/alu4_s2/fixed.place",
+      "sha256": "d8b4ab62cda31dbbc33b50f63cdf7d8ecf5553eeec52ce1b29e10b7e0ce6f108"
+    },
+    "rr_graph": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/alu4_s2/rr_graph.xml",
+      "sha256": "531566acce2938abaeab641d512946a748d547fb39b5d8709382b1e9b8f30660"
+    }
+  },
+  "lookahead_cache_sha256": null,
+  "execution_settings": {
+    "parallel_lookahead": false,
+    "router": "parallel",
+    "lookahead": "map",
+    "gpu_enabled": false,
+    "diagnostics": false
+  },
+  "input_prewarm": {
+    "seconds": 0.009187448769807816,
+    "bytes": 20116512,
+    "scope": "Equal sequential pre-read before timing; no filesystem cold-cache claim."
+  },
+  "binary_sha256": "37cc22c8b1b5d9d378e25379e85afcb7e56b5f1f6f72e3e9186e5e107ed5ce62",
+  "command": [
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/sources/architecture.xml",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/sources/alu4.blif",
+    "--route_chan_width",
+    "100",
+    "--device_width",
+    "0",
+    "--target_utilization",
+    "0.6",
+    "--seed",
+    "2",
+    "--num_workers",
+    "8",
+    "--router_algorithm",
+    "parallel",
+    "--flat_routing",
+    "off",
+    "--check_route",
+    "full",
+    "--net_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/generalization/serial/alu4_s2_generalization_w8_r0_stock_rebuild/packed.net",
+    "--place_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/generalization/serial/alu4_s2_generalization_w8_r0_stock_rebuild/fixed.place",
+    "--route_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/generalization/serial/alu4_s2_generalization_w8_r0_stock_rebuild/routed.route",
+    "--read_rr_graph",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/alu4_s2/rr_graph.xml",
+    "--timing_report_npaths",
+    "10",
+    "--analysis",
+    "--route",
+    "--routing_failure_predictor",
+    "off",
+    "--max_router_iterations",
+    "200",
+    "--congested_routing_iteration_threshold",
+    "0.25",
+    "--router_lookahead",
+    "map",
+    "--generate_rr_node_overuse_report",
+    "on",
+    "--write_router_lookahead",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/generalization/serial/alu4_s2_generalization_w8_r0_stock_rebuild/wire_map.bin"
+  ],
+  "timeout_seconds": 900,
+  "returncode": 0,
+  "process_seconds": 1.2677906565368176,
+  "cpu_budget_audit": {
+    "permitted_cpu_set": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "samples": 1,
+    "max_threads": 1,
+    "affinity_violations": [],
+    "cgroup_before": {
+      "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 3886934306918\nuser_usec 2653449178847\nsystem_usec 1233485128071\nnr_periods 12524369\nnr_throttled 855\nthrottled_usec 2202690546\n",
+      "/proc/self/cgroup": "0::/\n",
+      "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.max": "322122547200\n"
+    },
+    "peak_observed_rss_kib": 4,
+    "peak_observed_hwm_kib": 4,
+    "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+    "cpu_user_seconds": 1.5588179999999987,
+    "cpu_system_seconds": 0.14095600000000008,
+    "cgroup_after": {
+      "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+      "/sys/fs/cgroup/cpu.stat": "usage_usec 3886939249044\nuser_usec 2653452341439\nsystem_usec 1233486907605\nnr_periods 12524381\nnr_throttled 855\nthrottled_usec 2202690546\n",
+      "/proc/self/cgroup": "0::/\n",
+      "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+      "/sys/fs/cgroup/memory.max": "322122547200\n"
+    },
+    "verified": true
+  },
+  "diagnostic_sample": false,
+  "candidate_environment": {},
+  "wire_map_sha256": "ebe09e42fc1a376acd1219b24d8ff35a32ff7a6f2fb2f086ee64eb648ae1ea8a",
+  "wire_map_matches_serial": true,
+  "critical_path_ns": 4.333,
+  "wirelength": 14947,
+  "routing_seconds": 0.48,
+  "iterations": 22,
+  "heap_pushes": 2310415,
+  "heap_pops": 475887,
+  "search_seconds": 0.261,
+  "search_timer_seconds": [
+    0.0,
+    0.0,
+    0.261
+  ],
+  "search_timer_max_seconds": 0.261,
+  "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+  "full_check": true,
+  "routing_success": true,
+  "native_process_seconds": 1.2677906565368176,
+  "route_sha256": "d33ca351955728a355eab3750ed56c3db849400aef0eaae71e62aadb0d789d7d",
+  "route_body_sha256": "48a5a8679ce75777715e0acdd4953519982145616d82c5591c8ba11b9f5042c2",
+  "independent_check": {
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/sources/architecture.xml",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/sources/alu4.blif",
+      "--route_chan_width",
+      "100",
+      "--device_width",
+      "0",
+      "--target_utilization",
+      "0.6",
+      "--seed",
+      "2",
+      "--num_workers",
+      "1",
+      "--router_algorithm",
+      "timing_driven",
+      "--flat_routing",
+      "off",
+      "--check_route",
+      "full",
+      "--net_file",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/generalization/serial/alu4_s2_generalization_w8_r0_stock_rebuild/packed.net",
+      "--place_file",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/generalization/serial/alu4_s2_generalization_w8_r0_stock_rebuild/fixed.place",
+      "--route_file",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/generalization/serial/alu4_s2_generalization_w8_r0_stock_rebuild/routed.route",
+      "--read_rr_graph",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/alu4_s2/rr_graph.xml",
+      "--timing_report_npaths",
+      "10",
+      "--analysis"
+    ],
+    "timeout_seconds": 900,
+    "status": "completed",
+    "returncode": 0,
+    "process_seconds": 0.7673378475010395,
+    "cpu_budget_audit": {
+      "permitted_cpu_set": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "samples": 1,
+      "max_threads": 1,
+      "affinity_violations": [],
+      "cgroup_before": {
+        "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+        "/sys/fs/cgroup/cpu.stat": "usage_usec 3886939291000\nuser_usec 2653452366934\nsystem_usec 1233486924066\nnr_periods 12524381\nnr_throttled 855\nthrottled_usec 2202690546\n",
+        "/proc/self/cgroup": "0::/\n",
+        "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+        "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+        "/sys/fs/cgroup/memory.max": "322122547200\n"
+      },
+      "peak_observed_rss_kib": 4,
+      "peak_observed_hwm_kib": 4,
+      "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+      "cpu_user_seconds": 0.6347510000000014,
+      "cpu_system_seconds": 0.08436599999999972,
+      "cgroup_after": {
+        "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+        "/sys/fs/cgroup/cpu.stat": "usage_usec 3886941983281\nuser_usec 2653454013397\nsystem_usec 1233487969883\nnr_periods 12524389\nnr_throttled 855\nthrottled_usec 2202690546\n",
+        "/proc/self/cgroup": "0::/\n",
+        "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+        "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+        "/sys/fs/cgroup/memory.max": "322122547200\n"
+      },
+      "verified": true
+    },
+    "diagnostic_sample": false,
+    "candidate_environment": {}
+  },
+  "independent_metrics": {
+    "critical_path_ns": 4.333,
+    "wirelength": 14947,
+    "routing_seconds": 0.07,
+    "iterations": null,
+    "heap_pushes": null,
+    "heap_pops": null,
+    "search_seconds": null,
+    "search_timer_seconds": [],
+    "search_timer_max_seconds": null,
+    "search_time_scope": "Sum of per-router elapsed search timers (worker-seconds, including waits); not parallel search wall time",
+    "full_check": true,
+    "routing_success": true
+  },
+  "workflow_seconds": 2.060669381171465,
+  "finished_utc": "2026-11-02T05:11:56.056066+00:00",
+  "log_evidence": {
+    "stage_seconds": {
+      "rr_graph_load": 0.11,
+      "lookahead_build": 0.11,
+      "routing": 0.48
+    },
+    "iterations": [
+      {
+        "iteration": 1,
+        "seconds": 0.0,
+        "present_factor": 0.0,
+        "rerouted_nets": 713,
+        "rerouted_connections": 2548,
+        "overused_nodes": 1647
+      },
+      {
+        "iteration": 2,
+        "seconds": 0.0,
+        "present_factor": 0.5,
+        "rerouted_nets": 630,
+        "rerouted_connections": 2364,
+        "overused_nodes": 1003
+      },
+      {
+        "iteration": 3,
+        "seconds": 0.0,
+        "present_factor": 0.6,
+        "rerouted_nets": 550,
+        "rerouted_connections": 1997,
+        "overused_nodes": 975
+      },
+      {
+        "iteration": 4,
+        "seconds": 0.0,
+        "present_factor": 0.8,
+        "rerouted_nets": 478,
+        "rerouted_connections": 1941,
+        "overused_nodes": 825
+      },
+      {
+        "iteration": 5,
+        "seconds": 0.0,
+        "present_factor": 1.1,
+        "rerouted_nets": 441,
+        "rerouted_connections": 1826,
+        "overused_nodes": 627
+      },
+      {
+        "iteration": 6,
+        "seconds": 0.0,
+        "present_factor": 1.4,
+        "rerouted_nets": 393,
+        "rerouted_connections": 1650,
+        "overused_nodes": 540
+      },
+      {
+        "iteration": 7,
+        "seconds": 0.0,
+        "present_factor": 1.9,
+        "rerouted_nets": 330,
+        "rerouted_connections": 1433,
+        "overused_nodes": 446
+      },
+      {
+        "iteration": 8,
+        "seconds": 0.0,
+        "present_factor": 2.4,
+        "rerouted_nets": 268,
+        "rerouted_connections": 1193,
+        "overused_nodes": 296
+      },
+      {
+        "iteration": 9,
+        "seconds": 0.0,
+        "present_factor": 3.1,
+        "rerouted_nets": 209,
+        "rerouted_connections": 956,
+        "overused_nodes": 224
+      },
+      {
+        "iteration": 10,
+        "seconds": 0.0,
+        "present_factor": 4.1,
+        "rerouted_nets": 181,
+        "rerouted_connections": 893,
+        "overused_nodes": 175
+      },
+      {
+        "iteration": 11,
+        "seconds": 0.0,
+        "present_factor": 5.3,
+        "rerouted_nets": 172,
+        "rerouted_connections": 885,
+        "overused_nodes": 137
+      },
+      {
+        "iteration": 12,
+        "seconds": 0.0,
+        "present_factor": 6.9,
+        "rerouted_nets": 149,
+        "rerouted_connections": 653,
+        "overused_nodes": 96
+      },
+      {
+        "iteration": 13,
+        "seconds": 0.0,
+        "present_factor": 9.0,
+        "rerouted_nets": 100,
+        "rerouted_connections": 499,
+        "overused_nodes": 55
+      },
+      {
+        "iteration": 14,
+        "seconds": 0.0,
+        "present_factor": 11.6,
+        "rerouted_nets": 77,
+        "rerouted_connections": 347,
+        "overused_nodes": 27
+      },
+      {
+        "iteration": 15,
+        "seconds": 0.0,
+        "present_factor": 15.1,
+        "rerouted_nets": 64,
+        "rerouted_connections": 303,
+        "overused_nodes": 16
+      },
+      {
+        "iteration": 16,
+        "seconds": 0.0,
+        "present_factor": 19.7,
+        "rerouted_nets": 72,
+        "rerouted_connections": 357,
+        "overused_nodes": 13
+      },
+      {
+        "iteration": 17,
+        "seconds": 0.0,
+        "present_factor": 25.6,
+        "rerouted_nets": 68,
+        "rerouted_connections": 350,
+        "overused_nodes": 7
+      },
+      {
+        "iteration": 18,
+        "seconds": 0.0,
+        "present_factor": 33.3,
+        "rerouted_nets": 42,
+        "rerouted_connections": 195,
+        "overused_nodes": 2
+      },
+      {
+        "iteration": 19,
+        "seconds": 0.0,
+        "present_factor": 43.3,
+        "rerouted_nets": 31,
+        "rerouted_connections": 103,
+        "overused_nodes": 1
+      },
+      {
+        "iteration": 20,
+        "seconds": 0.0,
+        "present_factor": 56.2,
+        "rerouted_nets": 64,
+        "rerouted_connections": 320,
+        "overused_nodes": 1
+      },
+      {
+        "iteration": 21,
+        "seconds": 0.0,
+        "present_factor": 73.1,
+        "rerouted_nets": 58,
+        "rerouted_connections": 283,
+        "overused_nodes": 1
+      },
+      {
+        "iteration": 22,
+        "seconds": 0.0,
+        "present_factor": 95.0,
+        "rerouted_nets": 30,
+        "rerouted_connections": 98,
+        "overused_nodes": 0
+      }
+    ],
+    "final_overused_nodes": 0,
+    "last_observed_overused_nodes": 0,
+    "overuse_report": null
+  }
+}

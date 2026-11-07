@@ -1,0 +1,344 @@
+{
+  "schema_version": 1,
+  "machine": "Linux-5.15.0-119-generic-x86_64-with-glibc2.35",
+  "input_hashes": {
+    "graph": "1729c91dfd10aca42a997a03b075495693b9eb23d8f85b71c48ce81a148cde6b",
+    "nets": "be5d80bc0d4c5ea9b25323e52455afea55c8f7ec2bc960472daf6ed314d9d816",
+    "binary": "2917d75605609587dd6c63ae76d760481d343c0562bb02c155d8bffc12b864fa"
+  },
+  "case_manifest": {
+    "schema_version": 1,
+    "execution_kind": "rrg_projection",
+    "source": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/FPGA_accelerate_FPGA/G_3d_routing/data/derived/ex5p_w100/rr_graph.sqlite",
+      "sha256": "ba5dd39099df61efc0d80ef2814498e870695c49c011e0acff9ccc46d8e2766c"
+    },
+    "endpoint_route": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/fixture_ex5p_a0/routed.route",
+      "sha256": "53e0f2bde8a54cf86f5331ba403ddcc456f2cb17557ae97033ec842db7cea256"
+    },
+    "nodes": 264994,
+    "edges": 2366014,
+    "nodes_by_type": {
+      "SINK": 27064,
+      "SOURCE": 29200,
+      "IPIN": 76312,
+      "OPIN": 42880,
+      "CHANX": 41440,
+      "CHANY": 41440,
+      "CHANZ": 6658
+    },
+    "vertical_entry_edges": 200128,
+    "nets": 679,
+    "available_nets": 679,
+    "excluded_global_empty_nets": 0,
+    "subset": false,
+    "cross_layer_nets": 460,
+    "cost_model": "unit",
+    "missing_switch_delay_ids": [
+      0
+    ],
+    "scope": "Directed RRG connectivity and per-net node capacity; excludes local OPIN reservation, pin mapping, RC STA and physical bus-mux groups.",
+    "hardware_vectors": "real edge attributes with synthetic congestion states",
+    "files": {
+      "graph.rrg": "1729c91dfd10aca42a997a03b075495693b9eb23d8f85b71c48ce81a148cde6b",
+      "nets.txt": "be5d80bc0d4c5ea9b25323e52455afea55c8f7ec2bc960472daf6ed314d9d816",
+      "candidates.txt": "69066e6d7199db9ce92c9f267c576d77c50be7b786ae55a0417748c18929f1b0"
+    },
+    "reference_vpr": {
+      "manifest_path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/fixture_ex5p_a0/manifest.json",
+      "manifest_sha256": "343543b891f474187c356552348af731b67c4ea5ea042326f5124fa75df3848b",
+      "metrics": {
+        "critical_path_ns": 5.61388,
+        "wirelength": 19666,
+        "router_seconds": 0.53,
+        "iterations": 18,
+        "native_full_check_passed": true,
+        "routing_success_reported": true
+      },
+      "comparison": "context only; objectives and checker scope differ"
+    }
+  },
+  "runs": [
+    {
+      "variant": "batch_serial",
+      "repeat": 0,
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/build/h3d_route",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/graph.rrg",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/nets.txt",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/ex5p_matrix/batch_serial_0.json",
+        "--threads",
+        "1",
+        "--batch",
+        "8"
+      ],
+      "returncode": 0,
+      "status": "completed",
+      "process_seconds": 52.231955610215664,
+      "audit": {
+        "audit_passed": true,
+        "legal_in_projection": true,
+        "overflow": 0,
+        "unrouted": 0,
+        "wire_units_proxy": 23148,
+        "chanz_uses_per_net": 622,
+        "vertical_entries_per_net": 622,
+        "net_count": 679,
+        "vpr_full_check": false,
+        "critical_path_ns": null,
+        "result_sha256": "009cd73ef37feaa095dc7db5f057b92855e8037fdaf475836f3e4bf15d34a100"
+      },
+      "success": true,
+      "routing_seconds": 50.62022068,
+      "expansions": 157438499,
+      "fallbacks": 0,
+      "iterations": 4,
+      "conflicts": 273,
+      "repairs": 209,
+      "route_fingerprint": "81d444f361e0e9361473b177439beea8a3336f14c09a1878d96388747328b12a"
+    },
+    {
+      "variant": "parallel",
+      "repeat": 0,
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/build/h3d_route",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/graph.rrg",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/nets.txt",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/ex5p_matrix/parallel_0.json",
+        "--threads",
+        "4",
+        "--batch",
+        "8"
+      ],
+      "returncode": 0,
+      "status": "completed",
+      "process_seconds": 44.54036903753877,
+      "audit": {
+        "audit_passed": true,
+        "legal_in_projection": true,
+        "overflow": 0,
+        "unrouted": 0,
+        "wire_units_proxy": 23148,
+        "chanz_uses_per_net": 622,
+        "vertical_entries_per_net": 622,
+        "net_count": 679,
+        "vpr_full_check": false,
+        "critical_path_ns": null,
+        "result_sha256": "4b1167d9336a34b6cfd00007c32f73ec47ae70ead301dd4608e3df24e3b33734"
+      },
+      "success": true,
+      "routing_seconds": 42.90411208,
+      "expansions": 157438499,
+      "fallbacks": 0,
+      "iterations": 4,
+      "conflicts": 273,
+      "repairs": 209,
+      "route_fingerprint": "81d444f361e0e9361473b177439beea8a3336f14c09a1878d96388747328b12a"
+    },
+    {
+      "variant": "portal",
+      "repeat": 0,
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/build/h3d_route",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/graph.rrg",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/nets.txt",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/ex5p_matrix/portal_0.json",
+        "--threads",
+        "4",
+        "--batch",
+        "8",
+        "--portal-k",
+        "32",
+        "--schedule",
+        "portal"
+      ],
+      "returncode": 0,
+      "status": "completed",
+      "process_seconds": 42.11307394504547,
+      "audit": {
+        "audit_passed": true,
+        "legal_in_projection": true,
+        "overflow": 0,
+        "unrouted": 0,
+        "wire_units_proxy": 27210,
+        "chanz_uses_per_net": 556,
+        "vertical_entries_per_net": 556,
+        "net_count": 679,
+        "vpr_full_check": false,
+        "critical_path_ns": null,
+        "result_sha256": "4a90f55f88296c372458ad4eb387b1c113df04d2fb637f0f70c1238eb8ecf7cc"
+      },
+      "success": true,
+      "routing_seconds": 40.47629397,
+      "expansions": 152273282,
+      "fallbacks": 0,
+      "iterations": 3,
+      "conflicts": 293,
+      "repairs": 226,
+      "route_fingerprint": "62788fb39d0bab184507837fd25e06c0be9e9bd873b49a2193f5b83dca2a8347"
+    },
+    {
+      "variant": "parallel",
+      "repeat": 1,
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/build/h3d_route",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/graph.rrg",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/nets.txt",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/ex5p_matrix/parallel_1.json",
+        "--threads",
+        "4",
+        "--batch",
+        "8"
+      ],
+      "returncode": 0,
+      "status": "completed",
+      "process_seconds": 45.52751500532031,
+      "audit": {
+        "audit_passed": true,
+        "legal_in_projection": true,
+        "overflow": 0,
+        "unrouted": 0,
+        "wire_units_proxy": 23148,
+        "chanz_uses_per_net": 622,
+        "vertical_entries_per_net": 622,
+        "net_count": 679,
+        "vpr_full_check": false,
+        "critical_path_ns": null,
+        "result_sha256": "392fc7a02495d5315f72a08a1cb4948ca9f0e7829cbfd11e624b3e05af313e62"
+      },
+      "success": true,
+      "routing_seconds": 43.89964291,
+      "expansions": 157438499,
+      "fallbacks": 0,
+      "iterations": 4,
+      "conflicts": 273,
+      "repairs": 209,
+      "route_fingerprint": "81d444f361e0e9361473b177439beea8a3336f14c09a1878d96388747328b12a"
+    },
+    {
+      "variant": "portal",
+      "repeat": 1,
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/build/h3d_route",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/graph.rrg",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/nets.txt",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/ex5p_matrix/portal_1.json",
+        "--threads",
+        "4",
+        "--batch",
+        "8",
+        "--portal-k",
+        "32",
+        "--schedule",
+        "portal"
+      ],
+      "returncode": 0,
+      "status": "completed",
+      "process_seconds": 43.14760051295161,
+      "audit": {
+        "audit_passed": true,
+        "legal_in_projection": true,
+        "overflow": 0,
+        "unrouted": 0,
+        "wire_units_proxy": 27210,
+        "chanz_uses_per_net": 556,
+        "vertical_entries_per_net": 556,
+        "net_count": 679,
+        "vpr_full_check": false,
+        "critical_path_ns": null,
+        "result_sha256": "924996c7d4db733cb161a6d28bbee29d173284ebcd2cf5f615988671f94545d5"
+      },
+      "success": true,
+      "routing_seconds": 41.51392071,
+      "expansions": 152273282,
+      "fallbacks": 0,
+      "iterations": 3,
+      "conflicts": 293,
+      "repairs": 226,
+      "route_fingerprint": "62788fb39d0bab184507837fd25e06c0be9e9bd873b49a2193f5b83dca2a8347"
+    },
+    {
+      "variant": "batch_serial",
+      "repeat": 1,
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/build/h3d_route",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/graph.rrg",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced/nets.txt",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/ex5p_matrix/batch_serial_1.json",
+        "--threads",
+        "1",
+        "--batch",
+        "8"
+      ],
+      "returncode": 0,
+      "status": "completed",
+      "process_seconds": 57.00868337601423,
+      "audit": {
+        "audit_passed": true,
+        "legal_in_projection": true,
+        "overflow": 0,
+        "unrouted": 0,
+        "wire_units_proxy": 23148,
+        "chanz_uses_per_net": 622,
+        "vertical_entries_per_net": 622,
+        "net_count": 679,
+        "vpr_full_check": false,
+        "critical_path_ns": null,
+        "result_sha256": "66ab8347d5e780835b8af666b3fa9cb63d8ce912fe3ff06225ca2450edf3dbff"
+      },
+      "success": true,
+      "routing_seconds": 55.38547344,
+      "expansions": 157438499,
+      "fallbacks": 0,
+      "iterations": 4,
+      "conflicts": 273,
+      "repairs": 209,
+      "route_fingerprint": "81d444f361e0e9361473b177439beea8a3336f14c09a1878d96388747328b12a"
+    }
+  ],
+  "summary": {
+    "batch_serial": {
+      "runs": 2,
+      "completed": 2,
+      "successes": 2,
+      "median_process_seconds": 54.62031949311495,
+      "median_routing_seconds": 53.00284706,
+      "all_audited": true
+    },
+    "parallel": {
+      "runs": 2,
+      "completed": 2,
+      "successes": 2,
+      "median_process_seconds": 45.03394202142954,
+      "median_routing_seconds": 43.401877494999994,
+      "all_audited": true
+    },
+    "portal": {
+      "runs": 2,
+      "completed": 2,
+      "successes": 2,
+      "median_process_seconds": 42.63033722899854,
+      "median_routing_seconds": 40.995107340000004,
+      "all_audited": true
+    }
+  },
+  "timing_scope": "process_seconds includes graph loading, context setup, routing, result output; audit time excluded",
+  "comparison_scope": "serial changes scheduling; parallel vs batch_serial isolates worker count",
+  "gpu_kernel_seconds": null,
+  "gpu_transfer_seconds": null,
+  "fpga_board_seconds": null,
+  "worker_comparison": [
+    {
+      "repeat": 0,
+      "identical_routes": true,
+      "process_speedup": 1.1726879848299956
+    },
+    {
+      "repeat": 1,
+      "identical_routes": true,
+      "process_speedup": 1.252180870608735
+    }
+  ],
+  "measurement_note": "Exploratory shared-host measurements. HLS/XSim validation ran concurrently during portions of this matrix; no isolated performance or statistical significance claim."
+}

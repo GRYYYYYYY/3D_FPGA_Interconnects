@@ -1,0 +1,986 @@
+{
+  "plan": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution_plan.json",
+  "status": "completed",
+  "planned": 3,
+  "attempted": 3,
+  "successful": 3,
+  "failed": [],
+  "lanes": {
+    "attribution": {
+      "status": "completed",
+      "error": null,
+      "cache_qualifications": [
+        {
+          "case": "gemm",
+          "status": "passed",
+          "builders": [
+            {
+              "builder": "original",
+              "command": [
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/gemm_layer.blif",
+                "--route_chan_width",
+                "100",
+                "--device_width",
+                "0",
+                "--target_utilization",
+                "0.6",
+                "--seed",
+                "1",
+                "--num_workers",
+                "4",
+                "--router_algorithm",
+                "parallel",
+                "--flat_routing",
+                "off",
+                "--check_route",
+                "full",
+                "--net_file",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_original/packed.net",
+                "--place_file",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_original/fixed.place",
+                "--route_file",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_original/routed.route",
+                "--read_rr_graph",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_gemm_layer_seed1/rr_graph.xml",
+                "--timing_report_npaths",
+                "10",
+                "--analysis",
+                "--route",
+                "--routing_failure_predictor",
+                "off",
+                "--max_router_iterations",
+                "1",
+                "--congested_routing_iteration_threshold",
+                "0.25",
+                "--router_lookahead",
+                "map",
+                "--generate_rr_node_overuse_report",
+                "on",
+                "--write_router_lookahead",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_original/lookahead.bin"
+              ],
+              "timeout_seconds": 900,
+              "status": "failed",
+              "returncode": 2,
+              "process_seconds": 319.8385837636888,
+              "cpu_budget_audit": {
+                "permitted_cpu_set": [
+                  44,
+                  45,
+                  46,
+                  47
+                ],
+                "samples": 64,
+                "max_threads": 4,
+                "affinity_violations": [],
+                "cgroup_before": {
+                  "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+                  "/sys/fs/cgroup/cpu.stat": "usage_usec 3140405217439\nuser_usec 2077128603673\nsystem_usec 1063276613766\nnr_periods 11365576\nnr_throttled 450\nthrottled_usec 976969423\n",
+                  "/proc/self/cgroup": "0::/\n",
+                  "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+                  "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+                  "/sys/fs/cgroup/memory.max": "322122547200\n"
+                },
+                "peak_observed_rss_kib": 16297492,
+                "peak_observed_hwm_kib": 16397148,
+                "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+                "cpu_user_seconds": 316.532605,
+                "cpu_system_seconds": 18.572270999999997,
+                "cgroup_after": {
+                  "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+                  "/sys/fs/cgroup/cpu.stat": "usage_usec 3145191507843\nuser_usec 2081178498468\nsystem_usec 1064013009374\nnr_periods 11368774\nnr_throttled 451\nthrottled_usec 978736433\n",
+                  "/proc/self/cgroup": "0::/\n",
+                  "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+                  "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+                  "/sys/fs/cgroup/memory.max": "322122547200\n"
+                },
+                "verified": true
+              },
+              "lookahead_scheduler": "serial",
+              "wire_map_sha256": "458b7439c7fb2bd2ffae133d2d5cb89e3d3428c8893f83afc3aa4a8cc7501e8e",
+              "wire_map_matches_serial": true,
+              "cache_written": true,
+              "note": "One-iteration cache setup; routing convergence is not required and this is not a performance sample.",
+              "cache": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_original/lookahead.bin",
+              "sha256": "458b7439c7fb2bd2ffae133d2d5cb89e3d3428c8893f83afc3aa4a8cc7501e8e",
+              "bytes": 26763384
+            },
+            {
+              "builder": "optimized",
+              "command": [
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/bin/vpr_tasks",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/gemm_layer.blif",
+                "--route_chan_width",
+                "100",
+                "--device_width",
+                "0",
+                "--target_utilization",
+                "0.6",
+                "--seed",
+                "1",
+                "--num_workers",
+                "4",
+                "--router_algorithm",
+                "parallel",
+                "--flat_routing",
+                "off",
+                "--check_route",
+                "full",
+                "--net_file",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_optimized/packed.net",
+                "--place_file",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_optimized/fixed.place",
+                "--route_file",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_optimized/routed.route",
+                "--read_rr_graph",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_gemm_layer_seed1/rr_graph.xml",
+                "--timing_report_npaths",
+                "10",
+                "--analysis",
+                "--route",
+                "--routing_failure_predictor",
+                "off",
+                "--max_router_iterations",
+                "1",
+                "--congested_routing_iteration_threshold",
+                "0.25",
+                "--router_lookahead",
+                "map",
+                "--generate_rr_node_overuse_report",
+                "on",
+                "--write_router_lookahead",
+                "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_optimized/lookahead.bin"
+              ],
+              "timeout_seconds": 900,
+              "status": "failed",
+              "returncode": 2,
+              "process_seconds": 213.2658913694322,
+              "cpu_budget_audit": {
+                "permitted_cpu_set": [
+                  44,
+                  45,
+                  46,
+                  47
+                ],
+                "samples": 43,
+                "max_threads": 4,
+                "affinity_violations": [],
+                "cgroup_before": {
+                  "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+                  "/sys/fs/cgroup/cpu.stat": "usage_usec 3145219479730\nuser_usec 2081200682490\nsystem_usec 1064018797239\nnr_periods 11368796\nnr_throttled 451\nthrottled_usec 978736433\n",
+                  "/proc/self/cgroup": "0::/\n",
+                  "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+                  "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+                  "/sys/fs/cgroup/memory.max": "322122547200\n"
+                },
+                "peak_observed_rss_kib": 16016948,
+                "peak_observed_hwm_kib": 16397256,
+                "note": "Affinities and memory sampled every five seconds; transient changes are not observable. Memory event counters cover the containing cgroup.",
+                "cpu_user_seconds": 326.020583,
+                "cpu_system_seconds": 18.818417000000004,
+                "cgroup_after": {
+                  "/sys/fs/cgroup/cpu.max": "5400000 100000\n",
+                  "/sys/fs/cgroup/cpu.stat": "usage_usec 3148731813231\nuser_usec 2084108823320\nsystem_usec 1064622989911\nnr_periods 11370928\nnr_throttled 460\nthrottled_usec 998762198\n",
+                  "/proc/self/cgroup": "0::/\n",
+                  "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+                  "/sys/fs/cgroup/memory.events.local": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 2\n",
+                  "/sys/fs/cgroup/memory.max": "322122547200\n"
+                },
+                "verified": true
+              },
+              "lookahead_scheduler": "global_ordered_pipeline",
+              "wire_map_sha256": "458b7439c7fb2bd2ffae133d2d5cb89e3d3428c8893f83afc3aa4a8cc7501e8e",
+              "wire_map_matches_serial": true,
+              "cache_written": true,
+              "note": "One-iteration cache setup; routing convergence is not required and this is not a performance sample.",
+              "cache": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_optimized/lookahead.bin",
+              "sha256": "458b7439c7fb2bd2ffae133d2d5cb89e3d3428c8893f83afc3aa4a8cc7501e8e",
+              "bytes": 26763384
+            }
+          ],
+          "shared_cache": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_paper_20261031/tasks_attribution/attribution/gemm_cache_original/lookahead.bin",
+          "sha256": "458b7439c7fb2bd2ffae133d2d5cb89e3d3428c8893f83afc3aa4a8cc7501e8e",
+          "inputs": {
+            "architecture": "b19507fc7eeb0f87208a8565fe09b6313aafd1d6006b057c1e284ae2c549ef60",
+            "circuit": "351572ff1d5af340fcf517cdb74c4320eef6cef74a7672d0ff56cc0909f5b37c",
+            "packed_netlist": "eb1413e75520ffe505f2cf8a28d45ba75f06f3ff6ef3009e4777a0ec5e1119c0",
+            "placement": "7fc3d3c5fa8f23f622a968d9865fc986c2e231913e7dc42df6cef56fb68e6b28",
+            "rr_graph": "621b23a188c8dbe4319d8a42d9ce340797d6402093404ab79b719f5ea5323950"
+          }
+        }
+      ],
+      "skipped": [],
+      "hostname": "fpgaacc--cc6e3aed63e1-kloi3p6yyx"
+    }
+  },
+  "summaries": [
+    {
+      "case": "gemm",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "variant": "optimized",
+      "attempted": 1,
+      "passed": 1,
+      "native_process_seconds": {
+        "n": 1,
+        "median": 233.2352412752807,
+        "min": 233.2352412752807,
+        "max": 233.2352412752807
+      },
+      "workflow_seconds": {
+        "n": 1,
+        "median": 415.05909575894475,
+        "min": 415.05909575894475,
+        "max": 415.05909575894475
+      },
+      "routing_seconds": {
+        "n": 1,
+        "median": 36.07,
+        "min": 36.07,
+        "max": 36.07
+      },
+      "critical_path_ns": {
+        "n": 1,
+        "median": 13.2667,
+        "min": 13.2667,
+        "max": 13.2667
+      },
+      "wirelength": {
+        "n": 1,
+        "median": 4095178,
+        "min": 4095178,
+        "max": 4095178
+      },
+      "iterations": {
+        "n": 1,
+        "median": 15,
+        "min": 15,
+        "max": 15
+      },
+      "lookahead_seconds": {
+        "n": 1,
+        "median": 40.58,
+        "min": 40.58,
+        "max": 40.58
+      },
+      "peak_rss_mib": {
+        "n": 1,
+        "median": 16012.8125,
+        "min": 16012.8125,
+        "max": 16012.8125
+      },
+      "vpr_reported_peak_rss_mib": {
+        "n": 1,
+        "median": 16012.8,
+        "min": 16012.8,
+        "max": 16012.8
+      },
+      "top_level_timer_seconds": {
+        "Loading Architecture Description": {
+          "n": 1,
+          "median": 0.02,
+          "min": 0.02,
+          "max": 0.02
+        },
+        "Building complex block graph": {
+          "n": 1,
+          "median": 0.01,
+          "min": 0.01,
+          "max": 0.01
+        },
+        "Load circuit": {
+          "n": 1,
+          "median": 11.07,
+          "min": 11.07,
+          "max": 11.07
+        },
+        "Clean circuit": {
+          "n": 1,
+          "median": 7.27,
+          "min": 7.27,
+          "max": 7.27
+        },
+        "Compress circuit": {
+          "n": 1,
+          "median": 0.94,
+          "min": 0.94,
+          "max": 0.94
+        },
+        "Verify circuit": {
+          "n": 1,
+          "median": 0.39,
+          "min": 0.39,
+          "max": 0.39
+        },
+        "Build Timing Graph": {
+          "n": 1,
+          "median": 2.74,
+          "min": 2.74,
+          "max": 2.74
+        },
+        "Load Timing Constraints": {
+          "n": 1,
+          "median": 0.01,
+          "min": 0.01,
+          "max": 0.01
+        },
+        "Load packing": {
+          "n": 1,
+          "median": 30.9,
+          "min": 30.9,
+          "max": 30.9
+        },
+        "Create Device": {
+          "n": 1,
+          "median": 53.54,
+          "min": 53.54,
+          "max": 53.54
+        },
+        "Load Placement": {
+          "n": 1,
+          "median": 0.33,
+          "min": 0.33,
+          "max": 0.33
+        },
+        "Computing router lookahead map": {
+          "n": 1,
+          "median": 40.58,
+          "min": 40.58,
+          "max": 40.58
+        },
+        "Routing": {
+          "n": 1,
+          "median": 36.07,
+          "min": 36.07,
+          "max": 36.07
+        },
+        "Checking to ensure non-configurable edges are legal": {
+          "n": 1,
+          "median": 0.86,
+          "min": 0.86,
+          "max": 0.86
+        },
+        "Synchronize the packed netlist to routing optimization": {
+          "n": 1,
+          "median": 6.68,
+          "min": 6.68,
+          "max": 6.68
+        }
+      },
+      "unscoped_wall_seconds": {
+        "n": 1,
+        "median": 41.82524127528072,
+        "min": 41.82524127528072,
+        "max": 41.82524127528072
+      },
+      "vpr_reported_flow_seconds": {
+        "n": 1,
+        "median": 232.66,
+        "min": 232.66,
+        "max": 232.66
+      },
+      "external_clock_gap_seconds": {
+        "n": 1,
+        "median": 0.5752412752807174,
+        "min": 0.5752412752807174,
+        "max": 0.5752412752807174
+      }
+    },
+    {
+      "case": "gemm",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "variant": "refactored",
+      "attempted": 1,
+      "passed": 1,
+      "native_process_seconds": {
+        "n": 1,
+        "median": 246.58326805382967,
+        "min": 246.58326805382967,
+        "max": 246.58326805382967
+      },
+      "workflow_seconds": {
+        "n": 1,
+        "median": 430.864315520972,
+        "min": 430.864315520972,
+        "max": 430.864315520972
+      },
+      "routing_seconds": {
+        "n": 1,
+        "median": 36.28,
+        "min": 36.28,
+        "max": 36.28
+      },
+      "critical_path_ns": {
+        "n": 1,
+        "median": 13.2667,
+        "min": 13.2667,
+        "max": 13.2667
+      },
+      "wirelength": {
+        "n": 1,
+        "median": 4095178,
+        "min": 4095178,
+        "max": 4095178
+      },
+      "iterations": {
+        "n": 1,
+        "median": 15,
+        "min": 15,
+        "max": 15
+      },
+      "lookahead_seconds": {
+        "n": 1,
+        "median": 40.2,
+        "min": 40.2,
+        "max": 40.2
+      },
+      "peak_rss_mib": {
+        "n": 1,
+        "median": 16012.953125,
+        "min": 16012.953125,
+        "max": 16012.953125
+      },
+      "vpr_reported_peak_rss_mib": {
+        "n": 1,
+        "median": 16013.0,
+        "min": 16013.0,
+        "max": 16013.0
+      },
+      "top_level_timer_seconds": {
+        "Loading Architecture Description": {
+          "n": 1,
+          "median": 0.02,
+          "min": 0.02,
+          "max": 0.02
+        },
+        "Building complex block graph": {
+          "n": 1,
+          "median": 0.01,
+          "min": 0.01,
+          "max": 0.01
+        },
+        "Load circuit": {
+          "n": 1,
+          "median": 11.28,
+          "min": 11.28,
+          "max": 11.28
+        },
+        "Clean circuit": {
+          "n": 1,
+          "median": 7.68,
+          "min": 7.68,
+          "max": 7.68
+        },
+        "Compress circuit": {
+          "n": 1,
+          "median": 0.88,
+          "min": 0.88,
+          "max": 0.88
+        },
+        "Verify circuit": {
+          "n": 1,
+          "median": 0.31,
+          "min": 0.31,
+          "max": 0.31
+        },
+        "Build Timing Graph": {
+          "n": 1,
+          "median": 2.65,
+          "min": 2.65,
+          "max": 2.65
+        },
+        "Load Timing Constraints": {
+          "n": 1,
+          "median": 0.01,
+          "min": 0.01,
+          "max": 0.01
+        },
+        "Load packing": {
+          "n": 1,
+          "median": 30.85,
+          "min": 30.85,
+          "max": 30.85
+        },
+        "Create Device": {
+          "n": 1,
+          "median": 54.74,
+          "min": 54.74,
+          "max": 54.74
+        },
+        "Load Placement": {
+          "n": 1,
+          "median": 0.34,
+          "min": 0.34,
+          "max": 0.34
+        },
+        "Computing router lookahead map": {
+          "n": 1,
+          "median": 40.2,
+          "min": 40.2,
+          "max": 40.2
+        },
+        "Routing": {
+          "n": 1,
+          "median": 36.28,
+          "min": 36.28,
+          "max": 36.28
+        },
+        "Checking to ensure non-configurable edges are legal": {
+          "n": 1,
+          "median": 0.87,
+          "min": 0.87,
+          "max": 0.87
+        },
+        "Synchronize the packed netlist to routing optimization": {
+          "n": 1,
+          "median": 6.75,
+          "min": 6.75,
+          "max": 6.75
+        }
+      },
+      "unscoped_wall_seconds": {
+        "n": 1,
+        "median": 53.71326805382964,
+        "min": 53.71326805382964,
+        "max": 53.71326805382964
+      },
+      "vpr_reported_flow_seconds": {
+        "n": 1,
+        "median": 246.05,
+        "min": 246.05,
+        "max": 246.05
+      },
+      "external_clock_gap_seconds": {
+        "n": 1,
+        "median": 0.5332680538296586,
+        "min": 0.5332680538296586,
+        "max": 0.5332680538296586
+      }
+    },
+    {
+      "case": "gemm",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "variant": "tasks",
+      "attempted": 1,
+      "passed": 1,
+      "native_process_seconds": {
+        "n": 1,
+        "median": 244.15921722352505,
+        "min": 244.15921722352505,
+        "max": 244.15921722352505
+      },
+      "workflow_seconds": {
+        "n": 1,
+        "median": 420.7321164794266,
+        "min": 420.7321164794266,
+        "max": 420.7321164794266
+      },
+      "routing_seconds": {
+        "n": 1,
+        "median": 36.56,
+        "min": 36.56,
+        "max": 36.56
+      },
+      "critical_path_ns": {
+        "n": 1,
+        "median": 13.2667,
+        "min": 13.2667,
+        "max": 13.2667
+      },
+      "wirelength": {
+        "n": 1,
+        "median": 4095178,
+        "min": 4095178,
+        "max": 4095178
+      },
+      "iterations": {
+        "n": 1,
+        "median": 15,
+        "min": 15,
+        "max": 15
+      },
+      "lookahead_seconds": {
+        "n": 1,
+        "median": 39.88,
+        "min": 39.88,
+        "max": 39.88
+      },
+      "peak_rss_mib": {
+        "n": 1,
+        "median": 16012.66796875,
+        "min": 16012.66796875,
+        "max": 16012.66796875
+      },
+      "vpr_reported_peak_rss_mib": {
+        "n": 1,
+        "median": 16012.7,
+        "min": 16012.7,
+        "max": 16012.7
+      },
+      "top_level_timer_seconds": {
+        "Loading Architecture Description": {
+          "n": 1,
+          "median": 0.02,
+          "min": 0.02,
+          "max": 0.02
+        },
+        "Building complex block graph": {
+          "n": 1,
+          "median": 0.01,
+          "min": 0.01,
+          "max": 0.01
+        },
+        "Load circuit": {
+          "n": 1,
+          "median": 11.0,
+          "min": 11.0,
+          "max": 11.0
+        },
+        "Clean circuit": {
+          "n": 1,
+          "median": 7.4,
+          "min": 7.4,
+          "max": 7.4
+        },
+        "Compress circuit": {
+          "n": 1,
+          "median": 0.86,
+          "min": 0.86,
+          "max": 0.86
+        },
+        "Verify circuit": {
+          "n": 1,
+          "median": 0.3,
+          "min": 0.3,
+          "max": 0.3
+        },
+        "Build Timing Graph": {
+          "n": 1,
+          "median": 2.6,
+          "min": 2.6,
+          "max": 2.6
+        },
+        "Load Timing Constraints": {
+          "n": 1,
+          "median": 0.01,
+          "min": 0.01,
+          "max": 0.01
+        },
+        "Load packing": {
+          "n": 1,
+          "median": 30.55,
+          "min": 30.55,
+          "max": 30.55
+        },
+        "Create Device": {
+          "n": 1,
+          "median": 54.04,
+          "min": 54.04,
+          "max": 54.04
+        },
+        "Load Placement": {
+          "n": 1,
+          "median": 0.26,
+          "min": 0.26,
+          "max": 0.26
+        },
+        "Computing router lookahead map": {
+          "n": 1,
+          "median": 39.88,
+          "min": 39.88,
+          "max": 39.88
+        },
+        "Routing": {
+          "n": 1,
+          "median": 36.56,
+          "min": 36.56,
+          "max": 36.56
+        },
+        "Checking to ensure non-configurable edges are legal": {
+          "n": 1,
+          "median": 0.82,
+          "min": 0.82,
+          "max": 0.82
+        },
+        "Synchronize the packed netlist to routing optimization": {
+          "n": 1,
+          "median": 6.66,
+          "min": 6.66,
+          "max": 6.66
+        }
+      },
+      "unscoped_wall_seconds": {
+        "n": 1,
+        "median": 53.18921722352505,
+        "min": 53.18921722352505,
+        "max": 53.18921722352505
+      },
+      "vpr_reported_flow_seconds": {
+        "n": 1,
+        "median": 243.52,
+        "min": 243.52,
+        "max": 243.52
+      },
+      "external_clock_gap_seconds": {
+        "n": 1,
+        "median": 0.6392172235250371,
+        "min": 0.6392172235250371,
+        "max": 0.6392172235250371
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "case": "gemm",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "lane": "attribution",
+      "repeat": 0,
+      "contrast": "optimized:tasks",
+      "reference": "gemm_same_binary_control_w4_r0_optimized_rebuild",
+      "candidate": "gemm_same_binary_control_w4_r0_tasks_rebuild",
+      "eligible": true,
+      "quality_pass": true,
+      "cpd_change_percent": 0.0,
+      "wire_change_percent": 0.0,
+      "process_speedup": 0.95525880172591,
+      "workflow_speedup": 0.986516311690317,
+      "routing_speedup": 0.986597374179431,
+      "route_body_equal": true,
+      "lookahead_speedup": 1.0175526579739216
+    },
+    {
+      "case": "gemm",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "lane": "attribution",
+      "repeat": 0,
+      "contrast": "optimized:refactored",
+      "reference": "gemm_same_binary_control_w4_r0_optimized_rebuild",
+      "candidate": "gemm_same_binary_control_w4_r0_refactored_rebuild",
+      "eligible": true,
+      "quality_pass": true,
+      "cpd_change_percent": 0.0,
+      "wire_change_percent": 0.0,
+      "process_speedup": 0.9458680757867356,
+      "workflow_speedup": 0.9633174083054044,
+      "routing_speedup": 0.9942116868798235,
+      "route_body_equal": true,
+      "lookahead_speedup": 1.0094527363184078
+    },
+    {
+      "case": "gemm",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "lane": "attribution",
+      "repeat": 0,
+      "contrast": "refactored:tasks",
+      "reference": "gemm_same_binary_control_w4_r0_refactored_rebuild",
+      "candidate": "gemm_same_binary_control_w4_r0_tasks_rebuild",
+      "eligible": true,
+      "quality_pass": true,
+      "cpd_change_percent": 0.0,
+      "wire_change_percent": 0.0,
+      "process_speedup": 1.0099281561346318,
+      "workflow_speedup": 1.0240823047366312,
+      "routing_speedup": 0.9923413566739606,
+      "route_body_equal": true,
+      "lookahead_speedup": 1.00802407221665
+    }
+  ],
+  "headline": [
+    {
+      "case": "gemm",
+      "cache_mode": "rebuild",
+      "pairs": 0,
+      "accepted": 0,
+      "process_speedup": null,
+      "workflow_speedup": null,
+      "route_bodies_equal": null
+    },
+    {
+      "case": "gemm",
+      "cache_mode": "reuse",
+      "pairs": 0,
+      "accepted": 0,
+      "process_speedup": null,
+      "workflow_speedup": null,
+      "route_bodies_equal": null
+    }
+  ],
+  "aggregates": {
+    "rebuild": {
+      "cases": [],
+      "geomean_paired_process_speedup": null,
+      "worst_case_median_speedup": null
+    },
+    "reuse": {
+      "cases": [],
+      "geomean_paired_process_speedup": null,
+      "worst_case_median_speedup": null
+    }
+  },
+  "original_comparison": [
+    {
+      "case": "gemm",
+      "pairs": 0,
+      "valid": 0,
+      "quality_pass": 0,
+      "process_speedup": null,
+      "cpd_change_percent": null,
+      "wire_change_percent": null
+    }
+  ],
+  "contrast_summaries": [
+    {
+      "case": "gemm",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "contrast": "optimized:refactored",
+      "pairs": 1,
+      "valid": 1,
+      "accepted": 1,
+      "process_speedup": {
+        "n": 1,
+        "median": 0.9458680757867356,
+        "min": 0.9458680757867356,
+        "max": 0.9458680757867356
+      },
+      "workflow_speedup": {
+        "n": 1,
+        "median": 0.9633174083054044,
+        "min": 0.9633174083054044,
+        "max": 0.9633174083054044
+      },
+      "routing_speedup": {
+        "n": 1,
+        "median": 0.9942116868798235,
+        "min": 0.9942116868798235,
+        "max": 0.9942116868798235
+      },
+      "lookahead_speedup": {
+        "n": 1,
+        "median": 1.0094527363184078,
+        "min": 1.0094527363184078,
+        "max": 1.0094527363184078
+      },
+      "cpd_change_percent": {
+        "n": 1,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 1,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "route_bodies_equal": true
+    },
+    {
+      "case": "gemm",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "contrast": "optimized:tasks",
+      "pairs": 1,
+      "valid": 1,
+      "accepted": 1,
+      "process_speedup": {
+        "n": 1,
+        "median": 0.95525880172591,
+        "min": 0.95525880172591,
+        "max": 0.95525880172591
+      },
+      "workflow_speedup": {
+        "n": 1,
+        "median": 0.986516311690317,
+        "min": 0.986516311690317,
+        "max": 0.986516311690317
+      },
+      "routing_speedup": {
+        "n": 1,
+        "median": 0.986597374179431,
+        "min": 0.986597374179431,
+        "max": 0.986597374179431
+      },
+      "lookahead_speedup": {
+        "n": 1,
+        "median": 1.0175526579739216,
+        "min": 1.0175526579739216,
+        "max": 1.0175526579739216
+      },
+      "cpd_change_percent": {
+        "n": 1,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 1,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "route_bodies_equal": true
+    },
+    {
+      "case": "gemm",
+      "workers": 4,
+      "cache_mode": "rebuild",
+      "contrast": "refactored:tasks",
+      "pairs": 1,
+      "valid": 1,
+      "accepted": 1,
+      "process_speedup": {
+        "n": 1,
+        "median": 1.0099281561346318,
+        "min": 1.0099281561346318,
+        "max": 1.0099281561346318
+      },
+      "workflow_speedup": {
+        "n": 1,
+        "median": 1.0240823047366312,
+        "min": 1.0240823047366312,
+        "max": 1.0240823047366312
+      },
+      "routing_speedup": {
+        "n": 1,
+        "median": 0.9923413566739606,
+        "min": 0.9923413566739606,
+        "max": 0.9923413566739606
+      },
+      "lookahead_speedup": {
+        "n": 1,
+        "median": 1.00802407221665,
+        "min": 1.00802407221665,
+        "max": 1.00802407221665
+      },
+      "cpd_change_percent": {
+        "n": 1,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "wire_change_percent": {
+        "n": 1,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "route_bodies_equal": true
+    }
+  ],
+  "caveats": [
+    "VPR process after identical input pre-read; pack/place excluded and fixed; RRG XML load, lookahead, routing, native FULL and STA included. Independent original readback reported separately in workflow. Pipeline-study variants all serialize a wire map inside process timing; every map is checked against original serial bytes, at every core count.",
+    "Uses four physical cores44..47 after completed CLSTM quality confirmation; other studies may overlap on disjoint CPU sets, shared host/memory.",
+    "One exploratory attribution triple, not a performance confirmation. refactored and tasks have exactly the same SHA/binary bytes (hardlink aliases), differing only in pipeline activation. optimized retains the earlier sample-parallel binary.",
+    "Build-cache improvements are not routing-kernel acceleration; cache reuse is provided equally.",
+    "Failed routes are excluded from speedup ratios and remain part of the robustness result."
+  ]
+}

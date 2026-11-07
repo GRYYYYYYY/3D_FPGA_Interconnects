@@ -1,0 +1,212 @@
+{
+  "status": "verified_complete",
+  "checked_at": "2026-10-27T22:30:41.094195+00:00",
+  "objective": "按照上述安排继续完善",
+  "current_core_matches_measured_frozen_source": true,
+  "core_sha256": {
+    "src/router.cpp": "0d32c6acb4a0b638a3b46e6f5e40c7071afdc9b8eccb446233bc9238674942fc",
+    "src/main.cpp": "407da35e7e92b109f9619ee0ae79f7e0046be51b70dc4c010f97f5ce0ebf564c",
+    "src/target_router.cpp": "80ff066c310be799c7f4892a6923c34842b59b35487aba53966211965c7af63b",
+    "src/search_target_cuda.cu": "4a0f8cfe6b88a8c2cc1eac1d05383043e8326e25d5c4fb2c9e2ae2d0e859c572",
+    "src/search_cuda_dense.cu": "8a85a3748a18afbebdab40852842d7e26ea78061db14c37d64ae5aec76cf2176",
+    "src/search_cuda.cu": "057f2eedcbf80c56f90e67a95142c2856b947e9542480460f824c34674b4e1b5",
+    "include/router.hpp": "7b5a87ed978b7507985a5ba9e45eda1ae8afb7814628529df31e44e9d7bdf8ba",
+    "include/target_router.hpp": "fb2fa72432db46264a65d2b6a64d8a85e7ce95f9b5d82cebda9aebd284e535c2",
+    "hardware/run_hls.tcl": "32ae12cbe9ef3f6caaf24db66518e46e89b8072db48ba6b1e36a0534a705f405",
+    "hardware/cost.hpp": "a4ba1797c7f2bf36f7e4d4310158547a862ac941d3ec70680e56d25aa59931b8",
+    "hardware/candidate_cost.cpp": "e887fbe93729cc21f19e0113fac1c8c2bf22967b6f16456cf1d63d9a47bc3b14",
+    "CMakeLists.txt": "77c2f07297488be50e6a2d05bc7918e8cd84a798552a201892d8d527133b615f",
+    "tests/test_target.cpp": "bf580ce996e5e7cbf9e8acda829e872e7bcf36d8976cc9b848d3ade2ddbb0cba",
+    "tests/test_router.cpp": "1d906bf86fb717e12e5dd2c9b64a8c1f6ac26d4d1bd1683bd9be124a197c2ba3",
+    "tests/test_cost.cpp": "ca0cb676c05e39c6d6c32c2f2e0aee5f756516dbb2487a0b034222648b87015f",
+    "tests/test_cuda.cpp": "cf3ede8a741017ed2ee2105e749cc3e6c9ae92b99888c66a8e784592fbf72608"
+  },
+  "runtime_python_ast_matches_frozen_source": true,
+  "requirements": [
+    {
+      "requirement": "Diagnose original reduction/GEMM 600s timeouts by initialization, windows, relaxation and traceback",
+      "status": "proven",
+      "evidence": "results/h3d-target-profile-20261027-201708/profile_verification.json",
+      "limit": "Completed queries only; one interrupted query per case excluded; diagnostic instrumentation is not a speed benchmark"
+    },
+    {
+      "requirement": "GPU-resident spatial windows with small descriptors",
+      "status": "proven",
+      "evidence": "results/h3d-target-window-20261027-202250/artifact_verification.json",
+      "limit": "Three exact-path same-worker pairs; original VPR still faster on these cases"
+    },
+    {
+      "requirement": "Stronger target-related lower bound preserving weighted tree prefix semantics",
+      "status": "proven",
+      "evidence": [
+        "docs/target_router.md",
+        "results/h3d-target-finalscale-20261027-212826/oracle.log"
+      ],
+      "limit": "Zero-RC buffered model, quantified tests; constrained-window optimum is not whole-graph optimum"
+    },
+    {
+      "requirement": "Resident occupancy/history, sparse updates, and persistent routing process/context across own STA",
+      "status": "proven",
+      "evidence": "results/h3d-target-confirm5-20261027-211729/artifact_verification.json",
+      "limit": "Each epoch still invokes native VPR FULL/STA externally; new static-index upload in later epochs is zero"
+    },
+    {
+      "requirement": "Selective critical refinement with conflict repair and legal-checkpoint rollback",
+      "status": "proven",
+      "evidence": [
+        "tests/test_target.cpp",
+        "results/h3d-target-finalscale-20261027-212826/oracle.log",
+        "results/h3d-target-confirm5-20261027-211729/artifact_verification.json"
+      ],
+      "limit": "Budgeted negotiation can fail; rollback and failed time retained"
+    },
+    {
+      "requirement": "Fix soft congestion penalties becoming unreachable on saturation",
+      "status": "proven",
+      "evidence": [
+        "include/target_router.hpp",
+        "tests/test_target.cpp",
+        "results/h3d-target-finalscale-20261027-212826/oracle.log"
+      ],
+      "limit": "Finite cap still loses ordering at cap; not arbitrary precision"
+    },
+    {
+      "requirement": "Obtain legal reduction/GEMM routes within existing 600s routing stage budget",
+      "status": "proven",
+      "evidence": "results/h3d-target-subtree-20261027-204559/artifact_verification.json",
+      "limit": "Full workflows include further audits/STA and exceed 600s; quality budgets evaluated separately"
+    },
+    {
+      "requirement": "Confirm a full-workflow speedup over original VPR with <=5% CPD/wire degradation",
+      "status": "proven",
+      "evidence": "results/h3d-target-confirm5-20261027-211729/confirmation.json",
+      "limit": "Three fixed-input elliptic pairs only; does not establish scale crossover"
+    },
+    {
+      "requirement": "Measure latest frozen implementation on all six cases against original VPR, retain failures and all phase times",
+      "status": "proven",
+      "evidence": "results/h3d-target-finalscale-20261027-212826/artifact_verification.json",
+      "limit": "6/6 legal,5/6 within5%; one speedup point on congested elliptic; no scale crossover"
+    },
+    {
+      "requirement": "Distinguish whole-scheme speedup from CPU/CUDA backend contribution",
+      "status": "proven",
+      "evidence": "results/target_cpuref_run.json",
+      "limit": "One same-worker pilot; CPU/CUDA paths and quality differ; both meet original VPR 5% budget; not a pure hardware-only or stable ratio"
+    },
+    {
+      "requirement": "Complete report, scaling plots, latest pointer and final full-scope audit",
+      "status": "proven",
+      "evidence": [
+        "docs/target_results.md",
+        "results/target_latest.json",
+        "results/target_improvement_audit.json"
+      ],
+      "limit": "Limits and quality failures explicitly reported; earlier frozen runs retained"
+    },
+    {
+      "requirement": "Confirm faster final subtree configuration with three predeclared rotated 5%-quality pairs",
+      "status": "proven",
+      "evidence": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-confirm-subtree-20261027-221003/confirmation.json",
+      "limit": "Three fixed-layout/seed pairs, all <=5% budget and >1 full-flow speedup; not a scale crossover"
+    }
+  ],
+  "scope_note": "Positive fixed-case confirmation does not replace six-case scale measurement or imply a general GPU hardware advantage.",
+  "report_links_resolve": true,
+  "cpp_tests_and_build_config_match_measured_snapshot": true,
+  "postprocess_tests": "results/target_postprocess_tests.log",
+  "completion_scope": "Planned implementation improvements, timeout diagnosis, full six-case measurement, best-configuration repeated 5% confirmation, CPU/CUDA attribution control and complete reporting; general scale crossover is not claimed",
+  "experiment_bindings": {
+    "profile": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-profile-20261027-201708/profile.json",
+      "sha256": "5d1751bd3245ca8f8bfdbc09a927b7f6029d89e3739bd5731b347fdb591cdecb",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-profile-20261027-201708/profile_verification.json",
+      "verification_sha256": "fc05ff678c4b68121b635c55cc0d7ba6803530b44fa406eadb930f50c48daea1",
+      "platform_status": "job_succeeded"
+    },
+    "window": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-window-20261027-202250/summary.json",
+      "sha256": "66ec9e5f0156a65a3632b760cf093520d5eba6793dfb3115c04f9ed0e0c576bc",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-window-20261027-202250/artifact_verification.json",
+      "verification_sha256": "0cfe967189cc78b41a586038e8c58c7bcdaab6390d281894e01bdadcebd126a2",
+      "platform_status": "job_succeeded"
+    },
+    "span": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-span-20261027-202747/summary.json",
+      "sha256": "77858df6927444439c9bba1ba75ce5783added7ff5ad0ce546dce9150c23a93b",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-span-20261027-202747/artifact_verification.json",
+      "verification_sha256": "a8d653eaa0ce6accbd30499bfedfc8caeef78e38fb989e2db025f3d66abca7a2",
+      "platform_status": "job_succeeded"
+    },
+    "refine": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-refine-20261027-203942/summary.json",
+      "sha256": "39916500671d82c3549332bb182a0439749c8b57fc9242877eb08f972997ff14",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-refine-20261027-203942/artifact_verification.json",
+      "verification_sha256": "af877995d8a7866899b9a381e092fc71e9f2c2f8f5fdc4d1af87bc5d177ca1eb",
+      "platform_status": "job_succeeded"
+    },
+    "refine3": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-refine3-20261027-205052/summary.json",
+      "sha256": "d8df88e0bc8264d6eca0097f5628c04bd84a070011b3d2c93a0cde472c4b1ed1",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-refine3-20261027-205052/artifact_verification.json",
+      "verification_sha256": "7de1c121d8c9a6ee12860465dc176df32b2bc60805489edbd8b73ee141cb0f00",
+      "platform_status": "job_succeeded"
+    },
+    "subtree": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-subtree-20261027-204559/summary.json",
+      "sha256": "bb287633740d0c9cf4b53a47d301af3f6a72e10fd0282cbf770d59cd708a0821",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-subtree-20261027-204559/artifact_verification.json",
+      "verification_sha256": "894afaece0c2770dea5fc12bbc6d19d59512adb5fff8858588339fb6efef7635",
+      "platform_status": "job_succeeded"
+    },
+    "negotiate": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-negotiate-20261027-210745/summary.json",
+      "sha256": "44d7c0b34e1cc20a35e8baca19abb093f0cfa3b7eae965a2605da100f6403d88",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-negotiate-20261027-210745/artifact_verification.json",
+      "verification_sha256": "b91db67b1af08e8954342de2f5e9a524c69ab82be039948062a915d0f98dc4d8",
+      "platform_status": "job_succeeded"
+    },
+    "confirm5": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-confirm5-20261027-211729/summary.json",
+      "sha256": "78e8ca350e4c4b77566393f6363f9268a5daa49bc390c047d56235e8da9da5c7",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-confirm5-20261027-211729/artifact_verification.json",
+      "verification_sha256": "d2c9b374e8ec99bcab0dfd693bbc99db66e6b4c63a9aa949477a4954e4ed5fbb",
+      "platform_status": "job_succeeded"
+    },
+    "finalscale": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-finalscale-20261027-212826/summary.json",
+      "sha256": "f96294bb3f2af88f8d4c8d97daaf63c218de74dce7d9fdab8f17c003653a3e2d",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-finalscale-20261027-212826/artifact_verification.json",
+      "verification_sha256": "3cdd402446f07bd7e502aa61e3f78676218a9e63616afb29494f0f50270d4f9c",
+      "platform_status": "job_succeeded"
+    },
+    "cpuref": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-cpuref-20261027-215317/summary.json",
+      "sha256": "3196e0c93180ce630d3dd1e67eb54b7d3ce3507981c079aebef9d733ff5d1e49",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-cpuref-20261027-215317/artifact_verification.json",
+      "verification_sha256": "ffff91247769737a15e8410b2bc9ba3a9d916f9e09fb29cdd77e85d02eaf0b1a",
+      "platform_status": "job_succeeded"
+    },
+    "confirm_subtree": {
+      "summary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-confirm-subtree-20261027-221003/summary.json",
+      "sha256": "ceab9c86a1450fcc7bac1f117018d99079052c550819136b7394a01a33d57b57",
+      "verification": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-target-confirm-subtree-20261027-221003/artifact_verification.json",
+      "verification_sha256": "de37c609afa431caa01222e757703fbd25dc2c96c54935053dfb1eb3a9d59941",
+      "platform_status": "job_succeeded"
+    }
+  },
+  "report_sha256": "88bc1c645f75c572c8df1f4f24c50685dc814878620f230958d73b1d6494201c",
+  "design_sha256": "945dc2f5569af675e5ad02e788b33d0ffbba2ed3a8b4456a9273449089df9be8",
+  "latest_sha256": "a7346b6cf00bf775eb5d9559ea62f31ffeb2ea0936370f630db55cadfe6fd627",
+  "limitations": [
+    "Zero-RC buffered timing model with 1 ps quantization; not general RC routing",
+    "Own-STA-derived priorities do not replicate every native VPR criticality rule",
+    "Finite soft penalties remain capped and can lose ordering; unreachable is separately represented",
+    "Five scale/control cases remain slower than original VPR; CLSTM CPD degradation is 9.41%",
+    "Repeated acceleration is for one fixed congestion case, architecture, placement and seed; no scale crossover established",
+    "CPU/CUDA control is one full-bootstrap pilot with different paths; CUDA CPD is 14.18% longer than that CPU candidate",
+    "Reported full workflow begins from fixed endpoints and includes all routing/audit/export/FULL/STA/feedback; offline projection, side files, build and experiment hashing excluded",
+    "GPU search parallelizes one connection at a time; terminal/net submission remains serial",
+    "HLS retains the previous objective; no new FPGA board performance claim"
+  ]
+}

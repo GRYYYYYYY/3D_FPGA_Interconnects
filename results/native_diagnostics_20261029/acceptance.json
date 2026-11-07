@@ -1,0 +1,193 @@
+{
+  "status": "diagnostic_phase_complete",
+  "updated_utc": "2026-10-29T21:34:45.364213+00:00",
+  "research_acceleration_achieved": false,
+  "default_policy": "CPU",
+  "implementation": {
+    "gpu_abi": 3,
+    "capture_abi": "H3DTAK2",
+    "native_binary_sha256": "fb0379ea7f4bced9ec5312c395930e6ceeca12aeb5a5ac3804cccdcef0bd1b3e",
+    "gpu_library_sha256": "73481fd1d202b4eb23c8846a903c6af312af6099d562f4c9ea6b04ccf8e92264",
+    "algorithm_and_ownership_policy_changed": false
+  },
+  "main_uncaptured_pair": {
+    "elliptic": {
+      "queries": 9040,
+      "gpu_full_handoff_wins": 526,
+      "cpu_remaining_seconds": 122.850753227,
+      "handoff_excluding_initialization_capture_replay_seconds": 193.563347574,
+      "kernel_slower_than_cpu": 8244,
+      "kernel_seconds": 183.043643893,
+      "all_queries_execute_seconds": 184.466608426,
+      "all_queries_kernel_seconds": 183.177599238,
+      "kernel_fraction_of_execute": 0.9930122356615176,
+      "all_queries_copy_event_seconds": 0.867230925,
+      "note": "Uncaptured pair samples avoid extra CPU-repeat warming. Host/device intervals overlap; copy events are not hardware bus measurements."
+    },
+    "gemm": {
+      "queries": 108,
+      "gpu_full_handoff_wins": 1,
+      "cpu_remaining_seconds": 0.230371947,
+      "handoff_excluding_initialization_capture_replay_seconds": 0.68776331,
+      "kernel_slower_than_cpu": 99,
+      "kernel_seconds": 0.408513988,
+      "all_queries_execute_seconds": 0.55178565,
+      "all_queries_kernel_seconds": 0.530702995,
+      "kernel_fraction_of_execute": 0.9617919476521362,
+      "all_queries_copy_event_seconds": 0.021191509,
+      "note": "Uncaptured pair samples avoid extra CPU-repeat warming. Host/device intervals overlap; copy events are not hardware bus measurements."
+    }
+  },
+  "batch_diagnosis": {
+    "elliptic": {
+      "batch_size_histogram": {
+        "1": 7872
+      },
+      "batch_observation_counts": {
+        "single_parent_partition_with_children_unreleased": 7693,
+        "other_native_searches_not_yet_ready": 3,
+        "ownership_waiters_present": 160,
+        "insufficient_ready_queries_at_deadline_unresolved": 16
+      },
+      "ownership_wait_events": 47424,
+      "own_expansion_only_conflict_events": 0,
+      "queue_depth_at_dispatch": {
+        "count": 7872,
+        "sum": 7872,
+        "median": 1.0,
+        "p95": 1,
+        "max": 1
+      },
+      "success": false,
+      "errors": 0,
+      "fallbacks": 0,
+      "quality": {
+        "overused_nodes": 5,
+        "iteration_limit": 200
+      }
+    },
+    "gemm": {
+      "batch_size_histogram": {
+        "1": 118
+      },
+      "batch_observation_counts": {
+        "single_parent_partition_with_children_unreleased": 64,
+        "other_native_searches_not_yet_ready": 38,
+        "insufficient_ready_queries_at_deadline_unresolved": 13,
+        "native_partition_tasks_queued": 6
+      },
+      "ownership_wait_events": 8,
+      "own_expansion_only_conflict_events": 0,
+      "queue_depth_at_dispatch": {
+        "count": 118,
+        "sum": 118,
+        "median": 1.0,
+        "p95": 1,
+        "max": 1
+      },
+      "success": true,
+      "errors": 0,
+      "fallbacks": 0,
+      "quality": {
+        "cpd_degradation_fraction": 0,
+        "wirelength_degradation_fraction": 0.00037900910257193665
+      }
+    }
+  },
+  "same_worker_capture_replay": {
+    "elliptic": {
+      "snapshots": 567,
+      "native_repetitions": 1701,
+      "gpu_warmup_paths": 567,
+      "gpu_measured_paths": 1701,
+      "native_median_sum_seconds": 7.349558188,
+      "gpu_median_sum_seconds": 11.4958834,
+      "kernel_median_sum_seconds": 10.917615816,
+      "gpu_median_wins": 36,
+      "net_count": 168,
+      "iteration_range": [
+        6,
+        189
+      ],
+      "scope": "Same-worker native CPU continuations vs offline GPU medians; distinct host implementation and cache effects, not production scheduling evidence."
+    },
+    "gemm": {
+      "snapshots": 9,
+      "native_repetitions": 27,
+      "gpu_warmup_paths": 9,
+      "gpu_measured_paths": 27,
+      "native_median_sum_seconds": 0.012790285,
+      "gpu_median_sum_seconds": 0.051728941,
+      "kernel_median_sum_seconds": 0.027926941,
+      "gpu_median_wins": 0,
+      "net_count": 9,
+      "iteration_range": [
+        2,
+        8
+      ],
+      "scope": "Same-worker native CPU continuations vs offline GPU medians; distinct host implementation and cache effects, not production scheduling evidence."
+    }
+  },
+  "capture_route_checks": [
+    {
+      "case": "elliptic",
+      "full_sta": true,
+      "original_route_identical": true,
+      "route_body_sha256": "96fc8503f4c177d848b5b152135c4d810103bc7fdaed12c8784b67b07ea65729",
+      "cpd_ns": 11.2895,
+      "wirelength": 99232,
+      "errors": 0,
+      "fallbacks": 0
+    },
+    {
+      "case": "gemm",
+      "full_sta": true,
+      "original_route_identical": true,
+      "route_body_sha256": "4864b10f4d86b412037b038060cf1371a26e72de23af727a3890a86d21a93995",
+      "cpd_ns": 13.2667,
+      "wirelength": 4092250,
+      "errors": 0,
+      "fallbacks": 0
+    }
+  ],
+  "gpu_validated_capture_paths": 2304,
+  "legacy_oracle_validated_paths": 345,
+  "local_smoke_gpu_paths": 16,
+  "all_new_jobs_terminal": true,
+  "archive": {
+    "archive": "/inspire/hdd/project/project-public/guoruiyuan-253208540291/h3d-native-diagnostics-20261029-211643-output/artifacts.tar.gz",
+    "archive_sha256": "b220ec7fafad5ba209a13fdb4c783f2f2f6e869fbefae0ad403a345a7bd5cde3",
+    "archive_bytes": 828604800,
+    "capture_bindings_verified": [
+      {
+        "manifest": "results/native_diagnostics_20261029/artifacts_211643/run/routing/elliptic_0_pair/takeovers/bindings.json",
+        "format": "H3DTAK2",
+        "files": 1703,
+        "status": "verified"
+      },
+      {
+        "manifest": "results/native_diagnostics_20261029/artifacts_211643/run/routing/gemm_0_pair/takeovers/bindings.json",
+        "format": "H3DTAK2",
+        "files": 29,
+        "status": "verified"
+      }
+    ],
+    "bundle_bindings_verified": 146
+  },
+  "decisions": [
+    "Keep CPU default; 2048-pop threshold remains experimental, with no profitable held-out dispatch rule.",
+    "Search kernel already exceeds CPU continuation in aggregate on both cases; prioritize kernel profiling and algorithmic work before pinned/async-copy changes.",
+    "Investigate finer independent task publication under the same ownership protection; singleton batches do not prove intrinsic dependence.",
+    "Do not blindly extend batch windows or resweep 8/16/64 cooperative blocks.",
+    "GEMM original lookahead build is 143.55 s; any separate reuse/cache optimization needs an equally cached original baseline.",
+    "A future candidate needs same-worker four-CPU guard controls, legal zero-overuse routes, CPD/wire <= original +5%, independent FULL/STA, and repeated end-to-end confirmation."
+  ],
+  "limitations": [
+    "One diagnostic measurement per main variant; instrumentation changes timing.",
+    "Original and pair retain CPU routes; GEMM batch includes four-CPU work and cannot establish GPU attribution.",
+    "Captured samples warm CPU state; offline GPU host preparation differs from online VPR.",
+    "Concurrent scheduler counters are observations, not atomic causal proofs.",
+    "Storage is container overlay; no demonstrated SSD/NVMe comparison.",
+    "Old v1 full-capture replays failed; their successful online timing is retained separately."
+  ]
+}

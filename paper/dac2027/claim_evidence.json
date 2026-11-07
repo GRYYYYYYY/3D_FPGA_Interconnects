@@ -1,0 +1,136 @@
+{
+  "scope": "Internal author review; do not include this file in anonymous submission source.",
+  "headline": {
+    "claim": "GEMM 8-core stock-to-pipeline paired process speedup: mean 1.63831099, sample SD 0.00521384; common-cache mean 1.00009651, sample SD 0.00898300",
+    "source": "../../results/native_cpu_evidence_20261102/analysis.json",
+    "location": "comparisons: stage=triad, control=stock, candidate=pipeline; configuration_summaries",
+    "primary_records": "evidence/measurements/",
+    "check": "18 original records, identical input records/CPU sets/wire-map hashes and quality gates; paired ratios recomputed",
+    "reported_statistics": "statistics/statistics.json: evidence/gemm/8/stock-to-pipeline; arithmetic mean +/- sample SD, n=3"
+  },
+  "confirmation": {
+    "claim": "36 legal runs; three circuits each three paired runtime repeats in rebuild and reuse",
+    "source": "../../results/native_pipeline_confirm_20261102/analysis.json",
+    "audit": "../../results/native_pipeline_confirm_20261102/evidence_verification.json",
+    "location": "comparisons; stage_medians; quality",
+    "restriction": "Separate cohort; fixed-placement runtime repeats on a shared host, not additional placement seeds"
+  },
+  "storage_ablation": {
+    "claim": "171 legal native samples; 120 formal samples; bounded does not stably outperform pipeline",
+    "source": "../../results/native_cpu_slices_20261101/analysis.json",
+    "audit": "../../results/native_cpu_slices_20261101/evidence_verification.json",
+    "location": "stages; paired_comparisons; promotion_rule_passed",
+    "implementation": "../../docs/native_cpu_slices.md"
+  },
+  "interpolation_semantics": {
+    "claim": "2400 fixtures, 4800 bitwise comparisons, zero mismatches, mutation detection counts 1905 and 1902",
+    "source": "../../results/native_lookahead_analysis_20261101/semantics.json",
+    "reasoning": "../../docs/native_lookahead_novelty_analysis.md",
+    "restriction": "Synthetic extracted-function tests; not 4800 native routing runs"
+  },
+  "scalar_semantics": {
+    "claim": "100000 fixtures and 1551076 field comparisons",
+    "source": "../../results/native_cpu_slices_20261101/report.md",
+    "implementation": "../../scripts/check_native_compact_costs.py",
+    "restriction": "Cell equivalence does not imply reduction of process RSS"
+  },
+  "scaling_and_fresh_layouts": {
+    "source": "../../results/native_cpu_evidence_20261102/analysis.json",
+    "location": "configuration_summaries; heldout_aggregates; fresh_placements; retained_setup_failures",
+    "restriction": "One runtime per fresh layout and configuration; three circuits with two layouts each; core-count groups at different times"
+  },
+  "large_failures": {
+    "width100_source": "../../results/native_cpu_large_20261102/review_20261103.md",
+    "width100_analysis": "../../results/native_cpu_large_20261102/analysis.json",
+    "width120_source": "../../results/native_cpu_width120_20261104/review.json",
+    "serial_lstm_source": "../../results/native_lstm_width120_serial_20261104/report.md",
+    "restriction": "No process speedup from failed routing or mixed graph-load/graph-generation boundaries"
+  },
+  "post_optimization_cost_bound": {
+    "source": "../../results/native_cpu_direction_20261102/analysis.json",
+    "location": "configurations: workers=8, variant=pipeline; lookahead_fraction; speedup_if_lookahead_halved; ideal_speedup_if_lookahead_free",
+    "restriction": "Ratios computed per sample before arithmetic mean and sample SD; idealized unchanged other costs"
+  },
+  "source_code": {
+    "pipeline": "../../vendor/vtr_cpu_tasks/vpr/src/route/router_lookahead/router_lookahead_map_utils.cpp",
+    "interpolation_and_timer": "../../vendor/vtr_cpu_tasks/vpr/src/route/router_lookahead/router_lookahead_map.cpp",
+    "bounded": "../../vendor/vtr_cpu_slices/vpr/src/route/router_lookahead/",
+    "restriction": "Frozen study manifests bind the actually tested source/binary snapshots; current working source is explanatory"
+  },
+  "excluded": [
+    "Historical independent cuda_target speedups as evidence for native CPU/GPU or CPU-only claims",
+    "All failed, timed-out, diagnostic-only and cache-qualification runs as legal process-speedup baselines",
+    "Unmeasured FPGA board or fabricated-3D-device performance"
+  ],
+  "repeat_statistics": {
+    "claim": "222 original performance runs, 98 absolute-time configurations, 246 paired observations and 106 comparison groups; manuscript uses means and n-1 sample SD; historical medians retained only in audit data",
+    "primary_source_bindings": "statistics/source_manifest.json",
+    "raw_runs": "statistics/raw_runs.csv",
+    "raw_pairs": "statistics/paired_runs.csv",
+    "statistics": "statistics/statistics.json",
+    "checks": [
+      "statistics/verification.json",
+      "statistics/calculation_check.json"
+    ],
+    "scope": "Historical 222 records retained as a subset of expanded 603; no solver invoked during manuscript revision.",
+    "reporting_change": "Explicit reporting revision; same frozen observations, historical selection records and failed-run denominators retained"
+  },
+  "revision": "expanded_20261105",
+  "expanded_statistics": {
+    "claim": "603 formal observations: 414 legal full-flow, 189 construction-only; 952 absolute metric summaries; 90 actual cache-sequence processes analyzed separately.",
+    "statistics": "statistics_expanded/statistics.json",
+    "raw": "statistics_expanded/formal_runs.csv",
+    "audit": "statistics_expanded/verification.json",
+    "sources": "evidence/expanded_20261105/source_manifest.json",
+    "reporting": "Arithmetic mean and n-1 sample SD; paired ratios first; equal-circuit geometric aggregation; no pooling across hosts."
+  },
+  "three_graph_construction": {
+    "claim": "36 completed formal construction runs across all three width-120 3D graphs; capped routing tails excluded from legal full flows.",
+    "primary_source": "../../results/native_lookahead_component_20261104/summary.json",
+    "snapshot": "evidence/expanded_20261105/results__native_lookahead_component_20261104__summary.json",
+    "statistics": "statistics_expanded/statistics.json"
+  },
+  "qualified_3d_full_flow": {
+    "claim": "72 formal full runs on prequalified LSTM-s2 and BNN-s1/s2; equal-circuit rebuild process aggregate 1.680709988; retain 3/6 qualification failures.",
+    "primary_source": "../../results/native_cpu_width120_endtoend_20261104/summary.json",
+    "snapshot": "evidence/expanded_20261105/results__native_cpu_width120_endtoend_20261104__summary.json",
+    "statistics": "statistics_expanded/statistics.json"
+  },
+  "k6_cache_and_alternatives": {
+    "claim": "96 formal full runs, 90 cache-sequence requests and six compressed alternatives; cohorts and quality boundaries separate.",
+    "primary_source": "../../results/native_paper_closure_20261105/summary.json",
+    "snapshot": "evidence/expanded_20261105/results__native_paper_closure_20261105__summary.json",
+    "statistics": "statistics_expanded/statistics.json"
+  },
+  "construction_scaling": {
+    "claim": "90 formal construction runs, 1/2/4/8/16 cores; BNN/DLA Pipeline scales about 12x from one to sixteen cores.",
+    "primary_source": "../../results/native_paper_closure_20261105/scaling/summary.json",
+    "snapshot": "evidence/expanded_20261105/results__native_paper_closure_20261105__scaling__summary.json",
+    "statistics": "statistics_expanded/statistics.json"
+  },
+  "global_loop_control": {
+    "claim": "54 construction runs and 12 clma full runs; Flat/Pipeline comparison attributes dominant gain to global task exposure, not unique pipeline primitive.",
+    "primary_source": "../../results/native_flat_baseline_20261105/summary.json",
+    "snapshot": "evidence/expanded_20261105/results__native_flat_baseline_20261105__summary.json",
+    "statistics": "statistics_expanded/statistics.json"
+  },
+  "large_2d": {
+    "claim": "12 full and nine construction runs; separately prepared original KOIOS 2D BNN; no CHANZ, full paired process speedup 1.356 +/- 0.028.",
+    "primary_source": "../../results/native_large2d_followup_20261105/summary.json",
+    "snapshot": "evidence/expanded_20261105/results__native_large2d_followup_20261105__summary.json",
+    "statistics": "statistics_expanded/statistics.json"
+  },
+  "dataset_inventory": {
+    "claim": "14 circuit/fabric rows, 22 layout instances; 2D/3D classified using architecture, graph, layers, and actual routed transitions. Width-120 counts corrected using actual XML rather than stale geometry fields.",
+    "table": "statistics_expanded/datasets.json",
+    "scan": "evidence/expanded_20261105/input_graph_scan.json",
+    "recount": "scan_input_graphs.py"
+  },
+  "method_decomposition": {
+    "source": "evidence/expanded_20261105/docs__native_lookahead_method_argument.md",
+    "claim": "Private floods, original-order strict-delay paired-cost reduction, source/target layer slices, global scheduling, slice dependencies and bounded representation. Existing oneTBB primitives and inherited vertical cost model are attributed."
+  },
+  "future_hardware": {
+    "claim": "Defined task/result/ordered-commit interface and replication resource costs; no measured GPU, FPGA board or fabricated device performance."
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "status": "failed",
+  "machine": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39",
+  "stages": [
+    {
+      "name": "device",
+      "command": [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,memory.total",
+        "--format=csv"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.11523236497305334
+    },
+    {
+      "name": "toolkit",
+      "command": [
+        "nvcc",
+        "--version"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.004494027933105826
+    },
+    {
+      "name": "configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects",
+        "-B",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/build",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DH3D_CUDA=ON",
+        "-DCMAKE_CUDA_ARCHITECTURES=90"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 2.7703509740531445
+    },
+    {
+      "name": "build",
+      "command": [
+        "cmake",
+        "--build",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/build",
+        "-j",
+        "4"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 2.9194921139860526
+    },
+    {
+      "name": "oracle",
+      "command": [
+        "ctest",
+        "--test-dir",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/build",
+        "--output-on-failure",
+        "--timeout",
+        "180"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.8667872770456597
+    },
+    {
+      "name": "adapters",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.11438558204099536
+    },
+    {
+      "name": "cuda_demo",
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/build/h3d_route",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/examples/two_tier.rrg",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/examples/two_tier.nets",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/demo.json",
+        "--backend",
+        "cuda",
+        "--threads",
+        "1",
+        "--batch",
+        "2"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.5653712960192934
+    },
+    {
+      "name": "demo_audit",
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/audit.py",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/examples/two_tier.rrg",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/examples/two_tier.nets",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/demo.json",
+        "--output",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/demo_audit.json"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 0.06420790392439812
+    },
+    {
+      "name": "benchmark",
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/benchmark.py",
+        "--case",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced",
+        "--output",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/matrix",
+        "--binary",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/build/h3d_route",
+        "--variants",
+        "batch_serial",
+        "parallel",
+        "cuda",
+        "--repeats",
+        "1",
+        "--timeout",
+        "600"
+      ],
+      "status": "passed",
+      "returncode": 0,
+      "seconds": 170.25979113695212
+    },
+    {
+      "name": "vpr_cuda_0",
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/vpr_validate.py",
+        "--case",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/data/generated/ex5p_balanced",
+        "--result",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/matrix/cuda_0.json",
+        "--vpr-case",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/FPGA_accelerate_FPGA/G_3d_routing/data/raw/ex5p_balanced.json",
+        "--vpr-lock",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/FPGA_accelerate_FPGA/G_3d_routing/configs/vpr.lock.json",
+        "--output",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/vpr_cuda_0"
+      ],
+      "status": "failed",
+      "returncode": 2,
+      "seconds": 4.571805596002378
+    }
+  ],
+  "gpu_execution_passed": true,
+  "vpr_full_check_passed": null,
+  "performance_scope": "Paired prototype CPU/CUDA process times; no speedup claim versus native VPR",
+  "source_sha256": {
+    "CMakeLists.txt": "9327e14f0e1dc3acfca9511e0d14b85de463cc45c79fa6e466d043ff04109d77",
+    "hardware/candidate_cost.cpp": "e887fbe93729cc21f19e0113fac1c8c2bf22967b6f16456cf1d63d9a47bc3b14",
+    "hardware/cost.hpp": "a4ba1797c7f2bf36f7e4d4310158547a862ac941d3ec70680e56d25aa59931b8",
+    "hardware/run_hls.tcl": "32ae12cbe9ef3f6caaf24db66518e46e89b8072db48ba6b1e36a0534a705f405",
+    "include/router.hpp": "25b2d13fbb81056623c82bc0ea5d87be955ee998ff7b96c881c17ddba38d7a6f",
+    "scripts/audit.py": "4d3ade64eb8782ff70101e264efda6b3e1850d4d1e9f436d968e777ec0880ab5",
+    "scripts/benchmark.py": "a79dd10ea09d3d92be25f6d53d7d782cd56c68635a0b1608d370c96064691d2b",
+    "scripts/collect_hardware.py": "b5e13846cc6d059fd7d69eeead03ebaa33fe062411d5825c69dd2a5ae5de06af",
+    "scripts/prepare.py": "a50ecae1a7bb143ac7823360282348d237ef95b720ba608773652ed403496ac7",
+    "scripts/report.py": "a668644a9653b4d06fc2b2f4a86705ca2263493aea0c667eacc6bb8ea55a1f48",
+    "scripts/run_gpu_validation.py": "f3f6e60e22993574a9cba3afc2228ca9d910e660e6f4cc84bb0a75fa8e7a95d7",
+    "scripts/run_hls.py": "06ef69ae95f64e278054a4940c9c2fb39fe311f314fdecb4bae188ab93b7ae4d",
+    "scripts/vpr_validate.py": "5ecfcd63728f1c5128ceeb1fdf2017f69fd090bd54632a871112c3441e4f02c5",
+    "src/main.cpp": "f47de0e6e6e81b4477a9e3a37cb88b56f15cb12c0198184a7a9a48f95bd0ff51",
+    "src/router.cpp": "5ae568f8b0bc8e7ea31284692b4ab7d52ecb7c3e4b0b2d17446d5535a0583501",
+    "src/search_cuda.cu": "f908157456595761d6af6e78c0cd103934fe6b93b9d612ebb87526b463a7da6e",
+    "tests/test_adapters.py": "d69e0ac6e4a119326bb1cad812c69e88f11372b569e4d0806c29688a0d6b9b3a",
+    "tests/test_cost.cpp": "ca0cb676c05e39c6d6c32c2f2e0aee5f756516dbb2487a0b034222648b87015f",
+    "tests/test_router.cpp": "f04adc0e2f9193941420c3ee8ffd56f40e8c6254b86ad231eeb60463640ce269"
+  },
+  "error": "vpr_cuda_0: failed; inspect /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/h3d-cuda-validate-20261023-164842/vpr_cuda_0.log"
+}
