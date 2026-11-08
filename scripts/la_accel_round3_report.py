@@ -9,6 +9,12 @@ def distribution(values):
 def hardware(folder):
  binding=json.loads((folder/'binding.json').read_text());top=binding['top']
  result=dict(name=folder.name,binding=binding,phases={},functional_cycles=None,verified_mhz=None)
+ rtl=folder/f'project/solution/syn/verilog/{top}.v'
+ if rtl.exists():
+  result['rtl_top_sha256']=sha256(rtl);result['adapter_configuration']={}
+  for port,body in re.findall(re.escape(top)+r'_(\w+)_m_axi\s*#\((.*?)\)\s*\w+_m_axi_U',rtl.read_text(),re.S):
+   values={k:int(v) for k,v in re.findall(r'\.(\w+)\(\s*(\d+)\s*\)',body)}
+   result['adapter_configuration'][port]={k:values[k] for k in ['NUM_READ_OUTSTANDING','NUM_WRITE_OUTSTANDING','MAX_READ_BURST_LENGTH','MAX_WRITE_BURST_LENGTH','USER_DW']}
  for phase in ['csim','csynth','cosim','impl']:
   p=folder/(phase+'.json');result['phases'][phase]=json.loads(p.read_text())['status'] if p.exists() else 'pending_or_not_run'
  if result['phases']['cosim']=='passed':
@@ -36,12 +42,17 @@ def main():
  data=dict(goal='FPGA faster than each baseline; software ordering unrestricted',fpga_superiority_verified=False,board_measured=False,software=[],hardware=[],bounded=[],workloads={},comparisons=[])
  for d in root.glob('native_d*'):
   if (d/'manifest.json').exists():data['workloads'][d.name]=json.loads((d/'manifest.json').read_text())
- worker=root/'gpu_worker';assert json.loads((worker/'finished.json').read_text())['status']=='passed'
- raw=json.loads((worker/'measurements.json').read_text());data['worker']=json.loads((worker/'worker.json').read_text())
- for case,kind,parallel in sorted({(v['case'],v['kind'],v['parallel']) for v in raw}):
-  rows=[v for v in raw if (v['case'],v['kind'],v['parallel'])==(case,kind,parallel)]
+ raw=[];data['workers']={}
+ for worker in sorted(root.glob('gpu_worker*')):
+  if not (worker/'finished.json').exists():continue
+  assert json.loads((worker/'finished.json').read_text())['status']=='passed'
+  data['workers'][worker.name]=json.loads((worker/'worker.json').read_text())
+  for record in json.loads((worker/'measurements.json').read_text()):record['cohort']=worker.name;raw.append(record)
+ assert raw,'No completed measured software cohort'
+ for case,kind,parallel,cohort in sorted({(v['case'],v['kind'],v['parallel'],v['cohort']) for v in raw}):
+  rows=[v for v in raw if (v['case'],v['kind'],v['parallel'],v['cohort'])==(case,kind,parallel,cohort)]
   assert len(rows)==5 and all(len(v['measurements'])==6 and all(m['all_golden_bits_match'] for m in v['measurements']) for v in rows)
-  record=dict(case=case,kind=kind,parallel=parallel,workload_sha256=rows[0]['workload_sha256'],
+  record=dict(case=case,kind=kind,parallel=parallel,cohort=cohort,workload_sha256=rows[0]['workload_sha256'],
     cold_e1_s=distribution([v['measurements'][0]['resident_s'] for v in rows]),
     warm_e1_s=distribution([statistics.median(m['resident_s'] for m in v['measurements'][1:]) for v in rows]),
     cold_service_s=distribution([v['measurements'][0]['service_to_result_s'] for v in rows]),
@@ -59,9 +70,13 @@ def main():
    row['e1_cycles_including_drain']=result['rtl_cycles'][0]+row['post_done_drain_cycles']
    row['total_native_beats']=sum(p['read_beats']+p['write_beats'] for p in m['ports'])
    row['bank_slot_utilization']=row['total_native_beats']*config['cycles_per_bank_beat']/(row['e1_cycles_including_drain']*config['shared_banks'])
+   bank_beats=[0]*config['shared_banks']
+   for port,p in zip(config['ports'],m['ports']):bank_beats[config['bank_mapping'][port]]+=p['read_beats']+p['write_beats']
+   row['observed_traffic_service_lower_bound_cycles']=max(max(0,(b-1)*config['cycles_per_bank_beat']+1) for b in bank_beats)
   if result['status']=='passed' and h['verified_mhz']:
    row['rtl_time_s']=row['e1_cycles_including_drain']/(h['verified_mhz']*1e6)
    row['bank_capacity_native_beats_per_s']=h['verified_mhz']*1e6*config['shared_banks']/config['cycles_per_bank_beat']
+   row['observed_traffic_service_lower_bound_s']=row['observed_traffic_service_lower_bound_cycles']/(h['verified_mhz']*1e6)
    candidates=[v for v in data['software'] if v['workload_sha256']==h['binding']['workload']]
    if candidates:
     best=min(candidates,key=lambda v:v['warm_e1_s']['median']);limit=best['warm_e1_s']['median']*h['verified_mhz']*1e6
@@ -69,7 +84,7 @@ def main():
     row['strictly_faster_cycle_budget']=math.ceil(limit)-1;row['time_ratio_to_best_warm_software']=row['rtl_time_s']/best['warm_e1_s']['median']
   data['bounded'].append(row)
  runs={v['name']:v for v in data['bounded']}
- for baseline,candidate,purpose in [('bounded_single_family','bounded_dual','replicated resident engines'),('bounded_single_family','bounded_packed_wt','packed-label layout'),('bounded_packed_wt','bounded_packed_wb','label write-back policy'),('bounded_dual','bounded_quad','four-engine scaling')]:
+ for baseline,candidate,purpose in [('bounded_single_family','bounded_dual','replicated resident engines'),('bounded_single_family','bounded_packed_wt','packed-label layout'),('bounded_packed_wt','bounded_packed_wb','label write-back policy'),('bounded_dual','bounded_quad','four-engine scaling'),('bounded_dual_d4','bounded_quad_d4','four engines, next complete 3D rung')]:
   if baseline not in runs or candidate not in runs:continue
   b,c=runs[baseline],runs[candidate];hb,hc=byname[b['source_hls']],byname[c['source_hls']]
   keys=['latency_cycles','shared_banks','cycles_per_bank_beat','outstanding_per_port_per_direction','total_read_credits','total_write_credits','interposer_sha256']
@@ -121,8 +136,15 @@ def main():
   lines+=['',f'{v["name"]}: total peak outstanding R/W = {m["max_total_reads"]}/{m["max_total_writes"]}; shared bank slot utilization = {v["bank_slot_utilization"]:.2%}; post-completion drain = {v["post_done_drain_cycles"]} cycles.']
   if o:
    active=[e['active_cycles'] for e in o['engines']];lines.append(f'At least two engines overlap for {o["overlap_cycles"]} cycles; per-engine active cycles {active}, max/min = {max(active)/min(active):.6f}. Exact first/last activity is retained in JSON.')
+  lines.append(f'With these observed beat counts unchanged, bank service alone needs at least {v["observed_traffic_service_lower_bound_cycles"]} cycles, even with perfect compute overlap. This is a small-input model bound, not a hardware measurement or a large-graph forecast.')
+ for h in data['hardware']:
+  ports=h.get('adapter_configuration',{})
+  if ports:
+   reads=sum(p['NUM_READ_OUTSTANDING'] for p in ports.values());writes=sum(p['NUM_WRITE_OUTSTANDING'] for p in ports.values())
+   lines+=['',f'{h["name"]}: {len(ports)} generated AXI masters provision {reads}/{writes} total internal read/write outstanding slots. The external bounded model still admits only the fixed global 8/8 requests, with 2/2 per port. Full per-port RTL parameters are retained in JSON.']
  lines+=['','Primary controls: 64-cycle minimum request latency; one shared bank; one R/W native beat every four clocks; two outstanding requests per direction per port; fixed global pools of eight read and eight write credits. A held address reserves a global credit. Each return port has one finite skid slot. Port widths, actual peak outstanding, stalls, beat counts and engine overlap are retained in JSON. This is a synthetic sensitivity model, not measured HBM.','',
   'At 200 MHz the shared bank supplies at most 50 million native beats/s (at most 3.2 GB/s for exclusively 512-bit beats); effective transferred bytes depend on each recorded port width and byte strobes. Replication does not increase this beat budget or the global credit pools. E1 adds any post-completion drain recorded by the model.','',
+  'Engine overlap measures deasserted ap_idle intervals and includes AXI waits. It proves concurrent in-flight searches, not simultaneous useful arithmetic on every counted cycle.','',
   'The cycle budget uses the strongest warm CPU/CUDA configuration actually measured on this exact workload. It is a necessary target for this cohort, not evidence of superiority over every original/native software implementation. FPGA large-graph prediction and complete lookahead E2 remain outside this phase.']
  (out/'report.json').write_text(json.dumps(data,indent=2)+'\n');(out/'report.md').write_text('\n'.join(lines)+'\n');print(out/'report.md')
 if __name__=='__main__':main()

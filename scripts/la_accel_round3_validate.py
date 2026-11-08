@@ -8,6 +8,13 @@ def main():
  assert not a.output.exists();checks=[]
  def check(condition,name):
   checks.append({'check':name,'passed':bool(condition)})
+ for worker in r.glob('gpu_worker*'):
+  if not worker.is_dir() or not (worker/'worker.json').exists():continue
+  meta=json.loads((worker/'worker.json').read_text())
+  for rel,digest in meta['sources'].items():check(sha256(worker/'source'/rel)==digest,worker.name+':snapshot:'+rel)
+  finish=json.loads((worker/'finished.json').read_text());rows=json.loads((worker/'measurements.json').read_text())
+  check(finish['status']=='passed' and finish['processes']==len(rows),worker.name+':completed')
+  for row in rows:check(len(row['measurements'])==6 and row['measurements'][0]['phase']=='cold_first_call' and all(m['all_golden_bits_match'] for m in row['measurements']),worker.name+':'+row['log'])
  for d in r.glob('native_d*'):
   p=d/'manifest.json'
   if not p.exists():continue
@@ -26,6 +33,7 @@ def main():
     # The first cohort deliberately froze the original 5ns Tcl before period support was added.
     if not key.endswith('.tcl'):check(Path(key).exists() and sha256(Path(key))==value,d.name+':source:'+Path(key).name)
   check(any(sha256(p)==b['testbench'] for p in (d/'source_snapshot').glob('*.cpp')),d.name+':testbench')
+  if 'dual_header' in b:check(sha256(d/'source_snapshot/dual_kernel.hpp')==b['dual_header'],d.name+':dual_interface_header')
   for phase in ['csim','csynth','cosim','impl']:
    p=d/(phase+'.json');check(p.exists() and json.loads(p.read_text())['status']=='passed',d.name+':'+phase)
  for d in r.glob('bounded_*'):

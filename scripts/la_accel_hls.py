@@ -32,6 +32,7 @@ def main():
    for src in sources:
     if src.suffix!='.tcl':assert recorded[str(src)]==sha256(src),'Synthesis source changed'
    assert recorded.get('testbench')==sha256(tb),'Testbench changed'
+   if a.top=='lookahead_dual':assert recorded['dual_header']==sha256(ROOT/'accel/lookahead/include/dual_kernel.hpp'),'Dual interface header changed'
    for key,value in recorded.items():
     if key.startswith('/') and not key.endswith('.tcl'):assert Path(key).exists() and sha256(Path(key))==value,'Recorded synthesis dependency changed: '+key
    if a.workload:assert recorded['workload']==sha256(a.workload),'Workload changed'

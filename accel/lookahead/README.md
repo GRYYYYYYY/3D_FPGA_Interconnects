@@ -179,3 +179,74 @@ scripts/la_accel_round2_plot.py` for round-two reports and figures. Calibration 
 large-graph FPGA predictions, asynchronous request/response context scheduling,
 compact geometry and physical HBM connectivity remain unverified. FPGA superiority
 over the software baselines remains a research target, not a measured conclusion.
+
+## Round three: complete 3D spill and matched resident controls
+
+See [the round-three record](../../docs/lookahead_accel_round3.md). The original
+CPU/CUDA kernel algorithms are retained. `cpu_benchmark` and `cuda_benchmark`
+accept `workload workers_or_CTAs warm_repeats`; the first invocation in each fresh
+process is cold, subsequent batches reuse allocations while resetting search state
+inside E1. `la_accel_round3_gpu_job.py` runs five independent processes per setting,
+with CPU 1/2/4/8 workers (up to the actual job count) and basic CUDA up to eight CTAs.
+The original/native E2 timers must not be substituted for this resident E1.
+
+Generate a new complete native graph without cutting edges or selecting samples:
+
+```bash
+python3 scripts/la_accel_native3d.py --help
+cmake -S accel/lookahead -B /new/round3_host -DCMAKE_BUILD_TYPE=Release
+cmake --build /new/round3_host -j 8
+ctest --test-dir /new/round3_host --output-on-failure
+/new/round3_host/spill_profile /new/native/workload.bin /new/native/layers.bin 127
+```
+
+`layers.bin` records integer layers from native RRG `layer_low`, avoiding the old
+text export's raw character formatting. The profiler counts actual cross-layer
+traversals and logical external queue operations, never FPGA cycles.
+`adjacent_pair_read_hits` counts consecutive reads to the same aligned index pair;
+it is not a simulated heap-sibling cache hit rate and is not used for the chosen
+label-cache ablation.
+
+Run a fresh canonical single-engine cohort with the complete exported workload:
+
+```bash
+python3 scripts/la_accel_flow3.py --output /new/hls_single \
+  --source accel/lookahead/hls/variants/lookahead_single_resident3.cpp \
+  --workload /new/native/workload.bin \
+  --define LA_HEAP_TOP=127 --define LA_LABEL_LINES=64 --define LA_COST_LINES=64
+python3 scripts/la_accel_bounded3.py --hls /new/hls_single \
+  --output /new/bounded_single --minimal-debug
+```
+
+For two complete engines, select `lookahead_dual_resident3.cpp`, `--top
+lookahead_dual --contexts 2`; replay with `--top lookahead_dual --engines 2`.
+Keep all three cache defines unchanged. The runner records engine idle signals,
+overlap and activity intervals. The bounded model fixes one shared bank, one native
+read/write beat every four clocks, 64-cycle minimum latency, two credits per port
+per direction, and fixed global pools of eight read/eight write credits. Address
+reservations count against the global pools; ports do not each get a separate bank.
+This is a synthetic memory sensitivity model, not calibrated HBM bandwidth.
+Overlap counts deasserted `ap_idle` intervals, including memory waits; it does not
+count simultaneous useful arithmetic operations.
+
+For the matched label-policy controls use `lookahead_packed_resident3.cpp`,
+`--top lookahead_packed --testbench accel/lookahead/tests/packed_real3.cpp`, and
+`--define LA_LABEL_WRITEBACK=0` or `=1` in separate output directories. Replay with
+`--top lookahead_packed`. Both policies pack the exact FP32 visited bits and expanded
+flag into 64 bits, retain 64 cache lines, and include final dirty flush in E1.
+The host adapter also verifies external label coherence against the uncached core.
+
+`la_accel_flow3.py` runs csim, synthesis, cosim and implementation in order, freezing
+source/Tcl bindings. It accepts an explicit `--period-ns` for a fresh implementation
+cohort. A successful tool exit is not proof of positive setup/hold slack. Reporting
+uses only timing-clean OOC targets, adds any post-completion memory drain and never
+uses C simulation elapsed time as FPGA time. Preserve failed cohorts when retrying.
+
+Use `la_accel_round3_report.py`, `la_accel_round3_validate.py` and
+`la_accel_round3_archive.py` with fresh output paths for reports, audits and the
+small-input evidence bundle. Figures use `.venv-report/bin/python
+scripts/la_accel_round3_plot.py --report /new/report/report.json --output /new/plots`.
+The archive includes complete small native workloads, raw CPU/CUDA observations,
+source snapshots, RTL counts and implementation reports; it excludes credentials,
+build trees, waves and DCP binaries. Final scalability decisions must use matched
+bounded RTL time at verified frequencies, not functional-cycle ratios alone.
