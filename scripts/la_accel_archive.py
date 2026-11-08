@@ -5,7 +5,7 @@ from prepare import sha256
 
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--experiment',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();root=a.experiment.resolve();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False);files=[]
- patterns=['preflight_v2/preflight.json','preservation_audit.json','source_binding_audit.json','heap_ii_diagnosis.json','memory_layout.json','operation_counts.json','software_summary*.json','ctest*regression.log','ctest_verified.log','dual_overlap/result.json','dual_overlap/config.json','dual_postcheck_diagnosis.json','memory64_*/result*.json','memory64_*/config.json','*_mcp_*timing*.rpt','*_mcp_route_status.rpt','tseng_import/result.json','tseng_hls_comparison/comparison.json','*_export/manifest.json','*/workload_layout.json','*_eligible/manifest.json','native_env_fix_local/summary.json']
+ patterns=['preflight_v2/preflight.json','preservation_audit.json','source_binding_audit.json','final_validation.json','heap_ii_diagnosis.json','memory_layout.json','operation_counts.json','software_summary*.json','ctest*regression.log','ctest_verified.log','dual_overlap/result.json','dual_overlap/config.json','dual_postcheck_diagnosis.json','memory64_*/result*.json','memory64_*/config.json','*_mcp_*timing*.rpt','*_mcp_route_status.rpt','tseng_import/result.json','tseng_hls_comparison/comparison.json','*_export/manifest.json','*/workload_layout.json','*_eligible/manifest.json','native_env_fix_local/summary.json']
  for pattern in patterns:files.extend(root.glob(pattern))
  for d in root.glob('hls_*'):
   if not d.is_dir():continue
