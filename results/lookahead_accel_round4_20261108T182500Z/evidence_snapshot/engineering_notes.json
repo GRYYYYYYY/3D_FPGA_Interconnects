@@ -1,0 +1,44 @@
+{
+  "failed_attempts": [
+    {
+      "name": "early HLS shell driver",
+      "cause": "python executable alias absent; no HLS cohort created",
+      "resolution": "Used python3; preserved failed driver logs separately."
+    },
+    {
+      "name": "native_stock_correctness_d5",
+      "cause": "Missing libtbb.so.12 runtime search path",
+      "resolution": "Fresh retry cohort with frozen data/vpr_runtime_20261025; complete original VPR map matches."
+    },
+    {
+      "name": "cross_layer_trace",
+      "cause": "Probe incorrectly required every qid to cross layers, including two native empty-target samples",
+      "resolution": "Retained all samples; verified full and early batches actually cross layers. New successful cohort, original trace retained."
+    },
+    {
+      "name": "monitor scalar trace comparison",
+      "cause": "HLS scalar status text has different separator padding before transaction IDs 10/11",
+      "resolution": "Preserved raw failure receipts. Memory result data remains byte-identical; scalar status values/IDs verified token-for-token in verification_v2. No RTL or stimulus changed."
+    },
+    {
+      "name": "200 MHz implementation",
+      "cause": "Negative setup slack in original target runs",
+      "resolution": "Original reports retained; one fixed 125 MHz post-route internal STA check, no frequency sweep or inferred Fmax."
+    },
+    {
+      "name": "plot environment",
+      "cause": "System python3 lacks matplotlib",
+      "resolution": "Used existing .venv-report/bin/python, no environment mutation."
+    },
+    {
+      "name": "early4 frozen monitor postprocessor",
+      "cause": "The intermediate frozen postprocessor decoded binary memory output as UTF-8 after successful RTL completion.",
+      "resolution": "No RTL or stimulus rerun or change. New verifier checks raw memory bytes, scalar status tokens, all 12 transactions, XML cycles, graph inactivity and AXI drain. Missing process return code is left null; the original traceback/snapshot are retained."
+    },
+    {
+      "name": "final current-source audit",
+      "cause": "Audit sought generated run_hls.tcl in the source tree; no source mismatch was found.",
+      "resolution": "Generated Tcl checked against frozen cohort binding; C++ sources checked against current tree. Initial valid archive retained locally as evidence_snapshot_initial; final archive includes the completed provenance checks."
+    }
+  ]
+}

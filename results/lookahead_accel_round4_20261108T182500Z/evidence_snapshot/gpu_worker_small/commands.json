@@ -1,0 +1,1868 @@
+[
+  {
+    "name": "gpu",
+    "command": [
+      "nvidia-smi"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.21625161601696163
+  },
+  {
+    "name": "nvcc",
+    "command": [
+      "nvcc",
+      "--version"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00567049696110189
+  },
+  {
+    "name": "cpu",
+    "command": [
+      "lscpu"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.11644669703673571
+  },
+  {
+    "name": "compiler",
+    "command": [
+      "c++",
+      "--version"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.010545701952651143
+  },
+  {
+    "name": "build_cpu",
+    "command": [
+      "c++",
+      "-O2",
+      "-std=c++14",
+      "-fopenmp",
+      "-ffp-contract=off",
+      "-fno-fast-math",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/source/include",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/source/round4/cpu4.cpp",
+      "-o",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 1.1674358940217644
+  },
+  {
+    "name": "build_cuda",
+    "command": [
+      "nvcc",
+      "-O2",
+      "-std=c++14",
+      "--fmad=false",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/source/include",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/source/round4/cuda4.cu",
+      "-o",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 2.418513822951354
+  },
+  {
+    "name": "native_d4_w8_full_cpu_1_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016730125062167645
+  },
+  {
+    "name": "native_d3_w8_early_cpu_4_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004387757042422891
+  },
+  {
+    "name": "native_d3_w8_full_cpu_1_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004346187924966216
+  },
+  {
+    "name": "native_d5_w8_full_cpu_2_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.0164527379674837
+  },
+  {
+    "name": "native_d4_w8_early_cuda_12_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "12",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.8160087530268356
+  },
+  {
+    "name": "native_d4_w8_early_cpu_8_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016959344036877155
+  },
+  {
+    "name": "native_d5_w8_full_cpu_2_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.01799008098896593
+  },
+  {
+    "name": "native_d4_w8_full_cpu_1_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00859919807408005
+  },
+  {
+    "name": "native_d5_w8_early_cuda_12_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "12",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6675074709346518
+  },
+  {
+    "name": "native_d4_w8_early_cuda_12_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "12",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6164382989518344
+  },
+  {
+    "name": "native_d3_w8_early_cuda_8_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6155737020308152
+  },
+  {
+    "name": "native_d3_w8_full_cpu_4_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004645125009119511
+  },
+  {
+    "name": "native_d3_w8_early_cpu_8_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.0057253409177064896
+  },
+  {
+    "name": "native_d3_w8_early_cpu_1_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.0043141760397702456
+  },
+  {
+    "name": "native_d5_w8_early_cpu_4_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008381802006624639
+  },
+  {
+    "name": "native_d3_w8_early_cpu_4_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004735833965241909
+  },
+  {
+    "name": "native_d5_w8_early_cpu_2_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.01672551198862493
+  },
+  {
+    "name": "native_d5_w8_early_cpu_1_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.009513432043604553
+  },
+  {
+    "name": "native_d4_w8_early_cpu_8_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004396299016661942
+  },
+  {
+    "name": "native_d5_w8_early_cuda_12_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "12",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6655525340465829
+  },
+  {
+    "name": "native_d5_w8_early_cpu_2_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016949089942499995
+  },
+  {
+    "name": "native_d4_w8_full_cpu_1_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008541777031496167
+  },
+  {
+    "name": "native_d4_w8_early_cpu_4_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004697280004620552
+  },
+  {
+    "name": "native_d3_w8_early_cpu_4_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004381905077025294
+  },
+  {
+    "name": "native_d5_w8_full_cpu_1_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.01646268495824188
+  },
+  {
+    "name": "native_d5_w8_full_cuda_12_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "12",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6655870670219883
+  },
+  {
+    "name": "native_d4_w8_early_cpu_4_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008658323902636766
+  },
+  {
+    "name": "native_d5_w8_early_cpu_4_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008478990057483315
+  },
+  {
+    "name": "native_d4_w8_full_cpu_2_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.017636382021009922
+  },
+  {
+    "name": "native_d3_w8_full_cpu_8_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016658348962664604
+  },
+  {
+    "name": "native_d3_w8_full_cpu_4_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008632818004116416
+  },
+  {
+    "name": "native_d5_w8_early_cpu_2_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016671252087689936
+  },
+  {
+    "name": "native_d5_w8_early_cpu_2_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016544301062822342
+  },
+  {
+    "name": "native_d5_w8_full_cpu_4_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008848824072629213
+  },
+  {
+    "name": "native_d4_w8_early_cpu_8_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008698957040905952
+  },
+  {
+    "name": "native_d4_w8_early_cpu_1_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.009400228038430214
+  },
+  {
+    "name": "native_d4_w8_early_cpu_2_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00870334601495415
+  },
+  {
+    "name": "native_d3_w8_full_cuda_8_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6157562270527706
+  },
+  {
+    "name": "native_d4_w8_early_cpu_2_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008698739111423492
+  },
+  {
+    "name": "native_d3_w8_full_cpu_8_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004456904949620366
+  },
+  {
+    "name": "native_d3_w8_full_cpu_1_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004399721976369619
+  },
+  {
+    "name": "native_d5_w8_early_cpu_8_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00852955796290189
+  },
+  {
+    "name": "native_d5_w8_full_cpu_4_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008450252935290337
+  },
+  {
+    "name": "native_d5_w8_early_cpu_1_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008782583056017756
+  },
+  {
+    "name": "native_d5_w8_early_cpu_1_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008696433971635997
+  },
+  {
+    "name": "native_d5_w8_early_cpu_8_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008539749076589942
+  },
+  {
+    "name": "native_d5_w8_full_cpu_8_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008502145996317267
+  },
+  {
+    "name": "native_d3_w8_full_cpu_4_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004390342975966632
+  },
+  {
+    "name": "native_d5_w8_full_cpu_8_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.009474701015278697
+  },
+  {
+    "name": "native_d3_w8_early_cpu_1_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004363914020359516
+  },
+  {
+    "name": "native_d3_w8_full_cpu_2_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004403474973514676
+  },
+  {
+    "name": "native_d4_w8_full_cpu_8_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.019750343984924257
+  },
+  {
+    "name": "native_d4_w8_full_cuda_12_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "12",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6658394830301404
+  },
+  {
+    "name": "native_d3_w8_early_cpu_2_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008982938015833497
+  },
+  {
+    "name": "native_d4_w8_full_cuda_12_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "12",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6715422678971663
+  },
+  {
+    "name": "native_d4_w8_full_cuda_12_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "12",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6158047299832106
+  },
+  {
+    "name": "native_d5_w8_full_cpu_1_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.0182686090702191
+  },
+  {
+    "name": "native_d3_w8_early_cpu_1_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.005036811926402152
+  },
+  {
+    "name": "native_d3_w8_full_cuda_8_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6159957979107276
+  },
+  {
+    "name": "native_d4_w8_full_cpu_8_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008745974046178162
+  },
+  {
+    "name": "native_d4_w8_full_cpu_2_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016550731961615384
+  },
+  {
+    "name": "native_d4_w8_full_cpu_2_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.01678242499474436
+  },
+  {
+    "name": "native_d5_w8_early_cpu_1_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.01658404094632715
+  },
+  {
+    "name": "native_d5_w8_full_cpu_8_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008906636037863791
+  },
+  {
+    "name": "native_d4_w8_full_cpu_4_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008458100026473403
+  },
+  {
+    "name": "native_d3_w8_early_cpu_8_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.0044077360071241856
+  },
+  {
+    "name": "native_d4_w8_early_cpu_4_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004379317979328334
+  },
+  {
+    "name": "native_d3_w8_early_cpu_2_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004572040983475745
+  },
+  {
+    "name": "native_d4_w8_full_cpu_2_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.01693754899315536
+  },
+  {
+    "name": "native_d3_w8_full_cpu_8_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004481481038965285
+  },
+  {
+    "name": "native_d5_w8_full_cuda_12_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "12",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6156313710380346
+  },
+  {
+    "name": "native_d3_w8_full_cuda_8_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6156975060002878
+  },
+  {
+    "name": "native_d3_w8_early_cpu_2_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004905787063762546
+  },
+  {
+    "name": "native_d5_w8_early_cpu_4_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008987101959064603
+  },
+  {
+    "name": "native_d4_w8_early_cpu_2_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008813556982204318
+  },
+  {
+    "name": "native_d4_w8_full_cpu_4_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008529125014320016
+  },
+  {
+    "name": "native_d4_w8_early_cpu_8_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004423736943863332
+  },
+  {
+    "name": "native_d4_w8_full_cuda_12_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "12",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6655819669831544
+  },
+  {
+    "name": "native_d4_w8_full_cpu_2_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016694432008080184
+  },
+  {
+    "name": "native_d4_w8_early_cpu_2_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008543105912394822
+  },
+  {
+    "name": "native_d3_w8_early_cpu_8_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004438831005245447
+  },
+  {
+    "name": "native_d3_w8_full_cpu_2_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.018362873001024127
+  },
+  {
+    "name": "native_d4_w8_early_cpu_4_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.012429703027009964
+  },
+  {
+    "name": "native_d3_w8_full_cpu_1_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.0045167210046201944
+  },
+  {
+    "name": "native_d3_w8_early_cpu_2_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00572981801815331
+  },
+  {
+    "name": "native_d4_w8_full_cpu_4_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008583108079619706
+  },
+  {
+    "name": "native_d4_w8_early_cpu_4_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008663084940053523
+  },
+  {
+    "name": "native_d3_w8_full_cpu_8_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.019475959008559585
+  },
+  {
+    "name": "native_d4_w8_full_cpu_1_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008632278069853783
+  },
+  {
+    "name": "native_d4_w8_early_cuda_12_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "12",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6657277629710734
+  },
+  {
+    "name": "native_d5_w8_full_cuda_12_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "12",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6661362510640174
+  },
+  {
+    "name": "native_d5_w8_early_cpu_8_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008689270005561411
+  },
+  {
+    "name": "native_d5_w8_early_cpu_4_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008519869996234775
+  },
+  {
+    "name": "native_d4_w8_early_cpu_1_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008438814897090197
+  },
+  {
+    "name": "native_d5_w8_early_cpu_4_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008544408017769456
+  },
+  {
+    "name": "native_d4_w8_early_cpu_2_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008455195929855108
+  },
+  {
+    "name": "native_d4_w8_full_cpu_4_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.01795801694970578
+  },
+  {
+    "name": "native_d3_w8_full_cuda_8_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.7159810169832781
+  },
+  {
+    "name": "native_d3_w8_early_cuda_8_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6157193640246987
+  },
+  {
+    "name": "native_d5_w8_full_cpu_4_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.019353825016878545
+  },
+  {
+    "name": "native_d3_w8_full_cpu_2_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004489304032176733
+  },
+  {
+    "name": "native_d5_w8_full_cuda_12_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "12",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6676727459998801
+  },
+  {
+    "name": "native_d5_w8_full_cpu_4_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.017130287014879286
+  },
+  {
+    "name": "native_d4_w8_full_cpu_8_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008568153018131852
+  },
+  {
+    "name": "native_d3_w8_full_cpu_2_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004410484922118485
+  },
+  {
+    "name": "native_d4_w8_early_cuda_12_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "12",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6654919920256361
+  },
+  {
+    "name": "native_d3_w8_full_cpu_1_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.005665379925630987
+  },
+  {
+    "name": "native_d5_w8_early_cpu_1_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016598590067587793
+  },
+  {
+    "name": "native_d5_w8_early_cuda_12_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "12",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.715826875064522
+  },
+  {
+    "name": "native_d5_w8_full_cpu_1_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016788868932053447
+  },
+  {
+    "name": "native_d3_w8_early_cuda_8_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6167741731042042
+  },
+  {
+    "name": "native_d4_w8_full_cpu_1_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.0087344020139426
+  },
+  {
+    "name": "native_d5_w8_full_cpu_1_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.018102331086993217
+  },
+  {
+    "name": "native_d5_w8_early_cuda_12_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "12",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6681723629590124
+  },
+  {
+    "name": "native_d3_w8_full_cpu_4_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00473762396723032
+  },
+  {
+    "name": "native_d4_w8_full_cpu_4_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008772764005698264
+  },
+  {
+    "name": "native_d3_w8_early_cuda_8_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6168749140342698
+  },
+  {
+    "name": "native_d3_w8_early_cpu_4_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004567965981550515
+  },
+  {
+    "name": "native_d4_w8_early_cuda_12_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "12",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6155443710740656
+  },
+  {
+    "name": "native_d3_w8_early_cpu_1_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008667967980727553
+  },
+  {
+    "name": "native_d4_w8_early_cpu_1_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008562045055441558
+  },
+  {
+    "name": "native_d4_w8_early_cpu_8_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00856584100984037
+  },
+  {
+    "name": "native_d5_w8_full_cuda_12_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "12",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6691340509569272
+  },
+  {
+    "name": "native_d3_w8_early_cuda_8_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.615698550012894
+  },
+  {
+    "name": "native_d5_w8_full_cpu_2_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016736235935240984
+  },
+  {
+    "name": "native_d5_w8_full_cpu_8_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.03371731098741293
+  },
+  {
+    "name": "native_d3_w8_full_cpu_8_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004644387983717024
+  },
+  {
+    "name": "native_d3_w8_full_cpu_1_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.0054774439195171
+  },
+  {
+    "name": "native_d3_w8_full_cpu_4_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.0044338759034872055
+  },
+  {
+    "name": "native_d3_w8_full_cpu_2_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004654429038055241
+  },
+  {
+    "name": "native_d4_w8_full_cpu_8_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00876902008894831
+  },
+  {
+    "name": "native_d5_w8_early_cpu_8_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00897512398660183
+  },
+  {
+    "name": "native_d5_w8_full_cpu_8_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008913684054277837
+  },
+  {
+    "name": "native_d3_w8_early_cpu_2_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004429312073625624
+  },
+  {
+    "name": "native_d5_w8_full_cpu_4_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "4",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008556613000109792
+  },
+  {
+    "name": "native_d3_w8_early_cpu_8_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.03635562502313405
+  },
+  {
+    "name": "native_d4_w8_full_cpu_8_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.009618390002287924
+  },
+  {
+    "name": "native_d3_w8_full_cuda_8_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6168654640205204
+  },
+  {
+    "name": "native_d3_w8_early_cpu_1_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00887495104689151
+  },
+  {
+    "name": "native_d5_w8_full_cpu_2_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.01665650005452335
+  },
+  {
+    "name": "native_d5_w8_full_cpu_2_process1",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "2",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.016560466960072517
+  },
+  {
+    "name": "native_d4_w8_full_cuda_12_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "12",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6656233749818057
+  },
+  {
+    "name": "native_d3_w8_early_cpu_8_process4",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004744205041788518
+  },
+  {
+    "name": "native_d4_w8_early_cpu_1_process3",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.00870024599134922
+  },
+  {
+    "name": "native_d5_w8_early_cpu_2_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "2",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.017018663929775357
+  },
+  {
+    "name": "native_d5_w8_full_cpu_1_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "1",
+      "5",
+      "full"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.01663622003979981
+  },
+  {
+    "name": "native_d4_w8_early_cpu_1_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "1",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.008538409019820392
+  },
+  {
+    "name": "native_d5_w8_early_cuda_12_process0",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cuda_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "12",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.6656795690068975
+  },
+  {
+    "name": "native_d3_w8_early_cpu_4_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "4",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.004593822057358921
+  },
+  {
+    "name": "native_d5_w8_early_cpu_8_process2",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/gpu_worker_small/cpu_benchmark",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/native_d5_w8/workload.bin",
+      "8",
+      "5",
+      "early"
+    ],
+    "returncode": 0,
+    "host_elapsed_s": 0.019124113023281097
+  }
+]

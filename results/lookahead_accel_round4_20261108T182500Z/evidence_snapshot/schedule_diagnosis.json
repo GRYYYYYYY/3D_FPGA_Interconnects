@@ -1,0 +1,73 @@
+{
+  "tool_version": "2022.2",
+  "evidence_type": "HLS_schedule_not_board_timing",
+  "diagnosis": "Heap loops achieve requested II=2. HLS timing warnings identify SRAM read -> unsigned compare -> Entry select -> SRAM write, not an AXI stall or achieved-II violation. Sibling requests use independent banks. The generated even RAM exposes two ports; the odd RAM is simplified to one read/write port. Read/write dependencies remain scheduled; no false-dependence pragma or claimed unlimited RAM ports.",
+  "loops": [
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 10, loop 'LOAD_ROW'",
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 2, Depth = 11, loop 'LOAD_COST'",
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 2, Depth = 12, loop 'LOAD_NODE'",
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 10, loop 'LOAD_EDGE'",
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 10, loop 'LOAD_CELL'",
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'RESET_LABELS'",
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 1, Depth = 1, loop 'RESET_OUTPUT'",
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 2, Final II = 2, Depth = 3, loop 'HEAP_DOWN'",
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 2, Final II = 2, Depth = 2, loop 'HEAP_UP'",
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 2, Final II = 2, Depth = 2, loop 'HEAP_PUSH'",
+    "INFO: [HLS 200-1470] Pipelining result : Target II = 1, Final II = 2, Depth = 9, loop 'FLUSH_MAP'"
+  ],
+  "critical_paths": [
+    "WARNING: [HLS 200-1016] The critical path in module 'pop_Pipeline_HEAP_DOWN' consists of the following:\t'load' operation ('r', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:52) on array 'even' [28]  (2.98 ns)",
+    "\t'icmp' operation ('left', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:53) [37]  (0.859 ns)",
+    "\t'select' operation ('select_ln32', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:32) [39]  (0.344 ns)",
+    "\t'store' operation ('odd_addr_write_ln32', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:32) of variable 'select_ln32', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:32 on array 'odd' [49]  (2.98 ns)",
+    "WARNING: [HLS 200-1016] The critical path in module 'pop_Pipeline_HEAP_UP' consists of the following:\t'load' operation ('odd_load', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:32) on array 'odd' [31]  (2.98 ns)",
+    "\t'select' operation ('w.V', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:59) [34]  (0.344 ns)",
+    "\t'store' operation ('even_addr_1_write_ln32', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:32) of variable 'w.V', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:59 on array 'even' [45]  (2.98 ns)",
+    "WARNING: [HLS 200-1016] The critical path in module 'search_0_Pipeline_HEAP_PUSH' consists of the following:\t'load' operation ('odd_V_load', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:32) on array 'odd_V' [32]  (2.98 ns)",
+    "\t'select' operation ('w.V', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:39) [35]  (0.344 ns)",
+    "\t'store' operation ('even_V_addr_1_write_ln32', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:32) of variable 'w.V', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:39 on array 'even_V' [45]  (2.98 ns)"
+  ],
+  "schedule_sha256": "731e5efa0acdf60d37878cea2220dbd18765ec5e3cbcb90ac2e1e5e19d3afda6",
+  "schedule_evidence": [
+    {
+      "line": 122,
+      "text": "ST_3 : Operation 30 [1/2] (2.98ns)   --->   \"%r = load i14 %even_addr\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:52]   --->   Operation 30 'load' 'r' <Predicate = true> <Delay = 2.98> <CoreInst = \"RAM_T2P_BRAM\">   --->   Core 99 'RAM_T2P_BRAM' <Latency = 1> <II = 1> <Delay = 2.98> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 96> <Depth = 8193> <RAM>"
+    },
+    {
+      "line": 124,
+      "text": "ST_3 : Operation 32 [1/2] (2.98ns)   --->   \"%l = load i14 %odd_addr_1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:52]   --->   Operation 32 'load' 'l' <Predicate = true> <Delay = 2.98> <CoreInst = \"RAM_T2P_BRAM\">   --->   Core 99 'RAM_T2P_BRAM' <Latency = 1> <II = 1> <Delay = 2.98> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 96> <Depth = 8193> <RAM>"
+    },
+    {
+      "line": 127,
+      "text": "ST_3 : Operation 35 [1/1] (0.85ns)   --->   \"%left = icmp_ugt  i32 %tmp2, i32 %tmp_s\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:53]   --->   Operation 35 'icmp' 'left' <Predicate = true> <Delay = 0.85> <CoreInst = \"Cmp\">   --->   Core 9 'Cmp' <Latency = 0> <II = 1> <Delay = 0.85> <FuncUnit> <Opcode : 'icmp'> <InPorts = 2> <OutPorts = 1>"
+    },
+    {
+      "line": 134,
+      "text": "ST_3 : Operation 42 [1/1] (2.98ns)   --->   \"%store_ln32 = store i96 %select_ln32, i14 %even_addr_2\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:32]   --->   Operation 42 'store' 'store_ln32' <Predicate = (!trunc_ln48)> <Delay = 2.98> <CoreInst = \"RAM_T2P_BRAM\">   --->   Core 99 'RAM_T2P_BRAM' <Latency = 1> <II = 1> <Delay = 2.98> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 96> <Depth = 8193> <RAM>"
+    },
+    {
+      "line": 137,
+      "text": "ST_3 : Operation 45 [1/1] (2.98ns)   --->   \"%store_ln32 = store i96 %select_ln32, i14 %odd_addr\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:32]   --->   Operation 45 'store' 'store_ln32' <Predicate = (trunc_ln48)> <Delay = 2.98> <CoreInst = \"RAM_T2P_BRAM\">   --->   Core 99 'RAM_T2P_BRAM' <Latency = 1> <II = 1> <Delay = 2.98> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 96> <Depth = 8193> <RAM>"
+    },
+    {
+      "line": 141,
+      "text": "ST_3 : Operation 49 [1/1] (0.38ns)   --->   \"%store_ln49 = store i32 %hole_6, i32 %hole_4\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:49]   --->   Operation 49 'store' 'store_ln49' <Predicate = true> <Delay = 0.38>"
+    },
+    {
+      "line": 142,
+      "text": "ST_3 : Operation 50 [1/1] (0.38ns)   --->   \"%store_ln49 = store i32 %right_3, i32 %right\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round4_20261108T182500Z/hls_full_1/source_snapshot/onchip_types4.hpp:49]   --->   Operation 50 'store' 'store_ln49' <Predicate = true> <Delay = 0.38>"
+    }
+  ],
+  "actual_routed_paths": {
+    "full_1": {
+      "Source": "bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40/CLKBWRCLK",
+      "Destination": "bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_3/ENARDEN",
+      "Data Path Delay": "5.128ns  (logic 2.884ns (56.236%)  route 2.244ns (43.764%))"
+    },
+    "early_1": {
+      "Source": "bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_1287/even_V_U/ram_reg_bram_4/CLKBWRCLK",
+      "Destination": "bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_1287/odd_V_U/ram_reg_bram_16/DINADIN[11]",
+      "Data Path Delay": "5.065ns  (logic 2.133ns (42.115%)  route 2.932ns (57.885%))"
+    }
+  }
+}

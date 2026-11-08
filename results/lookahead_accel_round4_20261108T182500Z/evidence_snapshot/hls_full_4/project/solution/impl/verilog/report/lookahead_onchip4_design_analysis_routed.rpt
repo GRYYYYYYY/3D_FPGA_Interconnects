@@ -1,0 +1,96 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date         : Sun Nov  8 19:42:12 2026
+| Host         : fpgaacc2--72bfa719011c-3hfvuvkzdl running 64-bit Ubuntu 22.04.4 LTS
+| Command      : report_design_analysis -file ./report/lookahead_onchip4_design_analysis_routed.rpt
+| Design       : bd_0_wrapper
+| Device       : xcu280
+| Design State : Routed
+----------------------------------------------------------------------------------------------------
+
+Report Design Analysis
+
+Table of Contents
+-----------------
+1. Setup Path Characteristics 1-1
+2. Logic Level Distribution
+3. Placer Final Level Congestion Reporting
+4. Router Initial Congestion
+5. SLR Net Crossing Reporting
+
+1. Setup Path Characteristics 1-1
+---------------------------------
+
++---------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+|      Characteristics      |                                                                       Path #1                                                                      |
++---------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| Requirement               | 5.000                                                                                                                                              |
+| Path Delay                | 5.438                                                                                                                                              |
+| Logic Delay               | 2.031(38%)                                                                                                                                         |
+| Net Delay                 | 3.407(62%)                                                                                                                                         |
+| Clock Skew                | -0.037                                                                                                                                             |
+| Slack                     | -0.905                                                                                                                                             |
+| Clock Uncertainty         | 0.035                                                                                                                                              |
+| Clock Relationship        | Safely Timed                                                                                                                                       |
+| Clock Delay Group         | Same Clock                                                                                                                                         |
+| Logic Levels              | 12                                                                                                                                                 |
+| Routes                    | 12                                                                                                                                                 |
+| Logical Path              | RAMB36E2/CLKBWRCLK-(1)-RAMB36E2-RAMB36E2-RAMB36E2-LUT4-(9)-LUT6-(1)-CARRY8-(1)-CARRY8-LUT2-(1)-LUT6-(1)-LUT6-(3)-LUT6-(6)-LUT4-(4)-RAMB36E2/WEA[0] |
+| Start Point Clock         | ap_clk                                                                                                                                             |
+| End Point Clock           | ap_clk                                                                                                                                             |
+| DSP Block                 | None                                                                                                                                               |
+| RAM Registers             | DO_REG(0)-None                                                                                                                                     |
+| IO Crossings              | 0                                                                                                                                                  |
+| SLR Crossings             | 0                                                                                                                                                  |
+| PBlocks                   | 0                                                                                                                                                  |
+| High Fanout               | 9                                                                                                                                                  |
+| Dont Touch                | 0                                                                                                                                                  |
+| Mark Debug                | 0                                                                                                                                                  |
+| Start Point Pin Primitive | RAMB36E2/CLKBWRCLK                                                                                                                                 |
+| End Point Pin Primitive   | RAMB36E2/WEA[0]                                                                                                                                    |
+| Start Point Pin           | ram_reg_bram_0/CLKBWRCLK                                                                                                                           |
+| End Point Pin             | ram_reg_bram_17/WEA[0]                                                                                                                             |
++---------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+* Bounding box calculated as % of dimensions for the target device (5130, 1566)
+
+
+2. Logic Level Distribution
+---------------------------
+
++-----------------+-------------+----+-----+-----+----+-----+----+
+| End Point Clock | Requirement |  8 |  9  |  10 | 11 |  12 | 13 |
++-----------------+-------------+----+-----+-----+----+-----+----+
+| ap_clk          | 5.000ns     | 39 | 437 | 293 | 71 | 148 | 12 |
++-----------------+-------------+----+-----+-----+----+-----+----+
+* Columns represent the logic levels per end point clock
+** Distribution is for top worst 1000 paths
+
+
+3. Placer Final Level Congestion Reporting
+------------------------------------------
+
++-----------+------+-------+--------+---------------+---------------+-----+--------+------+------+------+------+-----+-------+-----+------------+
+| Direction | Type | Level | Window | Combined LUTs | Avg LUT Input | LUT | LUTRAM | Flop | MUXF | RAMB | URAM | DSP | CARRY | SRL | Cell Names |
++-----------+------+-------+--------+---------------+---------------+-----+--------+------+------+------+------+-----+-------+-----+------------+
+* No congestion windows are found above level 5
+
+
+4. Router Initial Congestion
+----------------------------
+
++-----------+------+-------+--------+---------------+---------------+-----+--------+------+------+------+------+-----+-------+-----+------------+-------------+
+| Direction | Type | Level | Window | Combined LUTs | Avg LUT Input | LUT | LUTRAM | Flop | MUXF | RAMB | URAM | DSP | CARRY | SRL | Cell Names | Sub Windows |
++-----------+------+-------+--------+---------------+---------------+-----+--------+------+------+------+------+-----+-------+-----+------------+-------------+
+* No effective congestion windows are found above level 5
+
+
+5. SLR Net Crossing Reporting
+-----------------------------
+
++------------+-----------------------------+-------------+-------------+-------------+
+| Cell Names | Number of Nets crossing SLR | 0 - 1 Cuts  | 0 - 2 Cuts  | 1 - 2 Cuts  |
++------------+-----------------------------+-------------+-------------+-------------+
+* Information not available. There are no nets crossing SLRs.
+
+

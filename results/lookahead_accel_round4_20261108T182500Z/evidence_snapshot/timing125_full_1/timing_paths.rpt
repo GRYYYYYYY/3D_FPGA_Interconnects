@@ -1,0 +1,835 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date              : Sun Nov  8 19:16:14 2026
+| Host              : fpgaacc2--72bfa719011c-3hfvuvkzdl running 64-bit Ubuntu 22.04.4 LTS
+| Command           : report_timing -max_paths 10 -file timing_paths.rpt
+| Design            : bd_0_wrapper
+| Device            : xcu280-fsvh2892
+| Speed File        : -2L  PRODUCTION 1.30 05-01-2022
+| Temperature Grade : E
+------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             2.457ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_3/ENARDEN
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (ap_clk rise@8.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        5.128ns  (logic 2.884ns (56.236%)  route 2.244ns (43.764%))
+  Logic Levels:           12  (CARRY8=1 LUT4=1 LUT5=1 LUT6=2 RAMB36E2=7)
+  Clock Path Skew:        -0.037ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.039ns = ( 8.039 - 8.000 ) 
+    Source Clock Delay      (SCD):    0.076ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.076     0.076    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ap_clk
+    RAMB36_X3Y34         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40/CLKBWRCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y34         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKBWRCLK_CASDOUTB[7])
+                                                      1.062     1.138 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.166    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40_n_66
+    RAMB36_X3Y35         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     1.376 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_41/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.404    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_41_n_66
+    RAMB36_X3Y36         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     1.614 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_42/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.642    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_42_n_66
+    RAMB36_X3Y37         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     1.852 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_43/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.880    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_43_n_66
+    RAMB36_X3Y38         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     2.090 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_44/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     2.118    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_44_n_66
+    RAMB36_X3Y39         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     2.328 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_45/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     2.356    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_45_n_66
+    RAMB36_X3Y40         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     2.566 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_46/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     2.594    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_46_n_66
+    RAMB36_X3Y41         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_DOUTBDOUT[7])
+                                                      0.117     2.711 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_47/DOUTBDOUT[7]
+                         net (fo=1, routed)           0.838     3.549    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_47_n_130
+    SLICE_X66Y150        LUT6 (Prop_E6LUT_SLICEL_I3_O)
+                                                      0.035     3.584 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_17/O
+                         net (fo=2, routed)           0.113     3.697    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_17_n_6
+    SLICE_X66Y148        LUT4 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.098     3.795 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_10/O
+                         net (fo=1, routed)           0.009     3.804    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_10_n_6
+    SLICE_X66Y148        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[4])
+                                                      0.211     4.015 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835_reg[11]_i_1/O[4]
+                         net (fo=9, routed)           0.271     4.286    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/output_addr_reg_1835_reg[11]_0[11]
+    SLICE_X65Y132        LUT5 (Prop_F6LUT_SLICEM_I2_O)
+                                                      0.051     4.337 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/ram_reg_bram_0_i_50__2/O
+                         net (fo=7, routed)           0.136     4.473    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_s_fu_621_output_r_address0[11]
+    SLICE_X66Y132        LUT6 (Prop_D6LUT_SLICEL_I4_O)
+                                                      0.050     4.523 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/ram_reg_bram_3_i_2__3/O
+                         net (fo=1, routed)           0.681     5.204    bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_3_1
+    RAMB36_X4Y20         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_3/ENARDEN
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     8.000     8.000 r  
+                                                      0.000     8.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.039     8.039    bd_0_i/hls_inst/inst/engine_0_U0/output_U/ap_clk
+    RAMB36_X4Y20         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_3/CLKARDCLK
+                         clock pessimism              0.000     8.039    
+                         clock uncertainty           -0.035     8.004    
+    RAMB36_X4Y20         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKARDCLK_ENARDEN)
+                                                     -0.342     7.662    bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_3
+  -------------------------------------------------------------------
+                         required time                          7.662    
+                         arrival time                          -5.204    
+  -------------------------------------------------------------------
+                         slack                                  2.457    
+
+Slack (MET) :             2.468ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0/WEBWE[3]
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (ap_clk rise@8.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        5.066ns  (logic 2.202ns (43.463%)  route 2.864ns (56.537%))
+  Logic Levels:           11  (CARRY8=2 LUT4=2 LUT5=1 LUT6=3 RAMB36E2=3)
+  Clock Path Skew:        -0.036ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.040ns = ( 8.040 - 8.000 ) 
+    Source Clock Delay      (SCD):    0.076ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.076     0.076    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ap_clk
+    RAMB36_X2Y15         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CLKBWRCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X2Y15         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKBWRCLK_CASDOUTPB[1])
+                                                      1.054     1.130 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.161    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4_n_144
+    RAMB36_X2Y16         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_CASDOUTPB[1])
+                                                      0.210     1.371 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_5/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.402    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_5_n_144
+    RAMB36_X2Y17         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_CASDOUTPB[1])
+                                                      0.210     1.612 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_6/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.643    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_6_n_144
+    RAMB36_X2Y18         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_DOUTPBDOUTP[1])
+                                                      0.117     1.760 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_7/DOUTPBDOUTP[1]
+                         net (fo=2, routed)           0.553     2.313    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_7_n_152
+    SLICE_X29Y69         LUT4 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.050     2.363 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/left_fu_228_p2_carry_i_32/O
+                         net (fo=6, routed)           0.353     2.716    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_7_4
+    SLICE_X29Y43         LUT6 (Prop_C6LUT_SLICEL_I5_O)
+                                                      0.088     2.804 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_0_i_113__0/O
+                         net (fo=4, routed)           0.139     2.943    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/grp_search_0_Pipeline_HEAP_PUSH_fu_974_even_V_d0[33]
+    SLICE_X28Y42         LUT4 (Prop_A6LUT_SLICEM_I0_O)
+                                                      0.090     3.033 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm[3]_i_35/O
+                         net (fo=1, routed)           0.013     3.046    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ap_CS_fsm_reg[3]_i_2_4[0]
+    SLICE_X28Y42         CARRY8 (Prop_CARRY8_SLICEM_S[0]_CO[7])
+                                                      0.192     3.238 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ap_CS_fsm_reg[3]_i_3/CO[7]
+                         net (fo=1, routed)           0.026     3.264    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm_reg[1][0]
+    SLICE_X28Y43         CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.022     3.286 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm_reg[3]_i_2/CO[7]
+                         net (fo=5, routed)           0.602     3.888    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/CO[0]
+    SLICE_X40Y53         LUT6 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.036     3.924 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_10/O
+                         net (fo=2, routed)           0.051     3.975    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_10_n_6
+    SLICE_X40Y53         LUT6 (Prop_G6LUT_SLICEL_I3_O)
+                                                      0.097     4.072 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_4_comp_3/O
+                         net (fo=18, routed)          0.379     4.450    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/even_V_we0
+    SLICE_X38Y54         LUT5 (Prop_B6LUT_SLICEL_I0_O)
+                                                      0.036     4.486 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_0_i_60/O
+                         net (fo=8, routed)           0.656     5.142    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/WEBWE[0]
+    RAMB36_X1Y12         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0/WEBWE[3]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     8.000     8.000 r  
+                                                      0.000     8.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.040     8.040    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ap_clk
+    RAMB36_X1Y12         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0/CLKBWRCLK
+                         clock pessimism              0.000     8.040    
+                         clock uncertainty           -0.035     8.005    
+    RAMB36_X1Y12         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKBWRCLK_WEBWE[3])
+                                                     -0.394     7.611    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0
+  -------------------------------------------------------------------
+                         required time                          7.611    
+                         arrival time                          -5.142    
+  -------------------------------------------------------------------
+                         slack                                  2.468    
+
+Slack (MET) :             2.477ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0/WEBWE[1]
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (ap_clk rise@8.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        5.058ns  (logic 2.202ns (43.534%)  route 2.856ns (56.466%))
+  Logic Levels:           11  (CARRY8=2 LUT4=2 LUT5=1 LUT6=3 RAMB36E2=3)
+  Clock Path Skew:        -0.036ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.040ns = ( 8.040 - 8.000 ) 
+    Source Clock Delay      (SCD):    0.076ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.076     0.076    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ap_clk
+    RAMB36_X2Y15         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CLKBWRCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X2Y15         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKBWRCLK_CASDOUTPB[1])
+                                                      1.054     1.130 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.161    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4_n_144
+    RAMB36_X2Y16         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_CASDOUTPB[1])
+                                                      0.210     1.371 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_5/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.402    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_5_n_144
+    RAMB36_X2Y17         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_CASDOUTPB[1])
+                                                      0.210     1.612 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_6/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.643    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_6_n_144
+    RAMB36_X2Y18         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_DOUTPBDOUTP[1])
+                                                      0.117     1.760 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_7/DOUTPBDOUTP[1]
+                         net (fo=2, routed)           0.553     2.313    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_7_n_152
+    SLICE_X29Y69         LUT4 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.050     2.363 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/left_fu_228_p2_carry_i_32/O
+                         net (fo=6, routed)           0.353     2.716    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_7_4
+    SLICE_X29Y43         LUT6 (Prop_C6LUT_SLICEL_I5_O)
+                                                      0.088     2.804 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_0_i_113__0/O
+                         net (fo=4, routed)           0.139     2.943    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/grp_search_0_Pipeline_HEAP_PUSH_fu_974_even_V_d0[33]
+    SLICE_X28Y42         LUT4 (Prop_A6LUT_SLICEM_I0_O)
+                                                      0.090     3.033 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm[3]_i_35/O
+                         net (fo=1, routed)           0.013     3.046    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ap_CS_fsm_reg[3]_i_2_4[0]
+    SLICE_X28Y42         CARRY8 (Prop_CARRY8_SLICEM_S[0]_CO[7])
+                                                      0.192     3.238 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ap_CS_fsm_reg[3]_i_3/CO[7]
+                         net (fo=1, routed)           0.026     3.264    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm_reg[1][0]
+    SLICE_X28Y43         CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.022     3.286 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm_reg[3]_i_2/CO[7]
+                         net (fo=5, routed)           0.602     3.888    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/CO[0]
+    SLICE_X40Y53         LUT6 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.036     3.924 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_10/O
+                         net (fo=2, routed)           0.051     3.975    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_10_n_6
+    SLICE_X40Y53         LUT6 (Prop_G6LUT_SLICEL_I3_O)
+                                                      0.097     4.072 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_4_comp_3/O
+                         net (fo=18, routed)          0.379     4.450    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/even_V_we0
+    SLICE_X38Y54         LUT5 (Prop_B6LUT_SLICEL_I0_O)
+                                                      0.036     4.486 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_0_i_60/O
+                         net (fo=8, routed)           0.648     5.134    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/WEBWE[0]
+    RAMB36_X1Y12         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0/WEBWE[1]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     8.000     8.000 r  
+                                                      0.000     8.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.040     8.040    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ap_clk
+    RAMB36_X1Y12         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0/CLKBWRCLK
+                         clock pessimism              0.000     8.040    
+                         clock uncertainty           -0.035     8.005    
+    RAMB36_X1Y12         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKBWRCLK_WEBWE[1])
+                                                     -0.394     7.611    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0
+  -------------------------------------------------------------------
+                         required time                          7.611    
+                         arrival time                          -5.134    
+  -------------------------------------------------------------------
+                         slack                                  2.477    
+
+Slack (MET) :             2.478ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_0/ENARDEN
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (ap_clk rise@8.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        5.107ns  (logic 2.805ns (54.923%)  route 2.302ns (45.077%))
+  Logic Levels:           12  (CARRY8=1 LUT4=1 LUT5=1 LUT6=2 RAMB36E2=7)
+  Clock Path Skew:        -0.037ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.039ns = ( 8.039 - 8.000 ) 
+    Source Clock Delay      (SCD):    0.076ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.076     0.076    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ap_clk
+    RAMB36_X3Y34         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40/CLKBWRCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y34         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKBWRCLK_CASDOUTB[7])
+                                                      1.062     1.138 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.166    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40_n_66
+    RAMB36_X3Y35         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     1.376 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_41/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.404    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_41_n_66
+    RAMB36_X3Y36         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     1.614 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_42/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.642    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_42_n_66
+    RAMB36_X3Y37         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     1.852 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_43/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.880    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_43_n_66
+    RAMB36_X3Y38         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     2.090 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_44/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     2.118    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_44_n_66
+    RAMB36_X3Y39         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     2.328 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_45/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     2.356    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_45_n_66
+    RAMB36_X3Y40         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     2.566 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_46/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     2.594    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_46_n_66
+    RAMB36_X3Y41         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_DOUTBDOUT[7])
+                                                      0.117     2.711 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_47/DOUTBDOUT[7]
+                         net (fo=1, routed)           0.838     3.549    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_47_n_130
+    SLICE_X66Y150        LUT6 (Prop_E6LUT_SLICEL_I3_O)
+                                                      0.035     3.584 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_17/O
+                         net (fo=2, routed)           0.113     3.697    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_17_n_6
+    SLICE_X66Y148        LUT4 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.098     3.795 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_10/O
+                         net (fo=1, routed)           0.009     3.804    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_10_n_6
+    SLICE_X66Y148        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[3])
+                                                      0.145     3.949 f  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835_reg[11]_i_1/O[3]
+                         net (fo=3, routed)           0.115     4.064    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/output_addr_reg_1835_reg[11]_0[10]
+    SLICE_X65Y148        LUT5 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.037     4.101 f  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/ram_reg_bram_0_i_49__2/O
+                         net (fo=11, routed)          0.649     4.750    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_s_fu_621_output_r_address0[10]
+    SLICE_X66Y87         LUT6 (Prop_H6LUT_SLICEL_I2_O)
+                                                      0.051     4.801 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/ram_reg_bram_0_i_1__4_comp/O
+                         net (fo=1, routed)           0.382     5.183    bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_0_0
+    RAMB36_X4Y17         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_0/ENARDEN
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     8.000     8.000 r  
+                                                      0.000     8.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.039     8.039    bd_0_i/hls_inst/inst/engine_0_U0/output_U/ap_clk
+    RAMB36_X4Y17         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_0/CLKARDCLK
+                         clock pessimism              0.000     8.039    
+                         clock uncertainty           -0.035     8.004    
+    RAMB36_X4Y17         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKARDCLK_ENARDEN)
+                                                     -0.342     7.662    bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_0
+  -------------------------------------------------------------------
+                         required time                          7.662    
+                         arrival time                          -5.183    
+  -------------------------------------------------------------------
+                         slack                                  2.478    
+
+Slack (MET) :             2.483ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0/WEBWE[2]
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (ap_clk rise@8.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        5.052ns  (logic 2.202ns (43.586%)  route 2.850ns (56.414%))
+  Logic Levels:           11  (CARRY8=2 LUT4=2 LUT5=1 LUT6=3 RAMB36E2=3)
+  Clock Path Skew:        -0.036ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.040ns = ( 8.040 - 8.000 ) 
+    Source Clock Delay      (SCD):    0.076ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.076     0.076    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ap_clk
+    RAMB36_X2Y15         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CLKBWRCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X2Y15         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKBWRCLK_CASDOUTPB[1])
+                                                      1.054     1.130 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.161    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4_n_144
+    RAMB36_X2Y16         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_CASDOUTPB[1])
+                                                      0.210     1.371 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_5/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.402    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_5_n_144
+    RAMB36_X2Y17         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_CASDOUTPB[1])
+                                                      0.210     1.612 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_6/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.643    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_6_n_144
+    RAMB36_X2Y18         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_DOUTPBDOUTP[1])
+                                                      0.117     1.760 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_7/DOUTPBDOUTP[1]
+                         net (fo=2, routed)           0.553     2.313    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_7_n_152
+    SLICE_X29Y69         LUT4 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.050     2.363 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/left_fu_228_p2_carry_i_32/O
+                         net (fo=6, routed)           0.353     2.716    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_7_4
+    SLICE_X29Y43         LUT6 (Prop_C6LUT_SLICEL_I5_O)
+                                                      0.088     2.804 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_0_i_113__0/O
+                         net (fo=4, routed)           0.139     2.943    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/grp_search_0_Pipeline_HEAP_PUSH_fu_974_even_V_d0[33]
+    SLICE_X28Y42         LUT4 (Prop_A6LUT_SLICEM_I0_O)
+                                                      0.090     3.033 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm[3]_i_35/O
+                         net (fo=1, routed)           0.013     3.046    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ap_CS_fsm_reg[3]_i_2_4[0]
+    SLICE_X28Y42         CARRY8 (Prop_CARRY8_SLICEM_S[0]_CO[7])
+                                                      0.192     3.238 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ap_CS_fsm_reg[3]_i_3/CO[7]
+                         net (fo=1, routed)           0.026     3.264    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm_reg[1][0]
+    SLICE_X28Y43         CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.022     3.286 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm_reg[3]_i_2/CO[7]
+                         net (fo=5, routed)           0.602     3.888    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/CO[0]
+    SLICE_X40Y53         LUT6 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.036     3.924 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_10/O
+                         net (fo=2, routed)           0.051     3.975    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_10_n_6
+    SLICE_X40Y53         LUT6 (Prop_G6LUT_SLICEL_I3_O)
+                                                      0.097     4.072 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_4_comp_3/O
+                         net (fo=18, routed)          0.379     4.450    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/even_V_we0
+    SLICE_X38Y54         LUT5 (Prop_B6LUT_SLICEL_I0_O)
+                                                      0.036     4.486 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_0_i_60/O
+                         net (fo=8, routed)           0.642     5.128    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/WEBWE[0]
+    RAMB36_X1Y12         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0/WEBWE[2]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     8.000     8.000 r  
+                                                      0.000     8.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.040     8.040    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ap_clk
+    RAMB36_X1Y12         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0/CLKBWRCLK
+                         clock pessimism              0.000     8.040    
+                         clock uncertainty           -0.035     8.005    
+    RAMB36_X1Y12         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKBWRCLK_WEBWE[2])
+                                                     -0.394     7.611    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_0
+  -------------------------------------------------------------------
+                         required time                          7.611    
+                         arrival time                          -5.128    
+  -------------------------------------------------------------------
+                         slack                                  2.483    
+
+Slack (MET) :             2.488ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2/WEA[2]
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (ap_clk rise@8.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        5.045ns  (logic 2.204ns (43.683%)  route 2.841ns (56.317%))
+  Logic Levels:           12  (CARRY8=2 LUT4=2 LUT5=2 LUT6=3 RAMB36E2=3)
+  Clock Path Skew:        -0.037ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.039ns = ( 8.039 - 8.000 ) 
+    Source Clock Delay      (SCD):    0.076ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.076     0.076    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_clk
+    RAMB36_X2Y3          RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X2Y3          RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_CASDOUTA[0])
+                                                      1.143     1.219 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12/CASDOUTA[0]
+                         net (fo=1, routed)           0.032     1.251    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12_n_41
+    RAMB36_X2Y4          RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINA[0]_CASDOUTA[0])
+                                                      0.210     1.461 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_13/CASDOUTA[0]
+                         net (fo=1, routed)           0.032     1.493    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_13_n_41
+    RAMB36_X2Y5          RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINA[0]_CASDOUTA[0])
+                                                      0.210     1.703 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_14/CASDOUTA[0]
+                         net (fo=1, routed)           0.032     1.735    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_14_n_41
+    RAMB36_X2Y6          RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINA[0]_DOUTADOUT[0])
+                                                      0.117     1.852 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_15/DOUTADOUT[0]
+                         net (fo=3, routed)           0.588     2.440    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_15_n_105
+    SLICE_X27Y47         LUT4 (Prop_F6LUT_SLICEM_I2_O)
+                                                      0.088     2.528 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/trunc_ln47_2_reg_401[36]_i_2/O
+                         net (fo=6, routed)           0.253     2.782    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/ram_reg_bram_15_0
+    SLICE_X28Y44         LUT5 (Prop_C6LUT_SLICEM_I2_O)
+                                                      0.088     2.870 f  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_22/O
+                         net (fo=1, routed)           0.040     2.910    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_22_n_6
+    SLICE_X28Y44         LUT6 (Prop_D6LUT_SLICEM_I5_O)
+                                                      0.037     2.947 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_6/O
+                         net (fo=1, routed)           0.176     3.123    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_6_n_6
+    SLICE_X28Y45         CARRY8 (Prop_CARRY8_SLICEM_DI[2]_CO[7])
+                                                      0.110     3.233 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry/CO[7]
+                         net (fo=1, routed)           0.026     3.259    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_n_6
+    SLICE_X28Y46         CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.022     3.281 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry__0/CO[7]
+                         net (fo=5, routed)           0.203     3.484    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2
+    SLICE_X28Y50         LUT4 (Prop_D6LUT_SLICEM_I0_O)
+                                                      0.037     3.521 f  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/ram_reg_bram_23_i_13/O
+                         net (fo=2, routed)           0.336     3.857    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_DOWN_fu_155/ram_reg_bram_23_6
+    SLICE_X37Y53         LUT6 (Prop_H6LUT_SLICEM_I5_O)
+                                                      0.053     3.910 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_DOWN_fu_155/ram_reg_bram_23_i_7__0/O
+                         net (fo=1, routed)           0.042     3.952    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_1
+    SLICE_X37Y53         LUT6 (Prop_G6LUT_SLICEM_I2_O)
+                                                      0.037     3.989 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_3/O
+                         net (fo=19, routed)          0.416     4.405    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/odd_V_we0
+    SLICE_X17Y51         LUT5 (Prop_G6LUT_SLICEM_I4_O)
+                                                      0.052     4.457 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_2_i_3__2/O
+                         net (fo=8, routed)           0.664     5.121    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2_1[0]
+    RAMB36_X0Y15         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2/WEA[2]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     8.000     8.000 r  
+                                                      0.000     8.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.039     8.039    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_clk
+    RAMB36_X0Y15         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2/CLKARDCLK
+                         clock pessimism              0.000     8.039    
+                         clock uncertainty           -0.035     8.004    
+    RAMB36_X0Y15         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKARDCLK_WEA[2])
+                                                     -0.394     7.610    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2
+  -------------------------------------------------------------------
+                         required time                          7.610    
+                         arrival time                          -5.121    
+  -------------------------------------------------------------------
+                         slack                                  2.488    
+
+Slack (MET) :             2.488ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2/WEA[1]
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (ap_clk rise@8.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        5.045ns  (logic 2.204ns (43.683%)  route 2.841ns (56.317%))
+  Logic Levels:           12  (CARRY8=2 LUT4=2 LUT5=2 LUT6=3 RAMB36E2=3)
+  Clock Path Skew:        -0.037ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.039ns = ( 8.039 - 8.000 ) 
+    Source Clock Delay      (SCD):    0.076ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.076     0.076    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_clk
+    RAMB36_X2Y3          RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X2Y3          RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_CASDOUTA[0])
+                                                      1.143     1.219 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12/CASDOUTA[0]
+                         net (fo=1, routed)           0.032     1.251    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12_n_41
+    RAMB36_X2Y4          RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINA[0]_CASDOUTA[0])
+                                                      0.210     1.461 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_13/CASDOUTA[0]
+                         net (fo=1, routed)           0.032     1.493    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_13_n_41
+    RAMB36_X2Y5          RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINA[0]_CASDOUTA[0])
+                                                      0.210     1.703 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_14/CASDOUTA[0]
+                         net (fo=1, routed)           0.032     1.735    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_14_n_41
+    RAMB36_X2Y6          RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINA[0]_DOUTADOUT[0])
+                                                      0.117     1.852 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_15/DOUTADOUT[0]
+                         net (fo=3, routed)           0.588     2.440    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_15_n_105
+    SLICE_X27Y47         LUT4 (Prop_F6LUT_SLICEM_I2_O)
+                                                      0.088     2.528 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/trunc_ln47_2_reg_401[36]_i_2/O
+                         net (fo=6, routed)           0.253     2.782    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/ram_reg_bram_15_0
+    SLICE_X28Y44         LUT5 (Prop_C6LUT_SLICEM_I2_O)
+                                                      0.088     2.870 f  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_22/O
+                         net (fo=1, routed)           0.040     2.910    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_22_n_6
+    SLICE_X28Y44         LUT6 (Prop_D6LUT_SLICEM_I5_O)
+                                                      0.037     2.947 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_6/O
+                         net (fo=1, routed)           0.176     3.123    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_6_n_6
+    SLICE_X28Y45         CARRY8 (Prop_CARRY8_SLICEM_DI[2]_CO[7])
+                                                      0.110     3.233 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry/CO[7]
+                         net (fo=1, routed)           0.026     3.259    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_n_6
+    SLICE_X28Y46         CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.022     3.281 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry__0/CO[7]
+                         net (fo=5, routed)           0.203     3.484    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2
+    SLICE_X28Y50         LUT4 (Prop_D6LUT_SLICEM_I0_O)
+                                                      0.037     3.521 f  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/ram_reg_bram_23_i_13/O
+                         net (fo=2, routed)           0.336     3.857    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_DOWN_fu_155/ram_reg_bram_23_6
+    SLICE_X37Y53         LUT6 (Prop_H6LUT_SLICEM_I5_O)
+                                                      0.053     3.910 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_DOWN_fu_155/ram_reg_bram_23_i_7__0/O
+                         net (fo=1, routed)           0.042     3.952    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_1
+    SLICE_X37Y53         LUT6 (Prop_G6LUT_SLICEM_I2_O)
+                                                      0.037     3.989 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_3/O
+                         net (fo=19, routed)          0.416     4.405    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/odd_V_we0
+    SLICE_X17Y51         LUT5 (Prop_G6LUT_SLICEM_I4_O)
+                                                      0.052     4.457 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_2_i_3__2/O
+                         net (fo=8, routed)           0.664     5.121    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2_1[0]
+    RAMB36_X0Y15         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2/WEA[1]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     8.000     8.000 r  
+                                                      0.000     8.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.039     8.039    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_clk
+    RAMB36_X0Y15         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2/CLKARDCLK
+                         clock pessimism              0.000     8.039    
+                         clock uncertainty           -0.035     8.004    
+    RAMB36_X0Y15         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKARDCLK_WEA[1])
+                                                     -0.394     7.610    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2
+  -------------------------------------------------------------------
+                         required time                          7.610    
+                         arrival time                          -5.121    
+  -------------------------------------------------------------------
+                         slack                                  2.488    
+
+Slack (MET) :             2.489ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_2/WEBWE[1]
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (ap_clk rise@8.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        5.046ns  (logic 2.231ns (44.217%)  route 2.815ns (55.783%))
+  Logic Levels:           11  (CARRY8=2 LUT4=2 LUT5=1 LUT6=3 RAMB36E2=3)
+  Clock Path Skew:        -0.036ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.040ns = ( 8.040 - 8.000 ) 
+    Source Clock Delay      (SCD):    0.076ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.076     0.076    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ap_clk
+    RAMB36_X2Y15         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CLKBWRCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X2Y15         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKBWRCLK_CASDOUTPB[1])
+                                                      1.054     1.130 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.161    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_4_n_144
+    RAMB36_X2Y16         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_CASDOUTPB[1])
+                                                      0.210     1.371 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_5/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.402    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_5_n_144
+    RAMB36_X2Y17         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_CASDOUTPB[1])
+                                                      0.210     1.612 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_6/CASDOUTPB[1]
+                         net (fo=1, routed)           0.031     1.643    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_6_n_144
+    RAMB36_X2Y18         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINPB[1]_DOUTPBDOUTP[1])
+                                                      0.117     1.760 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_7/DOUTPBDOUTP[1]
+                         net (fo=2, routed)           0.553     2.313    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_7_n_152
+    SLICE_X29Y69         LUT4 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.050     2.363 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/left_fu_228_p2_carry_i_32/O
+                         net (fo=6, routed)           0.353     2.716    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_7_4
+    SLICE_X29Y43         LUT6 (Prop_C6LUT_SLICEL_I5_O)
+                                                      0.088     2.804 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_0_i_113__0/O
+                         net (fo=4, routed)           0.139     2.943    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/grp_search_0_Pipeline_HEAP_PUSH_fu_974_even_V_d0[33]
+    SLICE_X28Y42         LUT4 (Prop_A6LUT_SLICEM_I0_O)
+                                                      0.090     3.033 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm[3]_i_35/O
+                         net (fo=1, routed)           0.013     3.046    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ap_CS_fsm_reg[3]_i_2_4[0]
+    SLICE_X28Y42         CARRY8 (Prop_CARRY8_SLICEM_S[0]_CO[7])
+                                                      0.192     3.238 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ap_CS_fsm_reg[3]_i_3/CO[7]
+                         net (fo=1, routed)           0.026     3.264    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm_reg[1][0]
+    SLICE_X28Y43         CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.022     3.286 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_CS_fsm_reg[3]_i_2/CO[7]
+                         net (fo=5, routed)           0.602     3.888    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/CO[0]
+    SLICE_X40Y53         LUT6 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.036     3.924 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_10/O
+                         net (fo=2, routed)           0.051     3.975    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_10_n_6
+    SLICE_X40Y53         LUT6 (Prop_G6LUT_SLICEL_I3_O)
+                                                      0.097     4.072 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_4_comp_3/O
+                         net (fo=18, routed)          0.082     4.154    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/even_V_we0
+    SLICE_X40Y53         LUT5 (Prop_H5LUT_SLICEL_I0_O)
+                                                      0.065     4.219 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_2_i_6/O
+                         net (fo=8, routed)           0.903     5.122    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_2_3[0]
+    RAMB36_X1Y14         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_2/WEBWE[1]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     8.000     8.000 r  
+                                                      0.000     8.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.040     8.040    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ap_clk
+    RAMB36_X1Y14         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_2/CLKBWRCLK
+                         clock pessimism              0.000     8.040    
+                         clock uncertainty           -0.035     8.005    
+    RAMB36_X1Y14         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKBWRCLK_WEBWE[1])
+                                                     -0.394     7.611    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/even_V_U/ram_reg_bram_2
+  -------------------------------------------------------------------
+                         required time                          7.611    
+                         arrival time                          -5.122    
+  -------------------------------------------------------------------
+                         slack                                  2.489    
+
+Slack (MET) :             2.492ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_1/ENARDEN
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (ap_clk rise@8.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        5.094ns  (logic 2.870ns (56.343%)  route 2.224ns (43.657%))
+  Logic Levels:           12  (CARRY8=1 LUT4=1 LUT5=1 LUT6=2 RAMB36E2=7)
+  Clock Path Skew:        -0.037ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.039ns = ( 8.039 - 8.000 ) 
+    Source Clock Delay      (SCD):    0.076ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.076     0.076    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ap_clk
+    RAMB36_X3Y34         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40/CLKBWRCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X3Y34         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKBWRCLK_CASDOUTB[7])
+                                                      1.062     1.138 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.166    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_40_n_66
+    RAMB36_X3Y35         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     1.376 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_41/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.404    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_41_n_66
+    RAMB36_X3Y36         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     1.614 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_42/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.642    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_42_n_66
+    RAMB36_X3Y37         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     1.852 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_43/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     1.880    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_43_n_66
+    RAMB36_X3Y38         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     2.090 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_44/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     2.118    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_44_n_66
+    RAMB36_X3Y39         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     2.328 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_45/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     2.356    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_45_n_66
+    RAMB36_X3Y40         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_CASDOUTB[7])
+                                                      0.210     2.566 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_46/CASDOUTB[7]
+                         net (fo=1, routed)           0.028     2.594    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_46_n_66
+    RAMB36_X3Y41         RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINB[7]_DOUTBDOUT[7])
+                                                      0.117     2.711 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_47/DOUTBDOUT[7]
+                         net (fo=1, routed)           0.838     3.549    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/ram_reg_bram_47_n_130
+    SLICE_X66Y150        LUT6 (Prop_E6LUT_SLICEL_I3_O)
+                                                      0.035     3.584 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_17/O
+                         net (fo=2, routed)           0.113     3.697    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_17_n_6
+    SLICE_X66Y148        LUT4 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.098     3.795 r  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_10/O
+                         net (fo=1, routed)           0.009     3.804    bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835[11]_i_10_n_6
+    SLICE_X66Y148        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[4])
+                                                      0.211     4.015 f  bd_0_i/hls_inst/inst/engine_0_U0/cells_U/output_addr_reg_1835_reg[11]_i_1/O[4]
+                         net (fo=9, routed)           0.271     4.286    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/output_addr_reg_1835_reg[11]_0[11]
+    SLICE_X65Y132        LUT5 (Prop_F6LUT_SLICEM_I2_O)
+                                                      0.051     4.337 f  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/ram_reg_bram_0_i_50__2/O
+                         net (fo=7, routed)           0.101     4.438    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_s_fu_621_output_r_address0[11]
+    SLICE_X66Y132        LUT6 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.474 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/ram_reg_bram_1_i_3__2/O
+                         net (fo=1, routed)           0.696     5.170    bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_1_1
+    RAMB36_X4Y18         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_1/ENARDEN
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     8.000     8.000 r  
+                                                      0.000     8.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.039     8.039    bd_0_i/hls_inst/inst/engine_0_U0/output_U/ap_clk
+    RAMB36_X4Y18         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_1/CLKARDCLK
+                         clock pessimism              0.000     8.039    
+                         clock uncertainty           -0.035     8.004    
+    RAMB36_X4Y18         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKARDCLK_ENARDEN)
+                                                     -0.342     7.662    bd_0_i/hls_inst/inst/engine_0_U0/output_U/ram_reg_bram_1
+  -------------------------------------------------------------------
+                         required time                          7.662    
+                         arrival time                          -5.170    
+  -------------------------------------------------------------------
+                         slack                                  2.492    
+
+Slack (MET) :             2.494ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12/CLKARDCLK
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Destination:            bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2/WEA[3]
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@4.000ns period=8.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            8.000ns  (ap_clk rise@8.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        5.039ns  (logic 2.204ns (43.735%)  route 2.835ns (56.265%))
+  Logic Levels:           12  (CARRY8=2 LUT4=2 LUT5=2 LUT6=3 RAMB36E2=3)
+  Clock Path Skew:        -0.037ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.039ns = ( 8.039 - 8.000 ) 
+    Source Clock Delay      (SCD):    0.076ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.076     0.076    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_clk
+    RAMB36_X2Y3          RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12/CLKARDCLK
+  -------------------------------------------------------------------    -------------------
+    RAMB36_X2Y3          RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_CASDOUTA[0])
+                                                      1.143     1.219 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12/CASDOUTA[0]
+                         net (fo=1, routed)           0.032     1.251    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_12_n_41
+    RAMB36_X2Y4          RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINA[0]_CASDOUTA[0])
+                                                      0.210     1.461 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_13/CASDOUTA[0]
+                         net (fo=1, routed)           0.032     1.493    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_13_n_41
+    RAMB36_X2Y5          RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINA[0]_CASDOUTA[0])
+                                                      0.210     1.703 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_14/CASDOUTA[0]
+                         net (fo=1, routed)           0.032     1.735    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_14_n_41
+    RAMB36_X2Y6          RAMB36E2 (Prop_RAMB36E2_RAMB36_CASDINA[0]_DOUTADOUT[0])
+                                                      0.117     1.852 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_15/DOUTADOUT[0]
+                         net (fo=3, routed)           0.588     2.440    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_15_n_105
+    SLICE_X27Y47         LUT4 (Prop_F6LUT_SLICEM_I2_O)
+                                                      0.088     2.528 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/trunc_ln47_2_reg_401[36]_i_2/O
+                         net (fo=6, routed)           0.253     2.782    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/ram_reg_bram_15_0
+    SLICE_X28Y44         LUT5 (Prop_C6LUT_SLICEM_I2_O)
+                                                      0.088     2.870 f  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_22/O
+                         net (fo=1, routed)           0.040     2.910    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_22_n_6
+    SLICE_X28Y44         LUT6 (Prop_D6LUT_SLICEM_I5_O)
+                                                      0.037     2.947 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_6/O
+                         net (fo=1, routed)           0.176     3.123    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_i_6_n_6
+    SLICE_X28Y45         CARRY8 (Prop_CARRY8_SLICEM_DI[2]_CO[7])
+                                                      0.110     3.233 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry/CO[7]
+                         net (fo=1, routed)           0.026     3.259    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry_n_6
+    SLICE_X28Y46         CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.022     3.281 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2_carry__0/CO[7]
+                         net (fo=5, routed)           0.203     3.484    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/icmp_ln60_fu_252_p2
+    SLICE_X28Y50         LUT4 (Prop_D6LUT_SLICEM_I0_O)
+                                                      0.037     3.521 f  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_UP_fu_167/ram_reg_bram_23_i_13/O
+                         net (fo=2, routed)           0.336     3.857    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_DOWN_fu_155/ram_reg_bram_23_6
+    SLICE_X37Y53         LUT6 (Prop_H6LUT_SLICEM_I5_O)
+                                                      0.053     3.910 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_pop_fu_966/grp_pop_Pipeline_HEAP_DOWN_fu_155/ram_reg_bram_23_i_7__0/O
+                         net (fo=1, routed)           0.042     3.952    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_1
+    SLICE_X37Y53         LUT6 (Prop_G6LUT_SLICEM_I2_O)
+                                                      0.037     3.989 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_23_i_3/O
+                         net (fo=19, routed)          0.416     4.405    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/odd_V_we0
+    SLICE_X17Y51         LUT5 (Prop_G6LUT_SLICEM_I4_O)
+                                                      0.052     4.457 r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/grp_search_0_Pipeline_HEAP_PUSH_fu_974/ram_reg_bram_2_i_3__2/O
+                         net (fo=8, routed)           0.658     5.115    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2_1[0]
+    RAMB36_X0Y15         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2/WEA[3]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     8.000     8.000 r  
+                                                      0.000     8.000 r  ap_clk (IN)
+                         net (fo=13371, unset)        0.039     8.039    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ap_clk
+    RAMB36_X0Y15         RAMB36E2                                     r  bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2/CLKARDCLK
+                         clock pessimism              0.000     8.039    
+                         clock uncertainty           -0.035     8.004    
+    RAMB36_X0Y15         RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKARDCLK_WEA[3])
+                                                     -0.394     7.610    bd_0_i/hls_inst/inst/engine_0_U0/grp_search_0_s_fu_621/odd_V_U/ram_reg_bram_2
+  -------------------------------------------------------------------
+                         required time                          7.610    
+                         arrival time                          -5.115    
+  -------------------------------------------------------------------
+                         slack                                  2.494    
+
+
+
+
