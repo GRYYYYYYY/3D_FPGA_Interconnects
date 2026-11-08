@@ -49,7 +49,7 @@ def main():
             'sim/tv/cdatafile/c.*autotvout_result*.dat',
             'sim/tv/rtldatafile/rtl.*autotvout_result*.dat'])
     worker=root/'gpu_live_worker'
-    add(worker,['*.json','*.log','live_*/*.json','live_*/*/process.log',
+    add(worker,['*.json','*.log','live_*/*.json','live_*/*/*.log',
         'live_*/*/invocation.json','live_*/*/result.json',
         'native_controls/summary.json','native_controls/**/process.log',
         'source/**/*.cpp','source/**/*.cu','source/**/*.hpp','source/**/*.sv',

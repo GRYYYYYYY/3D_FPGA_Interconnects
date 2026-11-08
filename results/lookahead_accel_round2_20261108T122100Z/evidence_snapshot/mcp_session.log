@@ -1,0 +1,465 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Sun Nov  8 12:26:01 2026
+# Process ID: 2226585
+# Current directory: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z
+# Command line: vivado -mode tcl -log .vivado-ai/vivado_40759882_7fa1c717.log -journal .vivado-ai/vivado_40759882_7fa1c717.jou -notrace -source .vivado-ai/init_40759882_7fa1c717.tcl
+# Log file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/.vivado-ai/vivado_40759882_7fa1c717.log
+# Journal file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/.vivado-ai/vivado_40759882_7fa1c717.jou
+# Running On: fpgaacc2--72bfa719011c-3hfvuvkzdl, OS: Linux, CPU Frequency: 899.462 MHz, CPU Physical cores: 32, Host memory: 1622731 MB
+#-----------------------------------------------------------
+source .vivado-ai/init_40759882_7fa1c717.tcl -notrace
+INFO: [Common 17-1674] Started webserver at http://localhost:37163
+set_param -quiet messaging.defaultLimit 10000000
+puts "MCPPROBE:qweeclpvhof5:[get_param messaging.defaultLimit]"
+MCPPROBE:qweeclpvhof5:10000000
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:696s0tqmwvu3===}
+INFO: [MCP 00-100] ===MCP_CMD_START:696s0tqmwvu3===
+puts "VSCSTART" ; set exitCode [catch {create_project la_memory_test ./memory_selftest -part xcu280-fsvh2892-2L-e; add_files -fileset sim_1 ../../accel/lookahead/sim/bounded_axi.sv; add_files -fileset sim_1 ../../accel/lookahead/sim/bounded_axi_tb.sv; set_property top bounded_axi_tb [get_filesets sim_1]; set_property xsim.simulate.runtime 10us [get_filesets sim_1]; update_compile_order -fileset sim_1} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:696s0tqmwvu3:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:696s0tqmwvu3:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:u52h76gssju7===}
+INFO: [MCP 00-100] ===MCP_CMD_START:u52h76gssju7===
+puts "VSCSTART" ; set exitCode [catch {launch_simulation -simset sim_1 -mode behavioral} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+Command: launch_simulation  -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'bounded_axi_tb'
+WARNING: [Vivado 12-13277] Compiled library path does not exist: ''
+INFO: [Vivado 12-5682] Launching behavioral simulation in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from '/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/tps/boost_1_72_0'
+INFO: [SIM-utils-54] Inspecting design source files for 'bounded_axi_tb' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+xvlog --incr --relax -L uvm -prj bounded_axi_tb_vlog.prj
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module la_bounded_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi_tb.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bounded_axi_tb
+INFO: [VRFC 10-2263] Analyzing Verilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+Waiting for jobs to finish...
+No pending jobs, compilation finished.
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot bounded_axi_tb_behav xil_defaultlib.bounded_axi_tb xil_defaultlib.glbl -log elaborate.log
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin/unwrapped/lnx64.o/xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot bounded_axi_tb_behav xil_defaultlib.bounded_axi_tb xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+WARNING: [XSIM 43-4099] "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi.sv" Line 5. Module la_bounded_axi(PORTS=2,MAX_CYCLES=1000) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi.sv" Line 5. Module la_bounded_axi(PORTS=2,MAX_CYCLES=1000) doesn't have a timescale but at least one module in design has a timescale.
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.la_bounded_axi(PORTS=2,MAX_CYCLE...
+Compiling module xil_defaultlib.bounded_axi_tb
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot bounded_axi_tb_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '2' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "bounded_axi_tb_behav -key {Behavioral:sim_1:Functional:bounded_axi_tb} -tclbatch {bounded_axi_tb.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Time resolution is 1 ps
+source bounded_axi_tb.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 10us
+BOUNDED_MEMORY_PASS cycles=253
+TEST_PASS bounded AXI arbitration, stalls, bursts, credits and drain
+$finish called at time : 1290 ns : File "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi_tb.sv" Line 59
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'bounded_axi_tb_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 10us
+launch_simulation: Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 1809.855 ; gain = 90.895 ; free physical = 1040367 ; free virtual = 1447430
+
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:u52h76gssju7:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:u52h76gssju7:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:e4pnwb2cu92d===}
+INFO: [MCP 00-100] ===MCP_CMD_START:e4pnwb2cu92d===
+puts "VSCSTART" ; set exitCode [catch {close_sim; launch_simulation -simset sim_1 -mode behavioral} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+INFO: [Simtcl 6-16] Simulation closed
+Command: launch_simulation  -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'bounded_axi_tb'
+WARNING: [Vivado 12-13277] Compiled library path does not exist: ''
+INFO: [Vivado 12-5682] Launching behavioral simulation in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from '/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/tps/boost_1_72_0'
+INFO: [SIM-utils-54] Inspecting design source files for 'bounded_axi_tb' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+xvlog --incr --relax -L uvm -prj bounded_axi_tb_vlog.prj
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module la_bounded_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi_tb.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bounded_axi_tb
+Waiting for jobs to finish...
+No pending jobs, compilation finished.
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot bounded_axi_tb_behav xil_defaultlib.bounded_axi_tb xil_defaultlib.glbl -log elaborate.log
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin/unwrapped/lnx64.o/xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot bounded_axi_tb_behav xil_defaultlib.bounded_axi_tb xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.la_bounded_axi(PORTS=2,MAX_CYCLE...
+Compiling module xil_defaultlib.bounded_axi_tb
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot bounded_axi_tb_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '2' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "bounded_axi_tb_behav -key {Behavioral:sim_1:Functional:bounded_axi_tb} -tclbatch {bounded_axi_tb.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Time resolution is 1 ps
+source bounded_axi_tb.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 10us
+BOUNDED_MEMORY_PASS cycles=253
+TEST_PASS bounded AXI arbitration, stalls, bursts, credits and drain
+$finish called at time : 1290 ns : File "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi_tb.sv" Line 59
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'bounded_axi_tb_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 10us
+launch_simulation: Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 1809.855 ; gain = 0.000 ; free physical = 1040251 ; free virtual = 1447317
+
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:e4pnwb2cu92d:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:e4pnwb2cu92d:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:wg4jkt5hzlfq===}
+INFO: [MCP 00-100] ===MCP_CMD_START:wg4jkt5hzlfq===
+puts "VSCSTART" ; set exitCode [catch {close_sim; launch_simulation -simset sim_1 -mode behavioral} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+INFO: [Simtcl 6-16] Simulation closed
+Command: launch_simulation  -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'bounded_axi_tb'
+WARNING: [Vivado 12-13277] Compiled library path does not exist: ''
+INFO: [Vivado 12-5682] Launching behavioral simulation in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from '/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/tps/boost_1_72_0'
+INFO: [SIM-utils-54] Inspecting design source files for 'bounded_axi_tb' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+xvlog --incr --relax -L uvm -prj bounded_axi_tb_vlog.prj
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module la_bounded_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi_tb.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bounded_axi_tb
+Waiting for jobs to finish...
+No pending jobs, compilation finished.
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot bounded_axi_tb_behav xil_defaultlib.bounded_axi_tb xil_defaultlib.glbl -log elaborate.log
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin/unwrapped/lnx64.o/xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot bounded_axi_tb_behav xil_defaultlib.bounded_axi_tb xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.la_bounded_axi(PORTS=2,MAX_CYCLE...
+Compiling module xil_defaultlib.bounded_axi_tb
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot bounded_axi_tb_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '3' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "bounded_axi_tb_behav -key {Behavioral:sim_1:Functional:bounded_axi_tb} -tclbatch {bounded_axi_tb.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Time resolution is 1 ps
+source bounded_axi_tb.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 10us
+Fatal: bounded memory watchdog
+Time: 5022500 ps  Iteration: 0  Process: /bounded_axi_tb/dut/Always72_6  Scope: bounded_axi_tb.dut  File: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi.sv Line: 87
+$finish called at time : 5022500 ps
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'bounded_axi_tb_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 10us
+launch_simulation: Time (s): cpu = 00:00:03 ; elapsed = 00:00:06 . Memory (MB): peak = 1817.859 ; gain = 0.000 ; free physical = 1035125 ; free virtual = 1442355
+
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:wg4jkt5hzlfq:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:wg4jkt5hzlfq:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:gwj7rj8zuu5o===}
+INFO: [MCP 00-100] ===MCP_CMD_START:gwj7rj8zuu5o===
+puts "VSCSTART" ; set exitCode [catch {close_sim} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+INFO: [Simtcl 6-16] Simulation closed
+
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:gwj7rj8zuu5o:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:gwj7rj8zuu5o:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:jpo17yh8qel3===}
+INFO: [MCP 00-100] ===MCP_CMD_START:jpo17yh8qel3===
+puts "VSCSTART" ; set exitCode [catch {launch_simulation -simset sim_1 -mode behavioral} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+Command: launch_simulation  -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'bounded_axi_tb'
+WARNING: [Vivado 12-13277] Compiled library path does not exist: ''
+INFO: [Vivado 12-5682] Launching behavioral simulation in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from '/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/tps/boost_1_72_0'
+INFO: [SIM-utils-54] Inspecting design source files for 'bounded_axi_tb' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+xvlog --incr --relax -L uvm -prj bounded_axi_tb_vlog.prj
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module la_bounded_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi_tb.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bounded_axi_tb
+Waiting for jobs to finish...
+No pending jobs, compilation finished.
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot bounded_axi_tb_behav xil_defaultlib.bounded_axi_tb xil_defaultlib.glbl -log elaborate.log
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin/unwrapped/lnx64.o/xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot bounded_axi_tb_behav xil_defaultlib.bounded_axi_tb xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.la_bounded_axi(PORTS=2,MAX_CYCLE...
+Compiling module xil_defaultlib.bounded_axi_tb
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot bounded_axi_tb_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '3' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/memory_selftest/la_memory_test.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "bounded_axi_tb_behav -key {Behavioral:sim_1:Functional:bounded_axi_tb} -tclbatch {bounded_axi_tb.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Time resolution is 1 ps
+source bounded_axi_tb.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 10us
+BOUNDED_MEMORY_PROGRESS cycle=0
+BOUNDED_MEMORY_PASS cycles=251
+TEST_PASS bounded AXI arbitration, stalls, bursts, credits and drain
+$finish called at time : 1280 ns : File "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/sim/bounded_axi_tb.sv" Line 67
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'bounded_axi_tb_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 10us
+launch_simulation: Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 1817.859 ; gain = 0.000 ; free physical = 1033498 ; free virtual = 1440694
+
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:jpo17yh8qel3:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:jpo17yh8qel3:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:05244imzoo15===}
+INFO: [MCP 00-100] ===MCP_CMD_START:05244imzoo15===
+puts "VSCSTART" ; set exitCode [catch {close_sim; close_project} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+INFO: [Simtcl 6-16] Simulation closed
+
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:05244imzoo15:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:05244imzoo15:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:m1e1yqq2h29j===}
+INFO: [MCP 00-100] ===MCP_CMD_START:m1e1yqq2h29j===
+puts "VSCSTART" ; set exitCode [catch {open_checkpoint ./hls_resident/project/solution/impl/verilog/project.runs/impl_1/bd_0_wrapper_routed.dcp} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+Command: open_checkpoint ./hls_resident/project/solution/impl/verilog/project.runs/impl_1/bd_0_wrapper_routed.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00.08 ; elapsed = 00:00:00.1 . Memory (MB): peak = 1817.859 ; gain = 0.000 ; free physical = 1028720 ; free virtual = 1436183
+INFO: [Device 21-403] Loading part xcu280-fsvh2892-2L-e
+Netlist sorting complete. Time (s): cpu = 00:00:00.32 ; elapsed = 00:00:00.32 . Memory (MB): peak = 3154.898 ; gain = 0.000 ; free physical = 1026406 ; free virtual = 1433869
+INFO: [Netlist 29-17] Analyzing 1588 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2022.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF Files: Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 3806.922 ; gain = 63.773 ; free physical = 1025327 ; free virtual = 1432781
+Restored from archive | CPU: 3.830000 secs | Memory: 59.836487 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 3806.922 ; gain = 63.773 ; free physical = 1025327 ; free virtual = 1432781
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 4059.688 ; gain = 0.000 ; free physical = 1024832 ; free virtual = 1432286
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 582 instances were transformed.
+  DSP48E1 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD, DSP_PREADD_DATA): 4 instances
+  RAM16X1D => RAM32X1D (RAMD32(x2)): 192 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 96 instances
+  RAM64X1D => RAM64X1D (RAMD64E(x2)): 96 instances
+  RAM64X1S => RAM64X1S (RAMS64E): 194 instances
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2022.2 (64-bit) build 3671981
+OpenCheckpoint Checksum | Checksum: 14db4cb4f
+----- Checksum: PlaceDB: 55848655 ShapeSum: 979e5693 RouteDB: 6091ee67 
+open_checkpoint: Time (s): cpu = 00:00:34 ; elapsed = 00:00:37 . Memory (MB): peak = 4059.688 ; gain = 2241.828 ; free physical = 1024834 ; free virtual = 1432288
+checkpoint_bd_0_wrapper_routed
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:m1e1yqq2h29j:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:m1e1yqq2h29j:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:lfq868xkp6r0===}
+INFO: [MCP 00-100] ===MCP_CMD_START:lfq868xkp6r0===
+puts "VSCSTART" ; set exitCode [catch {file mkdir ./mcp_resident_check; list [get_property PART [current_design]] [get_clocks] [get_property PERIOD [get_clocks]]} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+xcu280-fsvh2892-2L-e ap_clk 5.000
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:lfq868xkp6r0:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:lfq868xkp6r0:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:gt9tgvgrv44v===}
+INFO: [MCP 00-100] ===MCP_CMD_START:gt9tgvgrv44v===
+puts "VSCSTART" ; set exitCode [catch {report_timing_summary -delay_type min_max -file ./mcp_resident_check/timing.rpt; report_utilization -file ./mcp_resident_check/utilization.rpt; report_route_status -file ./mcp_resident_check/route.rpt} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -2L, Temperature grade: E, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 8 CPUs
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "ap_clk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+report_timing_summary: Time (s): cpu = 00:00:23 ; elapsed = 00:00:08 . Memory (MB): peak = 4312.770 ; gain = 253.082 ; free physical = 1024450 ; free virtual = 1431905
+
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:gt9tgvgrv44v:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:gt9tgvgrv44v:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:9xnx5l3en1gi===}
+INFO: [MCP 00-100] ===MCP_CMD_START:9xnx5l3en1gi===
+puts "VSCSTART" ; set exitCode [catch {dict create design [current_design] part [get_property PART [current_design]] period [get_property PERIOD [get_clocks ap_clk]]} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+design checkpoint_bd_0_wrapper_routed part xcu280-fsvh2892-2L-e period 5.000
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:9xnx5l3en1gi:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:9xnx5l3en1gi:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:y10o3zmya6tz===}
+INFO: [MCP 00-100] ===MCP_CMD_START:y10o3zmya6tz===
+puts "VSCSTART" ; set exitCode [catch {close_project} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:y10o3zmya6tz:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:y10o3zmya6tz:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:fvx5d9xm32ce===}
+INFO: [MCP 00-100] ===MCP_CMD_START:fvx5d9xm32ce===
+puts "VSCSTART" ; set exitCode [catch {open_checkpoint {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/hls_interleaved4_distance/project/solution/impl/verilog/project.runs/impl_1/bd_0_wrapper_routed.dcp}} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+Command: open_checkpoint /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/hls_interleaved4_distance/project/solution/impl/verilog/project.runs/impl_1/bd_0_wrapper_routed.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 4312.770 ; gain = 0.000 ; free physical = 1039730 ; free virtual = 1447800
+Netlist sorting complete. Time (s): cpu = 00:00:00.38 ; elapsed = 00:00:00.38 . Memory (MB): peak = 4312.770 ; gain = 0.000 ; free physical = 1039698 ; free virtual = 1447768
+INFO: [Netlist 29-17] Analyzing 1793 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2022.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF Files: Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 4312.770 ; gain = 0.000 ; free physical = 1039371 ; free virtual = 1447441
+Restored from archive | CPU: 4.160000 secs | Memory: 63.137947 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 4312.770 ; gain = 0.000 ; free physical = 1039371 ; free virtual = 1447441
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 4312.770 ; gain = 0.000 ; free physical = 1039375 ; free virtual = 1447445
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 12 instances were transformed.
+  DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD, DSP_PREADD_DATA): 12 instances
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2022.2 (64-bit) build 3671981
+OpenCheckpoint Checksum | Checksum: 13fb336eb
+----- Checksum: PlaceDB: d7e58fc9 ShapeSum: 0a9ff006 RouteDB: 5d2db71c 
+open_checkpoint: Time (s): cpu = 00:00:17 ; elapsed = 00:00:17 . Memory (MB): peak = 4312.770 ; gain = 0.000 ; free physical = 1039376 ; free virtual = 1447447
+checkpoint_bd_0_wrapper_routed
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:fvx5d9xm32ce:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:fvx5d9xm32ce:0===
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:k9k80mj1feuo===}
+INFO: [MCP 00-100] ===MCP_CMD_START:k9k80mj1feuo===
+puts "VSCSTART" ; set exitCode [catch {report_timing_summary -report_unconstrained -file {mcp_distance_check/timing.rpt}; report_route_status -file {mcp_distance_check/route.rpt}; report_utilization -file {mcp_distance_check/utilization.rpt}} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+VSCSTART
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -2L, Temperature grade: E, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 8 CPUs
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "ap_clk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+report_timing_summary: Time (s): cpu = 00:00:24 ; elapsed = 00:00:07 . Memory (MB): peak = 4362.957 ; gain = 50.188 ; free physical = 1039321 ; free virtual = 1447391
+/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/mcp_distance_check/utilization.rpt
+VSCEND:0
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:k9k80mj1feuo:$exitCode==="
+INFO: [MCP 00-101] ===MCP_CMD_END:k9k80mj1feuo:0===

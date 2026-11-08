@@ -1,0 +1,432 @@
+
+
+================================================================
+== Vitis HLS Report for 'lookahead_top_Pipeline_VITIS_LOOP_110_1'
+================================================================
+* Date:           Sun Nov  8 13:02:49 2026
+
+* Version:        2022.2 (Build 3670227 on Oct 13 2022)
+* Project:        project
+* Solution:       solution (Vivado IP Flow Target)
+* Product family: virtexuplus
+* Target device:  xcu280-fsvh2892-2L-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+---------+----------+------------+
+    |  Clock |  Target | Estimated| Uncertainty|
+    +--------+---------+----------+------------+
+    |ap_clk  |  5.00 ns|  1.288 ns|     1.35 ns|
+    +--------+---------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |  Latency (cycles) |   Latency (absolute)  |  Interval | Pipeline|
+    |   min   |   max   |    min    |    max    | min | max |   Type  |
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |        6|        6|  30.000 ns|  30.000 ns|    6|    6|       no|
+    +---------+---------+-----------+-----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +--------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                    |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |      Loop Name     |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +--------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_110_1  |        4|        4|         1|          1|          1|     4|       yes|
+        +--------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+------+---------+---------+-----+
+|         Name        | BRAM_18K|  DSP |    FF   |   LUT   | URAM|
++---------------------+---------+------+---------+---------+-----+
+|DSP                  |        -|     -|        -|        -|    -|
+|Expression           |        -|     -|        0|      103|    -|
+|FIFO                 |        -|     -|        -|        -|    -|
+|Instance             |        -|     -|        -|        -|    -|
+|Memory               |        -|     -|        -|        -|    -|
+|Multiplexer          |        -|     -|        -|       45|    -|
+|Register             |        -|     -|      418|        -|    -|
++---------------------+---------+------+---------+---------+-----+
+|Total                |        0|     0|      418|      148|    0|
++---------------------+---------+------+---------+---------+-----+
+|Available SLR        |     1344|  3008|   869120|   434560|  320|
++---------------------+---------+------+---------+---------+-----+
+|Utilization SLR (%)  |        0|     0|       ~0|       ~0|    0|
++---------------------+---------+------+---------+---------+-----+
+|Available            |     4032|  9024|  2607360|  1303680|  960|
++---------------------+---------+------+---------+---------+-----+
+|Utilization (%)      |        0|     0|       ~0|       ~0|    0|
++---------------------+---------+------+---------+---------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +------------------------+----------+----+---+----+------------+------------+
+    |      Variable Name     | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +------------------------+----------+----+---+----+------------+------------+
+    |add_ln110_fu_1942_p2    |         +|   0|  0|  10|           3|           1|
+    |add_ln112_1_fu_1971_p2  |         +|   0|  0|  41|          34|          34|
+    |add_ln112_fu_1962_p2    |         +|   0|  0|  41|          34|          34|
+    |icmp_ln110_fu_1936_p2   |      icmp|   0|  0|   9|           3|           4|
+    |ap_enable_pp0           |       xor|   0|  0|   2|           1|           2|
+    +------------------------+----------+----+---+----+------------+------------+
+    |Total                   |          |   0|  0| 103|          75|          75|
+    +------------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------+----+-----------+-----+-----------+
+    |           Name          | LUT| Input Size| Bits| Total Bits|
+    +-------------------------+----+-----------+-----+-----------+
+    |ap_done_int              |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter1  |   9|          2|    1|          2|
+    |c_q_fu_334               |   9|          2|    3|          6|
+    |heap_bases_4_fu_326      |   9|          2|   34|         68|
+    |label_bases_4_fu_330     |   9|          2|   34|         68|
+    +-------------------------+----+-----------+-----+-----------+
+    |Total                    |  45|         10|   73|        146|
+    +-------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +--------------------------+----+----+-----+-----------+
+    |           Name           | FF | LUT| Bits| Const Bits|
+    +--------------------------+----+----+-----+-----------+
+    |ap_CS_fsm                 |   1|   0|    1|          0|
+    |ap_done_reg               |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1   |   1|   0|    1|          0|
+    |c_q_fu_334                |   3|   0|    3|          0|
+    |heap_bases_1_fu_358       |  34|   0|   64|         30|
+    |heap_bases_2_fu_362       |  34|   0|   64|         30|
+    |heap_bases_3_fu_366       |  34|   0|   64|         30|
+    |heap_bases_4_fu_326       |  34|   0|   34|          0|
+    |heap_bases_fu_354         |  34|   0|   64|         30|
+    |label_bases_1_fu_342      |  34|   0|   64|         30|
+    |label_bases_2_fu_346      |  34|   0|   64|         30|
+    |label_bases_3_fu_350      |  34|   0|   64|         30|
+    |label_bases_4_fu_330      |  34|   0|   34|          0|
+    |label_bases_fu_338        |  34|   0|   64|         30|
+    |n_cast_cast_reg_4029      |  32|   0|   34|          2|
+    |state_q_1_fu_574          |   2|   0|   32|         30|
+    |state_q_2_fu_678          |   2|   0|   32|         30|
+    |state_q_3_fu_782          |   2|   0|   32|         30|
+    |state_q_fu_470            |   2|   0|   32|         30|
+    |zext_ln110_cast_reg_4024  |  32|   0|   34|          2|
+    +--------------------------+----+----+-----+-----------+
+    |Total                     | 418|   0|  782|        364|
+    +--------------------------+----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++----------------------------------------+-----+-----+------------+-----------------------------------------+--------------+
+|                RTL Ports               | Dir | Bits|  Protocol  |              Source Object              |    C Type    |
++----------------------------------------+-----+-----+------------+-----------------------------------------+--------------+
+|ap_clk                                  |   in|    1|  ap_ctrl_hs|  lookahead_top_Pipeline_VITIS_LOOP_110_1|  return value|
+|ap_rst                                  |   in|    1|  ap_ctrl_hs|  lookahead_top_Pipeline_VITIS_LOOP_110_1|  return value|
+|ap_start                                |   in|    1|  ap_ctrl_hs|  lookahead_top_Pipeline_VITIS_LOOP_110_1|  return value|
+|ap_done                                 |  out|    1|  ap_ctrl_hs|  lookahead_top_Pipeline_VITIS_LOOP_110_1|  return value|
+|ap_idle                                 |  out|    1|  ap_ctrl_hs|  lookahead_top_Pipeline_VITIS_LOOP_110_1|  return value|
+|ap_ready                                |  out|    1|  ap_ctrl_hs|  lookahead_top_Pipeline_VITIS_LOOP_110_1|  return value|
+|n_cast                                  |   in|   32|     ap_none|                                   n_cast|        scalar|
+|zext_ln110                              |   in|   32|     ap_none|                               zext_ln110|        scalar|
+|state_st_status_3_out                   |  out|   32|      ap_vld|                    state_st_status_3_out|       pointer|
+|state_st_status_3_out_ap_vld            |  out|    1|      ap_vld|                    state_st_status_3_out|       pointer|
+|state_st_peak_3_out                     |  out|   64|      ap_vld|                      state_st_peak_3_out|       pointer|
+|state_st_peak_3_out_ap_vld              |  out|    1|      ap_vld|                      state_st_peak_3_out|       pointer|
+|state_st_expanded_3_out                 |  out|   64|      ap_vld|                  state_st_expanded_3_out|       pointer|
+|state_st_expanded_3_out_ap_vld          |  out|    1|      ap_vld|                  state_st_expanded_3_out|       pointer|
+|state_st_edges_3_out                    |  out|   64|      ap_vld|                     state_st_edges_3_out|       pointer|
+|state_st_edges_3_out_ap_vld             |  out|    1|      ap_vld|                     state_st_edges_3_out|       pointer|
+|state_st_pops_3_out                     |  out|   64|      ap_vld|                      state_st_pops_3_out|       pointer|
+|state_st_pops_3_out_ap_vld              |  out|    1|      ap_vld|                      state_st_pops_3_out|       pointer|
+|state_st_pushes_3_out                   |  out|   64|      ap_vld|                    state_st_pushes_3_out|       pointer|
+|state_st_pushes_3_out_ap_vld            |  out|    1|      ap_vld|                    state_st_pushes_3_out|       pointer|
+|state_next_segment_kind_3_out           |  out|   32|      ap_vld|            state_next_segment_kind_3_out|       pointer|
+|state_next_segment_kind_3_out_ap_vld    |  out|    1|      ap_vld|            state_next_segment_kind_3_out|       pointer|
+|state_next_inter_3_out                  |  out|   32|      ap_vld|                   state_next_inter_3_out|       pointer|
+|state_next_inter_3_out_ap_vld           |  out|    1|      ap_vld|                   state_next_inter_3_out|       pointer|
+|state_next_cost_3_out                   |  out|   32|      ap_vld|                    state_next_cost_3_out|       pointer|
+|state_next_cost_3_out_ap_vld            |  out|    1|      ap_vld|                    state_next_cost_3_out|       pointer|
+|state_next_type_3_out                   |  out|   32|      ap_vld|                    state_next_type_3_out|       pointer|
+|state_next_type_3_out_ap_vld            |  out|    1|      ap_vld|                    state_next_type_3_out|       pointer|
+|state_parent_segment_kind_3_out         |  out|   32|      ap_vld|          state_parent_segment_kind_3_out|       pointer|
+|state_parent_segment_kind_3_out_ap_vld  |  out|    1|      ap_vld|          state_parent_segment_kind_3_out|       pointer|
+|state_parent_inter_3_out                |  out|   32|      ap_vld|                 state_parent_inter_3_out|       pointer|
+|state_parent_inter_3_out_ap_vld         |  out|    1|      ap_vld|                 state_parent_inter_3_out|       pointer|
+|state_parent_cost_3_out                 |  out|   32|      ap_vld|                  state_parent_cost_3_out|       pointer|
+|state_parent_cost_3_out_ap_vld          |  out|    1|      ap_vld|                  state_parent_cost_3_out|       pointer|
+|state_parent_type_3_out                 |  out|   32|      ap_vld|                  state_parent_type_3_out|       pointer|
+|state_parent_type_3_out_ap_vld          |  out|    1|      ap_vld|                  state_parent_type_3_out|       pointer|
+|state_value_node_3_out                  |  out|   32|      ap_vld|                   state_value_node_3_out|       pointer|
+|state_value_node_3_out_ap_vld           |  out|    1|      ap_vld|                   state_value_node_3_out|       pointer|
+|state_current_node_3_out                |  out|   32|      ap_vld|                 state_current_node_3_out|       pointer|
+|state_current_node_3_out_ap_vld         |  out|    1|      ap_vld|                 state_current_node_3_out|       pointer|
+|state_popping_3_out                     |  out|    1|      ap_vld|                      state_popping_3_out|       pointer|
+|state_popping_3_out_ap_vld              |  out|    1|      ap_vld|                      state_popping_3_out|       pointer|
+|state_end_3_out                         |  out|   64|      ap_vld|                          state_end_3_out|       pointer|
+|state_end_3_out_ap_vld                  |  out|    1|      ap_vld|                          state_end_3_out|       pointer|
+|state_edge_3_out                        |  out|   64|      ap_vld|                         state_edge_3_out|       pointer|
+|state_edge_3_out_ap_vld                 |  out|    1|      ap_vld|                         state_edge_3_out|       pointer|
+|state_dst_3_out                         |  out|   32|      ap_vld|                          state_dst_3_out|       pointer|
+|state_dst_3_out_ap_vld                  |  out|    1|      ap_vld|                          state_dst_3_out|       pointer|
+|state_child_3_out                       |  out|   32|      ap_vld|                        state_child_3_out|       pointer|
+|state_child_3_out_ap_vld                |  out|    1|      ap_vld|                        state_child_3_out|       pointer|
+|state_hole_3_out                        |  out|   32|      ap_vld|                         state_hole_3_out|       pointer|
+|state_hole_3_out_ap_vld                 |  out|    1|      ap_vld|                         state_hole_3_out|       pointer|
+|state_count_3_out                       |  out|   32|      ap_vld|                        state_count_3_out|       pointer|
+|state_count_3_out_ap_vld                |  out|    1|      ap_vld|                        state_count_3_out|       pointer|
+|state_index_3_out                       |  out|   32|      ap_vld|                        state_index_3_out|       pointer|
+|state_index_3_out_ap_vld                |  out|    1|      ap_vld|                        state_index_3_out|       pointer|
+|state_q_3_out                           |  out|   32|      ap_vld|                            state_q_3_out|       pointer|
+|state_q_3_out_ap_vld                    |  out|    1|      ap_vld|                            state_q_3_out|       pointer|
+|state_phase_3_out                       |  out|   32|      ap_vld|                        state_phase_3_out|       pointer|
+|state_phase_3_out_ap_vld                |  out|    1|      ap_vld|                        state_phase_3_out|       pointer|
+|state_st_status_2_out                   |  out|   32|      ap_vld|                    state_st_status_2_out|       pointer|
+|state_st_status_2_out_ap_vld            |  out|    1|      ap_vld|                    state_st_status_2_out|       pointer|
+|state_st_peak_2_out                     |  out|   64|      ap_vld|                      state_st_peak_2_out|       pointer|
+|state_st_peak_2_out_ap_vld              |  out|    1|      ap_vld|                      state_st_peak_2_out|       pointer|
+|state_st_expanded_2_out                 |  out|   64|      ap_vld|                  state_st_expanded_2_out|       pointer|
+|state_st_expanded_2_out_ap_vld          |  out|    1|      ap_vld|                  state_st_expanded_2_out|       pointer|
+|state_st_edges_2_out                    |  out|   64|      ap_vld|                     state_st_edges_2_out|       pointer|
+|state_st_edges_2_out_ap_vld             |  out|    1|      ap_vld|                     state_st_edges_2_out|       pointer|
+|state_st_pops_2_out                     |  out|   64|      ap_vld|                      state_st_pops_2_out|       pointer|
+|state_st_pops_2_out_ap_vld              |  out|    1|      ap_vld|                      state_st_pops_2_out|       pointer|
+|state_st_pushes_2_out                   |  out|   64|      ap_vld|                    state_st_pushes_2_out|       pointer|
+|state_st_pushes_2_out_ap_vld            |  out|    1|      ap_vld|                    state_st_pushes_2_out|       pointer|
+|state_next_segment_kind_2_out           |  out|   32|      ap_vld|            state_next_segment_kind_2_out|       pointer|
+|state_next_segment_kind_2_out_ap_vld    |  out|    1|      ap_vld|            state_next_segment_kind_2_out|       pointer|
+|state_next_inter_2_out                  |  out|   32|      ap_vld|                   state_next_inter_2_out|       pointer|
+|state_next_inter_2_out_ap_vld           |  out|    1|      ap_vld|                   state_next_inter_2_out|       pointer|
+|state_next_cost_2_out                   |  out|   32|      ap_vld|                    state_next_cost_2_out|       pointer|
+|state_next_cost_2_out_ap_vld            |  out|    1|      ap_vld|                    state_next_cost_2_out|       pointer|
+|state_next_type_2_out                   |  out|   32|      ap_vld|                    state_next_type_2_out|       pointer|
+|state_next_type_2_out_ap_vld            |  out|    1|      ap_vld|                    state_next_type_2_out|       pointer|
+|state_parent_segment_kind_2_out         |  out|   32|      ap_vld|          state_parent_segment_kind_2_out|       pointer|
+|state_parent_segment_kind_2_out_ap_vld  |  out|    1|      ap_vld|          state_parent_segment_kind_2_out|       pointer|
+|state_parent_inter_2_out                |  out|   32|      ap_vld|                 state_parent_inter_2_out|       pointer|
+|state_parent_inter_2_out_ap_vld         |  out|    1|      ap_vld|                 state_parent_inter_2_out|       pointer|
+|state_parent_cost_2_out                 |  out|   32|      ap_vld|                  state_parent_cost_2_out|       pointer|
+|state_parent_cost_2_out_ap_vld          |  out|    1|      ap_vld|                  state_parent_cost_2_out|       pointer|
+|state_parent_type_2_out                 |  out|   32|      ap_vld|                  state_parent_type_2_out|       pointer|
+|state_parent_type_2_out_ap_vld          |  out|    1|      ap_vld|                  state_parent_type_2_out|       pointer|
+|state_value_node_2_out                  |  out|   32|      ap_vld|                   state_value_node_2_out|       pointer|
+|state_value_node_2_out_ap_vld           |  out|    1|      ap_vld|                   state_value_node_2_out|       pointer|
+|state_current_node_2_out                |  out|   32|      ap_vld|                 state_current_node_2_out|       pointer|
+|state_current_node_2_out_ap_vld         |  out|    1|      ap_vld|                 state_current_node_2_out|       pointer|
+|state_popping_2_out                     |  out|    1|      ap_vld|                      state_popping_2_out|       pointer|
+|state_popping_2_out_ap_vld              |  out|    1|      ap_vld|                      state_popping_2_out|       pointer|
+|state_end_2_out                         |  out|   64|      ap_vld|                          state_end_2_out|       pointer|
+|state_end_2_out_ap_vld                  |  out|    1|      ap_vld|                          state_end_2_out|       pointer|
+|state_edge_2_out                        |  out|   64|      ap_vld|                         state_edge_2_out|       pointer|
+|state_edge_2_out_ap_vld                 |  out|    1|      ap_vld|                         state_edge_2_out|       pointer|
+|state_dst_2_out                         |  out|   32|      ap_vld|                          state_dst_2_out|       pointer|
+|state_dst_2_out_ap_vld                  |  out|    1|      ap_vld|                          state_dst_2_out|       pointer|
+|state_child_2_out                       |  out|   32|      ap_vld|                        state_child_2_out|       pointer|
+|state_child_2_out_ap_vld                |  out|    1|      ap_vld|                        state_child_2_out|       pointer|
+|state_hole_2_out                        |  out|   32|      ap_vld|                         state_hole_2_out|       pointer|
+|state_hole_2_out_ap_vld                 |  out|    1|      ap_vld|                         state_hole_2_out|       pointer|
+|state_count_2_out                       |  out|   32|      ap_vld|                        state_count_2_out|       pointer|
+|state_count_2_out_ap_vld                |  out|    1|      ap_vld|                        state_count_2_out|       pointer|
+|state_index_2_out                       |  out|   32|      ap_vld|                        state_index_2_out|       pointer|
+|state_index_2_out_ap_vld                |  out|    1|      ap_vld|                        state_index_2_out|       pointer|
+|state_q_2_out                           |  out|   32|      ap_vld|                            state_q_2_out|       pointer|
+|state_q_2_out_ap_vld                    |  out|    1|      ap_vld|                            state_q_2_out|       pointer|
+|state_phase_2_out                       |  out|   32|      ap_vld|                        state_phase_2_out|       pointer|
+|state_phase_2_out_ap_vld                |  out|    1|      ap_vld|                        state_phase_2_out|       pointer|
+|state_st_status_1_out                   |  out|   32|      ap_vld|                    state_st_status_1_out|       pointer|
+|state_st_status_1_out_ap_vld            |  out|    1|      ap_vld|                    state_st_status_1_out|       pointer|
+|state_st_peak_1_out                     |  out|   64|      ap_vld|                      state_st_peak_1_out|       pointer|
+|state_st_peak_1_out_ap_vld              |  out|    1|      ap_vld|                      state_st_peak_1_out|       pointer|
+|state_st_expanded_1_out                 |  out|   64|      ap_vld|                  state_st_expanded_1_out|       pointer|
+|state_st_expanded_1_out_ap_vld          |  out|    1|      ap_vld|                  state_st_expanded_1_out|       pointer|
+|state_st_edges_1_out                    |  out|   64|      ap_vld|                     state_st_edges_1_out|       pointer|
+|state_st_edges_1_out_ap_vld             |  out|    1|      ap_vld|                     state_st_edges_1_out|       pointer|
+|state_st_pops_1_out                     |  out|   64|      ap_vld|                      state_st_pops_1_out|       pointer|
+|state_st_pops_1_out_ap_vld              |  out|    1|      ap_vld|                      state_st_pops_1_out|       pointer|
+|state_st_pushes_1_out                   |  out|   64|      ap_vld|                    state_st_pushes_1_out|       pointer|
+|state_st_pushes_1_out_ap_vld            |  out|    1|      ap_vld|                    state_st_pushes_1_out|       pointer|
+|state_next_segment_kind_1_out           |  out|   32|      ap_vld|            state_next_segment_kind_1_out|       pointer|
+|state_next_segment_kind_1_out_ap_vld    |  out|    1|      ap_vld|            state_next_segment_kind_1_out|       pointer|
+|state_next_inter_1_out                  |  out|   32|      ap_vld|                   state_next_inter_1_out|       pointer|
+|state_next_inter_1_out_ap_vld           |  out|    1|      ap_vld|                   state_next_inter_1_out|       pointer|
+|state_next_cost_1_out                   |  out|   32|      ap_vld|                    state_next_cost_1_out|       pointer|
+|state_next_cost_1_out_ap_vld            |  out|    1|      ap_vld|                    state_next_cost_1_out|       pointer|
+|state_next_type_1_out                   |  out|   32|      ap_vld|                    state_next_type_1_out|       pointer|
+|state_next_type_1_out_ap_vld            |  out|    1|      ap_vld|                    state_next_type_1_out|       pointer|
+|state_parent_segment_kind_1_out         |  out|   32|      ap_vld|          state_parent_segment_kind_1_out|       pointer|
+|state_parent_segment_kind_1_out_ap_vld  |  out|    1|      ap_vld|          state_parent_segment_kind_1_out|       pointer|
+|state_parent_inter_1_out                |  out|   32|      ap_vld|                 state_parent_inter_1_out|       pointer|
+|state_parent_inter_1_out_ap_vld         |  out|    1|      ap_vld|                 state_parent_inter_1_out|       pointer|
+|state_parent_cost_1_out                 |  out|   32|      ap_vld|                  state_parent_cost_1_out|       pointer|
+|state_parent_cost_1_out_ap_vld          |  out|    1|      ap_vld|                  state_parent_cost_1_out|       pointer|
+|state_parent_type_1_out                 |  out|   32|      ap_vld|                  state_parent_type_1_out|       pointer|
+|state_parent_type_1_out_ap_vld          |  out|    1|      ap_vld|                  state_parent_type_1_out|       pointer|
+|state_value_node_1_out                  |  out|   32|      ap_vld|                   state_value_node_1_out|       pointer|
+|state_value_node_1_out_ap_vld           |  out|    1|      ap_vld|                   state_value_node_1_out|       pointer|
+|state_current_node_1_out                |  out|   32|      ap_vld|                 state_current_node_1_out|       pointer|
+|state_current_node_1_out_ap_vld         |  out|    1|      ap_vld|                 state_current_node_1_out|       pointer|
+|state_popping_1_out                     |  out|    1|      ap_vld|                      state_popping_1_out|       pointer|
+|state_popping_1_out_ap_vld              |  out|    1|      ap_vld|                      state_popping_1_out|       pointer|
+|state_end_1_out                         |  out|   64|      ap_vld|                          state_end_1_out|       pointer|
+|state_end_1_out_ap_vld                  |  out|    1|      ap_vld|                          state_end_1_out|       pointer|
+|state_edge_1_out                        |  out|   64|      ap_vld|                         state_edge_1_out|       pointer|
+|state_edge_1_out_ap_vld                 |  out|    1|      ap_vld|                         state_edge_1_out|       pointer|
+|state_dst_1_out                         |  out|   32|      ap_vld|                          state_dst_1_out|       pointer|
+|state_dst_1_out_ap_vld                  |  out|    1|      ap_vld|                          state_dst_1_out|       pointer|
+|state_child_1_out                       |  out|   32|      ap_vld|                        state_child_1_out|       pointer|
+|state_child_1_out_ap_vld                |  out|    1|      ap_vld|                        state_child_1_out|       pointer|
+|state_hole_1_out                        |  out|   32|      ap_vld|                         state_hole_1_out|       pointer|
+|state_hole_1_out_ap_vld                 |  out|    1|      ap_vld|                         state_hole_1_out|       pointer|
+|state_count_1_out                       |  out|   32|      ap_vld|                        state_count_1_out|       pointer|
+|state_count_1_out_ap_vld                |  out|    1|      ap_vld|                        state_count_1_out|       pointer|
+|state_index_1_out                       |  out|   32|      ap_vld|                        state_index_1_out|       pointer|
+|state_index_1_out_ap_vld                |  out|    1|      ap_vld|                        state_index_1_out|       pointer|
+|state_q_1_out                           |  out|   32|      ap_vld|                            state_q_1_out|       pointer|
+|state_q_1_out_ap_vld                    |  out|    1|      ap_vld|                            state_q_1_out|       pointer|
+|state_phase_1_out                       |  out|   32|      ap_vld|                        state_phase_1_out|       pointer|
+|state_phase_1_out_ap_vld                |  out|    1|      ap_vld|                        state_phase_1_out|       pointer|
+|state_st_status_out                     |  out|   32|      ap_vld|                      state_st_status_out|       pointer|
+|state_st_status_out_ap_vld              |  out|    1|      ap_vld|                      state_st_status_out|       pointer|
+|state_st_peak_out                       |  out|   64|      ap_vld|                        state_st_peak_out|       pointer|
+|state_st_peak_out_ap_vld                |  out|    1|      ap_vld|                        state_st_peak_out|       pointer|
+|state_st_expanded_out                   |  out|   64|      ap_vld|                    state_st_expanded_out|       pointer|
+|state_st_expanded_out_ap_vld            |  out|    1|      ap_vld|                    state_st_expanded_out|       pointer|
+|state_st_edges_out                      |  out|   64|      ap_vld|                       state_st_edges_out|       pointer|
+|state_st_edges_out_ap_vld               |  out|    1|      ap_vld|                       state_st_edges_out|       pointer|
+|state_st_pops_out                       |  out|   64|      ap_vld|                        state_st_pops_out|       pointer|
+|state_st_pops_out_ap_vld                |  out|    1|      ap_vld|                        state_st_pops_out|       pointer|
+|state_st_pushes_out                     |  out|   64|      ap_vld|                      state_st_pushes_out|       pointer|
+|state_st_pushes_out_ap_vld              |  out|    1|      ap_vld|                      state_st_pushes_out|       pointer|
+|state_next_segment_kind_out             |  out|   32|      ap_vld|              state_next_segment_kind_out|       pointer|
+|state_next_segment_kind_out_ap_vld      |  out|    1|      ap_vld|              state_next_segment_kind_out|       pointer|
+|state_next_inter_out                    |  out|   32|      ap_vld|                     state_next_inter_out|       pointer|
+|state_next_inter_out_ap_vld             |  out|    1|      ap_vld|                     state_next_inter_out|       pointer|
+|state_next_cost_out                     |  out|   32|      ap_vld|                      state_next_cost_out|       pointer|
+|state_next_cost_out_ap_vld              |  out|    1|      ap_vld|                      state_next_cost_out|       pointer|
+|state_next_type_out                     |  out|   32|      ap_vld|                      state_next_type_out|       pointer|
+|state_next_type_out_ap_vld              |  out|    1|      ap_vld|                      state_next_type_out|       pointer|
+|state_parent_segment_kind_out           |  out|   32|      ap_vld|            state_parent_segment_kind_out|       pointer|
+|state_parent_segment_kind_out_ap_vld    |  out|    1|      ap_vld|            state_parent_segment_kind_out|       pointer|
+|state_parent_inter_out                  |  out|   32|      ap_vld|                   state_parent_inter_out|       pointer|
+|state_parent_inter_out_ap_vld           |  out|    1|      ap_vld|                   state_parent_inter_out|       pointer|
+|state_parent_cost_out                   |  out|   32|      ap_vld|                    state_parent_cost_out|       pointer|
+|state_parent_cost_out_ap_vld            |  out|    1|      ap_vld|                    state_parent_cost_out|       pointer|
+|state_parent_type_out                   |  out|   32|      ap_vld|                    state_parent_type_out|       pointer|
+|state_parent_type_out_ap_vld            |  out|    1|      ap_vld|                    state_parent_type_out|       pointer|
+|state_value_node_out                    |  out|   32|      ap_vld|                     state_value_node_out|       pointer|
+|state_value_node_out_ap_vld             |  out|    1|      ap_vld|                     state_value_node_out|       pointer|
+|state_current_node_out                  |  out|   32|      ap_vld|                   state_current_node_out|       pointer|
+|state_current_node_out_ap_vld           |  out|    1|      ap_vld|                   state_current_node_out|       pointer|
+|state_popping_out                       |  out|    1|      ap_vld|                        state_popping_out|       pointer|
+|state_popping_out_ap_vld                |  out|    1|      ap_vld|                        state_popping_out|       pointer|
+|state_end_out                           |  out|   64|      ap_vld|                            state_end_out|       pointer|
+|state_end_out_ap_vld                    |  out|    1|      ap_vld|                            state_end_out|       pointer|
+|state_edge_out                          |  out|   64|      ap_vld|                           state_edge_out|       pointer|
+|state_edge_out_ap_vld                   |  out|    1|      ap_vld|                           state_edge_out|       pointer|
+|state_dst_out                           |  out|   32|      ap_vld|                            state_dst_out|       pointer|
+|state_dst_out_ap_vld                    |  out|    1|      ap_vld|                            state_dst_out|       pointer|
+|state_child_out                         |  out|   32|      ap_vld|                          state_child_out|       pointer|
+|state_child_out_ap_vld                  |  out|    1|      ap_vld|                          state_child_out|       pointer|
+|state_hole_out                          |  out|   32|      ap_vld|                           state_hole_out|       pointer|
+|state_hole_out_ap_vld                   |  out|    1|      ap_vld|                           state_hole_out|       pointer|
+|state_count_out                         |  out|   32|      ap_vld|                          state_count_out|       pointer|
+|state_count_out_ap_vld                  |  out|    1|      ap_vld|                          state_count_out|       pointer|
+|state_index_out                         |  out|   32|      ap_vld|                          state_index_out|       pointer|
+|state_index_out_ap_vld                  |  out|    1|      ap_vld|                          state_index_out|       pointer|
+|state_q_out                             |  out|   32|      ap_vld|                              state_q_out|       pointer|
+|state_q_out_ap_vld                      |  out|    1|      ap_vld|                              state_q_out|       pointer|
+|state_phase_out                         |  out|   32|      ap_vld|                          state_phase_out|       pointer|
+|state_phase_out_ap_vld                  |  out|    1|      ap_vld|                          state_phase_out|       pointer|
+|mux_case_310401263_out                  |  out|   32|      ap_vld|                   mux_case_310401263_out|       pointer|
+|mux_case_310401263_out_ap_vld           |  out|    1|      ap_vld|                   mux_case_310401263_out|       pointer|
+|mux_case_210391258_out                  |  out|   32|      ap_vld|                   mux_case_210391258_out|       pointer|
+|mux_case_210391258_out_ap_vld           |  out|    1|      ap_vld|                   mux_case_210391258_out|       pointer|
+|mux_case_110381253_out                  |  out|   32|      ap_vld|                   mux_case_110381253_out|       pointer|
+|mux_case_110381253_out_ap_vld           |  out|    1|      ap_vld|                   mux_case_110381253_out|       pointer|
+|mux_case_010371248_out                  |  out|   32|      ap_vld|                   mux_case_010371248_out|       pointer|
+|mux_case_010371248_out_ap_vld           |  out|    1|      ap_vld|                   mux_case_010371248_out|       pointer|
+|mux_case_310361243_out                  |  out|   32|      ap_vld|                   mux_case_310361243_out|       pointer|
+|mux_case_310361243_out_ap_vld           |  out|    1|      ap_vld|                   mux_case_310361243_out|       pointer|
+|mux_case_210351238_out                  |  out|   32|      ap_vld|                   mux_case_210351238_out|       pointer|
+|mux_case_210351238_out_ap_vld           |  out|    1|      ap_vld|                   mux_case_210351238_out|       pointer|
+|mux_case_110341233_out                  |  out|   32|      ap_vld|                   mux_case_110341233_out|       pointer|
+|mux_case_110341233_out_ap_vld           |  out|    1|      ap_vld|                   mux_case_110341233_out|       pointer|
+|mux_case_010331228_out                  |  out|   32|      ap_vld|                   mux_case_010331228_out|       pointer|
+|mux_case_010331228_out_ap_vld           |  out|    1|      ap_vld|                   mux_case_010331228_out|       pointer|
+|mux_case_310001223_out                  |  out|   32|      ap_vld|                   mux_case_310001223_out|       pointer|
+|mux_case_310001223_out_ap_vld           |  out|    1|      ap_vld|                   mux_case_310001223_out|       pointer|
+|mux_case_29991218_out                   |  out|   32|      ap_vld|                    mux_case_29991218_out|       pointer|
+|mux_case_29991218_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_29991218_out|       pointer|
+|mux_case_19981213_out                   |  out|   32|      ap_vld|                    mux_case_19981213_out|       pointer|
+|mux_case_19981213_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_19981213_out|       pointer|
+|mux_case_09971208_out                   |  out|   32|      ap_vld|                    mux_case_09971208_out|       pointer|
+|mux_case_09971208_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_09971208_out|       pointer|
+|mux_case_39961203_out                   |  out|   32|      ap_vld|                    mux_case_39961203_out|       pointer|
+|mux_case_39961203_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_39961203_out|       pointer|
+|mux_case_29951198_out                   |  out|   32|      ap_vld|                    mux_case_29951198_out|       pointer|
+|mux_case_29951198_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_29951198_out|       pointer|
+|mux_case_19941193_out                   |  out|   32|      ap_vld|                    mux_case_19941193_out|       pointer|
+|mux_case_19941193_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_19941193_out|       pointer|
+|mux_case_09931188_out                   |  out|   32|      ap_vld|                    mux_case_09931188_out|       pointer|
+|mux_case_09931188_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_09931188_out|       pointer|
+|mux_case_39881183_out                   |  out|   32|      ap_vld|                    mux_case_39881183_out|       pointer|
+|mux_case_39881183_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_39881183_out|       pointer|
+|mux_case_29871178_out                   |  out|   32|      ap_vld|                    mux_case_29871178_out|       pointer|
+|mux_case_29871178_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_29871178_out|       pointer|
+|mux_case_19861173_out                   |  out|   32|      ap_vld|                    mux_case_19861173_out|       pointer|
+|mux_case_19861173_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_19861173_out|       pointer|
+|mux_case_09851168_out                   |  out|   32|      ap_vld|                    mux_case_09851168_out|       pointer|
+|mux_case_09851168_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_09851168_out|       pointer|
+|mux_case_39841163_out                   |  out|   32|      ap_vld|                    mux_case_39841163_out|       pointer|
+|mux_case_39841163_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_39841163_out|       pointer|
+|mux_case_29831158_out                   |  out|   32|      ap_vld|                    mux_case_29831158_out|       pointer|
+|mux_case_29831158_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_29831158_out|       pointer|
+|mux_case_19821153_out                   |  out|   32|      ap_vld|                    mux_case_19821153_out|       pointer|
+|mux_case_19821153_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_19821153_out|       pointer|
+|mux_case_09811148_out                   |  out|   32|      ap_vld|                    mux_case_09811148_out|       pointer|
+|mux_case_09811148_out_ap_vld            |  out|    1|      ap_vld|                    mux_case_09811148_out|       pointer|
+|heap_bases_3_out                        |  out|   62|      ap_vld|                         heap_bases_3_out|       pointer|
+|heap_bases_3_out_ap_vld                 |  out|    1|      ap_vld|                         heap_bases_3_out|       pointer|
+|heap_bases_2_out                        |  out|   62|      ap_vld|                         heap_bases_2_out|       pointer|
+|heap_bases_2_out_ap_vld                 |  out|    1|      ap_vld|                         heap_bases_2_out|       pointer|
+|heap_bases_1_out                        |  out|   62|      ap_vld|                         heap_bases_1_out|       pointer|
+|heap_bases_1_out_ap_vld                 |  out|    1|      ap_vld|                         heap_bases_1_out|       pointer|
+|heap_bases_out                          |  out|   62|      ap_vld|                           heap_bases_out|       pointer|
+|heap_bases_out_ap_vld                   |  out|    1|      ap_vld|                           heap_bases_out|       pointer|
+|label_bases_3_out                       |  out|   62|      ap_vld|                        label_bases_3_out|       pointer|
+|label_bases_3_out_ap_vld                |  out|    1|      ap_vld|                        label_bases_3_out|       pointer|
+|label_bases_2_out                       |  out|   62|      ap_vld|                        label_bases_2_out|       pointer|
+|label_bases_2_out_ap_vld                |  out|    1|      ap_vld|                        label_bases_2_out|       pointer|
+|label_bases_1_out                       |  out|   62|      ap_vld|                        label_bases_1_out|       pointer|
+|label_bases_1_out_ap_vld                |  out|    1|      ap_vld|                        label_bases_1_out|       pointer|
+|label_bases_out                         |  out|   62|      ap_vld|                          label_bases_out|       pointer|
+|label_bases_out_ap_vld                  |  out|    1|      ap_vld|                          label_bases_out|       pointer|
++----------------------------------------+-----+-----+------------+-----------------------------------------+--------------+
+

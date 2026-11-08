@@ -1,0 +1,75 @@
+{
+  "fpga_goal": "FPGA better than each baseline; no GPU-vs-CPU ordering requirement",
+  "failed_versions": {
+    "hls_interleaved4": "2022.2 cannot resolve per-context heap pointer array; C simulation passed, synthesis failed.",
+    "hls_interleaved4_v2": "C simulation passed, RTL out-of-bounds on fifth context visit. RTL turn wraps at 4, base adds n without wrapping. Address trace 0,2208,4416,6624,8836 instead of 0,2208,4416,6624,4. Fixed explicit volatile base tables in v3; csim/cosim passed.",
+    "memory_model_failure": "Shared held read grants deadlock a port waiting for another port. Adversarial RTL watchdog reproduced. Finite per-port read buffer repairs liveness.",
+    "bounded_*skid pre-final": "Generator emitted [-1:0] zero-width padding for full 512-bit result port, shifting packed channel data. Native bitwise checker rejected every run. Fixed numeric widths and now reject port-width warnings.",
+    "backend_cpu_dlclose": "Native sample map matches before dlclose, then OpenMP worker library unload segfault. RTLD_NODELETE keeps worker code mapped; fixed replay exits 0 and live native full map matches.",
+    "bounded_heap31_final": "XSim host driver/kernel stopped making file progress and both waited in futex; no proof of HDL deadlock or vendor AR match. Recorded host_stall.json then terminated only this owned kernel. Fresh bounded_heap31_minimal with typical debug and no view/protoinst passed all output bits. Root cause remains unproven."
+  },
+  "documentation_research": {
+    "volatile": "https://docs.amd.com/r/2022.2-English/ug1399-vitis-hls/Volatile",
+    "pointers": "https://docs.amd.com/r/2022.2-English/ug1399-vitis-hls/Pointers",
+    "vendor_AR_for_wrap_issue": null,
+    "true_dependence_distance": "https://docs.amd.com/r/2022.2-English/ug1399-vitis-hls/pragma-HLS-dependence"
+  },
+  "evidence_scope": "R2 core RTL at 5ns target; no board calibration. Live E2 includes cold backend conversion/upload, compact readback, merge, downstream fill; no offline golden injection.",
+  "shared_context_comparison": {
+    "functional_cycles": {
+      "one": 509446,
+      "four": 514988,
+      "two_distance": 450184,
+      "four_distance": 451782
+    },
+    "bounded_cycles": {
+      "one": 1396523,
+      "four": 1410463,
+      "four_distance": 1346628
+    },
+    "interpretation": "Four contexts alone regress; true dependence distances lower II20 to17, but shared global blocking memory still limits useful overlap. This scheduler is not an asynchronous request/response pipeline."
+  },
+  "bounded_memory_traffic": {
+    "bounded_f0_final": {
+      "read_beats": 23173,
+      "write_beats": 12451,
+      "cycles": 2091704
+    },
+    "bounded_cacheoff_final": {
+      "read_beats": 34441,
+      "write_beats": 18598,
+      "cycles": 2625249
+    },
+    "bounded_heap31_minimal": {
+      "read_beats": 11077,
+      "write_beats": 6628,
+      "cycles": 1211614
+    },
+    "bounded_dual_final": {
+      "read_beats": 23173,
+      "write_beats": 12451,
+      "cycles": 1063676
+    },
+    "bounded_resident_final": {
+      "read_beats": 9625,
+      "write_beats": 6181,
+      "cycles": 996173
+    },
+    "bounded_interleaved1": {
+      "read_beats": 10837,
+      "write_beats": 6397,
+      "cycles": 1396523
+    },
+    "bounded_interleaved4": {
+      "read_beats": 10837,
+      "write_beats": 6404,
+      "cycles": 1410463
+    },
+    "bounded_distance": {
+      "read_beats": 10837,
+      "write_beats": 6404,
+      "cycles": 1346628
+    }
+  },
+  "retained_simulator_warnings": "Single-context HLS-generated floating-point DSP48E1 simulation emits repeated OPMODE warnings, retained unsuppressed in full logs (~11 MB each). Canonical fresh final outputs still match every native golden bit. No claim of general X-propagation absence is made."
+}

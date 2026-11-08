@@ -1,0 +1,18 @@
+set root $::env(LA_ROOT)
+set out $::env(LA_HLS_OUT)
+set phase $::env(LA_PHASE)
+cd $out
+open_project project
+set_top $::env(LA_TOP)
+set flags "-I$root/accel/lookahead/include -std=c++14 -ffp-contract=off -fno-fast-math $::env(LA_EXTRA_FLAGS)"
+add_files $::env(LA_SOURCE) -cflags $flags
+add_files -tb $::env(LA_TESTBENCH) -cflags $flags
+open_solution solution -flow_target vivado
+set_part xcu280-fsvh2892-2L-e
+create_clock -period 5 -name default
+
+if {$phase eq "csim"} {csim_design -argv $::env(LA_WORKLOAD)}
+if {$phase eq "csynth"} {csynth_design}
+if {$phase eq "cosim"} {cosim_design -rtl verilog -tool xsim -trace_level all -argv $::env(LA_WORKLOAD)}
+if {$phase eq "impl"} {export_design -rtl verilog -format ip_catalog -flow impl}
+exit

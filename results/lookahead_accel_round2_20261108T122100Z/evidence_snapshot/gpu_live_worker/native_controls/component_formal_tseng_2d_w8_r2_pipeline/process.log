@@ -1,0 +1,339 @@
+VPR FPGA Placement and Routing.
+Version: 9.0.0-dev+unknown
+Revision: unknown
+Compiled: 2026-11-01T16:36:11
+Compiler: GNU 11.4.0 on Linux-5.15.0-119-generic x86_64
+Build Info: release VTR_ASSERT_LEVEL=2
+
+University of Toronto
+verilogtorouting.org
+vtr-users@googlegroups.com
+This is free open source code under MIT license.
+
+VPR was run with the following command-line:
+/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_flat_baseline_20261105/bin/vpr_flat /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/vendor/vtr_cpu_slices/vtr_flow/arch/timing/k6_N10_mem32K_40nm.xml /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/vendor/vtr/vtr_flow/benchmarks/blif/tseng.blif --route_chan_width 100 --device_width 30 --target_utilization 0.5 --seed 1 --num_workers 8 --router_algorithm parallel --flat_routing off --check_route full --net_file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/gpu_live_worker/native_controls/component_formal_tseng_2d_w8_r2_pipeline/packed.net --place_file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/gpu_live_worker/native_controls/component_formal_tseng_2d_w8_r2_pipeline/fixed.place --route_file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/gpu_live_worker/native_controls/component_formal_tseng_2d_w8_r2_pipeline/routed.route --read_rr_graph /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_paper_closure_20261105/prepare_tseng_s1/rr_graph.xml --timing_report_npaths 10 --route --routing_failure_predictor off --max_router_iterations 1 --congested_routing_iteration_threshold 0.25 --router_lookahead map --generate_rr_node_overuse_report off --write_router_lookahead /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/gpu_live_worker/native_controls/component_formal_tseng_2d_w8_r2_pipeline/wire_map.bin
+
+Using up to 8 parallel worker(s)
+
+Architecture file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/vendor/vtr_cpu_slices/vtr_flow/arch/timing/k6_N10_mem32K_40nm.xml
+Circuit name: tseng
+
+# Loading Architecture Description
+# Loading Architecture Description took 0.01 seconds (max_rss 46.5 MiB, delta_rss +0.0 MiB)
+
+Timing analysis: ON
+Circuit netlist file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/gpu_live_worker/native_controls/component_formal_tseng_2d_w8_r2_pipeline/packed.net
+Circuit placement file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/gpu_live_worker/native_controls/component_formal_tseng_2d_w8_r2_pipeline/fixed.place
+Circuit routing file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/gpu_live_worker/native_controls/component_formal_tseng_2d_w8_r2_pipeline/routed.route
+Circuit SDC file: tseng.sdc
+Vpr floorplanning constraints file: not specified
+
+Packer: LOAD
+Placer: LOAD
+Analytical Placer: DISABLED
+Router: ENABLED
+Analysis: DISABLED
+
+VPR was run with the following options:
+
+netlist_opts.absorb_buffer_luts            : true
+netlist_opts.merge_constant_generators     : true
+netlist_opts.sweep_dangling_primary_ios    : true
+netlist_opts.sweep_dangling_nets           : true
+netlist_opts.sweep_dangling_blocks         : true
+netlist_opts.sweep_constant_primary_outputs: false
+netlist_opts.netlist_verbosity             : 1
+netlist_opts.const_gen_inference           : COMB_SEQ
+
+packer_opts.allow_unrelated_clustering: auto
+packer_opts.timing_gain_weight: 0.750000
+packer_opts.connection_gain_weight: 0.900000
+packer_opts.cluster_seed_type: BLEND2
+packer_opts.connection_driven: true
+packer_opts.timing_driven: true
+packer_opts.target_external_pin_util: auto
+
+placer_opts.place_freq: ONCE
+placer_opts.place_algorithm: CRITICALITY_TIMING_PLACE
+placer_opts.pad_loc_type: FREE
+placer_opts.constraints_file: No constraints file given
+placer_opts.place_chan_width: 100
+placer_opts.congestion_factor: 0.000000
+placer_opts.interposer_cost_params.net_cost_type: two_stage
+placer_opts.interposer_cost_params.two_stage_net_cost_first_stage_type: minimize_interposer_crossing_bb
+placer_opts.interposer_cost_params.two_stage_net_cost_second_stage_type: interposer_wire_aware_crossing_bb
+placer_opts.interposer_cost_params.net_cost_change_threshold: 0.005000
+placer_opts.inner_loop_recompute_divider: 0
+placer_opts.recompute_crit_iter: 1
+placer_opts.timing_tradeoff: 0.500000
+placer_opts.td_place_exp_first: 1.000000
+placer_opts.td_place_exp_last: 8.000000
+placer_opts.delay_offset: 0.000000
+placer_opts.delay_ramp_delta_threshold: -1
+placer_opts.delay_ramp_slope: 0.000000
+placer_opts.tsu_rel_margin: 1.000000
+placer_opts.tsu_abs_margin: 0.000000
+placer_opts.post_place_timing_report_file: 
+placer_opts.allowed_tiles_for_delay_model: 
+placer_opts.delay_model_reducer: MIN
+placer_opts.delay_model_type: SIMPLE
+placer_opts.rlim_escape_fraction: 0.000000
+placer_opts.move_stats_file: 
+placer_opts.placement_saves_per_temperature: 0
+placer_opts.effort_scaling: CIRCUIT
+placer_opts.place_delta_delay_matrix_calculation_method: ASTAR_ROUTE
+placer_opts.seed: 1
+anneal_sched.type: AUTO_SCHED
+anneal_sched.inner_num: 0.500000
+placer_opts.anneal_init_t_estimator: EQUILIBRIUM
+
+router_opts.route_type: DETAILED
+router_opts.flat_routing: false
+router_opts.choke_points: on
+router_opts.router_algorithm: PARALLEL
+router_opts.base_cost_type: DELAY_NORMALIZED_LENGTH
+router_opts.fixed_channel_width: 100
+router_opts.check_route: FULL
+router_opts.acc_fac: 1.000000
+router_opts.bb_factor: 3
+router_opts.bend_cost: 0.000000
+router_opts.first_iter_pres_fac: 0.000000
+router_opts.initial_pres_fac: 0.500000
+router_opts.pres_fac_mult: 1.300000
+router_opts.max_pres_fac: 1000.000000
+router_opts.max_router_iterations: 1
+router_opts.min_incremental_reroute_fanout: 16
+router_opts.initial_acc_cost_chan_congestion_threshold: 0.500000
+router_opts.initial_acc_cost_chan_congestion_weight: 0.500000
+router_opts.do_check_rr_graph: true
+router_opts.verify_binary_search: false
+router_opts.min_channel_width_hint: 0
+router_opts.read_rr_edge_metadata: false
+router_opts.exit_after_first_routing_iteration: false
+router_opts.routing_failure_predictor = OFF
+router_opts.routing_predictor_min_history: 8
+router_opts.routing_budgets_algorithm = DISABLE
+
+# Building complex block graph
+# Building complex block graph took 0.01 seconds (max_rss 46.5 MiB, delta_rss +0.0 MiB)
+Circuit file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/vendor/vtr/vtr_flow/benchmarks/blif/tseng.blif
+# Load circuit
+# Load circuit took 0.01 seconds (max_rss 46.5 MiB, delta_rss +0.0 MiB)
+# Clean circuit
+Absorbed 0 LUT buffers
+Merged 0 constant generators
+Swept input(s)      : 0
+Swept output(s)     : 0 (0 dangling, 0 constant)
+Swept net(s)        : 0
+Swept block(s)      : 0
+Constant Pins Marked: 0
+# Clean circuit took 0.00 seconds (max_rss 46.5 MiB, delta_rss +0.0 MiB)
+# Compress circuit
+# Compress circuit took 0.00 seconds (max_rss 46.5 MiB, delta_rss +0.0 MiB)
+# Verify circuit
+# Verify circuit took 0.00 seconds (max_rss 46.5 MiB, delta_rss +0.0 MiB)
+Circuit Statistics:
+  Blocks: 1605
+    .input :      52
+    .latch :     385
+    .names :    1046
+        2-LUT:     132
+        3-LUT:     283
+        4-LUT:     631
+    .output:     122
+  Nets  : 1483
+    Avg Fanout:     3.1
+    Max Fanout:   388.0
+    Min Fanout:     1.0
+  Netlist Clocks: 1
+# Build Timing Graph
+  Timing Graph Nodes: 6012
+  Timing Graph Edges: 8936
+  Timing Graph Levels: 30
+# Build Timing Graph took 0.00 seconds (max_rss 46.5 MiB, delta_rss +0.0 MiB)
+Netlist contains 1 clocks
+  Netlist Clock 'pclk' Fanout: 385 pins (6.4%), 385 blocks (24.0%)
+# Load Timing Constraints
+
+SDC file 'tseng.sdc' not found
+Setting default timing constraints:
+   * constrain all primary inputs and primary outputs on netlist clock 'pclk'
+   * optimize netlist clock to run as fast as possible
+Timing constraints created 1 clocks
+  Constrained Clock 'pclk' Source: 'pclk.inpad[0]'
+
+# Load Timing Constraints took 0.00 seconds (max_rss 46.5 MiB, delta_rss +0.0 MiB)
+kj/filesystem-disk-unix.c++:1734: warning: PWD environment variable doesn't match current directory; pwd = /inspire/hdd/project/project-public/guoruiyuan-253208540291
+# Load packing
+## Loading packed FPGA netlist file.
+Netlist generated from file '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_paper_closure_20261105/prepare_tseng_s1/packed.net'.
+Detected 0 constant generators (to see names run with higher pack verbosity)
+## Loading packed FPGA netlist file. took 0.07 seconds (max_rss 46.5 MiB, delta_rss +0.0 MiB)
+Warning 1: Treated 0 constant nets as global which will not be routed (to see net names increase packer verbosity).
+Completed clustering consistency check successfully.
+Cluster level netlist and block usage statistics
+Netlist num_nets: 573
+Netlist num_blocks: 284
+Netlist EMPTY blocks: 0.
+Netlist io blocks: 174.
+Netlist clb blocks: 110.
+Netlist mult_36 blocks: 0.
+Netlist memory blocks: 0.
+Netlist inputs pins: 52
+Netlist output pins: 122
+
+Pb types usage...
+  io         : 174
+   inpad     : 52
+   outpad    : 122
+  clb        : 110
+   fle       : 1047
+    ble6     : 1047
+     lut6    : 1046
+      lut    : 1046
+     ff      : 385
+
+# Load packing took 0.12 seconds (max_rss 64.5 MiB, delta_rss +18.1 MiB)
+# Create Device
+## Build Device Grid
+FPGA sized to 30 x 30: 900 grid tiles (auto)
+## Build Device Grid took 0.00 seconds (max_rss 64.5 MiB, delta_rss +0.0 MiB)
+## Loading routing resource graph
+
+Warning 2: This architecture version is for VPR 9.0.0-dev+0b91233 while your current VPR version is 9.0.0-dev+unknown, compatibility issues may arise
+
+## Loading routing resource graph took 0.43 seconds (max_rss 163.2 MiB, delta_rss +98.7 MiB)
+  RR Graph Nodes: 93276
+  RR Graph Edges: 860020
+# Create Device took 0.44 seconds (max_rss 163.2 MiB, delta_rss +98.7 MiB)
+
+Resource usage...
+	Netlist
+		174	blocks of type: io
+	Architecture
+		896	blocks of type: io
+	Netlist
+		110	blocks of type: clb
+	Architecture
+		588	blocks of type: clb
+	Netlist
+		0	blocks of type: mult_36
+	Architecture
+		21	blocks of type: mult_36
+	Netlist
+		0	blocks of type: memory
+	Architecture
+		16	blocks of type: memory
+
+Device Utilization: 0.15 (target 0.50)
+	Physical Tile io:
+	Block Utilization: 0.19 Logical Block: io
+	Physical Tile clb:
+	Block Utilization: 0.19 Logical Block: clb
+	Physical Tile mult_36:
+	Block Utilization: 0.00 Logical Block: mult_36
+	Physical Tile memory:
+	Block Utilization: 0.00 Logical Block: memory
+
+
+# Load Placement
+Reading /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/gpu_live_worker/native_controls/component_formal_tseng_2d_w8_r2_pipeline/fixed.place.
+
+Successfully read /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/gpu_live_worker/native_controls/component_formal_tseng_2d_w8_r2_pipeline/fixed.place.
+
+Completed placement consistency check successfully.
+# Load Placement took 0.00 seconds (max_rss 163.2 MiB, delta_rss +0.0 MiB)
+
+# Computing router lookahead map
+## Computing wire lookahead
+CPU_GLOBAL_SCHEDULER=pipeline samples=8 groups=2
+## Computing wire lookahead took 0.05 seconds (max_rss 163.2 MiB, delta_rss +0.0 MiB)
+## Computing src/opin lookahead
+Warning 3: Found no more sample locations for SOURCE in io
+Warning 4: Found no more sample locations for OPIN in io
+Warning 5: Found no more sample locations for SOURCE in clb
+Warning 6: Found no more sample locations for OPIN in clb
+Warning 7: Found no more sample locations for SOURCE in mult_36
+Warning 8: Found no more sample locations for OPIN in mult_36
+Warning 9: Found no more sample locations for SOURCE in memory
+Warning 10: Found no more sample locations for OPIN in memory
+## Computing src/opin lookahead took 0.01 seconds (max_rss 163.2 MiB, delta_rss +0.0 MiB)
+# Computing router lookahead map took 0.06 seconds (max_rss 163.2 MiB, delta_rss +0.0 MiB)
+# Routing
+RR graph channel widths unchanged, skipping RR graph rebuild
+## Initializing router criticalities
+Initial Net Connection Criticality Histogram:
+[        0:      0.1) 106 (  6.6%) |**********
+[      0.1:      0.2) 346 ( 21.6%) |**********************************
+[      0.2:      0.3) 484 ( 30.2%) |***********************************************
+[      0.3:      0.4) 233 ( 14.5%) |***********************
+[      0.4:      0.5) 147 (  9.2%) |**************
+[      0.5:      0.6)  59 (  3.7%) |******
+[      0.6:      0.7)  59 (  3.7%) |******
+[      0.7:      0.8)  32 (  2.0%) |***
+[      0.8:      0.9)  51 (  3.2%) |*****
+[      0.9:        1)  85 (  5.3%) |********
+## Initializing router criticalities took 0.01 seconds (max_rss 163.2 MiB, delta_rss +0.0 MiB)
+Serial Connection Router is being destroyed. Time spent on path search: 0.000 seconds.
+---- ------ ------- ---- ------- ------- ------- ----------------- --------------- -------- ---------- ---------- ---------- ---------- --------
+Iter   Time    pres  BBs    Heap  Re-Rtd  Re-Rtd Overused RR Nodes      Wirelength      CPD       sTNS       sWNS       hTNS       hWNS Est Succ
+      (sec)     fac Updt    push    Nets   Conns                                       (ns)       (ns)       (ns)       (ns)       (ns)     Iter
+---- ------ ------- ---- ------- ------- ------- ----------------- --------------- -------- ---------- ---------- ---------- ---------- --------
+   1    0.0     0.0    0   86400     572    1496     795 ( 0.852%)    6953 ( 4.3%)    7.136     -1258.     -7.136      0.000      0.000      N/A
+Routing failed.
+
+Failed routing attempt
+Total number of overused nodes: 795
+Total number of overused nodes is larger than the logging limit (20).
+Displaying the first 20 entries.
+Routing Failure Diagnostics: Printing Overused Nodes Information
+------ ------- ---------- --------- -------- ------------ ------- ------- ------- ------- ------- ------- -------
+   No.  NodeId  Occupancy  Capacity  RR Node    Direction    Side     PTC   Block    Xlow    Ylow   Xhigh   Yhigh
+                                        type                          NUM    Name                                 
+------ ------- ---------- --------- -------- ------------ ------- ------- ------- ------- ------- ------- -------
+     0   12419          2         1     IPIN          N/A     TOP      16     clb       7      21       7      21
+     1   12443          4         1     OPIN          N/A     TOP      40     clb       7      21       7      21
+     2   12445          2         1     OPIN          N/A  BOTTOM      42     clb       7      21       7      21
+     3   12452          2         1     OPIN          N/A   RIGHT      49     clb       7      21       7      21
+     4   12463          3         1     IPIN          N/A  BOTTOM       6     clb       7      22       7      22
+     5   12469          3         1     IPIN          N/A     TOP      12     clb       7      22       7      22
+     6   12497          5         1     OPIN          N/A     TOP      40     clb       7      22       7      22
+     7   12499          2         1     OPIN          N/A  BOTTOM      42     clb       7      22       7      22
+     8   12517          2         1     IPIN          N/A  BOTTOM       6     clb       7      23       7      23
+     9   12525          3         1     IPIN          N/A  BOTTOM      14     clb       7      23       7      23
+    10   12532          2         1     IPIN          N/A   RIGHT      21     clb       7      23       7      23
+    11   12551          4         1     OPIN          N/A     TOP      40     clb       7      23       7      23
+    12   12553          3         1     OPIN          N/A  BOTTOM      42     clb       7      23       7      23
+    13   13853          2         1     IPIN          N/A     TOP       4     clb       8      18       8      18
+    14   13854          3         1     IPIN          N/A   RIGHT       5     clb       8      18       8      18
+    15   13889          2         1     OPIN          N/A     TOP      40     clb       8      18       8      18
+    16   13897          2         1     OPIN          N/A     TOP      48     clb       8      18       8      18
+    17   13931          2         1     IPIN          N/A     TOP      28     clb       8      19       8      19
+    18   13943          3         1     OPIN          N/A     TOP      40     clb       8      19       8      19
+    19   13952          2         1     OPIN          N/A   RIGHT      49     clb       8      19       8      19
+
+Final Net Connection Criticality Histogram:
+[        0:      0.1) 106 (  6.6%) |**********
+[      0.1:      0.2) 252 ( 15.7%) |************************
+[      0.2:      0.3) 493 ( 30.8%) |***********************************************
+[      0.3:      0.4) 306 ( 19.1%) |*****************************
+[      0.4:      0.5) 154 (  9.6%) |***************
+[      0.5:      0.6)  63 (  3.9%) |******
+[      0.6:      0.7)  56 (  3.5%) |*****
+[      0.7:      0.8)  27 (  1.7%) |***
+[      0.8:      0.9)  51 (  3.2%) |*****
+[      0.9:        1)  94 (  5.9%) |*********
+Router Stats: total_nets_routed: 572 total_connections_routed: 1496 total_heap_pushes: 86400 total_heap_pops: 15525 
+Serial Connection Router is being destroyed. Time spent on path search: 0.000 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 0.006 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 0.001 seconds.
+# Routing took 0.03 seconds (max_rss 163.2 MiB, delta_rss +0.0 MiB)
+Circuit is unroutable with a channel width factor of 100.
+For a detailed report on the RR node overuse information (report_overused_nodes.rpt), specify --generate_rr_node_overuse_report on.
+Incr Slack updates 2 in 0.000513328 sec
+Full Max Req/Worst Slack updates 2 in 2.0407e-05 sec
+Incr Max Req/Worst Slack updates 0 in 0 sec
+Incr Criticality updates 0 in 0 sec
+Full Criticality updates 2 in 0.000650087 sec
+VPR failed to implement circuit
+The entire flow of VPR took 0.70 seconds (max_rss 163.2 MiB)
