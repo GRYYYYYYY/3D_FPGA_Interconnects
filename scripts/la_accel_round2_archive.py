@@ -24,7 +24,7 @@ def main():
         'final_validation.json','final_host_tests.log',
         'interleaved_*.log','gpu_live_job.json','gpu_live_submit.json',
         'gpu_live_validate.json','gpu_live_status*.json','backend_cpu*.json',
-        'backend_cpu_crash.log','mcp_session.log','mcp_resident_check/*.rpt',
+        'backend_cpu_crash.log','mcp_session.log','mcp_*_check/*.rpt',
         'report_final/*','plot_final/*','interleaved4_diagnosis/run.log',
         'memory_model_failure/*.sv','memory_model_failure/*.log'])
     add(root/'memory_selftest',['**/simulate.log','**/compile.log',

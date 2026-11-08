@@ -6,7 +6,7 @@
 实验日期：2026-11-08。分支：`accel/lookahead-strict-20261108`，起点
 `068aabd0f604a094c3b42b378028d9e9b5f54b39`。已完整阅读实验指导，实际完成
 P0–P2 的导出、参考、CUDA、完整 HLS 核和小图实现闭环，并进行了五类优化的初步消融。
-**目标 FPGA > 基础 GPU > 优化 CPU > 原 VPR 多线程尚未得到验证。**
+**目标“FPGA 优于基础 GPU、优化 CPU 和原 VPR 多线程等基线”尚未得到验证。**
 
 完整数据见 [自动汇总表](../results/lookahead_accel_20261108T125500Z/report_final/report.md)、
 [机器可读记录](../results/lookahead_accel_20261108T125500Z/report_final/report.json) 和
