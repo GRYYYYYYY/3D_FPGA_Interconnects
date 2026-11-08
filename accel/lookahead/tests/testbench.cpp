@@ -62,4 +62,5 @@ int main(int argc,char** argv) {
  lookahead_top(row.data(),node.data(),edge.data(),costs.data(),jobs.data(),cell.data(),visited.data(),expanded.data(),heap.data(),out.data(),stats.data(),12,1,nc,257,10000);assert(stats[0].status==la::UNSUPPORTED_NUMERIC);
  lookahead_top(row.data(),node.data(),edge.data(),costs.data(),jobs.data(),cell.data(),visited.data(),expanded.data(),heap.data(),out.data(),stats.data(),12,0,nc,257,10000);
  std::cout<<"PASS strict heap 20000 mixed operations; native-order flood; tie/parallel/SINK/network/empty/overflow/budget/subnormal\n";
+ return 0;
 }
