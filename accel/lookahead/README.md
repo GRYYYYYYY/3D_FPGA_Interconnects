@@ -121,8 +121,10 @@ The host suite includes 20,000 mixed heap operations against libstdc++, semantic
 error/boundary cases, and 200 randomized differential graphs for each cache.
 Run `la_accel_software_summary.py`, `la_accel_report.py` and `la_accel_plot.py`
 to collect a completed cohort and produce evidence tables and exportable figures.
-Pinned E1 CPU/CUDA data and the first worker's valid E2 native cohort are reported
-separately. The later native cohort's affinity rejection is retained and excluded.
+A final confirmation worker supplies both pinned E1 CPU/CUDA and valid native
+E2 data. Earlier cohorts and the native affinity rejection remain separate.
+CUDA uses one warmup plus three measured batches; CPU currently measures one
+batch per process, including OpenMP startup. This warmup difference is recorded.
 
 Calibration of a bounded external-memory model, true shared-pipeline context
 interleaving, small on-chip cost LUT, geometry-map compression, physical HBM

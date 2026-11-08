@@ -28,6 +28,8 @@ def main():
   records.append(dict(name=name,command=cmd,returncode=r.returncode if r else None,failure_reason=failure,host_elapsed_s=time.time()-start));(o/'commands.json').write_text(json.dumps(records,indent=2));return r is not None and r.returncode==0
  if not run('device',['nvidia-smi']):return 1
  if not run('compiler',['nvcc','--version']):return 1
+ if not run('cpu_topology',['lscpu']):return 1
+ if not run('cpu_compiler',['c++','--version']):return 1
  binary=o/'lookahead_cuda'
  if not run('build',['nvcc','-O2','-std=c++14','--fmad=false','-I'+str(ROOT/'accel/lookahead/include'),str(ROOT/'accel/lookahead/cuda/lookahead_cuda.cu'),'-o',str(binary)]):return 1
  cpu=o/'cpu_reference'
