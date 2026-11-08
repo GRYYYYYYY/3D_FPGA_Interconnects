@@ -1,0 +1,22 @@
+{
+  "selection": "packed label + write-back cache",
+  "counter_source": "bounded_single/result.json",
+  "state_reads": 8390,
+  "state_writes": 14996,
+  "state_initialization_scalar_writes": 10464,
+  "queue_reads": 15759,
+  "queue_writes": 11091,
+  "hypothesis": "64-bit packing halves initialization requests; dirty write-back may coalesce updates but cannot remove mandatory per-sample initialization.",
+  "controls": [
+    "unchanged scalar-label resident engine, heap127 label64 cost64",
+    "packed64 label write-through, heap127 label64 cost64",
+    "same packed64 source/config except LA_LABEL_WRITEBACK=1; flush inside E1"
+  ],
+  "unchanged": [
+    "native job order and complete search",
+    "FP32 arithmetic/ties and compact outputs",
+    "heap, CSR, cost cache",
+    "one bank, period4, latency64, global8R/8W"
+  ],
+  "decided_before_packed_measurement": true
+}

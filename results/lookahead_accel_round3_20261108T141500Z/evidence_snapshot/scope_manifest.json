@@ -1,0 +1,38 @@
+{
+  "semantic_mode": "STRICT_FP32",
+  "domain": "Finite nonnegative normal costs or zero; no arithmetic subnormals/overflow; missing-map NaN sentinel is preserved as bits and excluded from arithmetic.",
+  "scope_id": "E1 resident_flood_batch",
+  "starts": "Static graph, native task list and scratch allocations are ready; no precomputed search trace is consumed.",
+  "includes": [
+    "Every-sample label and output initialization",
+    "Complete native sample list in original order or disjoint native-order chunks",
+    "Full heap-driven CSR search and original strict tie/eligibility/update semantics",
+    "IPIN map recording",
+    "All device memory waits, external heap spill and completion/drain"
+  ],
+  "excludes": [
+    "Workload file I/O and golden checking",
+    "One-time graph conversion/allocation/upload",
+    "Compact result readback (reported separately for measured software)",
+    "Group merge, interpolation, source/OPIN/minima and routing"
+  ],
+  "evidence_types": {
+    "cpu": "Measured monotonic wall span",
+    "cuda": "Measured CUDA events enclosing entire complete batch; first event interval includes first-launch/lazy-module gap",
+    "functional_rtl": "Complete kernel executed by XSim with HLS automatic functional AXI",
+    "bounded_rtl": "Complete kernel executed by XSim with fixed shared-bank/credit/latency interposer",
+    "fpga_time": "RTL cycles plus observed post-done drain divided only by timing-clean OOC target frequency",
+    "board": "Not measured",
+    "large_graph_prediction": "Deferred"
+  },
+  "cold_warm": "Five fresh processes/configuration, one first call and five subsequent complete E1 batches per process, all search state reset inside every E1; FPGA cache initialization and state reset are included in its transaction.",
+  "baseline_coverage": {
+    "C1": "Compact CSR std::priority_queue/OpenMP CPU measured on same worker as G0, 1/2/4/8 workers",
+    "G0": "Basic GPU kernel, 128 threads/CTA and one CTA/real native job for each 3D workload",
+    "B0": "Original multithread-enabled VPR verifies identical final lookahead wire map; no new B0 E1 timing hook in this phase",
+    "B1": "Frozen native flat export supplies full samples and golden; historical flat/pipeline evidence preserved, not used as an unmatched E1 timing denominator",
+    "B3": "Full strict resident kernel; functional/bounded RTL and OOC core implementation"
+  },
+  "comparison_limit": "Beating the strongest measured C1/G0 warm configuration is a necessary checkpoint, not proof of superiority over B0/B1; the checkpoint fails in this round. E2 remains gated by core feasibility.",
+  "remote_main_before_publication": "068aabd0f604a094c3b42b378028d9e9b5f54b39"
+}

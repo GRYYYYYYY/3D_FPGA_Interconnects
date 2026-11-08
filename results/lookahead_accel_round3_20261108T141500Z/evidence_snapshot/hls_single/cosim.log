@@ -1,0 +1,488 @@
+
+****** Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2022.2 (64-bit)
+  **** SW Build 3670227 on Oct 13 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source /inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vitis_HLS/2022.2/scripts/vitis_hls/hls.tcl -notrace
+INFO: [HLS 200-10] Running '/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vitis_HLS/2022.2/bin/unwrapped/lnx64.o/vitis_hls'
+INFO: [HLS 200-10] For user 'root' on host 'fpgaacc2--72bfa719011c-3hfvuvkzdl' (Linux_x86_64 version 5.15.0-119-generic) on Sun Nov 08 14:20:53 UTC 2026
+INFO: [HLS 200-10] On os Ubuntu 22.04.4 LTS
+INFO: [HLS 200-10] In directory '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single'
+Sourcing Tcl script '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/source_snapshot/run_hls.tcl'
+INFO: [HLS 200-1510] Running: open_project project 
+INFO: [HLS 200-10] Opening project '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project'.
+INFO: [HLS 200-1510] Running: set_top lookahead_top 
+INFO: [HLS 200-1510] Running: add_files /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/hls/variants/lookahead_resident.cpp -cflags -I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include -std=c++14 -ffp-contract=off -fno-fast-math -DLA_DEPTH_ROW=656 -DLA_DEPTH_NODES=656 -DLA_DEPTH_EDGES=1576 -DLA_DEPTH_COSTS=16 -DLA_DEPTH_JOBS=8 -DLA_DEPTH_CELLS=5232 -DLA_DEPTH_VISITED=656 -DLA_DEPTH_EXPANDED=656 -DLA_DEPTH_HEAP=1584 -DLA_DEPTH_OUTPUT=144 -DLA_DEPTH_STATS=8 -DLA_HEAP_TOP=127 -DLA_LABEL_LINES=64 -DLA_COST_LINES=64 -I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/hls/variants 
+INFO: [HLS 200-10] Adding design file '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/hls/variants/lookahead_resident.cpp' to the project
+INFO: [HLS 200-1510] Running: add_files -tb /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/tests/interleaved_real.cpp -cflags -I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include -std=c++14 -ffp-contract=off -fno-fast-math -DLA_DEPTH_ROW=656 -DLA_DEPTH_NODES=656 -DLA_DEPTH_EDGES=1576 -DLA_DEPTH_COSTS=16 -DLA_DEPTH_JOBS=8 -DLA_DEPTH_CELLS=5232 -DLA_DEPTH_VISITED=656 -DLA_DEPTH_EXPANDED=656 -DLA_DEPTH_HEAP=1584 -DLA_DEPTH_OUTPUT=144 -DLA_DEPTH_STATS=8 -DLA_HEAP_TOP=127 -DLA_LABEL_LINES=64 -DLA_COST_LINES=64 -I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/hls/variants 
+INFO: [HLS 200-10] Adding test bench file '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/tests/interleaved_real.cpp' to the project
+INFO: [HLS 200-1510] Running: open_solution solution -flow_target vivado 
+INFO: [HLS 200-10] Opening solution '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution'.
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 5ns.
+INFO: [HLS 200-1611] Setting target device to 'xcu280-fsvh2892-2L-e'
+INFO: [HLS 200-1505] Using flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see www.xilinx.com/cgi-bin/docs/rdoc?v=2022.2;t=hls+guidance;d=200-1505.html
+INFO: [HLS 200-1464] Running solution command: config_interface -m_axi_latency=0
+INFO: [HLS 200-1510] Running: set_part xcu280-fsvh2892-2L-e 
+INFO: [HLS 200-1510] Running: create_clock -period 5 -name default 
+INFO: [HLS 200-1510] Running: cosim_design -rtl verilog -tool xsim -trace_level none -argv /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin 
+Running Dispatch Server on port: 45751
+INFO: [COSIM 212-47] Using XSIM for RTL simulation.
+INFO: [COSIM 212-14] Instrumenting C test bench ...
+   Build using "/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vitis_HLS/2022.2/tps/lnx64/gcc-8.3.0/bin/g++"
+   Compiling apatb_lookahead_top.cpp
+   Compiling interleaved_real.cpp_pre.cpp.tb.cpp
+   Compiling lookahead_resident.cpp_pre.cpp.tb.cpp
+   Compiling apatb_lookahead_top_ir.ll
+   Generating cosim.tv.exe
+INFO: [COSIM 212-302] Starting C TB testing ... 
+qid=0 pushes=545 pops=545 edges=1216 peak=317
+qid=1 pushes=1 pops=1 edges=0 peak=1
+qid=2 pushes=535 pops=535 edges=1216 peak=268
+qid=3 pushes=540 pops=540 edges=1216 peak=268
+qid=4 pushes=545 pops=545 edges=1216 peak=317
+qid=5 pushes=1 pops=1 edges=0 peak=1
+qid=6 pushes=540 pops=540 edges=1216 peak=268
+qid=7 pushes=535 pops=535 edges=1216 peak=268
+PASS complete native RRG sample maps, bitwise FP32
+INFO: [COSIM 212-333] Generating C post check test bench ...
+INFO: [COSIM 212-12] Generating RTL test bench ...
+
+****** Vivado v2022.2 (64-bit)
+  **** SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source run_vivado_gen_ip.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/data/ip'.
+WARNING: [IP_Flow 19-4832] The IP name 'lookahead_top_fcmp_32ns_32ns_1_2_no_dsp_1_ip' you have specified is long. The Windows operating system has path length limitations. It is recommended you use shorter names to reduce the likelihood of issues.
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'lookahead_top_fcmp_32ns_32ns_1_2_no_dsp_1_ip'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'lookahead_top_fcmp_32ns_32ns_1_2_no_dsp_1_ip'...
+WARNING: [IP_Flow 19-4832] The IP name 'lookahead_top_fadd_32ns_32ns_32_5_full_dsp_1_ip' you have specified is long. The Windows operating system has path length limitations. It is recommended you use shorter names to reduce the likelihood of issues.
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'lookahead_top_fadd_32ns_32ns_32_5_full_dsp_1_ip'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'lookahead_top_fadd_32ns_32ns_32_5_full_dsp_1_ip'...
+INFO: [Common 17-206] Exiting Vivado at Sun Nov  8 14:21:27 2026...
+INFO: [COSIM 212-1] *** C/RTL co-simulation file generation completed. ***
+INFO: [COSIM 212-323] Starting verilog simulation. 
+INFO: [COSIM 212-15] Starting XSIM ...
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin/unwrapped/lnx64.o/xelab xil_defaultlib.apatb_lookahead_top_top glbl -Oenable_linking_all_libraries -prj lookahead_top.prj -L smartconnect_v1_0 -L axi_protocol_checker_v1_1_12 -L axi_protocol_checker_v1_1_13 -L axis_protocol_checker_v1_1_11 -L axis_protocol_checker_v1_1_12 -L xil_defaultlib -L unisims_ver -L xpm -L floating_point_v7_0_20 -L floating_point_v7_1_15 --lib ieee_proposed=./ieee_proposed -s lookahead_top 
+Multi-threading is on. Using 126 slave threads.
+WARNING: [XSIM 43-3431] One or more environment variables have been detected which affect the operation of the C compiler. These are typically not set in standard installations and are not tested by Xilinx, however they may be appropriate for your system, so the flow will attempt to continue.  If errors occur, try running xelab with the "-mt off -v 1" switches to see more information from the C compiler. The following environment variables have been detected:
+    LIBRARY_PATH
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/ip/xil_defaultlib/lookahead_top_fcmp_32ns_32ns_1_2_no_dsp_1_ip.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_fcmp_32ns_32ns_1_2_no_dsp_1_ip
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/ip/xil_defaultlib/lookahead_top_fadd_32ns_32ns_32_5_full_dsp_1_ip.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_fadd_32ns_32ns_32_5_full_dsp_1_ip
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/glbl.v" into library work
+INFO: [VRFC 10-311] analyzing module glbl
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_state_m_axi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_state_m_axi
+INFO: [VRFC 10-311] analyzing module lookahead_top_state_m_axi_load
+INFO: [VRFC 10-311] analyzing module lookahead_top_state_m_axi_store
+INFO: [VRFC 10-311] analyzing module lookahead_top_state_m_axi_read
+INFO: [VRFC 10-311] analyzing module lookahead_top_state_m_axi_write
+INFO: [VRFC 10-311] analyzing module lookahead_top_state_m_axi_throttle
+INFO: [VRFC 10-311] analyzing module lookahead_top_state_m_axi_reg_slice
+INFO: [VRFC 10-311] analyzing module lookahead_top_state_m_axi_fifo
+INFO: [VRFC 10-311] analyzing module lookahead_top_state_m_axi_srl
+INFO: [VRFC 10-311] analyzing module lookahead_top_state_m_axi_mem
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/AESL_axi_slave_control.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_axi_slave_control
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_cached_pop.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_cached_pop
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_table_valid_RAM_AUTO_1R1W.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_table_valid_RAM_AUTO_1R1W
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_fcmp_32ns_32ns_1_2_no_dsp_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_fcmp_32ns_32ns_1_2_no_dsp_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_cached_push.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_cached_push
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_control_s_axi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_control_s_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_graph_m_axi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_graph_m_axi
+INFO: [VRFC 10-311] analyzing module lookahead_top_graph_m_axi_load
+INFO: [VRFC 10-311] analyzing module lookahead_top_graph_m_axi_store
+INFO: [VRFC 10-311] analyzing module lookahead_top_graph_m_axi_read
+INFO: [VRFC 10-311] analyzing module lookahead_top_graph_m_axi_write
+INFO: [VRFC 10-311] analyzing module lookahead_top_graph_m_axi_throttle
+INFO: [VRFC 10-311] analyzing module lookahead_top_graph_m_axi_reg_slice
+INFO: [VRFC 10-311] analyzing module lookahead_top_graph_m_axi_fifo
+INFO: [VRFC 10-311] analyzing module lookahead_top_graph_m_axi_srl
+INFO: [VRFC 10-311] analyzing module lookahead_top_graph_m_axi_mem
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_lookahead_top_Pipeline_VITIS_LOOP_79_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_lookahead_top_Pipeline_VITIS_LOOP_79_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/AESL_axi_master_graph.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_axi_master_graph
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_cached_pop_Pipeline_VITIS_LOOP_23_2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_cached_pop_Pipeline_VITIS_LOOP_23_2
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_lookahead_top_Pipeline_VITIS_LOOP_85_4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_lookahead_top_Pipeline_VITIS_LOOP_85_4
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_result_m_axi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_result_m_axi
+INFO: [VRFC 10-311] analyzing module lookahead_top_result_m_axi_load
+INFO: [VRFC 10-311] analyzing module lookahead_top_result_m_axi_store
+INFO: [VRFC 10-311] analyzing module lookahead_top_result_m_axi_read
+INFO: [VRFC 10-311] analyzing module lookahead_top_result_m_axi_write
+INFO: [VRFC 10-311] analyzing module lookahead_top_result_m_axi_throttle
+INFO: [VRFC 10-311] analyzing module lookahead_top_result_m_axi_reg_slice
+INFO: [VRFC 10-311] analyzing module lookahead_top_result_m_axi_fifo
+INFO: [VRFC 10-311] analyzing module lookahead_top_result_m_axi_srl
+INFO: [VRFC 10-311] analyzing module lookahead_top_result_m_axi_mem
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top.autotb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module apatb_lookahead_top_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/AESL_axi_master_state.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_axi_master_state
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_cached_push_Pipeline_VITIS_LOOP_17_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_cached_push_Pipeline_VITIS_LOOP_17_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_flow_control_loop_pipe_sequential_init.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_flow_control_loop_pipe_sequential_init
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_queue_top_node_RAM_1WNR_AUTO_1R1W.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_top_node_RAM_1WNR_AUTO_1R1W
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_queue_m_axi.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_m_axi
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_m_axi_load
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_m_axi_store
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_m_axi_read
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_m_axi_write
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_m_axi_throttle
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_m_axi_reg_slice
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_m_axi_fifo
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_m_axi_srl
+INFO: [VRFC 10-311] analyzing module lookahead_top_queue_m_axi_mem
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_lookahead_top_Pipeline_VITIS_LOOP_84_3.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_lookahead_top_Pipeline_VITIS_LOOP_84_3
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_lookahead_top_Pipeline_VITIS_LOOP_28_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_lookahead_top_Pipeline_VITIS_LOOP_28_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/AESL_axi_master_result.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_axi_master_result
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_table_tag_RAM_AUTO_1R1W.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_table_tag_RAM_AUTO_1R1W
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/AESL_axi_master_queue.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module AESL_axi_master_queue
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_cached_pop_Pipeline_VITIS_LOOP_21_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_cached_pop_Pipeline_VITIS_LOOP_21_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top_fadd_32ns_32ns_32_5_full_dsp_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lookahead_top_fadd_32ns_32ns_32_5_full_dsp_1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/dataflow_monitor.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dataflow_monitor
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package floating_point_v7_1_15.floating_point_v7_1_15_viv_comp
+Compiling package ieee.numeric_std
+Compiling package xbip_utils_v3_0_10.xbip_utils_v3_0_10_pkg
+Compiling package axi_utils_v2_0_6.axi_utils_v2_0_6_pkg
+Compiling package floating_point_v7_1_15.floating_point_v7_1_15_consts
+Compiling package ieee.math_real
+Compiling package floating_point_v7_1_15.floating_point_v7_1_15_exp_table...
+Compiling package mult_gen_v12_0_18.mult_gen_v12_0_18_pkg
+Compiling package ieee.std_logic_arith
+Compiling package ieee.std_logic_signed
+Compiling package floating_point_v7_1_15.floating_point_v7_1_15_pkg
+Compiling package floating_point_v7_1_15.flt_utils
+Compiling package unisim.vcomponents
+Compiling package xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv_comp
+Compiling package ieee.vital_timing
+Compiling package ieee.vital_primitives
+Compiling package unisim.vpkg
+Compiling package xil_defaultlib.$unit_dataflow_monitor_sv
+Compiling module xil_defaultlib.lookahead_top_table_tag_RAM_AUTO...
+Compiling module xil_defaultlib.lookahead_top_table_valid_RAM_AU...
+Compiling module xil_defaultlib.lookahead_top_queue_top_node_RAM...
+Compiling module xil_defaultlib.lookahead_top_flow_control_loop_...
+Compiling module xil_defaultlib.lookahead_top_lookahead_top_Pipe...
+Compiling module xil_defaultlib.lookahead_top_lookahead_top_Pipe...
+Compiling module xil_defaultlib.lookahead_top_lookahead_top_Pipe...
+Compiling module xil_defaultlib.lookahead_top_lookahead_top_Pipe...
+Compiling architecture muxcy_v of entity unisim.MUXCY [muxcy_default]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=3,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_15.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity floating_point_v7_1_15.compare_eq_im [\compare_eq_im(c_xdevicefamily="...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=4,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_15.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity floating_point_v7_1_15.compare_ne_im [\compare_ne_im(c_xdevicefamily="...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=2,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_15.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity floating_point_v7_1_15.compare_eq_im [\compare_eq_im(c_xdevicefamily="...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=11,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_15.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity floating_point_v7_1_15.compare_eq [\compare_eq(c_xdevicefamily="vir...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=16,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_15.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity floating_point_v7_1_15.compare_gt [\compare_gt(c_xdevicefamily="vir...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(length=0)\]
+Compiling architecture rtl of entity floating_point_v7_1_15.fp_cmp [\fp_cmp(c_xdevicefamily="virtexu...]
+Compiling module unisims_ver.x_lut1_mux2
+Compiling module unisims_ver.LUT1
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture xilinx of entity floating_point_v7_1_15.floating_point_v7_1_15_viv [\floating_point_v7_1_15_viv(c_xd...]
+Compiling architecture xilinx of entity floating_point_v7_1_15.floating_point_v7_1_15 [\floating_point_v7_1_15(c_xdevic...]
+Compiling module xil_defaultlib.lookahead_top_fcmp_32ns_32ns_1_2...
+Compiling module xil_defaultlib.lookahead_top_fcmp_32ns_32ns_1_2...
+Compiling module xil_defaultlib.lookahead_top_cached_push_Pipeli...
+Compiling module xil_defaultlib.lookahead_top_cached_push
+Compiling module xil_defaultlib.lookahead_top_cached_pop_Pipelin...
+Compiling module xil_defaultlib.lookahead_top_cached_pop_Pipelin...
+Compiling module xil_defaultlib.lookahead_top_cached_pop
+Compiling module xil_defaultlib.lookahead_top_control_s_axi
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_mem(ME...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_fifo(M...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_store(...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_mem(ME...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_fifo(M...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_load(N...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_thrott...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_write(...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi_read(C...
+Compiling module xil_defaultlib.lookahead_top_graph_m_axi(CONSER...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_mem(ME...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_fifo(M...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_store(...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_mem(ME...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_fifo(M...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_load(N...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_thrott...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_write(...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi_read(C...
+Compiling module xil_defaultlib.lookahead_top_queue_m_axi(CONSER...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_srl(D...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_fifo(...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_mem(M...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_fifo(...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_srl(D...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_fifo(...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_srl(D...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_fifo(...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_store...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_mem(M...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_fifo(...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_load(...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_reg_s...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_srl(D...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_fifo(...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_reg_s...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_srl(D...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_fifo(...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_srl(D...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_fifo(...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_throt...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_reg_s...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_write...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_reg_s...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi_read(...
+Compiling module xil_defaultlib.lookahead_top_result_m_axi(CONSE...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_mem(ME...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_fifo(M...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_store(...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_mem(ME...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_fifo(M...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_load(N...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_srl(DA...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_fifo(D...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_thrott...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_write(...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_reg_sl...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi_read(C...
+Compiling module xil_defaultlib.lookahead_top_state_m_axi(CONSER...
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=7,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_15.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity floating_point_v7_1_15.compare_eq_im [\compare_eq_im(c_xdevicefamily="...]
+Compiling architecture xorcy_v of entity unisim.XORCY [xorcy_default]
+Compiling architecture struct of entity floating_point_v7_1_15.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=24,length=0,fast_in...]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(acascreg=0,adreg=0,alum...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=48,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=24,length=0)\]
+Compiling architecture rtl of entity floating_point_v7_1_15.dsp48e1_wrapper [\dsp48e1_wrapper(c_part="xcu280-...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [delay_default]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=13,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=27,length=0)\]
+Compiling architecture synth of entity floating_point_v7_1_15.align_add_dsp48e1_sgl [\align_add_dsp48e1_sgl(c_xdevice...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000000001111...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00000000000000000000...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=5,length=0)\]
+Compiling architecture rtl of entity floating_point_v7_1_15.lead_zero_encode_shift [\lead_zero_encode_shift(ab_fw=24...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111110010101001011...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="00010001010111110000...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11101110101000001111...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=2)\]
+Compiling architecture dsp48e1_v of entity unisim.DSP48E1 [\DSP48E1(adreg=0,alumodereg=0,ca...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=25,length=0)\]
+Compiling architecture rtl of entity floating_point_v7_1_15.dsp48e1_wrapper [\dsp48e1_wrapper(a_width=24,c_wi...]
+Compiling architecture rtl of entity floating_point_v7_1_15.norm_and_round_dsp48e1_sgl [\norm_and_round_dsp48e1_sgl(c_mu...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="10011001100110011001...]
+Compiling architecture lut5_v of entity unisim.LUT5 [\LUT5(init="11111111000000001111...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=9,length=0)\]
+Compiling architecture struct of entity floating_point_v7_1_15.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=8,length=0)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=10)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=4,length=0,fast_inp...]
+Compiling architecture fdre_v of entity unisim.FDRE [fdre_default]
+Compiling architecture fde_v of entity unisim.FDE [fde_default]
+Compiling architecture struct of entity floating_point_v7_1_15.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity floating_point_v7_1_15.compare_eq_im [\compare_eq_im(c_xdevicefamily="...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(fast_input=true)\]
+Compiling architecture rtl of entity floating_point_v7_1_15.special_detect [\special_detect(c_xdevicefamily=...]
+Compiling architecture struct of entity floating_point_v7_1_15.carry_chain [\carry_chain(c_xdevicefamily="vi...]
+Compiling architecture synth of entity floating_point_v7_1_15.compare_gt [\compare_gt(c_xdevicefamily="vir...]
+Compiling architecture synth of entity floating_point_v7_1_15.compare [\compare(c_xdevicefamily="virtex...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=8)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=9)\]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=2,length=2,fast_inp...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(length=2,fast_input=true)...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(length=0,fast_input=true)...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=2,length=0,fast_inp...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=12,length=0)\]
+Compiling architecture rtl of entity floating_point_v7_1_15.flt_add_exp_sp [\flt_add_exp_sp(c_xdevicefamily=...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_latency=...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=23)\]
+Compiling architecture synth of entity floating_point_v7_1_15.flt_dec_op [\flt_dec_op(c_xdevicefamily="vir...]
+Compiling architecture rtl of entity floating_point_v7_1_15.flt_add_dsp [\flt_add_dsp(c_xdevicefamily="vi...]
+Compiling architecture rtl of entity floating_point_v7_1_15.flt_add [\flt_add(c_xdevicefamily="virtex...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_latency=...]
+Compiling architecture synth of entity xbip_pipe_v3_0_6.xbip_pipe_v3_0_6_viv [\xbip_pipe_v3_0_6_viv(c_has_ce=1...]
+Compiling architecture rtl of entity floating_point_v7_1_15.delay [\delay(width=32,length=0)\]
+Compiling architecture xilinx of entity floating_point_v7_1_15.floating_point_v7_1_15_viv [\floating_point_v7_1_15_viv(c_xd...]
+Compiling architecture xilinx of entity floating_point_v7_1_15.floating_point_v7_1_15 [\floating_point_v7_1_15(c_xdevic...]
+Compiling module xil_defaultlib.lookahead_top_fadd_32ns_32ns_32_...
+Compiling module xil_defaultlib.lookahead_top_fadd_32ns_32ns_32_...
+Compiling module xil_defaultlib.lookahead_top
+Compiling module xil_defaultlib.AESL_axi_master_graph
+Compiling module xil_defaultlib.AESL_axi_master_state
+Compiling module xil_defaultlib.AESL_axi_master_queue
+Compiling module xil_defaultlib.AESL_axi_master_result
+Compiling module xil_defaultlib.AESL_axi_slave_control
+Compiling module xil_defaultlib.nodf_module_intf
+Compiling module xil_defaultlib.pp_loop_intf(FSM_WIDTH=25)
+Compiling module xil_defaultlib.seq_loop_intf(FSM_WIDTH=198)
+Compiling module xil_defaultlib.upc_loop_intf
+Compiling module xil_defaultlib.upc_loop_intf(FSM_WIDTH=23)
+Compiling module xil_defaultlib.dataflow_monitor_1
+Compiling module xil_defaultlib.apatb_lookahead_top_top
+Compiling module work.glbl
+Built simulation snapshot lookahead_top
+
+****** xsim v2022.2 (64-bit)
+  **** SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/lookahead_top/xsim_script.tcl
+# xsim {lookahead_top} -autoloadwcfg -tclbatch {lookahead_top.tcl}
+Time resolution is 1 ps
+source lookahead_top.tcl
+## run all
+////////////////////////////////////////////////////////////////////////////////////
+// Inter-Transaction Progress: Completed Transaction / Total Transaction
+// Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%
+//
+// RTL Simulation : "Inter-Transaction Progress" ["Intra-Transaction Progress"] @ "Simulation Time"
+////////////////////////////////////////////////////////////////////////////////////
+// RTL Simulation : 0 / 1 [n/a] @ "113000"
+// RTL Simulation : 1 / 1 [n/a] @ "6303503000"
+////////////////////////////////////////////////////////////////////////////////////
+$finish called at time : 6303532500 ps : File "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/hls_single/project/solution/sim/verilog/lookahead_top.autotb.v" Line 1227
+run: Time (s): cpu = 00:00:00.06 ; elapsed = 00:02:24 . Memory (MB): peak = 1365.430 ; gain = 0.000 ; free physical = 1041435 ; free virtual = 1449734
+## quit
+INFO: xsimkernel Simulation Memory Usage: 124204 KB (Peak: 172568 KB), Simulation CPU Usage: 143970 ms
+INFO: [Common 17-206] Exiting xsim at Sun Nov  8 14:24:15 2026...
+INFO: [COSIM 212-316] Starting C post checking ...
+qid=0 pushes=545 pops=545 edges=1216 peak=317
+qid=1 pushes=1 pops=1 edges=0 peak=1
+qid=2 pushes=535 pops=535 edges=1216 peak=268
+qid=3 pushes=540 pops=540 edges=1216 peak=268
+qid=4 pushes=545 pops=545 edges=1216 peak=317
+qid=5 pushes=1 pops=1 edges=0 peak=1
+qid=6 pushes=540 pops=540 edges=1216 peak=268
+qid=7 pushes=535 pops=535 edges=1216 peak=268
+PASS complete native RRG sample maps, bitwise FP32
+INFO: [COSIM 212-1000] *** C/RTL co-simulation finished: PASS ***
+INFO: [COSIM 212-211] II is measurable only when transaction number is greater than 1 in RTL simulation. Otherwise, they will be marked as all NA. If user wants to calculate them, please make sure there are at least 2 transactions in RTL simulation.
+INFO: [HLS 200-111] Finished Command cosim_design CPU user time: 216.56 seconds. CPU system time: 9.22 seconds. Elapsed time: 190.47 seconds; current allocated memory: 23.992 MB.
+INFO: [HLS 200-112] Total CPU user time: 219.18 seconds. Total CPU system time: 9.98 seconds. Total elapsed time: 203.51 seconds; peak allocated memory: 775.723 MB.
+INFO: [Common 17-206] Exiting vitis_hls at Sun Nov  8 14:24:16 2026...

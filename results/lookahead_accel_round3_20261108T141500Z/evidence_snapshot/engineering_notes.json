@@ -1,0 +1,14 @@
+{
+  "numeric_scope": "STRICT_FP32 finite nonnegative normal-or-positive-zero costs/accumulations, exact missing NaN sentinel; unsupported inputs fail closed.",
+  "layer_metadata": "Old nodes.tsv encoded layers as raw char. New generation reads integer layer_low from the complete native rr.xml and saves layers.bin; historical files are preserved.",
+  "profiling_scope": "spill.json is a logical algorithm profile, not a hardware timer. adjacent_pair_read_hits is an aligned consecutive-read statistic, not a heap-sibling cache hit ratio.",
+  "cold_scope": "First compute in a fresh process. CPU scratch allocation and CUDA device init/upload occur before E1 and appear separately in service measurements. CUDA event interval includes first-launch gaps.",
+  "memory_model": "Synthetic fixed bank/latency/global credits; no board calibration, shell integration or real HBM prediction. Selftest includes backpressure and held address reservations.",
+  "writeback_observation": "RTL write-back has fewer label writes but more cycles than the matched packed write-through control. Exact critical-path attribution has not been isolated; do not infer positive speedup from fewer requests.",
+  "host_build_retry": "The new spill_profile target was first requested before CMake regeneration. That host build returned missing target; explicit reconfigure followed by a fresh-log build passed. It is not an HLS failure.",
+  "source_freeze": "First single cohort freezes the original 5ns Tcl; subsequent cohorts record explicit period. Synthesis sources and testbenches are hash-checked between phases.",
+  "first_audit": "source_binding_audit_progress.json was run before four implementation phases completed; its only failed checks were those pending phases. Final audit will be separate.",
+  "original_native_cpu": "Frozen binaries and prior archives remain unchanged. The original VPR check on native_d3_w8 confirms the final wire-map hash; its complete-builder timer is not mixed with E1.",
+  "native_d4_routing": "Both export builder and original VPR produce the same final wire_map. The original VPR exits 2 after the subsequent one-iteration routing attempt is unroutable at W8. This is a component lookahead check only, not VPR routing convergence.",
+  "scale_progress_audit": "source_binding_audit_scale_progress.json has 431 checks; only the three then-pending implementation phases and three then-running bounded replays were incomplete. Snapshot/input/source checks passed."
+}

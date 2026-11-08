@@ -1,0 +1,70 @@
+{
+  "stage": "label_memory_ablation",
+  "workload_sha256": "50b8cedc8f36d23bdcedee4bd861e72d4b025bd46b3b02e977adf0baeceecc9b",
+  "results": [
+    {
+      "name": "single_family",
+      "cycles": 4483179,
+      "verified_mhz": 200.0,
+      "seconds": 0.022415895,
+      "slack_ns": {
+        "setup": 0.569,
+        "hold": 0.023,
+        "pulse": 1.958
+      },
+      "resources": {
+        "BRAM": 49,
+        "CLB": 5942,
+        "DSP": 4,
+        "FF": 31327,
+        "LATCH": 0,
+        "LUT": 26854,
+        "SRL": 762,
+        "URAM": 0
+      }
+    },
+    {
+      "name": "packed_wt",
+      "cycles": 3971796,
+      "verified_mhz": 200.0,
+      "seconds": 0.01985898,
+      "slack_ns": {
+        "setup": 0.364,
+        "hold": 0.02,
+        "pulse": 1.958
+      },
+      "resources": {
+        "BRAM": 51,
+        "CLB": 5631,
+        "DSP": 4,
+        "FF": 30449,
+        "LATCH": 0,
+        "LUT": 25498,
+        "SRL": 774,
+        "URAM": 0
+      }
+    },
+    {
+      "name": "packed_wb",
+      "cycles": 4018356,
+      "verified_mhz": 200.0,
+      "seconds": 0.02009178,
+      "slack_ns": {
+        "setup": 0.265,
+        "hold": 0.009,
+        "pulse": 1.958
+      },
+      "resources": {
+        "BRAM": 51,
+        "CLB": 5553,
+        "DSP": 4,
+        "FF": 30869,
+        "LATCH": 0,
+        "LUT": 25549,
+        "SRL": 777,
+        "URAM": 0
+      }
+    }
+  ],
+  "decision": "Packed write-through improves this cohort by 11.41%; matched write-back is 1.17% slower despite fewer writes. Retain WT as the positive label-layout candidate, preserve WB negative evidence. Do not combine this change into the replication control."
+}

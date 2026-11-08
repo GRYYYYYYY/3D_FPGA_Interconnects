@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-11-08T17:29:26.716400+00:00",
+  "round_status": "completed",
+  "FPGA_superiority_verified": false,
+  "evidence": "Measured software versus functional/bounded RTL at positive-slack OOC frequency; no board measurement",
+  "phase1": "Complete native 3D spill, cold/warm software, resident single proof and cycle budget completed",
+  "phase2": [
+    {
+      "baseline": "bounded_single_family",
+      "candidate": "bounded_dual",
+      "purpose": "replicated resident engines",
+      "matched_controls": true,
+      "timing_ready": true,
+      "speedup": 1.9943038053516207,
+      "actual_rtl_time_improved": true
+    },
+    {
+      "baseline": "bounded_single_family",
+      "candidate": "bounded_packed_wt",
+      "purpose": "packed-label layout",
+      "matched_controls": true,
+      "timing_ready": true,
+      "speedup": 1.1287535915741898,
+      "actual_rtl_time_improved": true
+    },
+    {
+      "baseline": "bounded_packed_wt",
+      "candidate": "bounded_packed_wb",
+      "purpose": "label write-back policy",
+      "matched_controls": true,
+      "timing_ready": true,
+      "speedup": 0.9884131719539034,
+      "actual_rtl_time_improved": false
+    },
+    {
+      "baseline": "bounded_dual",
+      "candidate": "bounded_quad",
+      "purpose": "four-engine scaling",
+      "matched_controls": true,
+      "timing_ready": true,
+      "speedup": 1.517318278890572,
+      "actual_rtl_time_improved": true
+    },
+    {
+      "baseline": "bounded_dual_d4",
+      "candidate": "bounded_quad_d4",
+      "purpose": "four engines, next complete 3D rung",
+      "matched_controls": true,
+      "timing_ready": true,
+      "speedup": 1.9299623564760813,
+      "actual_rtl_time_improved": true
+    }
+  ],
+  "scale_followup": "Four engines and complete 4x4 rung completed after matched dual gate; four engines improve bounded time on both graphs",
+  "next_step_basis": [
+    "Retain positive packed write-through layout result and negative write-back result separately",
+    "Investigate external heap request granularity with a matched control; observed queue requests are 3x logical Entry operations",
+    "Revisit memory organization and serial search scheduling using counts; do not infer that replication alone meets the software budget"
+  ],
+  "deferred": [
+    "8/16 shared contexts and wholesale asynchronous FSM rewrite",
+    "Large-graph FPGA performance predictions",
+    "Full lookahead E2 and new original/native E1 hooks pending core feasibility"
+  ],
+  "scope_limit": "C1/G0 E1 measured; B0 final wire-map correctness checked, B1 native flat supplies samples/golden; preserved flat/pipeline history is not an E1 denominator",
+  "final_report_sha256": "24decd1c615a24f4f898cfbad47012e8700e7244dbdae03c9500d20f5d8f9ab5"
+}

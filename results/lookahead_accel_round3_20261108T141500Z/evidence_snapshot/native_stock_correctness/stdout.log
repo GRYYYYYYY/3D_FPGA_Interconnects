@@ -1,0 +1,356 @@
+VPR FPGA Placement and Routing.
+Version: 9.0.0-dev+0b91233
+Revision: 0b91233
+Compiled: 2026-10-22T11:56:17
+Compiler: GNU 11.4.0 on Linux-5.15.0-119-generic x86_64
+Build Info: release VTR_ASSERT_LEVEL=2
+
+University of Toronto
+verilogtorouting.org
+vtr-users@googlegroups.com
+This is free open source code under MIT license.
+
+VPR was run with the following command-line:
+/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/architecture.xml /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/tiny.blif --device_width 3 --route_chan_width 8 --num_workers 8 --router_algorithm parallel --router_lookahead map --read_rr_graph /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/rr.xml --net_file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_stock_correctness/tiny.net --place_file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_stock_correctness/tiny.place --route --max_router_iterations 1 --write_router_lookahead /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_stock_correctness/wire_map.bin
+
+Using up to 8 parallel worker(s)
+
+Architecture file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/architecture.xml
+Circuit name: tiny
+
+# Loading Architecture Description
+Warning 1: Multiple matching Fc overrides found; the last will be applied
+Warning 2: Multiple matching Fc overrides found; the last will be applied
+Warning 3: Multiple matching Fc overrides found; the last will be applied
+Warning 4: Multiple matching Fc overrides found; the last will be applied
+Warning 5: Multiple matching Fc overrides found; the last will be applied
+Warning 6: Multiple matching Fc overrides found; the last will be applied
+# Loading Architecture Description took 0.06 seconds (max_rss 14.6 MiB, delta_rss +0.0 MiB)
+
+Timing analysis: ON
+Circuit netlist file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_stock_correctness/tiny.net
+Circuit placement file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_stock_correctness/tiny.place
+Circuit routing file: tiny.route
+Circuit SDC file: tiny.sdc
+Vpr floorplanning constraints file: not specified
+
+Packer: LOAD
+Placer: LOAD
+Analytical Placer: DISABLED
+Router: ENABLED
+Analysis: DISABLED
+
+VPR was run with the following options:
+
+netlist_opts.absorb_buffer_luts            : true
+netlist_opts.merge_constant_generators     : true
+netlist_opts.sweep_dangling_primary_ios    : true
+netlist_opts.sweep_dangling_nets           : true
+netlist_opts.sweep_dangling_blocks         : true
+netlist_opts.sweep_constant_primary_outputs: false
+netlist_opts.netlist_verbosity             : 1
+netlist_opts.const_gen_inference           : COMB_SEQ
+
+packer_opts.allow_unrelated_clustering: auto
+packer_opts.timing_gain_weight: 0.750000
+packer_opts.connection_gain_weight: 0.900000
+packer_opts.cluster_seed_type: BLEND2
+packer_opts.connection_driven: true
+packer_opts.timing_driven: true
+packer_opts.target_external_pin_util: auto
+
+placer_opts.place_freq: ONCE
+placer_opts.place_algorithm: CRITICALITY_TIMING_PLACE
+placer_opts.pad_loc_type: FREE
+placer_opts.constraints_file: No constraints file given
+placer_opts.place_chan_width: 8
+placer_opts.congestion_factor: 0.000000
+placer_opts.interposer_cost_params.net_cost_type: two_stage
+placer_opts.interposer_cost_params.two_stage_net_cost_first_stage_type: minimize_interposer_crossing_bb
+placer_opts.interposer_cost_params.two_stage_net_cost_second_stage_type: interposer_wire_aware_crossing_bb
+placer_opts.interposer_cost_params.net_cost_change_threshold: 0.005000
+placer_opts.inner_loop_recompute_divider: 0
+placer_opts.recompute_crit_iter: 1
+placer_opts.timing_tradeoff: 0.500000
+placer_opts.td_place_exp_first: 1.000000
+placer_opts.td_place_exp_last: 8.000000
+placer_opts.delay_offset: 0.000000
+placer_opts.delay_ramp_delta_threshold: -1
+placer_opts.delay_ramp_slope: 0.000000
+placer_opts.tsu_rel_margin: 1.000000
+placer_opts.tsu_abs_margin: 0.000000
+placer_opts.post_place_timing_report_file: 
+placer_opts.allowed_tiles_for_delay_model: 
+placer_opts.delay_model_reducer: MIN
+placer_opts.delay_model_type: SIMPLE
+placer_opts.rlim_escape_fraction: 0.000000
+placer_opts.move_stats_file: 
+placer_opts.placement_saves_per_temperature: 0
+placer_opts.effort_scaling: CIRCUIT
+placer_opts.place_delta_delay_matrix_calculation_method: ASTAR_ROUTE
+placer_opts.seed: 1
+anneal_sched.type: AUTO_SCHED
+anneal_sched.inner_num: 0.500000
+placer_opts.anneal_init_t_estimator: EQUILIBRIUM
+
+router_opts.route_type: DETAILED
+router_opts.flat_routing: false
+router_opts.choke_points: on
+router_opts.router_algorithm: PARALLEL
+router_opts.base_cost_type: DELAY_NORMALIZED_LENGTH
+router_opts.fixed_channel_width: 8
+router_opts.check_route: FULL
+router_opts.acc_fac: 1.000000
+router_opts.bb_factor: 3
+router_opts.bend_cost: 0.000000
+router_opts.first_iter_pres_fac: 0.000000
+router_opts.initial_pres_fac: 0.500000
+router_opts.pres_fac_mult: 1.300000
+router_opts.max_pres_fac: 1000.000000
+router_opts.max_router_iterations: 1
+router_opts.min_incremental_reroute_fanout: 16
+router_opts.initial_acc_cost_chan_congestion_threshold: 0.500000
+router_opts.initial_acc_cost_chan_congestion_weight: 0.500000
+router_opts.do_check_rr_graph: true
+router_opts.verify_binary_search: false
+router_opts.min_channel_width_hint: 0
+router_opts.read_rr_edge_metadata: false
+router_opts.exit_after_first_routing_iteration: false
+router_opts.routing_failure_predictor = SAFE
+router_opts.routing_predictor_min_history: 8
+router_opts.routing_budgets_algorithm = DISABLE
+
+# Building complex block graph
+# Building complex block graph took 0.06 seconds (max_rss 15.6 MiB, delta_rss +1.0 MiB)
+Circuit file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/tiny.blif
+# Load circuit
+# Load circuit took 0.00 seconds (max_rss 15.6 MiB, delta_rss +0.0 MiB)
+# Clean circuit
+Absorbed 0 LUT buffers
+Merged 0 constant generators
+Swept input(s)      : 0
+Swept output(s)     : 0 (0 dangling, 0 constant)
+Swept net(s)        : 0
+Swept block(s)      : 0
+Constant Pins Marked: 0
+# Clean circuit took 0.00 seconds (max_rss 15.9 MiB, delta_rss +0.3 MiB)
+# Compress circuit
+# Compress circuit took 0.00 seconds (max_rss 15.9 MiB, delta_rss +0.0 MiB)
+# Verify circuit
+# Verify circuit took 0.00 seconds (max_rss 15.9 MiB, delta_rss +0.0 MiB)
+Circuit Statistics:
+  Blocks: 4
+    .input :       2
+    .names :       1
+        2-LUT:       1
+    .output:       1
+  Nets  : 3
+    Avg Fanout:     1.0
+    Max Fanout:     1.0
+    Min Fanout:     1.0
+  Netlist Clocks: 0
+# Build Timing Graph
+  Timing Graph Nodes: 6
+  Timing Graph Edges: 5
+  Timing Graph Levels: 4
+# Build Timing Graph took 0.00 seconds (max_rss 15.9 MiB, delta_rss +0.0 MiB)
+Netlist contains 0 clocks
+# Load Timing Constraints
+
+SDC file 'tiny.sdc' not found
+Setting default timing constraints:
+   * constrain all primary inputs and primary outputs on a virtual external clock 'virtual_io_clock'
+   * optimize virtual clock to run as fast as possible
+Timing constraints created 1 clocks
+  Constrained Clock 'virtual_io_clock' (Virtual Clock)
+
+# Load Timing Constraints took 0.00 seconds (max_rss 15.9 MiB, delta_rss +0.0 MiB)
+Error 1: in check_rr_graph: node 612 (CHANZ) has no fanin.
+Error 2: in check_rr_graph: node 613 (CHANZ) has no fanin.
+Error 3: in check_rr_graph: node 614 (CHANZ) has no fanin.
+Error 4: in check_rr_graph: node 615 (CHANZ) has no fanin.
+Error 5: in check_rr_graph: node 616 (CHANZ) has no fanin.
+Error 6: in check_rr_graph: node 617 (CHANZ) has no fanin.
+Error 7: in check_rr_graph: node 636 (CHANZ) has no fanin.
+Error 8: in check_rr_graph: node 637 (CHANZ) has no fanin.
+Error 9: in check_rr_graph: node 638 (CHANZ) has no fanin.
+Error 10: in check_rr_graph: node 639 (CHANZ) has no fanin.
+Error 11: in check_rr_graph: node 640 (CHANZ) has no fanin.
+Error 12: in check_rr_graph: node 641 (CHANZ) has no fanin.
+Error 13: in check_rr_graph: node 648 (CHANZ) has no fanin.
+Error 14: in check_rr_graph: node 649 (CHANZ) has no fanin.
+Error 15: in check_rr_graph: node 650 (CHANZ) has no fanin.
+Error 16: in check_rr_graph: node 651 (CHANZ) has no fanin.
+Error 17: in check_rr_graph: node 652 (CHANZ) has no fanin.
+Error 18: in check_rr_graph: node 653 (CHANZ) has no fanin.
+kj/filesystem-disk-unix.c++:1734: warning: PWD environment variable doesn't match current directory; pwd = /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects
+# Load packing
+## Loading packed FPGA netlist file.
+Netlist generated from file 'tiny.net'.
+Detected 0 constant generators (to see names run with higher pack verbosity)
+## Loading packed FPGA netlist file. took 0.00 seconds (max_rss 16.2 MiB, delta_rss +0.0 MiB)
+Warning 7: Treated 0 constant nets as global which will not be routed (to see net names increase packer verbosity).
+Completed clustering consistency check successfully.
+Cluster level netlist and block usage statistics
+Netlist num_nets: 3
+Netlist num_blocks: 4
+Netlist EMPTY blocks: 0.
+Netlist io blocks: 3.
+Netlist clb blocks: 1.
+Netlist dsp_top blocks: 0.
+Netlist memory blocks: 0.
+Netlist tsv_hole blocks: 0.
+Netlist inputs pins: 2
+Netlist output pins: 1
+
+Pb types usage...
+  io             : 3
+   inpad         : 2
+   outpad        : 1
+  clb            : 1
+   fle           : 1
+    lut5inter    : 1
+     ble5        : 1
+      lut5       : 1
+       lut       : 1
+
+# Load packing took 0.07 seconds (max_rss 54.6 MiB, delta_rss +38.5 MiB)
+# Create Device
+## Build Device Grid
+Warning 8: Block type 'memory' grid location specification startx (11 = 11) falls outside device horizontal range [0,2]
+Warning 9: Block type 'memory' grid location specification startx (25 = 25) falls outside device horizontal range [0,2]
+Warning 10: Block type 'memory' grid location specification startx (37 = 37) falls outside device horizontal range [0,2]
+Warning 11: Block type 'dsp_top' grid location specification startx (18 = 18) falls outside device horizontal range [0,2]
+Warning 12: Block type 'dsp_top' grid location specification startx (31 = 31) falls outside device horizontal range [0,2]
+Warning 13: Block type 'tsv_hole' grid location specification startx (8 = 8) falls outside device horizontal range [0,2]
+Warning 14: Block type 'tsv_hole' grid location specification startx (14 = 14) falls outside device horizontal range [0,2]
+Warning 15: Block type 'memory' grid location specification startx (11 = 11) falls outside device horizontal range [0,2]
+Warning 16: Block type 'memory' grid location specification startx (25 = 25) falls outside device horizontal range [0,2]
+Warning 17: Block type 'memory' grid location specification startx (37 = 37) falls outside device horizontal range [0,2]
+Warning 18: Block type 'dsp_top' grid location specification startx (18 = 18) falls outside device horizontal range [0,2]
+Warning 19: Block type 'dsp_top' grid location specification startx (31 = 31) falls outside device horizontal range [0,2]
+FPGA sized to 3 x 3: 18 grid tiles (auto)
+## Build Device Grid took 0.00 seconds (max_rss 54.6 MiB, delta_rss +0.0 MiB)
+## Loading routing resource graph
+
+Warning 20: This architecture version is for VPR 9.0.0-dev+unknown while your current VPR version is 9.0.0-dev+0b91233, compatibility issues may arise
+
+Warning 21: Found 2 cost indices where no instances of RR nodes could be found
+Warning 22: Found 30 nodes with no out-going switches. Run VTR with route_verbosity > 1 to see details.
+Warning 23: in check_rr_graph: fringe node 630 CHANZ at (1,2) has no fanin.
+	 This is possible on a fringe node based on low Fc_out, N, and certain lengths.
+## Loading routing resource graph took 0.00 seconds (max_rss 55.4 MiB, delta_rss +0.8 MiB)
+  RR Graph Nodes: 654
+  RR Graph Edges: 1570
+# Create Device took 0.00 seconds (max_rss 55.4 MiB, delta_rss +0.8 MiB)
+
+Resource usage...
+	Netlist
+		3	blocks of type: io
+	Architecture
+		64	blocks of type: io
+	Netlist
+		1	blocks of type: clb
+	Architecture
+		2	blocks of type: clb
+	Netlist
+		0	blocks of type: dsp_top
+	Architecture
+		0	blocks of type: dsp_top
+	Netlist
+		0	blocks of type: memory
+	Architecture
+		0	blocks of type: memory
+	Netlist
+		0	blocks of type: tsv_hole
+	Architecture
+		0	blocks of type: tsv_hole
+
+Device Utilization: 0.08 (target 1.00)
+	Physical Tile io:
+	Block Utilization: 0.05 Logical Block: io
+	Physical Tile clb:
+	Block Utilization: 0.50 Logical Block: clb
+
+
+# Load Placement
+Reading /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_stock_correctness/tiny.place.
+
+Successfully read /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_stock_correctness/tiny.place.
+
+Completed placement consistency check successfully.
+# Load Placement took 0.00 seconds (max_rss 55.4 MiB, delta_rss +0.0 MiB)
+
+# Computing router lookahead map
+## Computing wire lookahead
+Warning 24: Unable to find any sample location for segment CHANX type 'L16' (length 16)
+Warning 25: Unable to find any sample location for segment CHANY type 'L16' (length 16)
+Warning 26: Unable to find any sample location for segment CHANX type 'L16' (length 16)
+Warning 27: Unable to find any sample location for segment CHANY type 'L16' (length 16)
+## Computing wire lookahead took 0.00 seconds (max_rss 55.7 MiB, delta_rss +0.0 MiB)
+## Computing src/opin lookahead
+Warning 28: Found no more sample locations for SOURCE in io
+Warning 29: Found no more sample locations for OPIN in io
+Warning 30: Found no more sample locations for SOURCE in clb
+Warning 31: Found no more sample locations for OPIN in clb
+Warning 32: Found no more sample locations for SOURCE in io
+Warning 33: Found no more sample locations for OPIN in io
+Warning 34: Found no more sample locations for SOURCE in clb
+Warning 35: Found no more sample locations for OPIN in clb
+## Computing src/opin lookahead took 0.00 seconds (max_rss 55.7 MiB, delta_rss +0.0 MiB)
+# Computing router lookahead map took 0.00 seconds (max_rss 55.7 MiB, delta_rss +0.0 MiB)
+# Routing
+RR graph channel widths unchanged, skipping RR graph rebuild
+## Initializing router criticalities
+Initial Net Connection Criticality Histogram:
+[        0:      0.1) 0 (  0.0%) |
+[      0.1:      0.2) 0 (  0.0%) |
+[      0.2:      0.3) 0 (  0.0%) |
+[      0.3:      0.4) 0 (  0.0%) |
+[      0.4:      0.5) 0 (  0.0%) |
+[      0.5:      0.6) 0 (  0.0%) |
+[      0.6:      0.7) 0 (  0.0%) |
+[      0.7:      0.8) 0 (  0.0%) |
+[      0.8:      0.9) 0 (  0.0%) |
+[      0.9:        1) 3 (100.0%) |*************************************************
+## Initializing router criticalities took 0.00 seconds (max_rss 56.5 MiB, delta_rss +0.6 MiB)
+Serial Connection Router is being destroyed. Time spent on path search: 0.000 seconds.
+---- ------ ------- ---- ------- ------- ------- ----------------- --------------- -------- ---------- ---------- ---------- ---------- --------
+Iter   Time    pres  BBs    Heap  Re-Rtd  Re-Rtd Overused RR Nodes      Wirelength      CPD       sTNS       sWNS       hTNS       hWNS Est Succ
+      (sec)     fac Updt    push    Nets   Conns                                       (ns)       (ns)       (ns)       (ns)       (ns)     Iter
+---- ------ ------- ---- ------- ------- ------- ----------------- --------------- -------- ---------- ---------- ---------- ---------- --------
+   1    0.0     0.0    0     151       3       3       0 ( 0.000%)       8 (12.5%)    1.071     -1.071     -1.071      0.000      0.000      N/A
+Restoring best routing
+Critical path: 1.07126 ns
+Successfully routed after 1 routing iterations.
+Final Net Connection Criticality Histogram:
+[        0:      0.1) 0 (  0.0%) |
+[      0.1:      0.2) 0 (  0.0%) |
+[      0.2:      0.3) 0 (  0.0%) |
+[      0.3:      0.4) 0 (  0.0%) |
+[      0.4:      0.5) 0 (  0.0%) |
+[      0.5:      0.6) 0 (  0.0%) |
+[      0.6:      0.7) 0 (  0.0%) |
+[      0.7:      0.8) 0 (  0.0%) |
+[      0.8:      0.9) 1 ( 33.3%) |*************************
+[      0.9:        1) 2 ( 66.7%) |*************************************************
+Router Stats: total_nets_routed: 3 total_connections_routed: 3 total_heap_pushes: 151 total_heap_pops: 67 
+Serial Connection Router is being destroyed. Time spent on path search: 0.000 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 0.000 seconds.
+# Routing took 0.01 seconds (max_rss 56.5 MiB, delta_rss +0.6 MiB)
+
+Checking to ensure routing is legal...
+# Checking to ensure non-configurable edges are legal
+# Checking to ensure non-configurable edges are legal took 0.00 seconds (max_rss 56.5 MiB, delta_rss +0.0 MiB)
+Completed routing consistency check successfully.
+
+Serial number (magic cookie) for the routing is: -17565
+Circuit successfully routed with a channel width factor of 8.
+Incr Slack updates 2 in 8.727e-06 sec
+Full Max Req/Worst Slack updates 1 in 5.324e-06 sec
+Incr Max Req/Worst Slack updates 1 in 2.677e-06 sec
+Incr Criticality updates 0 in 0 sec
+Full Criticality updates 2 in 1.1359e-05 sec
+Flow timing analysis took 0.000963727 seconds (0.000903233 STA, 6.0494e-05 slack) (2 full updates: 0 setup, 0 hold, 2 combined).
+VPR succeeded
+The entire flow of VPR took 0.21 seconds (max_rss 56.5 MiB)

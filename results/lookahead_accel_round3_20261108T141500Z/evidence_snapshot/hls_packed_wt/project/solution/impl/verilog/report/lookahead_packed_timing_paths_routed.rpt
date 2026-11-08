@@ -1,0 +1,775 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date              : Sun Nov  8 15:14:44 2026
+| Host              : fpgaacc2--72bfa719011c-3hfvuvkzdl running 64-bit Ubuntu 22.04.4 LTS
+| Command           : report_timing -max_paths 10 -file ./report/lookahead_packed_timing_paths_routed.rpt
+| Design            : bd_0_wrapper
+| Device            : xcu280-fsvh2892
+| Speed File        : -2L  PRODUCTION 1.30 05-01-2022
+| Temperature Grade : E
+----------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             0.364ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/C
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/mem_reg_0/ENARDEN
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (ap_clk rise@5.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        4.270ns  (logic 0.999ns (23.397%)  route 3.271ns (76.603%))
+  Logic Levels:           10  (CARRY8=1 LUT2=1 LUT3=2 LUT4=1 LUT5=2 LUT6=3)
+  Clock Path Skew:        0.011ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.039ns = ( 5.039 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.028     0.028    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/ap_clk
+    SLICE_X58Y60         FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X58Y60         FDRE (Prop_DFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/Q
+                         net (fo=4, routed)           0.368     0.475    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/s_axis_a_tdata[22]
+    SLICE_X61Y59         LUT4 (Prop_D6LUT_SLICEM_I0_O)
+                                                      0.145     0.620 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/CHAIN_GEN[11].C_MUX.CARRY_MUX_i_1/O
+                         net (fo=1, routed)           0.025     0.645    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/ADD_MANT_GEN[11].lut_op_reg
+    SLICE_X61Y59         CARRY8 (Prop_CARRY8_SLICEM_S[3]_CO[7])
+                                                      0.170     0.815 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/CHAIN_GEN[8].C_MUX.CARRY_MUX_CARRY4_CARRY8/CO[7]
+                         net (fo=1, routed)           0.244     1.059    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/a_gt_b_p1
+    SLICE_X61Y61         LUT5 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.053     1.112 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/m_axis_result_tdata[0]_INST_0_i_1/O
+                         net (fo=1, routed)           0.145     1.257    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/a_gt_b_fix1_out__0
+    SLICE_X61Y62         LUT6 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.101     1.358 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/m_axis_result_tdata[0]_INST_0/O
+                         net (fo=1, routed)           0.123     1.481    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/r_tdata
+    SLICE_X61Y65         LUT3 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.152     1.633 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/dout_r[0]_i_1__0/O
+                         net (fo=6, routed)           0.186     1.819    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/grp_fu_1375_p2
+    SLICE_X60Y69         LUT6 (Prop_H6LUT_SLICEM_I1_O)
+                                                      0.053     1.872 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/and_ln45_reg_4089[0]_i_2/O
+                         net (fo=6, routed)           0.174     2.046    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/and_ln45_fu_3083_p2125_out
+    SLICE_X61Y73         LUT3 (Prop_E5LUT_SLICEM_I2_O)
+                                                      0.070     2.116 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/grp_cached_push_fu_1290_ap_start_reg_i_2/O
+                         net (fo=4, routed)           0.226     2.342    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/icmp_ln46_fu_3089_p2
+    SLICE_X64Y74         LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     2.378 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/mem_reg[3][0]_srl4_i_6__1/O
+                         net (fo=7, routed)           0.370     2.749    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_23_2_fu_513/mem_reg_0_2
+    SLICE_X76Y66         LUT6 (Prop_G6LUT_SLICEM_I3_O)
+                                                      0.090     2.839 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_23_2_fu_513/empty_n_i_2__27/O
+                         net (fo=15, routed)          0.795     3.634    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_23_2_fu_513/pop_5
+    SLICE_X93Y33         LUT2 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     3.684 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_23_2_fu_513/mem_reg_0_i_1__2/O
+                         net (fo=2, routed)           0.614     4.298    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/mem_reg_0_0
+    RAMB36_X5Y4          RAMB36E2                                     r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/mem_reg_0/ENARDEN
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     5.000     5.000 r  
+                                                      0.000     5.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.039     5.039    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/ap_clk
+    RAMB36_X5Y4          RAMB36E2                                     r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/mem_reg_0/CLKARDCLK
+                         clock pessimism              0.000     5.039    
+                         clock uncertainty           -0.035     5.004    
+    RAMB36_X5Y4          RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKARDCLK_ENARDEN)
+                                                     -0.342     4.662    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/mem_reg_0
+  -------------------------------------------------------------------
+                         required time                          4.662    
+                         arrival time                          -4.298    
+  -------------------------------------------------------------------
+                         slack                                  0.364    
+
+Slack (MET) :             0.409ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/C
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/mem_reg_1/ENARDEN
+                            (rising edge-triggered cell RAMB36E2 clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (ap_clk rise@5.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        4.224ns  (logic 0.999ns (23.649%)  route 3.225ns (76.351%))
+  Logic Levels:           10  (CARRY8=1 LUT2=1 LUT3=2 LUT4=1 LUT5=2 LUT6=3)
+  Clock Path Skew:        0.011ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.039ns = ( 5.039 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.028     0.028    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/ap_clk
+    SLICE_X58Y60         FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X58Y60         FDRE (Prop_DFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/Q
+                         net (fo=4, routed)           0.368     0.475    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/s_axis_a_tdata[22]
+    SLICE_X61Y59         LUT4 (Prop_D6LUT_SLICEM_I0_O)
+                                                      0.145     0.620 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/CHAIN_GEN[11].C_MUX.CARRY_MUX_i_1/O
+                         net (fo=1, routed)           0.025     0.645    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/ADD_MANT_GEN[11].lut_op_reg
+    SLICE_X61Y59         CARRY8 (Prop_CARRY8_SLICEM_S[3]_CO[7])
+                                                      0.170     0.815 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/CHAIN_GEN[8].C_MUX.CARRY_MUX_CARRY4_CARRY8/CO[7]
+                         net (fo=1, routed)           0.244     1.059    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/a_gt_b_p1
+    SLICE_X61Y61         LUT5 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.053     1.112 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/m_axis_result_tdata[0]_INST_0_i_1/O
+                         net (fo=1, routed)           0.145     1.257    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/a_gt_b_fix1_out__0
+    SLICE_X61Y62         LUT6 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.101     1.358 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/m_axis_result_tdata[0]_INST_0/O
+                         net (fo=1, routed)           0.123     1.481    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/r_tdata
+    SLICE_X61Y65         LUT3 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.152     1.633 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/dout_r[0]_i_1__0/O
+                         net (fo=6, routed)           0.186     1.819    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/grp_fu_1375_p2
+    SLICE_X60Y69         LUT6 (Prop_H6LUT_SLICEM_I1_O)
+                                                      0.053     1.872 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/and_ln45_reg_4089[0]_i_2/O
+                         net (fo=6, routed)           0.174     2.046    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/and_ln45_fu_3083_p2125_out
+    SLICE_X61Y73         LUT3 (Prop_E5LUT_SLICEM_I2_O)
+                                                      0.070     2.116 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/grp_cached_push_fu_1290_ap_start_reg_i_2/O
+                         net (fo=4, routed)           0.226     2.342    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/icmp_ln46_fu_3089_p2
+    SLICE_X64Y74         LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     2.378 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/mem_reg[3][0]_srl4_i_6__1/O
+                         net (fo=7, routed)           0.370     2.749    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_23_2_fu_513/mem_reg_0_2
+    SLICE_X76Y66         LUT6 (Prop_G6LUT_SLICEM_I3_O)
+                                                      0.090     2.839 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_23_2_fu_513/empty_n_i_2__27/O
+                         net (fo=15, routed)          0.795     3.634    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_23_2_fu_513/pop_5
+    SLICE_X93Y33         LUT2 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     3.684 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_23_2_fu_513/mem_reg_0_i_1__2/O
+                         net (fo=2, routed)           0.569     4.252    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/mem_reg_0_0
+    RAMB36_X5Y5          RAMB36E2                                     r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/mem_reg_1/ENARDEN
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     5.000     5.000 r  
+                                                      0.000     5.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.039     5.039    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/ap_clk
+    RAMB36_X5Y5          RAMB36E2                                     r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/mem_reg_1/CLKARDCLK
+                         clock pessimism              0.000     5.039    
+                         clock uncertainty           -0.035     5.004    
+    RAMB36_X5Y5          RAMB36E2 (Setup_RAMB36E2_RAMB36_CLKARDCLK_ENARDEN)
+                                                     -0.342     4.662    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/mem_reg_1
+  -------------------------------------------------------------------
+                         required time                          4.662    
+                         arrival time                          -4.252    
+  -------------------------------------------------------------------
+                         slack                                  0.409    
+
+Slack (MET) :             0.673ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[47]/CE
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (ap_clk rise@5.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        4.222ns  (logic 0.668ns (15.821%)  route 3.554ns (84.179%))
+  Logic Levels:           9  (CARRY8=3 LUT3=2 LUT5=3 LUT6=1)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.030     0.030    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X77Y137        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X77Y137        FDRE (Prop_EFF_SLICEM_C_Q)
+                                                      0.076     0.106 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/Q
+                         net (fo=152, routed)         0.522     0.628    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782[3]
+    SLICE_X64Y145        LUT5 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.123     0.751 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[63]_i_6/O
+                         net (fo=2, routed)           0.420     1.171    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[63]_i_6_n_17
+    SLICE_X72Y142        LUT3 (Prop_D5LUT_SLICEM_I0_O)
+                                                      0.135     1.306 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[47]_i_2/O
+                         net (fo=4, routed)           0.389     1.695    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[47]_i_2_n_17
+    SLICE_X66Y145        LUT5 (Prop_G6LUT_SLICEL_I3_O)
+                                                      0.035     1.730 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[31]_i_2/O
+                         net (fo=4, routed)           0.262     1.992    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[31]_i_2_n_17
+    SLICE_X70Y142        LUT5 (Prop_F6LUT_SLICEL_I3_O)
+                                                      0.035     2.027 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[23]_i_1/O
+                         net (fo=2, routed)           0.167     2.194    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_fu_2378_p1[23]
+    SLICE_X68Y142        LUT6 (Prop_B6LUT_SLICEL_I5_O)
+                                                      0.036     2.230 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781[63]_i_43/O
+                         net (fo=1, routed)           0.195     2.425    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781[63]_i_43_n_17
+    SLICE_X69Y143        CARRY8 (Prop_CARRY8_SLICEL_DI[3]_CO[7])
+                                                      0.101     2.526 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_21/CO[7]
+                         net (fo=1, routed)           0.026     2.552    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_21_n_17
+    SLICE_X69Y144        CARRY8 (Prop_CARRY8_SLICEL_CI_CO[7])
+                                                      0.015     2.567 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_4/CO[7]
+                         net (fo=1, routed)           0.026     2.593    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_4_n_17
+    SLICE_X69Y145        CARRY8 (Prop_CARRY8_SLICEL_CI_CO[7])
+                                                      0.022     2.615 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_3/CO[7]
+                         net (fo=293, routed)         0.638     3.253    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/icmp_ln32_fu_2382_p2
+    SLICE_X68Y108        LUT3 (Prop_H6LUT_SLICEL_I1_O)
+                                                      0.090     3.343 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053[63]_i_1/O
+                         net (fo=256, routed)         0.909     4.252    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_status_1_reg_1017
+    SLICE_X46Y127        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[47]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     5.000     5.000 r  
+                                                      0.000     5.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.021     5.021    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X46Y127        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[47]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+    SLICE_X46Y127        FDRE (Setup_HFF2_SLICEM_C_CE)
+                                                     -0.061     4.925    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[47]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -4.252    
+  -------------------------------------------------------------------
+                         slack                                  0.673    
+
+Slack (MET) :             0.674ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[46]/CE
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (ap_clk rise@5.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        4.221ns  (logic 0.668ns (15.825%)  route 3.553ns (84.175%))
+  Logic Levels:           9  (CARRY8=3 LUT3=2 LUT5=3 LUT6=1)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.030     0.030    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X77Y137        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X77Y137        FDRE (Prop_EFF_SLICEM_C_Q)
+                                                      0.076     0.106 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/Q
+                         net (fo=152, routed)         0.522     0.628    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782[3]
+    SLICE_X64Y145        LUT5 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.123     0.751 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[63]_i_6/O
+                         net (fo=2, routed)           0.420     1.171    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[63]_i_6_n_17
+    SLICE_X72Y142        LUT3 (Prop_D5LUT_SLICEM_I0_O)
+                                                      0.135     1.306 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[47]_i_2/O
+                         net (fo=4, routed)           0.389     1.695    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[47]_i_2_n_17
+    SLICE_X66Y145        LUT5 (Prop_G6LUT_SLICEL_I3_O)
+                                                      0.035     1.730 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[31]_i_2/O
+                         net (fo=4, routed)           0.262     1.992    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[31]_i_2_n_17
+    SLICE_X70Y142        LUT5 (Prop_F6LUT_SLICEL_I3_O)
+                                                      0.035     2.027 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[23]_i_1/O
+                         net (fo=2, routed)           0.167     2.194    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_fu_2378_p1[23]
+    SLICE_X68Y142        LUT6 (Prop_B6LUT_SLICEL_I5_O)
+                                                      0.036     2.230 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781[63]_i_43/O
+                         net (fo=1, routed)           0.195     2.425    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781[63]_i_43_n_17
+    SLICE_X69Y143        CARRY8 (Prop_CARRY8_SLICEL_DI[3]_CO[7])
+                                                      0.101     2.526 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_21/CO[7]
+                         net (fo=1, routed)           0.026     2.552    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_21_n_17
+    SLICE_X69Y144        CARRY8 (Prop_CARRY8_SLICEL_CI_CO[7])
+                                                      0.015     2.567 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_4/CO[7]
+                         net (fo=1, routed)           0.026     2.593    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_4_n_17
+    SLICE_X69Y145        CARRY8 (Prop_CARRY8_SLICEL_CI_CO[7])
+                                                      0.022     2.615 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_3/CO[7]
+                         net (fo=293, routed)         0.638     3.253    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/icmp_ln32_fu_2382_p2
+    SLICE_X68Y108        LUT3 (Prop_H6LUT_SLICEL_I1_O)
+                                                      0.090     3.343 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053[63]_i_1/O
+                         net (fo=256, routed)         0.908     4.251    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_status_1_reg_1017
+    SLICE_X46Y127        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[46]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     5.000     5.000 r  
+                                                      0.000     5.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.021     5.021    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X46Y127        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[46]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+    SLICE_X46Y127        FDRE (Setup_HFF_SLICEM_C_CE)
+                                                     -0.061     4.925    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[46]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -4.251    
+  -------------------------------------------------------------------
+                         slack                                  0.674    
+
+Slack (MET) :             0.678ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/C
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/raddr_reg_reg[0]/D
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (ap_clk rise@5.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        4.303ns  (logic 1.101ns (25.585%)  route 3.202ns (74.415%))
+  Logic Levels:           11  (CARRY8=1 LUT3=3 LUT4=2 LUT5=2 LUT6=3)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.028     0.028    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/ap_clk
+    SLICE_X58Y60         FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X58Y60         FDRE (Prop_DFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/Q
+                         net (fo=4, routed)           0.368     0.475    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/s_axis_a_tdata[22]
+    SLICE_X61Y59         LUT4 (Prop_D6LUT_SLICEM_I0_O)
+                                                      0.145     0.620 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/CHAIN_GEN[11].C_MUX.CARRY_MUX_i_1/O
+                         net (fo=1, routed)           0.025     0.645    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/ADD_MANT_GEN[11].lut_op_reg
+    SLICE_X61Y59         CARRY8 (Prop_CARRY8_SLICEM_S[3]_CO[7])
+                                                      0.170     0.815 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/CHAIN_GEN[8].C_MUX.CARRY_MUX_CARRY4_CARRY8/CO[7]
+                         net (fo=1, routed)           0.244     1.059    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/a_gt_b_p1
+    SLICE_X61Y61         LUT5 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.053     1.112 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/m_axis_result_tdata[0]_INST_0_i_1/O
+                         net (fo=1, routed)           0.145     1.257    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/a_gt_b_fix1_out__0
+    SLICE_X61Y62         LUT6 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.101     1.358 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/m_axis_result_tdata[0]_INST_0/O
+                         net (fo=1, routed)           0.123     1.481    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/r_tdata
+    SLICE_X61Y65         LUT3 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.152     1.633 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/dout_r[0]_i_1__0/O
+                         net (fo=6, routed)           0.186     1.819    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/grp_fu_1375_p2
+    SLICE_X60Y69         LUT6 (Prop_H6LUT_SLICEM_I1_O)
+                                                      0.053     1.872 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/and_ln45_reg_4089[0]_i_2/O
+                         net (fo=6, routed)           0.174     2.046    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/and_ln45_fu_3083_p2125_out
+    SLICE_X61Y73         LUT3 (Prop_E5LUT_SLICEM_I2_O)
+                                                      0.070     2.116 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/grp_cached_push_fu_1290_ap_start_reg_i_2/O
+                         net (fo=4, routed)           0.226     2.342    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/icmp_ln46_fu_3089_p2
+    SLICE_X64Y74         LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     2.378 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/mem_reg[3][0]_srl4_i_6__1/O
+                         net (fo=7, routed)           0.389     2.767    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_21_1_fu_496/ready_for_outstanding_reg
+    SLICE_X73Y66         LUT6 (Prop_G6LUT_SLICEL_I4_O)
+                                                      0.035     2.802 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_21_1_fu_496/ready_for_outstanding_i_2/O
+                         net (fo=3, routed)           0.447     3.249    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/ready_for_outstanding_reg
+    SLICE_X89Y58         LUT3 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.050     3.299 r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/raddr[7]_i_3/O
+                         net (fo=4, routed)           0.579     3.878    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/raddr[7]_i_3_n_17
+    SLICE_X93Y33         LUT4 (Prop_D5LUT_SLICEL_I2_O)
+                                                      0.157     4.035 r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/raddr[0]_i_1__25/O
+                         net (fo=2, routed)           0.296     4.331    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/rnext[0]
+    SLICE_X93Y33         FDRE                                         r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/raddr_reg_reg[0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     5.000     5.000 r  
+                                                      0.000     5.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.020     5.020    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/ap_clk
+    SLICE_X93Y33         FDRE                                         r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/raddr_reg_reg[0]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.035     4.985    
+    SLICE_X93Y33         FDRE (Setup_EFF_SLICEL_C_D)
+                                                      0.025     5.010    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/raddr_reg_reg[0]
+  -------------------------------------------------------------------
+                         required time                          5.010    
+                         arrival time                          -4.331    
+  -------------------------------------------------------------------
+                         slack                                  0.678    
+
+Slack (MET) :             0.680ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/C
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/trunc_ln30_4_reg_3719_reg[447]/R
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (ap_clk rise@5.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        4.203ns  (logic 0.991ns (23.581%)  route 3.212ns (76.419%))
+  Logic Levels:           9  (CARRY8=1 LUT3=2 LUT4=2 LUT5=1 LUT6=3)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.028     0.028    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/ap_clk
+    SLICE_X58Y60         FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X58Y60         FDRE (Prop_DFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/Q
+                         net (fo=4, routed)           0.368     0.475    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/s_axis_a_tdata[22]
+    SLICE_X61Y59         LUT4 (Prop_D6LUT_SLICEM_I0_O)
+                                                      0.145     0.620 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/CHAIN_GEN[11].C_MUX.CARRY_MUX_i_1/O
+                         net (fo=1, routed)           0.025     0.645    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/ADD_MANT_GEN[11].lut_op_reg
+    SLICE_X61Y59         CARRY8 (Prop_CARRY8_SLICEM_S[3]_CO[7])
+                                                      0.170     0.815 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/CHAIN_GEN[8].C_MUX.CARRY_MUX_CARRY4_CARRY8/CO[7]
+                         net (fo=1, routed)           0.244     1.059    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/a_gt_b_p1
+    SLICE_X61Y61         LUT5 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.053     1.112 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/m_axis_result_tdata[0]_INST_0_i_1/O
+                         net (fo=1, routed)           0.145     1.257    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/a_gt_b_fix1_out__0
+    SLICE_X61Y62         LUT6 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.101     1.358 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/m_axis_result_tdata[0]_INST_0/O
+                         net (fo=1, routed)           0.123     1.481    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/r_tdata
+    SLICE_X61Y65         LUT3 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.152     1.633 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/dout_r[0]_i_1__0/O
+                         net (fo=6, routed)           0.331     1.964    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/grp_fu_1375_p2
+    SLICE_X56Y68         LUT6 (Prop_B6LUT_SLICEM_I0_O)
+                                                      0.037     2.001 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/tmp_16_reg_3729[55]_i_4/O
+                         net (fo=168, routed)         0.411     2.413    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/tmp_16_reg_3729[55]_i_4_n_17
+    SLICE_X52Y73         LUT6 (Prop_G6LUT_SLICEM_I5_O)
+                                                      0.100     2.513 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/tmp_16_reg_3729[47]_i_2/O
+                         net (fo=7, routed)           0.449     2.962    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/lshr_ln30_reg_3692_reg[63]
+    SLICE_X51Y95         LUT3 (Prop_D5LUT_SLICEL_I2_O)
+                                                      0.066     3.028 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/tmp_16_reg_3729[31]_i_1/O
+                         net (fo=7, routed)           0.543     3.571    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/shl_ln30_1_reg_3687_reg[4]
+    SLICE_X40Y107        LUT4 (Prop_C6LUT_SLICEL_I1_O)
+                                                      0.088     3.659 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/trunc_ln30_4_reg_3719[447]_i_1/O
+                         net (fo=7, routed)           0.572     4.231    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91_n_18
+    SLICE_X38Y110        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/trunc_ln30_4_reg_3719_reg[447]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     5.000     5.000 r  
+                                                      0.000     5.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.020     5.020    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X38Y110        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/trunc_ln30_4_reg_3719_reg[447]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.035     4.985    
+    SLICE_X38Y110        FDRE (Setup_AFF_SLICEL_C_R)
+                                                     -0.074     4.911    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/trunc_ln30_4_reg_3719_reg[447]
+  -------------------------------------------------------------------
+                         required time                          4.911    
+                         arrival time                          -4.231    
+  -------------------------------------------------------------------
+                         slack                                  0.680    
+
+Slack (MET) :             0.702ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/C
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/raddr_reg[0]/D
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (ap_clk rise@5.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        4.279ns  (logic 1.101ns (25.729%)  route 3.178ns (74.271%))
+  Logic Levels:           11  (CARRY8=1 LUT3=3 LUT4=2 LUT5=2 LUT6=3)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.028     0.028    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/ap_clk
+    SLICE_X58Y60         FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X58Y60         FDRE (Prop_DFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/din0_buf1_reg[22]/Q
+                         net (fo=4, routed)           0.368     0.475    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/s_axis_a_tdata[22]
+    SLICE_X61Y59         LUT4 (Prop_D6LUT_SLICEM_I0_O)
+                                                      0.145     0.620 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/CHAIN_GEN[11].C_MUX.CARRY_MUX_i_1/O
+                         net (fo=1, routed)           0.025     0.645    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/ADD_MANT_GEN[11].lut_op_reg
+    SLICE_X61Y59         CARRY8 (Prop_CARRY8_SLICEM_S[3]_CO[7])
+                                                      0.170     0.815 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/CHAIN_GEN[8].C_MUX.CARRY_MUX_CARRY4_CARRY8/CO[7]
+                         net (fo=1, routed)           0.244     1.059    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/a_gt_b_p1
+    SLICE_X61Y61         LUT5 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.053     1.112 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/m_axis_result_tdata[0]_INST_0_i_1/O
+                         net (fo=1, routed)           0.145     1.257    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/a_gt_b_fix1_out__0
+    SLICE_X61Y62         LUT6 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.101     1.358 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/inst/i_synth/COMP_OP.SPD.OP/STRUCT_CMP.A_GT_B_DET/C_CHAIN/m_axis_result_tdata[0]_INST_0/O
+                         net (fo=1, routed)           0.123     1.481    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/r_tdata
+    SLICE_X61Y65         LUT3 (Prop_H6LUT_SLICEM_I0_O)
+                                                      0.152     1.633 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U91/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/dout_r[0]_i_1__0/O
+                         net (fo=6, routed)           0.186     1.819    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/grp_fu_1375_p2
+    SLICE_X60Y69         LUT6 (Prop_H6LUT_SLICEM_I1_O)
+                                                      0.053     1.872 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/and_ln45_reg_4089[0]_i_2/O
+                         net (fo=6, routed)           0.174     2.046    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/and_ln45_fu_3083_p2125_out
+    SLICE_X61Y73         LUT3 (Prop_E5LUT_SLICEM_I2_O)
+                                                      0.070     2.116 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/grp_cached_push_fu_1290_ap_start_reg_i_2/O
+                         net (fo=4, routed)           0.226     2.342    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/icmp_ln46_fu_3089_p2
+    SLICE_X64Y74         LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     2.378 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/fcmp_32ns_32ns_1_2_no_dsp_1_U92/lookahead_packed_fcmp_32ns_32ns_1_2_no_dsp_1_ip_u/mem_reg[3][0]_srl4_i_6__1/O
+                         net (fo=7, routed)           0.389     2.767    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_21_1_fu_496/ready_for_outstanding_reg
+    SLICE_X73Y66         LUT6 (Prop_G6LUT_SLICEL_I4_O)
+                                                      0.035     2.802 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/grp_cached_pop_fu_1308/grp_cached_pop_Pipeline_VITIS_LOOP_21_1_fu_496/ready_for_outstanding_i_2/O
+                         net (fo=3, routed)           0.447     3.249    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/ready_for_outstanding_reg
+    SLICE_X89Y58         LUT3 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.050     3.299 r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/raddr[7]_i_3/O
+                         net (fo=4, routed)           0.579     3.878    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/raddr[7]_i_3_n_17
+    SLICE_X93Y33         LUT4 (Prop_D5LUT_SLICEL_I2_O)
+                                                      0.157     4.035 r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/U_fifo_mem/raddr[0]_i_1__25/O
+                         net (fo=2, routed)           0.272     4.307    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/rnext[0]
+    SLICE_X93Y33         FDRE                                         r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/raddr_reg[0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     5.000     5.000 r  
+                                                      0.000     5.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.020     5.020    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/ap_clk
+    SLICE_X93Y33         FDRE                                         r  bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/raddr_reg[0]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.035     4.985    
+    SLICE_X93Y33         FDRE (Setup_AFF_SLICEL_C_D)
+                                                      0.025     5.010    bd_0_i/hls_inst/inst/queue_m_axi_U/load_unit/buff_rdata/raddr_reg[0]
+  -------------------------------------------------------------------
+                         required time                          5.010    
+                         arrival time                          -4.307    
+  -------------------------------------------------------------------
+                         slack                                  0.702    
+
+Slack (MET) :             0.710ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[49]/CE
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (ap_clk rise@5.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        4.184ns  (logic 0.668ns (15.964%)  route 3.516ns (84.036%))
+  Logic Levels:           9  (CARRY8=3 LUT3=2 LUT5=3 LUT6=1)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.030     0.030    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X77Y137        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X77Y137        FDRE (Prop_EFF_SLICEM_C_Q)
+                                                      0.076     0.106 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/Q
+                         net (fo=152, routed)         0.522     0.628    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782[3]
+    SLICE_X64Y145        LUT5 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.123     0.751 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[63]_i_6/O
+                         net (fo=2, routed)           0.420     1.171    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[63]_i_6_n_17
+    SLICE_X72Y142        LUT3 (Prop_D5LUT_SLICEM_I0_O)
+                                                      0.135     1.306 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[47]_i_2/O
+                         net (fo=4, routed)           0.389     1.695    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[47]_i_2_n_17
+    SLICE_X66Y145        LUT5 (Prop_G6LUT_SLICEL_I3_O)
+                                                      0.035     1.730 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[31]_i_2/O
+                         net (fo=4, routed)           0.262     1.992    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[31]_i_2_n_17
+    SLICE_X70Y142        LUT5 (Prop_F6LUT_SLICEL_I3_O)
+                                                      0.035     2.027 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[23]_i_1/O
+                         net (fo=2, routed)           0.167     2.194    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_fu_2378_p1[23]
+    SLICE_X68Y142        LUT6 (Prop_B6LUT_SLICEL_I5_O)
+                                                      0.036     2.230 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781[63]_i_43/O
+                         net (fo=1, routed)           0.195     2.425    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781[63]_i_43_n_17
+    SLICE_X69Y143        CARRY8 (Prop_CARRY8_SLICEL_DI[3]_CO[7])
+                                                      0.101     2.526 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_21/CO[7]
+                         net (fo=1, routed)           0.026     2.552    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_21_n_17
+    SLICE_X69Y144        CARRY8 (Prop_CARRY8_SLICEL_CI_CO[7])
+                                                      0.015     2.567 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_4/CO[7]
+                         net (fo=1, routed)           0.026     2.593    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_4_n_17
+    SLICE_X69Y145        CARRY8 (Prop_CARRY8_SLICEL_CI_CO[7])
+                                                      0.022     2.615 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_3/CO[7]
+                         net (fo=293, routed)         0.638     3.253    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/icmp_ln32_fu_2382_p2
+    SLICE_X68Y108        LUT3 (Prop_H6LUT_SLICEL_I1_O)
+                                                      0.090     3.343 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053[63]_i_1/O
+                         net (fo=256, routed)         0.871     4.214    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_status_1_reg_1017
+    SLICE_X46Y128        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[49]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     5.000     5.000 r  
+                                                      0.000     5.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.021     5.021    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X46Y128        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[49]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+    SLICE_X46Y128        FDRE (Setup_HFF2_SLICEM_C_CE)
+                                                     -0.061     4.925    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[49]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -4.214    
+  -------------------------------------------------------------------
+                         slack                                  0.710    
+
+Slack (MET) :             0.710ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[63]/CE
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (ap_clk rise@5.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        4.184ns  (logic 0.668ns (15.964%)  route 3.516ns (84.036%))
+  Logic Levels:           9  (CARRY8=3 LUT3=2 LUT5=3 LUT6=1)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.030     0.030    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X77Y137        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X77Y137        FDRE (Prop_EFF_SLICEM_C_Q)
+                                                      0.076     0.106 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/Q
+                         net (fo=152, routed)         0.522     0.628    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782[3]
+    SLICE_X64Y145        LUT5 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.123     0.751 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[63]_i_6/O
+                         net (fo=2, routed)           0.420     1.171    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[63]_i_6_n_17
+    SLICE_X72Y142        LUT3 (Prop_D5LUT_SLICEM_I0_O)
+                                                      0.135     1.306 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[47]_i_2/O
+                         net (fo=4, routed)           0.389     1.695    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[47]_i_2_n_17
+    SLICE_X66Y145        LUT5 (Prop_G6LUT_SLICEL_I3_O)
+                                                      0.035     1.730 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[31]_i_2/O
+                         net (fo=4, routed)           0.262     1.992    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[31]_i_2_n_17
+    SLICE_X70Y142        LUT5 (Prop_F6LUT_SLICEL_I3_O)
+                                                      0.035     2.027 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[23]_i_1/O
+                         net (fo=2, routed)           0.167     2.194    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_fu_2378_p1[23]
+    SLICE_X68Y142        LUT6 (Prop_B6LUT_SLICEL_I5_O)
+                                                      0.036     2.230 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781[63]_i_43/O
+                         net (fo=1, routed)           0.195     2.425    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781[63]_i_43_n_17
+    SLICE_X69Y143        CARRY8 (Prop_CARRY8_SLICEL_DI[3]_CO[7])
+                                                      0.101     2.526 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_21/CO[7]
+                         net (fo=1, routed)           0.026     2.552    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_21_n_17
+    SLICE_X69Y144        CARRY8 (Prop_CARRY8_SLICEL_CI_CO[7])
+                                                      0.015     2.567 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_4/CO[7]
+                         net (fo=1, routed)           0.026     2.593    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_4_n_17
+    SLICE_X69Y145        CARRY8 (Prop_CARRY8_SLICEL_CI_CO[7])
+                                                      0.022     2.615 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_3/CO[7]
+                         net (fo=293, routed)         0.638     3.253    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/icmp_ln32_fu_2382_p2
+    SLICE_X68Y108        LUT3 (Prop_H6LUT_SLICEL_I1_O)
+                                                      0.090     3.343 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053[63]_i_1/O
+                         net (fo=256, routed)         0.871     4.214    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_status_1_reg_1017
+    SLICE_X46Y128        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[63]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     5.000     5.000 r  
+                                                      0.000     5.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.021     5.021    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X46Y128        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[63]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+    SLICE_X46Y128        FDRE (Setup_GFF2_SLICEM_C_CE)
+                                                     -0.061     4.925    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[63]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -4.214    
+  -------------------------------------------------------------------
+                         slack                                  0.710    
+
+Slack (MET) :             0.712ns  (required time - arrival time)
+  Source:                 bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[48]/CE
+                            (rising edge-triggered cell FDRE clocked by ap_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             ap_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (ap_clk rise@5.000ns - ap_clk rise@0.000ns)
+  Data Path Delay:        4.182ns  (logic 0.668ns (15.972%)  route 3.514ns (84.028%))
+  Logic Levels:           9  (CARRY8=3 LUT3=2 LUT5=3 LUT6=1)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ap_clk rise edge)     0.000     0.000 r  
+                                                      0.000     0.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.030     0.030    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X77Y137        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X77Y137        FDRE (Prop_EFF_SLICEM_C_Q)
+                                                      0.076     0.106 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782_reg[3]/Q
+                         net (fo=152, routed)         0.522     0.628    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/add_ln31_2_reg_3782[3]
+    SLICE_X64Y145        LUT5 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.123     0.751 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[63]_i_6/O
+                         net (fo=2, routed)           0.420     1.171    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[63]_i_6_n_17
+    SLICE_X72Y142        LUT3 (Prop_D5LUT_SLICEM_I0_O)
+                                                      0.135     1.306 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[47]_i_2/O
+                         net (fo=4, routed)           0.389     1.695    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[47]_i_2_n_17
+    SLICE_X66Y145        LUT5 (Prop_G6LUT_SLICEL_I3_O)
+                                                      0.035     1.730 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[31]_i_2/O
+                         net (fo=4, routed)           0.262     1.992    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[31]_i_2_n_17
+    SLICE_X70Y142        LUT5 (Prop_F6LUT_SLICEL_I3_O)
+                                                      0.035     2.027 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_reg_3798[23]_i_1/O
+                         net (fo=2, routed)           0.167     2.194    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/end_fu_2378_p1[23]
+    SLICE_X68Y142        LUT6 (Prop_B6LUT_SLICEL_I5_O)
+                                                      0.036     2.230 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781[63]_i_43/O
+                         net (fo=1, routed)           0.195     2.425    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781[63]_i_43_n_17
+    SLICE_X69Y143        CARRY8 (Prop_CARRY8_SLICEL_DI[3]_CO[7])
+                                                      0.101     2.526 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_21/CO[7]
+                         net (fo=1, routed)           0.026     2.552    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_21_n_17
+    SLICE_X69Y144        CARRY8 (Prop_CARRY8_SLICEL_CI_CO[7])
+                                                      0.015     2.567 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_4/CO[7]
+                         net (fo=1, routed)           0.026     2.593    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_4_n_17
+    SLICE_X69Y145        CARRY8 (Prop_CARRY8_SLICEL_CI_CO[7])
+                                                      0.022     2.615 f  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/i_2_reg_781_reg[63]_i_3/CO[7]
+                         net (fo=293, routed)         0.638     3.253    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/icmp_ln32_fu_2382_p2
+    SLICE_X68Y108        LUT3 (Prop_H6LUT_SLICEL_I1_O)
+                                                      0.090     3.343 r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053[63]_i_1/O
+                         net (fo=256, routed)         0.869     4.212    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_status_1_reg_1017
+    SLICE_X46Y128        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[48]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ap_clk rise edge)     5.000     5.000 r  
+                                                      0.000     5.000 r  ap_clk (IN)
+                         net (fo=32956, unset)        0.021     5.021    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/ap_clk
+    SLICE_X46Y128        FDRE                                         r  bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[48]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+    SLICE_X46Y128        FDRE (Setup_HFF_SLICEM_C_CE)
+                                                     -0.061     4.925    bd_0_i/hls_inst/inst/grp_packed_engine_0_s_fu_198/st_pushes_3_reg_1053_reg[48]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -4.212    
+  -------------------------------------------------------------------
+                         slack                                  0.712    
+
+
+
+

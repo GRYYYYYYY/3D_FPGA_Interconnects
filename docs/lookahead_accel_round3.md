@@ -76,6 +76,31 @@ CPU/CUDA 在同一 H100 工作节点上顺序测量，使用同一 NUMA 的物�
 
 下一档图的双、四引擎也分别完成全部 HLS 阶段，并通过 200 MHz。其功能 RTL 为 3,488,728 / 1,799,906 周期；资源和 setup/hold 与对应小图实现一致。双引擎全部 32 份、四引擎全部 52 份综合 Verilog 在两种输入间逐字节一致，记录见 `dual_cross_input_rtl_manifest.json` 与 `quad_cross_input_rtl_manifest.json`，没有针对已知图预计算搜索。八个核心实现的 routed DCP 哈希、源绑定、时序与资源汇总在 `implementation_artifacts_manifest.json`。
 
+扩展图受限 RTL 最终也全部通过，四路结果逐位一致并排空：双引擎 **15,410,568 周期 / 77.052840 ms**，四引擎 **7,984,906 周期 / 39.924530 ms**，同输入、同缓存、同访存限制下获得 **1.9300×** 时间收益。
+
+双引擎活跃周期为 15,150,494 / 15,410,288，重叠 15,150,494，完成差 259,794。四引擎为 7,984,396 / 7,194,143 / 7,786,916 / 7,653,832；四路全部重叠 7,194,143 周期，平均活跃引擎数 3.8346，最大/最小为 1.1098，完成差 790,253。双、四引擎全局 outstanding 峰值分别为 4R/8W、8R/8W；bank 服务槽利用率为 14.16%、27.33%。队列读写共 311,589 个 beat，占四引擎总量 545,615 的约 57.1%。
+
+## 最终同口径 E1 对照
+
+下表 CPU/CUDA 为同一工作节点上的 warm 实测中位数；FPGA 为完整受限 RTL 周期按通过实现的 200 MHz 换算。单位均为 **ms**，包含状态初始化和完整 sample batch。FPGA 数字不是实板测量。
+
+| 完整输入 | 最佳 C1 CPU | 基础 CUDA | 单 resident RTL | 双 resident RTL | 四 resident RTL | 胜过已测最强 warm 软件的周期预算 |
+|---|---:|---:|---:|---:|---:|---:|
+| 3×3，两层，654 节点 / 8 samples | 0.061716（4 workers） | 0.917024（8 CTAs） | 22.415895 | 11.239960 | 7.407780 | ≤12,343 |
+| 4×4，两层，1,592 节点 / 12 samples | 0.201099（8 workers） | 2.425664（12 CTAs） | 未运行 | 77.052840 | 39.924530 | ≤40,219 |
+
+四引擎在两张图上仍分别比最佳 C1 warm 慢 120.03 / 198.53 倍，也均慢于基础 CUDA。扩展图所有 CPU/GPU cold-first 与 warm 配置如下，统计方法与第一阶段相同：
+
+| 4×4 workload | cold-first E1，μs | warm E1，μs |
+|---|---:|---:|
+| CPU，1 worker | 871.871 | 813.733 |
+| CPU，2 workers | 500.773 | 416.775 |
+| CPU，4 workers | 499.213 | 377.890 |
+| CPU，8 workers | 418.675 | 201.099 |
+| CUDA，12 CTAs | 43,632.961 | 2,425.664 |
+
+四引擎扩展图已观察到的流量，在固定共享 bank 下仅服务跨度就至少需要 2,182,457 周期，即 10.912285 ms，仍超过该图的软件周期预算约 54 倍。此处是保持已观察流量不变的模型下界，不是实板测量或大图预测；复制引擎本身不能消除这项流量成本。
+
 ## 计时覆盖与后续依据
 
 本轮的同口径实测分母为 C1 紧凑 CSR CPU 与 G0 基础 CUDA。B0 原 VPR 多线程用于完整 wire map 核对，B1 native flat 提供全局 sample 与 golden；未增加 B0/B1 的 E1 插桩，也没有将历史 flat/pipeline 或原 VPR 的 E2 时间用作 E1 分母。因此，“胜过本轮最佳软件配置”只是必要门槛，不能替代对所有原生软件基线的最终验证。
@@ -85,3 +110,14 @@ CPU/CUDA 在同一 H100 工作节点上顺序测量，使用同一 NUMA 的物�
 一个可直接追溯的线索是：小图的 5,253 / 3,697 次外部 heap 逻辑读写，对应 RTL queue 端口的 15,759 / 11,091 次 AXI 请求，分别为三倍。下一项实验可先核查三字段 Entry 的请求合并，再与现状比较；本轮没有预先计入这种尚未实现的收益，也没有将访存模型调整为更宽松的参数来改善排序。
 
 共享多上下文状态机没有成为本轮前置条件，未扩展至 8/16 contexts，也未全面重写异步调度器。STRICT_FP32、完整 sample 搜索和每次状态初始化保持不变。所有 FPGA 时间均来自 RTL 周期和通过时序的核心频率，没有实板测量，C 仿真宿主时间不参与加速比。
+
+## 验证与归档入口
+
+15 项主机测试通过；两套 CPU/GPU 作业共 70 个独立进程、420 次完整 batch（含保留的 2D 控制）逐位一致。八个 HLS cohort 的 csim、综合、功能 cosim、实现及对应受限 RTL 均通过；567 项最终源绑定、输入、结果端口、credit 与排空检查通过。前两轮归档的 888 个文件、冻结 CPU/VPR 二进制和未跟踪指导文档保持原哈希。
+
+- [最终完整表、逐端口计数与重叠](../results/lookahead_accel_round3_20261108T141500Z/report_final/report.md)，[机器可读结果](../results/lookahead_accel_round3_20261108T141500Z/report_final/report.json)。
+- [3×3 图表](../results/lookahead_accel_round3_20261108T141500Z/plot_final_d3/evidence.png)、[4×4 图表](../results/lookahead_accel_round3_20261108T141500Z/plot_final_d4/evidence.png)；同目录提供 PDF/SVG。
+- [证据清单与 SHA256](../results/lookahead_accel_round3_20261108T141500Z/evidence_snapshot/index.json)，[最终审计](../results/lookahead_accel_round3_20261108T141500Z/evidence_snapshot/source_binding_final_audit.json)，[历史保护复核](../results/lookahead_accel_round3_20261108T141500Z/evidence_snapshot/preservation_final_audit.json)。
+- [计时覆盖](../results/lookahead_accel_round3_20261108T141500Z/evidence_snapshot/scope_manifest.json)与[阶段决定](../results/lookahead_accel_round3_20261108T141500Z/evidence_snapshot/completion_decision.json)。
+
+证据包包含两张完整小型 3D 图、workload、native golden、运行源码快照、原始软件测量、RTL 输出和实现报告；DCP、波形与构建目录留在本地，其关键哈希已归档。第三轮提交到独立分支，不合并 main。
