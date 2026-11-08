@@ -1,0 +1,162 @@
+{
+  "tool_version": "2022.2",
+  "skill": "amd-ross-agentic-ai-assistant:hls-ii-diagnose",
+  "compatibility": "Classic solution paths substituted for Unified IDE paths; direct report/log/schedule reads; no tool flow rerun for diagnosis.",
+  "target_label": "VITIS_LOOP_15_1",
+  "achieved_ii": 29,
+  "target_ii": null,
+  "summary_default_target": 1,
+  "category": [
+    "b: queue AXI response/request recurrence",
+    "a: no user II directive; automatic pipeline"
+  ],
+  "classification_limits": "No-target status is observed, not proof that a pragma alone removes this dependency. No memory-port-shortage conclusion.",
+  "evidence": {
+    "log": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/hls_tiny/csynth.log",
+    "log_lines": [
+      100,
+      101,
+      109,
+      111,
+      113,
+      115
+    ],
+    "schedule": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/hls_tiny/project/solution/.autopilot/db/lookahead_top_Pipeline_VITIS_LOOP_15_1.verbose.sched.rpt",
+    "schedule_excerpts": [
+      {
+        "line": 119,
+        "text": "ST_1 : Operation 35 [1/1] (0.00ns)   --->   \"%specinterface_ln0 = specinterface void @_ssdm_op_SpecInterface, i128 %queue, void @empty_7, i32 0, i32 0, void @empty_8, i32 0, i32 803, void @empty_25, void @empty_10, void @empty_8, i32 16, i32 16, i32 16, i32 16, void @empty_8, void @empty_8, i32 4294967295, i32 0\"   --->   Operation 35 'specinterface' 'specinterface_ln0' <Predicate = true> <Delay = 0.00>"
+      },
+      {
+        "line": 164,
+        "text": "ST_3 : Operation 72 [7/7] (3.65ns)   --->   \"%queue_load_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_3, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 72 'readreq' 'queue_load_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 179,
+        "text": "ST_4 : Operation 85 [6/7] (3.65ns)   --->   \"%queue_load_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_3, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 85 'readreq' 'queue_load_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 182,
+        "text": "ST_4 : Operation 88 [7/7] (3.65ns)   --->   \"%queue_load_1_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_4, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 88 'readreq' 'queue_load_1_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 185,
+        "text": "ST_5 : Operation 89 [5/7] (3.65ns)   --->   \"%queue_load_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_3, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 89 'readreq' 'queue_load_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 186,
+        "text": "ST_5 : Operation 90 [6/7] (3.65ns)   --->   \"%queue_load_1_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_4, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 90 'readreq' 'queue_load_1_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 189,
+        "text": "ST_6 : Operation 91 [4/7] (3.65ns)   --->   \"%queue_load_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_3, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 91 'readreq' 'queue_load_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 190,
+        "text": "ST_6 : Operation 92 [5/7] (3.65ns)   --->   \"%queue_load_1_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_4, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 92 'readreq' 'queue_load_1_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 193,
+        "text": "ST_7 : Operation 93 [3/7] (3.65ns)   --->   \"%queue_load_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_3, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 93 'readreq' 'queue_load_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 194,
+        "text": "ST_7 : Operation 94 [4/7] (3.65ns)   --->   \"%queue_load_1_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_4, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 94 'readreq' 'queue_load_1_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 197,
+        "text": "ST_8 : Operation 95 [2/7] (3.65ns)   --->   \"%queue_load_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_3, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 95 'readreq' 'queue_load_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 198,
+        "text": "ST_8 : Operation 96 [3/7] (3.65ns)   --->   \"%queue_load_1_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_4, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 96 'readreq' 'queue_load_1_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 201,
+        "text": "ST_9 : Operation 97 [1/7] (3.65ns)   --->   \"%queue_load_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_3, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 97 'readreq' 'queue_load_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 202,
+        "text": "ST_9 : Operation 98 [2/7] (3.65ns)   --->   \"%queue_load_1_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_4, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 98 'readreq' 'queue_load_1_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 206,
+        "text": "ST_10 : Operation 100 [1/7] (3.65ns)   --->   \"%queue_load_1_req = readreq i1 @_ssdm_op_ReadReq.m_axi.i128P1A, i128 %queue_addr_4, i32 1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 100 'readreq' 'queue_load_1_req' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 230,
+        "text": "ST_12 : Operation 120 [2/2] (1.64ns)   --->   \"%tmp_12 = fcmp_ogt  i32 %bitcast_ln15, i32 %bitcast_ln15_1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 120 'fcmp' 'tmp_12' <Predicate = (icmp_ln15)> <Delay = 1.64> <CoreInst = \"FCompare\">   --->   Core 19 'FCompare' <Latency = 1> <II = 1> <Delay = 1.64> <FuncUnit> <Opcode : 'fcmp'> <InPorts = 2> <OutPorts = 1>"
+      },
+      {
+        "line": 235,
+        "text": "ST_13 : Operation 123 [1/2] (1.64ns)   --->   \"%tmp_12 = fcmp_ogt  i32 %bitcast_ln15, i32 %bitcast_ln15_1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 123 'fcmp' 'tmp_12' <Predicate = (icmp_ln15)> <Delay = 1.64> <CoreInst = \"FCompare\">   --->   Core 19 'FCompare' <Latency = 1> <II = 1> <Delay = 1.64> <FuncUnit> <Opcode : 'fcmp'> <InPorts = 2> <OutPorts = 1>"
+      },
+      {
+        "line": 261,
+        "text": "ST_15 : Operation 145 [7/7] (3.65ns)   --->   \"%empty_78 = readreq i1 @_ssdm_op_ReadReq.m_axi.p1i128, i128 %queue_addr_5, i32 %select_ln15\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 145 'readreq' 'empty_78' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 264,
+        "text": "ST_16 : Operation 146 [6/7] (3.65ns)   --->   \"%empty_78 = readreq i1 @_ssdm_op_ReadReq.m_axi.p1i128, i128 %queue_addr_5, i32 %select_ln15\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 146 'readreq' 'empty_78' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 267,
+        "text": "ST_17 : Operation 147 [5/7] (3.65ns)   --->   \"%empty_78 = readreq i1 @_ssdm_op_ReadReq.m_axi.p1i128, i128 %queue_addr_5, i32 %select_ln15\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 147 'readreq' 'empty_78' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 270,
+        "text": "ST_18 : Operation 148 [4/7] (3.65ns)   --->   \"%empty_78 = readreq i1 @_ssdm_op_ReadReq.m_axi.p1i128, i128 %queue_addr_5, i32 %select_ln15\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 148 'readreq' 'empty_78' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 273,
+        "text": "ST_19 : Operation 149 [3/7] (3.65ns)   --->   \"%empty_78 = readreq i1 @_ssdm_op_ReadReq.m_axi.p1i128, i128 %queue_addr_5, i32 %select_ln15\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 149 'readreq' 'empty_78' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 276,
+        "text": "ST_20 : Operation 150 [2/7] (3.65ns)   --->   \"%empty_78 = readreq i1 @_ssdm_op_ReadReq.m_axi.p1i128, i128 %queue_addr_5, i32 %select_ln15\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 150 'readreq' 'empty_78' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 279,
+        "text": "ST_21 : Operation 151 [1/7] (3.65ns)   --->   \"%empty_78 = readreq i1 @_ssdm_op_ReadReq.m_axi.p1i128, i128 %queue_addr_5, i32 %select_ln15\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 151 'readreq' 'empty_78' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 282,
+        "text": "ST_22 : Operation 152 [1/1] (0.00ns)   --->   \"%specloopname_ln15 = specloopname void @_ssdm_op_SpecLoopName, void @empty_18\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 152 'specloopname' 'specloopname_ln15' <Predicate = (icmp_ln15)> <Delay = 0.00>"
+      },
+      {
+        "line": 293,
+        "text": "ST_24 : Operation 159 [1/1] (0.00ns) (grouped into LUT with out node shl_ln15_3)   --->   \"%empty_76 = phi i128 %queue_addr_5_read_1, void, i128 0, void %while.body.i142\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 159 'phi' 'empty_76' <Predicate = (icmp_ln15)> <Delay = 0.00>"
+      },
+      {
+        "line": 294,
+        "text": "ST_24 : Operation 160 [1/1] (0.00ns) (grouped into LUT with out node shl_ln15_3)   --->   \"%tmp_6 = bitconcatenate i256 @_ssdm_op_BitConcatenate.i256.i128.i128, i128 %empty_76, i128 %queue_addr_5_read\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 160 'bitconcatenate' 'tmp_6' <Predicate = (icmp_ln15)> <Delay = 0.00>"
+      },
+      {
+        "line": 305,
+        "text": "ST_24 : Operation 171 [1/1] (3.65ns)   --->   \"%empty_77 = writereq i1 @_ssdm_op_WriteReq.m_axi.p1i128, i128 %queue_addr_6, i32 %select_ln15_1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 171 'writereq' 'empty_77' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 323,
+        "text": "ST_27 : Operation 183 [5/5] (3.65ns)   --->   \"%empty = writeresp i1 @_ssdm_op_WriteResp.m_axi.p1i128, i128 %queue_addr_6\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 183 'writeresp' 'empty' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 326,
+        "text": "ST_28 : Operation 184 [4/5] (3.65ns)   --->   \"%empty = writeresp i1 @_ssdm_op_WriteResp.m_axi.p1i128, i128 %queue_addr_6\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 184 'writeresp' 'empty' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 329,
+        "text": "ST_29 : Operation 185 [3/5] (3.65ns)   --->   \"%empty = writeresp i1 @_ssdm_op_WriteResp.m_axi.p1i128, i128 %queue_addr_6\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 185 'writeresp' 'empty' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 332,
+        "text": "ST_30 : Operation 186 [2/5] (3.65ns)   --->   \"%empty = writeresp i1 @_ssdm_op_WriteResp.m_axi.p1i128, i128 %queue_addr_6\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 186 'writeresp' 'empty' <Predicate = (icmp_ln15)> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      },
+      {
+        "line": 335,
+        "text": "ST_31 : Operation 187 [1/5] (3.65ns)   --->   \"%empty = writeresp i1 @_ssdm_op_WriteResp.m_axi.p1i128, i128 %queue_addr_6\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include/strict_heap.hpp:15]   --->   Operation 187 'writeresp' 'empty' <Predicate = true> <Delay = 3.65> <CoreInst = \"m_axi\">   --->   Core 121 'm_axi' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : 'read' 'write' 'readreq' 'writereq' 'writeresp'>"
+      }
+    ],
+    "source": "accel/lookahead/include/strict_heap.hpp:15"
+  },
+  "next_step": "Reduce dependent heap round trips with top-index caching; hide independent-sample latency using separate contexts. Preserve equal-child order and label ownership. Do not assert dependence false."
+}

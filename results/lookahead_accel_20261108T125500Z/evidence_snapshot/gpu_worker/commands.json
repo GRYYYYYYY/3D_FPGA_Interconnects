@@ -1,0 +1,345 @@
+[
+  {
+    "name": "device",
+    "command": [
+      "nvidia-smi"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 0.21502137184143066
+  },
+  {
+    "name": "compiler",
+    "command": [
+      "nvcc",
+      "--version"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 0.004449367523193359
+  },
+  {
+    "name": "build",
+    "command": [
+      "nvcc",
+      "-O2",
+      "-std=c++14",
+      "--fmad=false",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/cuda/lookahead_cuda.cu",
+      "-o",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/lookahead_cuda"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 1.966855764389038
+  },
+  {
+    "name": "cpu_build",
+    "command": [
+      "c++",
+      "-O2",
+      "-std=c++14",
+      "-fopenmp",
+      "-ffp-contract=off",
+      "-fno-fast-math",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/include",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/accel/lookahead/cpu_reference.cpp",
+      "-o",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/cpu_reference"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 0.8662307262420654
+  },
+  {
+    "name": "cpu_tseng_export",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cpu",
+      "--workers",
+      "8",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/cpu_reference",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/tseng_export/workload.bin",
+      "--repeats",
+      "3",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/cpu_tseng_export"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 0.41458606719970703
+  },
+  {
+    "name": "cpu_tseng_eligible",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cpu",
+      "--workers",
+      "8",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/cpu_reference",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/tseng_eligible/workload.bin",
+      "--repeats",
+      "3",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/cpu_tseng_eligible"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 0.3146092891693115
+  },
+  {
+    "name": "cpu_bnn_export",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cpu",
+      "--workers",
+      "8",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/cpu_reference",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/bnn_export/workload.bin",
+      "--repeats",
+      "3",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/cpu_bnn_export"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 35.96135878562927
+  },
+  {
+    "name": "native_controls",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/reproduce_native_lookahead.py",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/native_controls",
+      "--case",
+      "tseng_2d",
+      "--workers",
+      "8",
+      "--repeats",
+      "3",
+      "--include-stock",
+      "--execute"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 11.528717994689941
+  },
+  {
+    "name": "adversarial",
+    "command": [
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/lookahead_cuda",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/adversarial.bin",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/adversarial.bin",
+      "3"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 0.7148330211639404
+  },
+  {
+    "name": "tiny_native_B1",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cuda",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/lookahead_cuda",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/tiny_native/workload.bin",
+      "--contexts",
+      "1",
+      "--repeats",
+      "1",
+      "--timeout",
+      "600",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/tiny_native_B1"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 0.7147786617279053
+  },
+  {
+    "name": "tiny_native_B2",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cuda",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/lookahead_cuda",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/tiny_native/workload.bin",
+      "--contexts",
+      "2",
+      "--repeats",
+      "1",
+      "--timeout",
+      "600",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/tiny_native_B2"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 0.6648581027984619
+  },
+  {
+    "name": "tiny_native_B4",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cuda",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/lookahead_cuda",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/tiny_native/workload.bin",
+      "--contexts",
+      "4",
+      "--repeats",
+      "1",
+      "--timeout",
+      "600",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/tiny_native_B4"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 0.6649117469787598
+  },
+  {
+    "name": "tseng_export_B1",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cuda",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/lookahead_cuda",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/tseng_export/workload.bin",
+      "--contexts",
+      "1",
+      "--repeats",
+      "1",
+      "--timeout",
+      "600",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/tseng_export_B1"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 21.389617919921875
+  },
+  {
+    "name": "tseng_export_B2",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cuda",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/lookahead_cuda",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/tseng_export/workload.bin",
+      "--contexts",
+      "2",
+      "--repeats",
+      "1",
+      "--timeout",
+      "600",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/tseng_export_B2"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 11.077229261398315
+  },
+  {
+    "name": "tseng_export_B4",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cuda",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/lookahead_cuda",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/tseng_export/workload.bin",
+      "--contexts",
+      "4",
+      "--repeats",
+      "1",
+      "--timeout",
+      "600",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/tseng_export_B4"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 5.820754528045654
+  },
+  {
+    "name": "tseng_export_B8",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cuda",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/lookahead_cuda",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/tseng_export/workload.bin",
+      "--contexts",
+      "8",
+      "--repeats",
+      "1",
+      "--timeout",
+      "600",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/tseng_export_B8"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 3.268096685409546
+  },
+  {
+    "name": "bnn_export_B40",
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/scripts/la_accel_run.py",
+      "--backend",
+      "cuda",
+      "--binary",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/lookahead_cuda",
+      "--workload",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/bnn_export/workload.bin",
+      "--contexts",
+      "40",
+      "--repeats",
+      "1",
+      "--timeout",
+      "600",
+      "--output",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/gpu_worker/bnn_export_B40"
+    ],
+    "returncode": 0,
+    "failure_reason": null,
+    "host_elapsed_s": 148.44430828094482
+  }
+]
