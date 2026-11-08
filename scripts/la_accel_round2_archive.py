@@ -57,7 +57,8 @@ def main():
     add(root/'native_live_build_v2',['*.json','source/*'])
     manifest={}
     for source in sorted(selected):
-        if source.stat().st_size>8*1024*1024:
+        # Unsuppressed DSP primitive warnings make a few valid XSim logs ~11 MB.
+        if source.stat().st_size>16*1024*1024:
             raise ValueError('Unexpected large evidence file: '+str(source))
         rel=source.relative_to(root);dest=out/rel;dest.parent.mkdir(parents=True,exist_ok=True)
         shutil.copy2(source,dest)
