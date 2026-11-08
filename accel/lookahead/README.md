@@ -1,8 +1,10 @@
 # STRICT_FP32 lookahead acceleration
 
 This is a new experimental backend, independent of the archived CPU paper and
-old online router / integer candidate-cost accelerator. The active experiment
-is `results/lookahead_accel_20261108T125500Z`. Read its generated report for actual
+old online router / integer candidate-cost accelerator. Round 1 is frozen at `results/lookahead_accel_20261108T125500Z`.
+The active continuation is `results/lookahead_accel_round2_20261108T122100Z`.
+The objective is FPGA faster than each baseline; GPU/CPU relative ordering is
+not a success criterion. GPU remains a supplementary baseline. Read its generated report for actual
 completion status; source availability does not imply device validation.
 
 ## Contract
@@ -97,6 +99,19 @@ Experimental variants are individually identified:
 - `la_accel_eligible.py`: static filtering preserves node identity, parallel edges
   and original order, and removes edges after the first eligible SINK. Both CPU
   and FPGA consume the same transformed graph and unchanged golden outputs.
+- `lookahead_resident.cpp`: combines configurable heap/label caches with an exact,
+  tagged cost cache (`LA_COST_LINES`). Cost-cache fills are included in E1 and
+  retained across jobs in a batch. The cache is reset between invocations.
+- `lookahead_interleaved_v3.cpp`: shared round-robin microstate machine with private
+  per-context heap/labels and one parent expansion per qid. `LA_CONTEXTS` selects
+  the count. Explicit base registers work around a reproduced 2022.2 wrapping
+  address strength-reduction failure. Earlier source versions are retained for
+  that failure's provenance, not selected for use.
+- `lookahead_interleaved_distance.cpp`: same algorithm, with **true** dependence
+  distance equal to the context count for heap, context state and top cache.
+  Each owner recurs every `LA_CONTEXTS` iterations; no false dependency is asserted.
+  The heap must remain alone in its AXI bundle. Cosim and routed timing determine
+  whether this helps; round-robin selection alone did not improve throughput.
 
 For dual-port co-simulation, use `--top lookahead_dual --contexts 2
 --aligned-depths`. Vitis HLS 2022.2 rounds adapter transfers to AXI beats; a
@@ -123,10 +138,44 @@ Run `la_accel_software_summary.py`, `la_accel_report.py` and `la_accel_plot.py`
 to collect a completed cohort and produce evidence tables and exportable figures.
 A final confirmation worker supplies both pinned E1 CPU/CUDA and valid native
 E2 data. Earlier cohorts and the native affinity rejection remain separate.
-CUDA uses one warmup plus three measured batches; CPU currently measures one
+Round-one CUDA uses one warmup plus three measured batches; CPU measures one
 batch per process, including OpenMP startup. This warmup difference is recorded.
 
-Calibration of a bounded external-memory model, true shared-pipeline context
-interleaving, small on-chip cost LUT, geometry-map compression, physical HBM
-connectivity and large-graph FPGA projections remain separate work. Do not infer
-these capabilities from the presence of independent AXI bundles or caches.
+## Round-two bounded memory and live builder
+
+```sh
+python3 scripts/la_accel_bounded.py --hls /verified/hls --output /new/bounded \
+  --latency 64 --banks 1 --period 4 --credits 2 --minimal-debug
+python3 scripts/la_accel_live.py --binary /new/native/bin/vpr_flat \
+  --library /new/build/liblookahead_cpu_backend.so --output /new/live_cpu \
+  --workers 8 --contexts 8 --repeats 3
+```
+
+`bounded_axi.sv` is a verification interposer around generated AESL RAM. It bounds
+shared read/write beat service and outstanding requests, has one finite read skid
+slot per port, and checks bursts, credits, latency, held VALID and drain. A cross-port
+backpressure test guards against bank-lock deadlock. It preserves fresh RTL output
+files and compares all result ports bitwise; no copied performance report is used.
+This is a synthetic sensitivity model. Calibration, refresh/row locality and actual
+HBM placement are not supplied. A finite bank is not evidence of real-board bandwidth.
+
+`VPR_LA_BACKEND=/absolute/library.so` activates a versioned in-process interface.
+It receives the current native graph, global samples and geometry mapping. It cannot
+accept golden outputs. The native bridge performs original ordered merging and
+downstream construction. CPU and CUDA libraries execute real searches and return
+compact maps and status. `RTLD_NODELETE` keeps OpenMP worker code mapped for process
+lifetime. Offline import/export cannot be combined with this live path.
+
+The live runner measures three independent processes with no explicit warmup for
+either backend, and verifies every final wire-map hash. E1 excludes allocation/upload;
+the measured full-builder timer includes cold conversion, backend initialization,
+upload, kernel, readback, merge and downstream work. The separate router timer also
+includes source/OPIN lookahead. These cold E2 measurements are not a warm resident
+FPGA service prediction. `la_accel_live_gpu_job.py` builds frozen source snapshots on
+one real H100 worker and reruns native CPU controls on the same eight physical cores.
+
+Use `la_accel_round2_report.py` and `.venv-report/bin/python
+scripts/la_accel_round2_plot.py` for round-two reports and figures. Calibration of
+large-graph FPGA predictions, asynchronous request/response context scheduling,
+compact geometry and physical HBM connectivity remain unverified. FPGA superiority
+over the software baselines remains a research target, not a measured conclusion.

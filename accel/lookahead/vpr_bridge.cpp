@@ -1,5 +1,6 @@
 // Included inside util after flood_wire_sample, in an isolated copy of the frozen TU.
 // Native accessors and native get_xy_deltas remain authoritative.
+#include "vpr_live.cpp"
 template<class Jobs>
 static void la_export(const Jobs& jobs, const std::vector<WireSampleGroup>& groups) {
  const char* path=std::getenv("VPR_LA_EXPORT"); if(!path) return;

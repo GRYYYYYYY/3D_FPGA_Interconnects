@@ -8,10 +8,12 @@ def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--tbb-include',type=Path,required=True);a=p.parse_args();o=a.output.resolve();o.mkdir(parents=True,exist_ok=False);(o/'source').mkdir();(o/'bin').mkdir()
  frozen=ROOT/'results/native_flat_baseline_20261105';steps=json.loads((frozen/'build_inputs.json').read_text())['commands']
  for src in (frozen/'source').iterdir(): shutil.copy2(src,o/'source'/src.name)
- src=o/'source/router_lookahead_map_utils.cpp';s=src.read_text();s='#include "io.hpp"\n'+s
+ # Snapshot injected bridge and ABI so later edits cannot change this build.
+ for src in [ROOT/'accel/lookahead/vpr_bridge.cpp',ROOT/'accel/lookahead/vpr_live.cpp',*(ROOT/'accel/lookahead/include').glob('*.hpp')]:shutil.copy2(src,o/'source'/src.name)
+ src=o/'source/router_lookahead_map_utils.cpp';s=src.read_text();s='#include "io.hpp"\n#include "backend.hpp"\n#include <dlfcn.h>\n#include <chrono>\n'+s
  marker='std::vector<t_routing_cost_map> get_routing_cost_maps_pipeline('
  assert s.count(marker)==1;s=s.replace(marker,'#include "vpr_bridge.cpp"\n'+marker)
- marker='    /** The token bound limits in-flight sample maps';assert s.count(marker)==1;s=s.replace(marker,'    la_export(jobs, groups);\n    if (la_import(jobs, results)) return results;\n'+marker);src.write_text(s)
+ marker='    /** The token bound limits in-flight sample maps';assert s.count(marker)==1;s=s.replace(marker,'    if (la_live(jobs, groups, results)) return results;\n    la_export(jobs, groups);\n    if (la_import(jobs, results)) return results;\n'+marker);src.write_text(s)
  commands=[]
  for cwd,cmd in steps:
   cmd=[str(x).replace(str(frozen),str(o)) for x in cmd]
