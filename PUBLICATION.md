@@ -20,6 +20,14 @@ Excluded from Git:
 - Instance-specific job submission manifests, credentials and authentication state.
 - Redundant manuscript preview images and generated source ZIP archives.
 
+The [round-three lookahead experiment](docs/lookahead_accel_round3.md) additionally
+publishes its complete small 3D workload inputs, raw timing observations, source
+snapshots, RTL counters and core implementation reports in a checksummed evidence
+bundle. Its selected job specifications and terminal status are retained for
+provenance; account identity fields are omitted from archived status responses.
+Credentials, CLI state, DCPs, waves and build trees remain excluded. Paths in these
+records describe the original compute environment and may require adaptation.
+
 The standalone CPU example can be built using the root README. Historical native
 experiments require the original external benchmarks, architecture descriptions,
 VTR runtime dependencies and frozen inputs. Absolute paths and SHA256 references

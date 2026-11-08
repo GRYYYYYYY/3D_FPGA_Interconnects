@@ -4,6 +4,8 @@
 >
 > 仓库包含源码、论文材料、轻量结果与图表。大型输入、原始实验输出、环境和二进制保留在本地；完整范围与复现限制见[PUBLICATION.md](PUBLICATION.md)。VTR修改通过[固定版本补丁](vendor_patches/README.md)提供。
 
+2026-11-08 的 [第三轮 lookahead FPGA 实验](docs/lookahead_accel_round3.md) 使用完整小型 3D 图，分别记录 CPU/CUDA 实测、功能 RTL、受限访存 RTL 和核心实现时序。FPGA 胜过各软件基线仍是待验证目标；历史 CPU 论文证据保持原有输入与计时口径。
+
 
 对应选题 A：**Native Parallel Routing and Hardware Acceleration for Heterogeneous 3D FPGA Interconnects**。
 

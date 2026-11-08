@@ -188,6 +188,8 @@ accept `workload workers_or_CTAs warm_repeats`; the first invocation in each fre
 process is cold, subsequent batches reuse allocations while resetting search state
 inside E1. `la_accel_round3_gpu_job.py` runs five independent processes per setting,
 with CPU 1/2/4/8 workers (up to the actual job count) and basic CUDA up to eight CTAs.
+For the complete 12-sample graph, `--all-cuda-jobs` launches all 12 real CTAs;
+the kernel and 128 threads per CTA remain unchanged.
 The original/native E2 timers must not be substituted for this resident E1.
 
 Generate a new complete native graph without cutting edges or selecting samples:
@@ -229,6 +231,24 @@ This is a synthetic memory sensitivity model, not calibrated HBM bandwidth.
 Overlap counts deasserted `ap_idle` intervals, including memory waits; it does not
 count simultaneous useful arithmetic operations.
 
+After the matched dual-engine bounded-time gate passes, run four engines with the
+same cache definitions in a fresh directory:
+
+```bash
+python3 scripts/la_accel_flow3.py --output /new/hls_quad \
+  --source accel/lookahead/hls/variants/lookahead_quad_resident3.cpp \
+  --top lookahead_quad --contexts 4 \
+  --testbench accel/lookahead/tests/quad_real3.cpp \
+  --workload /new/native/workload.bin \
+  --define LA_HEAP_TOP=127 --define LA_LABEL_LINES=64 --define LA_COST_LINES=64
+python3 scripts/la_accel_bounded3.py --hls /new/hls_quad \
+  --top lookahead_quad --engines 4 --output /new/bounded_quad --minimal-debug
+```
+
+The complete batch is divided into contiguous chunks in native sample order;
+empty chunks and non-divisible batch sizes are covered by host semantic tests.
+Four engines retain the same single-bank beat budget and global 8R/8W credits.
+
 For the matched label-policy controls use `lookahead_packed_resident3.cpp`,
 `--top lookahead_packed --testbench accel/lookahead/tests/packed_real3.cpp`, and
 `--define LA_LABEL_WRITEBACK=0` or `=1` in separate output directories. Replay with
@@ -246,6 +266,7 @@ Use `la_accel_round3_report.py`, `la_accel_round3_validate.py` and
 `la_accel_round3_archive.py` with fresh output paths for reports, audits and the
 small-input evidence bundle. Figures use `.venv-report/bin/python
 scripts/la_accel_round3_plot.py --report /new/report/report.json --output /new/plots`.
+Use `--case native_d4_w8` for the next complete 3D rung's separate figure.
 The archive includes complete small native workloads, raw CPU/CUDA observations,
 source snapshots, RTL counts and implementation reports; it excludes credentials,
 build trees, waves and DCP binaries. Final scalability decisions must use matched

@@ -12,9 +12,13 @@ def main():
   if not worker.is_dir() or not (worker/'worker.json').exists():continue
   meta=json.loads((worker/'worker.json').read_text())
   for rel,digest in meta['sources'].items():check(sha256(worker/'source'/rel)==digest,worker.name+':snapshot:'+rel)
+  workload_hashes={Path(path).parent.name:digest for path,digest in meta['workloads'].items()}
+  for path,digest in meta['workloads'].items():check(Path(path).exists() and sha256(Path(path))==digest,worker.name+':workload:'+Path(path).parent.name)
   finish=json.loads((worker/'finished.json').read_text());rows=json.loads((worker/'measurements.json').read_text())
   check(finish['status']=='passed' and finish['processes']==len(rows),worker.name+':completed')
-  for row in rows:check(len(row['measurements'])==6 and row['measurements'][0]['phase']=='cold_first_call' and all(m['all_golden_bits_match'] for m in row['measurements']),worker.name+':'+row['log'])
+  for row in rows:
+   check(row['workload_sha256']==workload_hashes.get(row['case']),worker.name+':measurement_input:'+row['log'])
+   check(len(row['measurements'])==6 and row['measurements'][0]['phase']=='cold_first_call' and all(m['all_golden_bits_match'] for m in row['measurements']),worker.name+':'+row['log'])
  for d in r.glob('native_d*'):
   p=d/'manifest.json'
   if not p.exists():continue
@@ -41,6 +45,7 @@ def main():
   c=json.loads((d/'config.json').read_text());p=d/'result.json';check(p.exists(),d.name+':completed')
   if not p.exists():continue
   v=json.loads(p.read_text());check(v['status']=='passed' and all(v['rtl_result_ports_match_c'].values()),d.name+':fresh_bitwise_RTL')
+  check(len(v['rtl_result_ports_match_c'])==sum(port.startswith('result') for port in c['ports']),d.name+':all_result_ports')
   check(sha256(d/'config.json')==v['config_sha256'] and sha256(d/'simulation.log')==v['log_sha256'],d.name+':result_binding')
   check(sha256(d/'sim/verilog/bounded_axi3.sv')==c['interposer_sha256'],d.name+':memory_model')
   memory=v['memory'];check(memory['drained'] and memory['max_total_reads']<=c['total_read_credits'] and memory['max_total_writes']<=c['total_write_credits'],d.name+':global_credits_and_drain')

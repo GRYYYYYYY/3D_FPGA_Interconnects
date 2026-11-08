@@ -73,6 +73,14 @@ def main():
    bank_beats=[0]*config['shared_banks']
    for port,p in zip(config['ports'],m['ports']):bank_beats[config['bank_mapping'][port]]+=p['read_beats']+p['write_beats']
    row['observed_traffic_service_lower_bound_cycles']=max(max(0,(b-1)*config['cycles_per_bank_beat']+1) for b in bank_beats)
+   if result.get('engine_overlap'):
+    engines=result['engine_overlap']['engines'];continuous=all(e['active_cycles']==e['last_active']-e['first_active']+1 for e in engines)
+    row['activity_summary']={'continuous_intervals_verified':continuous,'average_active_engines':sum(e['active_cycles'] for e in engines)/row['e1_cycles_including_drain'],
+     'active_cycle_imbalance':max(e['active_cycles'] for e in engines)/min(e['active_cycles'] for e in engines),
+     'finish_spread_cycles':max(e['last_active'] for e in engines)-min(e['last_active'] for e in engines)}
+    if continuous:
+     row['activity_summary']['all_engines_overlap_cycles']=max(0,min(e['last_active'] for e in engines)-max(e['first_active'] for e in engines)+1)
+     row['activity_summary']['pairwise_overlap_cycles']=[[max(0,min(x['last_active'],y['last_active'])-max(x['first_active'],y['first_active'])+1) for y in engines] for x in engines]
   if result['status']=='passed' and h['verified_mhz']:
    row['rtl_time_s']=row['e1_cycles_including_drain']/(h['verified_mhz']*1e6)
    row['bank_capacity_native_beats_per_s']=h['verified_mhz']*1e6*config['shared_banks']/config['cycles_per_bank_beat']
@@ -136,6 +144,8 @@ def main():
   lines+=['',f'{v["name"]}: total peak outstanding R/W = {m["max_total_reads"]}/{m["max_total_writes"]}; shared bank slot utilization = {v["bank_slot_utilization"]:.2%}; post-completion drain = {v["post_done_drain_cycles"]} cycles.']
   if o:
    active=[e['active_cycles'] for e in o['engines']];lines.append(f'At least two engines overlap for {o["overlap_cycles"]} cycles; per-engine active cycles {active}, max/min = {max(active)/min(active):.6f}. Exact first/last activity is retained in JSON.')
+   activity=v['activity_summary']
+   if activity['continuous_intervals_verified']:lines.append(f'Each active interval is verified continuous from its observed count and endpoints: all engines overlap for {activity["all_engines_overlap_cycles"]} cycles; average active engines = {activity["average_active_engines"]:.4f}, finish spread = {activity["finish_spread_cycles"]} cycles. Pairwise intersections are derived from these RTL intervals in JSON.')
   lines.append(f'With these observed beat counts unchanged, bank service alone needs at least {v["observed_traffic_service_lower_bound_cycles"]} cycles, even with perfect compute overlap. This is a small-input model bound, not a hardware measurement or a large-graph forecast.')
  for h in data['hardware']:
   ports=h.get('adapter_configuration',{})

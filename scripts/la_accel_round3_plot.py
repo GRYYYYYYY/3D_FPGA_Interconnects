@@ -33,7 +33,7 @@ def main():
  ax.set(yticks=y,yticklabels=names,xlabel='LUTs after implementation',title='Core OOC resources and verified target');ax.invert_yaxis();ax.set_xlim(0,max(vals)*1.28)
  fig.suptitle(f'Round 3 · {a.case} · STRICT_FP32 / complete native samples',fontsize=14)
  for ax in axes.flat:ax.grid(axis='x',alpha=.2);ax.set_axisbelow(True)
- for ext in ['pdf','svg','png']:fig.savefig(a.output/('evidence.'+ext),dpi=160)
+ for ext in ['pdf','svg','png']:fig.savefig(a.output/('evidence.'+ext),dpi=160,bbox_inches='tight',pad_inches=.15)
  plt.close(fig)
  (a.output/'metadata.json').write_text(json.dumps({'report':str(a.report.resolve()),'case':a.case,'evidence':'Software measured; RTL simulated under synthetic memory constraints; OOC frequency only.'},indent=2)+'\n')
 if __name__=='__main__':main()
