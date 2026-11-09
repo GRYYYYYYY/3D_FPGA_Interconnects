@@ -1,0 +1,165 @@
+
+
+================================================================
+== Synthesis Summary Report of 'heap_pop51'
+================================================================
++ General Information: 
+    * Date:           Mon Nov  9 07:37:20 2026
+    * Version:        2022.2 (Build 3670227 on Oct 13 2022)
+    * Project:        project
+    * Solution:       solution (Vivado IP Flow Target)
+    * Product family: virtexuplus
+    * Target device:  xcu280-fsvh2892-2L-e
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +---------------------------------------+--------+-------+---------+--------+----------+---------+------+----------+------+----+------------+------------+-----+
+    |                Modules                |  Issue |       | Latency | Latency| Iteration|         | Trip |          |      |    |            |            |     |
+    |                & Loops                |  Type  | Slack | (cycles)|  (ns)  |  Latency | Interval| Count| Pipelined| BRAM | DSP|     FF     |     LUT    | URAM|
+    +---------------------------------------+--------+-------+---------+--------+----------+---------+------+----------+------+----+------------+------------+-----+
+    |+ heap_pop51                           |  Timing|  -3.52|        -|       -|         -|        -|     -|        no|     -|   -|  6708 (~0%)|  1784 (~0%)|    -|
+    | + pop_path_16385_s                    |  Timing|  -3.52|        -|       -|         -|        -|     -|        no|     -|   -|  6673 (~0%)|  1770 (~0%)|    -|
+    |  + pop_path_16385_Pipeline_PATH_DOWN  |  Timing|  -3.52|        -|       -|         -|        -|     -|        no|     -|   -|  2114 (~0%)|   399 (~0%)|    -|
+    |   o PATH_DOWN                         |       -|   3.65|        -|       -|         2|        2|     -|       yes|     -|   -|           -|           -|    -|
+    |  + pop_path_16385_Pipeline_PATH_UP    |       -|   0.67|        -|       -|         -|        -|     -|        no|     -|   -|   163 (~0%)|   293 (~0%)|    -|
+    |   o PATH_UP                           |       -|   3.65|        -|       -|         2|        1|     -|       yes|     -|   -|           -|           -|    -|
+    +---------------------------------------+--------+-------+---------+--------+----------+---------+------+----------+------+----+------------+------------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* AP_MEMORY
++---------------+----------+
+| Interface     | Bitwidth |
++---------------+----------+
+| even_address0 | 14       |
+| even_address1 | 14       |
+| even_d0       | 96       |
+| even_d1       | 96       |
+| even_q0       | 96       |
+| even_q1       | 96       |
+| odd_address0  | 14       |
+| odd_d0        | 96       |
+| odd_q0        | 96       |
++---------------+----------+
+
+* Other Ports
++-----------+---------+----------+
+| Interface | Mode    | Bitwidth |
++-----------+---------+----------+
+| ap_return |         | 96       |
+| count_i   | ap_none | 32       |
+| count_o   | ap_none | 32       |
++-----------+---------+----------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------------------------------+
+| Interface | Type       | Ports                             |
++-----------+------------+-----------------------------------+
+| ap_clk    | clock      | ap_clk                            |
+| ap_rst    | reset      | ap_rst                            |
+| ap_ctrl   | ap_ctrl_hs | ap_done ap_idle ap_ready ap_start |
++-----------+------------+-----------------------------------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+---------------+
+| Argument | Direction | Datatype      |
++----------+-----------+---------------+
+| even     | inout     | ap_uint<96>*  |
+| odd      | inout     | ap_uint<96>*  |
+| count    | inout     | unsigned int& |
+| return   | out       | ap_uint<96>   |
++----------+-----------+---------------+
+
+* SW-to-HW Mapping
++----------+---------------+---------+----------+
+| Argument | HW Interface  | HW Type | HW Usage |
++----------+---------------+---------+----------+
+| even     | even_address0 | port    | offset   |
+| even     | even_ce0      | port    |          |
+| even     | even_we0      | port    |          |
+| even     | even_d0       | port    |          |
+| even     | even_q0       | port    |          |
+| even     | even_address1 | port    | offset   |
+| even     | even_ce1      | port    |          |
+| even     | even_we1      | port    |          |
+| even     | even_d1       | port    |          |
+| even     | even_q1       | port    |          |
+| odd      | odd_address0  | port    | offset   |
+| odd      | odd_ce0       | port    |          |
+| odd      | odd_we0       | port    |          |
+| odd      | odd_d0        | port    |          |
+| odd      | odd_q0        | port    |          |
+| count    | count_i       | port    |          |
+| count    | count_o       | port    |          |
+| return   | ap_return     | port    |          |
++----------+---------------+---------+----------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+  No burst in design
+
+================================================================
+== Bind Op Report
+================================================================
++---------------------------------------+-----+--------+---------------+-----+--------+---------+
+| Name                                  | DSP | Pragma | Variable      | Op  | Impl   | Latency |
++---------------------------------------+-----+--------+---------------+-----+--------+---------+
+| + heap_pop51                          | 0   |        |               |     |        |         |
+|  + pop_path_16385_s                   | 0   |        |               |     |        |         |
+|    add_ln22_fu_1885_p2                | -   |        | add_ln22      | add | fabric | 0       |
+|    add_ln26_fu_1864_p2                | -   |        | add_ln26      | add | fabric | 0       |
+|    path_index_46_fu_2036_p2           | -   |        | path_index_46 | add | fabric | 0       |
+|    add_ln39_1_fu_2017_p2              | -   |        | add_ln39_1    | add | fabric | 0       |
+|   + pop_path_16385_Pipeline_PATH_DOWN | 0   |        |               |     |        |         |
+|     depth_5_fu_622_p2                 | -   |        | depth_5       | add | fabric | 0       |
+|     add_ln27_fu_669_p2                | -   |        | add_ln27      | add | fabric | 0       |
+|     add_ln27_1_fu_648_p2              | -   |        | add_ln27_1    | add | fabric | 0       |
+|     right_3_fu_895_p2                 | -   |        | right_3       | add | fabric | 0       |
+|   + pop_path_16385_Pipeline_PATH_UP   | 0   |        |               |     |        |         |
+|     depth_3_fu_462_p2                 | -   |        | depth_3       | add | fabric | 0       |
++---------------------------------------+-----+--------+---------------+-----+--------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
+  No bind storage info in design
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-----------------+----------------------------------------------------+--------------------------------------------------------+
+| Type            | Options                                            | Location                                               |
++-----------------+----------------------------------------------------+--------------------------------------------------------+
+| inline          | off                                                | source_snapshot/heap51.hpp:15 in pop_path              |
+| array_partition | variable=path_word complete dim=1                  | source_snapshot/heap51.hpp:20 in pop_path, path_word   |
+| array_partition | variable=path_index complete dim=1                 | source_snapshot/heap51.hpp:21 in pop_path, path_index  |
+| pipeline        | II=2                                               | source_snapshot/heap51.hpp:26 in pop_path              |
+| pipeline        | II=1                                               | source_snapshot/heap51.hpp:47 in pop_path              |
+| interface       | ap_memory port=even storage_type=ram_t2p latency=1 | source_snapshot/heap_hls51.cpp:4 in heap_pop51, even   |
+| interface       | ap_memory port=odd storage_type=ram_t2p latency=1  | source_snapshot/heap_hls51.cpp:5 in heap_pop51, odd    |
+| interface       | ap_none port=count                                 | source_snapshot/heap_hls51.cpp:6 in heap_pop51, count  |
+| interface       | ap_ctrl_hs port=return                             | source_snapshot/heap_hls51.cpp:7 in heap_pop51, return |
+| inline          |                                                    | source_snapshot/onchip_types4.hpp:27 in get            |
+| inline          |                                                    | source_snapshot/onchip_types4.hpp:31 in put            |
+| inline          |                                                    | source_snapshot/onchip_types4.hpp:35 in push           |
+| pipeline        | II=2                                               | source_snapshot/onchip_types4.hpp:38 in push           |
+| inline          | off                                                | source_snapshot/onchip_types4.hpp:46 in pop            |
+| pipeline        | II=2                                               | source_snapshot/onchip_types4.hpp:50 in pop            |
+| pipeline        | II=2                                               | source_snapshot/onchip_types4.hpp:58 in pop            |
++-----------------+----------------------------------------------------+--------------------------------------------------------+
+
+

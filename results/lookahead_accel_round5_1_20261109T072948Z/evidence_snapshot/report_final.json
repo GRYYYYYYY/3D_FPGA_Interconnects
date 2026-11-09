@@ -1,0 +1,1460 @@
+{
+  "round": "5.1",
+  "base_commit": "52b5622687867756e9109b94c99685712ad0e21f",
+  "branch": "accel/lookahead-round5_1-20261109",
+  "generated_utc": "2026-11-09T07:57:00.366402+00:00",
+  "scope": "Bounded 32-node/128-edge two-context independent-service mechanism; native performance gate evaluated by conditional model, not complete-batch new RTL",
+  "independent_services_verified": true,
+  "same_parent_multi_edge_inflight_verified": true,
+  "ordered_commit_raw_verified": true,
+  "bounded_fifo_drain_verified": true,
+  "complete_batch_rtl_verified": false,
+  "new_implemented_frequency_hz": null,
+  "fpga_vs_r4_time_verified": false,
+  "fpga_vs_matched_cpu_verified": false,
+  "all_declared_baselines_verified": false,
+  "native_e2_verified": false,
+  "board_measured": false,
+  "root_ready_prefetch_implemented": false,
+  "pq_path_forwarding_integrated_in_service_network": false,
+  "evidence_bindings": {
+    "independent_services_verified": [
+      "mechanism/hls_d/project/solution/syn/verilog/lookahead_services51_network.v",
+      "mechanism/observer_d_zero/result.json",
+      "mechanism/observer_d_hold/result.json"
+    ],
+    "same_parent_multi_edge_inflight_verified": [
+      "mechanism/observer_d_zero/events.jsonl",
+      "mechanism/observer_d_hold/events.jsonl"
+    ],
+    "ordered_commit_raw_verified": [
+      "validation.json",
+      "mechanism/extended_rtl_v2/cosim.json",
+      "mechanism/observer_d_zero/result.json"
+    ],
+    "bounded_fifo_drain_verified": [
+      "mechanism/observer_d_hold/result.json",
+      "mechanism/extended_rtl_v2/cosim.json"
+    ]
+  },
+  "service_graph": {
+    "processes": [
+      "heap0",
+      "heap1",
+      "edge",
+      "map",
+      "commit_lifecycle"
+    ],
+    "fifo_depth": 4,
+    "fifo_count": 9,
+    "node_ram_copies": 2,
+    "global_microop_dispatcher": false,
+    "dependency_false_used": false,
+    "per_qid_heap_modifications_in_flight": 1,
+    "same_parent_candidate_fifo_depth": 4,
+    "edge_lane_head_of_line_blocking": true,
+    "shared_commit_reset_arbitration": true,
+    "graph_capacity": {
+      "N": 32,
+      "E": 128,
+      "J": 8,
+      "C": 8
+    },
+    "message_bits": 289,
+    "map_reply_bits": 161
+  },
+  "mechanism_rtl": {
+    "zero_hold": [
+      {
+        "transaction": 0,
+        "operation_start_gap_when_queued": {
+          "count": 20,
+          "min": 12,
+          "max": 15,
+          "mean": 13
+        },
+        "retire_to_start_when_queued": {
+          "count": 20,
+          "min": 1,
+          "max": 1,
+          "mean": 1
+        },
+        "fifo_full_with_other_service_handshakes": 8,
+        "latency_by_kind": {
+          "1": {
+            "execute": {
+              "count": 34,
+              "min": 11,
+              "max": 14,
+              "mean": 11.823529411764707
+            },
+            "feedback": {
+              "count": 34,
+              "min": 20,
+              "max": 60,
+              "mean": 34.11764705882353
+            }
+          },
+          "2": {
+            "execute": {
+              "count": 34,
+              "min": 7,
+              "max": 22,
+              "mean": 16.941176470588236
+            },
+            "feedback": {
+              "count": 34,
+              "min": 12,
+              "max": 28,
+              "mean": 24.705882352941178
+            }
+          }
+        },
+        "cycles": 2258,
+        "ops": 68,
+        "fifo_enqueue_gap": {
+          "count": 66,
+          "min": 8,
+          "max": 200,
+          "mean": 50.303030303030305
+        },
+        "pq_operation_start_gap": {
+          "count": 66,
+          "min": 12,
+          "max": 200,
+          "mean": 50.303030303030305
+        },
+        "operation_retire_gap": {
+          "count": 66,
+          "min": 12,
+          "max": 205,
+          "mean": 50.15151515151515
+        },
+        "operation_retire_ops_per_cycle": 0.030115146147032774,
+        "full_feedback_latency": {
+          "count": 68,
+          "min": 12,
+          "max": 60,
+          "mean": 29.41176470588235
+        },
+        "execution_latency": {
+          "count": 68,
+          "min": 7,
+          "max": 22,
+          "mean": 14.382352941176471
+        },
+        "max_fifo_occupancy": {
+          "mr": 1,
+          "h0": 4,
+          "h1": 4,
+          "r0": 1,
+          "ma": 1,
+          "r1": 1,
+          "er": 1,
+          "c0": 2,
+          "c1": 2
+        },
+        "fifo_full_cycles": {
+          "h0": 8,
+          "h1": 8
+        },
+        "same_parent_overlap_count": 16,
+        "same_parent_overlap_witness": [
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 415,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000030000000200000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 2,
+              "kind": "candidate",
+              "end": false,
+              "node": 3
+            },
+            "push": {
+              "enqueue": 406,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 0,
+              "partition": 0,
+              "bits": "13f8000004000000000000001000000010000000000000001000000000000000000000001",
+              "start": 408
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 424,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000040000000300000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 3,
+              "kind": "candidate",
+              "end": false,
+              "node": 4
+            },
+            "push": {
+              "enqueue": 414,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000001",
+              "start": 421
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 433,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000050000000400000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 4,
+              "kind": "candidate",
+              "end": false,
+              "node": 5
+            },
+            "push": {
+              "enqueue": 414,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000001",
+              "start": 421
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 442,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000060000000500000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 5,
+              "kind": "candidate",
+              "end": false,
+              "node": 6
+            },
+            "push": {
+              "enqueue": 422,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 2,
+              "partition": 0,
+              "bits": "13f8000004000000000000003000000010000000200000001000000000000000000000001",
+              "start": 436
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 451,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000070000000600000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 6,
+              "kind": "candidate",
+              "end": false,
+              "node": 7
+            },
+            "push": {
+              "enqueue": 430,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 3,
+              "partition": 0,
+              "bits": "1400000003f80000000000004000000010000000300000001000000000000000000000001",
+              "start": 448
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 460,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000080000000700000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 7,
+              "kind": "candidate",
+              "end": false,
+              "node": 8
+            },
+            "push": {
+              "enqueue": 430,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 3,
+              "partition": 0,
+              "bits": "1400000003f80000000000004000000010000000300000001000000000000000000000001",
+              "start": 448
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 469,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000090000000800000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 8,
+              "kind": "candidate",
+              "end": false,
+              "node": 9
+            },
+            "push": {
+              "enqueue": 438,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 4,
+              "partition": 0,
+              "bits": "13f8000004000000000000005000000010000000400000001000000000000000000000001",
+              "start": 462
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 478,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000010000000900000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 9,
+              "kind": "candidate",
+              "end": false,
+              "node": 1
+            },
+            "push": {
+              "enqueue": 454,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 5,
+              "partition": 0,
+              "bits": "1400000003f80000000000006000000010000000500000001000000000000000000000001",
+              "start": 474
+            }
+          }
+        ],
+        "simultaneous_useful_handshake_cycles": 11,
+        "ordered_push_ordinals": true,
+        "parent_barriers_checked": 34,
+        "all_fifos_drained": true
+      },
+      {
+        "transaction": 1,
+        "operation_start_gap_when_queued": {
+          "count": 20,
+          "min": 12,
+          "max": 15,
+          "mean": 13
+        },
+        "retire_to_start_when_queued": {
+          "count": 20,
+          "min": 1,
+          "max": 1,
+          "mean": 1
+        },
+        "fifo_full_with_other_service_handshakes": 8,
+        "latency_by_kind": {
+          "1": {
+            "execute": {
+              "count": 34,
+              "min": 11,
+              "max": 14,
+              "mean": 11.823529411764707
+            },
+            "feedback": {
+              "count": 34,
+              "min": 20,
+              "max": 60,
+              "mean": 34.11764705882353
+            }
+          },
+          "2": {
+            "execute": {
+              "count": 20,
+              "min": 7,
+              "max": 22,
+              "mean": 17.6
+            },
+            "feedback": {
+              "count": 20,
+              "min": 12,
+              "max": 28,
+              "mean": 24.8
+            }
+          }
+        },
+        "cycles": 1578,
+        "ops": 54,
+        "fifo_enqueue_gap": {
+          "count": 52,
+          "min": 8,
+          "max": 168,
+          "mean": 45.69230769230769
+        },
+        "pq_operation_start_gap": {
+          "count": 52,
+          "min": 12,
+          "max": 168,
+          "mean": 45.69230769230769
+        },
+        "operation_retire_gap": {
+          "count": 52,
+          "min": 12,
+          "max": 173,
+          "mean": 46
+        },
+        "operation_retire_ops_per_cycle": 0.034220532319391636,
+        "full_feedback_latency": {
+          "count": 54,
+          "min": 12,
+          "max": 60,
+          "mean": 30.666666666666668
+        },
+        "execution_latency": {
+          "count": 54,
+          "min": 7,
+          "max": 22,
+          "mean": 13.962962962962964
+        },
+        "max_fifo_occupancy": {
+          "mr": 1,
+          "h0": 4,
+          "h1": 4,
+          "r0": 1,
+          "ma": 1,
+          "r1": 1,
+          "er": 1,
+          "c0": 2,
+          "c1": 2
+        },
+        "fifo_full_cycles": {
+          "h0": 8,
+          "h1": 8
+        },
+        "same_parent_overlap_count": 16,
+        "same_parent_overlap_witness": [
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 2505,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000030000000200000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 2,
+              "kind": "candidate",
+              "end": false,
+              "node": 3
+            },
+            "push": {
+              "enqueue": 2496,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 0,
+              "partition": 0,
+              "bits": "13f8000004000000000000001000000010000000000000001000000000000000000000002",
+              "start": 2498
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 2514,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000040000000300000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 3,
+              "kind": "candidate",
+              "end": false,
+              "node": 4
+            },
+            "push": {
+              "enqueue": 2504,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000002",
+              "start": 2511
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 2523,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000050000000400000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 4,
+              "kind": "candidate",
+              "end": false,
+              "node": 5
+            },
+            "push": {
+              "enqueue": 2504,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000002",
+              "start": 2511
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 2532,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000060000000500000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 5,
+              "kind": "candidate",
+              "end": false,
+              "node": 6
+            },
+            "push": {
+              "enqueue": 2512,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 2,
+              "partition": 0,
+              "bits": "13f8000004000000000000003000000010000000200000001000000000000000000000002",
+              "start": 2526
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 2541,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000070000000600000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 6,
+              "kind": "candidate",
+              "end": false,
+              "node": 7
+            },
+            "push": {
+              "enqueue": 2520,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 3,
+              "partition": 0,
+              "bits": "1400000003f80000000000004000000010000000300000001000000000000000000000002",
+              "start": 2538
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 2550,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000080000000700000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 7,
+              "kind": "candidate",
+              "end": false,
+              "node": 8
+            },
+            "push": {
+              "enqueue": 2520,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 3,
+              "partition": 0,
+              "bits": "1400000003f80000000000004000000010000000300000001000000000000000000000002",
+              "start": 2538
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 2559,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000090000000800000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 8,
+              "kind": "candidate",
+              "end": false,
+              "node": 9
+            },
+            "push": {
+              "enqueue": 2528,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 4,
+              "partition": 0,
+              "bits": "13f8000004000000000000005000000010000000400000001000000000000000000000002",
+              "start": 2552
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 2568,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000010000000900000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 9,
+              "kind": "candidate",
+              "end": false,
+              "node": 1
+            },
+            "push": {
+              "enqueue": 2544,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 5,
+              "partition": 0,
+              "bits": "1400000003f80000000000006000000010000000500000001000000000000000000000002",
+              "start": 2564
+            }
+          }
+        ],
+        "simultaneous_useful_handshake_cycles": 13,
+        "ordered_push_ordinals": true,
+        "parent_barriers_checked": 20,
+        "all_fifos_drained": true
+      }
+    ],
+    "bounded_backpressure": [
+      {
+        "transaction": 0,
+        "operation_start_gap_when_queued": {
+          "count": 20,
+          "min": 36,
+          "max": 39,
+          "mean": 37
+        },
+        "retire_to_start_when_queued": {
+          "count": 20,
+          "min": 1,
+          "max": 1,
+          "mean": 1
+        },
+        "fifo_full_with_other_service_handshakes": 82,
+        "latency_by_kind": {
+          "1": {
+            "execute": {
+              "count": 34,
+              "min": 35,
+              "max": 38,
+              "mean": 35.8235294117647
+            },
+            "feedback": {
+              "count": 34,
+              "min": 44,
+              "max": 188,
+              "mean": 110.3529411764706
+            }
+          },
+          "2": {
+            "execute": {
+              "count": 34,
+              "min": 31,
+              "max": 46,
+              "mean": 40.94117647058823
+            },
+            "feedback": {
+              "count": 34,
+              "min": 36,
+              "max": 52,
+              "mean": 48.705882352941174
+            }
+          }
+        },
+        "cycles": 3322,
+        "ops": 68,
+        "fifo_enqueue_gap": {
+          "count": 66,
+          "min": 8,
+          "max": 256,
+          "mean": 77.57575757575758
+        },
+        "pq_operation_start_gap": {
+          "count": 66,
+          "min": 36,
+          "max": 256,
+          "mean": 77.57575757575758
+        },
+        "operation_retire_gap": {
+          "count": 66,
+          "min": 36,
+          "max": 261,
+          "mean": 77.42424242424242
+        },
+        "operation_retire_ops_per_cycle": 0.020469596628537028,
+        "full_feedback_latency": {
+          "count": 68,
+          "min": 36,
+          "max": 188,
+          "mean": 79.52941176470588
+        },
+        "execution_latency": {
+          "count": 68,
+          "min": 31,
+          "max": 46,
+          "mean": 38.38235294117647
+        },
+        "max_fifo_occupancy": {
+          "mr": 1,
+          "h0": 4,
+          "h1": 4,
+          "ma": 1,
+          "r0": 1,
+          "r1": 1,
+          "er": 1,
+          "c0": 4,
+          "c1": 4
+        },
+        "fifo_full_cycles": {
+          "h0": 187,
+          "c0": 83,
+          "h1": 187,
+          "c1": 83
+        },
+        "same_parent_overlap_count": 18,
+        "same_parent_overlap_witness": [
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 495,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000030000000200000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 2,
+              "kind": "candidate",
+              "end": false,
+              "node": 3
+            },
+            "push": {
+              "enqueue": 486,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 0,
+              "partition": 0,
+              "bits": "13f8000004000000000000001000000010000000000000001000000000000000000000001",
+              "start": 488
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 504,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000040000000300000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 3,
+              "kind": "candidate",
+              "end": false,
+              "node": 4
+            },
+            "push": {
+              "enqueue": 486,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 0,
+              "partition": 0,
+              "bits": "13f8000004000000000000001000000010000000000000001000000000000000000000001",
+              "start": 488
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 513,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000050000000400000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 4,
+              "kind": "candidate",
+              "end": false,
+              "node": 5
+            },
+            "push": {
+              "enqueue": 486,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 0,
+              "partition": 0,
+              "bits": "13f8000004000000000000001000000010000000000000001000000000000000000000001",
+              "start": 488
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 522,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000060000000500000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 5,
+              "kind": "candidate",
+              "end": false,
+              "node": 6
+            },
+            "push": {
+              "enqueue": 486,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 0,
+              "partition": 0,
+              "bits": "13f8000004000000000000001000000010000000000000001000000000000000000000001",
+              "start": 488
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 531,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000070000000600000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 6,
+              "kind": "candidate",
+              "end": false,
+              "node": 7
+            },
+            "push": {
+              "enqueue": 494,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000001",
+              "start": 525
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 540,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000080000000700000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 7,
+              "kind": "candidate",
+              "end": false,
+              "node": 8
+            },
+            "push": {
+              "enqueue": 494,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000001",
+              "start": 525
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 549,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000090000000800000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 8,
+              "kind": "candidate",
+              "end": false,
+              "node": 9
+            },
+            "push": {
+              "enqueue": 494,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000001",
+              "start": 525
+            }
+          },
+          {
+            "edge": {
+              "tx": 0,
+              "cycle": 558,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000010000000900000001000000000000000000000001",
+              "generation": 1,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 9,
+              "kind": "candidate",
+              "end": false,
+              "node": 1
+            },
+            "push": {
+              "enqueue": 494,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000001",
+              "start": 525
+            }
+          }
+        ],
+        "simultaneous_useful_handshake_cycles": 9,
+        "ordered_push_ordinals": true,
+        "parent_barriers_checked": 34,
+        "all_fifos_drained": true
+      },
+      {
+        "transaction": 1,
+        "operation_start_gap_when_queued": {
+          "count": 20,
+          "min": 36,
+          "max": 39,
+          "mean": 37
+        },
+        "retire_to_start_when_queued": {
+          "count": 20,
+          "min": 1,
+          "max": 1,
+          "mean": 1
+        },
+        "fifo_full_with_other_service_handshakes": 86,
+        "latency_by_kind": {
+          "1": {
+            "execute": {
+              "count": 34,
+              "min": 35,
+              "max": 38,
+              "mean": 35.8235294117647
+            },
+            "feedback": {
+              "count": 34,
+              "min": 44,
+              "max": 188,
+              "mean": 110.3529411764706
+            }
+          },
+          "2": {
+            "execute": {
+              "count": 20,
+              "min": 31,
+              "max": 46,
+              "mean": 41.6
+            },
+            "feedback": {
+              "count": 20,
+              "min": 36,
+              "max": 52,
+              "mean": 48.8
+            }
+          }
+        },
+        "cycles": 2450,
+        "ops": 54,
+        "fifo_enqueue_gap": {
+          "count": 52,
+          "min": 8,
+          "max": 232,
+          "mean": 72.92307692307692
+        },
+        "pq_operation_start_gap": {
+          "count": 52,
+          "min": 36,
+          "max": 232,
+          "mean": 72.92307692307692
+        },
+        "operation_retire_gap": {
+          "count": 52,
+          "min": 36,
+          "max": 237,
+          "mean": 73.23076923076923
+        },
+        "operation_retire_ops_per_cycle": 0.022040816326530613,
+        "full_feedback_latency": {
+          "count": 54,
+          "min": 36,
+          "max": 188,
+          "mean": 87.55555555555556
+        },
+        "execution_latency": {
+          "count": 54,
+          "min": 31,
+          "max": 46,
+          "mean": 37.96296296296296
+        },
+        "max_fifo_occupancy": {
+          "mr": 1,
+          "h0": 4,
+          "h1": 4,
+          "ma": 1,
+          "r0": 1,
+          "r1": 1,
+          "er": 1,
+          "c0": 4,
+          "c1": 4
+        },
+        "fifo_full_cycles": {
+          "h0": 187,
+          "c0": 83,
+          "h1": 187,
+          "c1": 83
+        },
+        "same_parent_overlap_count": 18,
+        "same_parent_overlap_witness": [
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 3649,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000030000000200000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 2,
+              "kind": "candidate",
+              "end": false,
+              "node": 3
+            },
+            "push": {
+              "enqueue": 3640,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 0,
+              "partition": 0,
+              "bits": "13f8000004000000000000001000000010000000000000001000000000000000000000002",
+              "start": 3642
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 3658,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000040000000300000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 3,
+              "kind": "candidate",
+              "end": false,
+              "node": 4
+            },
+            "push": {
+              "enqueue": 3640,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 0,
+              "partition": 0,
+              "bits": "13f8000004000000000000001000000010000000000000001000000000000000000000002",
+              "start": 3642
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 3667,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000050000000400000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 4,
+              "kind": "candidate",
+              "end": false,
+              "node": 5
+            },
+            "push": {
+              "enqueue": 3640,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 0,
+              "partition": 0,
+              "bits": "13f8000004000000000000001000000010000000000000001000000000000000000000002",
+              "start": 3642
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 3676,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000060000000500000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 5,
+              "kind": "candidate",
+              "end": false,
+              "node": 6
+            },
+            "push": {
+              "enqueue": 3640,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 0,
+              "partition": 0,
+              "bits": "13f8000004000000000000001000000010000000000000001000000000000000000000002",
+              "start": 3642
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 3685,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000070000000600000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 6,
+              "kind": "candidate",
+              "end": false,
+              "node": 7
+            },
+            "push": {
+              "enqueue": 3648,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000002",
+              "start": 3679
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 3694,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "000000001400000003f800000000000080000000700000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 7,
+              "kind": "candidate",
+              "end": false,
+              "node": 8
+            },
+            "push": {
+              "enqueue": 3648,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000002",
+              "start": 3679
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 3703,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000090000000800000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 8,
+              "kind": "candidate",
+              "end": false,
+              "node": 9
+            },
+            "push": {
+              "enqueue": 3648,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000002",
+              "start": 3679
+            }
+          },
+          {
+            "edge": {
+              "tx": 1,
+              "cycle": 3712,
+              "event": "enqueue",
+              "channel": "c0",
+              "bits": "0000000013f80000040000000000000010000000900000001000000000000000000000002",
+              "generation": 2,
+              "qid": 0,
+              "context": 0,
+              "parent": 1,
+              "ordinal": 9,
+              "kind": "candidate",
+              "end": false,
+              "node": 1
+            },
+            "push": {
+              "enqueue": 3648,
+              "kind": 1,
+              "qid": 0,
+              "parent": 1,
+              "ordinal": 1,
+              "partition": 0,
+              "bits": "1400000003f80000000000002000000010000000100000001000000000000000000000002",
+              "start": 3679
+            }
+          }
+        ],
+        "simultaneous_useful_handshake_cycles": 8,
+        "ordered_push_ordinals": true,
+        "parent_barriers_checked": 20,
+        "all_fifos_drained": true
+      }
+    ],
+    "evidence_type": "RTL simulation cycles; not a native batch or board measurement",
+    "extended_protocol_transactions": 18,
+    "resources_hls_estimated": {
+      "BRAM18": 30,
+      "DSP": 4,
+      "FF": 25672,
+      "LUT": 21857
+    },
+    "clock_ns_target_only": 5,
+    "hls_estimated_period_ns_not_verified": 3.603
+  },
+  "pq_optimization": {
+    "selected": "exact Floyd DOWN path register / UP forwarding",
+    "alternatives_implemented": false,
+    "path_host_operations": 400014,
+    "native_trace_unchanged": true,
+    "standalone_rtl_transactions": 45,
+    "sum_pop_latency_baseline_cycles": 967,
+    "sum_pop_latency_path_cycles": 861,
+    "sum_execution_including_transaction_gaps_baseline_cycles": 1011,
+    "sum_execution_including_transaction_gaps_path_cycles": 905,
+    "scope": "isolated POP CAP16385, not batch E1",
+    "hls_estimated_period_ns_not_verified": 7.169,
+    "implemented_frequency_hz": null,
+    "report": "pq/result.json"
+  },
+  "baselines": [
+    {
+      "case": "native_d3_w8",
+      "CPU_warm_E1_us": 25.92,
+      "basic_GPU_warm_E1_us": 357.312,
+      "R4_fastest_cycles": 23721,
+      "R4_verified_kernel_frequency_hz": 125000000,
+      "R4_kernel_us": 189.768,
+      "new_R51_native_rtl_cycles": null,
+      "new_R51_fpga_us": null
+    },
+    {
+      "case": "native_d4_w8",
+      "CPU_warm_E1_us": 126.522,
+      "basic_GPU_warm_E1_us": 1632.32,
+      "R4_fastest_cycles": 123821,
+      "R4_verified_kernel_frequency_hz": 125000000,
+      "R4_kernel_us": 990.568,
+      "new_R51_native_rtl_cycles": null,
+      "new_R51_fpga_us": null
+    },
+    {
+      "case": "native_d5_w8",
+      "CPU_warm_E1_us": 211.585,
+      "basic_GPU_warm_E1_us": 2901.952,
+      "R4_fastest_cycles": 263392,
+      "R4_verified_kernel_frequency_hz": 125000000,
+      "R4_kernel_us": 2107.136,
+      "new_R51_native_rtl_cycles": null,
+      "new_R51_fpga_us": null
+    }
+  ],
+  "gate": {
+    "native_full_batch_RTL": "not launched",
+    "OOC": "not launched",
+    "decision": "stop current blocking-PQ performance candidates; complete mechanism and archive",
+    "reference_frequency_hz_not_verified": 200000000,
+    "reference_CPU_cycle_budgets": [
+      5184,
+      25304.4,
+      42317
+    ],
+    "old_3x3_total_PQ_service_cycles": 26012,
+    "old_ideal_2_4_partition_bounds": [
+      13006,
+      6503
+    ],
+    "conditional_free_entire_pop_up_4pq_bounds": [
+      6029.75,
+      41830.25,
+      94431.25
+    ],
+    "conditional_free_entire_pop_up_qid_chain": [
+      5464,
+      26791,
+      46367
+    ],
+    "isolated_path_pop_mixed_contract_qid_chain": [
+      5412,
+      25574,
+      43540
+    ],
+    "conditions": "Old unchanged DOWN/PUSH rules for free-UP bounds; path POP formula measured only in standalone corpus, native integration/PUSH assumed. Not universal strict-PQ lower bounds. No sufficiently supported 20% margin at the reference budget.",
+    "model": "model/parent_edge_service_model.json"
+  },
+  "unchanged_software_timing_repeated": false,
+  "large_profiles_repeated": false,
+  "native_samples_duplicated": false,
+  "relaxed_tie_or_discard_equal_merged": false,
+  "follow_up_routes": [
+    "Separately named algorithm/map-contract and route QoR research with matched CPU/GPU algorithm controls",
+    "RRG/index hardware hotspot selected from existing native profile"
+  ],
+  "limitations": [
+    "The integrated service prototype is intentionally small and is not a capacity-qualified native batch implementation.",
+    "Shared edge lane can head-of-line block behind a full candidate queue; label/reset owner is still shared.",
+    "Tag equality is not runtime-checked; strict drain and no context reuse before completion prevent stale messages in this protocol.",
+    "The path-forwarding PQ and small service network have separate RTL evidence and are not integrated as one measured candidate.",
+    "No new FPGA microseconds, baseline-superiority, native E2, or board claims."
+  ],
+  "tooling": {
+    "skills": [
+      "hls-dataflow",
+      "hls-pragma-scope",
+      "hls-run-flow"
+    ],
+    "HLS": "2022.2 classic Tcl",
+    "MCP_initial": "no active sessions",
+    "MCP_final": "backend connection refused; local completed flows used",
+    "unmanaged_experiments": false
+  }
+}

@@ -1,0 +1,6171 @@
+{
+  "evidence": "conditional_finite_resource_trace_model_not_RTL",
+  "new_implemented_frequency_hz": null,
+  "board_measured": false,
+  "model_script_sha256": "240ec92337b692b524572cc584dc641713004205d23dcfe7a0282a377a633efb",
+  "trace_producer_sha256": "ee7eab9baac0269ee8b631464456b7e2c7ef716789535543a7ed9a48dda7e58f",
+  "selftest": {
+    "passed": true,
+    "checks": [
+      "ordered duplicate dst",
+      "finite FIFO backpressure",
+      "same-parent edge/PUSH overlap",
+      "logical capacity overflow",
+      "empty target lifecycle",
+      "complete drain"
+    ]
+  },
+  "candidates": [
+    {
+      "case": "native_d3_w8",
+      "actual_J": 8,
+      "resident_contexts": 2,
+      "heap_capacity_per_context": 1571,
+      "context_state_bytes": 44532,
+      "contract": {
+        "name": "old_blocking_pq_ctx2",
+        "evidence": "unverified_conditional_assumptions",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 7,
+        "edge_ii": 1,
+        "commit_latency": 2,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 2,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 1
+      },
+      "trace": {
+        "trace_sha256": "718905ce1c39eccda4976f44f30b01c14eaef125f14bb0edde7566b16b9f6306",
+        "workload_sha256": "50b8cedc8f36d23bdcedee4bd861e72d4b025bd46b3b02e977adf0baeceecc9b",
+        "parents": 583,
+        "edges": 2259,
+        "pushes": 1902,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 306,
+        "pop_split_trace_sha256": "e19249f63adb927d16fd1a6be2e6ec8caa1705a9b150da7e3a3f84b9112ea50e",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d3_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          2000,
+          0,
+          5162,
+          5321,
+          2000,
+          0,
+          5585,
+          5944
+        ],
+        "total_blocking_pq_service_cycles": 26012,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 13006,
+        "static_qid_partition_bound_cycles": 14747,
+        "longest_same_qid_pq_chain_cycles": 5944,
+        "combined_pq_bound_cycles": 13006,
+        "ideal_partition_bounds": {
+          "1": 26012,
+          "2": 13006,
+          "4": 6503
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 24310,
+      "stats": {
+        "edge_launches": 2259,
+        "commits": 2259,
+        "pq_enqueues": 2485,
+        "pq_starts": 2485,
+        "pq_retires": 2485,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 4,
+        "candidate_full_cycles": 5195,
+        "pq_fifo_full_cycles": 177,
+        "same_parent_edge_launch_while_push_pending": 1493,
+        "max_logical_size": 268,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 17589,
+        "pq_feedback_latency_cycles": 26012,
+        "reset_label_writes": 5232,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 1353,
+          "heap_peak": 0
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 3995,
+          "heap_peak": 208
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 9982,
+          "heap_peak": 268
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 13090,
+          "heap_peak": 268
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 13920,
+          "heap_peak": 208
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 14522,
+          "heap_peak": 0
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 23063,
+          "heap_peak": 268
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 24310,
+          "heap_peak": 268
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 1249,
+            "min_gap": 4,
+            "mean_gap": 18.365384615384617,
+            "max_gap": 2984
+          },
+          "operation_retire": {
+            "events": 1249,
+            "min_gap": 5,
+            "mean_gap": 18.38701923076923,
+            "max_gap": 2957
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 1236,
+            "min_gap": 4,
+            "mean_gap": 16.13765182186235,
+            "max_gap": 1388
+          },
+          "operation_retire": {
+            "events": 1236,
+            "min_gap": 5,
+            "mean_gap": 16.159514170040485,
+            "max_gap": 1364
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 1352,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 1356,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 1360,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 1364,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 1368,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 1372,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 1376,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 1380,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 1384,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 12,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 1388,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 13,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 1392,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 14,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 1396,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 15,
+          "pending_pushes": 4
+        },
+        {
+          "cycle": 1468,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 1472,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 5,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 1476,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 1480,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          27,
+          0,
+          129,
+          141,
+          27,
+          0,
+          147,
+          160
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 25381,
+            "per_qid_pq_serial_cycles": [
+              1973,
+              0,
+              5033,
+              5180,
+              1973,
+              0,
+              5438,
+              5784
+            ],
+            "longest_same_qid_pq_chain_cycles": 5784,
+            "ideal_partition_bounds": {
+              "1": 25381,
+              "2": 12691,
+              "4": 6346
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 24750,
+            "per_qid_pq_serial_cycles": [
+              1946,
+              0,
+              4904,
+              5039,
+              1946,
+              0,
+              5291,
+              5624
+            ],
+            "longest_same_qid_pq_chain_cycles": 5624,
+            "ideal_partition_bounds": {
+              "1": 24750,
+              "2": 12375,
+              "4": 6188
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 24119,
+            "per_qid_pq_serial_cycles": [
+              1919,
+              0,
+              4775,
+              4898,
+              1919,
+              0,
+              5144,
+              5464
+            ],
+            "longest_same_qid_pq_chain_cycles": 5464,
+            "ideal_partition_bounds": {
+              "1": 24119,
+              "2": 12060,
+              "4": 6030
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 25.919999999999998,
+      "reference_200mhz_budget_cycles": 5184.0,
+      "strict_max_integer_winning_cycles": 5183,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 4.689429012345679,
+      "required_frequency_MHz": 937.8858024691359,
+      "model_cycle_sensitivity_plus_25pct": 30388,
+      "model_cycle_sensitivity_plus_35pct": 32819,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d3_w8",
+      "actual_J": 8,
+      "resident_contexts": 4,
+      "heap_capacity_per_context": 1571,
+      "context_state_bytes": 89064,
+      "contract": {
+        "name": "old_blocking_pq_ctx4",
+        "evidence": "unverified_conditional_assumptions",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 7,
+        "edge_ii": 1,
+        "commit_latency": 2,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 4,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 1
+      },
+      "trace": {
+        "trace_sha256": "718905ce1c39eccda4976f44f30b01c14eaef125f14bb0edde7566b16b9f6306",
+        "workload_sha256": "50b8cedc8f36d23bdcedee4bd861e72d4b025bd46b3b02e977adf0baeceecc9b",
+        "parents": 583,
+        "edges": 2259,
+        "pushes": 1902,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 306,
+        "pop_split_trace_sha256": "e19249f63adb927d16fd1a6be2e6ec8caa1705a9b150da7e3a3f84b9112ea50e",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d3_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          2000,
+          0,
+          5162,
+          5321,
+          2000,
+          0,
+          5585,
+          5944
+        ],
+        "total_blocking_pq_service_cycles": 26012,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 13006,
+        "static_qid_partition_bound_cycles": 14747,
+        "longest_same_qid_pq_chain_cycles": 5944,
+        "combined_pq_bound_cycles": 13006,
+        "ideal_partition_bounds": {
+          "1": 26012,
+          "2": 13006,
+          "4": 6503
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 25070,
+      "stats": {
+        "edge_launches": 2259,
+        "commits": 2259,
+        "pq_enqueues": 2485,
+        "pq_starts": 2485,
+        "pq_retires": 2485,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 4,
+        "candidate_full_cycles": 11019,
+        "pq_fifo_full_cycles": 56,
+        "same_parent_edge_launch_while_push_pending": 1416,
+        "max_logical_size": 268,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 10640,
+        "pq_feedback_latency_cycles": 26012,
+        "reset_label_writes": 5232,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 2659,
+          "heap_peak": 0
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 8831,
+          "heap_peak": 208
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 11165,
+          "heap_peak": 208
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 11866,
+          "heap_peak": 0
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 13877,
+          "heap_peak": 268
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 14389,
+          "heap_peak": 268
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 23627,
+          "heap_peak": 268
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 25070,
+          "heap_peak": 268
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 1246,
+            "min_gap": 2,
+            "mean_gap": 17.9710843373494,
+            "max_gap": 900
+          },
+          "operation_retire": {
+            "events": 1246,
+            "min_gap": 2,
+            "mean_gap": 17.99277108433735,
+            "max_gap": 876
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 1239,
+            "min_gap": 2,
+            "mean_gap": 16.904684975767367,
+            "max_gap": 200
+          },
+          "operation_retire": {
+            "events": 1239,
+            "min_gap": 2,
+            "mean_gap": 16.9264943457189,
+            "max_gap": 197
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 2660,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2668,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2676,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2684,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2692,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2700,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2708,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2716,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2724,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 12,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2732,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 13,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2740,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 14,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2748,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 15,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2762,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2770,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2778,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2786,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          27,
+          0,
+          129,
+          141,
+          27,
+          0,
+          147,
+          160
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 25381,
+            "per_qid_pq_serial_cycles": [
+              1973,
+              0,
+              5033,
+              5180,
+              1973,
+              0,
+              5438,
+              5784
+            ],
+            "longest_same_qid_pq_chain_cycles": 5784,
+            "ideal_partition_bounds": {
+              "1": 25381,
+              "2": 12691,
+              "4": 6346
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 24750,
+            "per_qid_pq_serial_cycles": [
+              1946,
+              0,
+              4904,
+              5039,
+              1946,
+              0,
+              5291,
+              5624
+            ],
+            "longest_same_qid_pq_chain_cycles": 5624,
+            "ideal_partition_bounds": {
+              "1": 24750,
+              "2": 12375,
+              "4": 6188
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 24119,
+            "per_qid_pq_serial_cycles": [
+              1919,
+              0,
+              4775,
+              4898,
+              1919,
+              0,
+              5144,
+              5464
+            ],
+            "longest_same_qid_pq_chain_cycles": 5464,
+            "ideal_partition_bounds": {
+              "1": 24119,
+              "2": 12060,
+              "4": 6030
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 25.919999999999998,
+      "reference_200mhz_budget_cycles": 5184.0,
+      "strict_max_integer_winning_cycles": 5183,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 4.836033950617284,
+      "required_frequency_MHz": 967.2067901234568,
+      "model_cycle_sensitivity_plus_25pct": 31338,
+      "model_cycle_sensitivity_plus_35pct": 33845,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d3_w8",
+      "actual_J": 8,
+      "resident_contexts": 4,
+      "heap_capacity_per_context": 1571,
+      "context_state_bytes": 89064,
+      "contract": {
+        "name": "hypothetical_path_pop_up_one_cycle",
+        "evidence": "unverified_conditional_assumptions",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 7,
+        "edge_ii": 1,
+        "commit_latency": 2,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 4,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 1,
+        "pop_up_saved_cycles": 2
+      },
+      "trace": {
+        "trace_sha256": "718905ce1c39eccda4976f44f30b01c14eaef125f14bb0edde7566b16b9f6306",
+        "workload_sha256": "50b8cedc8f36d23bdcedee4bd861e72d4b025bd46b3b02e977adf0baeceecc9b",
+        "parents": 583,
+        "edges": 2259,
+        "pushes": 1902,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 306,
+        "pop_split_trace_sha256": "e19249f63adb927d16fd1a6be2e6ec8caa1705a9b150da7e3a3f84b9112ea50e",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d3_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          1946,
+          0,
+          4904,
+          5039,
+          1946,
+          0,
+          5291,
+          5624
+        ],
+        "total_blocking_pq_service_cycles": 24750,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 12375,
+        "static_qid_partition_bound_cycles": 14087,
+        "longest_same_qid_pq_chain_cycles": 5624,
+        "combined_pq_bound_cycles": 12375,
+        "ideal_partition_bounds": {
+          "1": 24750,
+          "2": 12375,
+          "4": 6188
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 24528,
+      "stats": {
+        "edge_launches": 2259,
+        "commits": 2259,
+        "pq_enqueues": 2485,
+        "pq_starts": 2485,
+        "pq_retires": 2485,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 4,
+        "candidate_full_cycles": 10966,
+        "pq_fifo_full_cycles": 49,
+        "same_parent_edge_launch_while_push_pending": 1416,
+        "max_logical_size": 268,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 9718,
+        "pq_feedback_latency_cycles": 24750,
+        "reset_label_writes": 5232,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 2659,
+          "heap_peak": 0
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 8801,
+          "heap_peak": 208
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 11100,
+          "heap_peak": 208
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 11838,
+          "heap_peak": 0
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 13635,
+          "heap_peak": 268
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 14123,
+          "heap_peak": 268
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 23197,
+          "heap_peak": 268
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 24528,
+          "heap_peak": 268
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 1246,
+            "min_gap": 2,
+            "mean_gap": 17.53734939759036,
+            "max_gap": 1112
+          },
+          "operation_retire": {
+            "events": 1246,
+            "min_gap": 2,
+            "mean_gap": 17.5574297188755,
+            "max_gap": 1090
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 1239,
+            "min_gap": 2,
+            "mean_gap": 16.55896607431341,
+            "max_gap": 200
+          },
+          "operation_retire": {
+            "events": 1239,
+            "min_gap": 2,
+            "mean_gap": 16.579159935379643,
+            "max_gap": 197
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 2660,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2668,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2676,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2684,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2692,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2700,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2708,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2716,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2724,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 12,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2732,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 13,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2740,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 14,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2748,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 15,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2762,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2770,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2778,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 2786,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          27,
+          0,
+          129,
+          141,
+          27,
+          0,
+          147,
+          160
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 25381,
+            "per_qid_pq_serial_cycles": [
+              1973,
+              0,
+              5033,
+              5180,
+              1973,
+              0,
+              5438,
+              5784
+            ],
+            "longest_same_qid_pq_chain_cycles": 5784,
+            "ideal_partition_bounds": {
+              "1": 25381,
+              "2": 12691,
+              "4": 6346
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 24750,
+            "per_qid_pq_serial_cycles": [
+              1946,
+              0,
+              4904,
+              5039,
+              1946,
+              0,
+              5291,
+              5624
+            ],
+            "longest_same_qid_pq_chain_cycles": 5624,
+            "ideal_partition_bounds": {
+              "1": 24750,
+              "2": 12375,
+              "4": 6188
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 24119,
+            "per_qid_pq_serial_cycles": [
+              1919,
+              0,
+              4775,
+              4898,
+              1919,
+              0,
+              5144,
+              5464
+            ],
+            "longest_same_qid_pq_chain_cycles": 5464,
+            "ideal_partition_bounds": {
+              "1": 24119,
+              "2": 12060,
+              "4": 6030
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 25.919999999999998,
+      "reference_200mhz_budget_cycles": 5184.0,
+      "strict_max_integer_winning_cycles": 5183,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 4.731481481481482,
+      "required_frequency_MHz": 946.2962962962964,
+      "model_cycle_sensitivity_plus_25pct": 30660,
+      "model_cycle_sensitivity_plus_35pct": 33113,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d3_w8",
+      "actual_J": 8,
+      "resident_contexts": 2,
+      "heap_capacity_per_context": 1571,
+      "context_state_bytes": 44532,
+      "contract": {
+        "name": "scheduled_services_rtl_pop_mixed_contract",
+        "evidence": "HLS_schedule_edge_commit_and_isolated_POP_RTL_with_native_extrapolation",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 10,
+        "edge_ii": 9,
+        "commit_latency": 7,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 2,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 4,
+        "commit_issue_ii": 4,
+        "pop_formula": "rtl_path51",
+        "pop_reaccept_gap": 1
+      },
+      "trace": {
+        "trace_sha256": "718905ce1c39eccda4976f44f30b01c14eaef125f14bb0edde7566b16b9f6306",
+        "workload_sha256": "50b8cedc8f36d23bdcedee4bd861e72d4b025bd46b3b02e977adf0baeceecc9b",
+        "parents": 583,
+        "edges": 2259,
+        "pushes": 1902,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 306,
+        "pop_split_trace_sha256": "e19249f63adb927d16fd1a6be2e6ec8caa1705a9b150da7e3a3f84b9112ea50e",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d3_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          1929,
+          0,
+          4748,
+          4867,
+          1929,
+          0,
+          5110,
+          5412
+        ],
+        "total_blocking_pq_service_cycles": 23995,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 11998,
+        "static_qid_partition_bound_cycles": 13716,
+        "longest_same_qid_pq_chain_cycles": 5412,
+        "combined_pq_bound_cycles": 11998,
+        "ideal_partition_bounds": {
+          "1": 23995,
+          "2": 11998,
+          "4": 5999
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 54030,
+      "stats": {
+        "edge_launches": 2259,
+        "commits": 2259,
+        "pq_enqueues": 2485,
+        "pq_starts": 2485,
+        "pq_retires": 2485,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 1,
+        "candidate_full_cycles": 16636,
+        "pq_fifo_full_cycles": 0,
+        "same_parent_edge_launch_while_push_pending": 1342,
+        "max_logical_size": 268,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 2485,
+        "pq_feedback_latency_cycles": 23995,
+        "reset_label_writes": 5232,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 5274,
+          "heap_peak": 0
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 10132,
+          "heap_peak": 208
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 23008,
+          "heap_peak": 268
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 28558,
+          "heap_peak": 268
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 33144,
+          "heap_peak": 208
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 33830,
+          "heap_peak": 0
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 52778,
+          "heap_peak": 268
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 54030,
+          "heap_peak": 268
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 1249,
+            "min_gap": 4,
+            "mean_gap": 39.04326923076923,
+            "max_gap": 10578
+          },
+          "operation_retire": {
+            "events": 1249,
+            "min_gap": 6,
+            "mean_gap": 39.061698717948715,
+            "max_gap": 10555
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 1236,
+            "min_gap": 4,
+            "mean_gap": 34.16842105263158,
+            "max_gap": 5306
+          },
+          "operation_retire": {
+            "events": 1236,
+            "min_gap": 6,
+            "mean_gap": 34.187044534412955,
+            "max_gap": 5285
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 5313,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5328,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5344,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5360,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5376,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5392,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5408,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 12,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5424,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 13,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5440,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 14,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5456,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 15,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5579,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 3,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5597,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5608,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5624,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5640,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 8,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5656,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 9,
+          "pending_pushes": 1
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          27,
+          0,
+          129,
+          141,
+          27,
+          0,
+          147,
+          160
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 25381,
+            "per_qid_pq_serial_cycles": [
+              1973,
+              0,
+              5033,
+              5180,
+              1973,
+              0,
+              5438,
+              5784
+            ],
+            "longest_same_qid_pq_chain_cycles": 5784,
+            "ideal_partition_bounds": {
+              "1": 25381,
+              "2": 12691,
+              "4": 6346
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 24750,
+            "per_qid_pq_serial_cycles": [
+              1946,
+              0,
+              4904,
+              5039,
+              1946,
+              0,
+              5291,
+              5624
+            ],
+            "longest_same_qid_pq_chain_cycles": 5624,
+            "ideal_partition_bounds": {
+              "1": 24750,
+              "2": 12375,
+              "4": 6188
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 24119,
+            "per_qid_pq_serial_cycles": [
+              1919,
+              0,
+              4775,
+              4898,
+              1919,
+              0,
+              5144,
+              5464
+            ],
+            "longest_same_qid_pq_chain_cycles": 5464,
+            "ideal_partition_bounds": {
+              "1": 24119,
+              "2": 12060,
+              "4": 6030
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 25.919999999999998,
+      "reference_200mhz_budget_cycles": 5184.0,
+      "strict_max_integer_winning_cycles": 5183,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 10.422453703703704,
+      "required_frequency_MHz": 2084.490740740741,
+      "model_cycle_sensitivity_plus_25pct": 67538,
+      "model_cycle_sensitivity_plus_35pct": 72941,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d3_w8",
+      "actual_J": 8,
+      "resident_contexts": 2,
+      "heap_capacity_per_context": 1571,
+      "context_state_bytes": 44532,
+      "contract": {
+        "name": "observer_d_baseline_pq_envelope_native_extrapolation",
+        "evidence": "D_zero_hold_mechanism_RTL_envelope_and_D_schedule_native_depth_extrapolation",
+        "level_cycles": 2,
+        "pop_base": 17,
+        "push_base": 12,
+        "edge_latency": 10,
+        "edge_ii": 9,
+        "commit_latency": 7,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 8,
+        "map_queue_depth": 4,
+        "contexts": 2,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 4,
+        "singleton_pop_cycles": 7,
+        "pop_formula": "observer_d_envelope",
+        "pop_reaccept_gap": 1,
+        "push_reaccept_gap": 1,
+        "response_latency": 9,
+        "commit_issue_ii": 4
+      },
+      "trace": {
+        "trace_sha256": "718905ce1c39eccda4976f44f30b01c14eaef125f14bb0edde7566b16b9f6306",
+        "workload_sha256": "50b8cedc8f36d23bdcedee4bd861e72d4b025bd46b3b02e977adf0baeceecc9b",
+        "parents": 583,
+        "edges": 2259,
+        "pushes": 1902,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 306,
+        "pop_split_trace_sha256": "e19249f63adb927d16fd1a6be2e6ec8caa1705a9b150da7e3a3f84b9112ea50e",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d3_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          4106,
+          0,
+          8957,
+          9104,
+          4106,
+          0,
+          9444,
+          9820
+        ],
+        "total_blocking_pq_service_cycles": 45537,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": true,
+        "ideal_balanced_partition_bound_cycles": 22769,
+        "static_qid_partition_bound_cycles": 26613,
+        "longest_same_qid_pq_chain_cycles": 9820,
+        "combined_pq_bound_cycles": 22769,
+        "ideal_partition_bounds": {
+          "1": 45537,
+          "2": 22769,
+          "4": 11385
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 59519,
+      "stats": {
+        "edge_launches": 2259,
+        "commits": 2259,
+        "pq_enqueues": 2485,
+        "pq_starts": 2485,
+        "pq_retires": 2485,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 1,
+        "candidate_full_cycles": 16977,
+        "pq_fifo_full_cycles": 0,
+        "same_parent_edge_launch_while_push_pending": 1619,
+        "max_logical_size": 268,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 4304,
+        "pq_feedback_latency_cycles": 45537,
+        "reset_label_writes": 5232,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 5274,
+          "heap_peak": 0
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 11109,
+          "heap_peak": 208
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 24851,
+          "heap_peak": 268
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 31743,
+          "heap_peak": 268
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 35921,
+          "heap_peak": 208
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 37014,
+          "heap_peak": 0
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 57923,
+          "heap_peak": 268
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 59519,
+          "heap_peak": 268
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 8,
+          "operation_start": {
+            "events": 1249,
+            "min_gap": 15,
+            "mean_gap": 43.42788461538461,
+            "max_gap": 10594
+          },
+          "operation_retire": {
+            "events": 1249,
+            "min_gap": 15,
+            "mean_gap": 43.44471153846154,
+            "max_gap": 10573
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 8,
+          "operation_start": {
+            "events": 1236,
+            "min_gap": 15,
+            "mean_gap": 38.320647773279354,
+            "max_gap": 5322
+          },
+          "operation_retire": {
+            "events": 1236,
+            "min_gap": 15,
+            "mean_gap": 38.33765182186235,
+            "max_gap": 5303
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 5317,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 3,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5326,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5335,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5344,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5360,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5376,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5392,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5408,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5424,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5440,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 12,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5456,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 13,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5472,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 14,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5488,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 15,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5646,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 3,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5655,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5664,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          27,
+          0,
+          129,
+          141,
+          27,
+          0,
+          147,
+          160
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 25381,
+            "per_qid_pq_serial_cycles": [
+              1973,
+              0,
+              5033,
+              5180,
+              1973,
+              0,
+              5438,
+              5784
+            ],
+            "longest_same_qid_pq_chain_cycles": 5784,
+            "ideal_partition_bounds": {
+              "1": 25381,
+              "2": 12691,
+              "4": 6346
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 24750,
+            "per_qid_pq_serial_cycles": [
+              1946,
+              0,
+              4904,
+              5039,
+              1946,
+              0,
+              5291,
+              5624
+            ],
+            "longest_same_qid_pq_chain_cycles": 5624,
+            "ideal_partition_bounds": {
+              "1": 24750,
+              "2": 12375,
+              "4": 6188
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 24119,
+            "per_qid_pq_serial_cycles": [
+              1919,
+              0,
+              4775,
+              4898,
+              1919,
+              0,
+              5144,
+              5464
+            ],
+            "longest_same_qid_pq_chain_cycles": 5464,
+            "ideal_partition_bounds": {
+              "1": 24119,
+              "2": 12060,
+              "4": 6030
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 25.919999999999998,
+      "reference_200mhz_budget_cycles": 5184.0,
+      "strict_max_integer_winning_cycles": 5183,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 11.481288580246913,
+      "required_frequency_MHz": 2296.257716049383,
+      "model_cycle_sensitivity_plus_25pct": 74399,
+      "model_cycle_sensitivity_plus_35pct": 80351,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d4_w8",
+      "actual_J": 12,
+      "resident_contexts": 2,
+      "heap_capacity_per_context": 4177,
+      "context_state_bytes": 116680,
+      "contract": {
+        "name": "old_blocking_pq_ctx2",
+        "evidence": "unverified_conditional_assumptions",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 7,
+        "edge_ii": 1,
+        "commit_latency": 2,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 2,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 1
+      },
+      "trace": {
+        "trace_sha256": "bf7ff53838bc150c427ddd17f52eb95e76fec82e9450c3f877b67715bf576f62",
+        "workload_sha256": "d28970a7ec641324d17e9371b8d29bb9e51230836076c98fb5d79573dad56678",
+        "parents": 4234,
+        "edges": 16102,
+        "pushes": 9576,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 2110,
+        "pop_split_trace_sha256": "ba9a5e963373041d21ea6c776bb74f8513275d868f204defb3c4366dd66936cd",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d4_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          5795,
+          3342,
+          29200,
+          11950,
+          28761,
+          12272,
+          5795,
+          3342,
+          25312,
+          14210,
+          28656,
+          12477
+        ],
+        "total_blocking_pq_service_cycles": 181112,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 90556,
+        "static_qid_partition_bound_cycles": 123519,
+        "longest_same_qid_pq_chain_cycles": 29200,
+        "combined_pq_bound_cycles": 90556,
+        "ideal_partition_bounds": {
+          "1": 181112,
+          "2": 90556,
+          "4": 45278
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 160894,
+      "stats": {
+        "edge_launches": 16102,
+        "commits": 16102,
+        "pq_enqueues": 13810,
+        "pq_starts": 13810,
+        "pq_retires": 13810,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 4,
+        "candidate_full_cycles": 37739,
+        "pq_fifo_full_cycles": 655,
+        "same_parent_edge_launch_while_push_pending": 9114,
+        "max_logical_size": 683,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 73804,
+        "pq_feedback_latency_cycles": 181112,
+        "reset_label_writes": 19104,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 7409,
+          "heap_peak": 368
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 12684,
+          "heap_peak": 379
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 34133,
+          "heap_peak": 577
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 54733,
+          "heap_peak": 658
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 77155,
+          "heap_peak": 565
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 80521,
+          "heap_peak": 637
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 88570,
+          "heap_peak": 368
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 90015,
+          "heap_peak": 379
+        },
+        {
+          "qid": 9,
+          "finish_cycle": 114706,
+          "heap_peak": 603
+        },
+        {
+          "qid": 8,
+          "finish_cycle": 129636,
+          "heap_peak": 634
+        },
+        {
+          "qid": 11,
+          "finish_cycle": 150907,
+          "heap_peak": 601
+        },
+        {
+          "qid": 10,
+          "finish_cycle": 160894,
+          "heap_peak": 683
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 6788,
+            "min_gap": 4,
+            "mean_gap": 21.74893178134669,
+            "max_gap": 4218
+          },
+          "operation_retire": {
+            "events": 6788,
+            "min_gap": 5,
+            "mean_gap": 21.753351996463827,
+            "max_gap": 4191
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 7022,
+            "min_gap": 4,
+            "mean_gap": 22.446375160233586,
+            "max_gap": 4214
+          },
+          "operation_retire": {
+            "events": 7022,
+            "min_gap": 5,
+            "mean_gap": 22.450648055832502,
+            "max_gap": 4187
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 3242,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 3246,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 3250,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 3254,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 3265,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 3271,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 3277,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 3281,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 3285,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 3289,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 3293,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 3297,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 3301,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 12,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 3305,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 13,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 3309,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 14,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 3313,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 15,
+          "pending_pushes": 3
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          122,
+          43,
+          803,
+          296,
+          757,
+          311,
+          122,
+          43,
+          690,
+          353,
+          758,
+          299
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 176515,
+            "per_qid_pq_serial_cycles": [
+              5673,
+              3299,
+              28397,
+              11654,
+              28004,
+              11961,
+              5673,
+              3299,
+              24622,
+              13857,
+              27898,
+              12178
+            ],
+            "longest_same_qid_pq_chain_cycles": 28397,
+            "ideal_partition_bounds": {
+              "1": 176515,
+              "2": 88258,
+              "4": 44129
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 171918,
+            "per_qid_pq_serial_cycles": [
+              5551,
+              3256,
+              27594,
+              11358,
+              27247,
+              11650,
+              5551,
+              3256,
+              23932,
+              13504,
+              27140,
+              11879
+            ],
+            "longest_same_qid_pq_chain_cycles": 27594,
+            "ideal_partition_bounds": {
+              "1": 171918,
+              "2": 85959,
+              "4": 42980
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 167321,
+            "per_qid_pq_serial_cycles": [
+              5429,
+              3213,
+              26791,
+              11062,
+              26490,
+              11339,
+              5429,
+              3213,
+              23242,
+              13151,
+              26382,
+              11580
+            ],
+            "longest_same_qid_pq_chain_cycles": 26791,
+            "ideal_partition_bounds": {
+              "1": 167321,
+              "2": 83661,
+              "4": 41831
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 126.522,
+      "reference_200mhz_budget_cycles": 25304.4,
+      "strict_max_integer_winning_cycles": 25304,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 6.358340841908917,
+      "required_frequency_MHz": 1271.6681683817833,
+      "model_cycle_sensitivity_plus_25pct": 201118,
+      "model_cycle_sensitivity_plus_35pct": 217207,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d4_w8",
+      "actual_J": 12,
+      "resident_contexts": 4,
+      "heap_capacity_per_context": 4177,
+      "context_state_bytes": 233360,
+      "contract": {
+        "name": "old_blocking_pq_ctx4",
+        "evidence": "unverified_conditional_assumptions",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 7,
+        "edge_ii": 1,
+        "commit_latency": 2,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 4,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 1
+      },
+      "trace": {
+        "trace_sha256": "bf7ff53838bc150c427ddd17f52eb95e76fec82e9450c3f877b67715bf576f62",
+        "workload_sha256": "d28970a7ec641324d17e9371b8d29bb9e51230836076c98fb5d79573dad56678",
+        "parents": 4234,
+        "edges": 16102,
+        "pushes": 9576,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 2110,
+        "pop_split_trace_sha256": "ba9a5e963373041d21ea6c776bb74f8513275d868f204defb3c4366dd66936cd",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d4_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          5795,
+          3342,
+          29200,
+          11950,
+          28761,
+          12272,
+          5795,
+          3342,
+          25312,
+          14210,
+          28656,
+          12477
+        ],
+        "total_blocking_pq_service_cycles": 181112,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 90556,
+        "static_qid_partition_bound_cycles": 123519,
+        "longest_same_qid_pq_chain_cycles": 29200,
+        "combined_pq_bound_cycles": 90556,
+        "ideal_partition_bounds": {
+          "1": 181112,
+          "2": 90556,
+          "4": 45278
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 154737,
+      "stats": {
+        "edge_launches": 16102,
+        "commits": 16102,
+        "pq_enqueues": 13810,
+        "pq_starts": 13810,
+        "pq_retires": 13810,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 4,
+        "candidate_full_cycles": 81434,
+        "pq_fifo_full_cycles": 863,
+        "same_parent_edge_launch_while_push_pending": 8354,
+        "max_logical_size": 683,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 128435,
+        "pq_feedback_latency_cycles": 181112,
+        "reset_label_writes": 19104,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 13379,
+          "heap_peak": 368
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 26773,
+          "heap_peak": 379
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 37583,
+          "heap_peak": 577
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 62661,
+          "heap_peak": 379
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 65593,
+          "heap_peak": 565
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 77195,
+          "heap_peak": 368
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 81280,
+          "heap_peak": 658
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 94761,
+          "heap_peak": 637
+        },
+        {
+          "qid": 9,
+          "finish_cycle": 119743,
+          "heap_peak": 603
+        },
+        {
+          "qid": 11,
+          "finish_cycle": 130788,
+          "heap_peak": 601
+        },
+        {
+          "qid": 8,
+          "finish_cycle": 136308,
+          "heap_peak": 634
+        },
+        {
+          "qid": 10,
+          "finish_cycle": 154737,
+          "heap_peak": 683
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 7206,
+            "min_gap": 2,
+            "mean_gap": 20.57709923664122,
+            "max_gap": 316
+          },
+          "operation_retire": {
+            "events": 7206,
+            "min_gap": 2,
+            "mean_gap": 20.58126301179736,
+            "max_gap": 316
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 6604,
+            "min_gap": 2,
+            "mean_gap": 18.82598818718764,
+            "max_gap": 384
+          },
+          "operation_retire": {
+            "events": 6604,
+            "min_gap": 2,
+            "mean_gap": 18.830531576556112,
+            "max_gap": 384
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 6428,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6436,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6444,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6452,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6465,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6473,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6481,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6489,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6497,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6505,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6513,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6521,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6529,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 12,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6537,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 13,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6545,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 14,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6553,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 15,
+          "pending_pushes": 1
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          122,
+          43,
+          803,
+          296,
+          757,
+          311,
+          122,
+          43,
+          690,
+          353,
+          758,
+          299
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 176515,
+            "per_qid_pq_serial_cycles": [
+              5673,
+              3299,
+              28397,
+              11654,
+              28004,
+              11961,
+              5673,
+              3299,
+              24622,
+              13857,
+              27898,
+              12178
+            ],
+            "longest_same_qid_pq_chain_cycles": 28397,
+            "ideal_partition_bounds": {
+              "1": 176515,
+              "2": 88258,
+              "4": 44129
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 171918,
+            "per_qid_pq_serial_cycles": [
+              5551,
+              3256,
+              27594,
+              11358,
+              27247,
+              11650,
+              5551,
+              3256,
+              23932,
+              13504,
+              27140,
+              11879
+            ],
+            "longest_same_qid_pq_chain_cycles": 27594,
+            "ideal_partition_bounds": {
+              "1": 171918,
+              "2": 85959,
+              "4": 42980
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 167321,
+            "per_qid_pq_serial_cycles": [
+              5429,
+              3213,
+              26791,
+              11062,
+              26490,
+              11339,
+              5429,
+              3213,
+              23242,
+              13151,
+              26382,
+              11580
+            ],
+            "longest_same_qid_pq_chain_cycles": 26791,
+            "ideal_partition_bounds": {
+              "1": 167321,
+              "2": 83661,
+              "4": 41831
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 126.522,
+      "reference_200mhz_budget_cycles": 25304.4,
+      "strict_max_integer_winning_cycles": 25304,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 6.115023474178403,
+      "required_frequency_MHz": 1223.0046948356808,
+      "model_cycle_sensitivity_plus_25pct": 193422,
+      "model_cycle_sensitivity_plus_35pct": 208895,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d4_w8",
+      "actual_J": 12,
+      "resident_contexts": 4,
+      "heap_capacity_per_context": 4177,
+      "context_state_bytes": 233360,
+      "contract": {
+        "name": "hypothetical_path_pop_up_one_cycle",
+        "evidence": "unverified_conditional_assumptions",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 7,
+        "edge_ii": 1,
+        "commit_latency": 2,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 4,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 1,
+        "pop_up_saved_cycles": 2
+      },
+      "trace": {
+        "trace_sha256": "bf7ff53838bc150c427ddd17f52eb95e76fec82e9450c3f877b67715bf576f62",
+        "workload_sha256": "d28970a7ec641324d17e9371b8d29bb9e51230836076c98fb5d79573dad56678",
+        "parents": 4234,
+        "edges": 16102,
+        "pushes": 9576,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 2110,
+        "pop_split_trace_sha256": "ba9a5e963373041d21ea6c776bb74f8513275d868f204defb3c4366dd66936cd",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d4_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          5551,
+          3256,
+          27594,
+          11358,
+          27247,
+          11650,
+          5551,
+          3256,
+          23932,
+          13504,
+          27140,
+          11879
+        ],
+        "total_blocking_pq_service_cycles": 171918,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 85959,
+        "static_qid_partition_bound_cycles": 117015,
+        "longest_same_qid_pq_chain_cycles": 27594,
+        "combined_pq_bound_cycles": 85959,
+        "ideal_partition_bounds": {
+          "1": 171918,
+          "2": 85959,
+          "4": 42980
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 151039,
+      "stats": {
+        "edge_launches": 16102,
+        "commits": 16102,
+        "pq_enqueues": 13810,
+        "pq_starts": 13810,
+        "pq_retires": 13810,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 4,
+        "candidate_full_cycles": 81158,
+        "pq_fifo_full_cycles": 753,
+        "same_parent_edge_launch_while_push_pending": 8330,
+        "max_logical_size": 683,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 118035,
+        "pq_feedback_latency_cycles": 171918,
+        "reset_label_writes": 19104,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 13271,
+          "heap_peak": 368
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 26560,
+          "heap_peak": 379
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 36920,
+          "heap_peak": 577
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 62478,
+          "heap_peak": 379
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 65268,
+          "heap_peak": 565
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 76936,
+          "heap_peak": 368
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 79907,
+          "heap_peak": 658
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 93927,
+          "heap_peak": 637
+        },
+        {
+          "qid": 9,
+          "finish_cycle": 118225,
+          "heap_peak": 603
+        },
+        {
+          "qid": 11,
+          "finish_cycle": 128842,
+          "heap_peak": 601
+        },
+        {
+          "qid": 8,
+          "finish_cycle": 133258,
+          "heap_peak": 634
+        },
+        {
+          "qid": 10,
+          "finish_cycle": 151039,
+          "heap_peak": 683
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 7206,
+            "min_gap": 2,
+            "mean_gap": 20.06412213740458,
+            "max_gap": 368
+          },
+          "operation_retire": {
+            "events": 7206,
+            "min_gap": 2,
+            "mean_gap": 20.068008327550313,
+            "max_gap": 368
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 6604,
+            "min_gap": 2,
+            "mean_gap": 18.53157655611086,
+            "max_gap": 376
+          },
+          "operation_retire": {
+            "events": 6604,
+            "min_gap": 2,
+            "mean_gap": 18.535817052854764,
+            "max_gap": 376
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 6428,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6436,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6444,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6452,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6465,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6473,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6481,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6489,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6497,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6505,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6513,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6521,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6529,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 12,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6537,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 13,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6545,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 14,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 6553,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 15,
+          "pending_pushes": 1
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          122,
+          43,
+          803,
+          296,
+          757,
+          311,
+          122,
+          43,
+          690,
+          353,
+          758,
+          299
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 176515,
+            "per_qid_pq_serial_cycles": [
+              5673,
+              3299,
+              28397,
+              11654,
+              28004,
+              11961,
+              5673,
+              3299,
+              24622,
+              13857,
+              27898,
+              12178
+            ],
+            "longest_same_qid_pq_chain_cycles": 28397,
+            "ideal_partition_bounds": {
+              "1": 176515,
+              "2": 88258,
+              "4": 44129
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 171918,
+            "per_qid_pq_serial_cycles": [
+              5551,
+              3256,
+              27594,
+              11358,
+              27247,
+              11650,
+              5551,
+              3256,
+              23932,
+              13504,
+              27140,
+              11879
+            ],
+            "longest_same_qid_pq_chain_cycles": 27594,
+            "ideal_partition_bounds": {
+              "1": 171918,
+              "2": 85959,
+              "4": 42980
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 167321,
+            "per_qid_pq_serial_cycles": [
+              5429,
+              3213,
+              26791,
+              11062,
+              26490,
+              11339,
+              5429,
+              3213,
+              23242,
+              13151,
+              26382,
+              11580
+            ],
+            "longest_same_qid_pq_chain_cycles": 26791,
+            "ideal_partition_bounds": {
+              "1": 167321,
+              "2": 83661,
+              "4": 41831
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 126.522,
+      "reference_200mhz_budget_cycles": 25304.4,
+      "strict_max_integer_winning_cycles": 25304,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 5.968882882028422,
+      "required_frequency_MHz": 1193.7765764056844,
+      "model_cycle_sensitivity_plus_25pct": 188799,
+      "model_cycle_sensitivity_plus_35pct": 203903,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d4_w8",
+      "actual_J": 12,
+      "resident_contexts": 2,
+      "heap_capacity_per_context": 4177,
+      "context_state_bytes": 116680,
+      "contract": {
+        "name": "scheduled_services_rtl_pop_mixed_contract",
+        "evidence": "HLS_schedule_edge_commit_and_isolated_POP_RTL_with_native_extrapolation",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 10,
+        "edge_ii": 9,
+        "commit_latency": 7,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 2,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 4,
+        "commit_issue_ii": 4,
+        "pop_formula": "rtl_path51",
+        "pop_reaccept_gap": 1
+      },
+      "trace": {
+        "trace_sha256": "bf7ff53838bc150c427ddd17f52eb95e76fec82e9450c3f877b67715bf576f62",
+        "workload_sha256": "d28970a7ec641324d17e9371b8d29bb9e51230836076c98fb5d79573dad56678",
+        "parents": 4234,
+        "edges": 16102,
+        "pushes": 9576,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 2110,
+        "pop_split_trace_sha256": "ba9a5e963373041d21ea6c776bb74f8513275d868f204defb3c4366dd66936cd",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d4_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          5387,
+          3194,
+          25574,
+          10728,
+          25295,
+          11005,
+          5387,
+          3194,
+          22322,
+          12670,
+          25146,
+          11208
+        ],
+        "total_blocking_pq_service_cycles": 161110,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 80555,
+        "static_qid_partition_bound_cycles": 109111,
+        "longest_same_qid_pq_chain_cycles": 25574,
+        "combined_pq_bound_cycles": 80555,
+        "ideal_partition_bounds": {
+          "1": 161110,
+          "2": 80555,
+          "4": 40278
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 339370,
+      "stats": {
+        "edge_launches": 16102,
+        "commits": 16102,
+        "pq_enqueues": 13810,
+        "pq_starts": 13810,
+        "pq_retires": 13810,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 1,
+        "candidate_full_cycles": 130820,
+        "pq_fifo_full_cycles": 0,
+        "same_parent_edge_launch_while_push_pending": 7332,
+        "max_logical_size": 683,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 13815,
+        "pq_feedback_latency_cycles": 161110,
+        "reset_label_writes": 19104,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 21624,
+          "heap_peak": 368
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 31812,
+          "heap_peak": 379
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 80564,
+          "heap_peak": 577
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 114448,
+          "heap_peak": 658
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 164560,
+          "heap_peak": 565
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 165558,
+          "heap_peak": 637
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 187260,
+          "heap_peak": 368
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 196704,
+          "heap_peak": 379
+        },
+        {
+          "qid": 9,
+          "finish_cycle": 249882,
+          "heap_peak": 603
+        },
+        {
+          "qid": 8,
+          "finish_cycle": 270556,
+          "heap_peak": 634
+        },
+        {
+          "qid": 11,
+          "finish_cycle": 319886,
+          "heap_peak": 601
+        },
+        {
+          "qid": 10,
+          "finish_cycle": 339370,
+          "heap_peak": 683
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 6788,
+            "min_gap": 4,
+            "mean_gap": 45.240607042876086,
+            "max_gap": 12840
+          },
+          "operation_retire": {
+            "events": 6788,
+            "min_gap": 6,
+            "mean_gap": 45.2442905554737,
+            "max_gap": 12817
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 7022,
+            "min_gap": 4,
+            "mean_gap": 46.507335137444805,
+            "max_gap": 12840
+          },
+          "operation_retire": {
+            "events": 7022,
+            "min_gap": 6,
+            "mean_gap": 46.51089588377724,
+            "max_gap": 12817
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 12832,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12848,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12893,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12911,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12924,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12940,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12956,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12972,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12988,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 13004,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 12,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 13020,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 13,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 13036,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 14,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 13052,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 15,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 13097,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 13115,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 13128,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          122,
+          43,
+          803,
+          296,
+          757,
+          311,
+          122,
+          43,
+          690,
+          353,
+          758,
+          299
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 176515,
+            "per_qid_pq_serial_cycles": [
+              5673,
+              3299,
+              28397,
+              11654,
+              28004,
+              11961,
+              5673,
+              3299,
+              24622,
+              13857,
+              27898,
+              12178
+            ],
+            "longest_same_qid_pq_chain_cycles": 28397,
+            "ideal_partition_bounds": {
+              "1": 176515,
+              "2": 88258,
+              "4": 44129
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 171918,
+            "per_qid_pq_serial_cycles": [
+              5551,
+              3256,
+              27594,
+              11358,
+              27247,
+              11650,
+              5551,
+              3256,
+              23932,
+              13504,
+              27140,
+              11879
+            ],
+            "longest_same_qid_pq_chain_cycles": 27594,
+            "ideal_partition_bounds": {
+              "1": 171918,
+              "2": 85959,
+              "4": 42980
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 167321,
+            "per_qid_pq_serial_cycles": [
+              5429,
+              3213,
+              26791,
+              11062,
+              26490,
+              11339,
+              5429,
+              3213,
+              23242,
+              13151,
+              26382,
+              11580
+            ],
+            "longest_same_qid_pq_chain_cycles": 26791,
+            "ideal_partition_bounds": {
+              "1": 167321,
+              "2": 83661,
+              "4": 41831
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 126.522,
+      "reference_200mhz_budget_cycles": 25304.4,
+      "strict_max_integer_winning_cycles": 25304,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 13.411501557041463,
+      "required_frequency_MHz": 2682.3003114082926,
+      "model_cycle_sensitivity_plus_25pct": 424213,
+      "model_cycle_sensitivity_plus_35pct": 458150,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d4_w8",
+      "actual_J": 12,
+      "resident_contexts": 2,
+      "heap_capacity_per_context": 4177,
+      "context_state_bytes": 116680,
+      "contract": {
+        "name": "observer_d_baseline_pq_envelope_native_extrapolation",
+        "evidence": "D_zero_hold_mechanism_RTL_envelope_and_D_schedule_native_depth_extrapolation",
+        "level_cycles": 2,
+        "pop_base": 17,
+        "push_base": 12,
+        "edge_latency": 10,
+        "edge_ii": 9,
+        "commit_latency": 7,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 8,
+        "map_queue_depth": 4,
+        "contexts": 2,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 4,
+        "singleton_pop_cycles": 7,
+        "pop_formula": "observer_d_envelope",
+        "pop_reaccept_gap": 1,
+        "push_reaccept_gap": 1,
+        "response_latency": 9,
+        "commit_issue_ii": 4
+      },
+      "trace": {
+        "trace_sha256": "bf7ff53838bc150c427ddd17f52eb95e76fec82e9450c3f877b67715bf576f62",
+        "workload_sha256": "d28970a7ec641324d17e9371b8d29bb9e51230836076c98fb5d79573dad56678",
+        "parents": 4234,
+        "edges": 16102,
+        "pushes": 9576,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 2110,
+        "pop_split_trace_sha256": "ba9a5e963373041d21ea6c776bb74f8513275d868f204defb3c4366dd66936cd",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d4_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          10566,
+          6844,
+          42209,
+          19461,
+          41990,
+          19800,
+          10566,
+          6844,
+          37383,
+          22556,
+          41759,
+          20652
+        ],
+        "total_blocking_pq_service_cycles": 280630,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": true,
+        "ideal_balanced_partition_bound_cycles": 140315,
+        "static_qid_partition_bound_cycles": 184473,
+        "longest_same_qid_pq_chain_cycles": 42209,
+        "combined_pq_bound_cycles": 140315,
+        "ideal_partition_bounds": {
+          "1": 280630,
+          "2": 140315,
+          "4": 70158
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 377587,
+      "stats": {
+        "edge_launches": 16102,
+        "commits": 16102,
+        "pq_enqueues": 13810,
+        "pq_starts": 13810,
+        "pq_retires": 13810,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 2,
+        "candidate_full_cycles": 130920,
+        "pq_fifo_full_cycles": 0,
+        "same_parent_edge_launch_while_push_pending": 9281,
+        "max_logical_size": 683,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 19462,
+        "pq_feedback_latency_cycles": 280630,
+        "reset_label_writes": 19104,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 22393,
+          "heap_peak": 368
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 34173,
+          "heap_peak": 379
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 87189,
+          "heap_peak": 577
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 125913,
+          "heap_peak": 658
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 181073,
+          "heap_peak": 565
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 185095,
+          "heap_peak": 637
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 208029,
+          "heap_peak": 368
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 215121,
+          "heap_peak": 379
+        },
+        {
+          "qid": 9,
+          "finish_cycle": 275267,
+          "heap_peak": 603
+        },
+        {
+          "qid": 8,
+          "finish_cycle": 299277,
+          "heap_peak": 634
+        },
+        {
+          "qid": 11,
+          "finish_cycle": 351319,
+          "heap_peak": 601
+        },
+        {
+          "qid": 10,
+          "finish_cycle": 377587,
+          "heap_peak": 683
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 8,
+          "operation_start": {
+            "events": 6788,
+            "min_gap": 15,
+            "mean_gap": 49.869456313540596,
+            "max_gap": 12856
+          },
+          "operation_retire": {
+            "events": 6788,
+            "min_gap": 15,
+            "mean_gap": 49.8728451451304,
+            "max_gap": 12835
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 8,
+          "operation_start": {
+            "events": 7022,
+            "min_gap": 15,
+            "mean_gap": 51.9481555333998,
+            "max_gap": 12856
+          },
+          "operation_retire": {
+            "events": 7022,
+            "min_gap": 15,
+            "mean_gap": 51.951431420025635,
+            "max_gap": 12835
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 12835,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 3,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12844,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12853,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 12864,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 12880,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 12916,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 3,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12925,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 12934,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 12943,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 12956,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 12972,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 12988,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 13004,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 13020,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 13036,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 12,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 13052,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 13,
+          "pending_pushes": 2
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          122,
+          43,
+          803,
+          296,
+          757,
+          311,
+          122,
+          43,
+          690,
+          353,
+          758,
+          299
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 176515,
+            "per_qid_pq_serial_cycles": [
+              5673,
+              3299,
+              28397,
+              11654,
+              28004,
+              11961,
+              5673,
+              3299,
+              24622,
+              13857,
+              27898,
+              12178
+            ],
+            "longest_same_qid_pq_chain_cycles": 28397,
+            "ideal_partition_bounds": {
+              "1": 176515,
+              "2": 88258,
+              "4": 44129
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 171918,
+            "per_qid_pq_serial_cycles": [
+              5551,
+              3256,
+              27594,
+              11358,
+              27247,
+              11650,
+              5551,
+              3256,
+              23932,
+              13504,
+              27140,
+              11879
+            ],
+            "longest_same_qid_pq_chain_cycles": 27594,
+            "ideal_partition_bounds": {
+              "1": 171918,
+              "2": 85959,
+              "4": 42980
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 167321,
+            "per_qid_pq_serial_cycles": [
+              5429,
+              3213,
+              26791,
+              11062,
+              26490,
+              11339,
+              5429,
+              3213,
+              23242,
+              13151,
+              26382,
+              11580
+            ],
+            "longest_same_qid_pq_chain_cycles": 26791,
+            "ideal_partition_bounds": {
+              "1": 167321,
+              "2": 83661,
+              "4": 41831
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 126.522,
+      "reference_200mhz_budget_cycles": 25304.4,
+      "strict_max_integer_winning_cycles": 25304,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 14.921792257473008,
+      "required_frequency_MHz": 2984.3584514946015,
+      "model_cycle_sensitivity_plus_25pct": 471984,
+      "model_cycle_sensitivity_plus_35pct": 509743,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d5_w8",
+      "actual_J": 12,
+      "resident_contexts": 2,
+      "heap_capacity_per_context": 7923,
+      "context_state_bytes": 219572,
+      "contract": {
+        "name": "old_blocking_pq_ctx2",
+        "evidence": "unverified_conditional_assumptions",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 7,
+        "edge_ii": 1,
+        "commit_latency": 2,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 2,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 1
+      },
+      "trace": {
+        "trace_sha256": "eaf609567a262fd8e1396845dd6e640b711b16ffedd392c8af379cb4c39b55fc",
+        "workload_sha256": "87b46e7e451ec4a4eacff6b13b9dfdc1ac7a18baf6c803c846b17ba612be6753",
+        "parents": 9348,
+        "edges": 38258,
+        "pushes": 19094,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 4277,
+        "pop_split_trace_sha256": "30144762fc8b801a12fb70fd1da1a51b506076868acc1e5c90bfb59b16442a1b",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d5_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          33547,
+          11387,
+          47323,
+          34771,
+          50153,
+          31666,
+          33547,
+          11387,
+          49088,
+          26841,
+          42975,
+          35607
+        ],
+        "total_blocking_pq_service_cycles": 408292,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 204146,
+        "static_qid_partition_bound_cycles": 256633,
+        "longest_same_qid_pq_chain_cycles": 50153,
+        "combined_pq_bound_cycles": 204146,
+        "ideal_partition_bounds": {
+          "1": 408292,
+          "2": 204146,
+          "4": 102073
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 352556,
+      "stats": {
+        "edge_launches": 38258,
+        "commits": 38258,
+        "pq_enqueues": 28442,
+        "pq_starts": 28442,
+        "pq_retires": 28442,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 4,
+        "candidate_full_cycles": 89550,
+        "pq_fifo_full_cycles": 929,
+        "same_parent_edge_launch_while_push_pending": 19234,
+        "max_logical_size": 1248,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 135597,
+        "pq_feedback_latency_cycles": 408292,
+        "reset_label_writes": 34344,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 22504,
+          "heap_peak": 608
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 54916,
+          "heap_peak": 1248
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 102326,
+          "heap_peak": 1234
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 116781,
+          "heap_peak": 1018
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 173833,
+          "heap_peak": 947
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 184682,
+          "heap_peak": 1200
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 209810,
+          "heap_peak": 608
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 229567,
+          "heap_peak": 1248
+        },
+        {
+          "qid": 9,
+          "finish_cycle": 279019,
+          "heap_peak": 791
+        },
+        {
+          "qid": 8,
+          "finish_cycle": 290354,
+          "heap_peak": 1151
+        },
+        {
+          "qid": 10,
+          "finish_cycle": 350839,
+          "heap_peak": 1003
+        },
+        {
+          "qid": 11,
+          "finish_cycle": 352556,
+          "heap_peak": 1001
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 14507,
+            "min_gap": 4,
+            "mean_gap": 23.780918240727974,
+            "max_gap": 7160
+          },
+          "operation_retire": {
+            "events": 14507,
+            "min_gap": 5,
+            "mean_gap": 23.782986350475664,
+            "max_gap": 7130
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 13935,
+            "min_gap": 4,
+            "mean_gap": 24.880292808956508,
+            "max_gap": 8100
+          },
+          "operation_retire": {
+            "events": 13935,
+            "min_gap": 5,
+            "mean_gap": 24.882445815989666,
+            "max_gap": 8070
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 5800,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5804,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5808,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5812,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5823,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5829,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5835,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5839,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5872,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 5876,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 5,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5880,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5884,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5888,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 8,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 5892,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 9,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 5896,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 10,
+          "pending_pushes": 3
+        },
+        {
+          "cycle": 5900,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 11,
+          "pending_pushes": 3
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          799,
+          249,
+          1190,
+          890,
+          1262,
+          776,
+          799,
+          249,
+          1245,
+          694,
+          1125,
+          911
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 398103,
+            "per_qid_pq_serial_cycles": [
+              32748,
+              11138,
+              46133,
+              33881,
+              48891,
+              30890,
+              32748,
+              11138,
+              47843,
+              26147,
+              41850,
+              34696
+            ],
+            "longest_same_qid_pq_chain_cycles": 48891,
+            "ideal_partition_bounds": {
+              "1": 398103,
+              "2": 199052,
+              "4": 99526
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 387914,
+            "per_qid_pq_serial_cycles": [
+              31949,
+              10889,
+              44943,
+              32991,
+              47629,
+              30114,
+              31949,
+              10889,
+              46598,
+              25453,
+              40725,
+              33785
+            ],
+            "longest_same_qid_pq_chain_cycles": 47629,
+            "ideal_partition_bounds": {
+              "1": 387914,
+              "2": 193957,
+              "4": 96979
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 377725,
+            "per_qid_pq_serial_cycles": [
+              31150,
+              10640,
+              43753,
+              32101,
+              46367,
+              29338,
+              31150,
+              10640,
+              45353,
+              24759,
+              39600,
+              32874
+            ],
+            "longest_same_qid_pq_chain_cycles": 46367,
+            "ideal_partition_bounds": {
+              "1": 377725,
+              "2": 188863,
+              "4": 94432
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 211.585,
+      "reference_200mhz_budget_cycles": 42317.0,
+      "strict_max_integer_winning_cycles": 42316,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 8.33130893021717,
+      "required_frequency_MHz": 1666.261786043434,
+      "model_cycle_sensitivity_plus_25pct": 440695,
+      "model_cycle_sensitivity_plus_35pct": 475951,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d5_w8",
+      "actual_J": 12,
+      "resident_contexts": 4,
+      "heap_capacity_per_context": 7923,
+      "context_state_bytes": 439144,
+      "contract": {
+        "name": "old_blocking_pq_ctx4",
+        "evidence": "unverified_conditional_assumptions",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 7,
+        "edge_ii": 1,
+        "commit_latency": 2,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 4,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 1
+      },
+      "trace": {
+        "trace_sha256": "eaf609567a262fd8e1396845dd6e640b711b16ffedd392c8af379cb4c39b55fc",
+        "workload_sha256": "87b46e7e451ec4a4eacff6b13b9dfdc1ac7a18baf6c803c846b17ba612be6753",
+        "parents": 9348,
+        "edges": 38258,
+        "pushes": 19094,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 4277,
+        "pop_split_trace_sha256": "30144762fc8b801a12fb70fd1da1a51b506076868acc1e5c90bfb59b16442a1b",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d5_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          33547,
+          11387,
+          47323,
+          34771,
+          50153,
+          31666,
+          33547,
+          11387,
+          49088,
+          26841,
+          42975,
+          35607
+        ],
+        "total_blocking_pq_service_cycles": 408292,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 204146,
+        "static_qid_partition_bound_cycles": 256633,
+        "longest_same_qid_pq_chain_cycles": 50153,
+        "combined_pq_bound_cycles": 204146,
+        "ideal_partition_bounds": {
+          "1": 408292,
+          "2": 204146,
+          "4": 102073
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 340838,
+      "stats": {
+        "edge_launches": 38258,
+        "commits": 38258,
+        "pq_enqueues": 28442,
+        "pq_starts": 28442,
+        "pq_retires": 28442,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 4,
+        "candidate_full_cycles": 195996,
+        "pq_fifo_full_cycles": 1685,
+        "same_parent_edge_launch_while_push_pending": 17057,
+        "max_logical_size": 1248,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 294372,
+        "pq_feedback_latency_cycles": 408292,
+        "reset_label_writes": 34344,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 43890,
+          "heap_peak": 608
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 100015,
+          "heap_peak": 1248
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 106971,
+          "heap_peak": 1018
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 152872,
+          "heap_peak": 1234
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 199464,
+          "heap_peak": 1200
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 202958,
+          "heap_peak": 608
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 203149,
+          "heap_peak": 947
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 214466,
+          "heap_peak": 1248
+        },
+        {
+          "qid": 9,
+          "finish_cycle": 310096,
+          "heap_peak": 791
+        },
+        {
+          "qid": 11,
+          "finish_cycle": 331577,
+          "heap_peak": 1001
+        },
+        {
+          "qid": 10,
+          "finish_cycle": 333037,
+          "heap_peak": 1003
+        },
+        {
+          "qid": 8,
+          "finish_cycle": 340838,
+          "heap_peak": 1151
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 13690,
+            "min_gap": 2,
+            "mean_gap": 23.481773686901892,
+            "max_gap": 12078
+          },
+          "operation_retire": {
+            "events": 13690,
+            "min_gap": 2,
+            "mean_gap": 23.48396522755497,
+            "max_gap": 12048
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 14752,
+            "min_gap": 2,
+            "mean_gap": 22.319978306555488,
+            "max_gap": 368
+          },
+          "operation_retire": {
+            "events": 14752,
+            "min_gap": 2,
+            "mean_gap": 22.32201206697851,
+            "max_gap": 365
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 11524,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11532,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11540,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11548,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11561,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11569,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11577,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11585,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11598,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11606,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11614,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11622,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11630,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11638,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11646,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11654,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 1
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          799,
+          249,
+          1190,
+          890,
+          1262,
+          776,
+          799,
+          249,
+          1245,
+          694,
+          1125,
+          911
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 398103,
+            "per_qid_pq_serial_cycles": [
+              32748,
+              11138,
+              46133,
+              33881,
+              48891,
+              30890,
+              32748,
+              11138,
+              47843,
+              26147,
+              41850,
+              34696
+            ],
+            "longest_same_qid_pq_chain_cycles": 48891,
+            "ideal_partition_bounds": {
+              "1": 398103,
+              "2": 199052,
+              "4": 99526
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 387914,
+            "per_qid_pq_serial_cycles": [
+              31949,
+              10889,
+              44943,
+              32991,
+              47629,
+              30114,
+              31949,
+              10889,
+              46598,
+              25453,
+              40725,
+              33785
+            ],
+            "longest_same_qid_pq_chain_cycles": 47629,
+            "ideal_partition_bounds": {
+              "1": 387914,
+              "2": 193957,
+              "4": 96979
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 377725,
+            "per_qid_pq_serial_cycles": [
+              31150,
+              10640,
+              43753,
+              32101,
+              46367,
+              29338,
+              31150,
+              10640,
+              45353,
+              24759,
+              39600,
+              32874
+            ],
+            "longest_same_qid_pq_chain_cycles": 46367,
+            "ideal_partition_bounds": {
+              "1": 377725,
+              "2": 188863,
+              "4": 94432
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 211.585,
+      "reference_200mhz_budget_cycles": 42317.0,
+      "strict_max_integer_winning_cycles": 42316,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 8.054398941323818,
+      "required_frequency_MHz": 1610.8797882647634,
+      "model_cycle_sensitivity_plus_25pct": 426048,
+      "model_cycle_sensitivity_plus_35pct": 460132,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d5_w8",
+      "actual_J": 12,
+      "resident_contexts": 4,
+      "heap_capacity_per_context": 7923,
+      "context_state_bytes": 439144,
+      "contract": {
+        "name": "hypothetical_path_pop_up_one_cycle",
+        "evidence": "unverified_conditional_assumptions",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 7,
+        "edge_ii": 1,
+        "commit_latency": 2,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 4,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 1,
+        "pop_up_saved_cycles": 2
+      },
+      "trace": {
+        "trace_sha256": "eaf609567a262fd8e1396845dd6e640b711b16ffedd392c8af379cb4c39b55fc",
+        "workload_sha256": "87b46e7e451ec4a4eacff6b13b9dfdc1ac7a18baf6c803c846b17ba612be6753",
+        "parents": 9348,
+        "edges": 38258,
+        "pushes": 19094,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 4277,
+        "pop_split_trace_sha256": "30144762fc8b801a12fb70fd1da1a51b506076868acc1e5c90bfb59b16442a1b",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d5_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          31949,
+          10889,
+          44943,
+          32991,
+          47629,
+          30114,
+          31949,
+          10889,
+          46598,
+          25453,
+          40725,
+          33785
+        ],
+        "total_blocking_pq_service_cycles": 387914,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 193957,
+        "static_qid_partition_bound_cycles": 243793,
+        "longest_same_qid_pq_chain_cycles": 47629,
+        "combined_pq_bound_cycles": 193957,
+        "ideal_partition_bounds": {
+          "1": 387914,
+          "2": 193957,
+          "4": 96979
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 329832,
+      "stats": {
+        "edge_launches": 38258,
+        "commits": 38258,
+        "pq_enqueues": 28442,
+        "pq_starts": 28442,
+        "pq_retires": 28442,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 4,
+        "candidate_full_cycles": 195693,
+        "pq_fifo_full_cycles": 1496,
+        "same_parent_edge_launch_while_push_pending": 17012,
+        "max_logical_size": 1248,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 269629,
+        "pq_feedback_latency_cycles": 387914,
+        "reset_label_writes": 34344,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 43100,
+          "heap_peak": 608
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 98519,
+          "heap_peak": 1248
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 104817,
+          "heap_peak": 1018
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 149206,
+          "heap_peak": 1234
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 195496,
+          "heap_peak": 1200
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 199903,
+          "heap_peak": 608
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 200719,
+          "heap_peak": 947
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 210651,
+          "heap_peak": 1248
+        },
+        {
+          "qid": 9,
+          "finish_cycle": 303117,
+          "heap_peak": 791
+        },
+        {
+          "qid": 11,
+          "finish_cycle": 325404,
+          "heap_peak": 1001
+        },
+        {
+          "qid": 10,
+          "finish_cycle": 329316,
+          "heap_peak": 1003
+        },
+        {
+          "qid": 8,
+          "finish_cycle": 329832,
+          "heap_peak": 1151
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 13690,
+            "min_gap": 2,
+            "mean_gap": 23.21002264592008,
+            "max_gap": 11926
+          },
+          "operation_retire": {
+            "events": 13690,
+            "min_gap": 2,
+            "mean_gap": 23.212068083862956,
+            "max_gap": 11898
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 14752,
+            "min_gap": 2,
+            "mean_gap": 21.573994983390957,
+            "max_gap": 448
+          },
+          "operation_retire": {
+            "events": 14752,
+            "min_gap": 2,
+            "mean_gap": 21.575893159785778,
+            "max_gap": 448
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 11524,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11532,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11540,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11548,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11561,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11569,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11577,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11585,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11598,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11606,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11614,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11622,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11630,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 8,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11638,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 9,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11646,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 10,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 11654,
+          "qid": 2,
+          "parent_seq": 1,
+          "edge_ordinal": 11,
+          "pending_pushes": 1
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          799,
+          249,
+          1190,
+          890,
+          1262,
+          776,
+          799,
+          249,
+          1245,
+          694,
+          1125,
+          911
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 398103,
+            "per_qid_pq_serial_cycles": [
+              32748,
+              11138,
+              46133,
+              33881,
+              48891,
+              30890,
+              32748,
+              11138,
+              47843,
+              26147,
+              41850,
+              34696
+            ],
+            "longest_same_qid_pq_chain_cycles": 48891,
+            "ideal_partition_bounds": {
+              "1": 398103,
+              "2": 199052,
+              "4": 99526
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 387914,
+            "per_qid_pq_serial_cycles": [
+              31949,
+              10889,
+              44943,
+              32991,
+              47629,
+              30114,
+              31949,
+              10889,
+              46598,
+              25453,
+              40725,
+              33785
+            ],
+            "longest_same_qid_pq_chain_cycles": 47629,
+            "ideal_partition_bounds": {
+              "1": 387914,
+              "2": 193957,
+              "4": 96979
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 377725,
+            "per_qid_pq_serial_cycles": [
+              31150,
+              10640,
+              43753,
+              32101,
+              46367,
+              29338,
+              31150,
+              10640,
+              45353,
+              24759,
+              39600,
+              32874
+            ],
+            "longest_same_qid_pq_chain_cycles": 46367,
+            "ideal_partition_bounds": {
+              "1": 377725,
+              "2": 188863,
+              "4": 94432
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 211.585,
+      "reference_200mhz_budget_cycles": 42317.0,
+      "strict_max_integer_winning_cycles": 42316,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 7.794314341753905,
+      "required_frequency_MHz": 1558.862868350781,
+      "model_cycle_sensitivity_plus_25pct": 412290,
+      "model_cycle_sensitivity_plus_35pct": 445274,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d5_w8",
+      "actual_J": 12,
+      "resident_contexts": 2,
+      "heap_capacity_per_context": 7923,
+      "context_state_bytes": 219572,
+      "contract": {
+        "name": "scheduled_services_rtl_pop_mixed_contract",
+        "evidence": "HLS_schedule_edge_commit_and_isolated_POP_RTL_with_native_extrapolation",
+        "level_cycles": 3,
+        "pop_base": 5,
+        "push_base": 2,
+        "edge_latency": 10,
+        "edge_ii": 9,
+        "commit_latency": 7,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 1,
+        "map_queue_depth": 4,
+        "contexts": 2,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 4,
+        "commit_issue_ii": 4,
+        "pop_formula": "rtl_path51",
+        "pop_reaccept_gap": 1
+      },
+      "trace": {
+        "trace_sha256": "eaf609567a262fd8e1396845dd6e640b711b16ffedd392c8af379cb4c39b55fc",
+        "workload_sha256": "87b46e7e451ec4a4eacff6b13b9dfdc1ac7a18baf6c803c846b17ba612be6753",
+        "parents": 9348,
+        "edges": 38258,
+        "pushes": 19094,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 4277,
+        "pop_split_trace_sha256": "30144762fc8b801a12fb70fd1da1a51b506076868acc1e5c90bfb59b16442a1b",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d5_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          29505,
+          10300,
+          41159,
+          30454,
+          43540,
+          27850,
+          29505,
+          10300,
+          42624,
+          23700,
+          37411,
+          31128
+        ],
+        "total_blocking_pq_service_cycles": 357476,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": false,
+        "ideal_balanced_partition_bound_cycles": 178738,
+        "static_qid_partition_bound_cycles": 223744,
+        "longest_same_qid_pq_chain_cycles": 43540,
+        "combined_pq_bound_cycles": 178738,
+        "ideal_partition_bounds": {
+          "1": 357476,
+          "2": 178738,
+          "4": 89369
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 735808,
+      "stats": {
+        "edge_launches": 38258,
+        "commits": 38258,
+        "pq_enqueues": 28442,
+        "pq_starts": 28442,
+        "pq_retires": 28442,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 1,
+        "candidate_full_cycles": 318257,
+        "pq_fifo_full_cycles": 0,
+        "same_parent_edge_launch_while_push_pending": 14596,
+        "max_logical_size": 1248,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 28443,
+        "pq_feedback_latency_cycles": 357476,
+        "reset_label_writes": 34344,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 53196,
+          "heap_peak": 608
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 116312,
+          "heap_peak": 1248
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 213444,
+          "heap_peak": 1234
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 244254,
+          "heap_peak": 1018
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 374200,
+          "heap_peak": 947
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 376028,
+          "heap_peak": 1200
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 430468,
+          "heap_peak": 608
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 490232,
+          "heap_peak": 1248
+        },
+        {
+          "qid": 8,
+          "finish_cycle": 590220,
+          "heap_peak": 1151
+        },
+        {
+          "qid": 9,
+          "finish_cycle": 601208,
+          "heap_peak": 791
+        },
+        {
+          "qid": 10,
+          "finish_cycle": 735164,
+          "heap_peak": 1003
+        },
+        {
+          "qid": 11,
+          "finish_cycle": 735808,
+          "heap_peak": 1001
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 14114,
+            "min_gap": 4,
+            "mean_gap": 50.50478282434635,
+            "max_gap": 23044
+          },
+          "operation_retire": {
+            "events": 14114,
+            "min_gap": 6,
+            "mean_gap": 50.50655424077092,
+            "max_gap": 23017
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 1,
+          "operation_start": {
+            "events": 14328,
+            "min_gap": 4,
+            "mean_gap": 49.7051720527675,
+            "max_gap": 23042
+          },
+          "operation_retire": {
+            "events": 14328,
+            "min_gap": 6,
+            "mean_gap": 49.70691700984156,
+            "max_gap": 23017
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 23009,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23024,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23069,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23087,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23100,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23136,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 2,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23154,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23172,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23184,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23200,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 8,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23216,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 9,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23232,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 10,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23248,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 11,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23293,
+          "qid": 1,
+          "parent_seq": 2,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23311,
+          "qid": 1,
+          "parent_seq": 2,
+          "edge_ordinal": 6,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23324,
+          "qid": 1,
+          "parent_seq": 2,
+          "edge_ordinal": 7,
+          "pending_pushes": 1
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          799,
+          249,
+          1190,
+          890,
+          1262,
+          776,
+          799,
+          249,
+          1245,
+          694,
+          1125,
+          911
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 398103,
+            "per_qid_pq_serial_cycles": [
+              32748,
+              11138,
+              46133,
+              33881,
+              48891,
+              30890,
+              32748,
+              11138,
+              47843,
+              26147,
+              41850,
+              34696
+            ],
+            "longest_same_qid_pq_chain_cycles": 48891,
+            "ideal_partition_bounds": {
+              "1": 398103,
+              "2": 199052,
+              "4": 99526
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 387914,
+            "per_qid_pq_serial_cycles": [
+              31949,
+              10889,
+              44943,
+              32991,
+              47629,
+              30114,
+              31949,
+              10889,
+              46598,
+              25453,
+              40725,
+              33785
+            ],
+            "longest_same_qid_pq_chain_cycles": 47629,
+            "ideal_partition_bounds": {
+              "1": 387914,
+              "2": 193957,
+              "4": 96979
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 377725,
+            "per_qid_pq_serial_cycles": [
+              31150,
+              10640,
+              43753,
+              32101,
+              46367,
+              29338,
+              31150,
+              10640,
+              45353,
+              24759,
+              39600,
+              32874
+            ],
+            "longest_same_qid_pq_chain_cycles": 46367,
+            "ideal_partition_bounds": {
+              "1": 377725,
+              "2": 188863,
+              "4": 94432
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 211.585,
+      "reference_200mhz_budget_cycles": 42317.0,
+      "strict_max_integer_winning_cycles": 42316,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 17.38800009452466,
+      "required_frequency_MHz": 3477.600018904932,
+      "model_cycle_sensitivity_plus_25pct": 919760,
+      "model_cycle_sensitivity_plus_35pct": 993341,
+      "engineering_20pct_margin_pass": false
+    },
+    {
+      "case": "native_d5_w8",
+      "actual_J": 12,
+      "resident_contexts": 2,
+      "heap_capacity_per_context": 7923,
+      "context_state_bytes": 219572,
+      "contract": {
+        "name": "observer_d_baseline_pq_envelope_native_extrapolation",
+        "evidence": "D_zero_hold_mechanism_RTL_envelope_and_D_schedule_native_depth_extrapolation",
+        "level_cycles": 2,
+        "pop_base": 17,
+        "push_base": 12,
+        "edge_latency": 10,
+        "edge_ii": 9,
+        "commit_latency": 7,
+        "map_latency": 4,
+        "candidate_depth": 4,
+        "pq_queue_depth": 4,
+        "pq_enqueue_ii": 8,
+        "map_queue_depth": 4,
+        "contexts": 2,
+        "partitions": 2,
+        "reset_writes_per_cycle": 1,
+        "output_cells_per_cycle": 1,
+        "barrier_cycles": 1,
+        "drain_cycles": 8,
+        "edge_parent_hol": true,
+        "pq_mapping": "context",
+        "reset_mode": "shared_commit",
+        "commit_owner_ii": 4,
+        "singleton_pop_cycles": 7,
+        "pop_formula": "observer_d_envelope",
+        "pop_reaccept_gap": 1,
+        "push_reaccept_gap": 1,
+        "response_latency": 9,
+        "commit_issue_ii": 4
+      },
+      "trace": {
+        "trace_sha256": "eaf609567a262fd8e1396845dd6e640b711b16ffedd392c8af379cb4c39b55fc",
+        "workload_sha256": "87b46e7e451ec4a4eacff6b13b9dfdc1ac7a18baf6c803c846b17ba612be6753",
+        "parents": 9348,
+        "edges": 38258,
+        "pushes": 19094,
+        "duplicate_dst_within_parent": 0,
+        "parents_without_edges": 4277,
+        "pop_split_trace_sha256": "30144762fc8b801a12fb70fd1da1a51b506076868acc1e5c90bfb59b16442a1b",
+        "pop_split_trace_path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/native_d5_w8.csv.pop_path.csv"
+      },
+      "bounds": {
+        "per_qid_pq_serial_cycles": [
+          51126,
+          18823,
+          67907,
+          51303,
+          71538,
+          47750,
+          51126,
+          18823,
+          69977,
+          40777,
+          61997,
+          52353
+        ],
+        "total_blocking_pq_service_cycles": 603500,
+        "evidence_scope": "conditional_resource_bound_for_assigned_model_latencies_not_proven_native_hardware_lower_bound",
+        "observer_envelope_extrapolated": true,
+        "ideal_balanced_partition_bound_cycles": 301750,
+        "static_qid_partition_bound_cycles": 373671,
+        "longest_same_qid_pq_chain_cycles": 71538,
+        "combined_pq_bound_cycles": 301750,
+        "ideal_partition_bounds": {
+          "1": 603500,
+          "2": 301750,
+          "4": 150875
+        },
+        "static_partition_bound_applies": false,
+        "conditions": [
+          "Same qid heap operations cannot overlap; includes seed.",
+          "Each partition is occupied for full feedback. Static-qid bound only applies with qid_static mapping; context mapping uses ideal aggregate bound.",
+          "Edge/reset/map/output hidden completely; this is not a universal exact-search bound."
+        ]
+      },
+      "batch_cycles": 817497,
+      "stats": {
+        "edge_launches": 38258,
+        "commits": 38258,
+        "pq_enqueues": 28442,
+        "pq_starts": 28442,
+        "pq_retires": 28442,
+        "max_candidate_occupancy": 4,
+        "max_pq_fifo_occupancy": 2,
+        "candidate_full_cycles": 318544,
+        "pq_fifo_full_cycles": 0,
+        "same_parent_edge_launch_while_push_pending": 19182,
+        "max_logical_size": 1248,
+        "duplicate_dst_commits": 0,
+        "max_map_fifo_occupancy": 2,
+        "map_fifo_full_cycles": 0,
+        "pq_queue_wait_cycles": 34420,
+        "pq_feedback_latency_cycles": 603500,
+        "reset_label_writes": 34344,
+        "max_response_fifo_occupancy": 1
+      },
+      "per_qid": [
+        {
+          "qid": 1,
+          "finish_cycle": 57013,
+          "heap_peak": 608
+        },
+        {
+          "qid": 0,
+          "finish_cycle": 127195,
+          "heap_peak": 1248
+        },
+        {
+          "qid": 2,
+          "finish_cycle": 233789,
+          "heap_peak": 1234
+        },
+        {
+          "qid": 3,
+          "finish_cycle": 274192,
+          "heap_peak": 1018
+        },
+        {
+          "qid": 4,
+          "finish_cycle": 417181,
+          "heap_peak": 1200
+        },
+        {
+          "qid": 5,
+          "finish_cycle": 418097,
+          "heap_peak": 947
+        },
+        {
+          "qid": 7,
+          "finish_cycle": 475473,
+          "heap_peak": 608
+        },
+        {
+          "qid": 6,
+          "finish_cycle": 546032,
+          "heap_peak": 1248
+        },
+        {
+          "qid": 8,
+          "finish_cycle": 654873,
+          "heap_peak": 1151
+        },
+        {
+          "qid": 9,
+          "finish_cycle": 666445,
+          "heap_peak": 791
+        },
+        {
+          "qid": 11,
+          "finish_cycle": 812261,
+          "heap_peak": 1001
+        },
+        {
+          "qid": 10,
+          "finish_cycle": 817497,
+          "heap_peak": 1003
+        }
+      ],
+      "pq_service_model_metrics": [
+        {
+          "partition": 0,
+          "request_accept_ii": 8,
+          "operation_start": {
+            "events": 14198,
+            "min_gap": 15,
+            "mean_gap": 55.95872367401564,
+            "max_gap": 23059
+          },
+          "operation_retire": {
+            "events": 14198,
+            "min_gap": 15,
+            "mean_gap": 55.96034373459182,
+            "max_gap": 23036
+          }
+        },
+        {
+          "partition": 1,
+          "request_accept_ii": 8,
+          "operation_start": {
+            "events": 14244,
+            "min_gap": 15,
+            "mean_gap": 55.41009618760093,
+            "max_gap": 23058
+          },
+          "operation_retire": {
+            "events": 14244,
+            "min_gap": 15,
+            "mean_gap": 55.411711015937655,
+            "max_gap": 23035
+          }
+        }
+      ],
+      "same_parent_overlap_model_witness": [
+        {
+          "cycle": 23013,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 3,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23022,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23031,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23040,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 23056,
+          "qid": 0,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 23092,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 3,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23101,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 4,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 23110,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 5,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23119,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 23132,
+          "qid": 1,
+          "parent_seq": 1,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 23212,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 3,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23221,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 4,
+          "pending_pushes": 1
+        },
+        {
+          "cycle": 23230,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 5,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 23240,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 6,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 23256,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 7,
+          "pending_pushes": 2
+        },
+        {
+          "cycle": 23272,
+          "qid": 0,
+          "parent_seq": 2,
+          "edge_ordinal": 8,
+          "pending_pushes": 2
+        }
+      ],
+      "fifo_drained": true,
+      "path_cache_conditional_bounds": {
+        "per_qid_pop_up_levels": [
+          799,
+          249,
+          1190,
+          890,
+          1262,
+          776,
+          799,
+          249,
+          1245,
+          694,
+          1125,
+          911
+        ],
+        "points": [
+          {
+            "assumed_cycles_saved_per_pop_up_level": 1,
+            "total_pq_service_cycles": 398103,
+            "per_qid_pq_serial_cycles": [
+              32748,
+              11138,
+              46133,
+              33881,
+              48891,
+              30890,
+              32748,
+              11138,
+              47843,
+              26147,
+              41850,
+              34696
+            ],
+            "longest_same_qid_pq_chain_cycles": 48891,
+            "ideal_partition_bounds": {
+              "1": 398103,
+              "2": 199052,
+              "4": 99526
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 2,
+            "total_pq_service_cycles": 387914,
+            "per_qid_pq_serial_cycles": [
+              31949,
+              10889,
+              44943,
+              32991,
+              47629,
+              30114,
+              31949,
+              10889,
+              46598,
+              25453,
+              40725,
+              33785
+            ],
+            "longest_same_qid_pq_chain_cycles": 47629,
+            "ideal_partition_bounds": {
+              "1": 387914,
+              "2": 193957,
+              "4": 96979
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          },
+          {
+            "assumed_cycles_saved_per_pop_up_level": 3,
+            "total_pq_service_cycles": 377725,
+            "per_qid_pq_serial_cycles": [
+              31150,
+              10640,
+              43753,
+              32101,
+              46367,
+              29338,
+              31150,
+              10640,
+              45353,
+              24759,
+              39600,
+              32874
+            ],
+            "longest_same_qid_pq_chain_cycles": 46367,
+            "ideal_partition_bounds": {
+              "1": 377725,
+              "2": 188863,
+              "4": 94432
+            },
+            "measured": false,
+            "full_replay_estimate_available": false
+          }
+        ],
+        "assumption": "Only POP-UP levels save 1, 2, or all 3 cycles; DOWN and PUSH remain old 3-cycle levels and base costs remain 5/2. No added path register/writeback overhead.",
+        "limitation": "Trace aggregates DOWN+UP per POP; JSONL provides aggregate exact split per qid. These are bounds, not invented per-POP timing or a measured path-cache contract."
+      },
+      "cpu_measured_us": 211.585,
+      "reference_200mhz_budget_cycles": 42317.0,
+      "strict_max_integer_winning_cycles": 42316,
+      "lower_bound_excludes_at_reference_frequency": true,
+      "estimate_reference_budget_ratio": 19.31840631424723,
+      "required_frequency_MHz": 3863.681262849446,
+      "model_cycle_sensitivity_plus_25pct": 1021872,
+      "model_cycle_sensitivity_plus_35pct": 1103621,
+      "engineering_20pct_margin_pass": false
+    }
+  ],
+  "isolated_pop_rtl_contract": {
+    "path": "results/lookahead_accel_round5_1_20261109T072948Z/pq/rtl_transactions.json",
+    "sha256": "ef7eeabd2650a2d9211bae88081647fecd451ba01620ab13402ad37f851b0258",
+    "transactions": 45,
+    "formula_matched": true,
+    "scope": "Isolated CAP16385 POP module RTL; native service integration and PUSH latency unmeasured."
+  },
+  "synthesis_schedule_contract": {
+    "edge": {
+      "path": "results/lookahead_accel_round5_1_20261109T072948Z/mechanism/hls_b/project/solution/syn/report/edge_Pipeline_VITIS_LOOP_73_3_csynth.rpt",
+      "sha256": "b3e2f4b3323912f2728f4264bfa5155bfe9bb01f6161db53536c6dbad9ec8010",
+      "iteration_latency": 10,
+      "achieved_ii": 9
+    },
+    "commit": {
+      "path": "results/lookahead_accel_round5_1_20261109T072948Z/mechanism/hls_b/project/solution/syn/report/commit_Pipeline_VITIS_LOOP_110_3_csynth.rpt",
+      "sha256": "5bdbc39a2737058933e08716f90ef09f740ca960bdf1dd4bc94b29bd058d629e",
+      "iteration_latency": 7,
+      "achieved_ii": 4
+    }
+  },
+  "integrated_mechanism_observer_contract": {
+    "path": "results/lookahead_accel_round5_1_20261109T072948Z/mechanism/observer_d_zero/result.json",
+    "sha256": "0f6cc7c214538579135e35b2bad0d99233895b4cab0ecaccc6b0433bf094e920",
+    "scope": "synthetic 12-node mechanism, not native batch E1",
+    "operations_checked": 122,
+    "scheduled": {
+      "edge": {
+        "path": "results/lookahead_accel_round5_1_20261109T072948Z/mechanism/hls_d/project/solution/syn/report/edge_Pipeline_VITIS_LOOP_76_3_csynth.rpt",
+        "sha256": "2da7adb079779a0d2bf3d623755853fc03d79e88c2d0d66347c2e71f16416f8e",
+        "iteration_latency": 10,
+        "achieved_ii": 9
+      },
+      "commit": {
+        "path": "results/lookahead_accel_round5_1_20261109T072948Z/mechanism/hls_d/project/solution/syn/report/commit_Pipeline_VITIS_LOOP_116_3_csynth.rpt",
+        "sha256": "0d7c589a47bf35f4feefc40423d035582a2ea1b17cd8176022427064c2d33358",
+        "iteration_latency": 7,
+        "achieved_ii": 4
+      },
+      "heap_0": {
+        "path": "results/lookahead_accel_round5_1_20261109T072948Z/mechanism/hls_d/project/solution/syn/report/heap_0_Pipeline_VITIS_LOOP_57_4_csynth.rpt",
+        "sha256": "127ecc230b7391e2d43575a68d2462abc08c93f7446cb51a1806b968289147e6",
+        "iteration_latency": 2,
+        "achieved_ii": 2
+      }
+    },
+    "observed_max_heap_size": 11,
+    "observed_max_down": 3,
+    "observed_max_up": 2,
+    "envelope_covers_all_observed_execute_latencies": true,
+    "envelope": "PUSH=max_observed_residual+2*UP; POP singleton measured maximum, otherwise max_observed_residual+2*(DOWN+UP). Response latency uses max(retire-to-feedback). Observed minimum FIFO enqueue gap is used as a model throttle, not proof of intrinsic queue initiation interval.",
+    "limitations": "Baseline service PQ, not integrated path cache. Maximum-residual envelope covers only observed mechanism operations, not a proven upper/lower bound for deeper native heaps. Native depth/capacity, queue return timing, MAP and lifecycle remain extrapolated."
+  },
+  "contract_file_sha256": null,
+  "memory_and_protocol_contract": {
+    "pq": "One dedicated single-operation owner/RAM per partition; every level uses configured cycles; no layer overlap or hidden extra ports. Request FIFO accepts at configured II; actual starts wait full previous retire.",
+    "edge": "One shared lane locked to a parent until all its edges launch; finite candidate fullness causes head-of-line blocking across qids. Separate CSR, node and cost read banks, each one read port; synchronous reads included in edge_latency. Edge_ii throttles all three banks. Parent CSR startup included in map latency; no root_ready prefetch.",
+    "candidate": "Finite per-context credit includes all launched/inflight/ready candidates; FIFO slot retained through label commit.",
+    "labels": "Per-context RAM owned by label service, one nonoverlapped RMW/context in commit_latency; shared commit issue arbitration, per-context completion ports. Strict original edge order, label commit before next label read, including duplicate dst.",
+    "reset": "Default shared_commit: round-robin commit owner issues one label reset write per visit, competing with ordered label RMW; per-context search waits for reset. Cell-map initialization adds cells cycles. Optional independent reset is an unverified alternative. Warm initialization included.",
+    "map": "Single shared map owner; map_latency per POP, including stale/early-stop POPs (trace lacks exact map event flags). Completion precedes candidate side effects.",
+    "output": "One shared output RAM/writer, configured cells/cycle, complete map write then drain per qid.",
+    "capacity": "Logical size increments at accepted PUSH, decrements at accepted POP, includes pending operations once. Service queue full only backpressures; logical capacity overflow raises immediately. E+1 per context.",
+    "parent_barrier": "All original edges committed in order and every required PUSH retired before expanded barrier and next POP.",
+    "generation": "One immutable graph/cost generation per replay; recycled context only after own FIFO/pending/output drain. Cross-call reload protocol not simulated."
+  },
+  "limits": [
+    "Default service latencies/ports are conditional assumptions. The separately named scheduled_services_rtl_pop_mixed_contract reads edge II9/iteration10 and commit II4/iteration7 from synthesis reports plus the 45-transaction isolated POP RTL formula; PUSH retains old assumptions.",
+    "Pipeline depth10 is provisionally used as candidate feedback, not a measured full edge-service latency. Commit II4 gives two-context revisit8; reset shares that owner and writes at most one node every four cycles. No integrated native E1 contract is available.",
+    "observer_d_baseline_pq_envelope_native_extrapolation is a separate baseline-PQ point calibrated to D zero-hold mechanism operations. Its resource bounds are conditional on assigning those envelope latencies, not a hardware lower-bound proof. No complete native batch or deeper heap was measured by that observer.",
+    "Real mechanism prototype has N32/E128/C8/J8 and two dedicated-context PQs. Full native capacity, four-context sharing and this model service timing are not proven by that prototype.",
+    "Shared round-robin reset/label contention is explicit; other lifecycle transitions are not cycle-exact controller replicas. D mechanism FIFO enqueue and PQ start/retire intervals are measured only for its small test; complete native service timing remains unmeasured.",
+    "Single-parent edge lane HOL and depth4 PQ response FIFOs are modeled. Default contracts consume responses immediately; D observer envelope adds measured maximum retire-to-feedback9 and reaccept1. Parent/end-token and MAP turnaround, and native ACK arbitration under new loads remain extrapolated.",
+    "Old trace establishes parent boundaries, original edge ordinals/dst, accepted PUSHs and heap levels. Bounded path-cache profile supplies validated per-POP DOWN/UP split. Both omit parent identity on zero-edge POPs, exact MAP/expanded branches and speculative suffix activity.",
+    "Trace accepted/rejected decisions are fixed STRICT workload replay, not an executable proof of FP32, error/cancellation semantics or new algorithm behavior. No speculative suffix is modeled.",
+    "Repeated dst reads are serialized behind prior commit; model checks ordering/capacity/drain, not numerical label data.",
+    "Physical bank/address conflicts are excluded by dedicated banks and nonoverlapping RMW/PQ service, not assumed hazard-free layered pipelining. Wider concurrent PQ model is deliberately unsupported.",
+    "Cold graph loading and cost-version invalidation excluded and not estimated; full warm reset/output/drain included. Map-slot cost is conservative but unmodeled control can increase timing.",
+    "The +25% and +35% cycle sensitivities are not confidence intervals. Historical worst error used actual as denominator: a 25.6% underprediction needs 1/(1-0.256)=1.344086 times the prediction to recover actual. +35% illustrates that scale; +25% alone is insufficient compensation and neither guarantees future conservatism.",
+    "200MHz is only a reference budget; required frequency is a threshold, not achieved frequency; no FPGA microseconds or E2/board claim."
+  ]
+}

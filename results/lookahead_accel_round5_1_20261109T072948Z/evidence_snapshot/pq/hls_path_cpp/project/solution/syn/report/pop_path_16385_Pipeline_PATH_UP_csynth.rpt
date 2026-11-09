@@ -1,0 +1,201 @@
+
+
+================================================================
+== Vitis HLS Report for 'pop_path_16385_Pipeline_PATH_UP'
+================================================================
+* Date:           Mon Nov  9 07:37:19 2026
+
+* Version:        2022.2 (Build 3670227 on Oct 13 2022)
+* Project:        project
+* Solution:       solution (Vivado IP Flow Target)
+* Product family: virtexuplus
+* Target device:  xcu280-fsvh2892-2L-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+---------+----------+------------+
+    |  Clock |  Target | Estimated| Uncertainty|
+    +--------+---------+----------+------------+
+    |ap_clk  |  5.00 ns|  2.983 ns|     1.35 ns|
+    +--------+---------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+    |   min   |   max   |    min   |    max   | min | max |   Type  |
+    +---------+---------+----------+----------+-----+-----+---------+
+    |        ?|        ?|         ?|         ?|    ?|    ?|       no|
+    +---------+---------+----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +-----------+---------+---------+----------+-----------+-----------+------+----------+
+        |           |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        | Loop Name |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +-----------+---------+---------+----------+-----------+-----------+------+----------+
+        |- PATH_UP  |        ?|        ?|         2|          1|          1|     ?|       yes|
+        +-----------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+------+---------+---------+-----+
+|         Name        | BRAM_18K|  DSP |    FF   |   LUT   | URAM|
++---------------------+---------+------+---------+---------+-----+
+|DSP                  |        -|     -|        -|        -|    -|
+|Expression           |        -|     -|        0|      118|    -|
+|FIFO                 |        -|     -|        -|        -|    -|
+|Instance             |        -|     -|        0|      130|    -|
+|Memory               |        -|     -|        -|        -|    -|
+|Multiplexer          |        -|     -|        -|       45|    -|
+|Register             |        -|     -|      163|        -|    -|
++---------------------+---------+------+---------+---------+-----+
+|Total                |        0|     0|      163|      293|    0|
++---------------------+---------+------+---------+---------+-----+
+|Available SLR        |     1344|  3008|   869120|   434560|  320|
++---------------------+---------+------+---------+---------+-----+
+|Utilization SLR (%)  |        0|     0|       ~0|       ~0|    0|
++---------------------+---------+------+---------+---------+-----+
+|Available            |     4032|  9024|  2607360|  1303680|  960|
++---------------------+---------+------+---------+---------+-----+
+|Utilization (%)      |        0|     0|       ~0|       ~0|    0|
++---------------------+---------+------+---------+---------+-----+
+
++ Detail: 
+    * Instance: 
+    +--------------------+----------------+---------+----+---+----+-----+
+    |      Instance      |     Module     | BRAM_18K| DSP| FF| LUT| URAM|
+    +--------------------+----------------+---------+----+---+----+-----+
+    |mux_164_32_1_1_U40  |mux_164_32_1_1  |        0|   0|  0|  65|    0|
+    |mux_164_96_1_1_U39  |mux_164_96_1_1  |        0|   0|  0|  65|    0|
+    +--------------------+----------------+---------+----+---+----+-----+
+    |Total               |                |        0|   0|  0| 130|    0|
+    +--------------------+----------------+---------+----+---+----+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +-----------------------+----------+----+---+----+------------+------------+
+    |     Variable Name     | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +-----------------------+----------+----+---+----+------------+------------+
+    |depth_3_fu_462_p2      |         +|   0|  0|  39|          32|           2|
+    |ap_condition_350       |       and|   0|  0|   2|           1|           1|
+    |icmp_ln46_fu_404_p2    |      icmp|   0|  0|  20|          32|           1|
+    |icmp_ln50_fu_456_p2    |      icmp|   0|  0|  20|          32|          32|
+    |icmp_ln53_fu_468_p2    |      icmp|   0|  0|  20|          32|           1|
+    |select_ln53_fu_501_p3  |    select|   0|  0|  15|           1|           1|
+    |ap_enable_pp0          |       xor|   0|  0|   2|           1|           2|
+    +-----------------------+----------+----+---+----+------------+------------+
+    |Total                  |          |   0|  0| 118|         131|          40|
+    +-----------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------+----+-----------+-----+-----------+
+    |           Name          | LUT| Input Size| Bits| Total Bits|
+    +-------------------------+----+-----------+-----+-----------+
+    |ap_done_int              |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter1  |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter2  |   9|          2|    1|          2|
+    |depth_fu_136             |   9|          2|   32|         64|
+    |hole_fu_140              |   9|          2|   15|         30|
+    +-------------------------+----+-----------+-----+-----------+
+    |Total                    |  45|         10|   50|        100|
+    +-------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------------------+----+----+-----+-----------+
+    |           Name          | FF | LUT| Bits| Const Bits|
+    +-------------------------+----+----+-----+-----------+
+    |ap_CS_fsm                |   1|   0|    1|          0|
+    |ap_done_reg              |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1  |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter2  |   1|   0|    1|          0|
+    |depth_fu_136             |  32|   0|   32|          0|
+    |hole_2_reg_703           |  15|   0|   15|          0|
+    |hole_fu_140              |  15|   0|   15|          0|
+    |trunc_ln24_reg_708       |   1|   0|    1|          0|
+    |w_V_reg_715              |  96|   0|   96|          0|
+    +-------------------------+----+----+-----+-----------+
+    |Total                    | 163|   0|  163|          0|
+    +-------------------------+----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++----------------------+-----+-----+------------+----------------------------------+--------------+
+|       RTL Ports      | Dir | Bits|  Protocol  |           Source Object          |    C Type    |
++----------------------+-----+-----+------------+----------------------------------+--------------+
+|ap_clk                |   in|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_UP|  return value|
+|ap_rst                |   in|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_UP|  return value|
+|ap_start              |   in|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_UP|  return value|
+|ap_done               |  out|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_UP|  return value|
+|ap_idle               |  out|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_UP|  return value|
+|ap_ready              |  out|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_UP|  return value|
+|hole_1                |   in|   15|     ap_none|                            hole_1|        scalar|
+|depth_1               |   in|   32|     ap_none|                           depth_1|        scalar|
+|path_index_61         |   in|   32|     ap_none|                     path_index_61|        scalar|
+|path_index_47         |   in|   32|     ap_none|                     path_index_47|        scalar|
+|path_index_48         |   in|   32|     ap_none|                     path_index_48|        scalar|
+|path_index_49         |   in|   32|     ap_none|                     path_index_49|        scalar|
+|path_index_50         |   in|   32|     ap_none|                     path_index_50|        scalar|
+|path_index_51         |   in|   32|     ap_none|                     path_index_51|        scalar|
+|path_index_52         |   in|   32|     ap_none|                     path_index_52|        scalar|
+|path_index_53         |   in|   32|     ap_none|                     path_index_53|        scalar|
+|path_index_54         |   in|   32|     ap_none|                     path_index_54|        scalar|
+|path_index_55         |   in|   32|     ap_none|                     path_index_55|        scalar|
+|path_index_56         |   in|   32|     ap_none|                     path_index_56|        scalar|
+|path_index_57         |   in|   32|     ap_none|                     path_index_57|        scalar|
+|path_index_58         |   in|   32|     ap_none|                     path_index_58|        scalar|
+|path_index_59         |   in|   32|     ap_none|                     path_index_59|        scalar|
+|path_index_60         |   in|   32|     ap_none|                     path_index_60|        scalar|
+|odd_address0          |  out|   14|   ap_memory|                               odd|         array|
+|odd_ce0               |  out|    1|   ap_memory|                               odd|         array|
+|odd_we0               |  out|    1|   ap_memory|                               odd|         array|
+|odd_d0                |  out|   96|   ap_memory|                               odd|         array|
+|path_word_V_17        |   in|   96|     ap_none|                    path_word_V_17|        scalar|
+|path_word_V_18        |   in|   96|     ap_none|                    path_word_V_18|        scalar|
+|path_word_V_19        |   in|   96|     ap_none|                    path_word_V_19|        scalar|
+|path_word_V_20        |   in|   96|     ap_none|                    path_word_V_20|        scalar|
+|path_word_V_21        |   in|   96|     ap_none|                    path_word_V_21|        scalar|
+|path_word_V_22        |   in|   96|     ap_none|                    path_word_V_22|        scalar|
+|path_word_V_23        |   in|   96|     ap_none|                    path_word_V_23|        scalar|
+|path_word_V_24        |   in|   96|     ap_none|                    path_word_V_24|        scalar|
+|path_word_V_25        |   in|   96|     ap_none|                    path_word_V_25|        scalar|
+|path_word_V_26        |   in|   96|     ap_none|                    path_word_V_26|        scalar|
+|path_word_V_27        |   in|   96|     ap_none|                    path_word_V_27|        scalar|
+|path_word_V_28        |   in|   96|     ap_none|                    path_word_V_28|        scalar|
+|path_word_V_29        |   in|   96|     ap_none|                    path_word_V_29|        scalar|
+|path_word_V_30        |   in|   96|     ap_none|                    path_word_V_30|        scalar|
+|path_word_V_31        |   in|   96|     ap_none|                    path_word_V_31|        scalar|
+|w_V_3                 |   in|   64|     ap_none|                             w_V_3|        scalar|
+|even_address0         |  out|   14|   ap_memory|                              even|         array|
+|even_ce0              |  out|    1|   ap_memory|                              even|         array|
+|even_we0              |  out|    1|   ap_memory|                              even|         array|
+|even_d0               |  out|   96|   ap_memory|                              even|         array|
+|hole_out              |  out|   15|      ap_vld|                          hole_out|       pointer|
+|hole_out_ap_vld       |  out|    1|      ap_vld|                          hole_out|       pointer|
+|trunc_ln5_out         |  out|    1|      ap_vld|                     trunc_ln5_out|       pointer|
+|trunc_ln5_out_ap_vld  |  out|    1|      ap_vld|                     trunc_ln5_out|       pointer|
++----------------------+-----+-----+------------+----------------------------------+--------------+
+

@@ -1,0 +1,1771 @@
+{
+  "source_commit": "52b5622687867756e9109b94c99685712ad0e21f",
+  "report_sha256": "17fa0173eacdec9721fb7be0aa206f4a1a22d7d1945352927173f48ab8e886ba",
+  "evidence": "conditional_model_estimates_and_arithmetic",
+  "new_hardware_implemented": false,
+  "new_verified_frequency": null,
+  "board_measured": false,
+  "limits": [
+    "Trace replay preserves per-qid operation order, one operation in flight per qid and actual J.",
+    "One edge pipe is assumed to accept at II1; graph/label/output port constraints beyond the old model remain unmodeled.",
+    "PQ initiation interval1/2 cases require genuinely pipelined PQ hardware and sufficient banks/hazard handling, absent from current RTL.",
+    "Heap per-level1 and edge feedback1 are optimistic limits; no synthesis or timing feasibility is established.",
+    "Reset/output for different contexts may overlap as in the old model; actual shared resources may increase cycles.",
+    "Per-qid chain and occupancy bounds only apply to the given feedback assumptions, not all exact-search architectures.",
+    "200MHz is only a reference budget, not a new achieved frequency.",
+    "No native E2, board timing, or new software measurements are generated."
+  ],
+  "workloads": [
+    {
+      "case": "native_d3_w8",
+      "N": 654,
+      "E": 1570,
+      "J": 8,
+      "cpu_early_us": 25.919999999999998,
+      "cpu_reference_budget_cycles_125mhz": 3240.0,
+      "cpu_reference_budget_cycles_200mhz": 5184.0,
+      "trace_sha256": "718905ce1c39eccda4976f44f30b01c14eaef125f14bb0edde7566b16b9f6306",
+      "best_original_report_model": {
+        "case": "native_d3_w8",
+        "contexts": 4,
+        "edge_lanes": 2,
+        "pq_partitions": 2,
+        "batch_cycles": 18930,
+        "resource_wait_cycles": 13147,
+        "operation_latency_sum": 41333
+      },
+      "original_one_lane_model_reproduced": true,
+      "global_dispatch_conditions": [
+        {
+          "contexts": 2,
+          "phase_visits": 42417,
+          "dead_visits": 524,
+          "non_dead_visits": 41893,
+          "optimistic_search_cycles_one_global_dispatcher_II1_no_dead": 41893,
+          "no_dead_global_II1_over_cpu_200mhz_budget": 8.081211419753087,
+          "observed_rtl_cycles": 128468,
+          "conditional_no_dead_same_II_residual_cycles": 126896.0,
+          "ready_only_speedup_ceiling_same_II_and_residual": 1.0123880973395536
+        },
+        {
+          "contexts": 4,
+          "phase_visits": 52822,
+          "dead_visits": 10927,
+          "non_dead_visits": 41895,
+          "optimistic_search_cycles_one_global_dispatcher_II1_no_dead": 41895,
+          "no_dead_global_II1_over_cpu_200mhz_budget": 8.081597222222221,
+          "observed_rtl_cycles": 159683,
+          "conditional_no_dead_same_II_residual_cycles": 126902.0,
+          "ready_only_speedup_ceiling_same_II_and_residual": 1.2583174418054877
+        }
+      ],
+      "sensitivity": [
+        {
+          "heap_cycles_per_measured_level": 3,
+          "eligible_edge_feedback": 7,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            4296,
+            698,
+            8859,
+            9027,
+            4296,
+            698,
+            9327,
+            9716
+          ],
+          "critical_qid": 7,
+          "critical_feedback_chain_cycles": 9716,
+          "total_nonpreemptive_pq_occupancy_cycles": 26012,
+          "per_qid_nonoverlapped_pq_cycles": [
+            2000,
+            0,
+            5162,
+            5321,
+            2000,
+            0,
+            5585,
+            5944
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 5944,
+          "estimates": [
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 26766,
+              "over_cpu_200mhz_cycle_budget": 5.163194444444445,
+              "static_partition_occupancy_bound_if_nonpreemptive": 26012
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 9801,
+              "over_cpu_200mhz_cycle_budget": 1.890625,
+              "static_partition_occupancy_bound_if_nonpreemptive": 26012
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 10042,
+              "over_cpu_200mhz_cycle_budget": 1.9371141975308641,
+              "static_partition_occupancy_bound_if_nonpreemptive": 26012
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 15844,
+              "over_cpu_200mhz_cycle_budget": 3.056327160493827,
+              "static_partition_occupancy_bound_if_nonpreemptive": 14747
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 9768,
+              "over_cpu_200mhz_cycle_budget": 1.8842592592592593,
+              "static_partition_occupancy_bound_if_nonpreemptive": 14747
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 9809,
+              "over_cpu_200mhz_cycle_budget": 1.892168209876543,
+              "static_partition_occupancy_bound_if_nonpreemptive": 14747
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 12977,
+              "over_cpu_200mhz_cycle_budget": 2.5032793209876543,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11265
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 9763,
+              "over_cpu_200mhz_cycle_budget": 1.8832947530864197,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11265
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 9776,
+              "over_cpu_200mhz_cycle_budget": 1.8858024691358024,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11265
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 2,
+          "eligible_edge_feedback": 7,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            3826,
+            698,
+            7582,
+            7702,
+            3826,
+            698,
+            7934,
+            8220
+          ],
+          "critical_qid": 7,
+          "critical_feedback_chain_cycles": 8220,
+          "total_nonpreemptive_pq_occupancy_cycles": 19581,
+          "per_qid_nonoverlapped_pq_cycles": [
+            1530,
+            0,
+            3885,
+            3996,
+            1530,
+            0,
+            4192,
+            4448
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 4448,
+          "estimates": [
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 20341,
+              "over_cpu_200mhz_cycle_budget": 3.923804012345679,
+              "static_partition_occupancy_bound_if_nonpreemptive": 19581
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 8339,
+              "over_cpu_200mhz_cycle_budget": 1.6086033950617284,
+              "static_partition_occupancy_bound_if_nonpreemptive": 19581
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 8728,
+              "over_cpu_200mhz_cycle_budget": 1.683641975308642,
+              "static_partition_occupancy_bound_if_nonpreemptive": 19581
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 12350,
+              "over_cpu_200mhz_cycle_budget": 2.3823302469135803,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11137
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 8288,
+              "over_cpu_200mhz_cycle_budget": 1.5987654320987654,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11137
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 8364,
+              "over_cpu_200mhz_cycle_budget": 1.6134259259259258,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11137
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 10449,
+              "over_cpu_200mhz_cycle_budget": 2.015625,
+              "static_partition_occupancy_bound_if_nonpreemptive": 8444
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 8286,
+              "over_cpu_200mhz_cycle_budget": 1.5983796296296295,
+              "static_partition_occupancy_bound_if_nonpreemptive": 8444
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 8311,
+              "over_cpu_200mhz_cycle_budget": 1.6032021604938271,
+              "static_partition_occupancy_bound_if_nonpreemptive": 8444
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 3,
+          "eligible_edge_feedback": 3,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            3400,
+            698,
+            7171,
+            7339,
+            3400,
+            698,
+            7639,
+            8028
+          ],
+          "critical_qid": 7,
+          "critical_feedback_chain_cycles": 8028,
+          "total_nonpreemptive_pq_occupancy_cycles": 26012,
+          "per_qid_nonoverlapped_pq_cycles": [
+            2000,
+            0,
+            5162,
+            5321,
+            2000,
+            0,
+            5585,
+            5944
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 5944,
+          "estimates": [
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 26740,
+              "over_cpu_200mhz_cycle_budget": 5.158179012345679,
+              "static_partition_occupancy_bound_if_nonpreemptive": 26012
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 8182,
+              "over_cpu_200mhz_cycle_budget": 1.5783179012345678,
+              "static_partition_occupancy_bound_if_nonpreemptive": 26012
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 8855,
+              "over_cpu_200mhz_cycle_budget": 1.7081404320987654,
+              "static_partition_occupancy_bound_if_nonpreemptive": 26012
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 15518,
+              "over_cpu_200mhz_cycle_budget": 2.9934413580246915,
+              "static_partition_occupancy_bound_if_nonpreemptive": 14747
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 8126,
+              "over_cpu_200mhz_cycle_budget": 1.5675154320987654,
+              "static_partition_occupancy_bound_if_nonpreemptive": 14747
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 8198,
+              "over_cpu_200mhz_cycle_budget": 1.5814043209876543,
+              "static_partition_occupancy_bound_if_nonpreemptive": 14747
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 12166,
+              "over_cpu_200mhz_cycle_budget": 2.346836419753086,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11265
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 8144,
+              "over_cpu_200mhz_cycle_budget": 1.5709876543209877,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11265
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 8168,
+              "over_cpu_200mhz_cycle_budget": 1.5756172839506173,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11265
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 2,
+          "eligible_edge_feedback": 3,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            2930,
+            698,
+            5894,
+            6014,
+            2930,
+            698,
+            6246,
+            6532
+          ],
+          "critical_qid": 7,
+          "critical_feedback_chain_cycles": 6532,
+          "total_nonpreemptive_pq_occupancy_cycles": 19581,
+          "per_qid_nonoverlapped_pq_cycles": [
+            1530,
+            0,
+            3885,
+            3996,
+            1530,
+            0,
+            4192,
+            4448
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 4448,
+          "estimates": [
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 20306,
+              "over_cpu_200mhz_cycle_budget": 3.9170524691358026,
+              "static_partition_occupancy_bound_if_nonpreemptive": 19581
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 6697,
+              "over_cpu_200mhz_cycle_budget": 1.2918595679012346,
+              "static_partition_occupancy_bound_if_nonpreemptive": 19581
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 7681,
+              "over_cpu_200mhz_cycle_budget": 1.4816743827160495,
+              "static_partition_occupancy_bound_if_nonpreemptive": 19581
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 11928,
+              "over_cpu_200mhz_cycle_budget": 2.300925925925926,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11137
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 6662,
+              "over_cpu_200mhz_cycle_budget": 1.285108024691358,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11137
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 6778,
+              "over_cpu_200mhz_cycle_budget": 1.3074845679012346,
+              "static_partition_occupancy_bound_if_nonpreemptive": 11137
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 9372,
+              "over_cpu_200mhz_cycle_budget": 1.8078703703703705,
+              "static_partition_occupancy_bound_if_nonpreemptive": 8444
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 6664,
+              "over_cpu_200mhz_cycle_budget": 1.2854938271604939,
+              "static_partition_occupancy_bound_if_nonpreemptive": 8444
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 6693,
+              "over_cpu_200mhz_cycle_budget": 1.291087962962963,
+              "static_partition_occupancy_bound_if_nonpreemptive": 8444
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 1,
+          "eligible_edge_feedback": 1,
+          "discard_edge_feedback": 1,
+          "per_qid_feedback_chain_with_reset_output": [
+            1992,
+            698,
+            3743,
+            3809,
+            1992,
+            698,
+            3949,
+            4112
+          ],
+          "critical_qid": 7,
+          "critical_feedback_chain_cycles": 4112,
+          "total_nonpreemptive_pq_occupancy_cycles": 13150,
+          "per_qid_nonoverlapped_pq_cycles": [
+            1060,
+            0,
+            2608,
+            2671,
+            1060,
+            0,
+            2799,
+            2952
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 2952,
+          "estimates": [
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 13858,
+              "over_cpu_200mhz_cycle_budget": 2.6732253086419755,
+              "static_partition_occupancy_bound_if_nonpreemptive": 13150
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 4667,
+              "over_cpu_200mhz_cycle_budget": 0.9002700617283951,
+              "static_partition_occupancy_bound_if_nonpreemptive": 13150
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 6313,
+              "over_cpu_200mhz_cycle_budget": 1.2177854938271604,
+              "static_partition_occupancy_bound_if_nonpreemptive": 13150
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 8247,
+              "over_cpu_200mhz_cycle_budget": 1.5908564814814814,
+              "static_partition_occupancy_bound_if_nonpreemptive": 7527
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 4584,
+              "over_cpu_200mhz_cycle_budget": 0.8842592592592593,
+              "static_partition_occupancy_bound_if_nonpreemptive": 7527
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 4855,
+              "over_cpu_200mhz_cycle_budget": 0.9365354938271605,
+              "static_partition_occupancy_bound_if_nonpreemptive": 7527
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 6406,
+              "over_cpu_200mhz_cycle_budget": 1.2357253086419753,
+              "static_partition_occupancy_bound_if_nonpreemptive": 5623
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 4613,
+              "over_cpu_200mhz_cycle_budget": 0.8898533950617284,
+              "static_partition_occupancy_bound_if_nonpreemptive": 5623
+            },
+            {
+              "actual_context_limit": 8,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 4675,
+              "over_cpu_200mhz_cycle_budget": 0.9018132716049383,
+              "static_partition_occupancy_bound_if_nonpreemptive": 5623
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case": "native_d4_w8",
+      "N": 1592,
+      "E": 4176,
+      "J": 12,
+      "cpu_early_us": 126.522,
+      "cpu_reference_budget_cycles_125mhz": 15815.25,
+      "cpu_reference_budget_cycles_200mhz": 25304.4,
+      "trace_sha256": "bf7ff53838bc150c427ddd17f52eb95e76fec82e9450c3f877b67715bf576f62",
+      "best_original_report_model": {
+        "case": "native_d4_w8",
+        "contexts": 4,
+        "edge_lanes": 1,
+        "pq_partitions": 2,
+        "batch_cycles": 142338,
+        "resource_wait_cycles": 153493,
+        "operation_latency_sum": 289086
+      },
+      "original_one_lane_model_reproduced": true,
+      "global_dispatch_conditions": [
+        {
+          "contexts": 2,
+          "phase_visits": 276528,
+          "dead_visits": 6827,
+          "non_dead_visits": 269701,
+          "optimistic_search_cycles_one_global_dispatcher_II1_no_dead": 269701,
+          "no_dead_global_II1_over_cpu_200mhz_budget": 10.658264965776702
+        },
+        {
+          "contexts": 4,
+          "phase_visits": 323051,
+          "dead_visits": 53348,
+          "non_dead_visits": 269703,
+          "optimistic_search_cycles_one_global_dispatcher_II1_no_dead": 269703,
+          "no_dead_global_II1_over_cpu_200mhz_budget": 10.658344003414426
+        }
+      ],
+      "sensitivity": [
+        {
+          "heap_cycles_per_measured_level": 3,
+          "eligible_edge_feedback": 7,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            11579,
+            7754,
+            47124,
+            21136,
+            46632,
+            21413,
+            11579,
+            7754,
+            41216,
+            24068,
+            46517,
+            22282
+          ],
+          "critical_qid": 2,
+          "critical_feedback_chain_cycles": 47124,
+          "total_nonpreemptive_pq_occupancy_cycles": 181112,
+          "per_qid_nonoverlapped_pq_cycles": [
+            5795,
+            3342,
+            29200,
+            11950,
+            28761,
+            12272,
+            5795,
+            3342,
+            25312,
+            14210,
+            28656,
+            12477
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 29200,
+          "estimates": [
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 183391,
+              "over_cpu_200mhz_cycle_budget": 7.247395709837024,
+              "static_partition_occupancy_bound_if_nonpreemptive": 181112
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 47550,
+              "over_cpu_200mhz_cycle_budget": 1.8791198368663156,
+              "static_partition_occupancy_bound_if_nonpreemptive": 181112
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 51552,
+              "over_cpu_200mhz_cycle_budget": 2.037274149950206,
+              "static_partition_occupancy_bound_if_nonpreemptive": 181112
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 126168,
+              "over_cpu_200mhz_cycle_budget": 4.986010338123014,
+              "static_partition_occupancy_bound_if_nonpreemptive": 123519
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 47481,
+              "over_cpu_200mhz_cycle_budget": 1.8763930383648693,
+              "static_partition_occupancy_bound_if_nonpreemptive": 123519
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 47903,
+              "over_cpu_200mhz_cycle_budget": 1.89306997992444,
+              "static_partition_occupancy_bound_if_nonpreemptive": 123519
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 71444,
+              "over_cpu_200mhz_cycle_budget": 2.823382494743997,
+              "static_partition_occupancy_bound_if_nonpreemptive": 63651
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 47463,
+              "over_cpu_200mhz_cycle_budget": 1.8756816996253616,
+              "static_partition_occupancy_bound_if_nonpreemptive": 63651
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 47569,
+              "over_cpu_200mhz_cycle_budget": 1.879870694424685,
+              "static_partition_occupancy_bound_if_nonpreemptive": 63651
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 2,
+          "eligible_edge_feedback": 7,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            10166,
+            6960,
+            39405,
+            18087,
+            39055,
+            18275,
+            10166,
+            6960,
+            34577,
+            20408,
+            38956,
+            19109
+          ],
+          "critical_qid": 2,
+          "critical_feedback_chain_cycles": 39405,
+          "total_nonpreemptive_pq_occupancy_cycles": 134182,
+          "per_qid_nonoverlapped_pq_cycles": [
+            4382,
+            2548,
+            21481,
+            8901,
+            21184,
+            9134,
+            4382,
+            2548,
+            18673,
+            10550,
+            21095,
+            9304
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 21481,
+          "estimates": [
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 136728,
+              "over_cpu_200mhz_cycle_budget": 5.403329065300896,
+              "static_partition_occupancy_bound_if_nonpreemptive": 134182
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 40244,
+              "over_cpu_200mhz_cycle_budget": 1.5903953462638907,
+              "static_partition_occupancy_bound_if_nonpreemptive": 134182
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 45123,
+              "over_cpu_200mhz_cycle_budget": 1.7832076634893534,
+              "static_partition_occupancy_bound_if_nonpreemptive": 134182
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 94319,
+              "over_cpu_200mhz_cycle_budget": 3.7273754762017672,
+              "static_partition_occupancy_bound_if_nonpreemptive": 91197
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 40065,
+              "over_cpu_200mhz_cycle_budget": 1.5833214776876747,
+              "static_partition_occupancy_bound_if_nonpreemptive": 91197
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 40811,
+              "over_cpu_200mhz_cycle_budget": 1.612802516558385,
+              "static_partition_occupancy_bound_if_nonpreemptive": 91197
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 55539,
+              "over_cpu_200mhz_cycle_budget": 2.1948356807511735,
+              "static_partition_occupancy_bound_if_nonpreemptive": 46958
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 39988,
+              "over_cpu_200mhz_cycle_budget": 1.580278528635336,
+              "static_partition_occupancy_bound_if_nonpreemptive": 46958
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 40141,
+              "over_cpu_200mhz_cycle_budget": 1.5863249079211519,
+              "static_partition_occupancy_bound_if_nonpreemptive": 46958
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 3,
+          "eligible_edge_feedback": 3,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            9307,
+            6218,
+            38172,
+            16956,
+            37688,
+            17281,
+            9307,
+            6218,
+            33360,
+            19576,
+            37565,
+            17738
+          ],
+          "critical_qid": 2,
+          "critical_feedback_chain_cycles": 38172,
+          "total_nonpreemptive_pq_occupancy_cycles": 181112,
+          "per_qid_nonoverlapped_pq_cycles": [
+            5795,
+            3342,
+            29200,
+            11950,
+            28761,
+            12272,
+            5795,
+            3342,
+            25312,
+            14210,
+            28656,
+            12477
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 29200,
+          "estimates": [
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 182813,
+              "over_cpu_200mhz_cycle_budget": 7.224553832535053,
+              "static_partition_occupancy_bound_if_nonpreemptive": 181112
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 39658,
+              "over_cpu_200mhz_cycle_budget": 1.5672373184110273,
+              "static_partition_occupancy_bound_if_nonpreemptive": 181112
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 45404,
+              "over_cpu_200mhz_cycle_budget": 1.7943124515894469,
+              "static_partition_occupancy_bound_if_nonpreemptive": 181112
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 125317,
+              "over_cpu_200mhz_cycle_budget": 4.9523798232718415,
+              "static_partition_occupancy_bound_if_nonpreemptive": 123519
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 39531,
+              "over_cpu_200mhz_cycle_budget": 1.5622184284156113,
+              "static_partition_occupancy_bound_if_nonpreemptive": 123519
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 40091,
+              "over_cpu_200mhz_cycle_budget": 1.5843489669780748,
+              "static_partition_occupancy_bound_if_nonpreemptive": 123519
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 66938,
+              "over_cpu_200mhz_cycle_budget": 2.645310696953889,
+              "static_partition_occupancy_bound_if_nonpreemptive": 63651
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 39539,
+              "over_cpu_200mhz_cycle_budget": 1.5625345789665037,
+              "static_partition_occupancy_bound_if_nonpreemptive": 63651
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 39643,
+              "over_cpu_200mhz_cycle_budget": 1.566644536128104,
+              "static_partition_occupancy_bound_if_nonpreemptive": 63651
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 2,
+          "eligible_edge_feedback": 3,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            7894,
+            5424,
+            30453,
+            13907,
+            30111,
+            14143,
+            7894,
+            5424,
+            26721,
+            15916,
+            30004,
+            14565
+          ],
+          "critical_qid": 2,
+          "critical_feedback_chain_cycles": 30453,
+          "total_nonpreemptive_pq_occupancy_cycles": 134182,
+          "per_qid_nonoverlapped_pq_cycles": [
+            4382,
+            2548,
+            21481,
+            8901,
+            21184,
+            9134,
+            4382,
+            2548,
+            18673,
+            10550,
+            21095,
+            9304
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 21481,
+          "estimates": [
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 135911,
+              "over_cpu_200mhz_cycle_budget": 5.371042190291016,
+              "static_partition_occupancy_bound_if_nonpreemptive": 134182
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 33044,
+              "over_cpu_200mhz_cycle_budget": 1.3058598504607895,
+              "static_partition_occupancy_bound_if_nonpreemptive": 134182
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 39672,
+              "over_cpu_200mhz_cycle_budget": 1.5677905818750888,
+              "static_partition_occupancy_bound_if_nonpreemptive": 134182
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 92999,
+              "over_cpu_200mhz_cycle_budget": 3.675210635304532,
+              "static_partition_occupancy_bound_if_nonpreemptive": 91197
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 32847,
+              "over_cpu_200mhz_cycle_budget": 1.2980746431450656,
+              "static_partition_occupancy_bound_if_nonpreemptive": 91197
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 33574,
+              "over_cpu_200mhz_cycle_budget": 1.3268048244574064,
+              "static_partition_occupancy_bound_if_nonpreemptive": 91197
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 50412,
+              "over_cpu_200mhz_cycle_budget": 1.9922226964480485,
+              "static_partition_occupancy_bound_if_nonpreemptive": 46958
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 32748,
+              "over_cpu_200mhz_cycle_budget": 1.294162280077773,
+              "static_partition_occupancy_bound_if_nonpreemptive": 46958
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 32959,
+              "over_cpu_200mhz_cycle_budget": 1.3025007508575583,
+              "static_partition_occupancy_bound_if_nonpreemptive": 46958
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 1,
+          "eligible_edge_feedback": 1,
+          "discard_edge_feedback": 1,
+          "per_qid_feedback_chain_with_reset_output": [
+            5249,
+            3822,
+            17862,
+            8630,
+            17692,
+            8775,
+            5249,
+            3822,
+            15826,
+            9788,
+            17613,
+            8994
+          ],
+          "critical_qid": 2,
+          "critical_feedback_chain_cycles": 17862,
+          "total_nonpreemptive_pq_occupancy_cycles": 87252,
+          "per_qid_nonoverlapped_pq_cycles": [
+            2969,
+            1754,
+            13762,
+            5852,
+            13607,
+            5996,
+            2969,
+            1754,
+            12034,
+            6890,
+            13534,
+            6131
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 13762,
+          "estimates": [
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 89001,
+              "over_cpu_200mhz_cycle_budget": 3.517214397496087,
+              "static_partition_occupancy_bound_if_nonpreemptive": 87252
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 24247,
+              "over_cpu_200mhz_cycle_budget": 0.9582128009358056,
+              "static_partition_occupancy_bound_if_nonpreemptive": 87252
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 32737,
+              "over_cpu_200mhz_cycle_budget": 1.293727573070296,
+              "static_partition_occupancy_bound_if_nonpreemptive": 87252
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 60627,
+              "over_cpu_200mhz_cycle_budget": 2.3959074311186987,
+              "static_partition_occupancy_bound_if_nonpreemptive": 58875
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 24060,
+              "over_cpu_200mhz_cycle_budget": 0.9508227818086973,
+              "static_partition_occupancy_bound_if_nonpreemptive": 58875
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 24905,
+              "over_cpu_200mhz_cycle_budget": 0.9842161837467002,
+              "static_partition_occupancy_bound_if_nonpreemptive": 58875
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 33694,
+              "over_cpu_200mhz_cycle_budget": 1.3315470827207916,
+              "static_partition_occupancy_bound_if_nonpreemptive": 30265
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 23965,
+              "over_cpu_200mhz_cycle_budget": 0.9470684940168508,
+              "static_partition_occupancy_bound_if_nonpreemptive": 30265
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 24217,
+              "over_cpu_200mhz_cycle_budget": 0.9570272363699593,
+              "static_partition_occupancy_bound_if_nonpreemptive": 30265
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case": "native_d5_w8",
+      "N": 2862,
+      "E": 7922,
+      "J": 12,
+      "cpu_early_us": 211.585,
+      "cpu_reference_budget_cycles_125mhz": 26448.125,
+      "cpu_reference_budget_cycles_200mhz": 42317.0,
+      "trace_sha256": "eaf609567a262fd8e1396845dd6e640b711b16ffedd392c8af379cb4c39b55fc",
+      "best_original_report_model": {
+        "case": "native_d5_w8",
+        "contexts": 4,
+        "edge_lanes": 2,
+        "pq_partitions": 2,
+        "batch_cycles": 287932,
+        "resource_wait_cycles": 321034,
+        "operation_latency_sum": 664206
+      },
+      "original_one_lane_model_reproduced": true,
+      "global_dispatch_conditions": [
+        {
+          "contexts": 2,
+          "phase_visits": 612675,
+          "dead_visits": 5949,
+          "non_dead_visits": 606726,
+          "optimistic_search_cycles_one_global_dispatcher_II1_no_dead": 606726,
+          "no_dead_global_II1_over_cpu_200mhz_budget": 14.33764208237824
+        },
+        {
+          "contexts": 4,
+          "phase_visits": 649533,
+          "dead_visits": 42805,
+          "non_dead_visits": 606728,
+          "optimistic_search_cycles_one_global_dispatcher_II1_no_dead": 606728,
+          "no_dead_global_II1_over_cpu_200mhz_budget": 14.337689344707801
+        }
+      ],
+      "sensitivity": [
+        {
+          "heap_cycles_per_measured_level": 3,
+          "eligible_edge_feedback": 7,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            59733,
+            20760,
+            78310,
+            59646,
+            83764,
+            56159,
+            59733,
+            20760,
+            81487,
+            46555,
+            72272,
+            60667
+          ],
+          "critical_qid": 4,
+          "critical_feedback_chain_cycles": 83764,
+          "total_nonpreemptive_pq_occupancy_cycles": 408292,
+          "per_qid_nonoverlapped_pq_cycles": [
+            33547,
+            11387,
+            47323,
+            34771,
+            50153,
+            31666,
+            33547,
+            11387,
+            49088,
+            26841,
+            42975,
+            35607
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 50153,
+          "estimates": [
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 411503,
+              "over_cpu_200mhz_cycle_budget": 9.724295200510433,
+              "static_partition_occupancy_bound_if_nonpreemptive": 408292
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 85398,
+              "over_cpu_200mhz_cycle_budget": 2.018054209892006,
+              "static_partition_occupancy_bound_if_nonpreemptive": 408292
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 92291,
+              "over_cpu_200mhz_cycle_budget": 2.180943828721318,
+              "static_partition_occupancy_bound_if_nonpreemptive": 408292
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 260274,
+              "over_cpu_200mhz_cycle_budget": 6.150577781978874,
+              "static_partition_occupancy_bound_if_nonpreemptive": 256633
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 85240,
+              "over_cpu_200mhz_cycle_budget": 2.014320485856748,
+              "static_partition_occupancy_bound_if_nonpreemptive": 256633
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 86155,
+              "over_cpu_200mhz_cycle_budget": 2.0359430016305504,
+              "static_partition_occupancy_bound_if_nonpreemptive": 256633
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 141621,
+              "over_cpu_200mhz_cycle_budget": 3.346669187324243,
+              "static_partition_occupancy_bound_if_nonpreemptive": 132788
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 85205,
+              "over_cpu_200mhz_cycle_budget": 2.013493395089444,
+              "static_partition_occupancy_bound_if_nonpreemptive": 132788
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 85426,
+              "over_cpu_200mhz_cycle_budget": 2.0187158825058487,
+              "static_partition_occupancy_bound_if_nonpreemptive": 132788
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 2,
+          "eligible_edge_feedback": 7,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            50942,
+            17866,
+            65700,
+            50468,
+            70379,
+            47851,
+            50942,
+            17866,
+            68390,
+            39545,
+            60850,
+            51259
+          ],
+          "critical_qid": 4,
+          "critical_feedback_chain_cycles": 70379,
+          "total_nonpreemptive_pq_occupancy_cycles": 300504,
+          "per_qid_nonoverlapped_pq_cycles": [
+            24756,
+            8493,
+            34713,
+            25593,
+            36768,
+            23358,
+            24756,
+            8493,
+            35991,
+            19831,
+            31553,
+            26199
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 36768,
+          "estimates": [
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 303955,
+              "over_cpu_200mhz_cycle_budget": 7.182810690738947,
+              "static_partition_occupancy_bound_if_nonpreemptive": 300504
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 72664,
+              "over_cpu_200mhz_cycle_budget": 1.7171349575820591,
+              "static_partition_occupancy_bound_if_nonpreemptive": 300504
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 81925,
+              "over_cpu_200mhz_cycle_budget": 1.9359831746106766,
+              "static_partition_occupancy_bound_if_nonpreemptive": 300504
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 192334,
+              "over_cpu_200mhz_cycle_budget": 4.545076446818063,
+              "static_partition_occupancy_bound_if_nonpreemptive": 188537
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 72480,
+              "over_cpu_200mhz_cycle_budget": 1.7127868232625185,
+              "static_partition_occupancy_bound_if_nonpreemptive": 188537
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 73539,
+              "over_cpu_200mhz_cycle_budget": 1.7378122267646572,
+              "static_partition_occupancy_bound_if_nonpreemptive": 188537
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 108338,
+              "over_cpu_200mhz_cycle_budget": 2.5601531299477753,
+              "static_partition_occupancy_bound_if_nonpreemptive": 97515
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 72390,
+              "over_cpu_200mhz_cycle_budget": 1.7106600184323086,
+              "static_partition_occupancy_bound_if_nonpreemptive": 97515
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 72610,
+              "over_cpu_200mhz_cycle_budget": 1.7158588746839332,
+              "static_partition_occupancy_bound_if_nonpreemptive": 97515
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 3,
+          "eligible_edge_feedback": 3,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            46741,
+            17348,
+            62866,
+            47578,
+            66812,
+            44251,
+            46741,
+            17348,
+            65243,
+            37407,
+            57768,
+            48603
+          ],
+          "critical_qid": 4,
+          "critical_feedback_chain_cycles": 66812,
+          "total_nonpreemptive_pq_occupancy_cycles": 408292,
+          "per_qid_nonoverlapped_pq_cycles": [
+            33547,
+            11387,
+            47323,
+            34771,
+            50153,
+            31666,
+            33547,
+            11387,
+            49088,
+            26841,
+            42975,
+            35607
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 50153,
+          "estimates": [
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 411427,
+              "over_cpu_200mhz_cycle_budget": 9.722499231987145,
+              "static_partition_occupancy_bound_if_nonpreemptive": 408292
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 71055,
+              "over_cpu_200mhz_cycle_budget": 1.679112413450859,
+              "static_partition_occupancy_bound_if_nonpreemptive": 408292
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 81523,
+              "over_cpu_200mhz_cycle_budget": 1.9264834463690714,
+              "static_partition_occupancy_bound_if_nonpreemptive": 408292
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 259838,
+              "over_cpu_200mhz_cycle_budget": 6.140274594134745,
+              "static_partition_occupancy_bound_if_nonpreemptive": 256633
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 70840,
+              "over_cpu_200mhz_cycle_budget": 1.6740317130231348,
+              "static_partition_occupancy_bound_if_nonpreemptive": 256633
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 71932,
+              "over_cpu_200mhz_cycle_budget": 1.6998369449630173,
+              "static_partition_occupancy_bound_if_nonpreemptive": 256633
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 137081,
+              "over_cpu_200mhz_cycle_budget": 3.2393836992225347,
+              "static_partition_occupancy_bound_if_nonpreemptive": 132788
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 70731,
+              "over_cpu_200mhz_cycle_budget": 1.6714559160621028,
+              "static_partition_occupancy_bound_if_nonpreemptive": 132788
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 71143,
+              "over_cpu_200mhz_cycle_budget": 1.681191955951509,
+              "static_partition_occupancy_bound_if_nonpreemptive": 132788
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 2,
+          "eligible_edge_feedback": 3,
+          "discard_edge_feedback": 3,
+          "per_qid_feedback_chain_with_reset_output": [
+            37950,
+            14454,
+            50256,
+            38400,
+            53427,
+            35943,
+            37950,
+            14454,
+            52146,
+            30397,
+            46346,
+            39195
+          ],
+          "critical_qid": 4,
+          "critical_feedback_chain_cycles": 53427,
+          "total_nonpreemptive_pq_occupancy_cycles": 300504,
+          "per_qid_nonoverlapped_pq_cycles": [
+            24756,
+            8493,
+            34713,
+            25593,
+            36768,
+            23358,
+            24756,
+            8493,
+            35991,
+            19831,
+            31553,
+            26199
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 36768,
+          "estimates": [
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 303649,
+              "over_cpu_200mhz_cycle_budget": 7.175579554316232,
+              "static_partition_occupancy_bound_if_nonpreemptive": 300504
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 60326,
+              "over_cpu_200mhz_cycle_budget": 1.4255736465250373,
+              "static_partition_occupancy_bound_if_nonpreemptive": 300504
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 73429,
+              "over_cpu_200mhz_cycle_budget": 1.7352127986388448,
+              "static_partition_occupancy_bound_if_nonpreemptive": 300504
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 191762,
+              "over_cpu_200mhz_cycle_budget": 4.531559420563839,
+              "static_partition_occupancy_bound_if_nonpreemptive": 188537
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 60202,
+              "over_cpu_200mhz_cycle_budget": 1.4226433820923032,
+              "static_partition_occupancy_bound_if_nonpreemptive": 188537
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 61520,
+              "over_cpu_200mhz_cycle_budget": 1.4537892572724909,
+              "static_partition_occupancy_bound_if_nonpreemptive": 188537
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 102558,
+              "over_cpu_200mhz_cycle_budget": 2.423564997518728,
+              "static_partition_occupancy_bound_if_nonpreemptive": 97515
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 60050,
+              "over_cpu_200mhz_cycle_budget": 1.4190514450457263,
+              "static_partition_occupancy_bound_if_nonpreemptive": 97515
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 60383,
+              "over_cpu_200mhz_cycle_budget": 1.4269206229175035,
+              "static_partition_occupancy_bound_if_nonpreemptive": 97515
+            }
+          ]
+        },
+        {
+          "heap_cycles_per_measured_level": 1,
+          "eligible_edge_feedback": 1,
+          "discard_edge_feedback": 1,
+          "per_qid_feedback_chain_with_reset_output": [
+            22343,
+            9566,
+            29264,
+            22664,
+            30916,
+            21225,
+            22343,
+            9566,
+            30259,
+            18323,
+            27042,
+            23103
+          ],
+          "critical_qid": 4,
+          "critical_feedback_chain_cycles": 30916,
+          "total_nonpreemptive_pq_occupancy_cycles": 192716,
+          "per_qid_nonoverlapped_pq_cycles": [
+            15965,
+            5599,
+            22103,
+            16415,
+            23383,
+            15050,
+            15965,
+            5599,
+            22894,
+            12821,
+            20131,
+            16791
+          ],
+          "critical_nonoverlapped_pq_chain_cycles": 23383,
+          "estimates": [
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 195752,
+              "over_cpu_200mhz_cycle_budget": 4.625847768036486,
+              "static_partition_occupancy_bound_if_nonpreemptive": 192716
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 49191,
+              "over_cpu_200mhz_cycle_budget": 1.16244062669849,
+              "static_partition_occupancy_bound_if_nonpreemptive": 192716
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 1,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 64911,
+              "over_cpu_200mhz_cycle_budget": 1.5339225370418508,
+              "static_partition_occupancy_bound_if_nonpreemptive": 192716
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 123579,
+              "over_cpu_200mhz_cycle_budget": 2.9203157123614623,
+              "static_partition_occupancy_bound_if_nonpreemptive": 120441
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 49013,
+              "over_cpu_200mhz_cycle_budget": 1.1582342793676301,
+              "static_partition_occupancy_bound_if_nonpreemptive": 120441
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 2,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 50118,
+              "over_cpu_200mhz_cycle_budget": 1.1843467164496537,
+              "static_partition_occupancy_bound_if_nonpreemptive": 120441
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "nonpreemptive_feedback_occupancy",
+              "batch_cycles_estimated": 68800,
+              "over_cpu_200mhz_cycle_budget": 1.6258241368717063,
+              "static_partition_occupancy_bound_if_nonpreemptive": 62242
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II1",
+              "batch_cycles_estimated": 48873,
+              "over_cpu_200mhz_cycle_budget": 1.1549259162984145,
+              "static_partition_occupancy_bound_if_nonpreemptive": 62242
+            },
+            {
+              "actual_context_limit": 12,
+              "pq_partitions": 4,
+              "pq_service": "hypothetical_operation_II2",
+              "batch_cycles_estimated": 49091,
+              "over_cpu_200mhz_cycle_budget": 1.1600775102204788,
+              "static_partition_occupancy_bound_if_nonpreemptive": 62242
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,538 @@
+
+
+================================================================
+== Synthesis Summary Report of 'lookahead_services51'
+================================================================
++ General Information: 
+    * Date:           Mon Nov  9 07:37:14 2026
+    * Version:        2022.2 (Build 3670227 on Oct 13 2022)
+    * Project:        project
+    * Solution:       solution (Vivado IP Flow Target)
+    * Product family: virtexuplus
+    * Target device:  xcu280-fsvh2892-2L-e
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +---------------------------------------------------+------+------+---------+---------+----------+---------+------+----------+----------+---------+-------------+------------+-----+
+    |                      Modules                      | Issue|      | Latency | Latency | Iteration|         | Trip |          |          |         |             |            |     |
+    |                      & Loops                      | Type | Slack| (cycles)|   (ns)  |  Latency | Interval| Count| Pipelined|   BRAM   |   DSP   |      FF     |     LUT    | URAM|
+    +---------------------------------------------------+------+------+---------+---------+----------+---------+------+----------+----------+---------+-------------+------------+-----+
+    |+ lookahead_services51                             |     -|  0.05|        -|        -|         -|        -|     -|        no|  30 (~0%)|  4 (~0%)|  24933 (~0%)|  20602 (1%)|    -|
+    | + lookahead_services51_Pipeline_VITIS_LOOP_32_1   |     -|  1.75|       35|  175.000|         -|       35|     -|        no|         -|        -|     59 (~0%)|   193 (~0%)|    -|
+    |  o VITIS_LOOP_32_1                                |     -|  3.65|       33|  165.000|         2|        1|    33|       yes|         -|        -|            -|           -|    -|
+    | + lookahead_services51_Pipeline_VITIS_LOOP_33_2   |     -|  1.74|       66|  330.000|         -|       66|     -|        no|         -|        -|     17 (~0%)|    62 (~0%)|    -|
+    |  o VITIS_LOOP_33_2                                |     -|  3.65|       64|  320.000|         2|        1|    64|       yes|         -|        -|            -|           -|    -|
+    | + lookahead_services51_Pipeline_VITIS_LOOP_34_3   |     -|  1.10|       35|  175.000|         -|       35|     -|        no|         -|        -|     32 (~0%)|   395 (~0%)|    -|
+    |  o VITIS_LOOP_34_3                                |     -|  3.65|       33|  165.000|         3|        1|    32|       yes|         -|        -|            -|           -|    -|
+    | + lookahead_services51_Pipeline_VITIS_LOOP_35_4   |     -|  1.85|      130|  650.000|         -|      130|     -|        no|         -|        -|     27 (~0%)|    99 (~0%)|    -|
+    |  o VITIS_LOOP_35_4                                |     -|  3.65|      128|  640.000|         2|        1|   128|       yes|         -|        -|            -|           -|    -|
+    | + network*                                        |     -|  0.05|        -|        -|         -|        -|     -|  dataflow|  20 (~0%)|  4 (~0%)|  24244 (~0%)|  18474 (1%)|    -|
+    |  + heap_0_s                                       |     -|  0.05|        -|        -|         -|        -|     -|        no|   8 (~0%)|        -|   1796 (~0%)|  1989 (~0%)|    -|
+    |   + heap_0_Pipeline_VITIS_LOOP_43_1               |     -|  2.29|       10|   50.000|         -|       10|     -|        no|         -|        -|      6 (~0%)|    48 (~0%)|    -|
+    |    o VITIS_LOOP_43_1                              |     -|  3.65|        8|   40.000|         1|        1|     8|       yes|         -|        -|            -|           -|    -|
+    |   o VITIS_LOOP_44_2                               |     -|  3.65|        -|        -|         -|        -|     -|        no|         -|        -|            -|           -|    -|
+    |    + heap_0_Pipeline_VITIS_LOOP_54_4              |     -|  0.05|        -|        -|         -|        -|     -|        no|         -|        -|    112 (~0%)|   285 (~0%)|    -|
+    |     o VITIS_LOOP_54_4                             |    II|  3.65|        -|        -|         2|        2|     -|       yes|         -|        -|            -|           -|    -|
+    |    + heap_0_Pipeline_VITIS_LOOP_60_5              |     -|  0.05|        -|        -|         -|        -|     -|        no|         -|        -|    132 (~0%)|   344 (~0%)|    -|
+    |     o VITIS_LOOP_60_5                             |    II|  3.65|        -|        -|         2|        2|     -|       yes|         -|        -|            -|           -|    -|
+    |    + heap_0_Pipeline_VITIS_LOOP_62_6              |     -|  0.05|        -|        -|         -|        -|     -|        no|         -|        -|     80 (~0%)|   285 (~0%)|    -|
+    |     o VITIS_LOOP_62_6                             |    II|  3.65|        -|        -|         2|        2|     -|       yes|         -|        -|            -|           -|    -|
+    |  + heap_1_s                                       |     -|  0.05|        -|        -|         -|        -|     -|        no|   8 (~0%)|        -|   1796 (~0%)|  1989 (~0%)|    -|
+    |   + heap_1_Pipeline_VITIS_LOOP_43_1               |     -|  2.29|       10|   50.000|         -|       10|     -|        no|         -|        -|      6 (~0%)|    48 (~0%)|    -|
+    |    o VITIS_LOOP_43_1                              |     -|  3.65|        8|   40.000|         1|        1|     8|       yes|         -|        -|            -|           -|    -|
+    |   o VITIS_LOOP_44_2                               |     -|  3.65|        -|        -|         -|        -|     -|        no|         -|        -|            -|           -|    -|
+    |    + heap_1_Pipeline_VITIS_LOOP_54_4              |     -|  0.05|        -|        -|         -|        -|     -|        no|         -|        -|    112 (~0%)|   285 (~0%)|    -|
+    |     o VITIS_LOOP_54_4                             |    II|  3.65|        -|        -|         2|        2|     -|       yes|         -|        -|            -|           -|    -|
+    |    + heap_1_Pipeline_VITIS_LOOP_60_5              |     -|  0.05|        -|        -|         -|        -|     -|        no|         -|        -|    132 (~0%)|   344 (~0%)|    -|
+    |     o VITIS_LOOP_60_5                             |    II|  3.65|        -|        -|         2|        2|     -|       yes|         -|        -|            -|           -|    -|
+    |    + heap_1_Pipeline_VITIS_LOOP_62_6              |     -|  0.05|        -|        -|         -|        -|     -|        no|         -|        -|     80 (~0%)|   285 (~0%)|    -|
+    |     o VITIS_LOOP_62_6                             |    II|  3.65|        -|        -|         2|        2|     -|       yes|         -|        -|            -|           -|    -|
+    |  + edge_r                                         |     -|  0.54|        -|        -|         -|        -|     -|        no|         -|  4 (~0%)|   1546 (~0%)|  1372 (~0%)|    -|
+    |   + edge_Pipeline_VITIS_LOOP_71_1                 |     -|  2.29|       10|   50.000|         -|       10|     -|        no|         -|        -|      6 (~0%)|    48 (~0%)|    -|
+    |    o VITIS_LOOP_71_1                              |     -|  3.65|        8|   40.000|         1|        1|     8|       yes|         -|        -|            -|           -|    -|
+    |   o VITIS_LOOP_72_2                               |     -|  3.65|        -|        -|         -|        -|     -|        no|         -|        -|            -|           -|    -|
+    |    + edge_Pipeline_VITIS_LOOP_73_3                |     -|  0.67|        -|        -|         -|        -|     -|        no|         -|  4 (~0%)|    852 (~0%)|   944 (~0%)|    -|
+    |     o VITIS_LOOP_73_3                             |    II|  3.65|        -|        -|        10|        9|     -|       yes|         -|        -|            -|           -|    -|
+    |  + map_service                                    |     -|  0.94|        -|        -|         -|        -|     -|        no|         -|        -|    777 (~0%)|   926 (~0%)|    -|
+    |   + map_service_Pipeline_VITIS_LOOP_86_1          |     -|  2.29|       10|   50.000|         -|       10|     -|        no|         -|        -|      6 (~0%)|    48 (~0%)|    -|
+    |    o VITIS_LOOP_86_1                              |     -|  3.65|        8|   40.000|         1|        1|     8|       yes|         -|        -|            -|           -|    -|
+    |   o VITIS_LOOP_87_2                               |     -|  3.65|        -|        -|        16|        -|     -|        no|         -|        -|            -|           -|    -|
+    |    + map_service_Pipeline_VITIS_LOOP_92_4         |     -|  2.28|       10|   50.000|         -|       10|     -|        no|         -|        -|      6 (~0%)|    48 (~0%)|    -|
+    |     o VITIS_LOOP_92_4                             |     -|  3.65|        8|   40.000|         1|        1|     8|       yes|         -|        -|            -|           -|    -|
+    |  + entry_proc                                     |     -|  2.19|        0|    0.000|         -|        0|     -|        no|         -|        -|      2 (~0%)|    47 (~0%)|    -|
+    |  + commit                                         |     -|  0.43|        -|        -|         -|        -|     -|        no|   4 (~0%)|        -|   5920 (~0%)|  5254 (~0%)|    -|
+    |   + commit_Pipeline_VITIS_LOOP_107_1              |     -|  2.29|       10|   50.000|         -|       10|     -|        no|         -|        -|      6 (~0%)|    48 (~0%)|    -|
+    |    o VITIS_LOOP_107_1                             |     -|  3.65|        8|   40.000|         1|        1|     8|       yes|         -|        -|            -|           -|    -|
+    |   + commit_Pipeline_VITIS_LOOP_108_2              |     -|  2.49|        4|   20.000|         -|        4|     -|        no|         -|        -|    132 (~0%)|   185 (~0%)|    -|
+    |    o VITIS_LOOP_108_2                             |     -|  3.65|        2|   10.000|         1|        1|     2|       yes|         -|        -|            -|           -|    -|
+    |   + commit_Pipeline_VITIS_LOOP_110_3              |     -|  0.43|        -|        -|         -|        -|     -|        no|         -|        -|   5723 (~0%)|  4692 (~0%)|    -|
+    |    o VITIS_LOOP_110_3                             |    II|  3.65|        -|        -|         7|        4|     -|       yes|         -|        -|            -|           -|    -|
+    | o VITIS_LOOP_36_5                                 |     -|  3.65|        -|        -|         -|        -|     -|        no|         -|        -|            -|           -|    -|
+    |  + lookahead_services51_Pipeline_5                |     -|  2.35|       10|   50.000|         -|       10|     -|        no|         -|        -|      6 (~0%)|    48 (~0%)|    -|
+    |   o Loop 1                                        |     -|  3.65|        8|   40.000|         1|        1|     8|       yes|         -|        -|            -|           -|    -|
+    |  + lookahead_services51_Pipeline_VITIS_LOOP_36_6  |     -|  1.09|        -|        -|         -|        -|     -|        no|         -|        -|     97 (~0%)|   219 (~0%)|    -|
+    |   o VITIS_LOOP_36_6                               |    II|  3.65|        -|        -|         4|        2|     -|       yes|         -|        -|            -|           -|    -|
+    +---------------------------------------------------+------+------+---------+---------+----------+---------+------+----------+----------+---------+-------------+------------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* AP_MEMORY
++-------------------+----------+
+| Interface         | Bitwidth |
++-------------------+----------+
+| cells_address0    | 8        |
+| cells_q0          | 32       |
+| cm_address0       | 3        |
+| cm_address1       | 3        |
+| cm_d0             | 32       |
+| cm_d1             | 32       |
+| cm_q0             | 32       |
+| cm_q1             | 32       |
+| costs_address0    | 6        |
+| costs_q0          | 64       |
+| edges_address0    | 7        |
+| edges_q0          | 32       |
+| em_address0       | 3        |
+| em_address1       | 3        |
+| em_d0             | 32       |
+| em_d1             | 32       |
+| em_q0             | 32       |
+| em_q1             | 32       |
+| hm0_address0      | 3        |
+| hm0_address1      | 3        |
+| hm0_d0            | 32       |
+| hm0_d1            | 32       |
+| hm0_q0            | 32       |
+| hm0_q1            | 32       |
+| hm1_address0      | 3        |
+| hm1_address1      | 3        |
+| hm1_d0            | 32       |
+| hm1_d1            | 32       |
+| hm1_q0            | 32       |
+| hm1_q1            | 32       |
+| mm_address0       | 3        |
+| mm_address1       | 3        |
+| mm_d0             | 32       |
+| mm_d1             | 32       |
+| mm_q0             | 32       |
+| mm_q1             | 32       |
+| nodes_address0    | 5        |
+| nodes_q0          | 128      |
+| output_r_address0 | 6        |
+| output_r_d0       | 64       |
+| output_r_q0       | 64       |
+| row_address0      | 6        |
+| row_q0            | 32       |
+| sources_address0  | 3        |
+| sources_q0        | 32       |
+| stats_address0    | 3        |
+| stats_d0          | 352      |
+| targets_address0  | 3        |
+| targets_q0        | 32       |
++-------------------+----------+
+
+* Other Ports
++---------------+---------+----------+
+| Interface     | Mode    | Bitwidth |
++---------------+---------+----------+
+| capacity      | ap_none | 32       |
+| command       | ap_none | 32       |
+| cost_version  | ap_none | 32       |
+| early         | ap_none | 1        |
+| graph_version | ap_none | 32       |
+| heap_hold     | ap_none | 32       |
+| map_hold      | ap_none | 32       |
+| n             | ap_none | 32       |
+| nc            | ap_none | 32       |
+| ne            | ap_none | 32       |
+| nj            | ap_none | 32       |
+| nk            | ap_none | 32       |
+| status        | ap_vld  | 32       |
++---------------+---------+----------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------------------------------+
+| Interface | Type       | Ports                             |
++-----------+------------+-----------------------------------+
+| ap_clk    | clock      | ap_clk                            |
+| ap_rst    | reset      | ap_rst                            |
+| ap_ctrl   | ap_ctrl_hs | ap_done ap_idle ap_ready ap_start |
++-----------+------------+-----------------------------------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++---------------+-----------+----------------------+
+| Argument      | Direction | Datatype             |
++---------------+-----------+----------------------+
+| row           | in        | unsigned int const * |
+| nodes         | in        | ap_uint<128> const * |
+| edges         | in        | unsigned int const * |
+| costs         | in        | ap_uint<64> const *  |
+| sources       | in        | unsigned int const * |
+| cells         | in        | int const *          |
+| targets       | in        | unsigned int const * |
+| output        | inout     | ap_uint<64>*         |
+| stats         | out       | Stats*               |
+| n             | in        | unsigned int         |
+| ne            | in        | unsigned int         |
+| nj            | in        | unsigned int         |
+| nk            | in        | unsigned int         |
+| nc            | in        | unsigned int         |
+| capacity      | in        | unsigned int         |
+| command       | in        | unsigned int         |
+| graph_version | in        | unsigned int         |
+| cost_version  | in        | unsigned int         |
+| early         | in        | bool                 |
+| heap_hold     | in        | unsigned int         |
+| map_hold      | in        | unsigned int         |
+| status        | out       | unsigned int&        |
+| hm0           | inout     | unsigned int*        |
+| hm1           | inout     | unsigned int*        |
+| em            | inout     | unsigned int*        |
+| mm            | inout     | unsigned int*        |
+| cm            | inout     | unsigned int*        |
++---------------+-----------+----------------------+
+
+* SW-to-HW Mapping
++---------------+-------------------+---------+----------+
+| Argument      | HW Interface      | HW Type | HW Usage |
++---------------+-------------------+---------+----------+
+| row           | row_address0      | port    | offset   |
+| row           | row_ce0           | port    |          |
+| row           | row_q0            | port    |          |
+| nodes         | nodes_address0    | port    | offset   |
+| nodes         | nodes_ce0         | port    |          |
+| nodes         | nodes_q0          | port    |          |
+| edges         | edges_address0    | port    | offset   |
+| edges         | edges_ce0         | port    |          |
+| edges         | edges_q0          | port    |          |
+| costs         | costs_address0    | port    | offset   |
+| costs         | costs_ce0         | port    |          |
+| costs         | costs_q0          | port    |          |
+| sources       | sources_address0  | port    | offset   |
+| sources       | sources_ce0       | port    |          |
+| sources       | sources_q0        | port    |          |
+| cells         | cells_address0    | port    | offset   |
+| cells         | cells_ce0         | port    |          |
+| cells         | cells_q0          | port    |          |
+| targets       | targets_address0  | port    | offset   |
+| targets       | targets_ce0       | port    |          |
+| targets       | targets_q0        | port    |          |
+| output        | output_r_address0 | port    | offset   |
+| output        | output_r_ce0      | port    |          |
+| output        | output_r_we0      | port    |          |
+| output        | output_r_d0       | port    |          |
+| output        | output_r_q0       | port    |          |
+| stats         | stats_address0    | port    | offset   |
+| stats         | stats_ce0         | port    |          |
+| stats         | stats_we0         | port    |          |
+| stats         | stats_d0          | port    |          |
+| n             | n                 | port    |          |
+| ne            | ne                | port    |          |
+| nj            | nj                | port    |          |
+| nk            | nk                | port    |          |
+| nc            | nc                | port    |          |
+| capacity      | capacity          | port    |          |
+| command       | command           | port    |          |
+| graph_version | graph_version     | port    |          |
+| cost_version  | cost_version      | port    |          |
+| early         | early             | port    |          |
+| heap_hold     | heap_hold         | port    |          |
+| map_hold      | map_hold          | port    |          |
+| status        | status            | port    |          |
+| status        | status_ap_vld     | port    |          |
+| hm0           | hm0_address0      | port    | offset   |
+| hm0           | hm0_ce0           | port    |          |
+| hm0           | hm0_we0           | port    |          |
+| hm0           | hm0_d0            | port    |          |
+| hm0           | hm0_q0            | port    |          |
+| hm0           | hm0_address1      | port    | offset   |
+| hm0           | hm0_ce1           | port    |          |
+| hm0           | hm0_we1           | port    |          |
+| hm0           | hm0_d1            | port    |          |
+| hm0           | hm0_q1            | port    |          |
+| hm1           | hm1_address0      | port    | offset   |
+| hm1           | hm1_ce0           | port    |          |
+| hm1           | hm1_we0           | port    |          |
+| hm1           | hm1_d0            | port    |          |
+| hm1           | hm1_q0            | port    |          |
+| hm1           | hm1_address1      | port    | offset   |
+| hm1           | hm1_ce1           | port    |          |
+| hm1           | hm1_we1           | port    |          |
+| hm1           | hm1_d1            | port    |          |
+| hm1           | hm1_q1            | port    |          |
+| em            | em_address0       | port    | offset   |
+| em            | em_ce0            | port    |          |
+| em            | em_we0            | port    |          |
+| em            | em_d0             | port    |          |
+| em            | em_q0             | port    |          |
+| em            | em_address1       | port    | offset   |
+| em            | em_ce1            | port    |          |
+| em            | em_we1            | port    |          |
+| em            | em_d1             | port    |          |
+| em            | em_q1             | port    |          |
+| mm            | mm_address0       | port    | offset   |
+| mm            | mm_ce0            | port    |          |
+| mm            | mm_we0            | port    |          |
+| mm            | mm_d0             | port    |          |
+| mm            | mm_q0             | port    |          |
+| mm            | mm_address1       | port    | offset   |
+| mm            | mm_ce1            | port    |          |
+| mm            | mm_we1            | port    |          |
+| mm            | mm_d1             | port    |          |
+| mm            | mm_q1             | port    |          |
+| cm            | cm_address0       | port    | offset   |
+| cm            | cm_ce0            | port    |          |
+| cm            | cm_we0            | port    |          |
+| cm            | cm_d0             | port    |          |
+| cm            | cm_q0             | port    |          |
+| cm            | cm_address1       | port    | offset   |
+| cm            | cm_ce1            | port    |          |
+| cm            | cm_we1            | port    |          |
+| cm            | cm_d1             | port    |          |
+| cm            | cm_q1             | port    |          |
++---------------+-------------------+---------+----------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+  No burst in design
+
+================================================================
+== Bind Op Report
+================================================================
++--------------------------------------------------+-----+--------+-----------------+------+---------+---------+
+| Name                                             | DSP | Pragma | Variable        | Op   | Impl    | Latency |
++--------------------------------------------------+-----+--------+-----------------+------+---------+---------+
+| + lookahead_services51                           | 4   |        |                 |      |         |         |
+|   add_ln32_fu_691_p2                             | -   |        | add_ln32        | add  | fabric  | 0       |
+|   add_ln36_fu_722_p2                             | -   |        | add_ln36        | add  | fabric  | 0       |
+|   add_ln41_fu_921_p2                             | -   |        | add_ln41        | add  | fabric  | 0       |
+|  + lookahead_services51_Pipeline_VITIS_LOOP_32_1 | 0   |        |                 |      |         |         |
+|    i_5_fu_157_p2                                 | -   |        | i_5             | add  | fabric  | 0       |
+|  + lookahead_services51_Pipeline_VITIS_LOOP_33_2 | 0   |        |                 |      |         |         |
+|    add_ln33_fu_101_p2                            | -   |        | add_ln33        | add  | fabric  | 0       |
+|  + lookahead_services51_Pipeline_VITIS_LOOP_34_3 | 0   |        |                 |      |         |         |
+|    add_ln34_1_fu_225_p2                          | -   |        | add_ln34_1      | add  | fabric  | 0       |
+|    add_ln34_fu_291_p2                            | -   |        | add_ln34        | add  | fabric  | 0       |
+|  + lookahead_services51_Pipeline_VITIS_LOOP_35_4 | 0   |        |                 |      |         |         |
+|    add_ln35_fu_150_p2                            | -   |        | add_ln35        | add  | fabric  | 0       |
+|  + lookahead_services51_Pipeline_5               | 0   |        |                 |      |         |         |
+|    empty_69_fu_58_p2                             | -   |        | empty_69        | add  | fabric  | 0       |
+|  + lookahead_services51_Pipeline_VITIS_LOOP_36_6 | 0   |        |                 |      |         |         |
+|    add_ln36_fu_206_p2                            | -   |        | add_ln36        | add  | fabric  | 0       |
+|    count_1_fu_291_p2                             | -   |        | count_1         | add  | fabric  | 0       |
+|  + network                                       | 4   |        |                 |      |         |         |
+|   + heap_0_s                                     | 0   |        |                 |      |         |         |
+|     add_ln45_fu_390_p2                           | -   |        | add_ln45        | add  | fabric  | 0       |
+|     add_ln47_fu_421_p2                           | -   |        | add_ln47        | add  | fabric  | 0       |
+|     count_5_fu_462_p2                            | -   |        | count_5         | add  | fabric  | 0       |
+|     add_ln40_fu_435_p2                           | -   |        | add_ln40        | add  | fabric  | 0       |
+|     hole_15_fu_519_p2                            | -   |        | hole_15         | add  | fabric  | 0       |
+|     add_ln61_2_fu_499_p2                         | -   |        | add_ln61_2      | add  | fabric  | 0       |
+|     add_ln64_fu_574_p2                           | -   |        | add_ln64        | add  | fabric  | 0       |
+|     count_fu_588_p2                              | -   |        | count           | add  | fabric  | 0       |
+|     hm0_d1                                       | -   |        | add_ln55        | add  | fabric  | 0       |
+|     hm0_d1                                       | -   |        | add_ln66        | add  | fabric  | 0       |
+|    + heap_0_Pipeline_VITIS_LOOP_43_1             | 0   |        |                 |      |         |         |
+|      add_ln43_fu_66_p2                           | -   |        | add_ln43        | add  | fabric  | 0       |
+|    + heap_0_Pipeline_VITIS_LOOP_54_4             | 0   |        |                 |      |         |         |
+|      add_ln54_fu_210_p2                          | -   |        | add_ln54        | add  | fabric  | 0       |
+|      add_ln54_2_fu_176_p2                        | -   |        | add_ln54_2      | add  | fabric  | 0       |
+|    + heap_0_Pipeline_VITIS_LOOP_60_5             | 0   |        |                 |      |         |         |
+|      add_ln60_fu_203_p2                          | -   |        | add_ln60        | add  | fabric  | 0       |
+|      add_ln60_3_fu_182_p2                        | -   |        | add_ln60_3      | add  | fabric  | 0       |
+|      child_9_fu_272_p2                           | -   |        | child_9         | add  | fabric  | 0       |
+|    + heap_0_Pipeline_VITIS_LOOP_62_6             | 0   |        |                 |      |         |         |
+|      add_ln62_fu_197_p2                          | -   |        | add_ln62        | add  | fabric  | 0       |
+|      add_ln62_2_fu_172_p2                        | -   |        | add_ln62_2      | add  | fabric  | 0       |
+|   + heap_1_s                                     | 0   |        |                 |      |         |         |
+|     add_ln45_fu_390_p2                           | -   |        | add_ln45        | add  | fabric  | 0       |
+|     add_ln47_fu_421_p2                           | -   |        | add_ln47        | add  | fabric  | 0       |
+|     count_3_fu_462_p2                            | -   |        | count_3         | add  | fabric  | 0       |
+|     add_ln40_fu_435_p2                           | -   |        | add_ln40        | add  | fabric  | 0       |
+|     hole_7_fu_519_p2                             | -   |        | hole_7          | add  | fabric  | 0       |
+|     add_ln61_1_fu_499_p2                         | -   |        | add_ln61_1      | add  | fabric  | 0       |
+|     add_ln64_fu_574_p2                           | -   |        | add_ln64        | add  | fabric  | 0       |
+|     count_fu_588_p2                              | -   |        | count           | add  | fabric  | 0       |
+|     hm1_d1                                       | -   |        | add_ln55        | add  | fabric  | 0       |
+|     hm1_d1                                       | -   |        | add_ln66        | add  | fabric  | 0       |
+|    + heap_1_Pipeline_VITIS_LOOP_43_1             | 0   |        |                 |      |         |         |
+|      add_ln43_fu_66_p2                           | -   |        | add_ln43        | add  | fabric  | 0       |
+|    + heap_1_Pipeline_VITIS_LOOP_54_4             | 0   |        |                 |      |         |         |
+|      add_ln54_fu_210_p2                          | -   |        | add_ln54        | add  | fabric  | 0       |
+|      add_ln54_1_fu_176_p2                        | -   |        | add_ln54_1      | add  | fabric  | 0       |
+|    + heap_1_Pipeline_VITIS_LOOP_60_5             | 0   |        |                 |      |         |         |
+|      add_ln60_fu_203_p2                          | -   |        | add_ln60        | add  | fabric  | 0       |
+|      add_ln60_1_fu_182_p2                        | -   |        | add_ln60_1      | add  | fabric  | 0       |
+|      child_4_fu_272_p2                           | -   |        | child_4         | add  | fabric  | 0       |
+|    + heap_1_Pipeline_VITIS_LOOP_62_6             | 0   |        |                 |      |         |         |
+|      add_ln62_fu_197_p2                          | -   |        | add_ln62        | add  | fabric  | 0       |
+|      add_ln62_1_fu_172_p2                        | -   |        | add_ln62_1      | add  | fabric  | 0       |
+|   + edge_r                                       | 4   |        |                 |      |         |         |
+|     grp_fu_235_p2                                | -   |        | add_ln72        | add  | fabric  | 0       |
+|     add_fu_288_p2                                | -   |        | add             | add  | fabric  | 0       |
+|     grp_fu_235_p2                                | -   |        | add_ln79        | add  | fabric  | 0       |
+|    + edge_Pipeline_VITIS_LOOP_71_1               | 0   |        |                 |      |         |         |
+|      add_ln71_fu_66_p2                           | -   |        | add_ln71        | add  | fabric  | 0       |
+|    + edge_Pipeline_VITIS_LOOP_73_3               | 4   |        |                 |      |         |         |
+|      fadd_32ns_32ns_32_5_full_dsp_1_U88          | 2   |        | v_delay         | fadd | fulldsp | 4       |
+|      fadd_32ns_32ns_32_5_full_dsp_1_U89          | 2   |        | v_congestion    | fadd | fulldsp | 4       |
+|      em_d0                                       | -   |        | add_ln75        | add  | fabric  | 0       |
+|      add_ln77_fu_456_p2                          | -   |        | add_ln77        | add  | fabric  | 0       |
+|      add_ln73_fu_503_p2                          | -   |        | add_ln73        | add  | fabric  | 0       |
+|   + map_service                                  | 0   |        |                 |      |         |         |
+|     grp_fu_315_p2                                | -   |        | add_ln87        | add  | fabric  | 0       |
+|     add_ln88_fu_386_p2                           | -   |        | add_ln88        | add  | fabric  | 0       |
+|     add_ln93_fu_422_p2                           | -   |        | add_ln93        | add  | fabric  | 0       |
+|     add_ln93_1_fu_495_p2                         | -   |        | add_ln93_1      | add  | fabric  | 0       |
+|     grp_fu_315_p2                                | -   |        | add_ln93_2      | add  | fabric  | 0       |
+|     remaining_5_fu_646_p2                        | -   |        | remaining_5     | add  | fabric  | 0       |
+|     grp_fu_315_p2                                | -   |        | add_ln94        | add  | fabric  | 0       |
+|    + map_service_Pipeline_VITIS_LOOP_86_1        | 0   |        |                 |      |         |         |
+|      add_ln86_fu_66_p2                           | -   |        | add_ln86        | add  | fabric  | 0       |
+|    + map_service_Pipeline_VITIS_LOOP_92_4        | 0   |        |                 |      |         |         |
+|      add_ln92_fu_88_p2                           | -   |        | add_ln92        | add  | fabric  | 0       |
+|   + commit                                       | 0   |        |                 |      |         |         |
+|    + commit_Pipeline_VITIS_LOOP_107_1            | 0   |        |                 |      |         |         |
+|      add_ln107_fu_66_p2                          | -   |        | add_ln107       | add  | fabric  | 0       |
+|    + commit_Pipeline_VITIS_LOOP_108_2            | 0   |        |                 |      |         |         |
+|      s_2_fu_118_p2                               | -   |        | s_2             | add  | fabric  | 0       |
+|    + commit_Pipeline_VITIS_LOOP_110_3            | 0   |        |                 |      |         |         |
+|      grp_fu_2884_p2                              | -   |        | add_ln114       | add  | fabric  | 0       |
+|      x_pending_2_fu_3168_p2                      | -   |        | x_pending_2     | add  | fabric  | 0       |
+|      done_3_fu_3665_p2                           | -   |        | done_3          | add  | fabric  | 0       |
+|      next_3_fu_3680_p2                           | -   |        | next_3          | add  | fabric  | 0       |
+|      x_generation_fu_3849_p2                     | -   |        | x_generation    | add  | fabric  | 0       |
+|      x_st_expanded_1_fu_3853_p2                  | -   |        | x_st_expanded_1 | add  | fabric  | 0       |
+|      x_st_edges_1_fu_3858_p2                     | -   |        | x_st_edges_1    | add  | fabric  | 0       |
+|      grp_fu_2884_p2                              | -   |        | add_ln134       | add  | fabric  | 0       |
+|      x_size_2_fu_3902_p2                         | -   |        | x_size_2        | add  | fabric  | 0       |
+|      x_pending_3_fu_3907_p2                      | -   |        | x_pending_3     | add  | fabric  | 0       |
+|      x_st_pushes_1_fu_3913_p2                    | -   |        | x_st_pushes_1   | add  | fabric  | 0       |
+|      grp_fu_2884_p2                              | -   |        | add_ln141       | add  | fabric  | 0       |
+|      grp_fu_2884_p2                              | -   |        | add_ln133       | add  | fabric  | 0       |
+|      x_parent_seq_3_fu_3969_p2                   | -   |        | x_parent_seq_3  | add  | fabric  | 0       |
+|      x_size_1_fu_3974_p2                         | -   |        | x_size_1        | add  | fabric  | 0       |
+|      x_st_pops_1_fu_3979_p2                      | -   |        | x_st_pops_1     | add  | fabric  | 0       |
+|      add_ln147_fu_4073_p2                        | -   |        | add_ln147       | add  | fabric  | 0       |
+|      x_pos_1_fu_4028_p2                          | -   |        | x_pos_1         | add  | fabric  | 0       |
++--------------------------------------------------+-----+--------+-----------------+------+---------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
++------------------------+------+------+--------+--------------+---------+--------+---------+
+| Name                   | BRAM | URAM | Pragma | Variable     | Storage | Impl   | Latency |
++------------------------+------+------+--------+--------------+---------+--------+---------+
+| + lookahead_services51 | 30   | 0    |        |              |         |        |         |
+|   mask_U               | -    | -    |        | mask         | ram_1p  | auto   | 1       |
+|   sr_U                 | 1    | -    | pragma | sr           | ram_2p  | bram   | 1       |
+|   sk_V_U               | 2    | -    | pragma | sk_V         | ram_2p  | bram   | 1       |
+|   sn_V_U               | 4    | -    | pragma | sn_V         | ram_2p  | bram   | 1       |
+|   mn_V_U               | 1    | -    | pragma | mn_V         | ram_2p  | bram   | 1       |
+|   se_U                 | 1    | -    | pragma | se           | ram_2p  | bram   | 1       |
+|   ss_U                 | -    | -    |        | ss           | ram_1p  | auto   | 1       |
+|   sc_U                 | 1    | -    | pragma | sc           | ram_2p  | bram   | 1       |
+|   st_U                 | -    | -    |        | st           | ram_1p  | auto   | 1       |
+|  + network             | 20   | 0    |        |              |         |        |         |
+|    generation_c_U      | -    | -    |        | generation_c | fifo    | srl    | 0       |
+|    capacity_c_U        | -    | -    |        | capacity_c   | fifo    | srl    | 0       |
+|    nj_c_U              | -    | -    |        | nj_c         | fifo    | srl    | 0       |
+|    n_c_U               | -    | -    |        | n_c          | fifo    | srl    | 0       |
+|    h0_U                | -    | -    |        | h0           | fifo    | memory | 0       |
+|    h1_U                | -    | -    |        | h1           | fifo    | memory | 0       |
+|    r0_U                | -    | -    |        | r0           | fifo    | memory | 0       |
+|    r1_U                | -    | -    |        | r1           | fifo    | memory | 0       |
+|    er_U                | -    | -    |        | er           | fifo    | memory | 0       |
+|    mr_U                | -    | -    |        | mr           | fifo    | memory | 0       |
+|    c0_U                | -    | -    |        | c0           | fifo    | memory | 0       |
+|    c1_U                | -    | -    |        | c1           | fifo    | memory | 0       |
+|    ma_U                | -    | -    |        | ma           | fifo    | srl    | 0       |
+|   + heap_0_s           | 8    | 0    |        |              |         |        |         |
+|     even_V_U           | 4    | -    | yes    | even_V       | ram_t2p | bram   | 1       |
+|     odd_V_U            | 4    | -    | yes    | odd_V        | ram_t2p | bram   | 1       |
+|   + heap_1_s           | 8    | 0    |        |              |         |        |         |
+|     even_V_U           | 4    | -    | yes    | even_V       | ram_t2p | bram   | 1       |
+|     odd_V_U            | 4    | -    | yes    | odd_V        | ram_t2p | bram   | 1       |
+|   + commit             | 4    | 0    |        |              |         |        |         |
+|     visited_U          | 1    | -    | yes    | visited      | ram_t2p | bram   | 1       |
+|     visited_1_U        | 1    | -    | yes    | visited_1    | ram_t2p | bram   | 1       |
+|     expanded_U         | 1    | -    | yes    | expanded     | ram_t2p | bram   | 1       |
+|     expanded_1_U       | 1    | -    | yes    | expanded_1   | ram_t2p | bram   | 1       |
++------------------------+------+------+--------+--------------+---------+--------+---------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-----------------+----------------------------------------------------+-----------------------------------------------------------+
+| Type            | Options                                            | Location                                                  |
++-----------------+----------------------------------------------------+-----------------------------------------------------------+
+| inline          |                                                    | source/onchip_types4.hpp:27 in get                        |
+| inline          |                                                    | source/onchip_types4.hpp:31 in put                        |
+| inline          |                                                    | source/onchip_types4.hpp:35 in push                       |
+| pipeline        | II=2                                               | source/onchip_types4.hpp:38 in push                       |
+| inline          | off                                                | source/onchip_types4.hpp:46 in pop                        |
+| pipeline        | II=2                                               | source/onchip_types4.hpp:50 in pop                        |
+| pipeline        | II=2                                               | source/onchip_types4.hpp:58 in pop                        |
+| interface       | ap_memory port=row                                 | source/services51.cpp:4 in lookahead_services51, row      |
+| interface       | ap_memory port=nodes                               | source/services51.cpp:5 in lookahead_services51, nodes    |
+| interface       | ap_memory port=edges                               | source/services51.cpp:6 in lookahead_services51, edges    |
+| interface       | ap_memory port=costs                               | source/services51.cpp:7 in lookahead_services51, costs    |
+| interface       | ap_memory port=sources                             | source/services51.cpp:8 in lookahead_services51, sources  |
+| interface       | ap_memory port=cells                               | source/services51.cpp:9 in lookahead_services51, cells    |
+| interface       | ap_memory port=targets                             | source/services51.cpp:10 in lookahead_services51, targets |
+| interface       | ap_memory port=output                              | source/services51.cpp:11 in lookahead_services51, output  |
+| interface       | ap_memory port=stats                               | source/services51.cpp:12 in lookahead_services51, stats   |
+| interface       | ap_memory port=hm0                                 | source/services51.cpp:13 in lookahead_services51, hm0     |
+| interface       | ap_memory port=hm1                                 | source/services51.cpp:14 in lookahead_services51, hm1     |
+| interface       | ap_memory port=em                                  | source/services51.cpp:15 in lookahead_services51, em      |
+| interface       | ap_memory port=mm                                  | source/services51.cpp:16 in lookahead_services51, mm      |
+| interface       | ap_memory port=cm                                  | source/services51.cpp:17 in lookahead_services51, cm      |
+| bind_storage    | variable=sr type=ram_2p impl=bram latency=1        | source/services51.cpp:20 in lookahead_services51, sr      |
+| bind_storage    | variable=se type=ram_2p impl=bram latency=1        | source/services51.cpp:21 in lookahead_services51, se      |
+| bind_storage    | variable=sn type=ram_2p impl=bram latency=1        | source/services51.cpp:22 in lookahead_services51, sn      |
+| bind_storage    | variable=mn type=ram_2p impl=bram latency=1        | source/services51.cpp:23 in lookahead_services51, mn      |
+| bind_storage    | variable=sk type=ram_2p impl=bram latency=1        | source/services51.cpp:24 in lookahead_services51, sk      |
+| bind_storage    | variable=sc type=ram_2p impl=bram latency=1        | source/services51.cpp:25 in lookahead_services51, sc      |
+| inline          | off                                                | source/services51.hpp:39 in heap                          |
+| bind_storage    | variable=even type=ram_t2p impl=bram latency=1     | source/services51.hpp:41 in heap, even                    |
+| bind_storage    | variable=odd type=ram_t2p impl=bram latency=1      | source/services51.hpp:42 in heap, odd                     |
+| pipeline        | II=1                                               | source/services51.hpp:48 in heap                          |
+| inline          | off                                                | source/services51.hpp:70 in edge                          |
+| inline          | off                                                | source/services51.hpp:83 in map_service                   |
+| array_partition | variable=remaining complete                        | source/services51.hpp:85 in map_service, remaining        |
+| pipeline        | II=1                                               | source/services51.hpp:89 in map_service                   |
+| inline          | off                                                | source/services51.hpp:100 in commit                       |
+| array_partition | variable=ctx complete                              | source/services51.hpp:102 in commit, ctx                  |
+| array_partition | variable=visited complete dim=1                    | source/services51.hpp:103 in commit, visited              |
+| array_partition | variable=expanded complete dim=1                   | source/services51.hpp:104 in commit, expanded             |
+| bind_storage    | variable=visited type=ram_t2p impl=bram latency=1  | source/services51.hpp:105 in commit, visited              |
+| bind_storage    | variable=expanded type=ram_t2p impl=bram latency=1 | source/services51.hpp:106 in commit, expanded             |
+| inline          | off                                                | source/services51.hpp:153 in network                      |
+| dataflow        | disable_start_propagation                          | source/services51.hpp:154 in network                      |
+| stream          | variable=h0 depth=4                                | source/services51.hpp:156 in network, h0                  |
+| stream          | variable=h1 depth=4                                | source/services51.hpp:157 in network, h1                  |
+| stream          | variable=r0 depth=4                                | source/services51.hpp:158 in network, r0                  |
+| stream          | variable=r1 depth=4                                | source/services51.hpp:159 in network, r1                  |
+| stream          | variable=er depth=4                                | source/services51.hpp:160 in network, er                  |
+| stream          | variable=mr depth=4                                | source/services51.hpp:161 in network, mr                  |
+| stream          | variable=c0 depth=4                                | source/services51.hpp:162 in network, c0                  |
+| stream          | variable=c1 depth=4                                | source/services51.hpp:163 in network, c1                  |
+| stream          | variable=ma depth=4                                | source/services51.hpp:164 in network, ma                  |
++-----------------+----------------------------------------------------+-----------------------------------------------------------+
+
+

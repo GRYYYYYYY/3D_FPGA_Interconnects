@@ -1,0 +1,269 @@
+
+
+================================================================
+== Vitis HLS Report for 'pop_path_16385_Pipeline_PATH_DOWN'
+================================================================
+* Date:           Mon Nov  9 07:37:19 2026
+
+* Version:        2022.2 (Build 3670227 on Oct 13 2022)
+* Project:        project
+* Solution:       solution (Vivado IP Flow Target)
+* Product family: virtexuplus
+* Target device:  xcu280-fsvh2892-2L-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+---------+----------+------------+
+    |  Clock |  Target | Estimated| Uncertainty|
+    +--------+---------+----------+------------+
+    |ap_clk  |  5.00 ns|  7.169 ns|     1.35 ns|
+    +--------+---------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+    |   min   |   max   |    min   |    max   | min | max |   Type  |
+    +---------+---------+----------+----------+-----+-----+---------+
+    |        ?|        ?|         ?|         ?|    ?|    ?|       no|
+    +---------+---------+----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +-------------+---------+---------+----------+-----------+-----------+------+----------+
+        |             |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |  Loop Name  |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +-------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- PATH_DOWN  |        ?|        ?|         2|          2|          2|     ?|       yes|
+        +-------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+------+---------+---------+-----+
+|         Name        | BRAM_18K|  DSP |    FF   |   LUT   | URAM|
++---------------------+---------+------+---------+---------+-----+
+|DSP                  |        -|     -|        -|        -|    -|
+|Expression           |        -|     -|        0|      303|    -|
+|FIFO                 |        -|     -|        -|        -|    -|
+|Instance             |        -|     -|        -|        -|    -|
+|Memory               |        -|     -|        -|        -|    -|
+|Multiplexer          |        -|     -|        -|       96|    -|
+|Register             |        -|     -|     2114|        -|    -|
++---------------------+---------+------+---------+---------+-----+
+|Total                |        0|     0|     2114|      399|    0|
++---------------------+---------+------+---------+---------+-----+
+|Available SLR        |     1344|  3008|   869120|   434560|  320|
++---------------------+---------+------+---------+---------+-----+
+|Utilization SLR (%)  |        0|     0|       ~0|       ~0|    0|
++---------------------+---------+------+---------+---------+-----+
+|Available            |     4032|  9024|  2607360|  1303680|  960|
++---------------------+---------+------+---------+---------+-----+
+|Utilization (%)      |        0|     0|       ~0|       ~0|    0|
++---------------------+---------+------+---------+---------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +--------------------------+----------+----+---+----+------------+------------+
+    |       Variable Name      | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +--------------------------+----------+----+---+----+------------+------------+
+    |add_ln27_1_fu_648_p2      |         +|   0|  0|  22|          15|           2|
+    |add_ln27_fu_669_p2        |         +|   0|  0|  39|          32|           2|
+    |depth_3_out               |         +|   0|  0|  39|          32|           1|
+    |right_3_fu_895_p2         |         +|   0|  0|  39|          32|           2|
+    |icmp_ln25_fu_617_p2       |      icmp|   0|  0|  20|          32|          32|
+    |left_fu_694_p2            |      icmp|   0|  0|  20|          32|          32|
+    |hole_3_fu_700_p3          |    select|   0|  0|  32|           1|          32|
+    |path_word_V_15_fu_711_p3  |    select|   0|  0|  90|           1|          96|
+    |ap_enable_pp0             |       xor|   0|  0|   2|           1|           2|
+    +--------------------------+----------+----+---+----+------------+------------+
+    |Total                     |          |   0|  0| 303|         178|         201|
+    +--------------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------+----+-----------+-----+-----------+
+    |           Name          | LUT| Input Size| Bits| Total Bits|
+    +-------------------------+----+-----------+-----+-----------+
+    |ap_NS_fsm                |  14|          3|    1|          3|
+    |ap_done_int              |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter0  |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter1  |   9|          2|    1|          2|
+    |depth_fu_160             |   9|          2|   32|         64|
+    |even_address0            |  14|          3|   14|         42|
+    |hole_2_fu_168            |   9|          2|   15|         30|
+    |odd_address0             |  14|          3|   14|         42|
+    |right_fu_164             |   9|          2|   31|         62|
+    +-------------------------+----+-----------+-----+-----------+
+    |Total                    |  96|         21|  110|        249|
+    +-------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-----------------------------+----+----+-----+-----------+
+    |             Name            | FF | LUT| Bits| Const Bits|
+    +-----------------------------+----+----+-----+-----------+
+    |ap_CS_fsm                    |   2|   0|    2|          0|
+    |ap_done_reg                  |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter0_reg  |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1      |   1|   0|    1|          0|
+    |depth_4_reg_1241             |  32|   0|   32|          0|
+    |depth_5_reg_1264             |  32|   0|   32|          0|
+    |depth_fu_160                 |  32|   0|   32|          0|
+    |hole_2_fu_168                |  15|   0|   15|          0|
+    |hole_reg_1252                |  15|   0|   15|          0|
+    |path_index_10_fu_272         |  32|   0|   32|          0|
+    |path_index_11_fu_276         |  32|   0|   32|          0|
+    |path_index_12_fu_280         |  32|   0|   32|          0|
+    |path_index_13_fu_284         |  32|   0|   32|          0|
+    |path_index_14_fu_288         |  32|   0|   32|          0|
+    |path_index_1_fu_236          |  32|   0|   32|          0|
+    |path_index_2_fu_240          |  32|   0|   32|          0|
+    |path_index_3_fu_244          |  32|   0|   32|          0|
+    |path_index_4_fu_248          |  32|   0|   32|          0|
+    |path_index_5_fu_252          |  32|   0|   32|          0|
+    |path_index_6_fu_256          |  32|   0|   32|          0|
+    |path_index_7_fu_260          |  32|   0|   32|          0|
+    |path_index_8_fu_264          |  32|   0|   32|          0|
+    |path_index_9_fu_268          |  32|   0|   32|          0|
+    |path_index_fu_232            |  32|   0|   32|          0|
+    |path_word_V_10_fu_212        |  96|   0|   96|          0|
+    |path_word_V_11_fu_216        |  96|   0|   96|          0|
+    |path_word_V_12_fu_220        |  96|   0|   96|          0|
+    |path_word_V_13_fu_224        |  96|   0|   96|          0|
+    |path_word_V_14_fu_228        |  96|   0|   96|          0|
+    |path_word_V_1_fu_176         |  96|   0|   96|          0|
+    |path_word_V_2_fu_180         |  96|   0|   96|          0|
+    |path_word_V_3_fu_184         |  96|   0|   96|          0|
+    |path_word_V_4_fu_188         |  96|   0|   96|          0|
+    |path_word_V_5_fu_192         |  96|   0|   96|          0|
+    |path_word_V_6_fu_196         |  96|   0|   96|          0|
+    |path_word_V_7_fu_200         |  96|   0|   96|          0|
+    |path_word_V_8_fu_204         |  96|   0|   96|          0|
+    |path_word_V_9_fu_208         |  96|   0|   96|          0|
+    |path_word_V_fu_172           |  96|   0|   96|          0|
+    |right_2_reg_1246             |  31|   0|   32|          1|
+    |right_fu_164                 |  31|   0|   32|          1|
+    |trunc_ln18_reg_1257          |   1|   0|    1|          0|
+    +-----------------------------+----+----+-----+-----------+
+    |Total                        |2114|   0| 2116|          2|
+    +-----------------------------+----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++---------------------------+-----+-----+------------+------------------------------------+--------------+
+|         RTL Ports         | Dir | Bits|  Protocol  |            Source Object           |    C Type    |
++---------------------------+-----+-----+------------+------------------------------------+--------------+
+|ap_clk                     |   in|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_DOWN|  return value|
+|ap_rst                     |   in|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_DOWN|  return value|
+|ap_start                   |   in|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_DOWN|  return value|
+|ap_done                    |  out|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_DOWN|  return value|
+|ap_idle                    |  out|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_DOWN|  return value|
+|ap_ready                   |  out|    1|  ap_ctrl_hs|  pop_path<16385>_Pipeline_PATH_DOWN|  return value|
+|add_ln22                   |   in|   32|     ap_none|                            add_ln22|        scalar|
+|odd_address0               |  out|   14|   ap_memory|                                 odd|         array|
+|odd_ce0                    |  out|    1|   ap_memory|                                 odd|         array|
+|odd_we0                    |  out|    1|   ap_memory|                                 odd|         array|
+|odd_d0                     |  out|   96|   ap_memory|                                 odd|         array|
+|odd_q0                     |   in|   96|   ap_memory|                                 odd|         array|
+|even_address0              |  out|   14|   ap_memory|                                even|         array|
+|even_ce0                   |  out|    1|   ap_memory|                                even|         array|
+|even_we0                   |  out|    1|   ap_memory|                                even|         array|
+|even_d0                    |  out|   96|   ap_memory|                                even|         array|
+|even_q0                    |   in|   96|   ap_memory|                                even|         array|
+|path_index_14_out          |  out|   32|      ap_vld|                   path_index_14_out|       pointer|
+|path_index_14_out_ap_vld   |  out|    1|      ap_vld|                   path_index_14_out|       pointer|
+|path_index_13_out          |  out|   32|      ap_vld|                   path_index_13_out|       pointer|
+|path_index_13_out_ap_vld   |  out|    1|      ap_vld|                   path_index_13_out|       pointer|
+|path_index_12_out          |  out|   32|      ap_vld|                   path_index_12_out|       pointer|
+|path_index_12_out_ap_vld   |  out|    1|      ap_vld|                   path_index_12_out|       pointer|
+|path_index_11_out          |  out|   32|      ap_vld|                   path_index_11_out|       pointer|
+|path_index_11_out_ap_vld   |  out|    1|      ap_vld|                   path_index_11_out|       pointer|
+|path_index_10_out          |  out|   32|      ap_vld|                   path_index_10_out|       pointer|
+|path_index_10_out_ap_vld   |  out|    1|      ap_vld|                   path_index_10_out|       pointer|
+|path_index_9_out           |  out|   32|      ap_vld|                    path_index_9_out|       pointer|
+|path_index_9_out_ap_vld    |  out|    1|      ap_vld|                    path_index_9_out|       pointer|
+|path_index_8_out           |  out|   32|      ap_vld|                    path_index_8_out|       pointer|
+|path_index_8_out_ap_vld    |  out|    1|      ap_vld|                    path_index_8_out|       pointer|
+|path_index_7_out           |  out|   32|      ap_vld|                    path_index_7_out|       pointer|
+|path_index_7_out_ap_vld    |  out|    1|      ap_vld|                    path_index_7_out|       pointer|
+|path_index_6_out           |  out|   32|      ap_vld|                    path_index_6_out|       pointer|
+|path_index_6_out_ap_vld    |  out|    1|      ap_vld|                    path_index_6_out|       pointer|
+|path_index_5_out           |  out|   32|      ap_vld|                    path_index_5_out|       pointer|
+|path_index_5_out_ap_vld    |  out|    1|      ap_vld|                    path_index_5_out|       pointer|
+|path_index_4_out           |  out|   32|      ap_vld|                    path_index_4_out|       pointer|
+|path_index_4_out_ap_vld    |  out|    1|      ap_vld|                    path_index_4_out|       pointer|
+|path_index_3_out           |  out|   32|      ap_vld|                    path_index_3_out|       pointer|
+|path_index_3_out_ap_vld    |  out|    1|      ap_vld|                    path_index_3_out|       pointer|
+|path_index_2_out           |  out|   32|      ap_vld|                    path_index_2_out|       pointer|
+|path_index_2_out_ap_vld    |  out|    1|      ap_vld|                    path_index_2_out|       pointer|
+|path_index_1_out           |  out|   32|      ap_vld|                    path_index_1_out|       pointer|
+|path_index_1_out_ap_vld    |  out|    1|      ap_vld|                    path_index_1_out|       pointer|
+|path_index_out             |  out|   32|      ap_vld|                      path_index_out|       pointer|
+|path_index_out_ap_vld      |  out|    1|      ap_vld|                      path_index_out|       pointer|
+|path_word_V_14_out         |  out|   96|      ap_vld|                  path_word_V_14_out|       pointer|
+|path_word_V_14_out_ap_vld  |  out|    1|      ap_vld|                  path_word_V_14_out|       pointer|
+|path_word_V_13_out         |  out|   96|      ap_vld|                  path_word_V_13_out|       pointer|
+|path_word_V_13_out_ap_vld  |  out|    1|      ap_vld|                  path_word_V_13_out|       pointer|
+|path_word_V_12_out         |  out|   96|      ap_vld|                  path_word_V_12_out|       pointer|
+|path_word_V_12_out_ap_vld  |  out|    1|      ap_vld|                  path_word_V_12_out|       pointer|
+|path_word_V_11_out         |  out|   96|      ap_vld|                  path_word_V_11_out|       pointer|
+|path_word_V_11_out_ap_vld  |  out|    1|      ap_vld|                  path_word_V_11_out|       pointer|
+|path_word_V_10_out         |  out|   96|      ap_vld|                  path_word_V_10_out|       pointer|
+|path_word_V_10_out_ap_vld  |  out|    1|      ap_vld|                  path_word_V_10_out|       pointer|
+|path_word_V_9_out          |  out|   96|      ap_vld|                   path_word_V_9_out|       pointer|
+|path_word_V_9_out_ap_vld   |  out|    1|      ap_vld|                   path_word_V_9_out|       pointer|
+|path_word_V_8_out          |  out|   96|      ap_vld|                   path_word_V_8_out|       pointer|
+|path_word_V_8_out_ap_vld   |  out|    1|      ap_vld|                   path_word_V_8_out|       pointer|
+|path_word_V_7_out          |  out|   96|      ap_vld|                   path_word_V_7_out|       pointer|
+|path_word_V_7_out_ap_vld   |  out|    1|      ap_vld|                   path_word_V_7_out|       pointer|
+|path_word_V_6_out          |  out|   96|      ap_vld|                   path_word_V_6_out|       pointer|
+|path_word_V_6_out_ap_vld   |  out|    1|      ap_vld|                   path_word_V_6_out|       pointer|
+|path_word_V_5_out          |  out|   96|      ap_vld|                   path_word_V_5_out|       pointer|
+|path_word_V_5_out_ap_vld   |  out|    1|      ap_vld|                   path_word_V_5_out|       pointer|
+|path_word_V_4_out          |  out|   96|      ap_vld|                   path_word_V_4_out|       pointer|
+|path_word_V_4_out_ap_vld   |  out|    1|      ap_vld|                   path_word_V_4_out|       pointer|
+|path_word_V_3_out          |  out|   96|      ap_vld|                   path_word_V_3_out|       pointer|
+|path_word_V_3_out_ap_vld   |  out|    1|      ap_vld|                   path_word_V_3_out|       pointer|
+|path_word_V_2_out          |  out|   96|      ap_vld|                   path_word_V_2_out|       pointer|
+|path_word_V_2_out_ap_vld   |  out|    1|      ap_vld|                   path_word_V_2_out|       pointer|
+|path_word_V_1_out          |  out|   96|      ap_vld|                   path_word_V_1_out|       pointer|
+|path_word_V_1_out_ap_vld   |  out|    1|      ap_vld|                   path_word_V_1_out|       pointer|
+|path_word_V_out            |  out|   96|      ap_vld|                     path_word_V_out|       pointer|
+|path_word_V_out_ap_vld     |  out|    1|      ap_vld|                     path_word_V_out|       pointer|
+|hole_2_out                 |  out|   15|      ap_vld|                          hole_2_out|       pointer|
+|hole_2_out_ap_vld          |  out|    1|      ap_vld|                          hole_2_out|       pointer|
+|right_out                  |  out|   32|      ap_vld|                           right_out|       pointer|
+|right_out_ap_vld           |  out|    1|      ap_vld|                           right_out|       pointer|
+|depth_out                  |  out|   32|      ap_vld|                           depth_out|       pointer|
+|depth_out_ap_vld           |  out|    1|      ap_vld|                           depth_out|       pointer|
+|trunc_ln1_out              |  out|    1|      ap_vld|                       trunc_ln1_out|       pointer|
+|trunc_ln1_out_ap_vld       |  out|    1|      ap_vld|                       trunc_ln1_out|       pointer|
+|depth_3_out                |  out|   32|      ap_vld|                         depth_3_out|       pointer|
+|depth_3_out_ap_vld         |  out|    1|      ap_vld|                         depth_3_out|       pointer|
++---------------------------+-----+-----+------------+------------------------------------+--------------+
+

@@ -1,0 +1,29 @@
+{
+  "memory_and_protocol_contract": {
+    "pq": "One dedicated single-operation owner/RAM per partition; every level uses configured cycles; no layer overlap or hidden extra ports. Request FIFO accepts at configured II; actual starts wait full previous retire.",
+    "edge": "One shared lane locked to a parent until all its edges launch; finite candidate fullness causes head-of-line blocking across qids. Separate CSR, node and cost read banks, each one read port; synchronous reads included in edge_latency. Edge_ii throttles all three banks. Parent CSR startup included in map latency; no root_ready prefetch.",
+    "candidate": "Finite per-context credit includes all launched/inflight/ready candidates; FIFO slot retained through label commit.",
+    "labels": "Per-context RAM owned by label service, one nonoverlapped RMW/context in commit_latency; shared commit issue arbitration, per-context completion ports. Strict original edge order, label commit before next label read, including duplicate dst.",
+    "reset": "Default shared_commit: round-robin commit owner issues one label reset write per visit, competing with ordered label RMW; per-context search waits for reset. Cell-map initialization adds cells cycles. Optional independent reset is an unverified alternative. Warm initialization included.",
+    "map": "Single shared map owner; map_latency per POP, including stale/early-stop POPs (trace lacks exact map event flags). Completion precedes candidate side effects.",
+    "output": "One shared output RAM/writer, configured cells/cycle, complete map write then drain per qid.",
+    "capacity": "Logical size increments at accepted PUSH, decrements at accepted POP, includes pending operations once. Service queue full only backpressures; logical capacity overflow raises immediately. E+1 per context.",
+    "parent_barrier": "All original edges committed in order and every required PUSH retired before expanded barrier and next POP.",
+    "generation": "One immutable graph/cost generation per replay; recycled context only after own FIFO/pending/output drain. Cross-call reload protocol not simulated."
+  },
+  "limits": [
+    "Default service latencies/ports are conditional assumptions. The separately named scheduled_services_rtl_pop_mixed_contract reads edge II9/iteration10 and commit II4/iteration7 from synthesis reports plus the 45-transaction isolated POP RTL formula; PUSH retains old assumptions.",
+    "Pipeline depth10 is provisionally used as candidate feedback, not a measured full edge-service latency. Commit II4 gives two-context revisit8; reset shares that owner and writes at most one node every four cycles. No integrated native E1 contract is available.",
+    "observer_d_baseline_pq_envelope_native_extrapolation is a separate baseline-PQ point calibrated to D zero-hold mechanism operations. Its resource bounds are conditional on assigning those envelope latencies, not a hardware lower-bound proof. No complete native batch or deeper heap was measured by that observer.",
+    "Real mechanism prototype has N32/E128/C8/J8 and two dedicated-context PQs. Full native capacity, four-context sharing and this model service timing are not proven by that prototype.",
+    "Shared round-robin reset/label contention is explicit; other lifecycle transitions are not cycle-exact controller replicas. D mechanism FIFO enqueue and PQ start/retire intervals are measured only for its small test; complete native service timing remains unmeasured.",
+    "Single-parent edge lane HOL and depth4 PQ response FIFOs are modeled. Default contracts consume responses immediately; D observer envelope adds measured maximum retire-to-feedback9 and reaccept1. Parent/end-token and MAP turnaround, and native ACK arbitration under new loads remain extrapolated.",
+    "Old trace establishes parent boundaries, original edge ordinals/dst, accepted PUSHs and heap levels. Bounded path-cache profile supplies validated per-POP DOWN/UP split. Both omit parent identity on zero-edge POPs, exact MAP/expanded branches and speculative suffix activity.",
+    "Trace accepted/rejected decisions are fixed STRICT workload replay, not an executable proof of FP32, error/cancellation semantics or new algorithm behavior. No speculative suffix is modeled.",
+    "Repeated dst reads are serialized behind prior commit; model checks ordering/capacity/drain, not numerical label data.",
+    "Physical bank/address conflicts are excluded by dedicated banks and nonoverlapping RMW/PQ service, not assumed hazard-free layered pipelining. Wider concurrent PQ model is deliberately unsupported.",
+    "Cold graph loading and cost-version invalidation excluded and not estimated; full warm reset/output/drain included. Map-slot cost is conservative but unmodeled control can increase timing.",
+    "The +25% and +35% cycle sensitivities are not confidence intervals. Historical worst error used actual as denominator: a 25.6% underprediction needs 1/(1-0.256)=1.344086 times the prediction to recover actual. +35% illustrates that scale; +25% alone is insufficient compensation and neither guarantees future conservatism.",
+    "200MHz is only a reference budget; required frequency is a threshold, not achieved frequency; no FPGA microseconds or E2/board claim."
+  ]
+}
