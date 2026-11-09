@@ -1,0 +1,39 @@
+"""Separate manuscript-ready ALT appendix; strict main aggregates unchanged."""
+import json,sys
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];r=Path(sys.argv[1]);h=json.load(open(r/'holdout_results.json'))
+math=lambda a,b:'$'+f'{a:.3f}'+r'\pm'+(f'{b:.3f}' if b>=.0005 else f'{b:.6f}')+'$'
+out=[r'\documentclass[10pt]{article}',r'\usepackage[margin=0.8in]{geometry}',r'\usepackage{booktabs,amsmath,hyperref}',r'\title{R6.2: Native ALT Evidence and Hardware Service Boundary}',r'\author{}\date{}',r'\begin{document}\maketitle',
+r'\paragraph{Separate semantic track.} The strict CPU manuscript retains native tie semantics and map-equivalent aggregates. This appendix evaluates original-format ALT\_BUCKET\_FP32\_V1 at fixed shift20. Whole-pair FP32 wave updates can select different congestion values from STRICT. Compact/direct implementations remain offline-only; native qualification is not inferred.',
+r'\paragraph{Frozen holdout and scope.} LSTM seed2 was selected before timing independently of shift/cache tuning: two layers, width120, 4,166,724 final RR nodes, 40,142,314 edges and 40 samples, within unchanged $N<2^{23}$ admission. Stock, Flat, Pipeline, original ALT CPU and live ALT CUDA use fixed netlist/placement/RRG inputs on one H100 worker and eight physical cores. Three independent processes rotate arm order. E2 is the whole native lookahead constructor; Process includes RR XML loading, initialization, routing, checks and STA. Prior input generation is excluded; filesystem cache is not flushed.',
+r'\paragraph{Qualification.} Live CUDA compares every sample pair with a same-input CPU reference in a diagnostic run. Formal runs exclude capture and that verification. Every route retains its identity through independent FULL/STA, zero overuse and a 5\% CPD/wirelength gate against same-cohort Flat and stock. The no-fanin audit explains isolated outer-boundary CHANZ using exact channel-coordinate rules and final degrees; it does not certify all RRG invariants. No graph or checker was changed. Stock E2 has 0.01-second log precision; other E2 values use the high-resolution constructor timer. Timer formatting is not measurement accuracy.']
+names={'stock':'Stock','flat':'Flat','pipeline':'Pipeline','alt_cpu':'ALT CPU','alt_cuda':'ALT CUDA'}
+if h['status']['holdout_qualification_passed']:
+ out += [r'\begin{table}[h]\centering\small',r'\caption{LSTM native seconds, mean $\pm$ sample SD ($n=3$), one worker.}',r'\begin{tabular}{lrr}\toprule Method & E2 & Process\\\midrule']
+ for arm in names:
+  x=next(x for x in h['summary'] if x['case']=='lstm_s2' and x['backend']==arm)
+  out.append(names[arm]+' & '+math(x['E2_s']['mean'],x['E2_s']['sample_SD'])+' & '+math(x['Process_s']['mean'],x['Process_s']['sample_SD'])+r'\\')
+ out += [r'\bottomrule\end{tabular}\end{table}',r'\begin{table}[h]\centering\small',r'\caption{LSTM control/CUDA paired speedup, mean $\pm$ sample SD ($n=3$); no ratios of medians here.}',r'\begin{tabular}{lrr}\toprule Control & E2 & Process\\\midrule']
+ for arm in ['stock','flat','pipeline','alt_cpu']:
+  v=[next(x for x in h['paired_ratios'] if x['baseline']==arm and x['candidate']=='alt_cuda' and x['scope']==scope)['paired'] for scope in ['E2_s','Process_wall_s']]
+  out.append(names[arm]+' & '+math(v[0]['mean'],v[0]['sample_SD'])+' & '+math(v[1]['mean'],v[1]['sample_SD'])+r'\\')
+ out += [r'\bottomrule\end{tabular}\end{table}']
+ d=next(x for x in h['map_differences'] if x['pair']=='alt_cpu_vs_flat')
+ out += [f"The held-out ALT/Flat maps differ in {d['delay_word_differences']} delay words, {d['congestion_word_differences']} congestion words and {d['missing_state_differences']} missing states across {d['entries']} entries. Original ALT CPU/CUDA input-prefix and full-output hashes agree. These map counts are not per-sample difference counts."]
+else:out+=['The frozen holdout qualification did not pass; dependent formal timing was skipped. The negative gate and raw diagnostics are retained.']
+p=r/'targeted_optimization_results.json'
+if p.exists():
+ z=json.load(open(p));out += [r'\paragraph{One conversion optimization.} A single non-formal BNN profile measures 0.812 s in the dense mapping/job/cost construction interval, versus 0.619 s in CSR construction/allocation and 0.119 s in H2D. The sole candidate pre-indexes IPIN IDs and fills the unchanged original dense buffer. Both old cases pass affected CPU/CUDA qualifications; complete input-prefix and output SHA256 checks retain original bytes. The following measurements compare only live CUDA before/after this one bridge change on the same worker. They do not transfer optimized native qualification or timings to LSTM.',r'\begin{table}[h]\centering\small',r'\caption{Original/candidate paired speedup, mean $\pm$ sample SD ($n=3$).}',r'\begin{tabular}{llr}\toprule Case & Scope & Speedup\\\midrule']
+ for x in z['paired_statistics']:out.append(x['case']+' & '+('E2' if x['scope']=='E2_s' else 'Process')+' & '+math(x['paired']['mean'],x['paired']['sample_SD'])+r'\\')
+ out += [r'\bottomrule\end{tabular}\end{table}']
+ out += ['BNN E2 improves in all three pairs, but neither case has a consistently positive Process effect. The small-case E2 result also has mixed direction. The candidate remains an isolated experiment; defaults are unchanged and no second optimization is attempted.']
+out += [
+r'\paragraph{Earlier cohort and Pipeline boundary.} Recomputed from R6.1 raw repeats, BNN Flat/CUDA paired E2 speedup is $3.274\pm0.222\times$, and Process speedup is $1.091\pm0.011\times$. The earlier report used ratios of medians, $3.348\times$ and $1.095\times$. These statistics are not interchangeable. CUDA is slower on s38417; qualified ALT CPU builds faster, while stock has the fastest Process. R6.2 Pipeline supplements for s38417 and BNN pass map/QoR checks on a new worker; they do not support ratios to old-worker CUDA times. LSTM supplies the new same-worker Pipeline comparison.',
+r'\paragraph{System limit.} In BNN R6.1 repeat1, E1 is 0.363794840\,s of E2=3.104359912\,s (11.72\%). Keeping every other interval fixed, eliminating E1 gives at most 1.132744$\times$ E2 or 1.005434$\times$ Process speedup. This does not constrain conversion/preparation optimization. Stage partitions use one process; child medians are never summed. Historical E1/service ends before final ABI output handoff; E2 includes it.',
+r'\paragraph{Hardware stop.} Read-only Vivado 2022.2 identifies 960 URAM, 2016 BRAM36 and 3 SLRs in U280. XRT finds no FPGA and platforminfo no installed platform. One 32-bit member per 4096$\times$72 URAM word needs1024 URAM for 16\,MiB, exceeding the raw device; two members per word need 512 but do not establish ports or placement. Cache lookup/LRU mapping and random dependent RMW service remain unproved. Software hit counts are not hardware throughput. Proposal traffic alone implies 118.00\,GB/s break-even and 147.50\,GB/s with 20\% time margin against the frozen warm compact-CUDA E1 target; other traffic is omitted. No achieved frequency or calibrated whole-pair HBM service is available. Status is UNRESOLVED\_NO\_SUPPORTED\_MEMORY\_EVIDENCE; FPGA superiority is false. No HLS/RTL/OOC or new replay was launched.',
+r'\paragraph{Evidence scope.} Three runtime repeats of one holdout placement do not establish all-architecture or all-size generality. The strict CPU paper and this ALT appendix remain separate. Per-case/backend/shift/representation records, negative outcomes, source/object bindings and raw logs are archived in the R6.2 evidence snapshot. No automatic next hardware round follows.',
+r'\end{document}']
+out=[s+'\n' if s.startswith(r'\paragraph') or s.endswith(r'\end{table}') else s for s in out]
+(R/'paper/dac2027/r6_2_alt_extension.tex').write_text(('\n'.join(out)+'\n').replace('needs1024','needs 1024'))
+print('separate ALT appendix generated; strict manuscript unchanged')
+

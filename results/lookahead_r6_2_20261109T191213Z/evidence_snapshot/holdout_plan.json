@@ -1,0 +1,120 @@
+{
+  "selection": {
+    "case": "lstm_s2",
+    "frozen_utc": "2026-11-09T19:22:48.024226+00:00",
+    "reason": "Unseen by R6/R6.1 ALT shift/cache/directory tuning; medium-large two-layer circuit, known legal seed2 fixed placement; within N<2^23",
+    "input_bindings": {
+      "architecture": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+        "sha256": "b19507fc7eeb0f87208a8565fe09b6313aafd1d6006b057c1e284ae2c549ef60"
+      },
+      "circuit": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/lstm.blif",
+        "sha256": "38ecd31e85c8afa11a8f8840b4d62f89d763506d0d936417d78650afe4be09b1"
+      },
+      "packed_netlist": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s2/packed.net",
+        "sha256": "32c38abb0946e9592c44d508e273965c54bf157d3430d6beeceabd29e5966ee2"
+      },
+      "placement": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s2/fixed.place",
+        "sha256": "9591eaf566032945ed4c0980bc17877c3461dab46e28a40bfd3c63797213f0e5"
+      },
+      "rr_graph": {
+        "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/rr_graph.xml",
+        "sha256": "ce2c7ec3387ea8fd644083c8925e31421ad6cd34a1a9aac4ab1b9b7b5f91a364"
+      }
+    },
+    "actual_RR": {
+      "N": 4166724,
+      "max_id_plus_one": 4166724,
+      "E": 40142314,
+      "CHANZ": 76614,
+      "zero_fanin_CHANZ": 1350,
+      "isolated_CHANZ": 1350,
+      "cross_layer_span_edges": 4816896,
+      "xmax": 112,
+      "ymax": 112
+    },
+    "old_geometry": {
+      "placed_blocks": 17432,
+      "placement_layers": {
+        "1": 8322,
+        "0": 9110
+      },
+      "coordinate_sha256": "d37b19ae104f7d77c2357a1fc50bcbffb782b38cceea9803d73852a74f5a7c98",
+      "grid": [
+        "113 x 113 logic blocks"
+      ],
+      "rr_nodes": 3929844,
+      "rr_edges": 34459546,
+      "rr_bytes": 3013743411
+    },
+    "geometry_note": "Old metadata counters precede final additions. Immutable XML hash matches; use complete XML counts.",
+    "shift": 20,
+    "representation": "original",
+    "selector": "explicit CPU/GPU; no selector",
+    "extra_qor_seeds": [],
+    "J": 40,
+    "metadata_preflight": {
+      "N": 4166724,
+      "E": 40142314,
+      "J": 40,
+      "cells": 25538,
+      "costs": 10,
+      "search_executed": false,
+      "expected_exit": 86
+    }
+  },
+  "freeze_utc": "2026-11-09T19:25:09.103552+00:00",
+  "holdout_case_file": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/native_cpu_width120_20261104/lstm_s2/vpr_case.json",
+  "resources": "one H100, 8 distinct physical cores on one NUMA pool, quota>=8, sequential solver processes",
+  "qualifications": [
+    "stock",
+    "flat",
+    "pipeline",
+    "alt_cpu",
+    "alt_cuda"
+  ],
+  "formal_repeats": 3,
+  "formal_order_rotation": [
+    "stock",
+    "flat",
+    "pipeline",
+    "alt_cpu",
+    "alt_cuda"
+  ],
+  "existing_case_addition": {
+    "cases": [
+      "s38417",
+      "bnn"
+    ],
+    "arms": [
+      "pipeline"
+    ],
+    "repeats": 3,
+    "scope": "Only Pipeline row; new worker cohort. Do not divide by old-worker timing; compare map/QoR to frozen old controls."
+  },
+  "timeout_per_process_s": 600,
+  "max_job_s": 10800,
+  "representation": "original",
+  "shift": 20,
+  "qualification": "all CUDA full sample pairs compared with live same-input CPU; map decoded against Flat; native plus independent FULL/STA/route identity/zero overuse; CPD and WL <=1.05 Flat and stock; no timing claims for failures",
+  "stop": "No retries, no graph/config/seed switching after negative. Failure stored; dependent formal matrix skipped.",
+  "statistics": "Per-repeat paired ratios mean plus sample SD (n=3); also explicitly labelled ratio of medians. Never pool cohorts or sum medians.",
+  "P2": "At most one directed non-formal BNN native profile after P1. Optimization decision only from profile, at most one. No automatic selector or compact native.",
+  "script_bindings_pending": false,
+  "runner_binding": {
+    "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/scripts/la_accel_round6_2_worker.py",
+    "sha256": "279e05473cc9c06934cfbcff566298627e4ad44b1fe7a7e2d38abb7d75f8fc6c"
+  },
+  "binary_bindings": {
+    "native_build/bin/vpr_flat": "5d32c536b729d87ffd33a9c354ec157662b703f96dcc8ed02fcb522355de2355",
+    "libcpu61.so": "24def217de2a67f0963d0244bc86c17548b48e4be22ccb25fb1efdd63b614cb6",
+    "gpu_worker/libcuda61.so": "9f5c60501adde4cec5a59aef55de0acf82732c7ff23821f4d456d444d20d00b1"
+  },
+  "profile_bindings": {
+    "profile_build/bin/vpr_flat": "f26bd5ae34620888f7c315fd612cb736fd5f9f6d3c43b06707d9ac576a69e59c",
+    "profile_cuda_source/round6_1/cuda_solver61.cuh": "74224359699e31c97f46cc08a422f5088aa4afd090c4c924cfad307905f4113b"
+  }
+}

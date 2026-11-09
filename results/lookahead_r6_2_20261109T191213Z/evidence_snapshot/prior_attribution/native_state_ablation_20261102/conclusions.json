@@ -1,0 +1,36 @@
+{
+  "status": "complete_with_failed_parallel_attribution_gate",
+  "parallel_samples": 36,
+  "serial_diagnostic_samples": 12,
+  "legal_samples": 48,
+  "parallel_endpoint_gate_passed": false,
+  "both_endpoint_matches": 6,
+  "none_endpoint_matches": 3,
+  "serial": [
+    {
+      "case": "s38417_s1",
+      "equal_across_six_arms": true,
+      "iterations": 55,
+      "critical_path_ns": 7.52035,
+      "wirelength": 88168,
+      "route_body_sha256": "4cf4d4217cd34d90a1da18668ba9e89c9c8d7174942c4f6199b58979d5ba33d2"
+    },
+    {
+      "case": "s38417_s2",
+      "equal_across_six_arms": true,
+      "iterations": 56,
+      "critical_path_ns": 7.9263,
+      "wirelength": 89800,
+      "route_body_sha256": "7d724b2dfcea1fa9217fd15f61162d1ccf5895a6bf06bb1bb77c93de871dcb28"
+    }
+  ],
+  "conclusion": "Dynamic notification mode consistently associates with changed parallel iteration counts; no strict attribution claim because the no-fix parallel endpoint did not reproduce stock in all repetitions. Both-fixed endpoint reproduces frozen in all six. Serial six-arm routes are identical per layout; this supports parallel sensitivity but proves neither a race nor a complete root cause.",
+  "limitations": [
+    "Serial diagnostic has one run per arm/layout.",
+    "No-fix s1 repeat2 CPD8.33758 versus stock7.05387 exceeds5% quality gate; legality alone is insufficient.",
+    "Cached same-ELF small regression from prior study remains unresolved.",
+    "Reload fix changes s1 final wirelength87885 to87893 despite same68 iterations, so it is not behaviorally inert."
+  ],
+  "next": "Capture per-iteration net partition assignment and BB notification histories, locate earliest divergence in parallel no-fix vs fixed modes; keep correctness fixes enabled by default.",
+  "default_changed": false
+}

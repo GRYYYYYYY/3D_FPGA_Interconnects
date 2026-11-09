@@ -1,0 +1,11 @@
+{
+  "selected_utc": "2026-11-09T20:29:03.836595+00:00",
+  "profile_path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/worker/bnn_alt_cuda_profile/process.log",
+  "profile_sha256": "97a7a625cec8577d62f1258221ec42792f714ff246b193bde6be2471abe03ad1",
+  "candidate": "ORIGINAL_DENSE_IPIN_FILL_V1",
+  "reason": "Largest actionable profiled slice is dense mapping/job/cost construction0.811779686s, versus graph/CSR0.619274104s, context/capacity0.400624830s, targets0.256312932s and H2D0.118766436s. Build an IPIN ID list once and fill preallocated original qid*N cells. No second optimization.",
+  "representation": "original, byte layout and all IDs/order unchanged; no compact or mapping format version change",
+  "proof": "For every qid, all N cells begin at-1. Non-IPIN and coordinate-ineligible IPIN cells keep-1; every eligible IPIN invokes the same native get_xy_deltas and guard at the same qid*N+node index. Existing jobs, costs, CSR, errors, ordered reduction and mutable-label reset remain unchanged.",
+  "affected_qualification": "s38417 and BNN, original CPU and CUDA; capture input-prefix/complete outputs versus frozen R6.1 plus map identity and independent FULL/STA/QoR. Three same-worker paired CUDA baseline/candidate E2 and Process.",
+  "no_extra_profile": true
+}

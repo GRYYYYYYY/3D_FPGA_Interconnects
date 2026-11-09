@@ -1,0 +1,13 @@
+{
+  "status": "corrected_validation_passed",
+  "field": "launch_request_sha256",
+  "observed": "3ea7e26109c46c1260f2246c8cac33f5eb337df42af9bcb581565f9e9dffdafa",
+  "expected": "ed161b3704a61ba821fa55e2c46a3dae8eee0f1be5adb77bd7cd14ac439a35d4",
+  "cause": "Collector local p was reused for capture files; it hashed the last capture rather than the immutable launch request.",
+  "assertion": "validate.py launch-request binding failed",
+  "affected": "Metadata reference only; launch request, captures, process records, statistics and all experimental artifacts unchanged.",
+  "correction": "Use dedicated launch_path; regenerate collector output and rerun validation.",
+  "utc": "2026-11-09T20:49:21.669490+00:00",
+  "validation_sha256": "09c7e0429e7084536c25ea169f2d90bb01bd1c2cfc175caf881e7a0a80e3d553",
+  "additional_report_fix": "Report relative_to failed for relative CLI argument before output write; normalize result root with resolve(). No experiment change."
+}

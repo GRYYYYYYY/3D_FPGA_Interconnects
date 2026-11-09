@@ -1,0 +1,71 @@
+{
+  "status": "UNRESOLVED_NO_SUPPORTED_MEMORY_EVIDENCE",
+  "H1_conditions": {
+    "available_U280_shell": false,
+    "calibrated_controller_service": false,
+    "reusable_32B_random_RMW_facility": false,
+    "H0_interpretable_physical_contract": false,
+    "finite_budget": true
+  },
+  "H1_executed": false,
+  "board_measured": false,
+  "fpga_superiority_verified": false,
+  "necessary_thresholds": [
+    {
+      "threshold_kind": "break_even",
+      "target_s": 0.309712337,
+      "proposal_bytes": 36545890272,
+      "GB_s": 117.99946565254196,
+      "transactions_s": 3687483301.6419363,
+      "miss_reads_s": 3287965932.722919,
+      "eligible_per_200MHz_cycle": 20.776330053006575,
+      "max_nonhidden_lane_II": 3.08042853750961
+    },
+    {
+      "threshold_kind": "engineering_margin",
+      "target_s": 0.24776986960000003,
+      "proposal_bytes": 36545890272,
+      "GB_s": 147.49933206567744,
+      "transactions_s": 4609354127.05242,
+      "miss_reads_s": 4109957415.9036484,
+      "eligible_per_200MHz_cycle": 25.970412566258215,
+      "max_nonhidden_lane_II": 2.464342830007688
+    }
+  ],
+  "latency_sensitivity": {
+    "assumed_latency_ns": 300,
+    "not_measured": true,
+    "global_reads_outstanding": 1232.9872247710944,
+    "per32PC": 38.5308507740967
+  },
+  "lane_sensitivity": {
+    "lanes": 64,
+    "reference_MHz": 200,
+    "achieved_frequency": null,
+    "II3": "fails20percentmargin only; not proof that GPU break-even is impossible",
+    "II4": "fails break_even if per-lane service II cannot hide behind other independent work"
+  },
+  "traffic_omitted": [
+    "graph",
+    "parent label reads",
+    "pending clear/set",
+    "seen",
+    "reset",
+    "output",
+    "drain",
+    "all allocation/SLR protocol"
+  ],
+  "decision_scope": "Reject named naive mappings; whole candidate unresolved. No measured random mixedRMW/controller evidence; passing proposal bandwidth would be necessary only.",
+  "stop": "H1 ends here. No HLS, RTL, OOC, new full replay, board allocation or automatic next round.",
+  "facility_search": {
+    "roots": [
+      "accel",
+      "hardware",
+      "scripts",
+      "platforminfo -l",
+      "xbutil examine",
+      "xbmgmt examine"
+    ],
+    "result": "No reusable calibrated random32B whole-pair service facility found; existing AXI/csim evidence is not hardware service."
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "status": "completed_qualified_measured",
+  "worker_command_tag": "reserve is the preallocated-buffer candidate slot; scientific name below",
+  "candidate": "ORIGINAL_DENSE_IPIN_FILL_V1",
+  "reason": "Profile confirms dense mapping construction0.811779686s is the largest actionable slice. Pre-index IPIN IDs once and bulk-initialize the same qid*N dense buffer; no layout/value/semantics change. Only this one candidate is implemented.",
+  "binary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/reserve_build/bin/vpr_flat",
+  "binary_sha256": "645b179cfacf99c75d7628607ec8708828d1bce3676725f430e6e6b7b90ae39a",
+  "selection": {
+    "selected_utc": "2026-11-09T20:29:03.836595+00:00",
+    "profile_path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/worker/bnn_alt_cuda_profile/process.log",
+    "profile_sha256": "97a7a625cec8577d62f1258221ec42792f714ff246b193bde6be2471abe03ad1",
+    "candidate": "ORIGINAL_DENSE_IPIN_FILL_V1",
+    "reason": "Largest actionable profiled slice is dense mapping/job/cost construction0.811779686s, versus graph/CSR0.619274104s, context/capacity0.400624830s, targets0.256312932s and H2D0.118766436s. Build an IPIN ID list once and fill preallocated original qid*N cells. No second optimization.",
+    "representation": "original, byte layout and all IDs/order unchanged; no compact or mapping format version change",
+    "proof": "For every qid, all N cells begin at-1. Non-IPIN and coordinate-ineligible IPIN cells keep-1; every eligible IPIN invokes the same native get_xy_deltas and guard at the same qid*N+node index. Existing jobs, costs, CSR, errors, ordered reduction and mutable-label reset remain unchanged.",
+    "affected_qualification": "s38417 and BNN, original CPU and CUDA; capture input-prefix/complete outputs versus frozen R6.1 plus map identity and independent FULL/STA/QoR. Three same-worker paired CUDA baseline/candidate E2 and Process.",
+    "no_extra_profile": true
+  },
+  "binding": {
+    "candidate": "ORIGINAL_DENSE_IPIN_FILL_V1",
+    "binary_sha256": "645b179cfacf99c75d7628607ec8708828d1bce3676725f430e6e6b7b90ae39a",
+    "sources": {
+      "vpr_bridge.cpp": "afa1ee64b7d702210d9a637c32f451a19a1af481819cfc82099fbf197a987da7",
+      "kernel.hpp": "1b4d4457fb8eb2242e877bc530d58420af6cf30067335312a164410e076aff47",
+      "vpr_live.cpp": "1501e2692df66ff8dac9f0923c1960dfb344fba691c3ce1b6b54a517bcb7b20b",
+      "backend.hpp": "418821b884bf137f48077f6ac9a45ad76bbd6ee0dad53ee8ea0f14e81526d627",
+      "native_stage_memory.h": "4255e50e91a2f21cddfc28fd233ede7c2dd51a55bf8a589ad403f9909b768ae6",
+      "router_lookahead_map_utils.cpp": "6510c8ad8a3daddbd3b81aba7a0fb37a8f9a46e247d1a38647f05c2244ca152c",
+      "router_lookahead_map.cpp": "6380aca30ffb15cd6c5fa1819ce0077dc21c6333cf0a9e9bd3f028379cc177a2",
+      "io.hpp": "de3ace5bf1192464f2973d718f2359e28430a9d44512b99838fbcef92b415e1a",
+      "dual_kernel.hpp": "6d4db205b3b5e42b9bb2eeb40dd0c03ae360f0eab533f13241fa2072d27204fe",
+      "strict_heap.hpp": "c408b7cec8871e01dabb0471de125d2079c4ab27949e9293776beb2676487f3f",
+      "workload.hpp": "8ddb7478883d85086a6245acd9a534da967eeb7a6670d357c27ce672f89c69b7"
+    },
+    "patch_sha256": "dff70d3bf3d0626933c3db2240f45d0260baa7137cfe3a650b66d3efb934b5b9",
+    "scope_version": "R6_1_NATIVE_BUILD_V1",
+    "profile_instrumentation": false
+  },
+  "launch_utc": "2026-11-09T20:30:14.899080+00:00",
+  "profile_ready": {
+    "status": "complete",
+    "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/worker/bnn_alt_cuda_profile/process.log"
+  },
+  "formal_scope": "Three paired independent CUDA baseline/candidate processes per s38417/BNN on the same worker; CPU and CUDA both receive affected qualifications. CPU candidate performance is not a formal claim.",
+  "fallback": false,
+  "second_candidate_allowed": false,
+  "launch_request_sha256": "ed161b3704a61ba821fa55e2c46a3dae8eee0f1be5adb77bd7cd14ac439a35d4",
+  "results_sha256": "f1aa7ba24fd4bc02a39397caf38bc9100178f8c76357cbf2644cb60fe2124d15",
+  "affected_qualifications": 4,
+  "paired_formal_processes": 12,
+  "default_changed": false,
+  "LSTM_optimized_qualification_inherited": false,
+  "CPU_candidate_formal_timing": false,
+  "stop_decision": "STOP_P2_NO_SECOND_CANDIDATE",
+  "measured_interpretation": "s38417 E2_s: 0.983\u00b10.085\u00d7\uff08\u4e09\u5bf9\u65b9\u5411\u4e0d\u4e00\u81f4\uff0c\u672a\u8bc1\u660e\u4e00\u81f4\u6536\u76ca\uff09\u3002 s38417 Process_wall_s: 1.014\u00b10.032\u00d7\uff08\u4e09\u5bf9\u65b9\u5411\u4e0d\u4e00\u81f4\uff0c\u672a\u8bc1\u660e\u4e00\u81f4\u6536\u76ca\uff09\u3002 bnn E2_s: 1.082\u00b10.037\u00d7\uff08\u4e09\u5bf9\u5747\u52a0\u901f\uff09\u3002 bnn Process_wall_s: 1.009\u00b10.019\u00d7\uff08\u4e09\u5bf9\u65b9\u5411\u4e0d\u4e00\u81f4\uff0c\u672a\u8bc1\u660e\u4e00\u81f4\u6536\u76ca\uff09\u3002 \u552f\u4e00\u5019\u9009\u4fdd\u7559\u4e3a\u72ec\u7acb\u5b9e\u9a8c\uff0c\u4e0d\u6539\u9ed8\u8ba4\u8def\u5f84\uff1b\u672c\u8f6eP2\u5230\u6b64\u7ed3\u675f\u3002",
+  "paired_statistics": [
+    {
+      "case": "s38417",
+      "scope": "E2_s",
+      "baseline": {
+        "samples": [
+          0.516151642,
+          0.546531331,
+          0.535771062
+        ],
+        "n": 3,
+        "median": 0.535771062,
+        "mean": 0.5328180116666666,
+        "sample_SD": 0.015403628002440864,
+        "min": 0.516151642,
+        "max": 0.546531331
+      },
+      "candidate": {
+        "samples": [
+          0.583123117,
+          0.528195341,
+          0.520832828
+        ],
+        "n": 3,
+        "median": 0.528195341,
+        "mean": 0.5440504286666666,
+        "sample_SD": 0.0340375950915182,
+        "min": 0.520832828,
+        "max": 0.583123117
+      },
+      "paired": {
+        "samples": [
+          0.8851503686827769,
+          1.0347144107051107,
+          1.0286814371078776
+        ],
+        "n": 3,
+        "median": 1.0286814371078776,
+        "mean": 0.9828487388319217,
+        "sample_SD": 0.08466302522326805,
+        "min": 0.8851503686827769,
+        "max": 1.0347144107051107
+      },
+      "ratio_of_medians": 1.0143426501749473
+    },
+    {
+      "case": "s38417",
+      "scope": "Process_wall_s",
+      "baseline": {
+        "samples": [
+          6.623501774156466,
+          7.225994562963024,
+          6.825281149940565
+        ],
+        "n": 3,
+        "median": 6.825281149940565,
+        "mean": 6.891592495686685,
+        "sample_SD": 0.3066712997200291,
+        "min": 6.623501774156466,
+        "max": 7.225994562963024
+      },
+      "candidate": {
+        "samples": [
+          6.624444629997015,
+          6.878196204081178,
+          6.878259101882577
+        ],
+        "n": 3,
+        "median": 6.878196204081178,
+        "mean": 6.793633311986923,
+        "sample_SD": 0.1465217000111078,
+        "min": 6.624444629997015,
+        "max": 6.878259101882577
+      },
+      "paired": {
+        "samples": [
+          0.9998576702058495,
+          1.0505653442504999,
+          0.9922977673336685
+        ],
+        "n": 3,
+        "median": 0.9998576702058495,
+        "mean": 1.0142402605966727,
+        "sample_SD": 0.03168472517953033,
+        "min": 0.9922977673336685,
+        "max": 1.0505653442504999
+      },
+      "ratio_of_medians": 0.9923068414202527
+    },
+    {
+      "case": "bnn",
+      "scope": "E2_s",
+      "baseline": {
+        "samples": [
+          3.121240865,
+          3.212424263,
+          3.172186044
+        ],
+        "n": 3,
+        "median": 3.172186044,
+        "mean": 3.1686170573333334,
+        "sample_SD": 0.04569634850922707,
+        "min": 3.121240865,
+        "max": 3.212424263
+      },
+      "candidate": {
+        "samples": [
+          3.000331618,
+          2.887906617,
+          2.903446676
+        ],
+        "n": 3,
+        "median": 2.903446676,
+        "mean": 2.9305616370000003,
+        "sample_SD": 0.06092012019838884,
+        "min": 2.887906617,
+        "max": 3.000331618
+      },
+      "paired": {
+        "samples": [
+          1.0402986277498876,
+          1.11237123946103,
+          1.0925587406930561
+        ],
+        "n": 3,
+        "median": 1.0925587406930561,
+        "mean": 1.0817428693013245,
+        "sample_SD": 0.03723375679659697,
+        "min": 1.0402986277498876,
+        "max": 1.11237123946103
+      },
+      "ratio_of_medians": 1.0925587406930561
+    },
+    {
+      "case": "bnn",
+      "scope": "Process_wall_s",
+      "baseline": {
+        "samples": [
+          68.1072249149438,
+          69.24187472998165,
+          68.0034314780496
+        ],
+        "n": 3,
+        "median": 68.1072249149438,
+        "mean": 68.45084370765835,
+        "sample_SD": 0.6870158863475835,
+        "min": 68.0034314780496,
+        "max": 69.24187472998165
+      },
+      "candidate": {
+        "samples": [
+          68.98009402304888,
+          67.62186618801206,
+          66.91549117281102
+        ],
+        "n": 3,
+        "median": 67.62186618801206,
+        "mean": 67.83915046129066,
+        "sample_SD": 1.0493119525971428,
+        "min": 66.91549117281102,
+        "max": 68.98009402304888
+      },
+      "paired": {
+        "samples": [
+          0.9873460725087817,
+          1.023956874207899,
+          1.0162584221705697
+        ],
+        "n": 3,
+        "median": 1.0162584221705697,
+        "mean": 1.0091871229624167,
+        "sample_SD": 0.019302594505180935,
+        "min": 0.9873460725087817,
+        "max": 1.023956874207899
+      },
+      "ratio_of_medians": 1.00717754114597
+    }
+  ],
+  "build_setup_failure_retained": "candidate_build_failure.json"
+}

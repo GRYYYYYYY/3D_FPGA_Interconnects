@@ -1,0 +1,98 @@
+        R6.2: Native ALT Evidence and Hardware Service Boundary
+
+
+Separate semantic track. The strict CPU manuscript retains native tie semantics and map-equivalent aggre-
+gates. This appendix evaluates original-format ALT BUCKET FP32 V1 at fixed shift20. Whole-pair FP32 wave
+updates can select different congestion values from STRICT. Compact/direct implementations remain offline-only;
+native qualification is not inferred.
+
+Frozen holdout and scope. LSTM seed2 was selected before timing independently of shift/cache tuning: two
+layers, width120, 4,166,724 final RR nodes, 40,142,314 edges and 40 samples, within unchanged N < 223 admission.
+Stock, Flat, Pipeline, original ALT CPU and live ALT CUDA use fixed netlist/placement/RRG inputs on one H100
+worker and eight physical cores. Three independent processes rotate arm order. E2 is the whole native lookahead
+constructor; Process includes RR XML loading, initialization, routing, checks and STA. Prior input generation is
+excluded; filesystem cache is not flushed.
+
+Qualification. Live CUDA compares every sample pair with a same-input CPU reference in a diagnostic run.
+Formal runs exclude capture and that verification. Every route retains its identity through independent FULL/STA,
+zero overuse and a 5% CPD/wirelength gate against same-cohort Flat and stock. The no-fanin audit explains
+isolated outer-boundary CHANZ using exact channel-coordinate rules and final degrees; it does not certify all RRG
+invariants. No graph or checker was changed. Stock E2 has 0.01-second log precision; other E2 values use the
+high-resolution constructor timer. Timer formatting is not measurement accuracy.
+
+
+                    Table 1: LSTM native seconds, mean ± sample SD (n = 3), one worker.
+                                  Method                     E2            Process
+                                  Stock         65.413 ± 4.066     137.395 ± 4.839
+                                  Flat           9.909 ± 0.578      81.545 ± 1.742
+                                  Pipeline       9.907 ± 0.563      81.727 ± 1.986
+                                  ALT CPU        9.781 ± 0.179      81.246 ± 1.204
+                                  ALT CUDA       3.089 ± 0.071      74.703 ± 1.100
+
+
+
+
+     Table 2: LSTM control/CUDA paired speedup, mean ± sample SD (n = 3); no ratios of medians here.
+                                  Control                   E2            Process
+                                  Stock        21.182 ± 1.342        1.839 ± 0.049
+                                  Flat          3.208 ± 0.165        1.092 ± 0.007
+                                  Pipeline      3.207 ± 0.147        1.094 ± 0.010
+                                  ALT CPU       3.167 ± 0.071     1.088 ± 0.000122
+
+
+    The held-out ALT/Flat maps differ in 0 delay words, 23111 congestion words and 0 missing states across 459684
+entries. Original ALT CPU/CUDA input-prefix and full-output hashes agree. These map counts are not per-sample
+difference counts.
+
+One conversion optimization. A single non-formal BNN profile measures 0.812 s in the dense mapping/job/cost
+construction interval, versus 0.619 s in CSR construction/allocation and 0.119 s in H2D. The sole candidate pre-
+indexes IPIN IDs and fills the unchanged original dense buffer. Both old cases pass affected CPU/CUDA qualifica-
+tions; complete input-prefix and output SHA256 checks retain original bytes. The following measurements compare
+only live CUDA before/after this one bridge change on the same worker. They do not transfer optimized native
+qualification or timings to LSTM.
+
+
+                                                        1
+                    Table 3: Original/candidate paired speedup, mean ± sample SD (n = 3).
+                                         Case     Scope           Speedup
+                                         s38417   E2          0.983 ± 0.085
+                                         s38417   Process     1.014 ± 0.032
+                                         bnn      E2          1.082 ± 0.037
+                                         bnn      Process     1.009 ± 0.019
+
+
+   BNN E2 improves in all three pairs, but neither case has a consistently positive Process effect. The small-case
+E2 result also has mixed direction. The candidate remains an isolated experiment; defaults are unchanged and no
+second optimization is attempted.
+
+Earlier cohort and Pipeline boundary. Recomputed from R6.1 raw repeats, BNN Flat/CUDA paired E2
+speedup is 3.274 ± 0.222×, and Process speedup is 1.091 ± 0.011×. The earlier report used ratios of medians,
+3.348× and 1.095×. These statistics are not interchangeable. CUDA is slower on s38417; qualified ALT CPU
+builds faster, while stock has the fastest Process. R6.2 Pipeline supplements for s38417 and BNN pass map/QoR
+checks on a new worker; they do not support ratios to old-worker CUDA times. LSTM supplies the new same-worker
+Pipeline comparison.
+
+System limit. In BNN R6.1 repeat1, E1 is 0.363794840 s of E2=3.104359912 s (11.72%). Keeping every other
+interval fixed, eliminating E1 gives at most 1.132744× E2 or 1.005434× Process speedup. This does not constrain
+conversion/preparation optimization. Stage partitions use one process; child medians are never summed. Historical
+E1/service ends before final ABI output handoff; E2 includes it.
+
+Hardware stop. Read-only Vivado 2022.2 identifies 960 URAM, 2016 BRAM36 and 3 SLRs in U280. XRT finds
+no FPGA and platforminfo no installed platform. One 32-bit member per 4096×72 URAM word needs 1024 URAM
+for 16 MiB, exceeding the raw device; two members per word need 512 but do not establish ports or placement.
+Cache lookup/LRU mapping and random dependent RMW service remain unproved. Software hit counts are not
+hardware throughput. Proposal traffic alone implies 118.00 GB/s break-even and 147.50 GB/s with 20% time margin
+against the frozen warm compact-CUDA E1 target; other traffic is omitted. No achieved frequency or calibrated
+whole-pair HBM service is available. Status is UNRESOLVED NO SUPPORTED MEMORY EVIDENCE; FPGA
+superiority is false. No HLS/RTL/OOC or new replay was launched.
+
+Evidence scope. Three runtime repeats of one holdout placement do not establish all-architecture or all-size
+generality. The strict CPU paper and this ALT appendix remain separate. Per-case/backend/shift/representation
+records, negative outcomes, source/object bindings and raw logs are archived in the R6.2 evidence snapshot. No
+automatic next hardware round follows.
+
+
+
+
+                                                          2
+

@@ -1,0 +1,47 @@
+{
+  "status": "run_one_reserve_candidate",
+  "worker_command_tag": "reserve is the preallocated-buffer candidate slot; scientific name below",
+  "candidate": "ORIGINAL_DENSE_IPIN_FILL_V1",
+  "reason": "Profile confirms dense mapping construction0.811779686s is the largest actionable slice. Pre-index IPIN IDs once and bulk-initialize the same qid*N dense buffer; no layout/value/semantics change. Only this one candidate is implemented.",
+  "binary": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/reserve_build/bin/vpr_flat",
+  "binary_sha256": "645b179cfacf99c75d7628607ec8708828d1bce3676725f430e6e6b7b90ae39a",
+  "selection": {
+    "selected_utc": "2026-11-09T20:29:03.836595+00:00",
+    "profile_path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/worker/bnn_alt_cuda_profile/process.log",
+    "profile_sha256": "97a7a625cec8577d62f1258221ec42792f714ff246b193bde6be2471abe03ad1",
+    "candidate": "ORIGINAL_DENSE_IPIN_FILL_V1",
+    "reason": "Largest actionable profiled slice is dense mapping/job/cost construction0.811779686s, versus graph/CSR0.619274104s, context/capacity0.400624830s, targets0.256312932s and H2D0.118766436s. Build an IPIN ID list once and fill preallocated original qid*N cells. No second optimization.",
+    "representation": "original, byte layout and all IDs/order unchanged; no compact or mapping format version change",
+    "proof": "For every qid, all N cells begin at-1. Non-IPIN and coordinate-ineligible IPIN cells keep-1; every eligible IPIN invokes the same native get_xy_deltas and guard at the same qid*N+node index. Existing jobs, costs, CSR, errors, ordered reduction and mutable-label reset remain unchanged.",
+    "affected_qualification": "s38417 and BNN, original CPU and CUDA; capture input-prefix/complete outputs versus frozen R6.1 plus map identity and independent FULL/STA/QoR. Three same-worker paired CUDA baseline/candidate E2 and Process.",
+    "no_extra_profile": true
+  },
+  "binding": {
+    "candidate": "ORIGINAL_DENSE_IPIN_FILL_V1",
+    "binary_sha256": "645b179cfacf99c75d7628607ec8708828d1bce3676725f430e6e6b7b90ae39a",
+    "sources": {
+      "vpr_bridge.cpp": "afa1ee64b7d702210d9a637c32f451a19a1af481819cfc82099fbf197a987da7",
+      "kernel.hpp": "1b4d4457fb8eb2242e877bc530d58420af6cf30067335312a164410e076aff47",
+      "vpr_live.cpp": "1501e2692df66ff8dac9f0923c1960dfb344fba691c3ce1b6b54a517bcb7b20b",
+      "backend.hpp": "418821b884bf137f48077f6ac9a45ad76bbd6ee0dad53ee8ea0f14e81526d627",
+      "native_stage_memory.h": "4255e50e91a2f21cddfc28fd233ede7c2dd51a55bf8a589ad403f9909b768ae6",
+      "router_lookahead_map_utils.cpp": "6510c8ad8a3daddbd3b81aba7a0fb37a8f9a46e247d1a38647f05c2244ca152c",
+      "router_lookahead_map.cpp": "6380aca30ffb15cd6c5fa1819ce0077dc21c6333cf0a9e9bd3f028379cc177a2",
+      "io.hpp": "de3ace5bf1192464f2973d718f2359e28430a9d44512b99838fbcef92b415e1a",
+      "dual_kernel.hpp": "6d4db205b3b5e42b9bb2eeb40dd0c03ae360f0eab533f13241fa2072d27204fe",
+      "strict_heap.hpp": "c408b7cec8871e01dabb0471de125d2079c4ab27949e9293776beb2676487f3f",
+      "workload.hpp": "8ddb7478883d85086a6245acd9a534da967eeb7a6670d357c27ce672f89c69b7"
+    },
+    "patch_sha256": "dff70d3bf3d0626933c3db2240f45d0260baa7137cfe3a650b66d3efb934b5b9",
+    "scope_version": "R6_1_NATIVE_BUILD_V1",
+    "profile_instrumentation": false
+  },
+  "launch_utc": "2026-11-09T20:30:14.899080+00:00",
+  "profile_ready": {
+    "status": "complete",
+    "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/worker/bnn_alt_cuda_profile/process.log"
+  },
+  "formal_scope": "Three paired independent CUDA baseline/candidate processes per s38417/BNN on the same worker; CPU and CUDA both receive affected qualifications. CPU candidate performance is not a formal claim.",
+  "fallback": false,
+  "second_candidate_allowed": false
+}

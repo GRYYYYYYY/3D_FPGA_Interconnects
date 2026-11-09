@@ -1,0 +1,89 @@
+{
+  "case": "lstm_s2",
+  "backend": "alt_cuda",
+  "shift": 20,
+  "representation": "original",
+  "repeat": 2,
+  "qualification_diagnostic": false,
+  "hostname": "job-24e8ac10-a0a0-45fe-95df-cdb8afc72489-worker-0",
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "scope_version": "R6_1_NATIVE_BUILD_V1",
+  "binary_sha256": "5d32c536b729d87ffd33a9c354ec157662b703f96dcc8ed02fcb522355de2355",
+  "library_sha256": "9f5c60501adde4cec5a59aef55de0acf82732c7ff23821f4d456d444d20d00b1",
+  "input_bindings": {
+    "architecture": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+      "sha256": "b19507fc7eeb0f87208a8565fe09b6313aafd1d6006b057c1e284ae2c549ef60"
+    },
+    "circuit": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/lstm.blif",
+      "sha256": "38ecd31e85c8afa11a8f8840b4d62f89d763506d0d936417d78650afe4be09b1"
+    },
+    "packed_netlist": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s2/packed.net",
+      "sha256": "32c38abb0946e9592c44d508e273965c54bf157d3430d6beeceabd29e5966ee2"
+    },
+    "placement": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/lstm_s2/fixed.place",
+      "sha256": "9591eaf566032945ed4c0980bc17877c3461dab46e28a40bfd3c63797213f0e5"
+    },
+    "rr_graph": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/rr_graph.xml",
+      "sha256": "ce2c7ec3387ea8fd644083c8925e31421ad6cd34a1a9aac4ab1b9b7b5f91a364"
+    }
+  },
+  "command": [
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_accel_round6_1_20261109T160000Z/native_build/bin/vpr_flat",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/lstm.blif",
+    "--route_chan_width",
+    "120",
+    "--device_width",
+    "0",
+    "--target_utilization",
+    "0.6",
+    "--seed",
+    "2",
+    "--num_workers",
+    "8",
+    "--router_algorithm",
+    "parallel",
+    "--flat_routing",
+    "off",
+    "--check_route",
+    "full",
+    "--net_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/worker/lstm_s2_alt_cuda_2/packed.net",
+    "--place_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/worker/lstm_s2_alt_cuda_2/fixed.place",
+    "--route_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/worker/lstm_s2_alt_cuda_2/routed.route",
+    "--read_rr_graph",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/lstm_s2/rr_graph.xml",
+    "--timing_report_npaths",
+    "10",
+    "--analysis",
+    "--route",
+    "--routing_failure_predictor",
+    "off",
+    "--max_router_iterations",
+    "200",
+    "--congested_routing_iteration_threshold",
+    "0.25",
+    "--router_lookahead",
+    "map",
+    "--generate_rr_node_overuse_report",
+    "off",
+    "--write_router_lookahead",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/worker/lstm_s2_alt_cuda_2/wire_map.bin"
+  ]
+}

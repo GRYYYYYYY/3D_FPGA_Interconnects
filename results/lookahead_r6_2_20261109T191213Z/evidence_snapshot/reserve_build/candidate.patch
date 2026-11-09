@@ -1,0 +1,28 @@
+--- R6.1/vpr_live.cpp
++++ R6.2/ORIGINAL_DENSE_IPIN_FILL_V1/vpr_live.cpp
+@@ -24,18 +24,22 @@
+  if(nodes.size()>UINT32_MAX || edges.size()>=UINT32_MAX || jobs.size()>UINT32_MAX || nc>UINT32_MAX)
+   throw std::runtime_error("backend shape exceeds ABI");
+  std::vector<la::Job> desc;std::vector<uint32_t> ord(groups.size(),0);std::vector<int32_t> mapping;
+- mapping.reserve(jobs.size()*nodes.size());
++ // ORIGINAL_DENSE_IPIN_FILL_V1: retain every qid*N cell and its original index.
++ // Non-IPIN/default cells remain -1. Only construction traversal changes.
++ mapping.resize(jobs.size()*nodes.size(),-1);
++ std::vector<RRNodeId> ipin_nodes;
++ for(auto n:r.nodes()) if(r.node_type(n)==e_rr_type::IPIN) ipin_nodes.push_back(n);
+  for(auto j:jobs) {
+   const auto& g=groups[j.group];desc.push_back({uint32_t(size_t(j.node)),uint32_t(j.group),ord[j.group]++,g.from_layer,uint32_t(g.segment->seg_index),uint32_t(g.channel)});
+   int sx=r.node_xlow(j.node),sy=r.node_ylow(j.node);
+   if(r.node_direction(j.node)==Direction::DEC){sx=r.node_xhigh(j.node);sy=r.node_yhigh(j.node);}
+-  for(auto n:r.nodes()){
++  for(auto n:ipin_nodes){
+    int32_t index=-1;
+    if(r.node_type(n)==e_rr_type::IPIN && r.node_xlow(n)>=sx && r.node_ylow(n)>=sy){
+     auto xy=get_xy_deltas(j.node,n);uint64_t cell=(r.node_layer_low(n)*grid.width()+std::abs(xy.first))*grid.height()+std::abs(xy.second);
+     if(cell>=nc || cell>INT32_MAX)throw std::runtime_error("backend IPIN map out of bounds");index=cell;
+    }
+-   mapping.push_back(index);
++   mapping[(desc.size()-1)*nodes.size()+size_t(n)]=index;
+   }
+  }
+  std::vector<la::Cost> out(jobs.size()*nc);std::vector<la::Stats> stats(jobs.size());
