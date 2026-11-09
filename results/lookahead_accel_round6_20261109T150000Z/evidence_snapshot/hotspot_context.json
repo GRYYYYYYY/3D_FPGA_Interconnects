@@ -1,0 +1,56 @@
+{
+  "source_commit": "ab0a4afce89c567cf30f24c8a813d78884872f05",
+  "source_file": "paper/dac2027/evidence/accounting.json",
+  "scope": "Original eight-core GEMM paper cohort; not accelerator E1 or new measurements",
+  "nested_timer_note": "RR load is inside Create Device; do not add them.",
+  "rows": [
+    {
+      "variant": "frozen",
+      "n": 3,
+      "process_s_mean": 219.16844224184752,
+      "lookahead_s_mean": 37.88333333333333,
+      "rr_load_s_mean": 49.35,
+      "device_creation_s_mean": 52.03666666666667,
+      "ideal_speedup_if_lookahead_free_mean": 1.2089942967733402
+    },
+    {
+      "variant": "pipeline",
+      "n": 3,
+      "process_s_mean": 202.06808443615833,
+      "lookahead_s_mean": 20.95,
+      "rr_load_s_mean": 49.36333333333333,
+      "device_creation_s_mean": 52.03,
+      "ideal_speedup_if_lookahead_free_mean": 1.1156864338700354
+    },
+    {
+      "variant": "stock",
+      "n": 3,
+      "process_s_mean": 331.04804410785437,
+      "lookahead_s_mean": 149.56333333333333,
+      "rr_load_s_mean": 50.31,
+      "device_creation_s_mean": 53.016666666666666,
+      "ideal_speedup_if_lookahead_free_mean": 1.824109016586038
+    }
+  ],
+  "current_source_sha256": "4134e64a15e5e152b5d39644a3a2b25f915fdbf32758a52f2c672ed2e37c4403",
+  "locked_binary_version": "#include \"vtr_version.h\"\n\n//This file is automatically processed by CMAKE and replaces\n//the values between ampersand's with the relevant CMAKE variable\n//before being compiled.\nnamespace vtr {\n    const char* VERSION = \"9.0.0-dev+unknown\";\n    const char* VERSION_SHORT = \"9.0.0-dev\";\n\n    const size_t VERSION_MAJOR = 9;\n    const size_t VERSION_MINOR = 0;\n    const size_t VERSION_PATCH = 0;\n    const char* VERSION_PRERELEASE = \"dev\";\n\n    const char* VCS_REVISION = \"unknown\";\n    const char* VCS_REVISION_SHORT = \"unknown\";\n    const char* COMPILER = \"GNU 11.4.0 on Linux-5.15.0-119-generic x86_64\";\n    const char* BUILD_TIMESTAMP = \"2026-11-01T16:36:11\";\n    const char* BUILD_INFO = \"release VTR_ASSERT_LEVEL=2\";\n}\n",
+  "binary_format_enabled": true,
+  "binary_format_evidence": "build_cpu_slices/CMakeCache.txt:VTR_ENABLE_CAPNPROTO:BOOL=ON",
+  "priority": [
+    {
+      "stage": "RR file read / XML parse / DOM allocation",
+      "status": "combined timer planned; separate IO/allocation attribution not available",
+      "cpu_control": "existing CapnProto .bin mmap reader compiled in; no measured binary-vs-XML control yet, no hardware speed claim"
+    },
+    {
+      "stage": "RR node/edge decode and construction",
+      "status": "isolated serializer timers planned",
+      "cpu_control": "generated loader counts nodes/edges and reserves storage; not architecture-to-RRG generation"
+    },
+    {
+      "stage": "edge partition, node spatial indices, fan-in, indexed costs and checking",
+      "status": "nested diagnostic timers planned",
+      "cpu_control": "retain correctness checks, do not label residual as pipelineable compute"
+    }
+  ]
+}

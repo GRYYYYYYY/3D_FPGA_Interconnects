@@ -1,0 +1,85 @@
+{
+  "case": "bnn",
+  "arm": "control",
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "binary_sha256": "00a270aef3f2ab5f970c0f37d34149382d89c85c8fea7c4aa39f83fdd3d95d2b",
+  "library_sha256": "ece5c6aef4ac2d05cbb6b090a44fafabefefec3de0a25a0dbc608d99e6a2de4f",
+  "scope": "one bounded paired qualification; not formal timing",
+  "input_bindings": {
+    "architecture": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+      "sha256": "b19507fc7eeb0f87208a8565fe09b6313aafd1d6006b057c1e284ae2c549ef60"
+    },
+    "circuit": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/bnn.blif",
+      "sha256": "e41a79e8dbbbd119b856b975680a87152af047b4c8781dd464489e9211b2629a"
+    },
+    "packed_netlist": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/bnn_s1/packed.net",
+      "sha256": "05c3561522fcdff879ea9646d7a3483b17f467cdf12ca25f91662d6347ad5c65"
+    },
+    "placement": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_large_20261102/prepared/bnn_s1/fixed.place",
+      "sha256": "3a57287ff1373505d1ae4e5568c2691c22113cecb5992dc8cc06e2b9352d8bb8"
+    },
+    "rr_graph": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/rr_graph.xml",
+      "sha256": "f1215d1648db24d6d023e4754f738f654b96dba5dd4c0ea6536c34998df9007e"
+    }
+  },
+  "command": [
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round2_20261108T122100Z/native_live_build_v2/bin/vpr_flat",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/bnn.blif",
+    "--route_chan_width",
+    "120",
+    "--device_width",
+    "0",
+    "--target_utilization",
+    "0.6",
+    "--seed",
+    "1",
+    "--num_workers",
+    "8",
+    "--router_algorithm",
+    "parallel",
+    "--flat_routing",
+    "off",
+    "--check_route",
+    "full",
+    "--net_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_live_verified/bnn_control/packed.net",
+    "--place_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_live_verified/bnn_control/fixed.place",
+    "--route_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_live_verified/bnn_control/routed.route",
+    "--read_rr_graph",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_width120_20261104/bnn_s1/rr_graph.xml",
+    "--timing_report_npaths",
+    "10",
+    "--analysis",
+    "--route",
+    "--routing_failure_predictor",
+    "off",
+    "--max_router_iterations",
+    "200",
+    "--congested_routing_iteration_threshold",
+    "0.25",
+    "--router_lookahead",
+    "map",
+    "--generate_rr_node_overuse_report",
+    "off",
+    "--write_router_lookahead",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_live_verified/bnn_control/wire_map.bin"
+  ],
+  "alt_enabled": false
+}

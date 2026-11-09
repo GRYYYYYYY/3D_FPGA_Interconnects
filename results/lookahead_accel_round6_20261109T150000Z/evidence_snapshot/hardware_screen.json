@@ -1,0 +1,112 @@
+{
+  "decision": "NO_GO_FOR_NEW_HARDWARE_THIS_ROUND",
+  "scope": "one finite throughput/capacity screen; rejects readiness, not all possible FPGA architectures",
+  "reason": "BNN shift20 measured CUDA beats even 16-lane200MHz II1 edge-only lower bound; exact shift0 conditional margin does not beat the available coarse CUDA alternative with identical tested BNN output",
+  "storage_bn": {
+    "graph_and_mapping_bytes": 1078754064,
+    "eight_context_label_bytes": 262566912,
+    "member_capacity_per_context": 16410433,
+    "member_storage_8contexts_bytes": 525133856
+  },
+  "rows": [
+    {
+      "case": "bnn_export",
+      "shift": 0,
+      "candidate": "8 contexts,16 FP32 lanes,16 label banks,one shared directory update/cycle,external HBM; not synthesized",
+      "assumed_hz": 200000000,
+      "ideal_edge_only_s": 0.400763715625,
+      "ideal_edge_only_beats_gpu": true,
+      "lower_bound_before_barriers_s": 0.513741275,
+      "optimistic_conditional_s": 0.520042395,
+      "optimistic_with_25percent_margin_s": 0.65005299375,
+      "conservative_conditional_s": 1.83561970976,
+      "cpu_s": 7.304299887,
+      "gpu_s": 2.830302942,
+      "optimistic_with_margin_beats_both": true,
+      "resource_budget_supported": false,
+      "limits": [
+        "random DRAM effective bandwidth",
+        "directory tree or bitmap hardware",
+        "finite bank merge FIFOs and forwarding",
+        "cache misses",
+        "output group interpolation",
+        "placed frequency and actual lane II"
+      ]
+    },
+    {
+      "case": "bnn_export",
+      "shift": 20,
+      "candidate": "8 contexts,16 FP32 lanes,16 label banks,one shared directory update/cycle,external HBM; not synthesized",
+      "assumed_hz": 200000000,
+      "ideal_edge_only_s": 0.4021678584375,
+      "ideal_edge_only_beats_gpu": false,
+      "lower_bound_before_barriers_s": 0.514634505,
+      "optimistic_conditional_s": 0.5153260249999999,
+      "optimistic_with_25percent_margin_s": 0.6441575312499999,
+      "conservative_conditional_s": 1.70292805696,
+      "cpu_s": 7.065944795,
+      "gpu_s": 0.31417032,
+      "optimistic_with_margin_beats_both": false,
+      "resource_budget_supported": false,
+      "limits": [
+        "random DRAM effective bandwidth",
+        "directory tree or bitmap hardware",
+        "finite bank merge FIFOs and forwarding",
+        "cache misses",
+        "output group interpolation",
+        "placed frequency and actual lane II"
+      ]
+    },
+    {
+      "case": "tseng_export",
+      "shift": 0,
+      "candidate": "8 contexts,16 FP32 lanes,16 label banks,one shared directory update/cycle,external HBM; not synthesized",
+      "assumed_hz": 200000000,
+      "ideal_edge_only_s": 0.001807101875,
+      "ideal_edge_only_beats_gpu": true,
+      "lower_bound_before_barriers_s": 0.00289349,
+      "optimistic_conditional_s": 0.00296517,
+      "optimistic_with_25percent_margin_s": 0.0037064625,
+      "conservative_conditional_s": 0.007955724479999999,
+      "cpu_s": 0.013485117,
+      "gpu_s": 0.002148995,
+      "optimistic_with_margin_beats_both": false,
+      "resource_budget_supported": false,
+      "limits": [
+        "random DRAM effective bandwidth",
+        "directory tree or bitmap hardware",
+        "finite bank merge FIFOs and forwarding",
+        "cache misses",
+        "output group interpolation",
+        "placed frequency and actual lane II"
+      ]
+    },
+    {
+      "case": "tseng_export",
+      "shift": 20,
+      "candidate": "8 contexts,16 FP32 lanes,16 label banks,one shared directory update/cycle,external HBM; not synthesized",
+      "assumed_hz": 200000000,
+      "ideal_edge_only_s": 0.001813358125,
+      "ideal_edge_only_beats_gpu": false,
+      "lower_bound_before_barriers_s": 0.002894905,
+      "optimistic_conditional_s": 0.002956345,
+      "optimistic_with_25percent_margin_s": 0.0036954312499999998,
+      "conservative_conditional_s": 0.007971013439999999,
+      "cpu_s": 0.013692755,
+      "gpu_s": 0.001812717,
+      "optimistic_with_margin_beats_both": false,
+      "resource_budget_supported": false,
+      "limits": [
+        "random DRAM effective bandwidth",
+        "directory tree or bitmap hardware",
+        "finite bank merge FIFOs and forwarding",
+        "cache misses",
+        "output group interpolation",
+        "placed frequency and actual lane II"
+      ]
+    }
+  ],
+  "new_implemented_frequency_hz": null,
+  "board_measured": false,
+  "fpga_superiority_verified": false
+}

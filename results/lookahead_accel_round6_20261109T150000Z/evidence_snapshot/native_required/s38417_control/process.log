@@ -1,0 +1,862 @@
+VPR FPGA Placement and Routing.
+Version: 9.0.0-dev+unknown
+Revision: unknown
+Compiled: 2026-11-01T16:36:11
+Compiler: GNU 11.4.0 on Linux-5.15.0-119-generic x86_64
+Build Info: release VTR_ASSERT_LEVEL=2
+
+University of Toronto
+verilogtorouting.org
+vtr-users@googlegroups.com
+This is free open source code under MIT license.
+
+VPR was run with the following command-line:
+/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/native_build_v4/bin/vpr_flat /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/sources/architecture.xml /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/sources/s38417.blif --route_chan_width 100 --device_width 0 --target_utilization 0.6 --seed 1 --num_workers 8 --router_algorithm parallel --flat_routing off --check_route full --net_file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_required/s38417_control/packed.net --place_file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_required/s38417_control/fixed.place --route_file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_required/s38417_control/routed.route --read_rr_graph /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/s38417_s1/rr_graph.xml --timing_report_npaths 10 --analysis --route --routing_failure_predictor off --max_router_iterations 200 --congested_routing_iteration_threshold 0.25 --router_lookahead map --generate_rr_node_overuse_report off --write_router_lookahead /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_required/s38417_control/wire_map.bin
+
+Using up to 8 parallel worker(s)
+
+Architecture file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/sources/architecture.xml
+Circuit name: s38417
+
+# Loading Architecture Description
+Warning 1: Multiple matching Fc overrides found; the last will be applied
+Warning 2: Multiple matching Fc overrides found; the last will be applied
+Warning 3: Multiple matching Fc overrides found; the last will be applied
+Warning 4: Multiple matching Fc overrides found; the last will be applied
+Warning 5: Multiple matching Fc overrides found; the last will be applied
+Warning 6: Multiple matching Fc overrides found; the last will be applied
+# Loading Architecture Description took 0.06 seconds (max_rss 35.4 MiB, delta_rss +0.0 MiB)
+
+Timing analysis: ON
+Circuit netlist file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_required/s38417_control/packed.net
+Circuit placement file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_required/s38417_control/fixed.place
+Circuit routing file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_required/s38417_control/routed.route
+Circuit SDC file: s38417.sdc
+Vpr floorplanning constraints file: not specified
+
+Packer: LOAD
+Placer: LOAD
+Analytical Placer: DISABLED
+Router: ENABLED
+Analysis: ENABLED
+
+VPR was run with the following options:
+
+netlist_opts.absorb_buffer_luts            : true
+netlist_opts.merge_constant_generators     : true
+netlist_opts.sweep_dangling_primary_ios    : true
+netlist_opts.sweep_dangling_nets           : true
+netlist_opts.sweep_dangling_blocks         : true
+netlist_opts.sweep_constant_primary_outputs: false
+netlist_opts.netlist_verbosity             : 1
+netlist_opts.const_gen_inference           : COMB_SEQ
+
+packer_opts.allow_unrelated_clustering: auto
+packer_opts.timing_gain_weight: 0.750000
+packer_opts.connection_gain_weight: 0.900000
+packer_opts.cluster_seed_type: BLEND2
+packer_opts.connection_driven: true
+packer_opts.timing_driven: true
+packer_opts.target_external_pin_util: auto
+
+placer_opts.place_freq: ONCE
+placer_opts.place_algorithm: CRITICALITY_TIMING_PLACE
+placer_opts.pad_loc_type: FREE
+placer_opts.constraints_file: No constraints file given
+placer_opts.place_chan_width: 100
+placer_opts.congestion_factor: 0.000000
+placer_opts.interposer_cost_params.net_cost_type: two_stage
+placer_opts.interposer_cost_params.two_stage_net_cost_first_stage_type: minimize_interposer_crossing_bb
+placer_opts.interposer_cost_params.two_stage_net_cost_second_stage_type: interposer_wire_aware_crossing_bb
+placer_opts.interposer_cost_params.net_cost_change_threshold: 0.005000
+placer_opts.inner_loop_recompute_divider: 0
+placer_opts.recompute_crit_iter: 1
+placer_opts.timing_tradeoff: 0.500000
+placer_opts.td_place_exp_first: 1.000000
+placer_opts.td_place_exp_last: 8.000000
+placer_opts.delay_offset: 0.000000
+placer_opts.delay_ramp_delta_threshold: -1
+placer_opts.delay_ramp_slope: 0.000000
+placer_opts.tsu_rel_margin: 1.000000
+placer_opts.tsu_abs_margin: 0.000000
+placer_opts.post_place_timing_report_file: 
+placer_opts.allowed_tiles_for_delay_model: 
+placer_opts.delay_model_reducer: MIN
+placer_opts.delay_model_type: SIMPLE
+placer_opts.rlim_escape_fraction: 0.000000
+placer_opts.move_stats_file: 
+placer_opts.placement_saves_per_temperature: 0
+placer_opts.effort_scaling: CIRCUIT
+placer_opts.place_delta_delay_matrix_calculation_method: ASTAR_ROUTE
+placer_opts.seed: 1
+anneal_sched.type: AUTO_SCHED
+anneal_sched.inner_num: 0.500000
+placer_opts.anneal_init_t_estimator: EQUILIBRIUM
+
+router_opts.route_type: DETAILED
+router_opts.flat_routing: false
+router_opts.choke_points: on
+router_opts.router_algorithm: PARALLEL
+router_opts.base_cost_type: DELAY_NORMALIZED_LENGTH
+router_opts.fixed_channel_width: 100
+router_opts.check_route: FULL
+router_opts.acc_fac: 1.000000
+router_opts.bb_factor: 3
+router_opts.bend_cost: 0.000000
+router_opts.first_iter_pres_fac: 0.000000
+router_opts.initial_pres_fac: 0.500000
+router_opts.pres_fac_mult: 1.300000
+router_opts.max_pres_fac: 1000.000000
+router_opts.max_router_iterations: 200
+router_opts.min_incremental_reroute_fanout: 16
+router_opts.initial_acc_cost_chan_congestion_threshold: 0.500000
+router_opts.initial_acc_cost_chan_congestion_weight: 0.500000
+router_opts.do_check_rr_graph: true
+router_opts.verify_binary_search: false
+router_opts.min_channel_width_hint: 0
+router_opts.read_rr_edge_metadata: false
+router_opts.exit_after_first_routing_iteration: false
+router_opts.routing_failure_predictor = OFF
+router_opts.routing_predictor_min_history: 8
+router_opts.routing_budgets_algorithm = DISABLE
+
+analysis_opts.gen_post_synthesis_netlist: false
+analysis_opts.gen_post_implementation_merged_netlist: false
+analysis_opts.gen_post_implementation_sdc: false
+analysis_opts.timing_report_npaths: 10
+analysis_opts.timing_report_skew: false
+analysis_opts.echo_dot_timing_graph_node: -1
+analysis_opts.timing_report_detail: NETLIST
+analysis_opts.post_synth_netlist_unconn_input_handling: UNCONNECTED
+analysis_opts.post_synth_netlist_unconn_output_handling: UNCONNECTED
+analysis_opts.post_synth_netlist_module_parameters: on
+
+# Building complex block graph
+# Building complex block graph took 0.06 seconds (max_rss 35.4 MiB, delta_rss +0.0 MiB)
+Circuit file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/sources/s38417.blif
+# Load circuit
+# Load circuit took 0.12 seconds (max_rss 35.4 MiB, delta_rss +0.0 MiB)
+# Clean circuit
+Absorbed 54 LUT buffers
+Merged 0 constant generators
+Swept input(s)      : 0
+Swept output(s)     : 0 (0 dangling, 0 constant)
+Swept net(s)        : 0
+Swept block(s)      : 0
+Constant Pins Marked: 0
+# Clean circuit took 0.00 seconds (max_rss 35.4 MiB, delta_rss +0.0 MiB)
+# Compress circuit
+# Compress circuit took 0.01 seconds (max_rss 35.4 MiB, delta_rss +0.0 MiB)
+# Verify circuit
+# Verify circuit took 0.00 seconds (max_rss 35.4 MiB, delta_rss +0.0 MiB)
+Circuit Statistics:
+  Blocks: 7640
+    .input :      29
+    .latch :    1463
+    .names :    6042
+        1-LUT:      68
+        2-LUT:     291
+        3-LUT:    2508
+        4-LUT:    3175
+    .output:     106
+  Nets  : 7534
+    Avg Fanout:     3.2
+    Max Fanout:  1463.0
+    Min Fanout:     1.0
+  Netlist Clocks: 1
+# Build Timing Graph
+  Timing Graph Nodes: 31440
+  Timing Graph Edges: 47706
+  Timing Graph Levels: 26
+# Build Timing Graph took 0.03 seconds (max_rss 38.2 MiB, delta_rss +2.8 MiB)
+Netlist contains 1 clocks
+  Netlist Clock 'pclk' Fanout: 1463 pins (4.7%), 1463 blocks (19.1%)
+# Load Timing Constraints
+
+SDC file 's38417.sdc' not found
+Setting default timing constraints:
+   * constrain all primary inputs and primary outputs on netlist clock 'pclk'
+   * optimize netlist clock to run as fast as possible
+Timing constraints created 1 clocks
+  Constrained Clock 'pclk' Source: 'pclk.inpad[0]'
+
+# Load Timing Constraints took 0.00 seconds (max_rss 38.2 MiB, delta_rss +0.0 MiB)
+Error 1: in check_rr_graph: node 118358 (CHANZ) has no fanin.
+Error 2: in check_rr_graph: node 118359 (CHANZ) has no fanin.
+Error 3: in check_rr_graph: node 118360 (CHANZ) has no fanin.
+Error 4: in check_rr_graph: node 118361 (CHANZ) has no fanin.
+Error 5: in check_rr_graph: node 118362 (CHANZ) has no fanin.
+Error 6: in check_rr_graph: node 118363 (CHANZ) has no fanin.
+Error 7: in check_rr_graph: node 118598 (CHANZ) has no fanin.
+Error 8: in check_rr_graph: node 118599 (CHANZ) has no fanin.
+Error 9: in check_rr_graph: node 118600 (CHANZ) has no fanin.
+Error 10: in check_rr_graph: node 118601 (CHANZ) has no fanin.
+Error 11: in check_rr_graph: node 118602 (CHANZ) has no fanin.
+Error 12: in check_rr_graph: node 118603 (CHANZ) has no fanin.
+Error 13: in check_rr_graph: node 118718 (CHANZ) has no fanin.
+Error 14: in check_rr_graph: node 118719 (CHANZ) has no fanin.
+Error 15: in check_rr_graph: node 118720 (CHANZ) has no fanin.
+Error 16: in check_rr_graph: node 118721 (CHANZ) has no fanin.
+Error 17: in check_rr_graph: node 118722 (CHANZ) has no fanin.
+Error 18: in check_rr_graph: node 118723 (CHANZ) has no fanin.
+Error 19: in check_rr_graph: node 118838 (CHANZ) has no fanin.
+Error 20: in check_rr_graph: node 118839 (CHANZ) has no fanin.
+Error 21: in check_rr_graph: node 118840 (CHANZ) has no fanin.
+Error 22: in check_rr_graph: node 118841 (CHANZ) has no fanin.
+Error 23: in check_rr_graph: node 118842 (CHANZ) has no fanin.
+Error 24: in check_rr_graph: node 118843 (CHANZ) has no fanin.
+Error 25: in check_rr_graph: node 118958 (CHANZ) has no fanin.
+Error 26: in check_rr_graph: node 118959 (CHANZ) has no fanin.
+Error 27: in check_rr_graph: node 118960 (CHANZ) has no fanin.
+Error 28: in check_rr_graph: node 118961 (CHANZ) has no fanin.
+Error 29: in check_rr_graph: node 118962 (CHANZ) has no fanin.
+Error 30: in check_rr_graph: node 118963 (CHANZ) has no fanin.
+Error 31: in check_rr_graph: node 119078 (CHANZ) has no fanin.
+Error 32: in check_rr_graph: node 119079 (CHANZ) has no fanin.
+Error 33: in check_rr_graph: node 119080 (CHANZ) has no fanin.
+Error 34: in check_rr_graph: node 119081 (CHANZ) has no fanin.
+Error 35: in check_rr_graph: node 119082 (CHANZ) has no fanin.
+Error 36: in check_rr_graph: node 119083 (CHANZ) has no fanin.
+Error 37: in check_rr_graph: node 119198 (CHANZ) has no fanin.
+Error 38: in check_rr_graph: node 119199 (CHANZ) has no fanin.
+Error 39: in check_rr_graph: node 119200 (CHANZ) has no fanin.
+Error 40: in check_rr_graph: node 119201 (CHANZ) has no fanin.
+Error 41: in check_rr_graph: node 119202 (CHANZ) has no fanin.
+Error 42: in check_rr_graph: node 119203 (CHANZ) has no fanin.
+Error 43: in check_rr_graph: node 119294 (CHANZ) has no fanin.
+Error 44: in check_rr_graph: node 119295 (CHANZ) has no fanin.
+Error 45: in check_rr_graph: node 119296 (CHANZ) has no fanin.
+Error 46: in check_rr_graph: node 119297 (CHANZ) has no fanin.
+Error 47: in check_rr_graph: node 119298 (CHANZ) has no fanin.
+Error 48: in check_rr_graph: node 119299 (CHANZ) has no fanin.
+Error 49: in check_rr_graph: node 119390 (CHANZ) has no fanin.
+Error 50: in check_rr_graph: node 119391 (CHANZ) has no fanin.
+Error 51: in check_rr_graph: node 119392 (CHANZ) has no fanin.
+Error 52: in check_rr_graph: node 119393 (CHANZ) has no fanin.
+Error 53: in check_rr_graph: node 119394 (CHANZ) has no fanin.
+Error 54: in check_rr_graph: node 119395 (CHANZ) has no fanin.
+Error 55: in check_rr_graph: node 119510 (CHANZ) has no fanin.
+Error 56: in check_rr_graph: node 119511 (CHANZ) has no fanin.
+Error 57: in check_rr_graph: node 119512 (CHANZ) has no fanin.
+Error 58: in check_rr_graph: node 119513 (CHANZ) has no fanin.
+Error 59: in check_rr_graph: node 119514 (CHANZ) has no fanin.
+Error 60: in check_rr_graph: node 119515 (CHANZ) has no fanin.
+Error 61: in check_rr_graph: node 119954 (CHANZ) has no fanin.
+Error 62: in check_rr_graph: node 119955 (CHANZ) has no fanin.
+Error 63: in check_rr_graph: node 119956 (CHANZ) has no fanin.
+Error 64: in check_rr_graph: node 119957 (CHANZ) has no fanin.
+Error 65: in check_rr_graph: node 119958 (CHANZ) has no fanin.
+Error 66: in check_rr_graph: node 119959 (CHANZ) has no fanin.
+Error 67: in check_rr_graph: node 119960 (CHANZ) has no fanin.
+Error 68: in check_rr_graph: node 119961 (CHANZ) has no fanin.
+Error 69: in check_rr_graph: node 119962 (CHANZ) has no fanin.
+Error 70: in check_rr_graph: node 119963 (CHANZ) has no fanin.
+Error 71: in check_rr_graph: node 119964 (CHANZ) has no fanin.
+Error 72: in check_rr_graph: node 119965 (CHANZ) has no fanin.
+Error 73: in check_rr_graph: node 119966 (CHANZ) has no fanin.
+Error 74: in check_rr_graph: node 119967 (CHANZ) has no fanin.
+Error 75: in check_rr_graph: node 119968 (CHANZ) has no fanin.
+Error 76: in check_rr_graph: node 119969 (CHANZ) has no fanin.
+Error 77: in check_rr_graph: node 119970 (CHANZ) has no fanin.
+Error 78: in check_rr_graph: node 119971 (CHANZ) has no fanin.
+Error 79: in check_rr_graph: node 119972 (CHANZ) has no fanin.
+Error 80: in check_rr_graph: node 119973 (CHANZ) has no fanin.
+Error 81: in check_rr_graph: node 119974 (CHANZ) has no fanin.
+Error 82: in check_rr_graph: node 119975 (CHANZ) has no fanin.
+Error 83: in check_rr_graph: node 119976 (CHANZ) has no fanin.
+Error 84: in check_rr_graph: node 119977 (CHANZ) has no fanin.
+Error 85: in check_rr_graph: node 120092 (CHANZ) has no fanin.
+Error 86: in check_rr_graph: node 120093 (CHANZ) has no fanin.
+Error 87: in check_rr_graph: node 120094 (CHANZ) has no fanin.
+Error 88: in check_rr_graph: node 120095 (CHANZ) has no fanin.
+Error 89: in check_rr_graph: node 120096 (CHANZ) has no fanin.
+Error 90: in check_rr_graph: node 120097 (CHANZ) has no fanin.
+Error 91: in check_rr_graph: node 120212 (CHANZ) has no fanin.
+Error 92: in check_rr_graph: node 120213 (CHANZ) has no fanin.
+Error 93: in check_rr_graph: node 120214 (CHANZ) has no fanin.
+Error 94: in check_rr_graph: node 120215 (CHANZ) has no fanin.
+Error 95: in check_rr_graph: node 120216 (CHANZ) has no fanin.
+Error 96: in check_rr_graph: node 120217 (CHANZ) has no fanin.
+Error 97: in check_rr_graph: node 120320 (CHANZ) has no fanin.
+Error 98: in check_rr_graph: node 120321 (CHANZ) has no fanin.
+Error 99: in check_rr_graph: node 120322 (CHANZ) has no fanin.
+Error 100: in check_rr_graph: node 120323 (CHANZ) has no fanin.
+Error 101: in check_rr_graph: node 120324 (CHANZ) has no fanin.
+Error 102: in check_rr_graph: node 120325 (CHANZ) has no fanin.
+Error 103: in check_rr_graph: node 120428 (CHANZ) has no fanin.
+Error 104: in check_rr_graph: node 120429 (CHANZ) has no fanin.
+Error 105: in check_rr_graph: node 120430 (CHANZ) has no fanin.
+Error 106: in check_rr_graph: node 120431 (CHANZ) has no fanin.
+Error 107: in check_rr_graph: node 120432 (CHANZ) has no fanin.
+Error 108: in check_rr_graph: node 120433 (CHANZ) has no fanin.
+Error 109: in check_rr_graph: node 120548 (CHANZ) has no fanin.
+Error 110: in check_rr_graph: node 120549 (CHANZ) has no fanin.
+Error 111: in check_rr_graph: node 120550 (CHANZ) has no fanin.
+Error 112: in check_rr_graph: node 120551 (CHANZ) has no fanin.
+Error 113: in check_rr_graph: node 120552 (CHANZ) has no fanin.
+Error 114: in check_rr_graph: node 120553 (CHANZ) has no fanin.
+Error 115: in check_rr_graph: node 120668 (CHANZ) has no fanin.
+Error 116: in check_rr_graph: node 120669 (CHANZ) has no fanin.
+Error 117: in check_rr_graph: node 120670 (CHANZ) has no fanin.
+Error 118: in check_rr_graph: node 120671 (CHANZ) has no fanin.
+Error 119: in check_rr_graph: node 120672 (CHANZ) has no fanin.
+Error 120: in check_rr_graph: node 120673 (CHANZ) has no fanin.
+Error 121: in check_rr_graph: node 121060 (CHANZ) has no fanin.
+Error 122: in check_rr_graph: node 121061 (CHANZ) has no fanin.
+Error 123: in check_rr_graph: node 121062 (CHANZ) has no fanin.
+Error 124: in check_rr_graph: node 121063 (CHANZ) has no fanin.
+Error 125: in check_rr_graph: node 121064 (CHANZ) has no fanin.
+Error 126: in check_rr_graph: node 121065 (CHANZ) has no fanin.
+Error 127: in check_rr_graph: node 121072 (CHANZ) has no fanin.
+Error 128: in check_rr_graph: node 121073 (CHANZ) has no fanin.
+Error 129: in check_rr_graph: node 121074 (CHANZ) has no fanin.
+Error 130: in check_rr_graph: node 121075 (CHANZ) has no fanin.
+Error 131: in check_rr_graph: node 121076 (CHANZ) has no fanin.
+Error 132: in check_rr_graph: node 121077 (CHANZ) has no fanin.
+Error 133: in check_rr_graph: node 121078 (CHANZ) has no fanin.
+Error 134: in check_rr_graph: node 121079 (CHANZ) has no fanin.
+Error 135: in check_rr_graph: node 121080 (CHANZ) has no fanin.
+Error 136: in check_rr_graph: node 121081 (CHANZ) has no fanin.
+Error 137: in check_rr_graph: node 121082 (CHANZ) has no fanin.
+Error 138: in check_rr_graph: node 121083 (CHANZ) has no fanin.
+Error 139: in check_rr_graph: node 121084 (CHANZ) has no fanin.
+Error 140: in check_rr_graph: node 121085 (CHANZ) has no fanin.
+Error 141: in check_rr_graph: node 121086 (CHANZ) has no fanin.
+Error 142: in check_rr_graph: node 121087 (CHANZ) has no fanin.
+Error 143: in check_rr_graph: node 121088 (CHANZ) has no fanin.
+Error 144: in check_rr_graph: node 121089 (CHANZ) has no fanin.
+Error 145: in check_rr_graph: node 121090 (CHANZ) has no fanin.
+Error 146: in check_rr_graph: node 121091 (CHANZ) has no fanin.
+Error 147: in check_rr_graph: node 121092 (CHANZ) has no fanin.
+Error 148: in check_rr_graph: node 121093 (CHANZ) has no fanin.
+Error 149: in check_rr_graph: node 121094 (CHANZ) has no fanin.
+Error 150: in check_rr_graph: node 121095 (CHANZ) has no fanin.
+Error 151: in check_rr_graph: node 121096 (CHANZ) has no fanin.
+Error 152: in check_rr_graph: node 121097 (CHANZ) has no fanin.
+Error 153: in check_rr_graph: node 121098 (CHANZ) has no fanin.
+Error 154: in check_rr_graph: node 121099 (CHANZ) has no fanin.
+Error 155: in check_rr_graph: node 121100 (CHANZ) has no fanin.
+Error 156: in check_rr_graph: node 121101 (CHANZ) has no fanin.
+Error 157: in check_rr_graph: node 121102 (CHANZ) has no fanin.
+Error 158: in check_rr_graph: node 121103 (CHANZ) has no fanin.
+Error 159: in check_rr_graph: node 121104 (CHANZ) has no fanin.
+Error 160: in check_rr_graph: node 121105 (CHANZ) has no fanin.
+Error 161: in check_rr_graph: node 121106 (CHANZ) has no fanin.
+Error 162: in check_rr_graph: node 121107 (CHANZ) has no fanin.
+Error 163: in check_rr_graph: node 121108 (CHANZ) has no fanin.
+Error 164: in check_rr_graph: node 121109 (CHANZ) has no fanin.
+Error 165: in check_rr_graph: node 121110 (CHANZ) has no fanin.
+Error 166: in check_rr_graph: node 121111 (CHANZ) has no fanin.
+Error 167: in check_rr_graph: node 121112 (CHANZ) has no fanin.
+Error 168: in check_rr_graph: node 121113 (CHANZ) has no fanin.
+Error 169: in check_rr_graph: node 121114 (CHANZ) has no fanin.
+Error 170: in check_rr_graph: node 121115 (CHANZ) has no fanin.
+Error 171: in check_rr_graph: node 121116 (CHANZ) has no fanin.
+Error 172: in check_rr_graph: node 121117 (CHANZ) has no fanin.
+Error 173: in check_rr_graph: node 121118 (CHANZ) has no fanin.
+Error 174: in check_rr_graph: node 121119 (CHANZ) has no fanin.
+Error 175: in check_rr_graph: node 121120 (CHANZ) has no fanin.
+Error 176: in check_rr_graph: node 121121 (CHANZ) has no fanin.
+Error 177: in check_rr_graph: node 121122 (CHANZ) has no fanin.
+Error 178: in check_rr_graph: node 121123 (CHANZ) has no fanin.
+Error 179: in check_rr_graph: node 121124 (CHANZ) has no fanin.
+Error 180: in check_rr_graph: node 121125 (CHANZ) has no fanin.
+Error 181: in check_rr_graph: node 121126 (CHANZ) has no fanin.
+Error 182: in check_rr_graph: node 121127 (CHANZ) has no fanin.
+Error 183: in check_rr_graph: node 121128 (CHANZ) has no fanin.
+Error 184: in check_rr_graph: node 121129 (CHANZ) has no fanin.
+Error 185: in check_rr_graph: node 121130 (CHANZ) has no fanin.
+Error 186: in check_rr_graph: node 121131 (CHANZ) has no fanin.
+Error 187: in check_rr_graph: node 121132 (CHANZ) has no fanin.
+Error 188: in check_rr_graph: node 121133 (CHANZ) has no fanin.
+Error 189: in check_rr_graph: node 121134 (CHANZ) has no fanin.
+Error 190: in check_rr_graph: node 121135 (CHANZ) has no fanin.
+Error 191: in check_rr_graph: node 121136 (CHANZ) has no fanin.
+Error 192: in check_rr_graph: node 121137 (CHANZ) has no fanin.
+Error 193: in check_rr_graph: node 121138 (CHANZ) has no fanin.
+Error 194: in check_rr_graph: node 121139 (CHANZ) has no fanin.
+Error 195: in check_rr_graph: node 121140 (CHANZ) has no fanin.
+Error 196: in check_rr_graph: node 121141 (CHANZ) has no fanin.
+Error 197: in check_rr_graph: node 121142 (CHANZ) has no fanin.
+Error 198: in check_rr_graph: node 121143 (CHANZ) has no fanin.
+Error 199: in check_rr_graph: node 121144 (CHANZ) has no fanin.
+Error 200: in check_rr_graph: node 121145 (CHANZ) has no fanin.
+Error 201: in check_rr_graph: node 121146 (CHANZ) has no fanin.
+Error 202: in check_rr_graph: node 121147 (CHANZ) has no fanin.
+Error 203: in check_rr_graph: node 121148 (CHANZ) has no fanin.
+Error 204: in check_rr_graph: node 121149 (CHANZ) has no fanin.
+Error 205: in check_rr_graph: node 121150 (CHANZ) has no fanin.
+Error 206: in check_rr_graph: node 121151 (CHANZ) has no fanin.
+Error 207: in check_rr_graph: node 121152 (CHANZ) has no fanin.
+Error 208: in check_rr_graph: node 121153 (CHANZ) has no fanin.
+Error 209: in check_rr_graph: node 121154 (CHANZ) has no fanin.
+Error 210: in check_rr_graph: node 121155 (CHANZ) has no fanin.
+Error 211: in check_rr_graph: node 121156 (CHANZ) has no fanin.
+Error 212: in check_rr_graph: node 121157 (CHANZ) has no fanin.
+Error 213: in check_rr_graph: node 121158 (CHANZ) has no fanin.
+Error 214: in check_rr_graph: node 121159 (CHANZ) has no fanin.
+Error 215: in check_rr_graph: node 121160 (CHANZ) has no fanin.
+Error 216: in check_rr_graph: node 121161 (CHANZ) has no fanin.
+Error 217: in check_rr_graph: node 121162 (CHANZ) has no fanin.
+Error 218: in check_rr_graph: node 121163 (CHANZ) has no fanin.
+Error 219: in check_rr_graph: node 121164 (CHANZ) has no fanin.
+Error 220: in check_rr_graph: node 121165 (CHANZ) has no fanin.
+Error 221: in check_rr_graph: node 121166 (CHANZ) has no fanin.
+Error 222: in check_rr_graph: node 121167 (CHANZ) has no fanin.
+Error 223: in check_rr_graph: node 121174 (CHANZ) has no fanin.
+Error 224: in check_rr_graph: node 121175 (CHANZ) has no fanin.
+Error 225: in check_rr_graph: node 121176 (CHANZ) has no fanin.
+Error 226: in check_rr_graph: node 121177 (CHANZ) has no fanin.
+Error 227: in check_rr_graph: node 121178 (CHANZ) has no fanin.
+Error 228: in check_rr_graph: node 121179 (CHANZ) has no fanin.
+kj/filesystem-disk-unix.c++:1734: warning: PWD environment variable doesn't match current directory; pwd = /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects
+# Load packing
+## Loading packed FPGA netlist file.
+Netlist generated from file '/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/native_cpu_evidence_20261102/prepared/s38417_s1/packed.net'.
+Detected 0 constant generators (to see names run with higher pack verbosity)
+## Loading packed FPGA netlist file. took 0.82 seconds (max_rss 81.0 MiB, delta_rss +42.9 MiB)
+Warning 7: Treated 0 constant nets as global which will not be routed (to see net names increase packer verbosity).
+Completed clustering consistency check successfully.
+Cluster level netlist and block usage statistics
+Netlist num_nets: 4445
+Netlist num_blocks: 556
+Netlist EMPTY blocks: 0.
+Netlist io blocks: 135.
+Netlist clb blocks: 421.
+Netlist dsp_top blocks: 0.
+Netlist memory blocks: 0.
+Netlist tsv_hole blocks: 0.
+Netlist inputs pins: 29
+Netlist output pins: 106
+
+Pb types usage...
+  io             : 135
+   inpad         : 29
+   outpad        : 106
+  clb            : 421
+   fle           : 4085
+    lut5inter    : 4085
+     ble5        : 6239
+      lut5       : 6042
+       lut       : 6042
+      ff         : 1463
+
+# Load packing took 0.95 seconds (max_rss 100.9 MiB, delta_rss +62.7 MiB)
+# Create Device
+## Build Device Grid
+FPGA sized to 20 x 20: 800 grid tiles (auto)
+## Build Device Grid took 0.00 seconds (max_rss 100.9 MiB, delta_rss +0.0 MiB)
+## Loading routing resource graph
+
+Warning 8: This architecture version is for VPR 9.0.0-dev+0b91233 while your current VPR version is 9.0.0-dev+unknown, compatibility issues may arise
+
+Warning 9: Found 340 nodes with no out-going switches. Run VTR with route_verbosity > 1 to see details.
+Warning 10: in check_rr_graph: fringe node 103827 CHANY at (8,5) has no fanin.
+	 This is possible on a fringe node based on low Fc_out, N, and certain lengths.
+## Loading routing resource graph took 0.75 seconds (max_rss 221.1 MiB, delta_rss +120.2 MiB)
+  RR Graph Nodes: 121180
+  RR Graph Edges: 1019215
+# Create Device took 0.77 seconds (max_rss 221.1 MiB, delta_rss +120.2 MiB)
+
+Resource usage...
+	Netlist
+		135	blocks of type: io
+	Architecture
+		1152	blocks of type: io
+	Netlist
+		421	blocks of type: clb
+	Architecture
+		564	blocks of type: clb
+	Netlist
+		0	blocks of type: dsp_top
+	Architecture
+		36	blocks of type: dsp_top
+	Netlist
+		0	blocks of type: memory
+	Architecture
+		36	blocks of type: memory
+	Netlist
+		0	blocks of type: tsv_hole
+	Architecture
+		3	blocks of type: tsv_hole
+
+Device Utilization: 0.55 (target 0.60)
+	Physical Tile io:
+	Block Utilization: 0.12 Logical Block: io
+	Physical Tile clb:
+	Block Utilization: 0.75 Logical Block: clb
+	Physical Tile dsp_top:
+	Block Utilization: 0.00 Logical Block: dsp_top
+	Physical Tile memory:
+	Block Utilization: 0.00 Logical Block: memory
+	Physical Tile tsv_hole:
+	Block Utilization: 0.00 Logical Block: tsv_hole
+
+
+# Load Placement
+Reading /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_required/s38417_control/fixed.place.
+
+Successfully read /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round6_20261109T150000Z/native_required/s38417_control/fixed.place.
+
+Completed placement consistency check successfully.
+# Load Placement took 0.00 seconds (max_rss 221.1 MiB, delta_rss +0.0 MiB)
+
+# Computing router lookahead map
+## Computing wire lookahead
+CPU_GLOBAL_SCHEDULER=flat samples=40 groups=10
+## Computing wire lookahead took 0.25 seconds (max_rss 221.1 MiB, delta_rss +0.0 MiB)
+## Computing src/opin lookahead
+Warning 11: Found no more sample locations for SOURCE in io
+Warning 12: Found no more sample locations for OPIN in io
+Warning 13: Found no more sample locations for SOURCE in clb
+Warning 14: Found no more sample locations for OPIN in clb
+Warning 15: Found no more sample locations for SOURCE in dsp_top
+Warning 16: Found no more sample locations for OPIN in dsp_top
+Warning 17: Found no more sample locations for SOURCE in memory
+Warning 18: Found no more sample locations for OPIN in memory
+Warning 19: Found no more sample locations for SOURCE in io
+Warning 20: Found no more sample locations for OPIN in io
+Warning 21: Found no more sample locations for SOURCE in clb
+Warning 22: Found no more sample locations for OPIN in clb
+Warning 23: Found no more sample locations for SOURCE in dsp_top
+Warning 24: Found no more sample locations for OPIN in dsp_top
+Warning 25: Found no more sample locations for SOURCE in memory
+Warning 26: Found no more sample locations for OPIN in memory
+## Computing src/opin lookahead took 0.01 seconds (max_rss 221.1 MiB, delta_rss +0.0 MiB)
+# Computing router lookahead map took 0.28 seconds (max_rss 221.1 MiB, delta_rss +0.0 MiB)
+# Routing
+RR graph channel widths unchanged, skipping RR graph rebuild
+## Initializing router criticalities
+Initial Net Connection Criticality Histogram:
+[        0:      0.1)  490 (  5.0%) |*************
+[      0.1:      0.2)  730 (  7.4%) |********************
+[      0.2:      0.3)  914 (  9.3%) |*************************
+[      0.3:      0.4)  792 (  8.0%) |*********************
+[      0.4:      0.5)  796 (  8.1%) |**********************
+[      0.5:      0.6) 1266 ( 12.8%) |**********************************
+[      0.6:      0.7) 1695 ( 17.2%) |**********************************************
+[      0.7:      0.8) 1469 ( 14.9%) |****************************************
+[      0.8:      0.9) 1268 ( 12.9%) |**********************************
+[      0.9:        1)  435 (  4.4%) |************
+## Initializing router criticalities took 0.05 seconds (max_rss 221.1 MiB, delta_rss +0.0 MiB)
+Serial Connection Router is being destroyed. Time spent on path search: 0.000 seconds.
+---- ------ ------- ---- ------- ------- ------- ----------------- --------------- -------- ---------- ---------- ---------- ---------- --------
+Iter   Time    pres  BBs    Heap  Re-Rtd  Re-Rtd Overused RR Nodes      Wirelength      CPD       sTNS       sWNS       hTNS       hWNS Est Succ
+      (sec)     fac Updt    push    Nets   Conns                                       (ns)       (ns)       (ns)       (ns)       (ns)     Iter
+---- ------ ------- ---- ------- ------- ------- ----------------- --------------- -------- ---------- ---------- ---------- ---------- --------
+   1    0.1     0.0    0  671789    4444    9508    7536 ( 6.219%)   64836 (47.4%)    6.955     -3775.     -6.955      0.000      0.000      N/A
+   2    0.2     0.5  151  721360    3920    8910    4417 ( 3.645%)   64716 (47.3%)    6.955     -3813.     -6.955      0.000      0.000      N/A
+   3    0.2     0.6  146  790946    3321    8067    4184 ( 3.453%)   67431 (49.3%)    6.955     -3943.     -6.955      0.000      0.000      N/A
+   4    0.2     0.8  215  843687    3073    7684    3586 ( 2.959%)   68920 (50.4%)    6.955     -3986.     -6.955      0.000      0.000      N/A
+   5    0.3     1.1  176  887968    2724    7085    2763 ( 2.280%)   70570 (51.6%)    6.955     -4097.     -6.955      0.000      0.000      N/A
+   6    0.3     1.4  204  874068    2379    6417    2275 ( 1.877%)   71823 (52.5%)    6.955     -4189.     -6.955      0.000      0.000      N/A
+   7    0.3     1.9  149  921339    2154    6081    1877 ( 1.549%)   73232 (53.5%)    6.955     -4166.     -6.955      0.000      0.000      N/A
+   8    0.2     2.4  135  859058    1772    5329    1373 ( 1.133%)   74900 (54.8%)    6.955     -4222.     -6.955      0.000      0.000      N/A
+   9    0.2     3.1   98  786266    1434    4373    1032 ( 0.852%)   76365 (55.8%)    6.955     -4319.     -6.955      0.000      0.000       37
+  10    0.2     4.1  103  703243    1118    3465     745 ( 0.615%)   77512 (56.7%)    6.955     -4364.     -6.955      0.000      0.000       33
+  11    0.2     5.3   73  625729     878    2736     554 ( 0.457%)   78714 (57.5%)    6.955     -4387.     -6.955      0.000      0.000       33
+  12    1.0     6.9   47  522958     648    2052     390 ( 0.322%)   79759 (58.3%)    6.955     -4439.     -6.955      0.000      0.000       31
+  13    0.2     9.0   49  541481     507    1784     292 ( 0.241%)   81052 (59.2%)    6.955     -4485.     -6.955      0.000      0.000       31
+  14    0.1    11.6   39  357851     369    1111     216 ( 0.178%)   81658 (59.7%)    7.088     -4563.     -7.088      0.000      0.000       31
+  15    0.1    15.1   24  305749     296     893     146 ( 0.120%)   82329 (60.2%)    6.973     -4553.     -6.973      0.000      0.000       31
+  16    0.1    19.7   16  311243     253     822     116 ( 0.096%)   83059 (60.7%)    6.955     -4575.     -6.955      0.000      0.000       31
+  17    0.1    25.6   20  388887     157     596      78 ( 0.064%)   83905 (61.3%)    7.022     -4619.     -7.022      0.000      0.000       31
+  18    0.1    33.3   14  322948     176     630      69 ( 0.057%)   84370 (61.7%)    7.228     -4605.     -7.228      0.000      0.000       31
+  19    0.1    43.3   18  198635     124     429      58 ( 0.048%)   84953 (62.1%)    6.955     -4618.     -6.955      0.000      0.000       32
+  20    0.1    56.2   12  301505      88     327      47 ( 0.039%)   85410 (62.4%)    7.043     -4679.     -7.043      0.000      0.000       33
+  21    0.1    73.1    7  375138     141     536      51 ( 0.042%)   85447 (62.5%)    6.955     -4638.     -6.955      0.000      0.000       35
+  22    0.1    95.0    8  333403      83     313      37 ( 0.031%)   85950 (62.8%)    7.031     -4682.     -7.031      0.000      0.000       37
+  23    0.1   123.5    7  267026     117     436      33 ( 0.027%)   85980 (62.9%)    6.961     -4666.     -6.961      0.000      0.000       38
+  24    0.1   160.6    7  265678      60     233      28 ( 0.023%)   86402 (63.2%)    6.961     -4701.     -6.961      0.000      0.000       40
+  25    0.0   208.8    7  182286      54     202      28 ( 0.023%)   86490 (63.2%)    6.961     -4704.     -6.961      0.000      0.000       41
+  26    0.1   271.4   10  281558      50     182      23 ( 0.019%)   86639 (63.3%)    6.961     -4707.     -6.961      0.000      0.000       43
+  27    0.0   352.8    5  172095      42     180      19 ( 0.016%)   86738 (63.4%)    6.961     -4710.     -6.961      0.000      0.000       44
+  28    0.0   458.7    3  164881      37     168      20 ( 0.017%)   87030 (63.6%)    7.315     -4746.     -7.315      0.000      0.000       47
+  29    0.1   596.3    4  170338      68     230      20 ( 0.017%)   87128 (63.7%)    7.180     -4719.     -7.180      0.000      0.000       48
+  30    0.1   775.1    9  222241      79     288      18 ( 0.015%)   87305 (63.8%)    7.263     -4709.     -7.263      0.000      0.000       51
+  31    0.1  1000.0    9  214732      63     255      10 ( 0.008%)   87566 (64.0%)    8.028     -4762.     -8.028      0.000      0.000       50
+  32    0.0  1000.0   11   95695      25      89      12 ( 0.010%)   87578 (64.0%)    7.276     -4723.     -7.276      0.000      0.000       52
+  33    0.0  1000.0    1  121661      55     250       4 ( 0.003%)   87579 (64.0%)    6.961     -4725.     -6.961      0.000      0.000       48
+  34    0.0  1000.0    3  100905      14      49       4 ( 0.003%)   87559 (64.0%)    6.961     -4721.     -6.961      0.000      0.000       46
+  35    0.0  1000.0    0  101548      17      68       4 ( 0.003%)   87564 (64.0%)    6.961     -4721.     -6.961      0.000      0.000       45
+  36    0.0  1000.0    1   84837      17      65       6 ( 0.005%)   87580 (64.0%)    6.961     -4721.     -6.961      0.000      0.000       46
+  37    0.0  1000.0    2   73501      19      58      10 ( 0.008%)   87583 (64.0%)    6.961     -4721.     -6.961      0.000      0.000       48
+  38    0.0  1000.0    2  141917      20      92       6 ( 0.005%)   87687 (64.1%)    6.961     -4731.     -6.961      0.000      0.000       49
+  39    0.0  1000.0    1   95751      16      69       4 ( 0.003%)   87721 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       49
+  40    0.0  1000.0    1  105650      14      50       3 ( 0.002%)   87709 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       49
+  41    0.0  1000.0    0  103057      15      69       3 ( 0.002%)   87794 (64.2%)    6.961     -4731.     -6.961      0.000      0.000       49
+  42    0.1  1000.0    0  137950      11      51       3 ( 0.002%)   87725 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       49
+  43    0.1  1000.0    0  130156      14      62       3 ( 0.002%)   87689 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       50
+  44    0.0  1000.0    0   53017      13      44       3 ( 0.002%)   87677 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       50
+  45    0.0  1000.0    0   78527      13      58       3 ( 0.002%)   87697 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       51
+  46    0.0  1000.0    0  103983      14      63       3 ( 0.002%)   87701 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       52
+  47    0.0  1000.0    0   57198      13      50       3 ( 0.002%)   87721 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       53
+  48    0.0  1000.0    0  123440      13      62       3 ( 0.002%)   87748 (64.1%)    6.961     -4731.     -6.961      0.000      0.000       54
+  49    0.0  1000.0    0   65291      12      52       3 ( 0.002%)   87771 (64.2%)    6.961     -4732.     -6.961      0.000      0.000       55
+  50    0.1  1000.0    0  176121      13      65       3 ( 0.002%)   87723 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       57
+  51    0.1  1000.0 4445  167034      13      59       3 ( 0.002%)   87718 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       58
+  52    0.0  1000.0    1   78286      10      42       2 ( 0.002%)   87744 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       59
+  53    0.1  1000.0    0  158380      11      60       2 ( 0.002%)   87744 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       60
+  54    0.0  1000.0    0  126449      11      46       2 ( 0.002%)   87765 (64.2%)    6.961     -4732.     -6.961      0.000      0.000       61
+  55    0.0  1000.0    0   80031      11      49       2 ( 0.002%)   87788 (64.2%)    6.961     -4731.     -6.961      0.000      0.000       61
+  56    0.1  1000.0 4445  124105      10      45       2 ( 0.002%)   87765 (64.2%)    6.961     -4732.     -6.961      0.000      0.000       63
+  57    0.1  1000.0    0  171812      11      63       2 ( 0.002%)   87783 (64.2%)    6.961     -4732.     -6.961      0.000      0.000       64
+  58    0.1  1000.0    0  223834      11      60       2 ( 0.002%)   87801 (64.2%)    6.961     -4732.     -6.961      0.000      0.000       66
+  59    0.1  1000.0    0  197878      12      57       2 ( 0.002%)   87741 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       67
+  60    0.1  1000.0    0  129521      11      56       2 ( 0.002%)   87733 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       70
+  61    0.1  1000.0 4445  157417      12      64       2 ( 0.002%)   87754 (64.1%)    6.961     -4732.     -6.961      0.000      0.000       71
+  62    0.1  1000.0    0  143554      11      54       2 ( 0.002%)   87783 (64.2%)    6.961     -4731.     -6.961      0.000      0.000       74
+  63    0.1  1000.0    0  195874      13      56       2 ( 0.002%)   87784 (64.2%)    6.961     -4732.     -6.961      0.000      0.000       75
+  64    0.0  1000.0    0  107267      11      48       2 ( 0.002%)   87784 (64.2%)    6.961     -4732.     -6.961      0.000      0.000       79
+  65    0.1  1000.0    0  154772      10      43       2 ( 0.002%)   87782 (64.2%)    6.961     -4732.     -6.961      0.000      0.000       80
+  66    0.1  1000.0 4445  131406      10      53       1 ( 0.001%)   87835 (64.2%)    6.961     -4731.     -6.961      0.000      0.000       77
+  67    0.0  1000.0    0  112139      10      54       1 ( 0.001%)   87863 (64.2%)    6.961     -4731.     -6.961      0.000      0.000       75
+  68    0.0  1000.0    0  103885      10      55       0 ( 0.000%)   87893 (64.2%)    6.961     -4731.     -6.961      0.000      0.000      N/A
+Restoring best routing
+Critical path: 6.96051 ns
+Successfully routed after 68 routing iterations.
+Final Net Connection Criticality Histogram:
+[        0:      0.1)  460 (  4.7%) |***********
+[      0.1:      0.2)  534 (  5.4%) |*************
+[      0.2:      0.3)  761 (  7.7%) |*******************
+[      0.3:      0.4)  738 (  7.5%) |******************
+[      0.4:      0.5)  829 (  8.4%) |********************
+[      0.5:      0.6) 1183 ( 12.0%) |*****************************
+[      0.6:      0.7) 1522 ( 15.4%) |*************************************
+[      0.7:      0.8) 1873 ( 19.0%) |**********************************************
+[      0.8:      0.9) 1518 ( 15.4%) |*************************************
+[      0.9:        1)  437 (  4.4%) |***********
+Router Stats: total_nets_routed: 31155 total_connections_routed: 83652 total_heap_pushes: 19099935 total_heap_pops: 5541928 
+Serial Connection Router is being destroyed. Time spent on path search: 0.000 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 0.188 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 0.087 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 0.103 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 0.088 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 0.045 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 0.021 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 4.227 seconds.
+Serial Connection Router is being destroyed. Time spent on path search: 0.083 seconds.
+# Routing took 7.20 seconds (max_rss 221.1 MiB, delta_rss +0.0 MiB)
+
+Checking to ensure routing is legal...
+# Checking to ensure non-configurable edges are legal
+# Checking to ensure non-configurable edges are legal took 0.01 seconds (max_rss 221.1 MiB, delta_rss +0.0 MiB)
+Completed routing consistency check successfully.
+
+Serial number (magic cookie) for the routing is: -1906848186
+Circuit successfully routed with a channel width factor of 100.
+Incr Slack updates 69 in 0.104524 sec
+Full Max Req/Worst Slack updates 10 in 0.000328367 sec
+Incr Max Req/Worst Slack updates 59 in 0.00229592 sec
+Incr Criticality updates 51 in 0.065501 sec
+Full Criticality updates 18 in 0.0464842 sec
+# Synchronize the packed netlist to routing optimization
+## Annotating rr_node with routed nets
+## Annotating rr_node with routed nets took 0.00 seconds (max_rss 221.1 MiB, delta_rss +0.0 MiB)
+Found 14433 mismatches between routing and packing results.
+Fixed 8450 routing traces due to mismatch between routing and packing results.
+# Synchronize the packed netlist to routing optimization took 0.09 seconds (max_rss 221.1 MiB, delta_rss +0.0 MiB)
+Final Clustering Statistics: 
+----------   --------   ------------------------------------   --------------------------
+Block Type   # Blocks   Avg. # of input clocks and pins used   Avg. # of output pins used
+----------   --------   ------------------------------------   --------------------------
+     EMPTY          0                                      0                            0   
+        io        135                               0.785185                     0.214815   
+       clb        421                                23.1568                      10.4893   
+   dsp_top          0                                      0                            0   
+    memory          0                                      0                            0   
+  tsv_hole          0                                      0                            0   
+Absorbed logical nets 3089 out of 7534 nets, 4445 nets not absorbed.
+
+
+Average number of bends per net: 2.63321  Maximum # of bends: 154
+
+Number of global nets: 1
+Number of routed nets (nonglobal): 4444
+Wire length results (in units of 1 clb segments)...
+	Total wirelength: 87893, average net length: 19.7779
+	Maximum net length: 1393
+
+Wire length results in terms of physical segments...
+	Total wiring segments used: 22769, average wire segments per net: 5.12354
+	Maximum segments used by a net: 360
+	Total local nets with reserved CLB opins: 0
+Total number of nets absorbed: 0
+
+Routing channel utilization histogram:
+[        1:      inf)   0 (  0.0%) |
+[      0.9:        1)   1 (  0.1%) |
+[      0.8:      0.9) 121 ( 16.8%) |*****************
+[      0.7:      0.8) 337 ( 46.7%) |***********************************************
+[      0.5:      0.6)  83 ( 11.5%) |************
+[      0.4:      0.5)  66 (  9.1%) |*********
+[      0.3:      0.4)  38 (  5.3%) |*****
+[      0.2:      0.3)  23 (  3.2%) |***
+[      0.1:      0.2)  14 (  1.9%) |**
+[        0:      0.1)  39 (  5.4%) |*****
+Maximum routing channel utilization:       0.9 at (8,13)
+
+X - Directed channels: layer   y   max occ   ave occ   ave cap
+                        ----- ---- -------- -------- --------
+                            0    0       79   57.056      100
+                            0    1       46   33.778      100
+                            0    2       68   52.000      100
+                            0    3       78   60.611      100
+                            0    4       74   61.056      100
+                            0    5       74   57.111      100
+                            0    6       76   58.000      100
+                            0    7       86   73.778      100
+                            0    8       79   69.444      100
+                            0    9       76   66.556      100
+                            0   10       79   69.222      100
+                            0   11       80   61.278      100
+                            0   12       81   62.889      100
+                            0   13       85   73.444      100
+                            0   14       77   66.667      100
+                            0   15       79   69.333      100
+                            0   16       75   60.278      100
+                            0   17       58   43.278      100
+                            0   18       80   59.667      100
+                            1    0       84   59.389      100
+                            1    1       48   33.000      100
+                            1    2       54   42.444      100
+                            1    3       68   52.667      100
+                            1    4       76   59.500      100
+                            1    5       85   68.444      100
+                            1    6       83   73.556      100
+                            1    7       90   76.444      100
+                            1    8       86   75.056      100
+                            1    9       89   73.556      100
+                            1   10       85   75.556      100
+                            1   11       84   73.778      100
+                            1   12       88   77.000      100
+                            1   13       83   70.833      100
+                            1   14       87   70.222      100
+                            1   15       74   61.611      100
+                            1   16       77   59.000      100
+                            1   17       75   52.833      100
+                            1   18       92   68.778      100
+Y - Directed channels: layer   x   max occ   ave occ   ave cap
+                        ----- ---- -------- -------- --------
+                            0    0       88   71.833      100
+                            0    1       77   58.333      100
+                            0    2       90   74.833      100
+                            0    3       88   70.722      100
+                            0    4       88   75.444      100
+                            0    5       91   78.333      100
+                            0    6       91   82.111      100
+                            0    7       87   79.278      100
+                            0    8       87   59.944      100
+                            0    9       85   59.889      100
+                            0   10       87   76.389      100
+                            0   11       71   60.667      100
+                            0   12       84   73.389      100
+                            0   13       82   72.889      100
+                            0   14       82   61.333      100
+                            0   15       68   52.889      100
+                            0   16       76   58.167      100
+                            0   17       47   31.389      100
+                            0   18       57   36.000      100
+                            1    0       93   63.722      100
+                            1    1       50   35.111      100
+                            1    2       84   61.167      100
+                            1    3       85   65.889      100
+                            1    4       92   71.278      100
+                            1    5       88   74.222      100
+                            1    6       88   79.500      100
+                            1    7       92   79.889      100
+                            1    8       95   85.722      100
+                            1    9       84   75.556      100
+                            1   10       91   82.667      100
+                            1   11       69   57.722      100
+                            1   12       89   79.556      100
+                            1   13       89   78.000      100
+                            1   14       83   70.889      100
+                            1   15       80   69.833      100
+                            1   16       77   56.778      100
+                            1   17       56   33.833      100
+                            1   18       78   48.667      100
+
+Total existing wires segments: CHANX     68400, CHANY     68400, CHANZ      5872, ALL    142672
+Total used wires segments:     CHANX     42824, CHANY     45069, CHANZ      3420, ALL     91313
+Usage percentage:              CHANX     62.6%, CHANY     65.9%, CHANZ     58.2%, ALL     64.0%
+
+Logic area (in minimum width transistor areas, excludes I/Os and empty grid tiles)...
+	Total logic block area (Warning, need to add pitch of routing to blocks with height > 3): 2.98303e+07
+	Total used logic block area: 1.1748e+07
+
+Routing area (in minimum width transistor areas)...
+	Total routing area: 5.54080e+06, per logic tile: 6926.00
+
+Total Number of Wiring Segments by Direction: direction length number
+                                              --------- ------ -------
+                                                      X      4  17556
+                                                      Y      4  17556
+                                                      X     16    940
+                                                      Y     16    940
+
+X - Directed Wiring Segment usage by length: length utilization
+                                             ------ -----------
+                                             4       0.616
+                                            16       0.279
+
+Y - Directed Wiring Segment usage by length: length utilization
+                                             ------ -----------
+                                             4       0.651
+                                            16       0.278
+
+Segment occupancy by length: Length Occupancy Capacity Utilization
+                             ------ --------- -------- -----------
+                             L4         22246    35112       0.634
+                             L16          523     1880       0.278
+
+Segment occupancy by type:      name type utilization
+                           --------- ---- -----------
+                                  L4    1       0.634
+                                 L16    2       0.278
+
+Final hold Worst Negative Slack (hWNS): 0 ns
+Final hold Total Negative Slack (hTNS): 0 ns
+Final hold Worst Skew (hWS): 0 ns
+
+Final hold slack histogram:
+[  4.1e-11:    3e-10) 644 ( 41.0%) |***********************************************
+[    3e-10:  5.6e-10) 325 ( 20.7%) |************************
+[  5.6e-10:  8.2e-10) 280 ( 17.8%) |********************
+[  8.2e-10:  1.1e-09) 184 ( 11.7%) |*************
+[  1.1e-09:  1.3e-09)  75 (  4.8%) |*****
+[  1.3e-09:  1.6e-09)  36 (  2.3%) |***
+[  1.6e-09:  1.9e-09)  16 (  1.0%) |*
+[  1.9e-09:  2.1e-09)   2 (  0.1%) |
+[  2.1e-09:  2.4e-09)   3 (  0.2%) |
+[  2.4e-09:  2.7e-09)   4 (  0.3%) |
+
+Final critical path delay (least slack): 6.96051 ns, Fmax: 143.668 MHz
+Final critical path skew: -0.04243 ns
+Final setup Worst Negative Slack (sWNS): -6.96051 ns
+Final setup Total Negative Slack (sTNS): -4731.32 ns
+Final setup Worst Skew (sWS): -0.04243 ns
+
+Final setup slack histogram:
+[   -7e-09: -6.3e-09)  70 (  4.5%) |***********
+[ -6.3e-09: -5.6e-09) 136 (  8.7%) |*********************
+[ -5.6e-09: -4.9e-09) 130 (  8.3%) |********************
+[ -4.9e-09: -4.3e-09) 117 (  7.5%) |******************
+[ -4.3e-09: -3.6e-09) 136 (  8.7%) |*********************
+[ -3.6e-09: -2.9e-09) 166 ( 10.6%) |*************************
+[ -2.9e-09: -2.3e-09) 205 ( 13.1%) |*******************************
+[ -2.3e-09: -1.6e-09) 154 (  9.8%) |************************
+[ -1.6e-09:   -9e-10) 148 (  9.4%) |***********************
+[   -9e-10: -2.3e-10) 307 ( 19.6%) |***********************************************
+
+Final geomean non-virtual intra-domain period: 6.96051 ns (143.668 MHz)
+Final fanout-weighted geomean non-virtual intra-domain period: 6.96051 ns (143.668 MHz)
+
+Incr Slack updates 1 in 0.00304747 sec
+Full Max Req/Worst Slack updates 1 in 2.7222e-05 sec
+Incr Max Req/Worst Slack updates 0 in 0 sec
+Incr Criticality updates 0 in 0 sec
+Full Criticality updates 1 in 0.00287499 sec
+Flow timing analysis took 0.711021 seconds (0.478639 STA, 0.232382 slack) (70 full updates: 0 setup, 0 hold, 70 combined).
+VPR succeeded
+The entire flow of VPR took 10.04 seconds (max_rss 221.1 MiB)
