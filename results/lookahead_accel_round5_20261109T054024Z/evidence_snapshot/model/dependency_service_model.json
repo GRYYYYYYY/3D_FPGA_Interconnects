@@ -1,0 +1,496 @@
+{
+  "evidence": "model-estimated",
+  "board_measured": false,
+  "assumptions": [
+    "Original qid operation order retained; one parent and one uncommitted edge per qid.",
+    "PQ partitions are nonpreemptive through read/compare/write feedback, finite bank ports; partition conflict is explicit wait.",
+    "Heap level requires three stages; PQ launch/finish adds 2(push)/5(pop).",
+    "Edge pipe II1 and feedback7 eligible/3 discarded; metadata/FP32/label and commit included.",
+    "One reset write/context/cycle; output nc+8/context; no overlapped graph reload.",
+    "Not a universal lower bound: different microarchitecture can reduce work. Memory latency and HLS global recurrence may make real RTL slower."
+  ],
+  "calibration": [
+    {
+      "case": "native_d3_w8",
+      "mode": "full",
+      "old_rtl_cycles": 181395,
+      "model_cycles": 141428,
+      "relative_error": -0.22033132114997656,
+      "operation_counts_match": true
+    },
+    {
+      "case": "native_d3_w8",
+      "mode": "early",
+      "old_rtl_cycles": 59625,
+      "model_cycles": 44352,
+      "relative_error": -0.25615094339622646,
+      "operation_counts_match": true
+    },
+    {
+      "case": "native_d4_w8",
+      "mode": "full",
+      "old_rtl_cycles": 893427,
+      "model_cycles": 704964,
+      "relative_error": -0.21094392714793708,
+      "operation_counts_match": true
+    },
+    {
+      "case": "native_d4_w8",
+      "mode": "early",
+      "old_rtl_cycles": 371776,
+      "model_cycles": 282904,
+      "relative_error": -0.23904716818729554,
+      "operation_counts_match": true
+    },
+    {
+      "case": "native_d5_w8",
+      "mode": "full",
+      "old_rtl_cycles": 1630309,
+      "model_cycles": 1291018,
+      "relative_error": -0.20811453534268654,
+      "operation_counts_match": true
+    },
+    {
+      "case": "native_d5_w8",
+      "mode": "early",
+      "old_rtl_cycles": 830104,
+      "model_cycles": 632428,
+      "relative_error": -0.2381340169424554,
+      "operation_counts_match": true
+    }
+  ],
+  "candidates": [
+    {
+      "case": "native_d3_w8",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 32229,
+      "resource_wait_cycles": 17352,
+      "operation_latency_sum": 41333
+    },
+    {
+      "case": "native_d3_w8",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 24528,
+      "resource_wait_cycles": 1946,
+      "operation_latency_sum": 41333
+    },
+    {
+      "case": "native_d3_w8",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 32222,
+      "resource_wait_cycles": 17338,
+      "operation_latency_sum": 41333
+    },
+    {
+      "case": "native_d3_w8",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 24527,
+      "resource_wait_cycles": 1927,
+      "operation_latency_sum": 41333
+    },
+    {
+      "case": "native_d3_w8",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 29029,
+      "resource_wait_cycles": 51486,
+      "operation_latency_sum": 41333
+    },
+    {
+      "case": "native_d3_w8",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 18933,
+      "resource_wait_cycles": 13286,
+      "operation_latency_sum": 41333
+    },
+    {
+      "case": "native_d3_w8",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 29028,
+      "resource_wait_cycles": 51484,
+      "operation_latency_sum": 41333
+    },
+    {
+      "case": "native_d3_w8",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 18930,
+      "resource_wait_cycles": 13147,
+      "operation_latency_sum": 41333
+    },
+    {
+      "case": "native_d4_w8",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 219723,
+      "resource_wait_cycles": 120224,
+      "operation_latency_sum": 289086
+    },
+    {
+      "case": "native_d4_w8",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 181618,
+      "resource_wait_cycles": 43569,
+      "operation_latency_sum": 289086
+    },
+    {
+      "case": "native_d4_w8",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 219778,
+      "resource_wait_cycles": 120558,
+      "operation_latency_sum": 289086
+    },
+    {
+      "case": "native_d4_w8",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 181588,
+      "resource_wait_cycles": 42944,
+      "operation_latency_sum": 289086
+    },
+    {
+      "case": "native_d4_w8",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 199167,
+      "resource_wait_cycles": 421185,
+      "operation_latency_sum": 289086
+    },
+    {
+      "case": "native_d4_w8",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 142338,
+      "resource_wait_cycles": 153493,
+      "operation_latency_sum": 289086
+    },
+    {
+      "case": "native_d4_w8",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 198947,
+      "resource_wait_cycles": 421139,
+      "operation_latency_sum": 289086
+    },
+    {
+      "case": "native_d4_w8",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 142422,
+      "resource_wait_cycles": 153518,
+      "operation_latency_sum": 289086
+    },
+    {
+      "case": "native_d5_w8",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 493034,
+      "resource_wait_cycles": 273705,
+      "operation_latency_sum": 664206
+    },
+    {
+      "case": "native_d5_w8",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 389228,
+      "resource_wait_cycles": 70282,
+      "operation_latency_sum": 664206
+    },
+    {
+      "case": "native_d5_w8",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 492773,
+      "resource_wait_cycles": 274242,
+      "operation_latency_sum": 664206
+    },
+    {
+      "case": "native_d5_w8",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 388176,
+      "resource_wait_cycles": 64939,
+      "operation_latency_sum": 664206
+    },
+    {
+      "case": "native_d5_w8",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 438733,
+      "resource_wait_cycles": 959499,
+      "operation_latency_sum": 664206
+    },
+    {
+      "case": "native_d5_w8",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 287976,
+      "resource_wait_cycles": 322902,
+      "operation_latency_sum": 664206
+    },
+    {
+      "case": "native_d5_w8",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 438816,
+      "resource_wait_cycles": 959928,
+      "operation_latency_sum": 664206
+    },
+    {
+      "case": "native_d5_w8",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 287932,
+      "resource_wait_cycles": 321034,
+      "operation_latency_sum": 664206
+    },
+    {
+      "case": "native_d6_w8",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 748992,
+      "resource_wait_cycles": 442150,
+      "operation_latency_sum": 991082
+    },
+    {
+      "case": "native_d6_w8",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 583689,
+      "resource_wait_cycles": 115692,
+      "operation_latency_sum": 991082
+    },
+    {
+      "case": "native_d6_w8",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 748308,
+      "resource_wait_cycles": 440782,
+      "operation_latency_sum": 991082
+    },
+    {
+      "case": "native_d6_w8",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 582745,
+      "resource_wait_cycles": 114583,
+      "operation_latency_sum": 991082
+    },
+    {
+      "case": "native_d6_w8",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 674251,
+      "resource_wait_cycles": 1458892,
+      "operation_latency_sum": 991082
+    },
+    {
+      "case": "native_d6_w8",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 433070,
+      "resource_wait_cycles": 544162,
+      "operation_latency_sum": 991082
+    },
+    {
+      "case": "native_d6_w8",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 674231,
+      "resource_wait_cycles": 1458950,
+      "operation_latency_sum": 991082
+    },
+    {
+      "case": "native_d6_w8",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 432822,
+      "resource_wait_cycles": 544128,
+      "operation_latency_sum": 991082
+    },
+    {
+      "case": "native_d8_w8",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 2089450,
+      "resource_wait_cycles": 1170336,
+      "operation_latency_sum": 2893445
+    },
+    {
+      "case": "native_d8_w8",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 1662898,
+      "resource_wait_cycles": 301529,
+      "operation_latency_sum": 2893445
+    },
+    {
+      "case": "native_d8_w8",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 2088722,
+      "resource_wait_cycles": 1159124,
+      "operation_latency_sum": 2893445
+    },
+    {
+      "case": "native_d8_w8",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 1658082,
+      "resource_wait_cycles": 294798,
+      "operation_latency_sum": 2893445
+    },
+    {
+      "case": "native_d8_w8",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 1878406,
+      "resource_wait_cycles": 3975154,
+      "operation_latency_sum": 2893445
+    },
+    {
+      "case": "native_d8_w8",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 1282944,
+      "resource_wait_cycles": 1398075,
+      "operation_latency_sum": 2893445
+    },
+    {
+      "case": "native_d8_w8",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 1877794,
+      "resource_wait_cycles": 3973056,
+      "operation_latency_sum": 2893445
+    },
+    {
+      "case": "native_d8_w8",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 1280601,
+      "resource_wait_cycles": 1390564,
+      "operation_latency_sum": 2893445
+    },
+    {
+      "case": "native_d6_w8_l1",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 20624,
+      "resource_wait_cycles": 11853,
+      "operation_latency_sum": 20098
+    },
+    {
+      "case": "native_d6_w8_l1",
+      "contexts": 2,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 14832,
+      "resource_wait_cycles": 22,
+      "operation_latency_sum": 20098
+    },
+    {
+      "case": "native_d6_w8_l1",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 20624,
+      "resource_wait_cycles": 11853,
+      "operation_latency_sum": 20098
+    },
+    {
+      "case": "native_d6_w8_l1",
+      "contexts": 2,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 14810,
+      "resource_wait_cycles": 0,
+      "operation_latency_sum": 20098
+    },
+    {
+      "case": "native_d6_w8_l1",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 1,
+      "batch_cycles": 15918,
+      "resource_wait_cycles": 24053,
+      "operation_latency_sum": 20098
+    },
+    {
+      "case": "native_d6_w8_l1",
+      "contexts": 4,
+      "edge_lanes": 1,
+      "pq_partitions": 2,
+      "batch_cycles": 10629,
+      "resource_wait_cycles": 5542,
+      "operation_latency_sum": 20098
+    },
+    {
+      "case": "native_d6_w8_l1",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 1,
+      "batch_cycles": 15918,
+      "resource_wait_cycles": 24053,
+      "operation_latency_sum": 20098
+    },
+    {
+      "case": "native_d6_w8_l1",
+      "contexts": 4,
+      "edge_lanes": 2,
+      "pq_partitions": 2,
+      "batch_cycles": 10623,
+      "resource_wait_cycles": 5512,
+      "operation_latency_sum": 20098
+    }
+  ]
+}

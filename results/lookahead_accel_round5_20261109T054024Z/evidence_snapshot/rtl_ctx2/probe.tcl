@@ -1,0 +1,4 @@
+open_project project
+open_solution solution
+cosim_design -rtl verilog -tool xsim -trace_level none -argv [list {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin}]
+exit

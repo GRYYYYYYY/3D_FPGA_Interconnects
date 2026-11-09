@@ -1,0 +1,395 @@
+
+
+================================================================
+== Synthesis Summary Report of 'lookahead_interleave5'
+================================================================
++ General Information: 
+    * Date:           Mon Nov  9 05:49:09 2026
+    * Version:        2022.2 (Build 3670227 on Oct 13 2022)
+    * Project:        project
+    * Solution:       solution (Vivado IP Flow Target)
+    * Product family: virtexuplus
+    * Target device:  xcu280-fsvh2892-2L-e
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +----------------------------------------+--------+-------+---------+-----------+----------+---------+-------+----------+-----------+---------+-------------+-------------+-----+
+    |                 Modules                |  Issue |       | Latency |  Latency  | Iteration|         |  Trip |          |           |         |             |             |     |
+    |                 & Loops                |  Type  | Slack | (cycles)|    (ns)   |  Latency | Interval| Count | Pipelined|   BRAM    |   DSP   |      FF     |     LUT     | URAM|
+    +----------------------------------------+--------+-------+---------+-----------+----------+---------+-------+----------+-----------+---------+-------------+-------------+-----+
+    |+ lookahead_interleave5                 |  Timing|  -2.42|        -|          -|         -|        -|      -|        no|  597 (14%)|  2 (~0%)|   34211 (1%)|   47165 (3%)|    -|
+    | + engine_0_s                           |  Timing|  -2.42|        -|          -|         -|        -|      -|        no|  597 (14%)|  2 (~0%)|  25931 (~0%)|   33587 (2%)|    -|
+    |  + engine_0_Pipeline_LOAD_ROW          |       -|   0.00|        -|          -|         -|        -|      -|        no|          -|        -|    848 (~0%)|   1534 (~0%)|    -|
+    |   o LOAD_ROW                           |       -|   3.65|        -|          -|        10|        1|      -|       yes|          -|        -|            -|            -|    -|
+    |  + engine_0_Pipeline_LOAD_COST         |       -|   0.00|      138|    690.000|         -|      138|      -|        no|          -|        -|   1887 (~0%)|   2564 (~0%)|    -|
+    |   o LOAD_COST                          |      II|   3.65|      136|    680.000|        11|        2|     64|       yes|          -|        -|            -|            -|    -|
+    |  + engine_0_Pipeline_LOAD_NODE         |       -|   0.00|        -|          -|         -|        -|      -|        no|          -|        -|   1913 (~0%)|   2915 (~0%)|    -|
+    |   o LOAD_NODE                          |      II|   3.65|        -|          -|        12|        2|      -|       yes|          -|        -|            -|            -|    -|
+    |  + engine_0_Pipeline_LOAD_EDGE         |       -|   0.00|    16394|  8.197e+04|         -|    16394|      -|        no|          -|        -|    494 (~0%)|   1228 (~0%)|    -|
+    |   o LOAD_EDGE                          |       -|   3.65|    16392|  8.196e+04|        10|        1|  16384|       yes|          -|        -|            -|            -|    -|
+    |  + search_0_s                          |  Timing|  -2.42|        -|          -|         -|        -|      -|        no|  492 (12%)|        -|  16789 (~0%)|   13308 (1%)|    -|
+    |   + search_0_Pipeline_1                |       -|   2.56|       66|    330.000|         -|       66|      -|        no|          -|        -|      9 (~0%)|     52 (~0%)|    -|
+    |    o Loop 1                            |       -|   3.65|       64|    320.000|         1|        1|     64|       yes|          -|        -|            -|            -|    -|
+    |   + search_0_Pipeline_VITIS_LOOP_33_1  |       -|   2.69|        6|     30.000|         -|        6|      -|        no|          -|        -|      5 (~0%)|     46 (~0%)|    -|
+    |    o VITIS_LOOP_33_1                   |       -|   3.65|        4|     20.000|         1|        1|      4|       yes|          -|        -|            -|            -|    -|
+    |   + search_0_Pipeline_DISPATCH         |  Timing|  -2.42|        -|          -|         -|        -|      -|        no|          -|        -|  16036 (~0%)|  10204 (~0%)|    -|
+    |    o DISPATCH                          |      II|   3.65|        -|          -|         4|        3|      -|       yes|          -|        -|            -|            -|    -|
+    |   + search_0_Pipeline_VITIS_LOOP_78_2  |       -|   0.00|       72|    360.000|         -|       72|      -|        no|          -|        -|    723 (~0%)|   2804 (~0%)|    -|
+    |    o VITIS_LOOP_78_2                   |       -|   3.65|       70|    350.000|         8|        1|     64|       yes|          -|        -|            -|            -|    -|
+    |  o LOAD_TASK                           |       -|   3.65|   267008|  1.620e+06|      8344|        -|     32|        no|          -|        -|            -|            -|    -|
+    |   + engine_0_Pipeline_VITIS_LOOP_57_1  |       -|   2.56|      130|    650.000|         -|      130|      -|        no|          -|        -|     10 (~0%)|     53 (~0%)|    -|
+    |    o VITIS_LOOP_57_1                   |       -|   3.65|      128|    640.000|         1|        1|    128|       yes|          -|        -|            -|            -|    -|
+    |   + engine_0_Pipeline_LOAD_CELL        |       -|   0.00|     8202|  4.101e+04|         -|     8202|      -|        no|          -|        -|    909 (~0%)|   3492 (~0%)|    -|
+    |    o LOAD_CELL                         |       -|   3.65|     8200|  4.100e+04|        11|        1|   8191|       yes|          -|        -|            -|            -|    -|
+    |  o FLUSH_TASK                          |       -|   3.65|        -|          -|         -|        -|      -|        no|          -|        -|            -|            -|    -|
+    |   + engine_0_Pipeline_FLUSH_MAP        |       -|   0.00|        -|          -|         -|        -|      -|        no|          -|        -|    798 (~0%)|   2718 (~0%)|    -|
+    |    o FLUSH_MAP                         |      II|   3.65|        -|          -|         9|        2|      -|       yes|          -|        -|            -|            -|    -|
+    +----------------------------------------+--------+-------+---------+-----------+----------+---------+-------+----------+-----------+---------+-------------+-------------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++---------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+
+| Interface     | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   |
+|               | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |
++---------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+
+| m_axi_graph0  | 64 -> 256  | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          |
+| m_axi_result0 | 64 -> 512  | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          |
++---------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+
+
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 7             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+-----------+--------+-------+--------+------------------------+
+| Interface     | Register  | Offset | Width | Access | Description            |
++---------------+-----------+--------+-------+--------+------------------------+
+| s_axi_control | row0_1    | 0x10   | 32    | W      | Data signal of row0    |
+| s_axi_control | row0_2    | 0x14   | 32    | W      | Data signal of row0    |
+| s_axi_control | nodes0_1  | 0x1c   | 32    | W      | Data signal of nodes0  |
+| s_axi_control | nodes0_2  | 0x20   | 32    | W      | Data signal of nodes0  |
+| s_axi_control | edges0_1  | 0x28   | 32    | W      | Data signal of edges0  |
+| s_axi_control | edges0_2  | 0x2c   | 32    | W      | Data signal of edges0  |
+| s_axi_control | costs0_1  | 0x34   | 32    | W      | Data signal of costs0  |
+| s_axi_control | costs0_2  | 0x38   | 32    | W      | Data signal of costs0  |
+| s_axi_control | jobs0_1   | 0x40   | 32    | W      | Data signal of jobs0   |
+| s_axi_control | jobs0_2   | 0x44   | 32    | W      | Data signal of jobs0   |
+| s_axi_control | cells0_1  | 0x4c   | 32    | W      | Data signal of cells0  |
+| s_axi_control | cells0_2  | 0x50   | 32    | W      | Data signal of cells0  |
+| s_axi_control | output0_1 | 0x58   | 32    | W      | Data signal of output0 |
+| s_axi_control | output0_2 | 0x5c   | 32    | W      | Data signal of output0 |
+| s_axi_control | stats0_1  | 0x64   | 32    | W      | Data signal of stats0  |
+| s_axi_control | stats0_2  | 0x68   | 32    | W      | Data signal of stats0  |
+| s_axi_control | metrics_1 | 0x70   | 32    | W      | Data signal of metrics |
+| s_axi_control | metrics_2 | 0x74   | 32    | W      | Data signal of metrics |
++---------------+-----------+--------+-------+--------+------------------------+
+
+* Other Ports
++-----------+---------+----------+
+| Interface | Mode    | Bitwidth |
++-----------+---------+----------+
+| command   | ap_none | 32       |
+| n         | ap_none | 32       |
+| nc        | ap_none | 32       |
+| ne        | ap_none | 32       |
+| nj        | ap_none | 32       |
+| nk        | ap_none | 32       |
+| status0   | ap_vld  | 32       |
++-----------+---------+----------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------------------------------+
+| Interface | Type       | Ports                             |
++-----------+------------+-----------------------------------+
+| ap_clk    | clock      | ap_clk                            |
+| ap_rst_n  | reset      | ap_rst_n                          |
+| ap_ctrl   | ap_ctrl_hs | ap_done ap_idle ap_ready ap_start |
++-----------+------------+-----------------------------------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+---------------------------+
+| Argument | Direction | Datatype                  |
++----------+-----------+---------------------------+
+| row0     | in        | long unsigned int const * |
+| nodes0   | in        | Node const *              |
+| edges0   | in        | Edge const *              |
+| costs0   | in        | Cost const *              |
+| jobs0    | in        | Job const *               |
+| cells0   | in        | int const *               |
+| output0  | out       | Cost*                     |
+| stats0   | out       | Stats*                    |
+| n        | in        | unsigned int              |
+| ne       | in        | unsigned int              |
+| nj       | in        | unsigned int              |
+| nk       | in        | unsigned int              |
+| nc       | in        | unsigned int              |
+| command  | in        | unsigned int              |
+| status0  | out       | unsigned int&             |
+| metrics  | out       | long unsigned int*        |
++----------+-----------+---------------------------+
+
+* SW-to-HW Mapping
++----------+----------------+-----------+----------+-------------------------------------+
+| Argument | HW Interface   | HW Type   | HW Usage | HW Info                             |
++----------+----------------+-----------+----------+-------------------------------------+
+| row0     | m_axi_graph0   | interface |          |                                     |
+| row0     | s_axi_control  | register  | offset   | name=row0_1 offset=0x10 range=32    |
+| row0     | s_axi_control  | register  | offset   | name=row0_2 offset=0x14 range=32    |
+| nodes0   | m_axi_graph0   | interface |          |                                     |
+| nodes0   | s_axi_control  | register  | offset   | name=nodes0_1 offset=0x1c range=32  |
+| nodes0   | s_axi_control  | register  | offset   | name=nodes0_2 offset=0x20 range=32  |
+| edges0   | m_axi_graph0   | interface |          |                                     |
+| edges0   | s_axi_control  | register  | offset   | name=edges0_1 offset=0x28 range=32  |
+| edges0   | s_axi_control  | register  | offset   | name=edges0_2 offset=0x2c range=32  |
+| costs0   | m_axi_graph0   | interface |          |                                     |
+| costs0   | s_axi_control  | register  | offset   | name=costs0_1 offset=0x34 range=32  |
+| costs0   | s_axi_control  | register  | offset   | name=costs0_2 offset=0x38 range=32  |
+| jobs0    | m_axi_graph0   | interface |          |                                     |
+| jobs0    | s_axi_control  | register  | offset   | name=jobs0_1 offset=0x40 range=32   |
+| jobs0    | s_axi_control  | register  | offset   | name=jobs0_2 offset=0x44 range=32   |
+| cells0   | m_axi_graph0   | interface |          |                                     |
+| cells0   | s_axi_control  | register  | offset   | name=cells0_1 offset=0x4c range=32  |
+| cells0   | s_axi_control  | register  | offset   | name=cells0_2 offset=0x50 range=32  |
+| output0  | m_axi_result0  | interface |          |                                     |
+| output0  | s_axi_control  | register  | offset   | name=output0_1 offset=0x58 range=32 |
+| output0  | s_axi_control  | register  | offset   | name=output0_2 offset=0x5c range=32 |
+| stats0   | m_axi_result0  | interface |          |                                     |
+| stats0   | s_axi_control  | register  | offset   | name=stats0_1 offset=0x64 range=32  |
+| stats0   | s_axi_control  | register  | offset   | name=stats0_2 offset=0x68 range=32  |
+| n        | n              | port      |          |                                     |
+| ne       | ne             | port      |          |                                     |
+| nj       | nj             | port      |          |                                     |
+| nk       | nk             | port      |          |                                     |
+| nc       | nc             | port      |          |                                     |
+| command  | command        | port      |          |                                     |
+| status0  | status0        | port      |          |                                     |
+| status0  | status0_ap_vld | port      |          |                                     |
+| metrics  | m_axi_result0  | interface |          |                                     |
+| metrics  | s_axi_control  | register  | offset   | name=metrics_1 offset=0x70 range=32 |
+| metrics  | s_axi_control  | register  | offset   | name=metrics_2 offset=0x74 range=32 |
++----------+----------------+-----------+----------+-------------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* Inferred Bursts and Widening Missed
++---------------+------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------+------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| HW Interface  | Variable   | Loop            | Problem                                                                                                                                        | Resolution | Location                                                                                                                                                                                          |
++---------------+------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------+------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| m_axi_graph0  | ext_costs  |                 | Unsupported access data type. Expected integer or floating point type but received %"struct.la::Cost" = type { float, float }                  | 214-378    | /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx4_clean/source_snapshot/loader5.hpp:36:21 |
+| m_axi_graph0  | ext_nodes  |                 | Unsupported access data type. Expected integer or floating point type but received %"struct.la::Node" = type { i32, i32, i32, i32 }            | 214-378    | /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx4_clean/source_snapshot/loader5.hpp:40:13 |
+| m_axi_graph0  | ext_edges  | LOAD_EDGE       | Stride is incompatible                                                                                                                         | 214-230    | /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx4_clean/source_snapshot/loader5.hpp:48:20 |
+| m_axi_graph0  | ext_jobs   | LOAD_TASK       | Stride is incompatible                                                                                                                         | 214-230    | /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx4_clean/source_snapshot/loader5.hpp:52:20 |
+| m_axi_graph0  | ext_cells  | LOAD_TASK       | Stride is incompatible                                                                                                                         | 214-230    | /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx4_clean/source_snapshot/loader5.hpp:52:20 |
+| m_axi_result0 | ext_output |                 | Unsupported access data type. Expected integer or floating point type but received %"struct.la::Cost" = type { float, float }                  | 214-378    | /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx4_clean/source_snapshot/loader5.hpp:77:20 |
+| m_axi_result0 | ext_stats  |                 | Unsupported access data type. Expected integer or floating point type but received %"struct.la::Stats" = type { i64, i64, i64, i64, i64, i32 } | 214-378    | /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx4_clean/source_snapshot/loader5.hpp:79:25 |
+| m_axi_graph0  | ext_cells  | LOAD_CELL       | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0                                          | 214-353    | /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx4_clean/source_snapshot/loader5.hpp:59:24 |
+| m_axi_result0 | metrics    | VITIS_LOOP_78_2 | Could not widen since type i64 size is greater than or equal to the max_widen_bitwidth threshold of 0                                          | 214-353    | /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx4_clean/source_snapshot/search5.hpp:78:37 |
++---------------+------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------+------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+    * Resolution URL: www.xilinx.com/cgi-bin/docs/rdoc?v=2022.2;t=hls+guidance;d=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++----------------------------------------+-----+--------+---------------------+------+--------+---------+
+| Name                                   | DSP | Pragma | Variable            | Op   | Impl   | Latency |
++----------------------------------------+-----+--------+---------------------+------+--------+---------+
+| + lookahead_interleave5                | 2   |        |                     |      |        |         |
+|  + engine_0_s                          | 2   |        |                     |      |        |         |
+|    add_ln25_fu_1513_p2                 | -   |        | add_ln25            | add  | fabric | 0       |
+|    add_ln29_fu_1613_p2                 | -   |        | add_ln29            | add  | fabric | 0       |
+|    add_ln52_fu_1670_p2                 | -   |        | add_ln52            | add  | fabric | 0       |
+|    mul_mul_5ns_18s_18_4_1_U925         | 1   |        | mul_ln53            | mul  | dsp48  | 3       |
+|    sub_ln53_fu_1704_p2                 | -   |        | sub_ln53            | sub  | fabric | 0       |
+|    add_ln53_fu_1718_p2                 | -   |        | add_ln53            | add  | fabric | 0       |
+|    add_ln53_2_fu_1733_p2               | -   |        | add_ln53_2          | add  | fabric | 0       |
+|    add_ln72_fu_1848_p2                 | -   |        | add_ln72            | add  | fabric | 0       |
+|    add_ln73_fu_2476_p2                 | -   |        | add_ln73            | add  | fabric | 0       |
+|    mul_mul_5ns_12s_12_4_1_U926         | 1   |        | mul_ln75            | mul  | dsp48  | 3       |
+|    sub_ln79_fu_2514_p2                 | -   |        | sub_ln79            | sub  | fabric | 0       |
+|    add_ln79_fu_2528_p2                 | -   |        | add_ln79            | add  | fabric | 0       |
+|    add_ln79_1_fu_2533_p2               | -   |        | add_ln79_1          | add  | fabric | 0       |
+|   + engine_0_Pipeline_LOAD_ROW         | 0   |        |                     |      |        |         |
+|     i_3_fu_215_p2                      | -   |        | i_3                 | add  | fabric | 0       |
+|     add_ln31_fu_237_p2                 | -   |        | add_ln31            | add  | fabric | 0       |
+|     add_ln31_1_fu_301_p2               | -   |        | add_ln31_1          | add  | fabric | 0       |
+|   + engine_0_Pipeline_LOAD_COST        | 0   |        |                     |      |        |         |
+|     add_ln34_fu_161_p2                 | -   |        | add_ln34            | add  | fabric | 0       |
+|     add_ln36_fu_195_p2                 | -   |        | add_ln36            | add  | fabric | 0       |
+|     add_ln36_1_fu_201_p2               | -   |        | add_ln36_1          | add  | fabric | 0       |
+|   + engine_0_Pipeline_LOAD_NODE        | 0   |        |                     |      |        |         |
+|     add_ln38_fu_324_p2                 | -   |        | add_ln38            | add  | fabric | 0       |
+|     add_ln40_fu_288_p2                 | -   |        | add_ln40            | add  | fabric | 0       |
+|     add_ln40_1_fu_294_p2               | -   |        | add_ln40_1          | add  | fabric | 0       |
+|     add_ln41_fu_422_p2                 | -   |        | add_ln41            | add  | fabric | 0       |
+|   + engine_0_Pipeline_LOAD_EDGE        | 0   |        |                     |      |        |         |
+|     add_ln48_fu_187_p2                 | -   |        | add_ln48            | add  | fabric | 0       |
+|     add_ln50_fu_209_p2                 | -   |        | add_ln50            | add  | fabric | 0       |
+|     add_ln50_1_fu_255_p2               | -   |        | add_ln50_1          | add  | fabric | 0       |
+|   + engine_0_Pipeline_VITIS_LOOP_57_1  | 0   |        |                     |      |        |         |
+|     add_ln57_fu_1974_p2                | -   |        | add_ln57            | add  | fabric | 0       |
+|   + search_0_s                         | 0   |        |                     |      |        |         |
+|    + search_0_Pipeline_1               | 0   |        |                     |      |        |         |
+|      empty_65_fu_1000_p2               | -   |        | empty_65            | add  | fabric | 0       |
+|    + search_0_Pipeline_VITIS_LOOP_33_1 | 0   |        |                     |      |        |         |
+|      add_ln33_fu_1618_p2               | -   |        | add_ln33            | add  | fabric | 0       |
+|    + search_0_Pipeline_DISPATCH        | 0   |        |                     |      |        |         |
+|      slot_fu_13414_p2                  | -   |        | slot                | add  | fabric | 0       |
+|      tick_fu_13526_p2                  | -   |        | tick                | add  | fabric | 0       |
+|      counters_66_fu_12537_p2           | -   |        | counters_66         | add  | fabric | 0       |
+|      done_2_fu_11832_p2                | -   |        | done_2              | add  | fabric | 0       |
+|      x_edge_2_fu_13532_p2              | -   |        | x_edge_2            | add  | fabric | 0       |
+|      x_size_2_fu_13549_p2              | -   |        | x_size_2            | add  | fabric | 0       |
+|      x_st_pushes_1_fu_13554_p2         | -   |        | x_st_pushes_1       | add  | fabric | 0       |
+|      fadd_32ns_32ns_32_4_no_dsp_1_U488 | -   |        | x_next_delay_1      | fadd | fabric | 3       |
+|      fadd_32ns_32ns_32_4_no_dsp_1_U489 | -   |        | x_next_congestion_1 | fadd | fabric | 3       |
+|      x_st_edges_1_fu_13643_p2          | -   |        | x_st_edges_1        | add  | fabric | 0       |
+|      x_st_expanded_1_fu_13648_p2       | -   |        | x_st_expanded_1     | add  | fabric | 0       |
+|      add_ln63_fu_11864_p2              | -   |        | add_ln63            | add  | fabric | 0       |
+|      add_ln60_fu_11898_p2              | -   |        | add_ln60            | add  | fabric | 0       |
+|      add_ln61_fu_13136_p2              | -   |        | add_ln61            | add  | fabric | 0       |
+|      x_remaining_2_fu_13952_p2         | -   |        | x_remaining_2       | add  | fabric | 0       |
+|      add_ln56_fu_13706_p2              | -   |        | add_ln56            | add  | fabric | 0       |
+|      counters_70_fu_13724_p2           | -   |        | counters_70         | add  | fabric | 0       |
+|      add_ln53_fu_13181_p2              | -   |        | add_ln53            | add  | fabric | 0       |
+|      add_ln53_1_fu_13187_p2            | -   |        | add_ln53_1          | add  | fabric | 0       |
+|      x_child_2_fu_13788_p2             | -   |        | x_child_2           | add  | fabric | 0       |
+|      x_child_1_fu_13259_p2             | -   |        | x_child_1           | add  | fabric | 0       |
+|      add_ln37_fu_13265_p2              | -   |        | add_ln37            | add  | fabric | 0       |
+|      grp_fu_11264_p2                   | -   |        | x_child_4           | add  | fabric | 0       |
+|      add_ln49_1_fu_13287_p2            | -   |        | add_ln49_1          | add  | fabric | 0       |
+|      grp_fu_11264_p2                   | -   |        | x_size_1            | add  | fabric | 0       |
+|      add_ln37_1_fu_13347_p2            | -   |        | add_ln37_1          | add  | fabric | 0       |
+|      x_st_pops_1_fu_14034_p2           | -   |        | x_st_pops_1         | add  | fabric | 0       |
+|      grp_fu_11259_p2                   | -   |        | x_pos_1             | add  | fabric | 0       |
+|      add_ln41_fu_13391_p2              | -   |        | add_ln41            | add  | fabric | 0       |
+|      grp_fu_11259_p2                   | -   |        | x_pos_2             | add  | fabric | 0       |
+|      nextqid_1_fu_11927_p2             | -   |        | nextqid_1           | add  | fabric | 0       |
+|    + search_0_Pipeline_VITIS_LOOP_78_2 | 0   |        |                     |      |        |         |
+|      add_ln78_1_fu_627_p2              | -   |        | add_ln78_1          | add  | fabric | 0       |
+|      add_ln78_fu_787_p2                | -   |        | add_ln78            | add  | fabric | 0       |
+|      add_ln78_2_fu_818_p2              | -   |        | add_ln78_2          | add  | fabric | 0       |
+|   + engine_0_Pipeline_LOAD_CELL        | 0   |        |                     |      |        |         |
+|     add_ln59_fu_2692_p2                | -   |        | add_ln59            | add  | fabric | 0       |
+|     add_ln61_2_fu_2797_p2              | -   |        | add_ln61_2          | add  | fabric | 0       |
+|     target_1_fu_4150_p2                | -   |        | target_1            | add  | fabric | 0       |
+|   + engine_0_Pipeline_FLUSH_MAP        | 0   |        |                     |      |        |         |
+|     add_ln75_fu_186_p2                 | -   |        | add_ln75            | add  | fabric | 0       |
+|     add_ln77_fu_213_p2                 | -   |        | add_ln77            | add  | fabric | 0       |
+|     add_ln77_1_fu_243_p2               | -   |        | add_ln77_1          | add  | fabric | 0       |
+|     add_ln77_2_fu_249_p2               | -   |        | add_ln77_2          | add  | fabric | 0       |
++----------------------------------------+-----+--------+---------------------+------+--------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
++------------------------------------------------------------------------------------------------+------+------+--------+-------------------------------------------------------------------------------------------+---------+------+---------+
+| Name                                                                                           | BRAM | URAM | Pragma | Variable                                                                                  | Storage | Impl | Latency |
++------------------------------------------------------------------------------------------------+------+------+--------+-------------------------------------------------------------------------------------------+---------+------+---------+
+| + lookahead_interleave5                                                                        | 597  | 0    |        |                                                                                           |         |      |         |
+|  + engine_0_s                                                                                  | 597  | 0    |        |                                                                                           |         |      |         |
+|    output_U                                                                                    | 15   | -    | yes    | output                                                                                    | ram_t2p | bram | 1       |
+|    stats_pushes_U                                                                              | 2    | -    | yes    | stats_pushes                                                                              | ram_2p  | bram | 1       |
+|    stats_pops_U                                                                                | 2    | -    | yes    | stats_pops                                                                                | ram_2p  | bram | 1       |
+|    stats_edges_U                                                                               | 2    | -    | yes    | stats_edges                                                                               | ram_2p  | bram | 1       |
+|    stats_expanded_U                                                                            | 2    | -    | yes    | stats_expanded                                                                            | ram_2p  | bram | 1       |
+|    stats_peak_U                                                                                | 2    | -    | yes    | stats_peak                                                                                | ram_2p  | bram | 1       |
+|    stats_status_U                                                                              | 1    | -    | yes    | stats_status                                                                              | ram_2p  | bram | 1       |
+|    void_engine_unsigned_long_const_Node_const_Edge_const_Cost_const_Job_const_1_U              | 8    | -    | pragma | void_engine_unsigned_long_const_Node_const_Edge_const_Cost_const_Job_const_1              | ram_2p  | bram | 1       |
+|    void_mulmulmulmulmulengine_unsigned_long_const_Node_const_Edge_const_Cost_const_Job_const_U | 8    | -    | pragma | void_mulmulmulmulmulengine_unsigned_long_const_Node_const_Edge_const_Cost_const_Job_const | ram_2p  | bram | 1       |
+|    costs_V_U                                                                                   | 2    | -    | pragma | costs_V                                                                                   | ram_2p  | bram | 1       |
+|    nodes_V_U                                                                                   | 29   | -    | pragma | nodes_V                                                                                   | ram_2p  | bram | 1       |
+|    edges_U                                                                                     | 16   | -    | pragma | edges                                                                                     | ram_2p  | bram | 1       |
+|    sources_U                                                                                   | -    | -    |        | sources                                                                                   | ram_1p  | auto | 1       |
+|    cells_U                                                                                     | 16   | -    | pragma | cells                                                                                     | ram_2p  | bram | 1       |
+|    targets_U                                                                                   | -    | -    |        | targets                                                                                   | ram_1p  | auto | 1       |
+|   + search_0_s                                                                                 | 492  | 0    |        |                                                                                           |         |      |         |
+|     even_V_U                                                                                   | 57   | -    | yes    | even_V                                                                                    | ram_t2p | bram | 1       |
+|     even_V_1_U                                                                                 | 57   | -    | yes    | even_V_1                                                                                  | ram_t2p | bram | 1       |
+|     even_V_2_U                                                                                 | 57   | -    | yes    | even_V_2                                                                                  | ram_t2p | bram | 1       |
+|     even_V_3_U                                                                                 | 57   | -    | yes    | even_V_3                                                                                  | ram_t2p | bram | 1       |
+|     odd_V_U                                                                                    | 57   | -    | yes    | odd_V                                                                                     | ram_t2p | bram | 1       |
+|     odd_V_1_U                                                                                  | 57   | -    | yes    | odd_V_1                                                                                   | ram_t2p | bram | 1       |
+|     odd_V_2_U                                                                                  | 57   | -    | yes    | odd_V_2                                                                                   | ram_t2p | bram | 1       |
+|     odd_V_3_U                                                                                  | 57   | -    | yes    | odd_V_3                                                                                   | ram_t2p | bram | 1       |
+|     visited_U                                                                                  | 8    | -    | yes    | visited                                                                                   | ram_t2p | bram | 1       |
+|     visited_1_U                                                                                | 8    | -    | yes    | visited_1                                                                                 | ram_t2p | bram | 1       |
+|     visited_2_U                                                                                | 8    | -    | yes    | visited_2                                                                                 | ram_t2p | bram | 1       |
+|     visited_3_U                                                                                | 8    | -    | yes    | visited_3                                                                                 | ram_t2p | bram | 1       |
+|     expanded_V_U                                                                               | 1    | -    | yes    | expanded_V                                                                                | ram_t2p | bram | 1       |
+|     expanded_V_1_U                                                                             | 1    | -    | yes    | expanded_V_1                                                                              | ram_t2p | bram | 1       |
+|     expanded_V_2_U                                                                             | 1    | -    | yes    | expanded_V_2                                                                              | ram_t2p | bram | 1       |
+|     expanded_V_3_U                                                                             | 1    | -    | yes    | expanded_V_3                                                                              | ram_t2p | bram | 1       |
++------------------------------------------------------------------------------------------------+------+------+--------+-------------------------------------------------------------------------------------------+---------+------+---------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------+
+| Type            | Options                                                                                                                                         | Location                                                             |
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------+
+| interface       | m_axi port=metrics bundle=result0 depth=64                                                                                                      | source_snapshot/interleave5.cpp:8 in lookahead_interleave5, metrics  |
+| interface       | m_axi port=row0 bundle=graph0 depth=2864 max_read_burst_length=16 max_write_burst_length=16 num_read_outstanding=16 num_write_outstanding=16    | source_snapshot/interleave5.cpp:9 in lookahead_interleave5, row0     |
+| interface       | m_axi port=nodes0 bundle=graph0 depth=2864 max_read_burst_length=16 max_write_burst_length=16 num_read_outstanding=16 num_write_outstanding=16  | source_snapshot/interleave5.cpp:10 in lookahead_interleave5, nodes0  |
+| interface       | m_axi port=edges0 bundle=graph0 depth=7928 max_read_burst_length=16 max_write_burst_length=16 num_read_outstanding=16 num_write_outstanding=16  | source_snapshot/interleave5.cpp:11 in lookahead_interleave5, edges0  |
+| interface       | m_axi port=costs0 bundle=graph0 depth=16 max_read_burst_length=16 max_write_burst_length=16 num_read_outstanding=16 num_write_outstanding=16    | source_snapshot/interleave5.cpp:12 in lookahead_interleave5, costs0  |
+| interface       | m_axi port=jobs0 bundle=graph0 depth=16 max_read_burst_length=16 max_write_burst_length=16 num_read_outstanding=16 num_write_outstanding=16     | source_snapshot/interleave5.cpp:13 in lookahead_interleave5, jobs0   |
+| interface       | m_axi port=cells0 bundle=graph0 depth=34352 max_read_burst_length=16 max_write_burst_length=16 num_read_outstanding=16 num_write_outstanding=16 | source_snapshot/interleave5.cpp:14 in lookahead_interleave5, cells0  |
+| interface       | m_axi port=output0 bundle=result0 depth=600 max_read_burst_length=16 max_write_burst_length=16 num_read_outstanding=16 num_write_outstanding=16 | source_snapshot/interleave5.cpp:15 in lookahead_interleave5, output0 |
+| interface       | m_axi port=stats0 bundle=result0 depth=12 max_read_burst_length=16 max_write_burst_length=16 num_read_outstanding=16 num_write_outstanding=16   | source_snapshot/interleave5.cpp:16 in lookahead_interleave5, stats0  |
+| inline          | off                                                                                                                                             | source_snapshot/loader5.hpp:10 in engine                             |
+| bind_storage    | variable=row type=ram_2p impl=bram latency=1                                                                                                    | source_snapshot/loader5.hpp:15 in engine, row                        |
+| bind_storage    | variable=nodes type=ram_2p impl=bram latency=1                                                                                                  | source_snapshot/loader5.hpp:16 in engine, nodes                      |
+| bind_storage    | variable=edges type=ram_2p impl=bram latency=1                                                                                                  | source_snapshot/loader5.hpp:17 in engine, edges                      |
+| bind_storage    | variable=costs type=ram_2p impl=bram latency=1                                                                                                  | source_snapshot/loader5.hpp:18 in engine, costs                      |
+| bind_storage    | variable=cells type=ram_2p impl=bram latency=1                                                                                                  | source_snapshot/loader5.hpp:19 in engine, cells                      |
+| bind_storage    | variable=output type=ram_t2p impl=bram latency=1                                                                                                | source_snapshot/loader5.hpp:20 in engine, output                     |
+| bind_storage    | variable=stats type=ram_2p impl=bram latency=1                                                                                                  | source_snapshot/loader5.hpp:21 in engine, stats                      |
+| pipeline        | II=1                                                                                                                                            | source_snapshot/loader5.hpp:30 in engine                             |
+| pipeline        | II=1                                                                                                                                            | source_snapshot/loader5.hpp:35 in engine                             |
+| pipeline        | II=1                                                                                                                                            | source_snapshot/loader5.hpp:39 in engine                             |
+| pipeline        | II=1                                                                                                                                            | source_snapshot/loader5.hpp:49 in engine                             |
+| array_partition | variable=mask complete                                                                                                                          | source_snapshot/loader5.hpp:56 in engine, mask                       |
+| pipeline        | II=1                                                                                                                                            | source_snapshot/loader5.hpp:60 in engine                             |
+| pipeline        | II=1                                                                                                                                            | source_snapshot/loader5.hpp:76 in engine                             |
+| inline          |                                                                                                                                                 | source_snapshot/onchip_types4.hpp:27 in get                          |
+| inline          |                                                                                                                                                 | source_snapshot/onchip_types4.hpp:31 in put                          |
+| inline          |                                                                                                                                                 | source_snapshot/onchip_types4.hpp:35 in push                         |
+| pipeline        | II=2                                                                                                                                            | source_snapshot/onchip_types4.hpp:38 in push                         |
+| inline          | off                                                                                                                                             | source_snapshot/onchip_types4.hpp:46 in pop                          |
+| pipeline        | II=2                                                                                                                                            | source_snapshot/onchip_types4.hpp:50 in pop                          |
+| pipeline        | II=2                                                                                                                                            | source_snapshot/onchip_types4.hpp:58 in pop                          |
+| inline          | off                                                                                                                                             | source_snapshot/search5.hpp:18 in search                             |
+| array_partition | variable=ctx complete                                                                                                                           | source_snapshot/search5.hpp:20 in search, ctx                        |
+| array_partition | variable=even complete dim=1                                                                                                                    | source_snapshot/search5.hpp:23 in search, even                       |
+| array_partition | variable=odd complete dim=1                                                                                                                     | source_snapshot/search5.hpp:24 in search, odd                        |
+| array_partition | variable=visited complete dim=1                                                                                                                 | source_snapshot/search5.hpp:25 in search, visited                    |
+| array_partition | variable=expanded complete dim=1                                                                                                                | source_snapshot/search5.hpp:26 in search, expanded                   |
+| bind_storage    | variable=even type=ram_t2p impl=bram latency=1                                                                                                  | source_snapshot/search5.hpp:27 in search, even                       |
+| bind_storage    | variable=odd type=ram_t2p impl=bram latency=1                                                                                                   | source_snapshot/search5.hpp:28 in search, odd                        |
+| bind_storage    | variable=visited type=ram_t2p impl=bram latency=1                                                                                               | source_snapshot/search5.hpp:29 in search, visited                    |
+| bind_storage    | variable=expanded type=ram_t2p impl=bram latency=1                                                                                              | source_snapshot/search5.hpp:30 in search, expanded                   |
+| array_partition | variable=counters complete                                                                                                                      | source_snapshot/search5.hpp:32 in search, counters                   |
+| pipeline        | II=1                                                                                                                                            | source_snapshot/search5.hpp:36 in search                             |
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------+
+
+

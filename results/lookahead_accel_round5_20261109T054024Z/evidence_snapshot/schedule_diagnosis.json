@@ -1,0 +1,32 @@
+{
+  "evidence": "HLS schedule, not post-route",
+  "target": "DISPATCH",
+  "target_ii": 1,
+  "achieved_ii": 3,
+  "category": "carried dependence through shared output map read-modify-write",
+  "log_evidence": [
+    {
+      "line": 281,
+      "text": "WARNING: [HLS 200-880] The II Violation in module 'search_0_Pipeline_DISPATCH' (loop 'DISPATCH'): Unable to enforce a carried dependence constraint (II = 1, distance = 1, offset = 1) between 'store' operation ('output_addr_1_write_ln61', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx2_clean/source_snapshot/search5.hpp:61) of variable '__Result__' on array 'output_r' and 'load' operation ('w.V', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx2_clean/source_snapshot/search5.hpp:61) on array 'output_r'."
+    },
+    {
+      "line": 283,
+      "text": "WARNING: [HLS 200-880] The II Violation in module 'search_0_Pipeline_DISPATCH' (loop 'DISPATCH'): Unable to enforce a carried dependence constraint (II = 2, distance = 1, offset = 1) between 'store' operation ('output_addr_1_write_ln61', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx2_clean/source_snapshot/search5.hpp:61) of variable '__Result__' on array 'output_r' and 'load' operation ('w.V', /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx2_clean/source_snapshot/search5.hpp:61) on array 'output_r'."
+    }
+  ],
+  "schedule_evidence": [
+    {
+      "line": 865,
+      "text": "ST_3 : Operation 777 [2/2] (1.23ns)   --->   \"%w_V_9 = load i12 %output_addr_1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx2_clean/source_snapshot/search5.hpp:61]   --->   Operation 777 'load' 'w_V_9' <Predicate = (icmp_ln35 & x_phase == 13 & !or_ln61)> <Delay = 1.23> <CoreInst = \"RAM_T2P_BRAM\">   --->   Core 99 'RAM_T2P_BRAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 64> <Depth = 4096> <RAM>"
+    },
+    {
+      "line": 1102,
+      "text": "ST_4 : Operation 1012 [1/2] (1.23ns)   --->   \"%w_V_9 = load i12 %output_addr_1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx2_clean/source_snapshot/search5.hpp:61]   --->   Operation 1012 'load' 'w_V_9' <Predicate = (icmp_ln35 & x_phase == 13 & !or_ln61)> <Delay = 1.23> <CoreInst = \"RAM_T2P_BRAM\">   --->   Core 99 'RAM_T2P_BRAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 64> <Depth = 4096> <RAM>"
+    },
+    {
+      "line": 1323,
+      "text": "ST_5 : Operation 1105 [1/1] (1.23ns)   --->   \"%store_ln61 = store i64 %p_Result_1, i12 %output_addr_1\" [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round5_20261109T054024Z/hls_ctx2_clean/source_snapshot/search5.hpp:61]   --->   Operation 1105 'store' 'store_ln61' <Predicate = (icmp_ln35 & x_phase == 13 & !or_ln61)> <Delay = 1.23> <CoreInst = \"RAM_T2P_BRAM\">   --->   Core 99 'RAM_T2P_BRAM' <Latency = 1> <II = 1> <Delay = 1.23> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 64> <Depth = 4096> <RAM>"
+    }
+  ],
+  "next_step": "Split map read/record/store into explicit feedback stages or isolate per-context output banking; this alone cannot meet C1 because ideal-II1 visits already exceed budget. Separate independently scheduled services are the larger necessary change."
+}

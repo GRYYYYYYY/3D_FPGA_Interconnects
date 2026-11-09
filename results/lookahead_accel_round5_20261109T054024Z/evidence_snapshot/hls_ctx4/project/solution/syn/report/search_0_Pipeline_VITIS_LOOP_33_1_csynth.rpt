@@ -1,0 +1,376 @@
+
+
+================================================================
+== Vitis HLS Report for 'search_0_Pipeline_VITIS_LOOP_33_1'
+================================================================
+* Date:           Mon Nov  9 05:46:11 2026
+
+* Version:        2022.2 (Build 3670227 on Oct 13 2022)
+* Project:        project
+* Solution:       solution (Vivado IP Flow Target)
+* Product family: virtexuplus
+* Target device:  xcu280-fsvh2892-2L-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+---------+----------+------------+
+    |  Clock |  Target | Estimated| Uncertainty|
+    +--------+---------+----------+------------+
+    |ap_clk  |  5.00 ns|  0.959 ns|     1.35 ns|
+    +--------+---------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |  Latency (cycles) |   Latency (absolute)  |  Interval | Pipeline|
+    |   min   |   max   |    min    |    max    | min | max |   Type  |
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |        6|        6|  30.000 ns|  30.000 ns|    6|    6|       no|
+    +---------+---------+-----------+-----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                   |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |     Loop Name     |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_33_1  |        4|        4|         1|          1|          1|     4|       yes|
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+------+---------+---------+-----+
+|         Name        | BRAM_18K|  DSP |    FF   |   LUT   | URAM|
++---------------------+---------+------+---------+---------+-----+
+|DSP                  |        -|     -|        -|        -|    -|
+|Expression           |        -|     -|        0|       19|    -|
+|FIFO                 |        -|     -|        -|        -|    -|
+|Instance             |        -|     -|        -|        -|    -|
+|Memory               |        -|     -|        -|        -|    -|
+|Multiplexer          |        -|     -|        -|       27|    -|
+|Register             |        -|     -|        5|        -|    -|
++---------------------+---------+------+---------+---------+-----+
+|Total                |        0|     0|        5|       46|    0|
++---------------------+---------+------+---------+---------+-----+
+|Available SLR        |     1344|  3008|   869120|   434560|  320|
++---------------------+---------+------+---------+---------+-----+
+|Utilization SLR (%)  |        0|     0|       ~0|       ~0|    0|
++---------------------+---------+------+---------+---------+-----+
+|Available            |     4032|  9024|  2607360|  1303680|  960|
++---------------------+---------+------+---------+---------+-----+
+|Utilization (%)      |        0|     0|       ~0|       ~0|    0|
++---------------------+---------+------+---------+---------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +----------------------+----------+----+---+----+------------+------------+
+    |     Variable Name    | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +----------------------+----------+----+---+----+------------+------------+
+    |add_ln33_fu_1618_p2   |         +|   0|  0|  10|           3|           1|
+    |icmp_ln33_fu_1612_p2  |      icmp|   0|  0|   9|           3|           4|
+    +----------------------+----------+----+---+----+------------+------------+
+    |Total                 |          |   0|  0|  19|           6|           5|
+    +----------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +----------------------+----+-----------+-----+-----------+
+    |         Name         | LUT| Input Size| Bits| Total Bits|
+    +----------------------+----+-----------+-----+-----------+
+    |ap_done_int           |   9|          2|    1|          2|
+    |ap_sig_allocacmp_c_1  |   9|          2|    3|          6|
+    |c_fu_280              |   9|          2|    3|          6|
+    +----------------------+----+-----------+-----+-----------+
+    |Total                 |  27|          6|    7|         14|
+    +----------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------+---+----+-----+-----------+
+    |     Name    | FF| LUT| Bits| Const Bits|
+    +-------------+---+----+-----+-----------+
+    |ap_CS_fsm    |  1|   0|    1|          0|
+    |ap_done_reg  |  1|   0|    1|          0|
+    |c_fu_280     |  3|   0|    3|          0|
+    +-------------+---+----+-----+-----------+
+    |Total        |  5|   0|    5|          0|
+    +-------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++----------------------------------+-----+-----+------------+------------------------------------+--------------+
+|             RTL Ports            | Dir | Bits|  Protocol  |            Source Object           |    C Type    |
++----------------------------------+-----+-----+------------+------------------------------------+--------------+
+|ap_clk                            |   in|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_33_1|  return value|
+|ap_rst                            |   in|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_33_1|  return value|
+|ap_start                          |   in|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_33_1|  return value|
+|ap_done                           |  out|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_33_1|  return value|
+|ap_idle                           |  out|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_33_1|  return value|
+|ap_ready                          |  out|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_33_1|  return value|
+|ctx_heap_start_3_out              |  out|   64|      ap_vld|                ctx_heap_start_3_out|       pointer|
+|ctx_heap_start_3_out_ap_vld       |  out|    1|      ap_vld|                ctx_heap_start_3_out|       pointer|
+|ctx_heap_start_2_out              |  out|   64|      ap_vld|                ctx_heap_start_2_out|       pointer|
+|ctx_heap_start_2_out_ap_vld       |  out|    1|      ap_vld|                ctx_heap_start_2_out|       pointer|
+|ctx_heap_start_1_out              |  out|   64|      ap_vld|                ctx_heap_start_1_out|       pointer|
+|ctx_heap_start_1_out_ap_vld       |  out|    1|      ap_vld|                ctx_heap_start_1_out|       pointer|
+|ctx_heap_start_out                |  out|   64|      ap_vld|                  ctx_heap_start_out|       pointer|
+|ctx_heap_start_out_ap_vld         |  out|    1|      ap_vld|                  ctx_heap_start_out|       pointer|
+|ctx_st_status_3_out               |  out|   32|      ap_vld|                 ctx_st_status_3_out|       pointer|
+|ctx_st_status_3_out_ap_vld        |  out|    1|      ap_vld|                 ctx_st_status_3_out|       pointer|
+|ctx_st_status_2_out               |  out|   32|      ap_vld|                 ctx_st_status_2_out|       pointer|
+|ctx_st_status_2_out_ap_vld        |  out|    1|      ap_vld|                 ctx_st_status_2_out|       pointer|
+|ctx_st_status_1_out               |  out|   32|      ap_vld|                 ctx_st_status_1_out|       pointer|
+|ctx_st_status_1_out_ap_vld        |  out|    1|      ap_vld|                 ctx_st_status_1_out|       pointer|
+|ctx_st_status_out                 |  out|   32|      ap_vld|                   ctx_st_status_out|       pointer|
+|ctx_st_status_out_ap_vld          |  out|    1|      ap_vld|                   ctx_st_status_out|       pointer|
+|ctx_st_peak_3_out                 |  out|   64|      ap_vld|                   ctx_st_peak_3_out|       pointer|
+|ctx_st_peak_3_out_ap_vld          |  out|    1|      ap_vld|                   ctx_st_peak_3_out|       pointer|
+|ctx_st_peak_2_out                 |  out|   64|      ap_vld|                   ctx_st_peak_2_out|       pointer|
+|ctx_st_peak_2_out_ap_vld          |  out|    1|      ap_vld|                   ctx_st_peak_2_out|       pointer|
+|ctx_st_peak_1_out                 |  out|   64|      ap_vld|                   ctx_st_peak_1_out|       pointer|
+|ctx_st_peak_1_out_ap_vld          |  out|    1|      ap_vld|                   ctx_st_peak_1_out|       pointer|
+|ctx_st_peak_out                   |  out|   64|      ap_vld|                     ctx_st_peak_out|       pointer|
+|ctx_st_peak_out_ap_vld            |  out|    1|      ap_vld|                     ctx_st_peak_out|       pointer|
+|ctx_st_expanded_3_out             |  out|   64|      ap_vld|               ctx_st_expanded_3_out|       pointer|
+|ctx_st_expanded_3_out_ap_vld      |  out|    1|      ap_vld|               ctx_st_expanded_3_out|       pointer|
+|ctx_st_expanded_2_out             |  out|   64|      ap_vld|               ctx_st_expanded_2_out|       pointer|
+|ctx_st_expanded_2_out_ap_vld      |  out|    1|      ap_vld|               ctx_st_expanded_2_out|       pointer|
+|ctx_st_expanded_1_out             |  out|   64|      ap_vld|               ctx_st_expanded_1_out|       pointer|
+|ctx_st_expanded_1_out_ap_vld      |  out|    1|      ap_vld|               ctx_st_expanded_1_out|       pointer|
+|ctx_st_expanded_out               |  out|   64|      ap_vld|                 ctx_st_expanded_out|       pointer|
+|ctx_st_expanded_out_ap_vld        |  out|    1|      ap_vld|                 ctx_st_expanded_out|       pointer|
+|ctx_st_edges_3_out                |  out|   64|      ap_vld|                  ctx_st_edges_3_out|       pointer|
+|ctx_st_edges_3_out_ap_vld         |  out|    1|      ap_vld|                  ctx_st_edges_3_out|       pointer|
+|ctx_st_edges_2_out                |  out|   64|      ap_vld|                  ctx_st_edges_2_out|       pointer|
+|ctx_st_edges_2_out_ap_vld         |  out|    1|      ap_vld|                  ctx_st_edges_2_out|       pointer|
+|ctx_st_edges_1_out                |  out|   64|      ap_vld|                  ctx_st_edges_1_out|       pointer|
+|ctx_st_edges_1_out_ap_vld         |  out|    1|      ap_vld|                  ctx_st_edges_1_out|       pointer|
+|ctx_st_edges_out                  |  out|   64|      ap_vld|                    ctx_st_edges_out|       pointer|
+|ctx_st_edges_out_ap_vld           |  out|    1|      ap_vld|                    ctx_st_edges_out|       pointer|
+|ctx_st_pops_3_out                 |  out|   64|      ap_vld|                   ctx_st_pops_3_out|       pointer|
+|ctx_st_pops_3_out_ap_vld          |  out|    1|      ap_vld|                   ctx_st_pops_3_out|       pointer|
+|ctx_st_pops_2_out                 |  out|   64|      ap_vld|                   ctx_st_pops_2_out|       pointer|
+|ctx_st_pops_2_out_ap_vld          |  out|    1|      ap_vld|                   ctx_st_pops_2_out|       pointer|
+|ctx_st_pops_1_out                 |  out|   64|      ap_vld|                   ctx_st_pops_1_out|       pointer|
+|ctx_st_pops_1_out_ap_vld          |  out|    1|      ap_vld|                   ctx_st_pops_1_out|       pointer|
+|ctx_st_pops_out                   |  out|   64|      ap_vld|                     ctx_st_pops_out|       pointer|
+|ctx_st_pops_out_ap_vld            |  out|    1|      ap_vld|                     ctx_st_pops_out|       pointer|
+|ctx_st_pushes_3_out               |  out|   64|      ap_vld|                 ctx_st_pushes_3_out|       pointer|
+|ctx_st_pushes_3_out_ap_vld        |  out|    1|      ap_vld|                 ctx_st_pushes_3_out|       pointer|
+|ctx_st_pushes_2_out               |  out|   64|      ap_vld|                 ctx_st_pushes_2_out|       pointer|
+|ctx_st_pushes_2_out_ap_vld        |  out|    1|      ap_vld|                 ctx_st_pushes_2_out|       pointer|
+|ctx_st_pushes_1_out               |  out|   64|      ap_vld|                 ctx_st_pushes_1_out|       pointer|
+|ctx_st_pushes_1_out_ap_vld        |  out|    1|      ap_vld|                 ctx_st_pushes_1_out|       pointer|
+|ctx_st_pushes_out                 |  out|   64|      ap_vld|                   ctx_st_pushes_out|       pointer|
+|ctx_st_pushes_out_ap_vld          |  out|    1|      ap_vld|                   ctx_st_pushes_out|       pointer|
+|ctx_cost_congestion_3_out         |  out|   32|      ap_vld|           ctx_cost_congestion_3_out|       pointer|
+|ctx_cost_congestion_3_out_ap_vld  |  out|    1|      ap_vld|           ctx_cost_congestion_3_out|       pointer|
+|ctx_cost_congestion_2_out         |  out|   32|      ap_vld|           ctx_cost_congestion_2_out|       pointer|
+|ctx_cost_congestion_2_out_ap_vld  |  out|    1|      ap_vld|           ctx_cost_congestion_2_out|       pointer|
+|ctx_cost_congestion_1_out         |  out|   32|      ap_vld|           ctx_cost_congestion_1_out|       pointer|
+|ctx_cost_congestion_1_out_ap_vld  |  out|    1|      ap_vld|           ctx_cost_congestion_1_out|       pointer|
+|ctx_cost_congestion_out           |  out|   32|      ap_vld|             ctx_cost_congestion_out|       pointer|
+|ctx_cost_congestion_out_ap_vld    |  out|    1|      ap_vld|             ctx_cost_congestion_out|       pointer|
+|ctx_cost_delay_3_out              |  out|   32|      ap_vld|                ctx_cost_delay_3_out|       pointer|
+|ctx_cost_delay_3_out_ap_vld       |  out|    1|      ap_vld|                ctx_cost_delay_3_out|       pointer|
+|ctx_cost_delay_2_out              |  out|   32|      ap_vld|                ctx_cost_delay_2_out|       pointer|
+|ctx_cost_delay_2_out_ap_vld       |  out|    1|      ap_vld|                ctx_cost_delay_2_out|       pointer|
+|ctx_cost_delay_1_out              |  out|   32|      ap_vld|                ctx_cost_delay_1_out|       pointer|
+|ctx_cost_delay_1_out_ap_vld       |  out|    1|      ap_vld|                ctx_cost_delay_1_out|       pointer|
+|ctx_cost_delay_out                |  out|   32|      ap_vld|                  ctx_cost_delay_out|       pointer|
+|ctx_cost_delay_out_ap_vld         |  out|    1|      ap_vld|                  ctx_cost_delay_out|       pointer|
+|ctx_cn_cost_3_out                 |  out|   32|      ap_vld|                   ctx_cn_cost_3_out|       pointer|
+|ctx_cn_cost_3_out_ap_vld          |  out|    1|      ap_vld|                   ctx_cn_cost_3_out|       pointer|
+|ctx_cn_cost_2_out                 |  out|   32|      ap_vld|                   ctx_cn_cost_2_out|       pointer|
+|ctx_cn_cost_2_out_ap_vld          |  out|    1|      ap_vld|                   ctx_cn_cost_2_out|       pointer|
+|ctx_cn_cost_1_out                 |  out|   32|      ap_vld|                   ctx_cn_cost_1_out|       pointer|
+|ctx_cn_cost_1_out_ap_vld          |  out|    1|      ap_vld|                   ctx_cn_cost_1_out|       pointer|
+|ctx_cn_cost_out                   |  out|   32|      ap_vld|                     ctx_cn_cost_out|       pointer|
+|ctx_cn_cost_out_ap_vld            |  out|    1|      ap_vld|                     ctx_cn_cost_out|       pointer|
+|ctx_pn_segment_kind_3_out         |  out|   32|      ap_vld|           ctx_pn_segment_kind_3_out|       pointer|
+|ctx_pn_segment_kind_3_out_ap_vld  |  out|    1|      ap_vld|           ctx_pn_segment_kind_3_out|       pointer|
+|ctx_pn_segment_kind_2_out         |  out|   32|      ap_vld|           ctx_pn_segment_kind_2_out|       pointer|
+|ctx_pn_segment_kind_2_out_ap_vld  |  out|    1|      ap_vld|           ctx_pn_segment_kind_2_out|       pointer|
+|ctx_pn_segment_kind_1_out         |  out|   32|      ap_vld|           ctx_pn_segment_kind_1_out|       pointer|
+|ctx_pn_segment_kind_1_out_ap_vld  |  out|    1|      ap_vld|           ctx_pn_segment_kind_1_out|       pointer|
+|ctx_pn_segment_kind_out           |  out|   32|      ap_vld|             ctx_pn_segment_kind_out|       pointer|
+|ctx_pn_segment_kind_out_ap_vld    |  out|    1|      ap_vld|             ctx_pn_segment_kind_out|       pointer|
+|ctx_pn_type_3_out                 |  out|   32|      ap_vld|                   ctx_pn_type_3_out|       pointer|
+|ctx_pn_type_3_out_ap_vld          |  out|    1|      ap_vld|                   ctx_pn_type_3_out|       pointer|
+|ctx_pn_type_2_out                 |  out|   32|      ap_vld|                   ctx_pn_type_2_out|       pointer|
+|ctx_pn_type_2_out_ap_vld          |  out|    1|      ap_vld|                   ctx_pn_type_2_out|       pointer|
+|ctx_pn_type_1_out                 |  out|   32|      ap_vld|                   ctx_pn_type_1_out|       pointer|
+|ctx_pn_type_1_out_ap_vld          |  out|    1|      ap_vld|                   ctx_pn_type_1_out|       pointer|
+|ctx_pn_type_out                   |  out|   32|      ap_vld|                     ctx_pn_type_out|       pointer|
+|ctx_pn_type_out_ap_vld            |  out|    1|      ap_vld|                     ctx_pn_type_out|       pointer|
+|ctx_next_congestion_3_out         |  out|   32|      ap_vld|           ctx_next_congestion_3_out|       pointer|
+|ctx_next_congestion_3_out_ap_vld  |  out|    1|      ap_vld|           ctx_next_congestion_3_out|       pointer|
+|ctx_next_congestion_2_out         |  out|   32|      ap_vld|           ctx_next_congestion_2_out|       pointer|
+|ctx_next_congestion_2_out_ap_vld  |  out|    1|      ap_vld|           ctx_next_congestion_2_out|       pointer|
+|ctx_next_congestion_1_out         |  out|   32|      ap_vld|           ctx_next_congestion_1_out|       pointer|
+|ctx_next_congestion_1_out_ap_vld  |  out|    1|      ap_vld|           ctx_next_congestion_1_out|       pointer|
+|ctx_next_congestion_out           |  out|   32|      ap_vld|             ctx_next_congestion_out|       pointer|
+|ctx_next_congestion_out_ap_vld    |  out|    1|      ap_vld|             ctx_next_congestion_out|       pointer|
+|ctx_next_delay_3_out              |  out|   32|      ap_vld|                ctx_next_delay_3_out|       pointer|
+|ctx_next_delay_3_out_ap_vld       |  out|    1|      ap_vld|                ctx_next_delay_3_out|       pointer|
+|ctx_next_delay_2_out              |  out|   32|      ap_vld|                ctx_next_delay_2_out|       pointer|
+|ctx_next_delay_2_out_ap_vld       |  out|    1|      ap_vld|                ctx_next_delay_2_out|       pointer|
+|ctx_next_delay_1_out              |  out|   32|      ap_vld|                ctx_next_delay_1_out|       pointer|
+|ctx_next_delay_1_out_ap_vld       |  out|    1|      ap_vld|                ctx_next_delay_1_out|       pointer|
+|ctx_next_delay_out                |  out|   32|      ap_vld|                  ctx_next_delay_out|       pointer|
+|ctx_next_delay_out_ap_vld         |  out|    1|      ap_vld|                  ctx_next_delay_out|       pointer|
+|ctx_next_node_3_out               |  out|   32|      ap_vld|                 ctx_next_node_3_out|       pointer|
+|ctx_next_node_3_out_ap_vld        |  out|    1|      ap_vld|                 ctx_next_node_3_out|       pointer|
+|ctx_next_node_2_out               |  out|   32|      ap_vld|                 ctx_next_node_2_out|       pointer|
+|ctx_next_node_2_out_ap_vld        |  out|    1|      ap_vld|                 ctx_next_node_2_out|       pointer|
+|ctx_next_node_1_out               |  out|   32|      ap_vld|                 ctx_next_node_1_out|       pointer|
+|ctx_next_node_1_out_ap_vld        |  out|    1|      ap_vld|                 ctx_next_node_1_out|       pointer|
+|ctx_next_node_out                 |  out|   32|      ap_vld|                   ctx_next_node_out|       pointer|
+|ctx_next_node_out_ap_vld          |  out|    1|      ap_vld|                   ctx_next_node_out|       pointer|
+|ctx_cur_congestion_3_out          |  out|   32|      ap_vld|            ctx_cur_congestion_3_out|       pointer|
+|ctx_cur_congestion_3_out_ap_vld   |  out|    1|      ap_vld|            ctx_cur_congestion_3_out|       pointer|
+|ctx_cur_congestion_2_out          |  out|   32|      ap_vld|            ctx_cur_congestion_2_out|       pointer|
+|ctx_cur_congestion_2_out_ap_vld   |  out|    1|      ap_vld|            ctx_cur_congestion_2_out|       pointer|
+|ctx_cur_congestion_1_out          |  out|   32|      ap_vld|            ctx_cur_congestion_1_out|       pointer|
+|ctx_cur_congestion_1_out_ap_vld   |  out|    1|      ap_vld|            ctx_cur_congestion_1_out|       pointer|
+|ctx_cur_congestion_out            |  out|   32|      ap_vld|              ctx_cur_congestion_out|       pointer|
+|ctx_cur_congestion_out_ap_vld     |  out|    1|      ap_vld|              ctx_cur_congestion_out|       pointer|
+|ctx_cur_delay_3_out               |  out|   32|      ap_vld|                 ctx_cur_delay_3_out|       pointer|
+|ctx_cur_delay_3_out_ap_vld        |  out|    1|      ap_vld|                 ctx_cur_delay_3_out|       pointer|
+|ctx_cur_delay_2_out               |  out|   32|      ap_vld|                 ctx_cur_delay_2_out|       pointer|
+|ctx_cur_delay_2_out_ap_vld        |  out|    1|      ap_vld|                 ctx_cur_delay_2_out|       pointer|
+|ctx_cur_delay_1_out               |  out|   32|      ap_vld|                 ctx_cur_delay_1_out|       pointer|
+|ctx_cur_delay_1_out_ap_vld        |  out|    1|      ap_vld|                 ctx_cur_delay_1_out|       pointer|
+|ctx_cur_delay_out                 |  out|   32|      ap_vld|                   ctx_cur_delay_out|       pointer|
+|ctx_cur_delay_out_ap_vld          |  out|    1|      ap_vld|                   ctx_cur_delay_out|       pointer|
+|ctx_cur_node_3_out                |  out|   32|      ap_vld|                  ctx_cur_node_3_out|       pointer|
+|ctx_cur_node_3_out_ap_vld         |  out|    1|      ap_vld|                  ctx_cur_node_3_out|       pointer|
+|ctx_cur_node_2_out                |  out|   32|      ap_vld|                  ctx_cur_node_2_out|       pointer|
+|ctx_cur_node_2_out_ap_vld         |  out|    1|      ap_vld|                  ctx_cur_node_2_out|       pointer|
+|ctx_cur_node_1_out                |  out|   32|      ap_vld|                  ctx_cur_node_1_out|       pointer|
+|ctx_cur_node_1_out_ap_vld         |  out|    1|      ap_vld|                  ctx_cur_node_1_out|       pointer|
+|ctx_cur_node_out                  |  out|   32|      ap_vld|                    ctx_cur_node_out|       pointer|
+|ctx_cur_node_out_ap_vld           |  out|    1|      ap_vld|                    ctx_cur_node_out|       pointer|
+|ctx_remaining_3_out               |  out|   32|      ap_vld|                 ctx_remaining_3_out|       pointer|
+|ctx_remaining_3_out_ap_vld        |  out|    1|      ap_vld|                 ctx_remaining_3_out|       pointer|
+|ctx_remaining_2_out               |  out|   32|      ap_vld|                 ctx_remaining_2_out|       pointer|
+|ctx_remaining_2_out_ap_vld        |  out|    1|      ap_vld|                 ctx_remaining_2_out|       pointer|
+|ctx_remaining_1_out               |  out|   32|      ap_vld|                 ctx_remaining_1_out|       pointer|
+|ctx_remaining_1_out_ap_vld        |  out|    1|      ap_vld|                 ctx_remaining_1_out|       pointer|
+|ctx_remaining_out                 |  out|   32|      ap_vld|                   ctx_remaining_out|       pointer|
+|ctx_remaining_out_ap_vld          |  out|    1|      ap_vld|                   ctx_remaining_out|       pointer|
+|ctx_dst_3_out                     |  out|   32|      ap_vld|                       ctx_dst_3_out|       pointer|
+|ctx_dst_3_out_ap_vld              |  out|    1|      ap_vld|                       ctx_dst_3_out|       pointer|
+|ctx_dst_2_out                     |  out|   32|      ap_vld|                       ctx_dst_2_out|       pointer|
+|ctx_dst_2_out_ap_vld              |  out|    1|      ap_vld|                       ctx_dst_2_out|       pointer|
+|ctx_dst_1_out                     |  out|   32|      ap_vld|                       ctx_dst_1_out|       pointer|
+|ctx_dst_1_out_ap_vld              |  out|    1|      ap_vld|                       ctx_dst_1_out|       pointer|
+|ctx_dst_out                       |  out|   32|      ap_vld|                         ctx_dst_out|       pointer|
+|ctx_dst_out_ap_vld                |  out|    1|      ap_vld|                         ctx_dst_out|       pointer|
+|ctx_end_3_out                     |  out|   32|      ap_vld|                       ctx_end_3_out|       pointer|
+|ctx_end_3_out_ap_vld              |  out|    1|      ap_vld|                       ctx_end_3_out|       pointer|
+|ctx_end_2_out                     |  out|   32|      ap_vld|                       ctx_end_2_out|       pointer|
+|ctx_end_2_out_ap_vld              |  out|    1|      ap_vld|                       ctx_end_2_out|       pointer|
+|ctx_end_1_out                     |  out|   32|      ap_vld|                       ctx_end_1_out|       pointer|
+|ctx_end_1_out_ap_vld              |  out|    1|      ap_vld|                       ctx_end_1_out|       pointer|
+|ctx_end_out                       |  out|   32|      ap_vld|                         ctx_end_out|       pointer|
+|ctx_end_out_ap_vld                |  out|    1|      ap_vld|                         ctx_end_out|       pointer|
+|ctx_edge_3_out                    |  out|   32|      ap_vld|                      ctx_edge_3_out|       pointer|
+|ctx_edge_3_out_ap_vld             |  out|    1|      ap_vld|                      ctx_edge_3_out|       pointer|
+|ctx_edge_2_out                    |  out|   32|      ap_vld|                      ctx_edge_2_out|       pointer|
+|ctx_edge_2_out_ap_vld             |  out|    1|      ap_vld|                      ctx_edge_2_out|       pointer|
+|ctx_edge_1_out                    |  out|   32|      ap_vld|                      ctx_edge_1_out|       pointer|
+|ctx_edge_1_out_ap_vld             |  out|    1|      ap_vld|                      ctx_edge_1_out|       pointer|
+|ctx_edge_out                      |  out|   32|      ap_vld|                        ctx_edge_out|       pointer|
+|ctx_edge_out_ap_vld               |  out|    1|      ap_vld|                        ctx_edge_out|       pointer|
+|ctx_after_3_out                   |  out|   32|      ap_vld|                     ctx_after_3_out|       pointer|
+|ctx_after_3_out_ap_vld            |  out|    1|      ap_vld|                     ctx_after_3_out|       pointer|
+|ctx_after_2_out                   |  out|   32|      ap_vld|                     ctx_after_2_out|       pointer|
+|ctx_after_2_out_ap_vld            |  out|    1|      ap_vld|                     ctx_after_2_out|       pointer|
+|ctx_after_1_out                   |  out|   32|      ap_vld|                     ctx_after_1_out|       pointer|
+|ctx_after_1_out_ap_vld            |  out|    1|      ap_vld|                     ctx_after_1_out|       pointer|
+|ctx_after_out                     |  out|   32|      ap_vld|                       ctx_after_out|       pointer|
+|ctx_after_out_ap_vld              |  out|    1|      ap_vld|                       ctx_after_out|       pointer|
+|ctx_parent_3_out                  |  out|   32|      ap_vld|                    ctx_parent_3_out|       pointer|
+|ctx_parent_3_out_ap_vld           |  out|    1|      ap_vld|                    ctx_parent_3_out|       pointer|
+|ctx_parent_2_out                  |  out|   32|      ap_vld|                    ctx_parent_2_out|       pointer|
+|ctx_parent_2_out_ap_vld           |  out|    1|      ap_vld|                    ctx_parent_2_out|       pointer|
+|ctx_parent_1_out                  |  out|   32|      ap_vld|                    ctx_parent_1_out|       pointer|
+|ctx_parent_1_out_ap_vld           |  out|    1|      ap_vld|                    ctx_parent_1_out|       pointer|
+|ctx_parent_out                    |  out|   32|      ap_vld|                      ctx_parent_out|       pointer|
+|ctx_parent_out_ap_vld             |  out|    1|      ap_vld|                      ctx_parent_out|       pointer|
+|ctx_child_3_out                   |  out|   32|      ap_vld|                     ctx_child_3_out|       pointer|
+|ctx_child_3_out_ap_vld            |  out|    1|      ap_vld|                     ctx_child_3_out|       pointer|
+|ctx_child_2_out                   |  out|   32|      ap_vld|                     ctx_child_2_out|       pointer|
+|ctx_child_2_out_ap_vld            |  out|    1|      ap_vld|                     ctx_child_2_out|       pointer|
+|ctx_child_1_out                   |  out|   32|      ap_vld|                     ctx_child_1_out|       pointer|
+|ctx_child_1_out_ap_vld            |  out|    1|      ap_vld|                     ctx_child_1_out|       pointer|
+|ctx_child_out                     |  out|   32|      ap_vld|                       ctx_child_out|       pointer|
+|ctx_child_out_ap_vld              |  out|    1|      ap_vld|                       ctx_child_out|       pointer|
+|ctx_hole_3_out                    |  out|   32|      ap_vld|                      ctx_hole_3_out|       pointer|
+|ctx_hole_3_out_ap_vld             |  out|    1|      ap_vld|                      ctx_hole_3_out|       pointer|
+|ctx_hole_2_out                    |  out|   32|      ap_vld|                      ctx_hole_2_out|       pointer|
+|ctx_hole_2_out_ap_vld             |  out|    1|      ap_vld|                      ctx_hole_2_out|       pointer|
+|ctx_hole_1_out                    |  out|   32|      ap_vld|                      ctx_hole_1_out|       pointer|
+|ctx_hole_1_out_ap_vld             |  out|    1|      ap_vld|                      ctx_hole_1_out|       pointer|
+|ctx_hole_out                      |  out|   32|      ap_vld|                        ctx_hole_out|       pointer|
+|ctx_hole_out_ap_vld               |  out|    1|      ap_vld|                        ctx_hole_out|       pointer|
+|ctx_size_3_out                    |  out|   32|      ap_vld|                      ctx_size_3_out|       pointer|
+|ctx_size_3_out_ap_vld             |  out|    1|      ap_vld|                      ctx_size_3_out|       pointer|
+|ctx_size_2_out                    |  out|   32|      ap_vld|                      ctx_size_2_out|       pointer|
+|ctx_size_2_out_ap_vld             |  out|    1|      ap_vld|                      ctx_size_2_out|       pointer|
+|ctx_size_1_out                    |  out|   32|      ap_vld|                      ctx_size_1_out|       pointer|
+|ctx_size_1_out_ap_vld             |  out|    1|      ap_vld|                      ctx_size_1_out|       pointer|
+|ctx_size_out                      |  out|   32|      ap_vld|                        ctx_size_out|       pointer|
+|ctx_size_out_ap_vld               |  out|    1|      ap_vld|                        ctx_size_out|       pointer|
+|ctx_pos_3_out                     |  out|   32|      ap_vld|                       ctx_pos_3_out|       pointer|
+|ctx_pos_3_out_ap_vld              |  out|    1|      ap_vld|                       ctx_pos_3_out|       pointer|
+|ctx_pos_2_out                     |  out|   32|      ap_vld|                       ctx_pos_2_out|       pointer|
+|ctx_pos_2_out_ap_vld              |  out|    1|      ap_vld|                       ctx_pos_2_out|       pointer|
+|ctx_pos_1_out                     |  out|   32|      ap_vld|                       ctx_pos_1_out|       pointer|
+|ctx_pos_1_out_ap_vld              |  out|    1|      ap_vld|                       ctx_pos_1_out|       pointer|
+|ctx_pos_out                       |  out|   32|      ap_vld|                         ctx_pos_out|       pointer|
+|ctx_pos_out_ap_vld                |  out|    1|      ap_vld|                         ctx_pos_out|       pointer|
+|ctx_qid_3_out                     |  out|   32|      ap_vld|                       ctx_qid_3_out|       pointer|
+|ctx_qid_3_out_ap_vld              |  out|    1|      ap_vld|                       ctx_qid_3_out|       pointer|
+|ctx_qid_2_out                     |  out|   32|      ap_vld|                       ctx_qid_2_out|       pointer|
+|ctx_qid_2_out_ap_vld              |  out|    1|      ap_vld|                       ctx_qid_2_out|       pointer|
+|ctx_qid_1_out                     |  out|   32|      ap_vld|                       ctx_qid_1_out|       pointer|
+|ctx_qid_1_out_ap_vld              |  out|    1|      ap_vld|                       ctx_qid_1_out|       pointer|
+|ctx_qid_out                       |  out|   32|      ap_vld|                         ctx_qid_out|       pointer|
+|ctx_qid_out_ap_vld                |  out|    1|      ap_vld|                         ctx_qid_out|       pointer|
+|ctx_phase_3_out                   |  out|   32|      ap_vld|                     ctx_phase_3_out|       pointer|
+|ctx_phase_3_out_ap_vld            |  out|    1|      ap_vld|                     ctx_phase_3_out|       pointer|
+|ctx_phase_2_out                   |  out|   32|      ap_vld|                     ctx_phase_2_out|       pointer|
+|ctx_phase_2_out_ap_vld            |  out|    1|      ap_vld|                     ctx_phase_2_out|       pointer|
+|ctx_phase_1_out                   |  out|   32|      ap_vld|                     ctx_phase_1_out|       pointer|
+|ctx_phase_1_out_ap_vld            |  out|    1|      ap_vld|                     ctx_phase_1_out|       pointer|
+|ctx_phase_out                     |  out|   32|      ap_vld|                       ctx_phase_out|       pointer|
+|ctx_phase_out_ap_vld              |  out|    1|      ap_vld|                       ctx_phase_out|       pointer|
++----------------------------------+-----+-----+------------+------------------------------------+--------------+
+

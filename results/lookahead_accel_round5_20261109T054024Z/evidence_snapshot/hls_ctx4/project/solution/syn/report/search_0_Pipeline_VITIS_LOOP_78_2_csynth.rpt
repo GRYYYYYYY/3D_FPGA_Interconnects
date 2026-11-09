@@ -1,0 +1,283 @@
+
+
+================================================================
+== Vitis HLS Report for 'search_0_Pipeline_VITIS_LOOP_78_2'
+================================================================
+* Date:           Mon Nov  9 05:46:14 2026
+
+* Version:        2022.2 (Build 3670227 on Oct 13 2022)
+* Project:        project
+* Solution:       solution (Vivado IP Flow Target)
+* Product family: virtexuplus
+* Target device:  xcu280-fsvh2892-2L-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+---------+----------+------------+
+    |  Clock |  Target | Estimated| Uncertainty|
+    +--------+---------+----------+------------+
+    |ap_clk  |  5.00 ns|  3.650 ns|     1.35 ns|
+    +--------+---------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+    |   min   |   max   |    min   |    max   | min | max |   Type  |
+    +---------+---------+----------+----------+-----+-----+---------+
+    |       72|       72|  0.360 us|  0.360 us|   72|   72|       no|
+    +---------+---------+----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                   |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |     Loop Name     |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- VITIS_LOOP_78_2  |       70|       70|         8|          1|          1|    64|       yes|
+        +-------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++---------------------+---------+------+---------+---------+-----+
+|         Name        | BRAM_18K|  DSP |    FF   |   LUT   | URAM|
++---------------------+---------+------+---------+---------+-----+
+|DSP                  |        -|     -|        -|        -|    -|
+|Expression           |        -|     -|        0|     2468|    -|
+|FIFO                 |        -|     -|        -|        -|    -|
+|Instance             |        -|     -|        0|      273|    -|
+|Memory               |        -|     -|        -|        -|    -|
+|Multiplexer          |        -|     -|        -|       63|    -|
+|Register             |        -|     -|      723|        -|    -|
++---------------------+---------+------+---------+---------+-----+
+|Total                |        0|     0|      723|     2804|    0|
++---------------------+---------+------+---------+---------+-----+
+|Available SLR        |     1344|  3008|   869120|   434560|  320|
++---------------------+---------+------+---------+---------+-----+
+|Utilization SLR (%)  |        0|     0|       ~0|       ~0|    0|
++---------------------+---------+------+---------+---------+-----+
+|Available            |     4032|  9024|  2607360|  1303680|  960|
++---------------------+---------+------+---------+---------+-----+
+|Utilization (%)      |        0|     0|       ~0|       ~0|    0|
++---------------------+---------+------+---------+---------+-----+
+
++ Detail: 
+    * Instance: 
+    +---------------------+----------------+---------+----+---+-----+-----+
+    |       Instance      |     Module     | BRAM_18K| DSP| FF| LUT | URAM|
+    +---------------------+----------------+---------+----+---+-----+-----+
+    |mux_646_64_1_1_U825  |mux_646_64_1_1  |        0|   0|  0|  273|    0|
+    +---------------------+----------------+---------+----+---+-----+-----+
+    |Total                |                |        0|   0|  0|  273|    0|
+    +---------------------+----------------+---------+----+---+-----+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +---------------------------+----------+----+---+------+------------+------------+
+    |       Variable Name       | Operation| DSP| FF|  LUT | Bitwidth P0| Bitwidth P1|
+    +---------------------------+----------+----+---+------+------------+------------+
+    |add_ln78_1_fu_627_p2       |         +|   0|  0|    14|           7|           1|
+    |add_ln78_2_fu_818_p2       |         +|   0|  0|    13|           6|           6|
+    |add_ln78_fu_787_p2         |         +|   0|  0|    71|          64|          64|
+    |ap_block_pp0_stage0_01001  |       and|   0|  0|     2|           1|           1|
+    |icmp_ln78_fu_621_p2        |      icmp|   0|  0|    11|           7|           8|
+    |ap_block_pp0_stage0_11001  |        or|   0|  0|     2|           1|           1|
+    |shl_ln78_1_fu_845_p2       |       shl|   0|  0|  2171|         512|         512|
+    |shl_ln78_fu_827_p2         |       shl|   0|  0|   182|           8|          64|
+    |ap_enable_pp0              |       xor|   0|  0|     2|           1|           2|
+    +---------------------------+----------+----+---+------+------------+------------+
+    |Total                      |          |   0|  0|  2468|         607|         659|
+    +---------------------------+----------+----+---+------+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------+----+-----------+-----+-----------+
+    |           Name          | LUT| Input Size| Bits| Total Bits|
+    +-------------------------+----+-----------+-----+-----------+
+    |ap_done_int              |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter1  |   9|          2|    1|          2|
+    |ap_sig_allocacmp_i_1     |   9|          2|    7|         14|
+    |i_fu_198                 |   9|          2|    7|         14|
+    |result0_blk_n_AW         |   9|          2|    1|          2|
+    |result0_blk_n_B          |   9|          2|    1|          2|
+    |result0_blk_n_W          |   9|          2|    1|          2|
+    +-------------------------+----+-----------+-----+-----------+
+    |Total                    |  63|         14|   19|         38|
+    +-------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +----------------------------------+-----+----+-----+-----------+
+    |               Name               |  FF | LUT| Bits| Const Bits|
+    +----------------------------------+-----+----+-----+-----------+
+    |ap_CS_fsm                         |    1|   0|    1|          0|
+    |ap_done_reg                       |    1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1           |    1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter2           |    1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter3           |    1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter4           |    1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter5           |    1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter6           |    1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter7           |    1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter1_reg  |    1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter2_reg  |    1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter3_reg  |    1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter4_reg  |    1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter5_reg  |    1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter6_reg  |    1|   0|    1|          0|
+    |i_fu_198                          |    7|   0|    7|          0|
+    |shl_ln78_1_reg_897                |  512|   0|  512|          0|
+    |shl_ln78_reg_892                  |   64|   0|   64|          0|
+    |tmp_5_reg_877                     |   64|   0|   64|          0|
+    |trunc_ln78_3_reg_887              |   58|   0|   58|          0|
+    |trunc_ln78_4_reg_882              |    3|   0|    3|          0|
+    +----------------------------------+-----+----+-----+-----------+
+    |Total                             |  723|   0|  723|          0|
+    +----------------------------------+-----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++------------------------+-----+-----+------------+------------------------------------+--------------+
+|        RTL Ports       | Dir | Bits|  Protocol  |            Source Object           |    C Type    |
++------------------------+-----+-----+------------+------------------------------------+--------------+
+|ap_clk                  |   in|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_78_2|  return value|
+|ap_rst                  |   in|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_78_2|  return value|
+|ap_start                |   in|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_78_2|  return value|
+|ap_done                 |  out|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_78_2|  return value|
+|ap_idle                 |  out|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_78_2|  return value|
+|ap_ready                |  out|    1|  ap_ctrl_hs|  search<0>_Pipeline_VITIS_LOOP_78_2|  return value|
+|m_axi_result0_AWVALID   |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWREADY   |   in|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWADDR    |  out|   64|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWID      |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWLEN     |  out|   32|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWSIZE    |  out|    3|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWBURST   |  out|    2|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWLOCK    |  out|    2|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWCACHE   |  out|    4|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWPROT    |  out|    3|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWQOS     |  out|    4|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWREGION  |  out|    4|       m_axi|                             result0|       pointer|
+|m_axi_result0_AWUSER    |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_WVALID    |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_WREADY    |   in|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_WDATA     |  out|  512|       m_axi|                             result0|       pointer|
+|m_axi_result0_WSTRB     |  out|   64|       m_axi|                             result0|       pointer|
+|m_axi_result0_WLAST     |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_WID       |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_WUSER     |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARVALID   |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARREADY   |   in|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARADDR    |  out|   64|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARID      |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARLEN     |  out|   32|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARSIZE    |  out|    3|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARBURST   |  out|    2|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARLOCK    |  out|    2|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARCACHE   |  out|    4|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARPROT    |  out|    3|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARQOS     |  out|    4|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARREGION  |  out|    4|       m_axi|                             result0|       pointer|
+|m_axi_result0_ARUSER    |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_RVALID    |   in|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_RREADY    |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_RDATA     |   in|  512|       m_axi|                             result0|       pointer|
+|m_axi_result0_RLAST     |   in|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_RID       |   in|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_RFIFONUM  |   in|    9|       m_axi|                             result0|       pointer|
+|m_axi_result0_RUSER     |   in|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_RRESP     |   in|    2|       m_axi|                             result0|       pointer|
+|m_axi_result0_BVALID    |   in|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_BREADY    |  out|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_BRESP     |   in|    2|       m_axi|                             result0|       pointer|
+|m_axi_result0_BID       |   in|    1|       m_axi|                             result0|       pointer|
+|m_axi_result0_BUSER     |   in|    1|       m_axi|                             result0|       pointer|
+|counters_129_reload     |   in|   64|     ap_none|                 counters_129_reload|        scalar|
+|counters_130_reload     |   in|   64|     ap_none|                 counters_130_reload|        scalar|
+|counters_131_reload     |   in|   64|     ap_none|                 counters_131_reload|        scalar|
+|counters_132_reload     |   in|   64|     ap_none|                 counters_132_reload|        scalar|
+|counters_133_reload     |   in|   64|     ap_none|                 counters_133_reload|        scalar|
+|counters_134_reload     |   in|   64|     ap_none|                 counters_134_reload|        scalar|
+|counters_135_reload     |   in|   64|     ap_none|                 counters_135_reload|        scalar|
+|counters_136_reload     |   in|   64|     ap_none|                 counters_136_reload|        scalar|
+|counters_137_reload     |   in|   64|     ap_none|                 counters_137_reload|        scalar|
+|counters_138_reload     |   in|   64|     ap_none|                 counters_138_reload|        scalar|
+|counters_139_reload     |   in|   64|     ap_none|                 counters_139_reload|        scalar|
+|counters_140_reload     |   in|   64|     ap_none|                 counters_140_reload|        scalar|
+|counters_141_reload     |   in|   64|     ap_none|                 counters_141_reload|        scalar|
+|counters_142_reload     |   in|   64|     ap_none|                 counters_142_reload|        scalar|
+|counters_143_reload     |   in|   64|     ap_none|                 counters_143_reload|        scalar|
+|counters_144_reload     |   in|   64|     ap_none|                 counters_144_reload|        scalar|
+|counters_145_reload     |   in|   64|     ap_none|                 counters_145_reload|        scalar|
+|counters_146_reload     |   in|   64|     ap_none|                 counters_146_reload|        scalar|
+|counters_147_reload     |   in|   64|     ap_none|                 counters_147_reload|        scalar|
+|counters_148_reload     |   in|   64|     ap_none|                 counters_148_reload|        scalar|
+|counters_149_reload     |   in|   64|     ap_none|                 counters_149_reload|        scalar|
+|counters_150_reload     |   in|   64|     ap_none|                 counters_150_reload|        scalar|
+|counters_151_reload     |   in|   64|     ap_none|                 counters_151_reload|        scalar|
+|counters_152_reload     |   in|   64|     ap_none|                 counters_152_reload|        scalar|
+|counters_153_reload     |   in|   64|     ap_none|                 counters_153_reload|        scalar|
+|counters_154_reload     |   in|   64|     ap_none|                 counters_154_reload|        scalar|
+|counters_155_reload     |   in|   64|     ap_none|                 counters_155_reload|        scalar|
+|counters_156_reload     |   in|   64|     ap_none|                 counters_156_reload|        scalar|
+|counters_157_reload     |   in|   64|     ap_none|                 counters_157_reload|        scalar|
+|counters_158_reload     |   in|   64|     ap_none|                 counters_158_reload|        scalar|
+|counters_159_reload     |   in|   64|     ap_none|                 counters_159_reload|        scalar|
+|counters_262_reload     |   in|   64|     ap_none|                 counters_262_reload|        scalar|
+|counters_161_reload     |   in|   64|     ap_none|                 counters_161_reload|        scalar|
+|counters_162_reload     |   in|   64|     ap_none|                 counters_162_reload|        scalar|
+|counters_163_reload     |   in|   64|     ap_none|                 counters_163_reload|        scalar|
+|counters_164_reload     |   in|   64|     ap_none|                 counters_164_reload|        scalar|
+|counters_165_reload     |   in|   64|     ap_none|                 counters_165_reload|        scalar|
+|counters_166_reload     |   in|   64|     ap_none|                 counters_166_reload|        scalar|
+|counters_167_reload     |   in|   64|     ap_none|                 counters_167_reload|        scalar|
+|counters_168_reload     |   in|   64|     ap_none|                 counters_168_reload|        scalar|
+|counters_169_reload     |   in|   64|     ap_none|                 counters_169_reload|        scalar|
+|counters_170_reload     |   in|   64|     ap_none|                 counters_170_reload|        scalar|
+|counters_171_reload     |   in|   64|     ap_none|                 counters_171_reload|        scalar|
+|counters_172_reload     |   in|   64|     ap_none|                 counters_172_reload|        scalar|
+|counters_173_reload     |   in|   64|     ap_none|                 counters_173_reload|        scalar|
+|counters_174_reload     |   in|   64|     ap_none|                 counters_174_reload|        scalar|
+|counters_175_reload     |   in|   64|     ap_none|                 counters_175_reload|        scalar|
+|counters_176_reload     |   in|   64|     ap_none|                 counters_176_reload|        scalar|
+|counters_177_reload     |   in|   64|     ap_none|                 counters_177_reload|        scalar|
+|counters_178_reload     |   in|   64|     ap_none|                 counters_178_reload|        scalar|
+|counters_179_reload     |   in|   64|     ap_none|                 counters_179_reload|        scalar|
+|counters_180_reload     |   in|   64|     ap_none|                 counters_180_reload|        scalar|
+|counters_181_reload     |   in|   64|     ap_none|                 counters_181_reload|        scalar|
+|counters_182_reload     |   in|   64|     ap_none|                 counters_182_reload|        scalar|
+|counters_183_reload     |   in|   64|     ap_none|                 counters_183_reload|        scalar|
+|counters_184_reload     |   in|   64|     ap_none|                 counters_184_reload|        scalar|
+|counters_185_reload     |   in|   64|     ap_none|                 counters_185_reload|        scalar|
+|counters_186_reload     |   in|   64|     ap_none|                 counters_186_reload|        scalar|
+|counters_187_reload     |   in|   64|     ap_none|                 counters_187_reload|        scalar|
+|counters_188_reload     |   in|   64|     ap_none|                 counters_188_reload|        scalar|
+|counters_189_reload     |   in|   64|     ap_none|                 counters_189_reload|        scalar|
+|counters_190_reload     |   in|   64|     ap_none|                 counters_190_reload|        scalar|
+|counters_191_reload     |   in|   64|     ap_none|                 counters_191_reload|        scalar|
+|counters_192_reload     |   in|   64|     ap_none|                 counters_192_reload|        scalar|
+|metrics                 |   in|   64|     ap_none|                             metrics|        scalar|
+|trunc_ln78_1            |   in|    6|     ap_none|                        trunc_ln78_1|        scalar|
++------------------------+-----+-----+------------+------------------------------------+--------------+
+

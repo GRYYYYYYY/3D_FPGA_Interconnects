@@ -106,3 +106,21 @@ if(LA_CUDA)
  set_target_properties(cuda4 PROPERTIES CUDA_STANDARD 14)
  target_compile_options(cuda4 PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--fmad=false>)
 endif()
+
+# Round-five trace profiler and finite-context closed-loop mechanism controls.
+add_executable(profile5 round5/profile5.cpp)
+target_include_directories(profile5 PRIVATE round4)
+if(LA_HLS_INCLUDE)
+ foreach(contexts 2 4)
+  add_executable(interleave5_ctx${contexts} round5/interleave5.cpp round5/mechanism_tests5.cpp)
+  target_include_directories(interleave5_ctx${contexts} PRIVATE round4 ${LA_HLS_INCLUDE})
+  target_compile_definitions(interleave5_ctx${contexts} PRIVATE LA5_CONTEXTS=${contexts} LA4_EARLY=1)
+  target_compile_options(interleave5_ctx${contexts} PRIVATE -UNDEBUG)
+  add_test(NAME interleave5_ctx${contexts} COMMAND interleave5_ctx${contexts}
+    ${CMAKE_CURRENT_BINARY_DIR}/early_fixtures4/duplicate_edges.bin
+    ${CMAKE_CURRENT_BINARY_DIR}/early_fixtures4/empty_targets.bin
+    ${CMAKE_CURRENT_BINARY_DIR}/early_fixtures4/filtered_sink.bin
+    ${CMAKE_CURRENT_BINARY_DIR}/early_fixtures4/ineligible_target_not_removed.bin)
+  set_tests_properties(interleave5_ctx${contexts} PROPERTIES DEPENDS early_semantics4)
+ endforeach()
+endif()
