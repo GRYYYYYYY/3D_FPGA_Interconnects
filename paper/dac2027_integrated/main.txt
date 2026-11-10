@@ -1,0 +1,422 @@
+PAGE 1
+Exposing Inter-Sample and Intra-Search Parallelism
+  in Layer-Aware Lookahead Construction for 3D
+            FPGA Routing
+
+
+                                    Anonymous Authors
+
+
+  Abstract—Layer-aware lookahead construction can dominate    The contributions are: (1) a layer-aware STRICT decom-
+multicore FPGA routing workﬂows. We expose two levels of par-   position into independent samples, private state and ordered
+allelism through separate execution contracts: STRICT schedules                                                                  reduction, with a scoped wire-map equivalence argument; (2)
+independent samples with private workspaces and ordered reduc-
+                                                        an independent ALT search contract exposing intra-search par-tion, while ALT uses whole-pair FP32 bucket waves within each
+search. The native integration preserves layer and source identity   allelism through snapshot waves and whole-pair updates; and
+while explicitly separating semantic guarantees. Existing eight-   (3) native system validation connecting construction to com-
+core GEMM measurements show 1.638-fold process acceleration   plete Process time, including a same-family tuning holdout,
+for STRICT Pipeline. On a preselected same-family LSTM case,                                                            qualiﬁed routes and size-dependent negative results. Bucket
+ALT CUDA accelerates native construction by 3.207-fold and
+                                                                algorithms, atomic operations and task libraries are establishedthe complete process by 1.094-fold against Pipeline. We report
+congestion differences, checked routing quality, and small-input   mechanisms; our contribution is their scoped integration and
+slowdowns; FPGA hardware superiority remains unveriﬁed.       validation for this lookahead problem.
+  Index Terms—3D FPGA, routing lookahead, parallel CAD,    The principal GPU  result  is  relative to optimized CPU
+CPU/GPU, execution contracts                                     Pipeline, rather than Stock: on LSTM, ALT CUDA achieves
+                                                          3.207 ± 0.147× native construction acceleration and 1.094 ±
+                            I. INTRODUCTION                   0.010× Process acceleration. This is a CPU/GPU CAD im-
+                                                             plementation for FPGA targets. FPGA hardware acceleration
+  Three-dimensional FPGA architecture exploration depends    is not a measured result.
+on CAD tools that represent layer-dependent connectivity and
+evaluate it at practical cost. LaZagna enables ﬂexible 3D archi-                  II. PROBLEM AND RELATED WORK
+tecture generation, and Escaping Flatland improves placement                                                             A. Layer-Aware Samples and Native Costs
+for stacked fabrics [1], [2]. These developments motivate faster
+routing initialization: evaluating a changed resource graph or   A routing-resource graph G = (V, E) represents wires, pins
+calibrated cost model can require reconstructing the heuristic  and switches. PathFinder-style negotiation resolves net con-
+used by timing-driven routing. A multicore router alone does   tention [3]; VPR’s timing-driven router combines accumulated
+not remove sequential work from this construction.             costs with lookahead estimates [4], [5]. Sampled wire maps
+                                                                      retain representative costs by displacement [6]. For layered  In our locked VPR baseline, the map-lookahead builder
+                                                                       fabrics, a map cell isﬂoods representative wire starts sequentially. On eight-core
+GEMM, construction accounts for approximately 45% of the                                                                           F[ℓs, ℓt, c, s, ∆x, ∆y] = (d, q),             (1)
+complete ﬁxed-input process: its mean time is 149.56 seconds,
+compared with 30.64 seconds for routing. Parallelizing inde-  where source/target layers, channel type and segment type
+pendent starts is attractive because the graph and indexed cost   identify the slice, and (d, q) is the associated delay/congestion
+model remain read-only. However, a group often has only four   pair. Each group g = (ℓs, s, c) contains an ordered  list of
+samples. A barrier between groups limits useful concurrency   sample starts. One sample may reach destinations on every
+even when sixteen physical cores are available. Parallelism   layer. Unoccupied cells are completed by native interpolation;
+within a single search offers another opportunity, but changes   source/OPIN preprocessing and derived minima are additional
+the order in which tied delay/congestion labels are selected.    construction work.
+  We distinguish these opportunities through two  explicit    Our graphs model two active layers with logic, DSP and
+contracts. STRICT preserves the native within-ﬂood visitation  memory resources, plus explicit vertical wires and inter-layer
+and original-order sample reduction while scheduling searches   switches. They adopt the existing VTR 3D/multi-die modeling
+across groups. ALT introduces a separate FP32 whole-pair   approach  [7],  [8]. The qualiﬁed LSTM CUDA route uses
+bucket/wave search, implemented on CPU and CUDA, be-   23,217 distinct CHANZ nodes. Thus the evaluated 3D scope
+neath the same native sample interface. ALT does not inherit   includes actual vertical connectivity and routed paths, not just
+STRICT’s equivalence proposition. We evaluate its semantic   layer annotations. We retain the existing indexed cost model;
+differences and downstream routing quality separately instead   this work does not introduce physical delay calibration or
+of conﬂating CPU/GPU agreement with native equivalence.    placement-delay reﬁnement.
+
+PAGE 2
+B. Parallelism and Prior Algorithms                                              Native samples: source, layer,
+                                                                                                       relative cells, CSR/costs  Let tg,j be the ideal search work of sample j in group g,   ∑       ∑
+Wg =     j tg,j, and W =    g Wg. With P workers, ideal
+                                                            STRICT CPU        ALT CPU / CUDA
+group-local and global search times obey
+                                                                      unchanged ﬂoods        FP32 bucket waves      ∑
+                                                                                          private state             whole-pair updates            Tgroup ≥   max{Wg/P, max tg,j},          (2)
+                                                   j
+                        g
+             Tglobal ≥max{W/P, max tg,j}.               (3)
+                                            g,j
+
+For ten groups of four equal-cost samples, eight workers need                                                                               Native outer construction: group commit,
+ten group-local waves but ﬁve global waves. Sixteen workers              interpolation, source/OPIN and derived minima
+still need ten group-local waves, versus three global waves.
+This is a task-width example, not a utilization measurement    Fig. 1.  Shared sample boundary with separate search contracts. STRICT’s
+or an optimal-scheduling guarantee. Memory bandwidth, reset,   equivalence conditions do not extend to ALT. Diagram is conceptual.
+allocation and reduction add costs omitted from these bounds.
+  MultiQueue  routing  parallelizes  individual  connection
+                                                             B. STRICT: Private Floods, Ordered Reduction
+searches through relaxed priority ordering [9]; STRICT in-
+stead leaves each ﬂood’s visitation unchanged. ALT shares    Each worker owns a visited-cost array, expanded bitmap,
+the  objective of exposing search  parallelism but operates   priority queue and sample output. Read-only graph/cost data
+during heuristic construction rather than negotiated connection   are  shared. The workspace  is  reset before every sample.
+routing. We do not transfer serial-equivalence results from  Groups preserve X/Y/Z channel ﬁltering and all destination-
+connection-search algorithms to ALT’s delay/congestion map   layer slices. Sample search uses the native full-device bound-
+semantics.                                                    ing box and existing edge/cost operations.
+   Parallel bucket scheduling  is  established. Delta-stepping    The native smallest-entry rule replaces a populated cell only
+groups  tentative distances to trade ordering against paral-   for a strictly smaller delay. Congestion belongs to the winning
+lelism [10]; GPU SSSP methods also balance work saving,   delay;  it must not be minimized independently. For ﬁnite
+frontier expansion and reorganization [11]. Our implemen-   occupied representatives, the winning sample is the earliest
+tation differs in  its native layer/source recording interface,  minimum-delay sample in native enumeration order:
+whole delay/congestion pair selection, FP32 bit-key schedul-               j∗(u) = arg  min            j).            (4)ing, same-bucket closure and target-cell completion. It is not                                     j occupied(dg,j(u),
+a claim to invent bucketing or GPU SSSP, and  it does not   Implementation uses the native insertion and occupancy pred-
+establish a new general SSSP complexity bound. oneTBB   icates, including missing-state behavior, rather than generic
+Pipeline and global parallel loops are similarly existing ex-   tuple sorting.
+ecution mechanisms [12]; the STRICT contribution  is the     Proposition 1: If native sample selection and within-ﬂood
+dependency boundary that permits their use without changing   visitation are unchanged, valid recorded delays are ﬁnite, and
+the native wire table.                                        ﬁnal commits/interpolation follow native order, private sample
+                                                              execution followed by  original-order  strict-delay reduction
+               III. TWO EXECUTION CONTRACTS
+                                                                  yields the native wire-cost table.
+A. A Common Native Task Boundary                                                                Proof. Each private ﬂood produces the same per-cell repre-
+  The native builder enumerates the original samples and sup-   sentative as its native ﬂood. Serial execution concatenates the
+plies source RR identity, source-relative cell mapping, target-   visitation sequences in sample order. Original-order reduction
+layer identity, CSR connectivity and indexed costs. Each back-   selects the minimum delay and retains the earliest associated
+end returns sample cost pairs to the outer builder. The host re-   congestion on ties. Occupancy agrees cell by cell; identical
+tains group commit, interpolation and source/OPIN/minimum  commits and interpolation preserve that agreement. Task com-
+work. Both paths use this interface, but their search order and   pletion order does not enter the argument. □
+within-sample representative selection differ. This distinction    The proposition does not permit arbitrary exceptional-value
+prevents a shared interface from being mistaken for shared   reassociation, changed heap  tie order or altered recording
+semantics.                                                        contexts.  It also concerns the wire map, not every derived
+  Source  identity  is  essential. Consider  starts  at x = 0   source/OPIN  object  or  eventual  routing  trajectory. These
+and x = 5 reaching a pin at x = 6 with delays 1 and   boundaries matter when comparing independently repaired
+2. They populate displacement buckets 6 and 1. A multi-   executables.
+source search retaining only the cheaper pin label loses the    Group executes samples concurrently but waits  at each
+second contribution. We therefore preserve separate logical   group  boundary.  Pipeline  exposes  all  groups  through  a
+samples, including their coordinate contexts. Allocation reuse  bounded stream with parallel search and original-order re-
+is allowed; reusing a previous sample’s mutable labels or   duction;  reusable  private workspaces avoid repeated  allo-
+cached answer is not.                                              cation.  Flat  is an independent  globally ﬂattened  parallel-
+
+PAGE 3
+loop control, not VPR’s separate ﬂat-routing option. Distinct  Algorithm 1 ALT wave contract (one logical sample)
+layer/type/segment slices permit disjoint work, but interpola-      1: Reset labels, pending state and outputs; publish source
+tion within a slice follows its native dependency/order. Com-      2: while pending work exists and target cells incomplete do
+pact storage and alternative commit schedules are secondary      3:     Select minimum pending bucket b; ﬁlter stale members
+variants, not assumed prerequisites of the reported native GPU      4:    Read wave-start labels; generate eligible proposals
+result.                                                                               5:    Reduce each destination by whole-pair ≺
+                                                                                       6:    Commit strict improvements; publish or deduplicate
+C. ALT: Whole-Pair FP32 Bucket Waves                                 7:       if bucket b has no remaining work then
+                                                                                       8:       Record closed target cells; test target completion  ALT_BUCKET_FP32_V1 is a separate contract. Admitted
+                                                                                       9:    end if
+costs and accumulated candidates must be positive normal
+                                                                              10: end while
+FP32 values or positive zero (negative zero and subnormals are
+                                                                              11: Return complete output or explicit failurerejected); unsupported numerics or capacity failures return an
+error without publishing a partial map. The unchanged native
+admission includes N < 223. Labels begin at (+∞, +∞) ex-
+cept source (0, 0); missing output cells retain their designated         IV. EXPERIMENTAL METHOD AND EVIDENCE
+missing state.                                                A. Frozen Inputs, Cohorts and Resources
+  For labels a, b, strict improvement means
+                                          We reuse completed experiments; paper integration adds
+      a ≺b ⇐⇒ad < bd ∨(ad = bd ∧aq < bq).     (5)  no  solver or performance  runs. The STRICT corpus has
+                                                     603 formal records, comprising 414 legal full-ﬂow and 189
+The  entire  pair  is  selected. For nonnegative  ﬁnite  ﬂoats,   construction-only observations. Construction-only studies use
+CUDA packs the delay bits above congestion bits in a 64-   capped route tails and do not establish legal routes. The old
+bit word, allowing an unsigned atomic minimum to select one  CPU representative GEMM cohort and core-scaling cohort
+actual pair.  It never combines a delay from one path with   remain separate. Existing failed large-input route qualiﬁca-
+congestion from another. FP32 additions use round-to-nearest   tions are retained in their attempted denominators rather than
+with contraction disabled in the matched implementations.      replaced by successful seeds.
+  Scheduling uses B(d) = bits32(d) ≫s. We ﬁx s = 20 for    The native ALT study has two further cohorts. R6.1 mea-
+the native experiments. Shift coarsens scheduling buckets, not   sures BNN and s38417 with Stock, Flat, ALT CPU and origi-
+stored delays: labels and returned costs remain FP32. At shift   nal live ALT CUDA. R6.2 preselects LSTM seed2 before ALT
+zero, the schedule key is the exact nonnegative FP32 delay bit   shift/cache/selector tuning and measures Stock, Flat, Pipeline,
+key; this fact alone does not make ALT equivalent to native  ALT CPU and original ALT CUDA on one new worker.
+tie semantics.                                            R6.2 contains 43 managed runs: 33 formal timings, nine
+ A wave selects the smallest pending bucket, ﬁlters stale   qualiﬁcations and one non-formal proﬁle, not 43 extra formal
+notiﬁcations and takes the current labels as its snapshot. All   performance repetitions. Its old-case Pipeline supplements and
+eligible outgoing edges generate proposals from that snapshot.   later CUDA conversion pairs belong to separate phases and are
+Per-destination proposals begin from the existing label and   never paired post hoc.
+reduce whole pairs; labels are committed only after expansion   LSTM  is  a  tuning  holdout  within  a  previously  stud-
+completes.  Strictly improved destinations are published to   ied family:  it already appears in the CPU project’s quali-
+their new bucket, including reinsertion into the current bucket.  ﬁed width120 subset.  It shares the architecture SHA with
+Pending deduplication avoids losing same-bucket notiﬁcations;  BNN, but has different netlist, placement, RRG and actual
+old notiﬁcations are ﬁltered on extraction. Closure occurs only   CSR/cost/job/cell/target inputs. LSTM has 4,166,724 nodes,
+when no pending work remains in the selected bucket. Target   40,142,314 edges and 40 samples; BNN has 4,102,608 nodes,
+cells are recorded after closure, using whole-pair selection,   39,480,616 edges and 40 samples. Both use two layers and
+and completion is tested then.                               width120. These are not independent-architecture generaliza-
+  The original CPU implementation uses a sparse bucket   tion tests.
+directory and per-wave proposal storage. Basic CUDA uses    The   locked  CPU    baseline     is  VTR   commit
+dense pending-directory  scans,  parallel  frontier expansion,  0b912334fdd8, with release builds and assertion level 2.
+atomic proposal selection and launch barriers between ex-  CPU experiments use Xeon Gold 6530 instances, physical-
+pansion, commit and closure. It is a matched native imple-   core afﬁnity within one NUMA node, and the stated per-cohort
+mentation, not a claim of optimal GPU SSSP. Reset, scans,   worker budget. Native ALT runs use one H100 80GB GPU
+synchronization and output handoff have real costs. Finite  and  eight  distinct  physical CPU  cores,  with  sequential
+iteration/work/capacity guards prevent an unbounded run; an   solver  execution.  Instances  are  shared;  exclusivity  is  not
+aborted invocation is not a successful timing sample. Exhaus-   established. R6.2 rotates arm order across three independent
+tion or target completion after closure terminates a successful   processes on each frozen input. Host, command, environment,
+search. We assert neither native tie equivalence nor universal   binary/library hashes and input identities are bound in the
+routing-quality preservation for this contract.                       artifact; different hosts and phases are not pooled.
+
+PAGE 4
+B. Timing and Statistical Policy                                                 TABLE I
+                                                LSTM NATIVE SECONDS, MEAN ± SAMPLE SD (n = 3); ONE ROTATED
+  E1 is the sample solver service interval; the reused CUDA             R6.2 COHORT, EIGHT CPU CORES AND ONE H100.
+wrapper ends its E1/service ﬁeld before the ﬁnal ABI output
+copy. E2  is the  full native MapLookahead::compute:            Method                E2             Process
+conversion, backend preparation/service, ordered group merge,              Stock         65.413 ± 4.066   137.395 ± 4.839
+interpolation, source/OPIN and derived-minimum work. E2                Flat           9.909 ± 0.578    81.545 ± 1.742
+includes the output handoff. Process  additionally includes               Pipeline        9.907 ± 0.563    81.727 ± 1.986
+                                                             ALT CPU      9.781 ± 0.179    81.246 ± 1.204
+RR XML loading, initialization, routing, checking/STA and          ALT CUDA    3.089 ± 0.071    74.703 ± 1.100
+uniform map  serialization. Independent  route readback  is
+outside Process. Pre-generated RRG, packing and placement
+are excluded; ﬁlesystem caches are not ﬂushed, so no cold-                        TABLE II
+disk claim is made.                                  LSTM QUALIFICATION OBJECTS. ALL THREE MAP-WORD DIFFERENCE                    ∑                         COUNTS ARE AGAINST FLAT.
+  For paired repeat r, sr = Tc,r/Ta,r. We report ¯s =    r sr/n
+and sample SD [∑ r(sr−¯s)2/(n−1)]1/2. Raw seconds also use        Object / metric                                    Observation
+mean and sample SD. Ratios are calculated before averaging;                                                         ALT CPU/CUDA complete samples                     Equal
+no products of unrelated speedups are reported. The three      ALT CPU/CUDA map (459,684 entries)                 Equal
+processes are runtime repeats, not three designs or placement        Delay / congestion / missing differences          0 / 23,111 / 0
+                                                         ALT CPU/CUDA route SHA                            Different
+seeds. SD is observed variability, not a conﬁdence interval.                                                                              Independent FULL/STA; zero overuse                      Pass
+Stock E2 uses  its native log’s 0.01-second print precision;       CPD: all ﬁve arms (ns)                               11.7483
+other E2 values use the high-resolution constructor timer.         Wirelength: Stock / Flat                  1,713,833 / 1,714,423
+                                                                                  Wirelength: ALT CPU / CUDA           1,712,223 / 1,712,223
+Diagnostic capture, complete CPU/CUDA pair veriﬁcation and
+the directed proﬁle are excluded from formal timing.
+
+C. Semantic and Routing Qualiﬁcation
+                                                               Figure 2  illustrates why  task width  matters. On BNN
+  STRICT checks compare native wire-map bytes under the  and DLA, ten nonempty groups provide four samples each.
+proposition’s scope. ALT qualiﬁcation separately checks com-   Pipeline continues beneﬁting beyond four cores while Group
+plete same-input CPU/CUDA sample pairs and ﬁnal map   saturates. A separate Flat global-loop control in the CPU
+identity, then candidate-speciﬁc routing. Each route retains its   evidence shows  that removing group  barriers,  rather than
+own SHA through an independent original-VPR FULL/STA   the oneTBB Pipeline primitive alone, supplies the main con-
+check, has zero overuse, and meets CPD and wirelength within   currency beneﬁt. Pipeline is not universally fastest: launch,
++5% of the paired control. LSTM is checked against both Flat   allocation and ordered-result buffering impose overhead when
+and Stock. This is measured qualiﬁcation on frozen inputs, not   group-local work already occupies the available cores. Com-
+an arbitrary-input QoR theorem.                                pact state and interpolation reﬁnements are secondary trade-
+ A read-only audit explains the diagnosed isolated outer-   offs; this manuscript does not multiply their isolated ratios into
+boundary CHANZ subset from exact coordinate-generation   the native CUDA headline.
+rules and ﬁnal in/out degrees. No graph is silently repaired and
+no errors are ﬁltered. This explains that diagnostic subset, not
+all RRG invariants. The two CPU bounding-box notiﬁcation   B. Native LSTM: Optimized CPU and Matched ALT
+repairs are object-bound in the reused integration. Stock and
+repaired C1 can have identical wire maps but different routing    The main GPU comparison  is against Pipeline: 3.207 ±
+iterations: map identity excludes changes to that object, not  0.147× E2 and 1.094 ± 0.010× Process acceleration. Against
+all derived SOURCE/OPIN state or route history. Existing di-   Flat, the corresponding ratios are 3.208±0.165× and 1.092±
+agnostics do not establish a unique complete root cause. Thus   0.007×. Against the same original ALT algorithm on CPU,
+Stock speedups  describe  the implementation combination;  CUDA obtains 3.167 ± 0.071× and 1.088 ± 0.000122×.
+shared-repair Flat/Pipeline/ALT comparisons better isolate the  The last Process SD is retained beyond three decimal places
+construction change.                                        because rounding it to zero would hide observed variability.
+                                           ALT CPU is close to Pipeline here; its different search contract
+       V. RESULTS AND SYSTEM INTERPRETATION                                                             alone does not explain the GPU speedup.
+A. STRICT Cross-Sample Parallelism                                                   Stock/CUDA gives 21.182 ± 1.342× and 1.839 ± 0.049×,
+  On eight-core GEMM, STRICT Pipeline reduces mean   but these large ratios include the entire implementation com-
+construction from 149.56 to 20.95 seconds and obtains 1.638±   bination and cannot be attributed entirely to the CUDA kernel.
+0.005× paired Process speedup versus Stock. Group reaches  The smaller Process gain against Pipeline  is the  relevant
+37.88 seconds but remains limited by group barriers. This ex-   system  result: loading,  initialization, routing and checking
+ample motivates exposing independent tasks before changing   remain after accelerating lookahead. Absolute values in Table I
+a search algorithm. It does not imply that every VPR routing   expose that difference instead of promoting an isolated kernel
+mode or circuit has the same bottleneck.                          ratio as full-ﬂow acceleration.
+
+PAGE 5
+           BNN / CPU scaling cohort                DLA / CPU scaling cohort
+                                                 150
+                                       Group                                         Group
+      60                                                Pipeline                                                 Pipeline             seconds                                                                                                                                                            seconds 100
+      40
+
+                                                  50
+      20                      Construction                                                                                                                                                                                                                                                                            Construction
+
+          1 2   4        8                16          1 2   4        8                16
+                           Physical cores                                         Physical cores
+
+
+
+Fig. 2. STRICT CPU construction-only core scaling, separate host-B cohort. Means and sample SD from three ﬁxed-input processes per point. Group retains
+per-group barriers; Pipeline exposes global samples. Capped-routing tails do not establish legal full routes.
+
+
+               Native construction (E2)                     Complete Process
+
+      60                                         125
+
+                                                 100
+      40
+                                                  75             Seconds                                                                                                                                                            Seconds
+                                                  50
+      20
+                                                  25
+
+       0                                           0
+            Stock   Flat  Pipeline ALTCPUALTCUDA           Stock   Flat  Pipeline ALTCPUALTCUDA
+
+
+
+Fig. 3. LSTM native construction and complete Process (same cohort as Table I). Bars show means, error bars sample SD. E2 and Process are nested scopes
+and are not added.
+
+
+                      TABLE III                  BNN supports a second large native result, but only against
+ R6.1 FLAT/ALT CUDA PAIRED SPEEDUP, MEAN ± SAMPLE SD (n = 3).     its measured Flat control (Table III). R6.2’s old-case Pipeline
+  THIS OLDER WORKER IS SEPARATE FROM LSTM AND R6.2 PIPELINE
+                        SUPPLEMENTS.                         supplements pass map/QoR checks on another worker and do
+                                                              not complete a missing same-block Pipeline/CUDA compar-
+             Case       E2 speedup   Process speedup               ison for BNN. Even P1 Pipeline and P2 original CUDA on
+         BNN     3.274 ± 0.222    1.091 ± 0.011                the new worker cannot be paired by matching repeat numbers:
+             s38417   0.274 ± 0.032    0.912 ± 0.016               they are separate stages.
+
+
+
+C. Semantics, QoR and Size-Dependent Results
+                                                     The s38417 result is deliberately retained: CUDA is slower
+  Table II separates agreement objects. ALT CPU and CUDA   for both E2 and Process than Flat. A ﬁxed device initialization
+agree on complete samples and ﬁnal wire maps, but their route   cost, scans and launches can overwhelm a small build. Original
+SHAs differ. Each route independently retains identity during  ALT CPU is useful for its construction, while Stock remains
+readback. Against Flat, ALT changes 23,111 congestion words   fastest for its full Process in that cohort. These observations
+with no delay or missing-state changes. A strict-delay native   motivate explicit CPU/GPU choice and size-aware future se-
+tie  rule and ALT’s whole-pair lexicographic improvement   lection, not a claimed automatic selector or an oracle choosing
+are different contracts; good measured CPD/WL does not   the fastest measured arm after execution. Three repeats of
+erase that difference. Equal delay words also do not establish  LSTM plus two legacy cases do not establish all-size or cross-
+equality of all intermediate labels or traversal histories.         architecture generality.
+
+PAGE 6
+D. Conversion Dominates Remaining Search Opportunity                         VII. CONCLUSION
+
+ BNN   R6.1   repeat   1   has   E2=3.104359912    s,     Layer-aware lookahead exposes useful parallelism at two
+E1=0.363794840    s   and   Process=67.304850295     s.   levels, with different semantic obligations. STRICT preserves
+Keeping  everything  else  ﬁxed,  eliminating  E1  yields   native sample behavior while removing group barriers through
+at most E2/(E2 −E1) =  1.132744×  construction  or   private ﬂoods and ordered reduction. ALT exposes search-
+Process/(Process−E1) = 1.005435× Process acceleration.   internal parallelism through a separate whole-pair FP32 wave
+These are conditional bounds for that one process; they do   contract. Native experiments connect sample/map checks, legal
+not prohibit redesigning conversion or preparation.              routes and QoR to complete construction and Process measure-
+  The sole non-formal BNN proﬁle measures E2=3.142660 s,   ments. The LSTM same-family tuning holdout demonstrates
+conversion=1.435082 s, prepare=0.787266 s and E1=0.365164  improvement over optimized Pipeline, while BNN and s38417
+s. Dense mapping/job/cost construction occupies 0.811780 s   delimit  the  observed  size-dependent  beneﬁt.  Construction
+inside conversion, and H2D occupies 0.118766 s inside pre-   gains are larger than Process gains, and hardware superiority
+pare. These parent/child intervals must not be stacked together.   remains an open, evidence-gated goal.
+Preparation includes more than PCIe. No stage medians from
+different processes are assembled into a synthetic run.
+  One proﬁle-selected candidate pre-indexes IPIN IDs and
+ﬁlls the same original dense qid-by-node array.  It changes
+construction  traversal,  not  representation.  Four  affected
+CPU/CUDA  qualiﬁcations  preserve  complete  input/output
+bytes on BNN and s38417. Three CUDA pairs give BNN
+E2 1.082 ± 0.037×, but Process 1.009 ± 0.019× has mixed
+direction; small-case E2/Process also lack consistent gains.
+Defaults remain unchanged. This secondary ablation is neither
+qualiﬁed on LSTM nor multiplied into its speedup.
+
+     VI. LIMITATIONS AND HARDWARE BOUNDARY
+
+  The STRICT proposition covers wire-map semantics under
+explicit assumptions. ALT provides measured CPU/CUDA
+agreement and qualiﬁed downstream behavior on the tested
+inputs, with congestion counterexamples to native equivalence.
+Wider seed, architecture and numerical-domain claims would
+require new evidence. LSTM is an ALT-tuning holdout from
+the same architecture family and previously appeared in the
+CPU study. Shared instances, small repetition counts and un-
+controlled ﬁlesystem caches limit interpretation of variability
+and deployment performance.
+  No FPGA hardware superiority  is veriﬁed. The current
+candidate lacks an achieved implementation frequency and
+calibrated dependent random whole-pair RMW service. U280
+logical storage totals and software cache hit counts do not
+establish ports, arbitration, ﬁnite queues, cross-SLR place-
+ment or service throughput. The observed environment has
+no  visible FPGA or usable  installed platform. The hard-
+ware state remains UNRESOLVED: speciﬁcally, no supported
+memory-service evidence. Both board-measured acceleration
+and FPGA-superiority ﬂags remain false.
+ A separate ofﬂine compact-CUDA E1 target and modeled
+proposal trafﬁc imply necessary service bounds, not native
+hardware performance; compact/direct native qualiﬁcation is
+not inherited. Restarting hardware work would require an
+actual target/shell or calibrated facility, dependent random 32-
+byte RMW with ﬁnite outstanding requests, a complete physi-
+cal/timing budget, and end-to-end margin against the strongest
+matched software baseline. This paper’s measured contribution
+is CPU/GPU lookahead construction, not successful FPGA
+acceleration or a proof that every FPGA mapping must fail.
+
+PAGE 7
+                 REFERENCES
+
+ [1]  I. Youssef, H. Yang, and C. Hao, “LaZagna: An open-source framework
+      for ﬂexible 3D FPGA  architectural  exploration,” arXiv:2505.05579,
+     2025. [Online]. Available: https://arxiv.org/abs/2505.05579
+ [2] C. Hao, A. B. Kahng, B. Pramanik, and I. Youssef, “Escaping ﬂatland:
+   A placement ﬂow for enabling 3D FPGAs,” in Proceedings of the 63rd
+    ACM/IEEE Design Automation Conference (DAC), 2026.  [Online].
+      Available: https://doi.org/10.1145/3770743.3804424
+ [3] L. McMurchie and  C.  Ebeling,  “PathFinder: A  negotiation-based
+     performance-driven router for FPGAs,” in Proceedings of the ACM
+      International Symposium on Field-Programmable Gate Arrays, 1995,
+     pp. 111–117. [Online]. Available: https://janders.eecg.utoronto.ca/1387_
+     2015/readings/pathﬁnder.pdf
+ [4] K. E. Murray, O.  Petelin, S. Zhong,  J. M. Wang, M. ElDafrawy,
+       J.-P.  Legault,  E.  Sha, A. G. Graham,  J. Wu, M.  J.  P.  Walker,
+     H. Zeng, P. Patros, J. Luu, K. B. Kent, and V. Betz, “VTR 8: High
+     performance CAD and customizable FPGA architecture modelling,”
+   ACM Transactions on Reconﬁgurable Technology and Systems, 2020.
+      [Online]. Available: https://aarongraham9.github.io/vtr8_trets.pdf
+ [5] M. A. Elgammal, A. Mohaghegh,  S. G. Shahrouz,  F. Mahmoudi,
+      F. Kosar, K.  Talaei,  J.  Fife, D. Khadivi, K. Murray, A. Boutros,
+     K. B. Kent, J. Goeders, and V. Betz, “VTR 9: Open-source CAD for
+      fabric and beyond FPGA architecture exploration,” ACM Transactions
+     on Reconﬁgurable Technology and Systems, 2025. [Online]. Available:
+      https://docs.verilogtorouting.org/en/latest/zreferences/
+ [6] O.  Petelin  and  V.  Betz,  “The  speed  of  diversity:  Exploring
+     complex FPGA  routing  topologies  for  the  global  metal  layer,”
+      in  International  Conference  on  Field  Programmable  Logic  and
+     Applications  (FPL),  2016.  [Online].  Available:  https://www.eecg.
+     utoronto.ca/~vaughn/papers/fpl2016_complex_routing.pdf
+ [7] A. Boutros,  F. Mahmoudi, A. Mohaghegh, S. More, and V. Betz,
+      “Into  the  third  dimension:  Architecture  exploration  tools  for 3D
+     reconﬁgurable  acceleration  devices,”  in  International  Conference
+     on  Field-Programmable  Technology  (ICFPT),  2023,  pp.  198–208.
+      [Online].  Available:  https://andrewboutros.github.io/assets/pdf/papers/
+     026_fpt2023_3dfpga.pdf
+ [8] A. Poolad,  S. G. Shahrouz, A. Boutros, and V. Betz, “Modeling,
+     optimizing  and  exploring  multi-die FPGA  routing  architectures,”
+     arXiv:2606.06421v3, 2026, author manuscript  of FPL 2026  paper.
+      [Online]. Available: https://arxiv.org/abs/2606.06421v3
+ [9] A.  Singer, H. Yan, G. Zhang, M. C.  Jeffrey, M.  Stojilovic, and
+     V.  Betz,  “MultiQueue-based FPGA  routing:  Relaxed A*  priority
+     ordering  for improved  parallelism,”  in International Conference on
+     Field-Programmable  Technology  (FPT),  2024.  [Online].  Available:
+     https://www.eecg.utoronto.ca/~mcj/papers/2024.mqrouter.fpt.pdf
+[10] U. Meyer and  P. Sanders, “Delta-stepping: A parallel single source
+      shortest path algorithm,” in Algorithms—ESA ’98, 1998, pp. 393–404.
+[11] A. Davidson, S. Baxter, M. Garland, and J. D. Owens, “Work-efﬁcient
+      parallel gpu methods for single-source shortest paths,” in IEEE Interna-
+      tional Parallel and Distributed Processing Symposium, 2014, pp. 349–
+     359.
+[12]  Intel,   “Working   on   the   assembly    line:    parallel_pipeline,”
+    oneTBB   Developer   Guide   and   API   Reference,    version
+     2021.9,    2023.    [Online].    Available:    https://www.intel.com/
+     content/www/us/en/docs/onetbb/developer-guide-api-reference/2021-9/
+     working-on-the-assembly-line-parallel-pipeline.html
