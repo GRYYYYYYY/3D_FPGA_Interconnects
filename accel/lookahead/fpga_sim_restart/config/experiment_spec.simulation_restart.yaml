@@ -1,0 +1,286 @@
+# 本文件是待执行计划。proposal/assumed 值均非实测；null 不能当作 0。
+schema_version: "2.0"
+status: partial_owner_delivery_full_experiment_incomplete
+research_mode: simulation_and_module_ooc
+project:
+  repository: https://github.com/GRYYYYYYY/3D_FPGA_Interconnects
+  source_commit: 7e63b917f37273f80c03327e024d86b797ee221b
+  frozen_evidence_commit: ea1d0d793f7655d421595fcf2ee961c9cdc9af92
+  repository_path: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62
+  branch_suggestion: accel/lookahead-fpga-sim-restart-20261112
+  output_root: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/results/fpga_sim_restart_20261111T231000Z
+  run_id: fpga_sim_restart_20261111T231000Z
+  candidate: ALT_LINE_OWNER_REDUCE_V1
+  research_target: outperform_matched_CPU_GPU_VPR_baselines
+  acceptance: functional_cycle_physical_and_model_evidence
+  victory_required_before_first_RTL: false
+execution:
+  board_required: false
+  xrt_device_required: false
+  xpfm_required_for_direct_rtl_ooc: false
+  full_shell_required: false
+  bitstream_required: false
+  board_memory_calibration_required_to_start: false
+  continue_without_visible_fpga: true
+  independent_worktree: true
+  preserve_historical_evidence: true
+  max_concurrent_vivado_jobs: 1
+  max_concurrent_timed_benchmarks: 1
+  protect_other_user_jobs: true
+  continue_after_technical_gate: true
+environment:
+  intended_part: xcu280-fsvh2892-2L-e
+  actual_part: xcu280-fsvh2892-2L-e
+  actual_vivado_version: "2022.2"
+  actual_hls_version: null
+  actual_rtl_simulator: XSim 2022.2
+  actual_gpu: null
+  actual_cpu_affinity: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127]
+  physical_board_visible: null
+  installed_platforms: null
+  tool_or_license_errors: [{"stage": "post-route WebTalk", "signature": "realloc(): invalid pointer; exit 6", "resolved_for_recovery": true, "workaround": "per-process LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libudev.so.1", "evidence": "attempts/crash_diagnosis.json"}]
+algorithm:
+  contract: ALT_BUCKET_FP32_V1
+  shift: 20
+  compare_reference: original_ALT_CPU
+  strict_equivalent: false
+  pair_selection: lexicographic_whole_pair
+  numerical_domain: existing_ALT_admission
+  rounding: preserve_existing_FP32_contract
+  label_snapshot_per_wave: true
+  proposal_separate_from_parent_labels: true
+  closure_and_target_rules: preserve_existing_ALT
+  incomplete_or_overflow_output_policy: explicit_failure_no_partial_map
+candidate:
+  parameter_provenance: proposed_design
+  active_samples: 1
+  complete_batch_jobs: all_original_jobs
+  intended_edge_lanes: 64
+  intended_owners: 64
+  line_bytes: 32
+  pairs_per_line: 4
+  owner_function: "(dst >> 2) % owner_count"
+  owner_cache:
+    sets: 32
+    ways: 4
+    set_function: "(line // owner_count) % sets"
+    tag_function: "line // (owner_count * sets)"
+    extra_identity: epoch_and_sample_or_verified_full_reset
+    lines_per_owner: 128
+    replacement: round_robin
+    total_data_bytes_at_64_owners: 262144
+    tags_epoch_dirty_replacement_state: explicit_physical_mapping_required
+    keep_across_wave: false
+    flush_and_invalidate_each_wave: true
+    old_cache_hit_rate_reusable: false
+  mshr_per_owner: 32
+  dirty_buffer_per_owner: 16
+  request_fifo_per_owner: 64
+  response_fifo_per_owner: 64
+  same_line_inflight_merge: true
+  wait_or_forward_before_dirty_line_reuse: true
+  interconnect:
+    finite_queues: true
+    arbitration_and_backpressure: required
+    free_crossbar: false
+    topology_and_depths: null
+  directory:
+    logical_bucket_capacity: 4096
+    member_pool_capacity: 524288
+    chunk_capacity: 16384
+    provenance: initial_capacity_proposal_revalidate_on_trace
+    physical_layout_and_ports: null
+    overflow_policy: explicit_failure
+    free_golden_frontier_input: false
+  ablations:
+    - F0_same_ownership_cache_bypass_explicit_line_RMW
+    - F1_line_cache_and_MSHR_combining
+  optional_capacity_control:
+    run_only_if_claiming_separate_line_layout_gain: true
+    kind: software_transaction_replay
+    pair_slots_per_owner: 512
+    ways: 4
+workloads:
+  freeze_hashes_and_complete_sample_sets: true
+  rtl_first_complete_case: native_d3_w8
+  rtl_calibration_holdout_suggestion: native_d4_w8
+  use_existing_real_input_paths: true
+  manifest: accel/lookahead/fpga_sim_restart/config/inputs.json
+  design_case: bnn_export
+  large_validation_case: lstm_s2
+  artificial_repeat_as_application_batch: false
+  retain_small_case_slowdowns: true
+  selected_real_wave_traces: [{"case": "native_d3_w8", "qid": 0, "complete_waves": [1, 2], "scope": "owner service trace"}, {"case": "native_d4_w8", "qid": 0, "complete_waves": [1, 2], "scope": "owner service holdout trace"}]
+  directed_cases:
+    - repeated_same_pair_improvements_and_nonimprovements
+    - four_pairs_sharing_one_line
+    - delayed_read_response
+    - dirty_eviction_immediate_revisit
+    - MSHR_full_and_FIFO_full
+    - read_write_same_address_dependency
+    - last_write_ack_and_fence
+    - epoch_and_sample_reset
+    - resource_overflow_no_partial_publish
+timing:
+  scope_version: RESIDENT_COMPLETE_BATCH_V2
+  start: task_begin_after_consumable_static_inputs_resident
+  end: all_job_outputs_committed_and_transactions_drained
+  includes:
+    - per_task_state_reset
+    - graph_cost_label_and_proposal_memory_access
+    - directory_member_seen_and_target_work
+    - required_wave_control_and_synchronization
+    - interconnect_conflict_and_backpressure
+    - wave_commit_closure_output_and_drain
+  excludes:
+    - external_host_input_conversion
+    - initial_H2D
+    - one_time_host_entry_control
+    - final_D2H
+    - external_host_postprocessing
+  GPU_whole_service_interval: true
+  GPU_required_per_wave_host_control_included: true
+  GPU_kernel_event_sum_alone_sufficient: false
+  legacy_E1_relabel_allowed: false
+  old_scope_values_retained: true
+  CPU_GPU_output_destination_declared: true
+baselines:
+  original_VPR_multithread:
+    role: original_method
+    same_scope_status: must_identify_or_measure
+  optimized_STRICT_CPU:
+    role: optimized_native_method
+    same_scope_status: must_identify_or_measure
+  original_ALT_CPU:
+    role: same_algorithm_hardware_control
+    threads: reuse_best_validated_budget
+  basic_original_ALT_CUDA:
+    role: qualified_same_algorithm_GPU
+    timer_field_preference: resident_s
+  compact_ALT_CUDA:
+    role: additional_strong_offline_reference
+    native_qualification_inherited: false
+  missing_baseline_blocks_first_RTL: false
+  unaligned_E2_divided_by_FPGA_batch: false
+  software_repetitions:
+    fresh_processes: 3
+    warmup_batches_per_process: 1
+    measured_batches_per_process: 3
+    save_raw: true
+    summary: mean_and_sample_SD_with_process_identity
+clock:
+  requested_hz: 200000000
+  requested_provenance: assumed_design_target
+  single_owner_ooc_hz: null
+  tile_ooc_hz: null
+  full_kernel_ooc_hz: null
+  performance_hz: null
+  performance_frequency_scope: null
+  inherit_old_R4_frequency: false
+  tile_frequency_implies_full_kernel_frequency: false
+  target_only_result_label: projected
+  preserve_memory_ns_and_bytes_per_second_in_frequency_sweep: true
+memory_model:
+  type: finite_AXI_service_model
+  physical_board_calibrated: false
+  parameter_provenance: assumed_scenarios_not_hardware_measurement
+  capacity_bytes: 8589934592
+  capacity_source: intended_target_capacity_verify_in_inventory
+  channels: 32
+  beat_bytes: 32
+  data_bits: 256
+  interface_clock_relation: same_as_DUT_unless_CDC_is_implemented
+  interface_bandwidth_cap_enforced: true
+  bandwidth_shared_between_reads_and_writes: true
+  max_outstanding_per_channel: 64
+  all_arrays_share_declared_channels: true
+  same_address_dependency_and_write_ack: required
+  response_backpressure: finite_credits
+  abstract_banks_per_channel: 16
+  bank_reissue_gap_ns: 40
+  read_write_turnaround_ns: 20
+  mapping_policy: freeze_and_record_before_timing
+  address_line_function: "physical_byte_address >> 5"
+  channel_function: "address_line % channels"
+  abstract_bank_function: "(address_line // channels) % abstract_banks_per_channel"
+  array_base_addresses_and_strides: must_be_distinct_aligned_and_recorded
+  bank_model_note: abstract_conflict_service_not_a_claim_of_exact_HBM_row_timing
+  scenarios:
+    - id: central
+      bandwidth_bytes_per_second: 128000000000
+      base_read_latency_ns: 300
+      base_write_response_latency_ns: 300
+    - id: bandwidth_64
+      bandwidth_bytes_per_second: 64000000000
+      base_read_latency_ns: 300
+      base_write_response_latency_ns: 300
+    - id: bandwidth_192
+      bandwidth_bytes_per_second: 192000000000
+      base_read_latency_ns: 300
+      base_write_response_latency_ns: 300
+    - id: latency_150
+      bandwidth_bytes_per_second: 128000000000
+      base_read_latency_ns: 150
+      base_write_response_latency_ns: 150
+    - id: latency_600
+      bandwidth_bytes_per_second: 128000000000
+      base_read_latency_ns: 600
+      base_write_response_latency_ns: 600
+  exceed_interface_capacity_policy: cap_and_report_actual_or_reject_scenario
+  true_physical_bounds_claimed: false
+  add_bytes_over_bandwidth_after_stalls_counted: false
+rtl_and_ooc:
+  first_top_scope: one_owner_service
+  intermediate_top_scope: eight_lane_eight_owner_tile
+  final_top_scope: complete_selected_kernel_and_interconnect
+  runtime_input_loading: required
+  golden_trace_as_complete_kernel: false
+  synthesized_component_coverage: one_owner_service_only
+  routed_component_coverage: one_owner_service_only
+  full_kernel_resource_budget: null
+  hypothetical_shell_reserve_fraction: 0.20
+  reserve_provenance: assumed_not_verified_shell_quota
+  report_setup_hold_unconstrained_paths_DRC: true
+  no_false_paths_to_hide_required_data_dependencies: true
+model_validation:
+  architecture_model: bounded_closed_loop
+  RTL_service_II_and_feedback_required: true
+  all_major_components_have_cycle_accounting: true
+  complete_small_case_calibration: required
+  unused_for_tuning_calibration_case: required
+  nominal_cycle_error_target_fraction: 0.05
+  maximum_cycle_error_target_fraction: 0.10
+  tolerance_provenance: engineering_acceptance_target_not_board_error_bound
+  uncalibrated_results: projected
+  calibrated_results: architecture_simulated
+  per_component_coverage_and_error_report: true
+  calibration_configuration_signature: required
+  full_64_owner_model_needs_matching_small_complete_RTL: true
+  only_8_owner_calibration_allows_64_owner_architecture_simulated_label: false
+qor:
+  complete_ALT_sample_output_compare: exact
+  final_wire_map_compare: exact_to_same_ALT_reference
+  reuse_existing_qualification_only_if_identical_output_bridge_inputs: true
+  changed_representation_or_bridge_requires_affected_native_check: true
+  STRICT_equivalence_not_inherited: true
+transfer_supplement:
+  primary_resident_result_not_replaced_by_cold_call: true
+  cold_call_kind: measured_or_explicitly_modeled
+  model_all_nonoverlapping_terms: true
+  cpu_memcpy_as_FPGA_PCIe_measurement: false
+  genuine_reuse_required_for_K: true
+  synthetic_K_for_same_cached_lookahead: false
+outputs:
+  minimum_first_delivery:
+    - synthesizable_owner_RTL
+    - runnable_finite_memory_testbench
+    - actual_RTL_output_differences_and_cycle_log
+    - OOC_resource_and_timing_report_with_scope
+  final_delivery:
+    - complete_small_batch_RTL
+    - architecture_model_and_calibration
+    - BNN_and_LSTM_complete_batch_outputs
+    - matched_software_resident_timings
+    - mechanism_and_memory_sensitivity_results
+    - raw_evidence_and_provenance
+    - concise_report_and_independent_commit
