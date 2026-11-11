@@ -115,6 +115,43 @@ for v in raw_cpu:
  rr=read(v['path'])
  if rr.get('key') in {z['control_key'] for z in gc['rows']}|{z['candidate_key'] for z in gc['rows']}:raw[rr['key']]=rr
 gc.update(raw_measurements=list(raw.values()),host_label='A (historical CPU cohort)',hostname='not recorded in these per-run measurement receipts')
+# Finite final revision: independent frozen cohorts, never additional experiments.
+flat_prefix='paper/dac2027/evidence/expanded_20261105/results__native_flat_baseline_20261105__'
+flat_source=flat_prefix+'summary.json';fs=read(flat_source);fp=read(flat_prefix+'plan.json')
+fr=[v for v in fs['measurements'] if v.get('graph')=='bnn' and v.get('workers')==8 and v.get('phase')=='component_formal']
+assert len(fr)==9 and all(v['component_valid'] and v['map_matches_reference'] for v in fr)
+assert {v['command'][0] for v in fr}=={fp['binaries']['cpu']['path']}
+flat_stats={}
+for arm in ['per_group','flat','pipeline']:
+ rr=sorted([v for v in fr if v['arm']==arm],key=lambda v:v['repeat'])
+ assert [v['repeat'] for v in rr]==[0,1,2]
+ flat_stats[arm]=summary(v['build_seconds'] for v in rr)
+computed['BNN_FLAT_CONTROL']=flat_stats
+macros.append(r'\newcommand{\FlatControlTimes}{'+ ' / '.join('$'+f"{v['mean']:.2f}"+r'\pm'+f"{v['sample_sd']:.2f}"+'$' for v in flat_stats.values())+'}')
+ledger.append(dict(claim_id='BNN_FLAT_CONTROL',source_commit=BASE,source_json=flat_source,source_sha256=inputs[flat_source],plan_source=flat_prefix+'plan.json',cohort='flat/component_formal/bnn/8',scope='construction_only',measurement_kind='measured',statistic='arithmetic mean and sample SD, ddof=1',n_processes_per_arm=3,worker_host=fs['hostname'],binary=fp['binaries']['cpu'],input_bindings=fp['cases']['bnn'],rows=fr,value=flat_stats,table_figure='Section V-A prose only; excluded from Fig. 2',limitations=['independent same-executable cohort','capped routing tail does not establish legal route','not pooled with scaling or native ALT']))
+diag_root='results/lookahead_accel_round6_20261109T150000Z/evidence_snapshot/'
+diag_source=diag_root+'profile_summary.json';ds=read(diag_source);di=read(diag_root+'large/bnn_export_preflight.json')
+counts={};diagnostic_rows=[]
+for shift in [0,20]:
+ rel=diag_root+f'large/bnn_export_s{shift}.log';raw=(R/rel).read_bytes();inputs[rel]=hashlib.sha256(raw).hexdigest()
+ profiles=[json.loads(line) for line in raw.decode().splitlines() if line.startswith('{')]
+ profiles=[v for v in profiles if v['kind']=='profile'];assert len(profiles)==di['prior_manifest']['J']==40
+ waves=sum(len(v['waves']) for v in profiles);edges=sum(v['eligible'] for v in profiles)
+ recorded=next(v for v in ds if v['case']=='bnn_export' and v['shift']==shift)
+ assert (waves,edges)==(recorded['wave_count'],recorded['eligible_edges'])
+ counts[shift]=dict(waves=waves,eligible_edges=edges)
+ diagnostic_rows.append(dict(shift=shift,raw_source=rel,raw_sha256=inputs[rel],counts=counts[shift],samples=[{k:v for k,v in x.items() if k in ['qid','eligible']}|dict(waves=len(x['waves'])) for x in profiles]))
+wr=counts[0]['waves']/counts[20]['waves'];ei=100*(counts[20]['eligible_edges']/counts[0]['eligible_edges']-1)
+computed['BNN_OFFLINE_WORKLOAD']=dict(counts=counts,wave_reduction_factor=wr,eligible_edge_increase_percent=ei)
+for tag,shift in [('Zero',0),('Twenty',20)]:
+ for kind,key in [('Waves','waves'),('Edges','eligible_edges')]:macros.append(r'\newcommand{\Bnn'+kind+tag+'}{'+f"{counts[shift][key]:,}"+'}')
+macros += [r'\newcommand{\BnnWaveRatio}{'+f'{wr:.2f}'+'}',r'\newcommand{\BnnEdgeIncrease}{'+f'{ei:.2f}'+'}']
+ledger.append(dict(claim_id='BNN_OFFLINE_WORKLOAD',source_commit=BASE,source_json=diag_source,source_sha256=inputs[diag_source],cohort='R6 complete offline BNN export / instrumented operation diagnostic',scope='sum over all 40 logical samples; shift0 vs shift20',input_binding=di,rows=diagnostic_rows,value=computed['BNN_OFFLINE_WORKLOAD'],measurement_kind='instrumented operation counts, not performance timing',table_figure='Section V-C prose',limitations=['separate from native timing cohorts','instrumented elapsed times excluded','frontier width is not GPU occupancy','no hardware speedup implied']))
+bnn_source='paper/dac2027/evidence/expanded_20261105/results__native_cpu_width120_20261104__bnn_s1__vpr_case.json'
+bs=read(bnn_source);ls=read(S+'holdout_selection.json')
+assert bs['inputs']['architecture']['sha256']==ls['input_bindings']['architecture']['sha256']
+assert all('/beyond_flatland/' in v['circuit']['path'] for v in [bs['inputs'],ls['input_bindings']])
+ledger.append(dict(claim_id='BENCHMARK_ORIGIN_HOLDOUT',source_commit=BASE,source_json=[bnn_source,S+'holdout_selection.json',S+'holdout_results.json'],cohort='BNN frozen CPU inputs; LSTM preselection',scope='input provenance and temporal tuning holdout',measurement_kind='frozen input metadata',input_bindings=[bs['inputs'],ls['input_bindings']],frozen_utc=ls['frozen_utc'],selection_reason=ls['reason'],table_figure='Section IV-A',limitations=['same architecture family','not unseen by the prior CPU project','not a claim of freezing before earlier ALT tuning']))
 (P/'tables/macros.tex').write_text('\n'.join(macros)+'\n')
 (P/'claims_accel.json').write_text(json.dumps(ledger,indent=2)+'\n');(P/'computed_statistics.json').write_text(json.dumps(computed,indent=2)+'\n');(P/'data_bindings.json').write_text(json.dumps(dict(base_commit=BASE,inputs=inputs,CPU_formal=603,CPU_full=414,CPU_construction_only=189,R62_managed=43,R62_formal=33,R62_qualification=9,R62_profile=1,new_experiments=0),indent=2)+'\n')
 print('Generated frozen tables, figures and',len(ledger),'claims')
