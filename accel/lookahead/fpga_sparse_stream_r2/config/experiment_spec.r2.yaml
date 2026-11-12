@@ -1,0 +1,44 @@
+experiment: SPARSE_STREAM_R2
+base_sha: 5651a34abb97939bee6402c5af585753ab07f64b
+status: in_progress
+comparison_contract: RESIDENT_COMPLETE_BATCH_V2
+exclude: [external_conversion, first_H2D, final_D2H]
+include: [cost_load_once, descriptor_reads, initialization, proposals, metadata, conflicts, wave_control, commit, output_writes, acknowledgements, drain]
+functional_transform:
+  reduction: valid_POP_whole_pair
+  stopping_point: original_bucket_closure_after_all_reduction_events_drain
+  candidate_numeric: positive_finite_normal_or_positive_zero_FP32
+m2_rtl:
+  lanes: 8
+  owners: 8
+  node_capacity: 4096
+  member_capacity_per_bank: 1024
+  changed_capacity_per_bank: 512
+  cell_capacity_per_sample: 32768
+  sequential_sample_capacity: 64
+  parent_contexts_per_lane: 4
+  metadata_contexts_per_lane: 16
+  reducer_banks: 8
+  reducer_entries_per_bank: 4096
+  owner_cache: {ways: 4, sets: 32, line_bytes: 32}
+  owner_MSHR: 32
+  owner_dirty_buffers: 16
+  owner_service: R1_serial_current_context_pending_M3_replacement
+  initializer_outstanding_per_bank: 16
+  output_write_outstanding: 16
+  logical_memory_clients: 33
+  physical_channels: 8
+  physical_tag_capacity_per_channel: 64
+  physical_mapping: line_mod_8
+  request_FIFO_per_client: 4
+  response_pipeline: physical_capture_then_registered_client_response
+  physical_service: hypothetical
+  clock_qualified_mhz: null
+  board_measured: false
+sensitivity:
+  memory_latency_cycles: [16, 60, 120]
+  memory_service_gap_cycles: [1, 2, 4]
+  physical_timing_units_note: cycle scenarios only; ns and B/s conversion requires an explicitly stated clock
+calibration:
+  R1_calibration_inherited: false
+  new_full_model_calibrated: false

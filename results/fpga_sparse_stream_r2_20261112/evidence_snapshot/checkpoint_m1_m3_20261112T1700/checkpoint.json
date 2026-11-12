@@ -1,0 +1,109 @@
+{
+  "base_sha": "5651a34abb97939bee6402c5af585753ab07f64b",
+  "board_measured": false,
+  "pop_reduce_native_exact": true,
+  "complete_small_rtl_verified": true,
+  "owner_retirement_service_verified": true,
+  "large_node_state_path_implemented": false,
+  "physical_channel_sharing_implemented": true,
+  "complete_batch_controller_implemented": true,
+  "tile_timing_closed": false,
+  "whole_kernel_timing_closed": false,
+  "whole_kernel_clock_mhz": null,
+  "clock_qualification_scope": null,
+  "large_complete_batch_model_verified": false,
+  "model_calibration_scope": [
+    {
+      "module": "owner pipeline",
+      "independent_Cpp_cycle_model": true,
+      "cases": [
+        "cold/eviction/OOO/backpressure stress",
+        "warm sustained hit"
+      ],
+      "cycle_log_rows_exact": true,
+      "record": "rtl/owner_model_c/calibration.json",
+      "not_qualified": [
+        "whole tile",
+        "large node-state",
+        "32/64 topology"
+      ]
+    }
+  ],
+  "software_baselines_complete": false,
+  "fpga_simulated_superiority_supported": false,
+  "candidate_status": "in_progress",
+  "next_action": "complete m2c/m3d OOC and RAM/timing audit; extend independently calibrated services into external-state complete tile and scaled shared channels; full model and software comparisons remain",
+  "semantics_scope": {
+    "native_complete_batches": [
+      "d3:8",
+      "d4:12",
+      "BNN:40",
+      "LSTM:40"
+    ],
+    "native_fixture_graphs": 91,
+    "native_fixture_jobs": 182,
+    "provided_algorithm_model_checks": 180,
+    "numeric_bit_exact_rejections": 5,
+    "R1_per_wave_counts_exact": true,
+    "closed_scan_retained_only_as_software_validation_oracle": true
+  },
+  "small_rtl_scope": {
+    "build": "m2c",
+    "lanes": 8,
+    "physical_channels": 8,
+    "node_capacity": 4096,
+    "cells_per_sample": 32768,
+    "native_samples": 20,
+    "directed_random_fixtures": 91,
+    "fixture_samples": 182,
+    "capacity_q40_tests": 2,
+    "new_model_calibrated": false
+  },
+  "physical_channel_scope": "M2 33 clients / 8 physical ports, 64 finite IDs/port, fixed line striping; no 32/64 topology qualification yet",
+  "owner_service_scope": {
+    "version": "owner_pipe_c",
+    "warm_hit_max_retire_II1_streak": 4096,
+    "stress_accepted_retired": 4800,
+    "mshr_peak": 32,
+    "dirty_peak": 16,
+    "physical_outstanding_peak": 48,
+    "failure_and_fix": "failures/owner_pipe_a_deadlock.json"
+  },
+  "commit_pipeline_scope": {
+    "version": "bank_pipe_a",
+    "commits": 1038,
+    "max_II1_streak": 511,
+    "stale": 16,
+    "max_members": 527,
+    "node_capacity": 512,
+    "independent_model_calibrated": false
+  },
+  "complete_small_rtl_latest": "pipe_full_b: d3/d4 and all91 nativefixtures pass; physical fabric syntax optimization pending pipe_full_c",
+  "large_node_state_standalone": {
+    "rtl": "node_state_b",
+    "node_address_space": 4194304,
+    "highest_node": 4194303,
+    "operations": 7680,
+    "cycles": 165414,
+    "backing_bytes": 67108864,
+    "cache_bytes": 4096,
+    "read_lines": 7653,
+    "write_lines": 5358,
+    "mshr_peak": 11,
+    "dirty_peak": 13,
+    "outstanding_peak": 21,
+    "complete_backing_exact": true,
+    "full_graph_integrated": false,
+    "independent_model_calibrated": false,
+    "OOC_verified": false
+  },
+  "vivado_sessions": {
+    "m2c": "vivado-20261112-161837-7d305dc5",
+    "m3d": "vivado-20261112-164509-ef1e3de5"
+  },
+  "pending_commands": {
+    "m2c": "wait_on_run synth_1 running since16:22:34 UTC; inspect status/log then implement",
+    "m3d": "wait_on_run synth_1 (exec cell g10:321); synth starts16:56:32 UTC",
+    "next_rtl": "run_fixtures.py pipe_full_d 60; run_stress.py pipe_full_d after prior stress source exports complete"
+  }
+}
