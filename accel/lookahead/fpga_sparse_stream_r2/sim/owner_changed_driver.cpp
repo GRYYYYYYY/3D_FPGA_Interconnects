@@ -1,3 +1,5 @@
+// Verilator4 legacy callback used only by assertion diagnostics; clocks are explicit.
+double sc_time_stamp(){return 0;}
 #include "Vowner_changed_tb.h"
 #include "verilated.h"
 using Vsparse_owner=Vowner_changed_tb;

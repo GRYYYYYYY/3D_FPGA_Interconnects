@@ -2,7 +2,7 @@
 // Membership resides in the external node-state service. Each MARK reserves one
 // of 32 response mailboxes before issue; no response or first-mark ID can vanish.
 // The worklist is finite. A first mark beyond CAP raises an explicit batch error.
-module r2_external_changed #(parameter CAP=1024,AW=$clog2(CAP))(
+module r2_external_changed #(parameter CAP=1024,AW=$clog2(CAP),STYLE="block")(
  input wire clk,rst,input wire ev,output wire er,input wire [31:0] line,input wire [3:0] mask,
  input wire commit_phase,output wire cv,input wire cr,output wire [31:0] node,
  output reg mv,input wire mr,output reg [31:0] mn,output reg [4:0] mid,
@@ -24,7 +24,7 @@ module r2_external_changed #(parameter CAP=1024,AW=$clog2(CAP))(
  end
  wire list_ready;wire list_put=publish_context>=0;
  wire [31:0] list_data=publish_context>=0?context_node[publish_context]:0;
- sparse_fifo #(.WIDTH(32),.DEPTH(CAP)) list(clk,rst,list_put,list_ready,list_data,cv,cr&&commit_phase,node,occupancy);
+ sparse_fifo #(.WIDTH(32),.DEPTH(CAP),.STYLE(STYLE)) list(clk,rst,list_put,list_ready,list_data,cv,cr&&commit_phase,node,occupancy);
  assign mark_idle=qv==0&&qcounts==0&&!mv&&live==0;
  always @(posedge clk)begin
   if(rst)begin live<=0;sent<=0;ready<=0;mv<=0;error<=0;rotate<=0;peak<=0;mark_requests<=0;duplicates<=0;unique_ids<=0;end

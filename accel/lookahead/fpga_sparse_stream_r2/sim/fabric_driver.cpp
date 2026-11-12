@@ -1,4 +1,5 @@
 #include <array>
+#include <bitset>
 #include <vector>
 #include <random>
 #include <fstream>
@@ -31,10 +32,10 @@ struct Device:r2_model::FabricCycle {
   if constexpr(std::is_integral<W>::value){for(unsigned i=0;i<width;++i)v|=uint64_t(w>>(at+i)&1)<<i;}
   else for(unsigned i=0;i<width;++i)v|=uint64_t(w[(at+i)/32]>>((at+i)%32)&1)<<i;return v;
  }
- void combin(){d.clk=0;d.rst=rst;d.cv=d.cw=d.rr=0;d.mr=d.sv=0;
-  for(unsigned c=0;c<C;++c){d.cv|=uint64_t(cv[c])<<c;d.cw|=uint64_t(cw[c])<<c;d.rr|=uint64_t(rr[c])<<c;d.cl[c]=cl[c];bits(d.ci,c*6,6,ci[c]);for(unsigned s=0;s<4;++s)bits(d.cd,c*256+s*64,64,cd[c][s]);}
+ void combin(){d.clk=0;d.rst=rst;d.mr=d.sv=0;
+  for(unsigned c=0;c<C;++c){bits(d.cv,c,1,cv[c]);bits(d.cw,c,1,cw[c]);bits(d.rr,c,1,rr[c]);d.cl[c]=cl[c];bits(d.ci,c*6,6,ci[c]);for(unsigned s=0;s<4;++s)bits(d.cd,c*256+s*64,64,cd[c][s]);}
   for(unsigned p=0;p<P;++p){d.mr|=unsigned(mr[p])<<p;d.sv|=unsigned(sv[p])<<p;bits(d.si,p*6,6,si[p]);for(unsigned s=0;s<4;++s)bits(d.sd,p*256+s*64,64,sd[p][s]);}
-  d.eval();for(unsigned c=0;c<C;++c){cr[c]=d.cr>>c&1;rv[c]=d.rv>>c&1;ri[c]=get(d.ri,c*6,6);for(unsigned s=0;s<4;++s)rd[c][s]=get(d.rd,c*256+s*64,64);}
+  d.eval();for(unsigned c=0;c<C;++c){cr[c]=get(d.cr,c,1);rv[c]=get(d.rv,c,1);ri[c]=get(d.ri,c*6,6);for(unsigned s=0;s<4;++s)rd[c][s]=get(d.rd,c*256+s*64,64);}
   for(unsigned p=0;p<P;++p){mv[p]=d.mv>>p&1;mw[p]=d.mw>>p&1;ml[p]=get(d.ml,p*32,32);mi[p]=get(d.mi,p*6,6);sr[p]=d.sr>>p&1;for(unsigned s=0;s<4;++s)md[p][s]=get(d.md,p*256+s*64,64);}
   error=d.error;idle=d.idle;accepted=d.accepted;returned=d.returned;
  }
@@ -52,8 +53,8 @@ int main(int argc,char**argv){try{
  for(unsigned step=0;step<1000000;++step){
   for(unsigned c=0;c<C;++c){d.rr[c]=(rng()%7)!=0&&(tick%401<330||c%3);if(!d.cv[c]&&sent[c]<1000&&live[c]!=~0ull&&rng()%3){unsigned id=__builtin_ctzll(~live[c]);d.cv[c]=true;d.ci[c]=id;live[c]|=1ull<<id;d.cl[c]=(rng()%512)*P+((sent[c]%3)?rng()%P:0);d.cw[c]=sent[c]%2;d.cd[c]={c,sent[c],id,0xfedcba9876000000ull|c};expected[c][id]=d.cw[c]?d.cd[c]:read_data(d.cl[c]);}}
   for(unsigned p=0;p<P;++p){d.mr[p]=pending[p].size()<64&&rng()%4&&tick%157<139;if(response[p]<0)for(int i=int(pending[p].size())-1;i>=0;--i)if(pending[p][i].due<=tick){response[p]=i;break;}d.sv[p]=response[p]>=0;if(d.sv[p]){auto x=pending[p][response[p]];d.si[p]=x.id;d.sd[p]=x.data;}}
-  d.combin();uint64_t im=0,om=0;std::array<bool,C>take{};
-  for(unsigned c=0;c<C;++c){take[c]=d.cv[c]&&d.cr[c];if(take[c]){++sent[c];++total_sent;im|=1ull<<c;}if(d.rv[c]&&d.rr[c]){unsigned id=d.ri[c];if(!(live[c]>>id&1)||d.rd[c]!=expected[c][id])throw std::runtime_error("client response mismatch");live[c]&=~(1ull<<id);++retired[c];++total_retired;om|=1ull<<c;}}
+  d.combin();std::bitset<C> im,om;std::array<bool,C>take{};
+  for(unsigned c=0;c<C;++c){take[c]=d.cv[c]&&d.cr[c];if(take[c]){++sent[c];++total_sent;im[c]=1;}if(d.rv[c]&&d.rr[c]){unsigned id=d.ri[c];if(!(live[c]>>id&1)||d.rd[c]!=expected[c][id])throw std::runtime_error("client response mismatch");live[c]&=~(1ull<<id);++retired[c];++total_retired;om[c]=1;}}
   unsigned outstanding=0;
   for(unsigned p=0;p<P;++p){bool pop=d.sv[p]&&d.sr[p];if(d.mv[p]&&d.mr[p]){if(d.ml[p]%P!=p)throw std::runtime_error("striping");for(auto x:pending[p])if(x.id==d.mi[p])throw std::runtime_error("tag reuse");pending[p].push_back({d.mi[p],d.mw[p]?d.md[p]:read_data(d.ml[p]),tick+60+rng()%60});}if(pop){pending[p].erase(pending[p].begin()+response[p]);response[p]=-1;}outstanding+=pending[p].size();}
   peak=std::max(peak,outstanding);log<<tick<<','<<total_sent<<','<<total_retired<<','<<d.accepted<<','<<d.returned<<','<<outstanding<<','<<im<<','<<om<<'\n';

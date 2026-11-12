@@ -9,7 +9,7 @@ struct OwnerCycle {
  bool mem_valid=false,mem_ready=false,mem_write=false,rsp_valid=false,rsp_ready=false,idle=false,error=false;
  uint32_t node=0,update_line=0,mem_line=0;uint64_t pair=0;unsigned update_mask=0,mem_id=0,rsp_id=0;
  std::array<uint32_t,8> mem_data{},rsp_data{};
- uint32_t accepted=0,retired=0,merges=0,hits=0,misses=0,raw_stall=0;unsigned mshr_peak=0,dirty_peak=0;
+ uint32_t accepted=0,retired=0,merges=0,hits=0,misses=0,raw_stall=0;unsigned mshr_peak=0,dirty_peak=0,owner_bits=3;
  struct Cache {bool valid=false,dirty=false,busy=false;uint32_t tag=0;Line data{};};
  struct Miss {bool valid=false,sent=false,go=false;uint32_t line=0,count=0;unsigned slot=0;Line candidates{INF,INF,INF,INF};};
  struct Write {bool valid=false,sent=false,ready=false;uint32_t line=0;Line data{};};
@@ -26,7 +26,7 @@ struct OwnerCycle {
   w=Wires{};auto q=c.requests.od;uint32_t line=q.node>>2;
   for(unsigned i=0;i<32;++i){auto &m=c.misses[i];if(m.valid){++w.cm;if(m.line==line)w.matching=i;}else if(w.fm<0)w.fm=i;bool hazard=false;for(auto &b:c.writes)hazard|=b.valid&&b.line==m.line;if(m.valid&&m.go&&!m.sent&&!hazard&&w.im<0)w.im=i;}
   for(unsigned i=0;i<16;++i){auto &b=c.writes[i];if(b.valid)++w.cw;else if(w.fw<0)w.fw=i;if(b.valid&&b.ready&&!b.sent&&w.iw<0)w.iw=i;}
-  unsigned set=(line>>3)&31;
+  unsigned set=(line>>owner_bits)&31;
   for(unsigned k=0;k<4;++k){unsigned s=k*32+set;auto &a=c.cache[s];if(a.valid&&!a.busy&&a.tag==line)w.hit=s;if(!a.valid&&!a.busy&&!(c.stage.valid&&c.stage.slot==s)&&w.victim<0)w.victim=s;}
   if(w.victim<0)for(unsigned k=0;k<4;++k){unsigned s=((c.replacement[set]+k)%4)*32+set;if(!c.cache[s].busy&&!(c.stage.valid&&c.stage.slot==s)&&w.victim<0)w.victim=s;}
   auto s=c.stage;w.base=c.last_valid&&c.last_slot==s.slot?c.last_data:c.ram_q;w.hitdata=w.base;
@@ -64,7 +64,7 @@ struct OwnerCycle {
     auto v=old.cache[z.victim];auto &st=n.stage;st.valid=true;st.eviction=true;st.slot=z.victim;st.dirty=v.dirty;st.evict_line=v.tag;st.miss=z.fm;
     if(v.dirty){st.write=z.fw;n.writes[z.fw].valid=true;n.writes[z.fw].sent=n.writes[z.fw].ready=false;n.writes[z.fw].line=v.tag;}
     auto &m=n.misses[z.fm];m.valid=true;m.sent=m.go=false;m.line=q.node>>2;m.slot=z.victim;m.count=1;m.candidates.fill(INF);m.candidates[q.node&3]=q.pair;
-    n.cache[z.victim].valid=n.cache[z.victim].dirty=false;n.cache[z.victim].busy=true;n.cache[z.victim].tag=q.node>>2;n.replacement[(q.node>>5)&31]=((unsigned(z.victim)>>5)+1)&3;++misses;
+    n.cache[z.victim].valid=n.cache[z.victim].dirty=false;n.cache[z.victim].busy=true;n.cache[z.victim].tag=q.node>>2;n.replacement[(q.node>>(owner_bits+2))&31]=((unsigned(z.victim)>>5)+1)&3;++misses;
    }
    if(z.flushdispatch){auto &st=n.stage;st.write=z.fw;n.writes[z.fw].valid=true;n.writes[z.fw].sent=n.writes[z.fw].ready=false;n.writes[z.fw].line=old.cache[old.flush_index].tag;st.valid=true;st.eviction=true;st.slot=old.flush_index;st.dirty=true;st.evict_line=old.cache[old.flush_index].tag;n.cache[old.flush_index].dirty=false;n.flush_index=old.flush_index+1;}
   }

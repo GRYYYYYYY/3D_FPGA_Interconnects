@@ -11,8 +11,8 @@ struct PopFork {
 };
 // All four sectors have independent finite queues. Atomic mark results are held
 // in reserved mailboxes until the finite changed worklist accepts the ID.
-struct ExternalChanged {
- std::array<Fifo<uint32_t>,4> q;Fifo<uint32_t,512> list;
+template<unsigned CAP=512>struct ExternalChangedT {
+ std::array<Fifo<uint32_t>,4> q;Fifo<uint32_t,CAP> list;
  uint32_t live=0,sent=0,ready=0;std::array<uint32_t,32>cn{};unsigned rotate=0;
  bool ev=false,er=false,commit=false,cv=false,cr=false,mv=false,mr=false,rv=false,first=false,mark_idle=false,error=false;
  uint32_t line=0,node=0,mn=0,rn=0;unsigned mask=0,mid=0,rid=0,peak=0,marks=0,duplicates=0,unique=0;
@@ -38,6 +38,7 @@ struct ExternalChanged {
  // The queue RAM output is sampled before any clocked action in the bank.
  void edge(bool rst){uint32_t selected=sector>=0?q[sector].od:0;bool take=(!mv||mr)&&free_ctx>=0&&sector>=0&&!commit;unsigned id=free_ctx;step(rst);if(!rst&&take){mn=selected;cn[id]=selected;}}
 };
+using ExternalChanged=ExternalChangedT<>;
 struct CellReducer {
  struct Item{bool seen=false;uint64_t pair=0;};std::array<Item,4096>memory{};Item ram{},last{};unsigned addr=0,last_addr=0,init_index=0;
  bool sv=false,last_valid=false,initializing=false,init_done=false,error=false,init=false,iv=false,ir=false,export_en=false;

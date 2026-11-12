@@ -1,8 +1,8 @@
 `timescale 1ns/1ps
-module sparse_fifo #(parameter WIDTH=96, DEPTH=64, AW=$clog2(DEPTH))(
+module sparse_fifo #(parameter WIDTH=96, DEPTH=64, AW=$clog2(DEPTH),STYLE="block")(
  input wire clk,rst,iv,output wire ir,input wire [WIDTH-1:0] id,
  output reg ov,input wire ordy,output reg [WIDTH-1:0] od,output wire [AW:0] occupancy);
- (* ram_style="block" *) reg [WIDTH-1:0] payload[0:DEPTH-1];
+ (* ram_style=STYLE *) reg [WIDTH-1:0] payload[0:DEPTH-1];
  reg [AW-1:0] wp,rp;reg [AW:0] count;
  wire take=(!ov||ordy)&&count!=0;wire put=iv&&ir;
  assign occupancy=count+ov;

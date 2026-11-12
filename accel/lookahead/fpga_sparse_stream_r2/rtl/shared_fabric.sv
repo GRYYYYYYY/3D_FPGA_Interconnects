@@ -12,24 +12,48 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
  reg [5:0] arb[0:P-1];reg [P-1:0] bv;reg [5:0] bc[0:P-1],bi[0:P-1];reg [255:0] bd[0:P-1];
  reg [PB-1:0] return_arb[0:C-1];reg [P-1:0] consume;
  reg [C-1:0] next_rv;reg [C*6-1:0] next_ri;reg [C*256-1:0] next_rd;
- integer selected[0:P-1],tag[0:P-1];integer k,n,chosen;reg any_busy;
+ wire [5:0] selected[0:P-1],tag[0:P-1],chosen[0:C-1];wire [P-1:0] select_valid,tag_valid;wire [C-1:0] chosen_valid;reg any_busy;
  for(genvar c=0;c<C;c=c+1)begin:requests
   sparse_fifo #(.WIDTH(295),.DEPTH(4)) fifo(clk,rst,cv[c],cr[c],{cw[c],cl[c*32+:32],ci[c*6+:6],cd[c*256+:256]},qv[c],qr[c],qwords[c],count[c*3+:3]);
  end
  for(genvar p=0;p<P;p=p+1)begin:response_ports
   assign sr[p]=!bv[p]||consume[p];
  end
+ // Fixed-index eligibility and balanced first-bit trees avoid C rotated
+ // variable-index muxes per port. Round-robin order is cycle-identical.
+ for(genvar p=0;p<P;p=p+1)begin:request_select
+  wire [63:0] eligible,after_cursor,free_tags;wire [5:0] lo,hi;wire lv,hv;
+  for(genvar c=0;c<64;c=c+1)begin:eligible_bits
+   if(c<C)begin
+    assign eligible[c]=qv[c]&&(P==1||qwords[c][262+:PB]==p);
+    assign after_cursor[c]=eligible[c]&&(c>=arb[p]);
+   end else begin assign eligible[c]=0;assign after_cursor[c]=0;end
+   assign free_tags[c]=(c<TAGS)&&!busy[p][c];
+  end
+  r2_first64 first_all(eligible,lv,lo);
+  r2_first64 first_after(after_cursor,hv,hi);
+  r2_first64 first_tag(free_tags,tag_valid[p],tag[p]);
+  assign selected[p]=hv?hi:lo;assign select_valid[p]=lv;
+ end
+ for(genvar c=0;c<C;c=c+1)begin:return_select
+  wire [63:0] eligible,after_cursor;wire [5:0] lo,hi;wire lv,hv;
+  for(genvar p=0;p<64;p=p+1)begin:eligible_bits
+   if(p<P)begin
+    assign eligible[p]=bv[p]&&bc[p]==c;
+    assign after_cursor[p]=eligible[p]&&(p>=return_arb[c]);
+   end else begin assign eligible[p]=0;assign after_cursor[p]=0;end
+  end
+  r2_first64 first_all(eligible,lv,lo);r2_first64 first_after(after_cursor,hv,hi);
+  assign chosen[c]=hv?hi:lo;assign chosen_valid[c]=lv;
+ end
  always @*begin
   qr=0;next_rv=0;next_ri=0;next_rd=0;consume=0;any_busy=0;
   for(integer p=0;p<P;p=p+1)begin
-   selected[p]=-1;tag[p]=-1;if(busy[p]!=0)any_busy=1;
-   for(integer t=0;t<TAGS;t=t+1)if(!busy[p][t]&&tag[p]<0)tag[p]=t;
-   for(integer c=0;c<C;c=c+1)begin n=arb[p]+c;if(n>=C)n=n-C;if(qv[n]&&(P==1||qwords[n][262+:PB]==p)&&selected[p]<0)selected[p]=n;end
-   if((!mv[p]||mr[p])&&tag[p]>=0&&selected[p]>=0)qr[selected[p]]=1;
+   if(busy[p]!=0)any_busy=1;
+   if((!mv[p]||mr[p])&&tag_valid[p]&&select_valid[p])qr[selected[p]]=1;
   end
-  for(integer c=0;c<C;c=c+1)begin chosen=-1;
-   for(integer p=0;p<P;p=p+1)begin k=(return_arb[c]+p)%P;if(bv[k]&&bc[k]==c&&chosen<0)chosen=k;end
-   if(chosen>=0)begin next_rv[c]=1;next_ri[c*6+:6]=bi[chosen];next_rd[c*256+:256]=bd[chosen];consume[chosen]=!rv[c]||rr[c];end
+  for(integer c=0;c<C;c=c+1)begin
+   if(chosen_valid[c])begin next_rv[c]=1;next_ri[c*6+:6]=bi[chosen[c]];next_rd[c*256+:256]=bd[chosen[c]];consume[chosen[c]]=!rv[c]||rr[c];end
   end
  end
  assign idle=qv==0&&count==0&&mv==0&&bv==0&&rv==0&&!any_busy;
@@ -41,7 +65,7 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
   end else begin
    issued_count=0;return_count=0;
    for(integer p=0;p<P;p=p+1)begin
-    if(!mv[p]||mr[p])begin mv[p]<=0;if(tag[p]>=0&&selected[p]>=0)begin
+    if(!mv[p]||mr[p])begin mv[p]<=0;if(tag_valid[p]&&select_valid[p])begin
      mv[p]<=1;{mw[p],ml[p*32+:32]}<=qwords[selected[p]][262+:33];md[p*256+:256]<=qwords[selected[p]][255:0];mi[p*6+:6]<=tag[p];
      busy[p][tag[p]]<=1;client[p][tag[p]]<=selected[p];local_id[p][tag[p]]<=qwords[selected[p]][256+:6];arb[p]<=selected[p]==C-1?0:selected[p]+1;issued_count=issued_count+1;
     end end

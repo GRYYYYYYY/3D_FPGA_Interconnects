@@ -1,3 +1,5 @@
+// Verilator4 legacy callback used only by assertion diagnostics; clocks are explicit.
+double sc_time_stamp(){return 0;}
 #include "Vsparse_tile.h"
 #include "verilated.h"
 #include "io.hpp"

@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Sparse directory/member bank with finite cached external labels, pending and
 // changed marks. No array is indexed by the full graph's node count.
-module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog2(MC))(
+module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog2(MC),USE_URAM=0)(
  input wire clk,rst,input wire [2:0] command,input wire [11:0] bucket,
  input wire [31:0] source,node_count,state_base,input wire upstream_fenced,
  output reg done,output reg has_bucket,output reg [11:0] min_bucket,output wire error,
@@ -38,13 +38,13 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
  // Atomic changed marks are serviced in the same cache as POP and COMMIT.
  wire mv,mr,mrv,first_mark,changed_error,cv,cr;wire [31:0] mn,rn,changed_node;wire [4:0] mid,rid;
  wire [$clog2(CC):0] changed_peak,changed_count;wire [31:0] marks,duplicates,unique_ids;
- r2_external_changed #(.CAP(CC)) changes(clk,rst,ev,er,event_line,event_mask,state==COMMIT,cv,cr,changed_node,
+ r2_external_changed #(.CAP(CC),.STYLE(USE_URAM?"ultra":"block")) changes(clk,rst,ev,er,event_line,event_mask,state==COMMIT,cv,cr,changed_node,
   mv,mr,mn,mid,mrv,rid,rn,first_mark,mark_idle,changed_error,changed_peak,changed_count,marks,duplicates,unique_ids);
  assign cr=state==COMMIT&&free_context>=0;
  reg sv;wire sr;reg [31:0] sn;reg [2:0] sop;reg [63:0] sval;reg [31:0] sarg;reg [4:0] sid;
  reg arb_hold,arb_selected,arb_turn;
  wire selected=arb_hold?arb_selected:(mv&&(!sv||arb_turn));
- wire niv=selected?mv:sv,nir;wire nov;wire [31:0] non;wire [5:0] notag;wire [3:0] nost;wire [127:0] nold;
+ wire niv=selected?mv:sv;wire nir;wire nov;wire [31:0] non;wire [5:0] notag;wire [3:0] nost;wire [127:0] nold;
  wire state_idle,state_error,state_done;reg state_fence;
  assign mr=selected&&nir;assign sr=!selected&&nir;
  assign mrv=nov&&notag[5];assign rid=notag[4:0];assign rn=non;assign first_mark=nost[0];
@@ -64,16 +64,18 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
  sparse_fifo #(.WIDTH(96)) parents(clk,rst,parent_iv,parent_ir,parent_data,pv,pr,{pn,pp},parent_count);
  // Credit includes validation requests whose responses have not arrived yet.
  wire pop_credit=parent_count+pop_count<64;
- (* ram_style="block" *) reg [63:0] directory[0:4095];reg [63:0] directory_q;
- (* ram_style="block" *) reg [47:0] member_header[0:MC-1];
- (* ram_style="block" *) reg [31:0] member_next[0:MC-1];
+ (* ram_style=(USE_URAM?"ultra":"block") *) reg [63:0] directory[0:4095];reg [63:0] directory_q;
+ (* ram_style=(USE_URAM?"ultra":"block") *) reg [47:0] member_header[0:MC-1];
+ (* ram_style=(USE_URAM?"ultra":"block") *) reg [31:0] member_next[0:MC-1];
  reg [47:0] header_q;reg [31:0] next_q,pointer;reg [11:0] key;
- reg [4095:0] bitmap;reg [63:0] groups;reg [63:0] selected_word;reg [5:0] selected_group;
+ (* ram_style="distributed" *) reg [63:0] bitmap_words[0:63];
+ reg [63:0] bitmap_q;reg [63:0] groups;wire [63:0] selected_word=bitmap_q;reg [5:0] selected_group;
+ reg last_bitmap_valid;reg [5:0] last_bitmap_group;reg [63:0] last_bitmap_value;
  wire gv,wv;wire [5:0] gi,wi;
  r2_first64 first_group(groups,gv,gi);r2_first64 first_word(selected_word,wv,wi);
  wire pool_iv,pool_ir,pool_ov,pool_or;wire [MA-1:0] pool_in,pool_out;wire [MA:0] pool_count;
  reg [MA:0] pool_init;
- sparse_fifo #(.WIDTH(MA),.DEPTH(MC)) pool(clk,rst,pool_iv,pool_ir,pool_in,pool_ov,pool_or,pool_out,pool_count);
+ sparse_fifo #(.WIDTH(MA),.DEPTH(MC),.STYLE(USE_URAM?"ultra":"block")) pool(clk,rst,pool_iv,pool_ir,pool_in,pool_ov,pool_or,pool_out,pool_count);
  wire pop_capture=state==POP_CAPTURE&&free_context>=0&&pop_credit&&pool_ir;
  wire append_select=publish_context>=0&&pool_ov;
  assign pool_iv=(state==INIT&&pool_init<MC)||pop_capture;
@@ -83,10 +85,20 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
  reg av;reg [4:0] actx;reg [MA-1:0] aid;reg [11:0] akey;reg [31:0] anode;reg [15:0] aversion;reg apresent;
  reg last_valid;reg [11:0] last_key;reg [63:0] last_dir;
  wire forwarded=last_valid&&last_key==akey;
- wire present=forwarded||apresent;wire [63:0] old_dir=forwarded?last_dir:directory_q;
+ wire [63:0] publication_bitmap=(last_bitmap_valid&&last_bitmap_group==akey[11:6])?last_bitmap_value:bitmap_q;
+ wire present=forwarded||publication_bitmap[akey[5:0]];wire [63:0] old_dir=forwarded?last_dir:directory_q;
  wire [31:0] extended_id={{(32-MA){1'b0}},aid};
  wire [63:0] new_dir={present?old_dir[63:32]:extended_id,extended_id};
+ wire bitmap_init=state==INIT&&pool_init<64;
+ wire bitmap_clear=state==POP_DIR;
+ wire bitmap_write=bitmap_init||bitmap_clear||av;
+ wire [5:0] bitmap_wa=bitmap_init?pool_init[5:0]:bitmap_clear?key[11:6]:akey[11:6];
+ wire [63:0] bitmap_new=bitmap_init?64'b0:bitmap_clear?(bitmap_q&~(64'b1<<key[5:0])):(publication_bitmap|(64'b1<<akey[5:0]));
+ wire bitmap_read=append_select||state==POP_HEAD||state==MIN_WORD;
+ wire [5:0] bitmap_ra=append_select?cp[publish_context][63:58]:state==POP_HEAD?key[11:6]:selected_group;
  always @(posedge clk)begin
+  if(bitmap_write)bitmap_words[bitmap_wa]<=bitmap_new;
+  if(bitmap_read)bitmap_q<=bitmap_words[bitmap_ra];
   if(av)directory[akey]<=new_dir;
   if(append_select||state==POP_HEAD)directory_q<=directory[append_select?cp[publish_context][63:52]:key];
   if(av)member_header[aid]<={aversion,anode};else header_q<=member_header[pointer[MA-1:0]];
@@ -103,7 +115,7 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
  always @*begin init_free=-1;for(integer i=0;i<16;i=i+1)if(!init_busy[i]&&init_free<0)init_free=i;end
  always @(posedge clk)begin
   if(rst)begin
-   state<=IDLE;done<=0;local_error<=0;has_bucket<=0;min_bucket<=0;bitmap<=0;groups<=0;pointer<=NIL;key<=0;
+   state<=IDLE;done<=0;local_error<=0;has_bucket<=0;min_bucket<=0;groups<=0;last_bitmap_valid<=0;pointer<=NIL;key<=0;
    sv<=0;av<=0;state_fence<=0;last_valid<=0;mem_valid<=0;mem_id<=0;mem_write<=0;mem_line<=0;mem_data<=0;
    ca<=0;commit_node<=0;active_count<=0;commit_count<=0;stale_count<=0;member_peak<=0;
    pool_init<=0;init_sent<=0;init_acked<=0;init_busy<=0;
@@ -140,11 +152,11 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
    end
    if(append_select)begin
     av<=1;actx<=publish_context;aid<=pool_out;akey<=cp[publish_context][63:52];
-    anode<=cn[publish_context];aversion<=carg[publish_context][27:12];apresent<=bitmap[cp[publish_context][63:52]];
+    anode<=cn[publish_context];aversion<=carg[publish_context][27:12];apresent<=0;
     cs[publish_context]<=PUBLISH_WAIT;
    end else if(publish_context>=0&&!pool_ov)local_error<=1;
    if(av)begin
-    bitmap[akey]<=1;groups[akey[11:6]]<=1;last_valid<=1;last_key<=akey;last_dir<=new_dir;
+    last_bitmap_valid<=1;last_bitmap_group<=akey[11:6];last_bitmap_value<=bitmap_new;groups[akey[11:6]]<=1;last_valid<=1;last_key<=akey;last_dir<=new_dir;
     cs[actx]<=state==SEED?FREE:CLEAR_SEND;
    end
    if(state==COMMIT)begin
@@ -157,8 +169,8 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
    end
    case(state)
     IDLE:if(command!=0&&!done)case(command)
-     1:begin state<=INIT;bitmap<=0;groups<=0;last_valid<=0;pool_init<=0;init_sent<=0;init_acked<=0;init_busy<=0;end
-     2:begin key<=bucket;last_valid<=0;state<=POP_HEAD;end
+     1:begin state<=INIT;last_bitmap_valid<=0;groups<=0;last_valid<=0;pool_init<=0;init_sent<=0;init_acked<=0;init_busy<=0;end
+     2:begin key<=bucket;last_valid<=0;last_bitmap_valid<=0;state<=POP_HEAD;end
      3:state<=COMMIT;
      4:done<=1;
      5:begin has_bucket<=gv;selected_group<=gi;state<=MIN_WORD;end
@@ -185,8 +197,8 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
     SEED:if(live_count==0&&!sv&&!av)begin state_fence<=1;if(state_done)begin state_fence<=0;done<=1;state<=IDLE;end end
     POP_HEAD:state<=POP_DIR;
     POP_DIR:begin
-     pointer<=bitmap[key]?directory_q[63:32]:NIL;bitmap[key]<=0;
-     if((bitmap[key[11:6]*64+:64]&~(64'b1<<key[5:0]))==0)groups[key[11:6]]<=0;
+     pointer<=bitmap_q[key[5:0]]?directory_q[63:32]:NIL;
+     if(bitmap_new==0)groups[key[11:6]]<=0;
      state<=POP_READ;
     end
     POP_READ:if(pointer==NIL)state<=POP_DRAIN;else state<=POP_CAPTURE;
@@ -197,7 +209,7 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
     POP_DRAIN:if(live_count==0&&!sv&&parent_count==0&&!pv)begin done<=1;state<=IDLE;end
     COMMIT:if(!cv&&live_count==0&&!sv&&!av&&!mem_valid)begin state_fence<=1;if(state_done)begin state_fence<=0;done<=1;state<=IDLE;end end
     FENCE:if(upstream_fenced&&mark_idle)begin state_fence<=1;if(state_done)begin state_fence<=0;done<=1;state<=IDLE;end end
-    MIN_WORD:begin selected_word<=bitmap[selected_group*64+:64];state<=MIN_END;end
+    MIN_WORD:state<=MIN_END;
     MIN_END:begin min_bucket<={selected_group,wi};has_bucket<=has_bucket&&wv;done<=1;state<=IDLE;end
     default:local_error<=1;
    endcase

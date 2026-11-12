@@ -52,12 +52,30 @@
       "cycle_log_exact_all": true,
       "scope": "8 lanes/8 physical ports, d3/d4,91fixtures,2stress,2address; no32/64 qualification",
       "record": "model/external_model_b/suite_calibration/calibration.json"
+    },
+    {
+      "version": "external_d",
+      "cases": 97,
+      "cycle_error": 0,
+      "scope": "8lane complete external state topo only"
+    },
+    {
+      "version": "external_f",
+      "cases": 97,
+      "cycle_error": 0,
+      "scope": "tree arbiter+write dependency scoreboard 8lane; two large-address followups passed output, cycle compare pending"
+    },
+    {
+      "version": "many8_b",
+      "cases": 95,
+      "cycle_error": 0,
+      "scope": "new composed owner uplink+shared8physical complete8lane topology; 32lane not implied"
     }
   ],
   "software_baselines_complete": false,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "finish actual tile OOC; full external-bank/control/reducer/fabric model calibration; choose resource-supported 32/64 shared topology; complete native BNN/LSTM architecture batches and software/native audit",
+  "next_action": "Finish external_e/f OOC, audit 8192-entry state bank and actual hierarchical interconnect; calibrate complete many8/many32, decide resource-supported next candidate and complete native architecture batches.",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -129,14 +147,18 @@
     "arithmetic": "vivado-20261112-173934-eb0a0adf"
   },
   "pending_commands": {
-    "m2c": "wait_on_run synth_1 running; inspect actual run status",
-    "m3d": "wait_on_run synth_1 running; LUTRAM fallback negative snapshot audit retained",
-    "m3e": "wait_on_run synth_1 pending exec cell g10:349; RTL ports fixed; full tile OOC still pending",
-    "arithmetic": "Vivado mapped timing loops on old add, 48 warnings; repaired candidate passed500000FP32sums; unit synth execg10:383 running; sessionvivado-20261112-173934-eb0a0adf",
-    "rtl": "external_c rebuild+native run session54916; fabric_mux5_b/p32_b sessions88945/48492"
+    "m2c": "original slow synthesis still running; obsolete arithmetic loop audit required",
+    "m3d": "synth complete735949LUT;48mappedFPloops; routed skipped with negative audit",
+    "m3e": "synth complete589685LUT;356RAMB36+161RAMB18;48mappedFPloops; routed skipped",
+    "external_e": "synth running sessionvivado-20261112-173934-eb0a0adf",
+    "external_f": "synth running sessionvivado-20261112-180611-3c758959",
+    "central_fabric32": "synth/posthooks sessionvivado-20261112-164509-ef1e3de5",
+    "bank8192": "bank8192_uram synth running sessionvivado-20261112-171744-63335f93",
+    "many32_RTL": "build session75663",
+    "hier32": "unit regression session2112"
   },
   "large_node_state_path_scope": {
-    "build": "external_a/external_b",
+    "build": "external_f",
     "lanes": 8,
     "logical_clients": 41,
     "physical_channels": 8,
@@ -164,11 +186,49 @@
     "same_GPU_host": false,
     "BNN_mean_s": 3.3074307294444445,
     "LSTM_mean_s": 3.438127633666667,
-    "CUDA_equivalence_audit_pending": true
+    "CUDA_equivalence_audit_pending": false,
+    "new_CUDA_has_prepared_CSR_and_valid_POP": true,
+    "GPU_summary": "software/prepared_pop_gpu_b/summary.json",
+    "same_worker_CPU": true,
+    "GPU_job_id": "job-eb9a21bb-c74e-46f6-98b8-4d485c2a4236",
+    "GPU_compact_BNN_mean_s": 0.15179996944444446,
+    "GPU_compact_LSTM_mean_s": 0.16024799044444443,
+    "GPU_basic_BNN_mean_s": 0.15669057711111112,
+    "GPU_basic_LSTM_mean_s": 0.15988857844444446,
+    "native_STRICT_VPR_scope_audit": "pending",
+    "receipt_count": 218
   },
   "external_capacity": {
     "40_sample_boundary_tests": 2,
     "changed_overflow_explicit_reject": true,
     "record": "rtl/external_b_external_changed_overflow/receipt.json"
+  },
+  "arithmetic_unit_routed": {
+    "WNS_ns": 0.077,
+    "WHS_ns": 0.02,
+    "clock_mhz": 200,
+    "scope": "pair_lane only; no fullkernel or board qualification; OOC HD.CLK_SRC/partition pin placement warnings retained",
+    "report": "timing/arithmetic_port_fix/arithmetic_routed_200.rpt"
+  },
+  "new_candidate_constraint": "32 owners,unchangedwork,<=200MHz and<=1candidate/cycle/lane cannot beat new prepared/POP GPU even ignoring all nonedge work; restriction binds that candidate only.",
+  "physical_channel_sharing_hierarchy": {
+    "hier32_b_clients": 161,
+    "physical_ports": 32,
+    "commands_verified": 161000,
+    "cycles": 96775,
+    "model_cycle_log_exact": true,
+    "scope": "standalone composed interconnect, not complete32kernel"
+  },
+  "bank8192_resources": {
+    "LUT": 13989,
+    "FF": 8416,
+    "RAMB36": 57,
+    "RAMB18": 15,
+    "URAM": 0,
+    "available_BRAM36": 2016,
+    "available_URAM": 960,
+    "scope": "synthesis of one complete externalstate/bucket/changed bank",
+    "32banks_BRAM36_equivalent": 2064,
+    "next": "USE_URAM=1 variant synthesized separately; do not assume inference/latency until verified"
   }
 }

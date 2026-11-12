@@ -1,3 +1,5 @@
+// Verilator4 legacy callback used only by assertion diagnostics; clocks are explicit.
+double sc_time_stamp(){return 0;}
 #ifdef R2_OWNER_MODEL
 #include "owner_pipeline_model.hpp"
 using Vsparse_owner_pipe=r2_model::OwnerCycle;

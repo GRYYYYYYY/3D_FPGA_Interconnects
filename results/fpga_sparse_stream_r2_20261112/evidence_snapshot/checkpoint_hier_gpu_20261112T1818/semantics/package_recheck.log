@@ -1,0 +1,92 @@
+{
+  "scope": "Independent algorithm-model differential validation only; not native, RTL, OOC, physical timing, or FPGA performance evidence",
+  "source_commit": "5651a34abb97939bee6402c5af585753ab07f64b",
+  "seed": 20261112,
+  "directed_graphs": 10,
+  "random_graphs": 80,
+  "shifts": [
+    0,
+    20
+  ],
+  "differential_cases": 180,
+  "failures": 0,
+  "all_differential_passed": true,
+  "mutation_checks": [
+    {
+      "case": "same_bucket_repeat_delay",
+      "mutation": "first_only",
+      "detected": true,
+      "reference": [
+        [
+          1091043328,
+          0
+        ]
+      ],
+      "mutant": [
+        [
+          1091305472,
+          1120403456
+        ]
+      ]
+    },
+    {
+      "case": "same_bucket_congestion_only",
+      "mutation": "first_only",
+      "detected": true,
+      "reference": [
+        [
+          1090519040,
+          0
+        ]
+      ],
+      "mutant": [
+        [
+          1090519040,
+          1120403456
+        ]
+      ]
+    },
+    {
+      "case": "zero_outdegree_target",
+      "mutation": "edge_only",
+      "detected": true,
+      "reference": [
+        [
+          1065353216,
+          1073741824
+        ]
+      ],
+      "mutant": [
+        [
+          2143289344,
+          2143289344
+        ]
+      ]
+    },
+    {
+      "case": "whole_pair_same_cell",
+      "mutation": "component_min",
+      "detected": true,
+      "reference": [
+        [
+          1090519040,
+          1120403456
+        ]
+      ],
+      "mutant": [
+        [
+          1090519040,
+          0
+        ]
+      ]
+    }
+  ],
+  "all_mutations_detected": true,
+  "seconds": 0.034906015964224935,
+  "limitations": [
+    "No VPR eligibility, full native graph, hardware finite queues, memory response reordering, numeric rejection, or capacity overflow execution modeled",
+    "Shared search/control implementation isolates output transform; independent floating point library/reference not used",
+    "Node-cost rounding uses Python float plus explicit float32 round-trip; all generated values finite nonnegative normal or +0"
+  ],
+  "failure_archive": "failures.json (retained even when empty)"
+}

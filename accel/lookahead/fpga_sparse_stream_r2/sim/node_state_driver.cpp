@@ -1,3 +1,5 @@
+// Verilator4 legacy callback used only by assertion diagnostics; clocks are explicit.
+double sc_time_stamp(){return 0;}
 #include "Vr2_node_state.h"
 #include "verilated.h"
 #include <array>

@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Elastic synchronous-RAM hit pipeline: tag/read of request k+1 overlaps
 // whole-line RMW/event publication of k. Miss/fill/eviction credits are finite.
-module sparse_owner_pipe(input wire clk,rst,iv,output wire ir,input wire [31:0] node,
+module sparse_owner_pipe #(parameter OWNER_BITS=3)(input wire clk,rst,iv,output wire ir,input wire [31:0] node,
  input wire [63:0] pair,input wire fence,output reg fence_done,
  output wire update_valid,input wire update_ready,output wire [31:0] update_line,output wire [3:0] update_mask,
  output reg mem_valid,input wire mem_ready,output reg mem_write,output reg [31:0] mem_line,
@@ -25,21 +25,26 @@ module sparse_owner_pipe(input wire clk,rst,iv,output wire ir,input wire [31:0] 
  reg [255:0] ram_q,last_data;reg [6:0] last_slot;reg last_valid;
  reg flushing;reg [7:0] flush_index;reg command_turn;
  wire [31:0] qline={2'b0,qd[95:66]};
- integer hit,matching,fm,fw,victim,issue_m,issue_w,count_m,count_w;integer candidate;reg hazard;
+ integer hit,matching,fm,fw,victim,issue_m,issue_w,count_m,count_w;integer candidate;
+ reg [15:0] wait_write[0:31];wire [15:0] allocation_wait;
+ wire write_ack=rv&&rr&&rd[261];
+ wire [15:0] ack_mask=write_ack?(16'b1<<rd[259:256]):16'b0;
+ for(genvar j=0;j<16;j=j+1)begin:write_dependencies
+  assign allocation_wait[j]=wv[j]&&wl[j]==qline&&!ack_mask[j];
+ end
  always @*begin
-  hit=-1;matching=-1;fm=-1;fw=-1;victim=-1;issue_m=-1;issue_w=-1;count_m=0;count_w=0;candidate=0;hazard=0;
+  hit=-1;matching=-1;fm=-1;fw=-1;victim=-1;issue_m=-1;issue_w=-1;count_m=0;count_w=0;candidate=0;
   for(integer i=0;i<32;i=i+1)begin
    if(mv[i])begin count_m=count_m+1;if(ml[i]==qline)matching=i;end else if(fm<0)fm=i;
-   hazard=0;for(integer j=0;j<16;j=j+1)if(wv[j]&&wl[j]==ml[i])hazard=1;
-   if(mv[i]&&mg[i]&&!ms[i]&&!hazard&&issue_m<0)issue_m=i;
+   if(mv[i]&&mg[i]&&!ms[i]&&wait_write[i]==0&&issue_m<0)issue_m=i;
   end
   for(integer i=0;i<16;i=i+1)begin if(wv[i])count_w=count_w+1;else if(fw<0)fw=i;if(wv[i]&&wg[i]&&!ws[i]&&issue_w<0)issue_w=i;end
   for(integer w=0;w<4;w=w+1)begin
-   candidate=(w<<5)|qline[7:3];
+   candidate=(w<<5)|qline[OWNER_BITS+:5];
    if(valid[candidate]&&!busy[candidate]&&tags[candidate]==qline)hit=candidate;
    if(!valid[candidate]&&!busy[candidate]&&!(sv&&sslot==candidate)&&victim<0)victim=candidate;
   end
-  if(victim<0)for(integer w=0;w<4;w=w+1)begin candidate=(((replacement[qline[7:3]]+w)%4)<<5)|qline[7:3];if(!busy[candidate]&&!(sv&&sslot==candidate)&&victim<0)victim=candidate;end
+  if(victim<0)for(integer w=0;w<4;w=w+1)begin candidate=(((replacement[qline[OWNER_BITS+:5]]+w)%4)<<5)|qline[OWNER_BITS+:5];if(!busy[candidate]&&!(sv&&sslot==candidate)&&victim<0)victim=candidate;end
  end
  wire [255:0] base_data=last_valid&&last_slot==sslot?last_data:ram_q;
  reg [255:0] hit_data,fill_data;reg [3:0] hit_mask,fill_mask;
@@ -73,6 +78,7 @@ module sparse_owner_pipe(input wire clk,rst,iv,output wire ir,input wire [31:0] 
   if(rst)begin sv<=0;valid<=0;dirty<=0;busy<=0;mv<=0;ms<=0;mg<=0;wv<=0;ws<=0;wg<=0;mem_valid<=0;fence_done<=0;flushing<=0;flush_index<=0;last_valid<=0;error<=0;accepted<=0;retired<=0;hits<=0;misses<=0;merges<=0;raw_stall<=0;mshr_peak<=0;dirty_peak<=0;command_turn<=0;
    for(integer i=0;i<32;i=i+1)replacement[i]<=0;
   end else begin
+   if(write_ack)for(integer i=0;i<32;i=i+1)wait_write[i]<=wait_write[i]&~ack_mask;
    if(iv&&ir)accepted<=accepted+1;
    if(qv&&!qr)raw_stall<=raw_stall+1;
    if(count_m>mshr_peak)mshr_peak<=count_m;if(count_w>dirty_peak)dirty_peak<=count_w;
@@ -101,8 +107,9 @@ module sparse_owner_pipe(input wire clk,rst,iv,output wire ir,input wire [31:0] 
     if(miss_dispatch)begin
      sv<=1;skind<=1;sslot<=victim;sdirty<=dirty[victim];evict_line<=tags[victim];smiss<=fm;
      if(dirty[victim])begin swrite<=fw;wv[fw]<=1;ws[fw]<=0;wg[fw]<=0;wl[fw]<=tags[victim];end
+     wait_write[fm]<=allocation_wait;
      mv[fm]<=1;ms[fm]<=0;mg[fm]<=0;ml[fm]<=qline;slot_for_miss[fm]<=victim;mcount[fm]<=1;mc[fm]<={4{INF}};mc[fm][qd[65:64]*64+:64]<=qd[63:0];
-     valid[victim]<=0;dirty[victim]<=0;busy[victim]<=1;tags[victim]<=qline;replacement[qline[7:3]]<=victim[6:5]+1;misses<=misses+1;
+     valid[victim]<=0;dirty[victim]<=0;busy[victim]<=1;tags[victim]<=qline;replacement[qline[OWNER_BITS+:5]]<=victim[6:5]+1;misses<=misses+1;
     end
     if(flush_dispatch)begin swrite<=fw;wv[fw]<=1;ws[fw]<=0;wg[fw]<=0;wl[fw]<=tags[flush_index[6:0]];sv<=1;skind<=1;sslot<=flush_index[6:0];sdirty<=1;evict_line<=tags[flush_index[6:0]];dirty[flush_index[6:0]]<=0;flush_index<=flush_index+1;end
    end
@@ -113,4 +120,11 @@ module sparse_owner_pipe(input wire clk,rst,iv,output wire ir,input wire [31:0] 
    if(flushing&&flush_index==128&&!sv&&wv==0&&!mem_valid&&rc==0&&!rv&&event_count==0&&!update_valid)begin flushing<=0;fence_done<=1;end
   end
  end
+`ifndef SYNTHESIS
+ always @(posedge clk)if(!rst)begin
+  for(integer i=0;i<32;i=i+1)for(integer j=0;j<16;j=j+1)
+   if(mv[i]&&(wait_write[i][j] !== (wv[j]&&wl[j]==ml[i])))
+    $fatal(1,"write dependency differs from address-based guard: mshr=%0d slot=%0d",i,j);
+ end
+`endif
 endmodule
