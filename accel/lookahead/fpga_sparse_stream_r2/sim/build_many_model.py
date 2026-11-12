@@ -7,5 +7,7 @@ shutil.copy2(s/'owner_primitives_model.hpp',f/'owner_model.hpp')
 p=f/'many_tile_driver.cpp';p.write_text(p.read_text().replace('#include "Vr2_many_tile.h"\n#include "verilated.h"','#include "many_tile_model.hpp"\nusing Vr2_many_tile=r2_model::ManyTileModel<TILE_L,TILE_P,TILE_MC,TILE_CC,TILE_CACHE>;').replace('Verilated::commandArgs(argc,argv);','').replace('RTL functional cycles; hypothetical bounded physical memory; no qualified clock','independent C++ cycle model; hypothetical bounded physical memory; no qualified clock'))
 cmd=['g++','-O3','-std=c++17','-ffp-contract=off','-DR2_ARCH_MODEL=1',*(['-DR2_REGISTERED_READY=1'] if len(sys.argv)>7 and sys.argv[7]=='1' else []),f'-DTILE_CACHE={sys.argv[6] if len(sys.argv)>6 else 1}',f'-DTILE_L={sys.argv[2]}',f'-DTILE_P={sys.argv[3]}',f'-DTILE_MC={sys.argv[4]}',f'-DTILE_CC={sys.argv[5]}','-I'+str(root/'accel/lookahead/include'),str(p),'-o',str(r/'model')]
 if len(sys.argv)>8 and sys.argv[8]=='1':cmd.insert(1,'-DR2_SINGLE_COMBIN=1')
+if len(sys.argv)>9 and sys.argv[9]=='1':cmd.insert(1,'-DR2_IDLE_CACHE=1')
+if len(sys.argv)>10 and sys.argv[10]=='1':cmd.insert(1,'-DR2_REQUEST_STAGE=1')
 with (r/'build.log').open('w') as log:rc=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT).returncode
 (r/'source_binding.json').write_text(json.dumps({'command':cmd,'returncode':rc,'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in f.iterdir()}},indent=2));print('BUILD',rc,r);sys.exit(rc)

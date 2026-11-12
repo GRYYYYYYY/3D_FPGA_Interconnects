@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Elastic synchronous-RAM hit pipeline: tag/read of request k+1 overlaps
 // whole-line RMW/event publication of k. Miss/fill/eviction credits are finite.
-module sparse_owner_pipe #(parameter OWNER_BITS=3)(input wire clk,rst,iv,output wire ir,input wire [31:0] node,
+module sparse_owner_pipe #(parameter OWNER_BITS=3,REQUEST_STAGE=0)(input wire clk,rst,iv,output wire ir,input wire [31:0] node,
  input wire [63:0] pair,input wire fence,output reg fence_done,
  output wire update_valid,input wire update_ready,output wire [31:0] update_line,output wire [3:0] update_mask,
  output reg mem_valid,input wire mem_ready,output reg mem_write,output reg [31:0] mem_line,
@@ -11,7 +11,7 @@ module sparse_owner_pipe #(parameter OWNER_BITS=3)(input wire clk,rst,iv,output 
  output reg [5:0] mshr_peak,output reg [4:0] dirty_peak);
  localparam [63:0] INF=64'h7f8000007f800000;
  wire qv,qr,fifo_ir,rv,rr;wire [95:0] qd;wire [261:0] rd;wire [6:0] qc,rc;
- sparse_fifo #(.WIDTH(96)) request_fifo(clk,rst,iv&&!fence,fifo_ir,{node,pair},qv,qr,qd,qc);
+ sparse_fifo #(.WIDTH(96),.OUTPUT_STAGE(REQUEST_STAGE)) request_fifo(clk,rst,iv&&!fence,fifo_ir,{node,pair},qv,qr,qd,qc);
  sparse_fifo #(.WIDTH(262)) response_fifo(clk,rst,rsp_valid,rsp_ready,{rsp_id,rsp_data},rv,rr,rd,rc);
  assign ir=fifo_ir&&!fence;
  wire event_v,event_r;wire [35:0] event_data,event_out;wire [6:0] event_count;
@@ -28,20 +28,44 @@ module sparse_owner_pipe #(parameter OWNER_BITS=3)(input wire clk,rst,iv,output 
  reg [255:0] ram_q,last_data;reg [6:0] last_slot;reg last_valid;
  reg flushing;reg [7:0] flush_index;reg command_turn;
  wire [31:0] qline={2'b0,qd[95:66]};
- integer hit,matching,fm,fw,victim,issue_m,issue_w,count_m,count_w;integer candidate;
+ integer hit,victim,count_m,count_w;integer candidate;
+ wire signed [31:0] matching,fm,fw,issue_m,issue_w;
  reg [15:0] wait_write[0:31];wire [15:0] allocation_wait;
  wire write_ack=rv&&rr&&rd[261];
  wire [15:0] ack_mask=write_ack?(16'b1<<rd[259:256]):16'b0;
  for(genvar j=0;j<16;j=j+1)begin:write_dependencies
   assign allocation_wait[j]=wv[j]&&wl[j]==qline&&!ack_mask[j];
  end
- always @*begin
-  hit=-1;matching=-1;fm=-1;fw=-1;victim=-1;issue_m=-1;issue_w=-1;count_m=0;count_w=0;candidate=0;
-  for(integer i=0;i<32;i=i+1)begin
-   if(mv[i])begin count_m=count_m+1;if(ml[i]==qline)matching=i;end else if(fm<0)fm=i;
-   if(mv[i]&&mg[i]&&!ms[i]&&wait_write[i]==0&&issue_m<0)issue_m=i;
+ // Balanced bit selection preserves exact low-ID issue/free priority and
+ // the old high-ID matching priority. No linear 32-entry priority cascade.
+ function automatic [5:0] first32(input [31:0] bits);
+  reg [31:0] x;reg [4:0] index;
+  begin x=bits;index=0;
+   if(x[15:0]==0)begin index[4]=1;x=x>>16;end
+   if(x[7:0]==0)begin index[3]=1;x=x>>8;end
+   if(x[3:0]==0)begin index[2]=1;x=x>>4;end
+   if(x[1:0]==0)begin index[1]=1;x=x>>2;end
+   if(!x[0])index[0]=1;
+   first32={|bits,index};
   end
-  for(integer i=0;i<16;i=i+1)begin if(wv[i])count_w=count_w+1;else if(fw<0)fw=i;if(wv[i]&&wg[i]&&!ws[i]&&issue_w<0)issue_w=i;end
+ endfunction
+ wire [31:0] issue_bits,match_reverse;wire [15:0] write_bits=wv&wg&~ws;
+ for(genvar k=0;k<32;k=k+1)begin:selection_bits
+  assign issue_bits[k]=mv[k]&&mg[k]&&!ms[k]&&wait_write[k]==0;
+  assign match_reverse[31-k]=mv[k]&&ml[k]==qline;
+ end
+ wire [5:0] sel_m=first32(issue_bits),sel_w=first32({16'b0,write_bits});
+ wire [5:0] free_m=first32(~mv),free_w=first32({16'b0,~wv});
+ wire [5:0] match_id=first32(match_reverse);
+ assign issue_m=sel_m[5]?{27'b0,sel_m[4:0]}:32'hffffffff;
+ assign issue_w=sel_w[5]?{27'b0,sel_w[4:0]}:32'hffffffff;
+ assign fm=free_m[5]?{27'b0,free_m[4:0]}:32'hffffffff;
+ assign fw=free_w[5]?{27'b0,free_w[4:0]}:32'hffffffff;
+ assign matching=match_id[5]?32'd31-{27'b0,match_id[4:0]}:32'hffffffff;
+ always @*begin
+  hit=-1;victim=-1;count_m=0;count_w=0;candidate=0;
+  for(integer i=0;i<32;i=i+1)if(mv[i])count_m=count_m+1;
+  for(integer i=0;i<16;i=i+1)if(wv[i])count_w=count_w+1;
   for(integer w=0;w<4;w=w+1)begin
    candidate=(w<<5)|qline[OWNER_BITS+:5];
    if(valid[candidate]&&!busy[candidate]&&tags[candidate]==qline)hit=candidate;

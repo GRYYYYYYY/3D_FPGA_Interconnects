@@ -18,6 +18,30 @@ template<class T,unsigned N=64>struct Fifo{
  }
  void step(bool iv,const T& data,bool ordy){bool put=iv&&ready(ordy),take=(!ov||ordy)&&count;T read=ram[rp];if(put){ram[wp]=data;wp=(wp+1)%N;}if(take){od=read;rp=(rp+1)%N;}count+=put;count-=take;if(!ov||ordy)ov=take;}
 };
+// Optional FF stage after the synchronous RAM, with the original total
+// admission capacity. No additional queue entries are supplied by the model.
+template<class T,unsigned N=64>struct PipelineFifo {
+ Fifo<T,N> ram;unsigned count=0;bool ov=false;T od{};
+ bool ready(bool ordy)const{
+#ifdef R2_REGISTERED_READY
+  return count+ov<N;
+#else
+  return count+ov<N||(ov&&ordy);
+#endif
+ }
+ void step(bool iv,const T&data,bool ordy){
+  const bool put=iv&&ready(ordy),advance=!ov||ordy;
+  const bool v=ram.ov;const T q=ram.od;
+  ram.step(put,data,advance);
+  if(advance){ov=v;if(v)od=q;}
+  count=ram.count+ram.ov;
+ }
+};
+#ifdef R2_REQUEST_STAGE
+ template<class T,unsigned N=64>using RequestFifo=PipelineFifo<T,N>;
+#else
+ template<class T,unsigned N=64>using RequestFifo=Fifo<T,N>;
+#endif
 struct Candidate{uint32_t node=0;uint64_t pair=0;};struct Response{unsigned id=0;Line data{};};
 struct OwnerModel{
  bool clk=false,rst=false,iv=false,ir=false,fence=false,fence_done=false,update_valid=false,update_ready=false;

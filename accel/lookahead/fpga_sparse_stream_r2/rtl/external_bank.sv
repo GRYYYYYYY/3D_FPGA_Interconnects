@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Sparse directory/member bank with finite cached external labels, pending and
 // changed marks. No array is indexed by the full graph's node count.
-module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog2(MC),USE_URAM=0)(
+module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog2(MC),USE_URAM=0,REQUEST_STAGE=0)(
  input wire clk,rst,input wire [2:0] command,input wire [11:0] bucket,
  input wire [31:0] source,node_count,state_base,input wire upstream_fenced,
  output reg done,output reg has_bucket,output reg [11:0] min_bucket,output wire error,
@@ -50,7 +50,7 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
  assign mrv=nov&&notag[5];assign rid=notag[4:0];assign rn=non;assign first_mark=nost[0];
  wire bank_response=nov&&!notag[5];
  wire [31:0] ns0,ns1,ns2,ns3,ns4,ns5;wire [5:0] ns6;wire [4:0] ns7;
- r2_node_state #(.OWNER_BITS(OWNER_BITS)) node_state(clk,rst,niv,nir,selected?mn:sn,selected?3'd1:sop,
+ r2_node_state #(.OWNER_BITS(OWNER_BITS),.REQUEST_STAGE(REQUEST_STAGE)) node_state(clk,rst,niv,nir,selected?mn:sn,selected?3'd1:sop,
   selected?64'b0:sval,selected?32'b0:sarg,{selected,selected?mid:sid},state_base,node_count,state_fence,state_done,
   nov,1'b1,non,notag,nost,nold,state_mem_valid,state_mem_ready,state_mem_write,state_mem_line,state_mem_id,state_mem_data,
   state_rsp_valid,state_rsp_ready,state_rsp_id,state_rsp_data,state_idle,state_error,ns0,ns1,ns2,ns3,ns4,ns5,ns6,ns7);

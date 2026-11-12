@@ -6,7 +6,7 @@ struct OwnerF0Cycle:sparse_model::OwnerModel{
  unsigned owner_bits=3; // Global line addresses; no cache indexing in F0.
  struct Miss{bool valid=false,sent=false,ready=false;uint32_t node=0;uint64_t candidate=0;Line data{};};
  struct Write{bool valid=false,sent=false;unsigned miss=0;Line data{};};
- struct Core{std::array<Miss,32> miss{};std::array<Write,16> write{};Fifo<Candidate> requests;Fifo<Response> responses;unsigned state=0,selected=0;Line fill_q{};} c;
+ struct Core{std::array<Miss,32> miss{};std::array<Write,16> write{};sparse_model::RequestFifo<Candidate> requests;Fifo<Response> responses;unsigned state=0,selected=0;Line fill_q{};} c;
  void combin(){bool collision=false;int fm=-1;for(unsigned i=0;i<32;++i){auto m=c.miss[i];collision|=m.valid&&m.node/4==c.requests.od.node/4;if(!m.valid&&fm<0)fm=i;}bool qr=c.state==0&&!c.responses.ov&&!update_valid&&fm>=0&&!collision;ir=c.requests.ready(qr)&&!fence;rsp_ready=c.responses.ready(c.state==0&&!update_valid);bool pending=false;for(auto m:c.miss)pending|=m.valid;for(auto w:c.write)pending|=w.valid;idle=c.state==0&&!c.requests.count&&!c.requests.ov&&!c.responses.count&&!c.responses.ov&&!pending&&!mem_valid&&!update_valid;}
  void eval(){if(clk&&!last_clk)step();last_clk=clk;combin();}
  void step(){

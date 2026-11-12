@@ -13,11 +13,16 @@ r = root / 'results/fpga_sparse_stream_r2_20261112'
 version = sys.argv[1]
 latency = sys.argv[2] if len(sys.argv) > 2 else '60'
 gap = sys.argv[3] if len(sys.argv) > 3 else '2'
+physical = dict(zip(['R2_KERNEL_PERIOD_PS', 'R2_MEMORY_BASE_PS', 'R2_MEMORY_GAP_PS'], sys.argv[4:7]))
+if physical and (len(physical) != 3 or any(int(x) <= 0 for x in physical.values())):
+    raise ValueError('fixed physical time requires positive period_ps base_ps gap_ps')
 exe = r / 'model' / version / 'model'
-out = r / 'model' / version / ('large_l' + latency + '_g' + gap)
+tag = ('large_ps' + '_'.join(physical.values())) if physical else ('large_l' + latency + '_g' + gap)
+out = r / 'model' / version / tag
 out.mkdir(exist_ok=False)
 env = os.environ.copy()
 env.update(R2_MAX_CYCLES='5000000000', R2_COMPACT_TRACE='1')
+env.update(physical)
 items = json.loads((r / 'semantics/native_complete.json').read_text())[2:]
 
 def run(item):
@@ -32,7 +37,7 @@ def run(item):
                'executable_sha256': hashlib.sha256(exe.read_bytes()).hexdigest(),
                'workload_sha256': item['workload_sha256'],
                'golden_sha256': item['golden_sha256'],
-               'env': {k: env[k] for k in ['R2_MAX_CYCLES', 'R2_COMPACT_TRACE']},
+               'env': {k: v for k, v in env.items() if k.startswith('R2_')},
                'started_unix': time.time()}
     with (d / 'console.log').open('w') as log:
         p = subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT, env=env)

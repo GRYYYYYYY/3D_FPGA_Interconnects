@@ -1,7 +1,7 @@
 from pathlib import Path
 s=Path(__file__).resolve().parents[1]
 t=(s/'rtl/external_tile.sv').read_text()
-t=t.replace('module r2_external_tile #(parameter','module r2_many_tile #(parameter L=32,PHYS=32,OWNER_BITS=$clog2(L),C=5*L+1,CTL=4*L,USE_URAM=1,CACHE_ENABLE=1,')
+t=t.replace('module r2_external_tile #(parameter','module r2_many_tile #(parameter L=32,PHYS=32,OWNER_BITS=$clog2(L),C=5*L+1,CTL=4*L,USE_URAM=1,CACHE_ENABLE=1,REQUEST_STAGE=0,')
 t=t.replace('POP_REDUCE=1,MEMBER_CAP=1024,CHANGED_LIMIT=512','POP_REDUCE=1,MEMBER_CAP=8192,CHANGED_LIMIT=8192')
 # Top bus and logical fabric dimensions, kept distinct from eight reducer banks.
 for a,b in [('[7:0] physical','[PHYS-1:0] physical'),('[255:0] physical_line','[PHYS*32-1:0] physical_line'),('[47:0] physical','[PHYS*6-1:0] physical'),('[2047:0] physical','[PHYS*256-1:0] physical'),('[7:0] issued','[L-1:0] issued'),('[255:0] commit_nodes','[L*32-1:0] commit_nodes'),('[7:0] owner_error','[L-1:0] owner_error'),('[255:0] active_counts','[L*32-1:0] active_counts'),('[47:0] mshr_peaks','[L*6-1:0] mshr_peaks'),('[39:0] dirty_peaks','[L*5-1:0] dirty_peaks'),('[40:0] mem_valid','[C-1:0] mem_valid'),('[1311:0] mem_line','[C*32-1:0] mem_line'),('[245:0] mem_id','[C*6-1:0] mem_id'),('[10495:0] mem_data','[C*256-1:0] mem_data'),('r2_shared_fabric #(.C(41))','r2_hier_fabric #(.L(L),.P(PHYS))'),('[23:0] leaf_op','[L*3-1:0] leaf_op'),('[63:0] leaf_epoch','[L*8-1:0] leaf_epoch'),('[7:0] leaf_done','[L-1:0] leaf_done'),('r2_control_tree control','r2_control_many #(.L(L)) control'),('[95:0] minima','[L*12-1:0] minima'),('[103:0] min_keys','[L*13-1:0] min_keys'),('[7:0] min_valid','[L-1:0] min_valid'),('r2_min8 minimum_tree','r2_min_many #(.L(L)) minimum_tree')]:
@@ -25,7 +25,7 @@ a=t.index('  wire [12:0] entries=');b=t.index('  assign leaf_done[n]=',a);reduce
 t=t[:a]+t[b:];t=t.replace('bank_done[n]&&reduce_init[n]','bank_done[n]&&reduce_init[n%8]')
 reducer=' for(genvar n=0;n<8;n=n+1)begin:reducers\n  wire [2:0] leaf_command=leaf_op[n*3+:3];wire leaf_reset=rst||leaf_command==7;\n'+reducer+' end\n'
 a=t.index(' // Each transition');t=t[:a]+reducer+t[a:]
-t=t.replace('.BANK(n),.MC','.BANK(n),.OWNER_BITS(OWNER_BITS),.USE_URAM(USE_URAM),.MC').replace('sparse_owner_pipe owner','sparse_owner_pipe #(.OWNER_BITS(OWNER_BITS)) owner')
+t=t.replace('.BANK(n),.MC','.BANK(n),.OWNER_BITS(OWNER_BITS),.USE_URAM(USE_URAM),.REQUEST_STAGE(REQUEST_STAGE),.MC').replace('sparse_owner_pipe owner','sparse_owner_pipe #(.OWNER_BITS(OWNER_BITS),.REQUEST_STAGE(REQUEST_STAGE)) owner')
 t=t.replace('wire [10:0] member_peak','wire [$clog2(MEMBER_CAP):0] member_peak').replace('wire [9:0] changed_peak,changed_occupancy','wire [$clog2(CHANGED_LIMIT):0] changed_peak,changed_occupancy')
 # Fixed legacy logical client offsets are translated as complete tokens.
 for a,b in [('24+n','3*L+n'),('16+n','2*L+n'),('33+n','4*L+1+n'),('8+n','L+n')]:t=t.replace(a,b)

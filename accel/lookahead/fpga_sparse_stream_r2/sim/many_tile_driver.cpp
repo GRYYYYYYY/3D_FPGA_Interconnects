@@ -34,9 +34,15 @@ int main(int argc,char**argv){try{
  Verilated::commandArgs(argc,argv);la::Workload w(argv[1]);std::ifstream prep(argv[2],std::ios::binary);uint64_t header[6];prep.read((char*)header,sizeof(header));
  if(header[0]!=0x5350415253455632ull)throw std::runtime_error("prepared magic");std::vector<uint64_t> row(header[1]+1);std::vector<uint32_t> edge(header[2]);la::read(prep,row.data(),row.size());la::read(prep,edge.data(),edge.size());
  unsigned latency=argc>5?std::stoul(argv[5]):16,seed=argc>6?std::stoul(argv[6]):1729,gap=argc>7?std::stoul(argv[7]):2;
+ // Optional fixed physical time contract. Requests/responses are sampled
+ // on the kernel clock, with conservative integer-cycle quantization and no CDC.
+ auto env_ps=[](const char*name,uint64_t fallback){const char*p=std::getenv(name);return p?std::stoull(p):fallback;};
+ uint64_t period_ps=env_ps("R2_KERNEL_PERIOD_PS",0),base_ps=env_ps("R2_MEMORY_BASE_PS",0),gap_ps=env_ps("R2_MEMORY_GAP_PS",0),jitter_ps=env_ps("R2_MEMORY_JITTER_STEP_PS",5000);
+ if(period_ps){if(!base_ps||!gap_ps)throw std::runtime_error("fixed-ns contract requires positive base and gap");latency=(base_ps+period_ps-1)/period_ps;gap=(gap_ps+period_ps-1)/period_ps;}
  if(w.h.jobs>64||w.h.nodes>4194304||w.h.cells>32768||!w.h.cells||!w.h.jobs||!w.h.costs||w.h.costs>16)throw std::runtime_error("M4 external tile capacity admission");
  std::filesystem::create_directories(argv[4]);std::string out=argv[4];std::ofstream cycles(out+"/cycles.csv"),commits(out+"/commits.csv"),events(out+"/phases.csv");
  cycles<<"cycle,sample,wave,phase,issued,accepted,committed,outstanding\n";commits<<"sample,wave,node\n";events<<"cycle,sample,wave,phase\n";
+ if(period_ps){std::ofstream contract(out+"/physical_time_contract.json");contract<<"{\"kernel_period_ps\":"<<period_ps<<",\"base_latency_ps\":"<<base_ps<<",\"minimum_service_gap_ps\":"<<gap_ps<<",\"jitter_step_ps\":"<<jitter_ps<<",\"jitter_steps\":13,\"base_cycles_ceiling\":"<<latency<<",\"service_gap_cycles_ceiling\":"<<gap<<",\"ports_clock\":\"kernel synchronous; no CDC; rounded upward\",\"board_measured\":false}\n";}
  auto align=[](unsigned v){return (v+255)&~255u;};const unsigned SB=align((w.h.nodes+4*L-1)/(4*L)*L),RB=align(SB+(w.h.nodes+4*L-1)/(4*L)*2*L),EB=align(RB+(row.size()*8+31)/32),CB=align(EB+(edge.size()*4+31)/32),MB=align(CB+(w.h.costs*8+31)/32),CS=align((w.h.nodes*8+31)/32),JB=MB+w.h.jobs*CS,OB=align(JB+w.h.jobs),OS=(w.h.cells+3)/4;
  std::vector<Line> memory(OB+w.h.jobs*OS);memcpy(memory.data()+RB,row.data(),row.size()*8);memcpy(memory.data()+EB,edge.data(),edge.size()*4);
  for(unsigned i=0;i<w.h.costs;++i){uint32_t a,b;memcpy(&a,&w.cost[i].delay,4);memcpy(&b,&w.cost[i].congestion,4);memory[CB+i/4][i%4]=uint64_t(a)<<32|b;}
@@ -80,7 +86,7 @@ int main(int argc,char**argv){try{
     if(addr>=memory.size()||addr%P!=c)throw std::runtime_error("physical address/striping");for(auto &p:pending[c])if(p.id==id)throw std::runtime_error("duplicate physical ID");
     bool wr=d.physical_write>>c&1;Line data=memory[addr];unsigned a=addr<SB?(wr?0:1):addr<RB?(wr?8:9):addr<EB?2:addr<CB?3:addr<MB?4:addr<JB?5:addr<OB?6:7;++arrays[a];
     if(wr){++writes[c];for(unsigned s=0;s<4;++s)data[s]=uint64_t(d.physical_data[c*8+s*2+1])<<32|d.physical_data[c*8+s*2];}else ++reads[c];
-    pending[c].push_back({wr,addr,id,data,tick+latency+rng()%13});next[c]=tick+gap;
+    unsigned jitter=rng()%13;uint64_t delay=period_ps?(base_ps+jitter*jitter_ps+period_ps-1)/period_ps:latency+jitter;pending[c].push_back({wr,addr,id,data,tick+delay});next[c]=tick+gap;
    }
    if(pop){pending[c].erase(pending[c].begin()+response[c]);response[c]=-1;}
    high[c]=std::max<unsigned>(high[c],pending[c].size());outstanding+=pending[c].size();

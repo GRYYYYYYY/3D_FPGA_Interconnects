@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // Cache/merge disabled control: same64-entry interfaces,32 independent line
 // transactions and16 writes, explicit same-line serialization until write ACK.
-module sparse_owner_f0(input wire clk,rst,iv,output wire ir,input wire [31:0] node,
+module sparse_owner_f0 #(parameter REQUEST_STAGE=0)(input wire clk,rst,iv,output wire ir,input wire [31:0] node,
  input wire [63:0] pair,input wire fence,output reg fence_done,
  output reg update_valid,input wire update_ready,output reg [31:0] update_line,output reg [3:0] update_mask,
  output reg mem_valid,input wire mem_ready,output reg mem_write,output reg [31:0] mem_line,
@@ -10,7 +10,7 @@ module sparse_owner_f0(input wire clk,rst,iv,output wire ir,input wire [31:0] no
  output wire idle,output reg error,output reg [31:0] accepted,retired,merges,hits,misses,raw_stall,
  output reg [5:0] mshr_peak,output reg [4:0] dirty_peak);
  wire qv,qr,fifo_ir,rv,rr;wire [95:0] qd;wire [261:0] rd;wire [6:0] qc,rc;
- sparse_fifo #(.WIDTH(96)) requests(clk,rst,iv&&!fence,fifo_ir,{node,pair},qv,qr,qd,qc);
+ sparse_fifo #(.WIDTH(96),.OUTPUT_STAGE(REQUEST_STAGE)) requests(clk,rst,iv&&!fence,fifo_ir,{node,pair},qv,qr,qd,qc);
  sparse_fifo #(.WIDTH(262)) responses(clk,rst,rsp_valid,rsp_ready,{rsp_id,rsp_data},rv,rr,rd,rc);
  assign ir=fifo_ir&&!fence;
  reg [31:0] mv,ms,mready;reg [31:0] nodes[0:31];reg [63:0] candidates[0:31];

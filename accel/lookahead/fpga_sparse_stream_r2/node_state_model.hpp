@@ -34,13 +34,18 @@ struct NodeStateCycle {
  struct Event {uint32_t node=0;unsigned tag=0,status=0;Record old{};};
  struct Stage {bool valid=false,eviction=false,dirty=false;unsigned slot=0,miss=0,write=0;Request cand{};uint32_t line=0,evict_line=0;};
  struct Core {std::array<Cache,128> cache{};std::array<Miss,32> misses{};std::array<Write,16> writes{};std::array<unsigned,32> replacement{};
-  Fifo<Request> requests;Fifo<Response> responses;Fifo<Event> events;Stage stage;Line ram_q{},last_data{};bool last_valid=false,flushing=false,turn=false;unsigned last_slot=0,flush_index=0;
+  sparse_model::RequestFifo<Request> requests;Fifo<Response> responses;Fifo<Event> events;Stage stage;Line ram_q{},last_data{};bool last_valid=false,flushing=false,turn=false;unsigned last_slot=0,flush_index=0;
  } c;
  struct Wires {int hit=-1,matching=-1,fm=-1,fw=-1,victim=-1,im=-1,iw=-1;unsigned cm=0,cw=0;Applied hr{},fr{};Line base{},hitdata{},filldata{};bool advance=false,fillwait=false,filltake=false,qr=false,rr=false,dispatch=false,hitdispatch=false,missdispatch=false,flushdispatch=false,eventready=false;} w;
- bool last_clk=false;
+ bool last_clk=false,quiet_cached=false;
  static Line unpack(const std::array<uint32_t,8>& a){Line l{};for(unsigned i=0;i<4;++i)l[i]=uint64_t(a[2*i+1])<<32|a[2*i];return l;}
  void command(bool wr,uint32_t line,unsigned id,const Line& data){mem_valid=true;mem_write=wr;mem_line=line;mem_id=id;for(unsigned i=0;i<4;++i){mem_data[2*i]=data[i];mem_data[2*i+1]=data[i]>>32;}}
  void combin(){
+#ifdef R2_IDLE_CACHE
+  // Empty service has no in-flight timer or work. Cached combinational wires
+  // remain valid until a request/response, reset, or fence changes the state.
+  if(quiet_cached&&!rst&&!fence&&!fence_done)return;
+#endif
   w=Wires{};auto q=c.requests.od;uint32_t line=address(q.node);
   for(unsigned i=0;i<32;++i){auto &m=c.misses[i];if(m.valid){++w.cm;if(m.line==line)w.matching=i;}else if(w.fm<0)w.fm=i;if(m.valid&&m.go&&!m.sent&&w.im<0){bool hazard=false;for(auto &b:c.writes)if(b.valid&&b.line==m.line){hazard=true;break;}if(!hazard)w.im=i;}}
   for(unsigned i=0;i<16;++i){auto &b=c.writes[i];if(b.valid)++w.cw;else if(w.fw<0)w.fw=i;if(b.valid&&b.ready&&!b.sent&&w.iw<0)w.iw=i;}
@@ -60,9 +65,14 @@ struct NodeStateCycle {
   ir=c.requests.ready(w.qr)&&!fence;rsp_ready=c.responses.ready(w.rr);
   ov=c.events.ov;onode=c.events.od.node;otag=c.events.od.tag;status=c.events.od.status;old_record={uint32_t(c.events.od.old.label),uint32_t(c.events.od.old.label>>32),uint32_t(c.events.od.old.meta),uint32_t(c.events.od.old.meta>>32)};
   idle=!s.valid&&!c.flushing&&!c.requests.count&&!c.requests.ov&&!c.responses.count&&!c.responses.ov&&!w.cm&&!w.cw&&!mem_valid&&!c.events.count&&!c.events.ov;
+  quiet_cached=idle&&!fence&&!fence_done;
  }
  void eval(){if(clk&&!last_clk)step();last_clk=clk;combin();}
  void step(){
+#ifdef R2_IDLE_CACHE
+  if(quiet_cached&&!rst&&!iv&&!rsp_valid&&!fence&&!fence_done)return;
+#endif
+  quiet_cached=false;
   if(rst){c=Core{};mem_valid=fence_done=error=false;accepted=retired=merges=hits=misses=raw_stall=0;mshr_peak=dirty_peak=0;return;}
   // Snapshot only values read across this edge, not entire FIFO/cache arrays.
   // Every cycle is still evaluated; this is host implementation optimization.

@@ -94,12 +94,76 @@
       "cycle_log_exact_all": true,
       "scope": "complete8/8 externalstate,registered-ready,2native91fixtures2stress2address; not32",
       "record": "model/many8_reg_f0_model_a/suite_calibration/calibration.json"
+    },
+    {
+      "version": "many32_model_f",
+      "RTL": "many32_c",
+      "cases": 97,
+      "all_pass": true,
+      "scope": "complete topology bound to RTL/source receipts; no32/64 inheritance",
+      "record": "model/many32_model_f/tail_calibration/calibration.json"
+    },
+    {
+      "version": "many32_reg_model_c",
+      "RTL": "many32_reg_b",
+      "cases": 97,
+      "all_pass": true,
+      "scope": "complete topology bound to RTL/source receipts; no32/64 inheritance",
+      "record": "model/many32_reg_model_c/suite_calibration/calibration.json"
+    },
+    {
+      "version": "many32_reg_model_d",
+      "RTL": "many32_reg_b",
+      "cases": 97,
+      "all_pass": true,
+      "scope": "complete topology bound to RTL/source receipts; no32/64 inheritance",
+      "record": "model/many32_reg_model_d/suite_calibration/calibration.json"
+    },
+    {
+      "version": "many32_reg_model_e",
+      "RTL": "many32_reg_b",
+      "cases": 97,
+      "all_pass": true,
+      "scope": "complete topology bound to RTL/source receipts; no32/64 inheritance",
+      "record": "model/many32_reg_model_e/suite_calibration/calibration.json"
+    },
+    {
+      "version": "many8_reg_model_a",
+      "RTL": "many8_mshr_b",
+      "cases": 97,
+      "all_pass": true,
+      "scope": "complete topology bound to RTL/source receipts; no32/64 inheritance",
+      "record": "model/many8_reg_model_a/mshr_calibration/calibration.json"
+    },
+    {
+      "version": "many8_request_model_a",
+      "RTL": "many8_request_a",
+      "cases": 97,
+      "all_pass": true,
+      "scope": "complete topology bound to RTL/source receipts; no32/64 inheritance",
+      "record": "model/many8_request_model_a/suite_calibration/calibration.json"
+    },
+    {
+      "version": "many8_request_model_a",
+      "RTL": "many8_request_tree_b",
+      "cases": 97,
+      "all_pass": true,
+      "record": "model/many8_request_model_a/tree_calibration/calibration.json",
+      "scope": "complete bound topology; full cycle/output/traffic/phase/histogram exact"
+    },
+    {
+      "version": "many32_reg_model_e",
+      "RTL": "many32_mshr_a",
+      "cases": 97,
+      "all_pass": true,
+      "record": "model/many32_reg_model_e/mshr_calibration/calibration.json",
+      "scope": "complete bound topology; full cycle/output/traffic/phase/histogram exact"
     }
   ],
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "Finish complete8/32 OOC and32registered-ready domain calibration; integrateverifiedsinglewriteMSHR; finish40-native simulations,exactcapacity,F0/F1 and sensitivities. No qualified fullkernel clock.",
+  "next_action": "Finish actual routed contexts,32newrequest/selectiondomaincalibration, fullnative40batches,F0/F1 and sensitivity. Internalholdpositive is not completebareportclockqualification. No fullkernel clock or FPGAwin claimed.",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -126,7 +190,7 @@
     "capacity_q40_tests": 2,
     "new_model_calibrated": false
   },
-  "physical_channel_scope": "8/32 finite hierarchical ports;32oldready95traces exact,32tail97outputs passed;8registeredreadyF1/F0 each97traces exact;32registeredready calibration pending",
+  "physical_channel_scope": "complete8 and32 finite shared physical topology each calibrated97cases; modifiedREQUEST_STAGE1+balancedtree8calibrated,32pending",
   "owner_service_scope": {
     "version": "owner_pipe_c",
     "warm_hit_max_retire_II1_streak": 4096,
@@ -145,7 +209,7 @@
     "node_capacity": 512,
     "independent_model_calibrated": false
   },
-  "complete_small_rtl_latest": "many32_c97outputs pass;many8_reg_a and many8_reg_f0_a97RTL/model logs exact;many32_reg_b full regression running",
+  "complete_small_rtl_latest": "32registered-ready/singlewriteMSHR97exact;8newrequest-stage/balancedselection97exact;32newrequest_stage calibration pending",
   "large_node_state_standalone": {
     "rtl": "node_state_b",
     "node_address_space": 4194304,
@@ -165,24 +229,34 @@
     "OOC_verified": false
   },
   "vivado_sessions": {
-    "owner_mshr_ram_b5": "vivado-20261112-161837-7d305dc5",
     "bank8192_reg": "vivado-20261112-171744-63335f93",
     "many8_reg_b": "vivado-20261112-164509-ef1e3de5",
     "many8_mshr_b": "vivado-20261112-173934-eb0a0adf",
     "external_f": "vivado-20261112-180611-3c758959",
     "many32_c": "vivado-20261112-183223-bc1f6643",
-    "many32_reg_b": "vivado-20261112-185211-8e7c9bec"
+    "many32_reg_b": "vivado-20261112-185211-8e7c9bec",
+    "owner_context_a": "vivado-20261112-161837-7d305dc5",
+    "many32_mshr_a": "vivado-20261112-191902-487477ac",
+    "many8_context_tree_a": "vivado-20261112-194208-cd9c35ec"
   },
   "pending_commands": {
     "owner_mshr_ram_b5": "route active; actual synthesis6909LUT; unitwarm/stresspass",
-    "bank8192_reg": "route active; actualsynthesis14628LUT20BRAMequiv9URAM",
+    "bank8192_reg": "route completed negative; see routed reports",
     "many8_reg_b": "route active; actual358396LUT214592FF368RAMB36+112RAMB18;5ns synthWNS-3.017",
-    "many8_mshr_b": "synthesisactive19:09; same8modelrecalibration required",
+    "many8_mshr_b": "synthesis completed234982LUT; route active;97cyclecalibration passed",
     "external_f": "oldready full8route active; TIMING-16 remains1000reports; clock-source assumption alone does not resolve setup",
-    "many32_c": "synthesisactive;97RTLoutputs pass;many32_model_f tail_calibration active;2Q40checksactive",
+    "many32_c": "synthesisactive;97RTL/modelcalibration andbothQ40outputs passed",
     "many32_reg_b": "synthesisactive;complete97RTLregressionactive;newhotcapacity8192/8193active;many32_reg_model_c exactnative only",
-    "many32_reg_model_d": "experimental one low-phase combin evaluation, everyedge executed, native2cycletraces exact; fullsuite pending",
-    "many32_model_e": "BNN/LSTMcomplete40batchrunning; progress/receipt files authoritative; oldmemberpeak counter invalid=8192 untilpoolinitfix; notcomplete"
+    "many32_reg_model_d": "97fullcycle/trafficexact; full40runner11783; provisionalmarker outdated scope=now97passed but complete40stillpending",
+    "many32_model_e": "BNN/LSTMcomplete40batchrunning; progress/receipt files authoritative; oldmemberpeak counter invalid=8192 untilpoolinitfix; notcomplete",
+    "owner_context_a": "route active19:41; true BUFG/registeredphysicalcontext, REQUEST_STAGE1 oldlinearselect",
+    "many8_context_tree_a": "complete8 actualcontextandbalancedselection synthactive19:43",
+    "many32_mshr_a": "synthesisactive;97fullcycle/traffic/outputcalibration passed",
+    "many8_request_tree_b": "97fullcycle/traffic/outputcalibration passed",
+    "many32_f0_a": "complete97regression+modelcal45723",
+    "many32_request_tree_a": "build70084, modelbuild44080; fullRTLcalibration stillrequired",
+    "many32_reg_model_e": "97fullcycle/trafficexact; full40BNN/LSTM runner15007; preserveallcompletedoutputs",
+    "boundary_calibration": "many32_reg_b exact8192/8193pass; Q40firstpass secondrunning68615; then calibrate_many_boundaries.py many32_reg_model_c,many32_reg_model_d,many32_reg_model_e many32_reg_b"
   },
   "large_node_state_path_scope": {
     "build": "external_f",
@@ -277,7 +351,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-12T19:13:15.564813+00:00",
+  "updated_utc": "2026-11-12T19:56:16.677694+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -285,7 +359,10 @@
     "RAMB18": 6,
     "URAM": 9,
     "synth_WNS_ns": -0.502,
-    "scope": "actual singlebank; tail snapshot avoids uninitialized tail read and second write; registered ready; route pending"
+    "scope": "actual single bank mapped and routed; negative timing retained",
+    "routed_WNS_ns": -3.668,
+    "routed_WHS_ns": -2.54,
+    "clock_qualified": false
   },
   "owner_mshr_single_write": {
     "LUT": 6909,
@@ -299,7 +376,14 @@
     "warm_consecutive_retirements": 4096,
     "stress_accepted_retired": 4800,
     "trace_identical_to_previous": true,
-    "scope": "standalone owner; complete integration and routed clock pending"
+    "scope": "standalone owner; complete integration and routed clock pending",
+    "routed": {
+      "WNS_ns": -4.508,
+      "WHS_ns": -2.044,
+      "internal_register_hold_ns": 0.032,
+      "clock_qualified": false,
+      "scope": "bareportswithHD_CLK_SRCestimate; worstholdfromrstinput"
+    }
   },
   "clock_assumptions": {
     "new_OOC_HD_CLK_SRC": "BUFGCE_X0Y144",
@@ -309,5 +393,61 @@
     "methodology_skill_requires": "2026.1",
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
-  }
+  },
+  "checkpoint_commit": "d2b32e13d225b93b748fda7846abe1ce41e8c295",
+  "exact_hot_capacity": {
+    "RTL": "many32_reg_b",
+    "model": "many32_reg_model_c",
+    "owner": 0,
+    "physical_port": 0,
+    "node_count_exact": 1048577,
+    "unique_changed_exact": 8192,
+    "one_over_capacity": 8193,
+    "complete_positive_output": true,
+    "negative_explicit_reject_without_output": true,
+    "both_cycle_logs_exact": true,
+    "record": "rtl/many32_reg_b_hot_capacity8192/summary.json"
+  },
+  "request_output_pipeline": {
+    "default_enabled": false,
+    "option": "REQUEST_STAGE=1",
+    "capacity_including_all_stages": 64,
+    "warm_max_II1_streak": 4096,
+    "stress_accepted_retired": 4800,
+    "stress_cycles": 30842,
+    "complete8calibrated": true,
+    "complete32calibrated": false
+  },
+  "owner_selection_tree": {
+    "change": "balanced low-ID free/issue, preservedhigh-ID match selection",
+    "reason": "many8_mshr_b actualsynth80logic-level wait_write to wb enable",
+    "unit_traces_identical_to_request_stage": true,
+    "complete_regression": "8lane97exact;32newREQUEST_STAGEbuild pending"
+  },
+  "many8_mshr_resources": {
+    "LUT": 234982,
+    "FF": 149070,
+    "RAMB36": 368,
+    "RAMB18": 112,
+    "synth_WNS_ns": -14.402,
+    "clock_qualified": false,
+    "next": "balanced32-entry selection tree and actualregisteredcontext"
+  },
+  "physical_context": {
+    "scope": "actualsame-clock launch/capture registers andinternalBUFG; notfunctionaltestormemorycontroller/shell",
+    "resource_overhead_included": true,
+    "top_owner": "r2_owner_context",
+    "top_complete8": "r2_many8_context",
+    "context_LFSRs_are_performance_workload": false,
+    "clock_qualified": false,
+    "owner_context_synth": {
+      "LUT": 7400,
+      "FF": 4201,
+      "RAMB36": 13,
+      "RAMB18": 2,
+      "WNS_ns": -0.146,
+      "WHS_ns": -0.074
+    }
+  },
+  "fixed_ns_service": "new opt-in ps contract; roundbase+seededjitter andservicegap upward to kernel cycles; ports synchronous, noCDC/board; calibration pending"
 }
