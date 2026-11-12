@@ -1,0 +1,2 @@
+#include "bucket61.hpp"
+int main(int argc,char**argv){if(argc!=3)return 2;la::Workload w(argv[1]);la61::Prepared p(w);la61::ScratchT<std::map<uint32_t,std::vector<uint32_t>>> s(w.h.nodes);std::vector<la::Cost> out(w.h.jobs*w.h.cells);for(unsigned q=0;q<w.h.jobs;++q){auto v=la61::search<false>(w,q,p.targets[q],20,s,out.data()+q*w.h.cells,false,500000000,524288);if(v.status)return 3;}std::ofstream f(argv[2],std::ios::binary);la::write(f,out.data(),out.size());}

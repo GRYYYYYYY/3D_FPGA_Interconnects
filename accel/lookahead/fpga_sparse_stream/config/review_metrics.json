@@ -1,0 +1,87 @@
+{
+  "status": "derived_analysis_only_no_new_hardware_experiment",
+  "source_commit": "fe659f008fc58c913bb1c0232d9898caf79fd524",
+  "timing_scope": "RESIDENT_COMPLETE_BATCH_V2",
+  "historical_fpga_frequency_supported": false,
+  "cases": [
+    {
+      "case": "bnn",
+      "old_model_cycles": 3011527924278,
+      "old_model_assumed_frequency_hz": 200000000,
+      "old_model_seconds_projected": 15057.63962139,
+      "new_compact_cuda_resident_mean_s": 0.30468024222222223,
+      "new_compact_cuda_sample_sd_s": 0.00035960562103705385,
+      "ratio_projected_old_to_cuda": 49421.122654903,
+      "old_model_bytes": 1496253264672,
+      "old_model_effective_bandwidth_Bps": 102400000000,
+      "old_bytes_ideal_bandwidth_lower_bound_s": 14.6118482878125,
+      "cache_hit_fraction": 0.8544982282650669,
+      "cache_cycle_saving_fraction": 0.0001637514542258689,
+      "phase_cycle_fractions": [
+        0.00263694819363293,
+        0.19489761691707244,
+        0.2894153125762425,
+        3.11029159799195e-07,
+        0.3864113077580009,
+        0.1266385034979986,
+        0.0,
+        0.0
+      ],
+      "gpu_equal_cycle_budget_at_200MHz": 60936048.44444445,
+      "gpu_equal_cycle_budget_at_125MHz": 38085030.277777776
+    },
+    {
+      "case": "lstm",
+      "old_model_cycles": 3108929429228,
+      "old_model_assumed_frequency_hz": 200000000,
+      "old_model_seconds_projected": 15544.64714614,
+      "new_compact_cuda_resident_mean_s": 0.30605324977777776,
+      "new_compact_cuda_sample_sd_s": 0.002376012424283364,
+      "ratio_projected_old_to_cuda": 50790.66194339323,
+      "old_model_bytes": 1544541332544,
+      "old_model_effective_bandwidth_Bps": 102400000000,
+      "old_bytes_ideal_bandwidth_lower_bound_s": 15.083411450625,
+      "cache_hit_fraction": 0.8540705529248807,
+      "cache_cycle_saving_fraction": 0.00016189905373209523,
+      "phase_cycle_fractions": [
+        0.0025943015380708724,
+        0.19513952646736266,
+        0.28830859722202645,
+        3.0357717069002806e-07,
+        0.3869162727372359,
+        0.1270409984311145,
+        0.0,
+        0.0
+      ],
+      "gpu_equal_cycle_budget_at_200MHz": 61210649.95555555,
+      "gpu_equal_cycle_budget_at_125MHz": 38256656.22222222
+    }
+  ],
+  "bnn_work": {
+    "eligible_candidates": 1286937147,
+    "all_touched_destinations": 335766497,
+    "successful_commit_destinations": 104210988,
+    "active_parents": 102918965,
+    "directory_inserts": 102926901,
+    "waves": 2161,
+    "required_average_per_full_batch_cycle_at_200MHz": {
+      "candidates": 21.11947164039204,
+      "all_touched": 5.510145563608694,
+      "changed_only": 1.7101697707722125,
+      "active_parents": 1.6889668369919242
+    },
+    "ideal_sequential_expand_commit_floors_s_at_200MHz": {
+      "64_edges_8_touched": 0.310396025234375,
+      "32_edges_16_touched": 0.30601095953125,
+      "64_edges_16_touched": 0.205468994921875,
+      "64_edges_8_changed": 0.165673832109375
+    },
+    "whole_batch_byte_budget_at_102_4GBps": 31199256803.555557,
+    "same_old_bytes_to_budget_ratio": 47.9579777843132
+  },
+  "notes": [
+    "Rates and lower bounds are necessary conditions, not achieved performance.",
+    "The changed-only commit option requires an exact invariant and RTL implementation; no new candidate has run.",
+    "Existing ~0.25% calibration belongs to the old serial schedule and must not be inherited by a concurrent redesign."
+  ]
+}

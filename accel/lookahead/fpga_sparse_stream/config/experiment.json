@@ -1,0 +1,122 @@
+{
+  "candidate": "SPARSE_STREAMED_ALT_V2",
+  "revision": "resident_batch_commit16",
+  "base_commit": "fe659f008fc58c913bb1c0232d9898caf79fd524",
+  "Q": 1,
+  "algorithm": "ALT_BUCKET_FP32_V1",
+  "bucket_shift": 20,
+  "bucket_keys": 4096,
+  "descriptor_format": "dst28_cost4",
+  "cost_capacity": 16,
+  "timing_scope": "RESIDENT_COMPLETE_BATCH_V2",
+  "board_measured": false,
+  "old_model_calibration_reused": false,
+  "status": "tile_routed_timing_failed_P3_fixed_structure_scaling_stopped",
+  "selected_implemented_width": {
+    "lanes": 8,
+    "owners": 8
+  },
+  "tile_actual": {
+    "nodes_capacity": 4096,
+    "cells_per_sample_capacity": 64,
+    "samples_per_batch_capacity": 64,
+    "persistent_batch_output_pairs": 4096,
+    "member_pool_per_bank": 1024,
+    "changed_per_bank": 512,
+    "closed_per_bank": 512,
+    "active_storage": "finite bank-to-frontend handshake and4 parent contexts per lane; no unbounded active vector",
+    "parent_contexts_per_lane": 4,
+    "commit_processing_paths": 8,
+    "commit_reads_inflight_per_bank": 16,
+    "cache_ways": 4,
+    "cache_sets": 32,
+    "line_bytes": 32,
+    "MSHR_per_owner": 32,
+    "dirty_slots_per_owner": 16,
+    "owner_request_FIFO": 64,
+    "owner_response_FIFO": 64,
+    "router_FIFO_per_owner": 64,
+    "label_storage": "512x64 synchronous per bank; actual inference reported, not assumed BRAM",
+    "cost_load": "one runtime preload per batch; retained through sample resets",
+    "outputs": "4096x64 finite local array; per-sample64slot stride; all outputs retained to final D2H"
+  },
+  "memory_service": {
+    "source_status": "assumed, no board measurements",
+    "physical_channel_envelope": 32,
+    "used_services": 25,
+    "mapping": "8 owner +8 frontend +8 init/commit +1 cost/closure",
+    "bytes_per_transaction": 32,
+    "read_write_shared_issue_gap_cycles": 2,
+    "outstanding_limit_per_service": 64,
+    "latency_cycles_tested": [
+      16,
+      60,
+      120
+    ],
+    "response_jitter_cycles": [
+      0,
+      6
+    ],
+    "out_of_order": true,
+    "write_visible_at": "ACK",
+    "random_seed": 1729,
+    "reference_clock_assumed_hz": 200000000,
+    "nominal_used_port_cap_bytes_per_second": 80000000000
+  },
+  "functional_large": {
+    "members_physical_shared_pool": 524288,
+    "active_capacity": 524288,
+    "changed_capacity": 524288,
+    "closed_capacity": 524288,
+    "touched_oracle_capacity": "N; verification only",
+    "hash_occupancy_audits": [
+      8,
+      64
+    ],
+    "hardware_large_instantiated": false
+  },
+  "scale_gate": {
+    "default_goal_lanes": 64,
+    "default_goal_owners": 64,
+    "decision": "do not scale fixed structure at assumed200MHz under contract P3 necessary-bound gate",
+    "full64_OOC_run": false,
+    "complete_large_cycle_model_run": false,
+    "reason": "new complete40sample work and structural maximum32 candidates/cycle plus8/3 closures/cycle already exceed compact CUDA before commit/init/memory"
+  },
+  "verification_state": {
+    "sparse_control_verified": true,
+    "changed_commit_invariant_verified": true,
+    "parallel_frontend_verified": true,
+    "concurrent_owner_model_calibrated": true,
+    "tile_ooc_timing_supported": false,
+    "full_kernel_ooc_timing_supported": false,
+    "full_batch_superiority_under_declared_model": false,
+    "board_measured": false
+  },
+  "job_command_service": {
+    "source_status": "assumed local preloaded command producer at tile boundary",
+    "finite_jobs": 64,
+    "counted_start_cycles_per_sample": 1,
+    "runtime_fields": [
+      "source",
+      "target_count",
+      "cell_metadata_base"
+    ],
+    "outer_controller_in_tile_OOC": false,
+    "PCIe_per_sample_host_control_measured": false
+  },
+  "physical_target": {
+    "clock_hz": 200000000,
+    "setup_WNS_ns": -7.035,
+    "hold_WHS_ns": -0.048,
+    "route_completed": true,
+    "timing_supported": false,
+    "qualified_frequency_hz": null,
+    "same_route_125MHz": {
+      "setup_WNS_ns": -4.035,
+      "hold_WHS_ns": -0.048,
+      "timing_supported": false,
+      "new_implementation": false
+    }
+  }
+}

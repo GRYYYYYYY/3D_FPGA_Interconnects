@@ -1,0 +1,151 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date         : Thu Nov 12 07:50:04 2026
+| Host         : fpgaacc2--72bfa719011c-3hfvuvkzdl running 64-bit Ubuntu 22.04.4 LTS
+| Command      : report_ram_utilization -file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R1/results/fpga_sparse_stream_20261112/owner_ooc/ram_utilization.rpt
+| Design       : sparse_owner
+| Device       : xcu280-fsvh2892-2L-e
+| Speed File   : -2L
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+RAM Usage Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Memory Description
+3. Memory Utilization - Inferred
+4. Memory Performance - Inferred
+5. Block Ram / URAM Memory Power - Inferred
+
+1. Summary
+----------
+
++--------------------------+------------+-----------+-------+-----------+
+| Memory Type              | Total Used | Available | Util% | Inferred% |
++--------------------------+------------+-----------+-------+-----------+
+| URAM                     |          0 |       960 |  0.00 |      0.00 |
+| BlockRAM                 |       13.5 |      2016 |  0.67 |    100.00 |
+|  RAMB36E2                |         13 |           |       |    100.00 |
+|  RAMB18E2                |          1 |           |       |    100.00 |
+| LUTMs as Distributed RAM |        740 |    600960 |  0.12 |    100.00 |
+|  LUTMs as RAM64M8        |         96 |           |       |    100.00 |
+|  LUTMs as RAM64M         |         12 |           |       |    100.00 |
+|  LUTMs as RAM32M16       |        488 |           |       |    100.00 |
+|  LUTMs as RAM32M         |         24 |           |       |    100.00 |
+|  LUTMs as RAM128X1D      |        120 |           |       |    100.00 |
++--------------------------+------------+-----------+-------+-----------+
+*  Each RAMB18 is calculated as 0.5 BlockRAM
+**  Tables 2, 3, 4 and 5 cover RAMs inferred by Vivado Synthesis using XPMs or RTL inference
+***  XRAMs are not reported for detailed tables
+
+
+2. Memory Description
+---------------------
+
++------------------------------+------------+-------------+------------------------+------------------------+
+| Memory Name                  | Array Size | Memory Type | Port 1 Dimension / Map | Port 2 Dimension / Map |
++------------------------------+------------+-------------+------------------------+------------------------+
+| data_ram                     |      32768 | RAM_SDP     | 512x256                | 512x256                |
+|  data_ram_reg_0              |      36864 |             |  B:B:128x72            |  A:A:128x72            |
+|  data_ram_reg_1              |      36864 |             |  B:B:128x72            |  A:A:128x72            |
+|  data_ram_reg_2              |      36864 |             |  B:B:128x72            |  A:A:128x72            |
+|  data_ram_reg_3              |      20480 |             |  B:B:128x40            |  A:A:128x40            |
+| response_fifo/payload        |      16768 | RAM_SDP     | 512x262                | 512x262                |
+|  response_fifo/payload_reg_0 |      36864 |             |  B:B:64x72             |  A:A:64x72             |
+|  response_fifo/payload_reg_1 |      36864 |             |  B:B:64x72             |  A:A:64x72             |
+|  response_fifo/payload_reg_2 |      36864 |             |  B:B:64x72             |  A:A:64x72             |
+|  response_fifo/payload_reg_3 |      23552 |             |  B:B:64x46             |  A:A:64x46             |
+| request_fifo/payload         |       6144 | RAM_SDP     | 512x96                 | 512x96                 |
+|  request_fifo/payload_reg_0  |      36864 |             |  B:B:64x72             |  A:A:64x72             |
+|  request_fifo/payload_reg_1  |      12288 |             |  B:B:64x24             |  A:A:64x24             |
+| wb                           |       4096 | RAM_SDP     | 512x256                | 512x256                |
+|  wb_reg_0                    |      36864 |             |  B:B:16x72             |  A:A:16x72             |
+|  wb_reg_1                    |      36864 |             |  B:B:16x72             |  A:A:16x72             |
+|  wb_reg_2                    |      36864 |             |  B:B:16x72             |  A:A:16x72             |
+|  wb_reg_3                    |      20480 |             |  B:B:16x40             |  A:A:16x40             |
++------------------------------+------------+-------------+------------------------+------------------------+
+
+
+3. Memory Utilization - Inferred
+--------------------------------
+
++------------------------------+-----------+----------------+-----------+-----------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+
+| Memory Name                  | Primitive | Available Bits | Used Bits | Bit Util% | A Depth | A Depth Avail | A Depth Util% | A Width | A Width Avail | A Width Util% | B Depth | B Depth Avail | B Depth Util% | B Width | B Width Avail | B Width Util% |
++------------------------------+-----------+----------------+-----------+-----------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+
+| data_ram                     |           |                |           |           |         |               |               |         |               |               |         |               |               |         |               |               |
+|  data_ram_reg_0              | RAMB36E2  |          36864 |      9216 |     25.00 |     128 |           512 |         25.00 |      72 |            72 |        100.00 |     128 |           512 |         25.00 |      72 |            72 |        100.00 |
+|  data_ram_reg_1              | RAMB36E2  |          36864 |      9216 |     25.00 |     128 |           512 |         25.00 |      72 |            72 |        100.00 |     128 |           512 |         25.00 |      72 |            72 |        100.00 |
+|  data_ram_reg_2              | RAMB36E2  |          36864 |      9216 |     25.00 |     128 |           512 |         25.00 |      72 |            72 |        100.00 |     128 |           512 |         25.00 |      72 |            72 |        100.00 |
+|  data_ram_reg_3              | RAMB36E2  |          36864 |      5120 |     13.89 |     128 |           512 |         25.00 |      40 |            72 |         55.56 |     128 |           512 |         25.00 |      40 |            72 |         55.56 |
+| response_fifo/payload        |           |                |           |           |         |               |               |         |               |               |         |               |               |         |               |               |
+|  response_fifo/payload_reg_0 | RAMB36E2  |          36864 |      4608 |     12.50 |      64 |           512 |         12.50 |      72 |            72 |        100.00 |      64 |           512 |         12.50 |      72 |            72 |        100.00 |
+|  response_fifo/payload_reg_1 | RAMB36E2  |          36864 |      4608 |     12.50 |      64 |           512 |         12.50 |      72 |            72 |        100.00 |      64 |           512 |         12.50 |      72 |            72 |        100.00 |
+|  response_fifo/payload_reg_2 | RAMB36E2  |          36864 |      4608 |     12.50 |      64 |           512 |         12.50 |      72 |            72 |        100.00 |      64 |           512 |         12.50 |      72 |            72 |        100.00 |
+|  response_fifo/payload_reg_3 | RAMB36E2  |          36864 |      2944 |      7.99 |      64 |           512 |         12.50 |      46 |            72 |         63.89 |      64 |           512 |         12.50 |      46 |            72 |         63.89 |
+| request_fifo/payload         |           |                |           |           |         |               |               |         |               |               |         |               |               |         |               |               |
+|  request_fifo/payload_reg_0  | RAMB36E2  |          36864 |      4608 |     12.50 |      64 |           512 |         12.50 |      72 |            72 |        100.00 |      64 |           512 |         12.50 |      72 |            72 |        100.00 |
+|  request_fifo/payload_reg_1  | RAMB18E2  |          18432 |      1536 |      8.33 |      64 |           512 |         12.50 |      24 |            36 |         66.67 |      64 |           512 |         12.50 |      24 |            36 |         66.67 |
+| wb                           |           |                |           |           |         |               |               |         |               |               |         |               |               |         |               |               |
+|  wb_reg_0                    | RAMB36E2  |          36864 |      1152 |      3.12 |      16 |           512 |          3.12 |      72 |            72 |        100.00 |      16 |           512 |          3.12 |      72 |            72 |        100.00 |
+|  wb_reg_1                    | RAMB36E2  |          36864 |      1152 |      3.12 |      16 |           512 |          3.12 |      72 |            72 |        100.00 |      16 |           512 |          3.12 |      72 |            72 |        100.00 |
+|  wb_reg_2                    | RAMB36E2  |          36864 |      1152 |      3.12 |      16 |           512 |          3.12 |      72 |            72 |        100.00 |      16 |           512 |          3.12 |      72 |            72 |        100.00 |
+|  wb_reg_3                    | RAMB36E2  |          36864 |       640 |      1.74 |      16 |           512 |          3.12 |      40 |            72 |         55.56 |      16 |           512 |          3.12 |      40 |            72 |         55.56 |
++------------------------------+-----------+----------------+-----------+-----------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+
+
+
+4. Memory Performance - Inferred
+--------------------------------
+
++------------------------------+-----------+------------------------+------------------------+-------------+-------------------------+-------------+-------------------------+-----------+--------+--------+---------+-----------+--------+--------+---------+
+| Memory Name                  | Primitive | Port 1 Dimension / Map | Port 2 Dimension / Map | Port A Type | Port A Requirement (ns) | Port B Type | Port B Requirement (ns) | A Cascade | IREG_A | OREG_A | DOA_REG | B Cascade | IREG_B | OREG_B | DOB_REG |
++------------------------------+-----------+------------------------+------------------------+-------------+-------------------------+-------------+-------------------------+-----------+--------+--------+---------+-----------+--------+--------+---------+
+| data_ram                     |           | 512x256                | 512x256                |             |                         |             |                         |           |        |        |         |           |        |        |         |
+|  data_ram_reg_0              | RAMB36E2  |  B:B:128x72            |  A:A:128x72            |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
+|  data_ram_reg_1              | RAMB36E2  |  B:B:128x72            |  A:A:128x72            |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
+|  data_ram_reg_2              | RAMB36E2  |  B:B:128x72            |  A:A:128x72            |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
+|  data_ram_reg_3              | RAMB36E2  |  B:B:128x40            |  A:A:128x40            |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
+| response_fifo/payload        |           | 512x262                | 512x262                |             |                         |             |                         |           |        |        |         |           |        |        |         |
+|  response_fifo/payload_reg_0 | RAMB36E2  |  B:B:64x72             |  A:A:64x72             |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       1 |      NONE |        |        |       1 |
+|  response_fifo/payload_reg_1 | RAMB36E2  |  B:B:64x72             |  A:A:64x72             |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       1 |      NONE |        |        |       1 |
+|  response_fifo/payload_reg_2 | RAMB36E2  |  B:B:64x72             |  A:A:64x72             |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       1 |      NONE |        |        |       1 |
+|  response_fifo/payload_reg_3 | RAMB36E2  |  B:B:64x46             |  A:A:64x46             |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
+| request_fifo/payload         |           | 512x96                 | 512x96                 |             |                         |             |                         |           |        |        |         |           |        |        |         |
+|  request_fifo/payload_reg_0  | RAMB36E2  |  B:B:64x72             |  A:A:64x72             |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       1 |      NONE |        |        |       1 |
+|  request_fifo/payload_reg_1  | RAMB18E2  |  B:B:64x24             |  A:A:64x24             |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       1 |      NONE |        |        |       1 |
+| wb                           |           | 512x256                | 512x256                |             |                         |             |                         |           |        |        |         |           |        |        |         |
+|  wb_reg_0                    | RAMB36E2  |  B:B:16x72             |  A:A:16x72             |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
+|  wb_reg_1                    | RAMB36E2  |  B:B:16x72             |  A:A:16x72             |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
+|  wb_reg_2                    | RAMB36E2  |  B:B:16x72             |  A:A:16x72             |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
+|  wb_reg_3                    | RAMB36E2  |  B:B:16x40             |  A:A:16x40             |        Read |                     5.0 |       Write |                     5.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
++------------------------------+-----------+------------------------+------------------------+-------------+-------------------------+-------------+-------------------------+-----------+--------+--------+---------+-----------+--------+--------+---------+
+
+
+5. Block Ram / URAM Memory Power - Inferred
+-------------------------------------------
+
++------------------------------+-----------+------------------------+------------------------+--------------------+---------------+-------------------+-----------+--------------------+---------------+-------------------+-----------+
+| Memory Name                  | Primitive | Port 1 Dimension / Map | Port 2 Dimension / Map | Port A Power Gated | Port A Enable | Port A WRITE_MODE | A Cascade | Port B Power Gated | Port B Enable | Port B WRITE_MODE | B Cascade |
++------------------------------+-----------+------------------------+------------------------+--------------------+---------------+-------------------+-----------+--------------------+---------------+-------------------+-----------+
+| data_ram                     |           | 512x256                | 512x256                |                    |               |                   |           |                    |               |                   |           |
+|  data_ram_reg_0              | RAMB36E2  |  B:B:128x72            |  A:A:128x72            |                    |        SIGNAL |        READ_FIRST |      NONE |                    |         POWER |        READ_FIRST |      NONE |
+|  data_ram_reg_1              | RAMB36E2  |  B:B:128x72            |  A:A:128x72            |                    |        SIGNAL |        READ_FIRST |      NONE |                    |         POWER |        READ_FIRST |      NONE |
+|  data_ram_reg_2              | RAMB36E2  |  B:B:128x72            |  A:A:128x72            |                    |        SIGNAL |        READ_FIRST |      NONE |                    |         POWER |        READ_FIRST |      NONE |
+|  data_ram_reg_3              | RAMB36E2  |  B:B:128x40            |  A:A:128x40            |                    |        SIGNAL |        READ_FIRST |      NONE |                    |         POWER |        READ_FIRST |      NONE |
+| response_fifo/payload        |           | 512x262                | 512x262                |                    |               |                   |           |                    |               |                   |           |
+|  response_fifo/payload_reg_0 | RAMB36E2  |  B:B:64x72             |  A:A:64x72             |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |        READ_FIRST |      NONE |
+|  response_fifo/payload_reg_1 | RAMB36E2  |  B:B:64x72             |  A:A:64x72             |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |        READ_FIRST |      NONE |
+|  response_fifo/payload_reg_2 | RAMB36E2  |  B:B:64x72             |  A:A:64x72             |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |        READ_FIRST |      NONE |
+|  response_fifo/payload_reg_3 | RAMB36E2  |  B:B:64x46             |  A:A:64x46             |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |        READ_FIRST |      NONE |
+| request_fifo/payload         |           | 512x96                 | 512x96                 |                    |               |                   |           |                    |               |                   |           |
+|  request_fifo/payload_reg_0  | RAMB36E2  |  B:B:64x72             |  A:A:64x72             |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |        READ_FIRST |      NONE |
+|  request_fifo/payload_reg_1  | RAMB18E2  |  B:B:64x24             |  A:A:64x24             |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |        READ_FIRST |      NONE |
+| wb                           |           | 512x256                | 512x256                |                    |               |                   |           |                    |               |                   |           |
+|  wb_reg_0                    | RAMB36E2  |  B:B:16x72             |  A:A:16x72             |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |        READ_FIRST |      NONE |
+|  wb_reg_1                    | RAMB36E2  |  B:B:16x72             |  A:A:16x72             |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |        READ_FIRST |      NONE |
+|  wb_reg_2                    | RAMB36E2  |  B:B:16x72             |  A:A:16x72             |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |        READ_FIRST |      NONE |
+|  wb_reg_3                    | RAMB36E2  |  B:B:16x40             |  A:A:16x40             |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |        READ_FIRST |      NONE |
++------------------------------+-----------+------------------------+------------------------+--------------------+---------------+-------------------+-----------+--------------------+---------------+-------------------+-----------+
+
+

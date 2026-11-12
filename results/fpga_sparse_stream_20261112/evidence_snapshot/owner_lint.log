@@ -1,0 +1,101 @@
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/sync_fifo.sv:8:24: Operator ADD expects 7 bits on the RHS, but RHS's VARREF 'ov' generates 1 bits.
+                                                                        : ... In instance sparse_owner.response_fifo
+    8 |  assign occupancy=count+ov;
+      |                        ^
+                ... Use "/* verilator lint_off WIDTH */" and lint_on around source to disable this message.
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/sync_fifo.sv:14:17: Operator EQ expects 32 or 7 bits on the LHS, but LHS's VARREF 'wp' generates 6 bits.
+                                                                         : ... In instance sparse_owner.response_fifo
+   14 |    if(put)wp<=wp==DEPTH-1?0:wp+1;
+      |                 ^~
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/sync_fifo.sv:15:18: Operator EQ expects 32 or 7 bits on the LHS, but LHS's VARREF 'rp' generates 6 bits.
+                                                                         : ... In instance sparse_owner.response_fifo
+   15 |    if(take)rp<=rp==DEPTH-1?0:rp+1;
+      |                  ^~
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:44:80: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's REPLICATE generates 7 bits.
+                                                                          : ... In instance sparse_owner
+   44 |    if(valid[{w[1:0],cur_line[7:3]}]&&tags[{w[1:0],cur_line[7:3]}]==cur_line)hit={w[1:0],cur_line[7:3]};
+      |                                                                                ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:45:85: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's REPLICATE generates 7 bits.
+                                                                          : ... In instance sparse_owner
+   45 |    if(!busy[{w[1:0],cur_line[7:3]}]&&!valid[{w[1:0],cur_line[7:3]}]&&victim<0)victim={w[1:0],cur_line[7:3]};
+      |                                                                                     ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:47:90: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's REPLICATE generates 7 bits.
+                                                                          : ... In instance sparse_owner
+   47 |   if(victim<0)for(integer w=0;w<4;w=w+1)if(!busy[{w[1:0],cur_line[7:3]}]&&victim<0)victim={w[1:0],cur_line[7:3]};
+      |                                                                                          ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:54:100: Bit extraction of array[31:0] requires 5 bit index, not 6 bits.
+                                                                           : ... In instance sparse_owner
+   54 |    for(integer s=0;s<4;s=s+1)if(mc[fillid][s*64+:64]<filldata[s*64+:64])begin nextdata[s*64+:64]=mc[fillid][s*64+:64];mask[s]=1;end
+      |                                                                                                    ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:54:35: Bit extraction of array[31:0] requires 5 bit index, not 6 bits.
+                                                                          : ... In instance sparse_owner
+   54 |    for(integer s=0;s<4;s=s+1)if(mc[fillid][s*64+:64]<filldata[s*64+:64])begin nextdata[s*64+:64]=mc[fillid][s*64+:64];mask[s]=1;end
+      |                                   ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:55:22: Bit extraction of array[31:0] requires 5 bit index, not 6 bits.
+                                                                          : ... In instance sparse_owner
+   55 |    ram_we=1;ram_wa=mw[fillid];ram_wd=nextdata;
+      |                      ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:64:34: Operator ASSIGNDLY expects 6 bits on the Assign RHS, but Assign RHS's VARREF 'count_m' generates 32 bits.
+                                                                          : ... In instance sparse_owner
+   64 |    if(count_m>mshr_peak)mshr_peak<=count_m;if(count_w>dirty_peak)dirty_peak<=count_w;
+      |                                  ^~
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:64:76: Operator ASSIGNDLY expects 5 bits on the Assign RHS, but Assign RHS's VARREF 'count_w' generates 32 bits.
+                                                                          : ... In instance sparse_owner
+   64 |    if(count_m>mshr_peak)mshr_peak<=count_m;if(count_w>dirty_peak)dirty_peak<=count_w;
+      |                                                                            ^~
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:69:79: Operator ASSIGNDLY expects 6 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+                                                                          : ... In instance sparse_owner
+   69 |     if(issue_w>=0)begin mem_valid<=1;mem_write<=1;mem_line<=wl[issue_w];mem_id<=32+issue_w;mem_data<=wb[issue_w];ws[issue_w]<=1;end
+      |                                                                               ^~
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:70:84: Operator ASSIGNDLY expects 6 bits on the Assign RHS, but Assign RHS's VARREF 'issue_m' generates 32 bits.
+                                                                          : ... In instance sparse_owner
+   70 |     else if(issue_m>=0)begin mem_valid<=1;mem_write<=0;mem_line<=ml[issue_m];mem_id<=issue_m;mem_data<=0;ms[issue_m]<=1;end
+      |                                                                                    ^~
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:81:58: Operator ASSIGNDLY expects 32 bits on the Assign RHS, but Assign RHS's SEL generates 30 bits.
+                                                                          : ... In instance sparse_owner
+   81 |     end else if(qv&&qr)begin cur_node<=qd[95:64];cur_line<=qd[95:66];cur_pair<=qd[63:0];state<=TAG;end
+      |                                                          ^~
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:91:42: Operator ASSIGNDLY expects 7 bits on the Assign RHS, but Assign RHS's VARREF 'hit' generates 32 bits.
+                                                                          : ... In instance sparse_owner
+   91 |     else if(hit>=0&&!busy[hit])begin slot<=hit;hits<=hits+1;state<=READ;end
+      |                                          ^~
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:92:73: Operator ASSIGNDLY expects 7 bits on the Assign RHS, but Assign RHS's VARREF 'victim' generates 32 bits.
+                                                                          : ... In instance sparse_owner
+   92 |     else if(free_m>=0&&victim>=0&&(!dirty[victim]||free_w>=0))begin slot<=victim;state<=READ;end
+      |                                                                         ^~
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:109:38: Bit extraction of array[31:0] requires 5 bit index, not 6 bits.
+                                                                           : ... In instance sparse_owner
+  109 |    FILL:begin retired<=retired+mcount[fillid];valid[mw[fillid]]<=1;busy[mw[fillid]]<=0;dirty[mw[fillid]]<=mask!=0;mv[fillid]<=0;ms[fillid]<=0;
+      |                                      ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:109:55: Bit extraction of array[31:0] requires 5 bit index, not 6 bits.
+                                                                           : ... In instance sparse_owner
+  109 |    FILL:begin retired<=retired+mcount[fillid];valid[mw[fillid]]<=1;busy[mw[fillid]]<=0;dirty[mw[fillid]]<=mask!=0;mv[fillid]<=0;ms[fillid]<=0;
+      |                                                       ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:109:75: Bit extraction of array[31:0] requires 5 bit index, not 6 bits.
+                                                                           : ... In instance sparse_owner
+  109 |    FILL:begin retired<=retired+mcount[fillid];valid[mw[fillid]]<=1;busy[mw[fillid]]<=0;dirty[mw[fillid]]<=mask!=0;mv[fillid]<=0;ms[fillid]<=0;
+      |                                                                           ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:109:96: Bit extraction of array[31:0] requires 5 bit index, not 6 bits.
+                                                                           : ... In instance sparse_owner
+  109 |    FILL:begin retired<=retired+mcount[fillid];valid[mw[fillid]]<=1;busy[mw[fillid]]<=0;dirty[mw[fillid]]<=mask!=0;mv[fillid]<=0;ms[fillid]<=0;
+      |                                                                                                ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:109:117: Bit extraction of var[31:0] requires 5 bit index, not 6 bits.
+                                                                            : ... In instance sparse_owner
+  109 |    FILL:begin retired<=retired+mcount[fillid];valid[mw[fillid]]<=1;busy[mw[fillid]]<=0;dirty[mw[fillid]]<=mask!=0;mv[fillid]<=0;ms[fillid]<=0;
+      |                                                                                                                     ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:109:131: Bit extraction of var[31:0] requires 5 bit index, not 6 bits.
+                                                                            : ... In instance sparse_owner
+  109 |    FILL:begin retired<=retired+mcount[fillid];valid[mw[fillid]]<=1;busy[mw[fillid]]<=0;dirty[mw[fillid]]<=mask!=0;mv[fillid]<=0;ms[fillid]<=0;
+      |                                                                                                                                   ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:110:53: Bit extraction of array[31:0] requires 5 bit index, not 6 bits.
+                                                                           : ... In instance sparse_owner
+  110 |     if(mask!=0)begin update_valid<=1;update_line<=ml[fillid];update_mask<=mask;state<=EVENT;end else state<=resume_state;
+      |                                                     ^
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:113:125: Operator ASSIGNDLY expects 7 bits on the Assign RHS, but Assign RHS's VARREF 'flush_index' generates 8 bits.
+                                                                            : ... In instance sparse_owner
+  113 |    FLUSH:if(flush_index==128)state<=IDLE;else if(!dirty[flush_index])flush_index<=flush_index+1;else if(free_w>=0)begin slot<=flush_index;state<=FREAD;end
+      |                                                                                                                             ^~
+%Warning-WIDTH: accel/lookahead/fpga_sparse_stream/rtl/owner_sync.sv:113:56: Bit extraction of var[127:0] requires 7 bit index, not 8 bits.
+                                                                           : ... In instance sparse_owner
+  113 |    FLUSH:if(flush_index==128)state<=IDLE;else if(!dirty[flush_index])flush_index<=flush_index+1;else if(free_w>=0)begin slot<=flush_index;state<=FREAD;end
+      |                                                        ^

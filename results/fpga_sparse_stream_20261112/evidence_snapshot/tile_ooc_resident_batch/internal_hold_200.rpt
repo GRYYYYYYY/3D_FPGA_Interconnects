@@ -1,0 +1,427 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date              : Thu Nov 12 11:17:33 2026
+| Host              : fpgaacc2--72bfa719011c-3hfvuvkzdl running 64-bit Ubuntu 22.04.4 LTS
+| Command           : report_timing -delay_type min -from [all_registers] -to [all_registers] -max_paths 10 -file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R1/results/fpga_sparse_stream_20261112/tile_ooc_resident_batch/internal_hold_200.rpt
+| Design            : sparse_tile
+| Device            : xcu280-fsvh2892
+| Speed File        : -2L  PRODUCTION 1.30 05-01-2022
+| Temperature Grade : E
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             0.019ns  (arrival time - required time)
+  Source:                 banks[1].front/emitcost_reg[62]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            banks[1].front/arithmetic/in_cost_reg[62]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.072ns  (logic 0.039ns (54.167%)  route 0.033ns (45.833%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.006ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.018ns
+    Source Clock Delay      (SCD):    0.012ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.012     0.012    banks[1].front/clk
+    SLICE_X79Y467        FDRE                                         r  banks[1].front/emitcost_reg[62]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X79Y467        FDRE (Prop_DFF_SLICEL_C_Q)
+                                                      0.039     0.051 r  banks[1].front/emitcost_reg[62]/Q
+                         net (fo=1, routed)           0.033     0.084    banks[1].front/arithmetic/cost[62]
+    SLICE_X79Y467        FDRE                                         r  banks[1].front/arithmetic/in_cost_reg[62]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.018     0.018    banks[1].front/arithmetic/clk
+    SLICE_X79Y467        FDRE                                         r  banks[1].front/arithmetic/in_cost_reg[62]/C
+                         clock pessimism              0.000     0.018    
+    SLICE_X79Y467        FDRE (Hold_CFF2_SLICEL_C_D)
+                                                      0.047     0.065    banks[1].front/arithmetic/in_cost_reg[62]
+  -------------------------------------------------------------------
+                         required time                         -0.065    
+                         arrival time                           0.084    
+  -------------------------------------------------------------------
+                         slack                                  0.019    
+
+Slack (MET) :             0.019ns  (arrival time - required time)
+  Source:                 banks[3].front/arithmetic/in_dst_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            banks[3].front/arithmetic/od_reg[1]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.072ns  (logic 0.039ns (54.167%)  route 0.033ns (45.833%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.006ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.018ns
+    Source Clock Delay      (SCD):    0.012ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.012     0.012    banks[3].front/arithmetic/clk
+    SLICE_X84Y419        FDRE                                         r  banks[3].front/arithmetic/in_dst_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X84Y419        FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.039     0.051 r  banks[3].front/arithmetic/in_dst_reg[1]/Q
+                         net (fo=1, routed)           0.033     0.084    banks[3].front/arithmetic/in_dst_reg_n_0_[1]
+    SLICE_X84Y419        FDRE                                         r  banks[3].front/arithmetic/od_reg[1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.018     0.018    banks[3].front/arithmetic/clk
+    SLICE_X84Y419        FDRE                                         r  banks[3].front/arithmetic/od_reg[1]/C
+                         clock pessimism              0.000     0.018    
+    SLICE_X84Y419        FDRE (Hold_CFF2_SLICEL_C_D)
+                                                      0.047     0.065    banks[3].front/arithmetic/od_reg[1]
+  -------------------------------------------------------------------
+                         required time                         -0.065    
+                         arrival time                           0.084    
+  -------------------------------------------------------------------
+                         slack                                  0.019    
+
+Slack (MET) :             0.019ns  (arrival time - required time)
+  Source:                 banks[0].front/emitcost_reg[10]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            banks[0].front/arithmetic/in_cost_reg[10]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.072ns  (logic 0.039ns (54.167%)  route 0.033ns (45.833%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.006ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.019ns
+    Source Clock Delay      (SCD):    0.013ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.013     0.013    banks[0].front/clk
+    SLICE_X108Y456       FDRE                                         r  banks[0].front/emitcost_reg[10]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X108Y456       FDRE (Prop_HFF_SLICEL_C_Q)
+                                                      0.039     0.052 r  banks[0].front/emitcost_reg[10]/Q
+                         net (fo=1, routed)           0.033     0.085    banks[0].front/arithmetic/cost[10]
+    SLICE_X108Y456       FDRE                                         r  banks[0].front/arithmetic/in_cost_reg[10]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.019     0.019    banks[0].front/arithmetic/clk
+    SLICE_X108Y456       FDRE                                         r  banks[0].front/arithmetic/in_cost_reg[10]/C
+                         clock pessimism              0.000     0.019    
+    SLICE_X108Y456       FDRE (Hold_HFF2_SLICEL_C_D)
+                                                      0.047     0.066    banks[0].front/arithmetic/in_cost_reg[10]
+  -------------------------------------------------------------------
+                         required time                         -0.066    
+                         arrival time                           0.085    
+  -------------------------------------------------------------------
+                         slack                                  0.019    
+
+Slack (MET) :             0.019ns  (arrival time - required time)
+  Source:                 banks[0].front/emitcost_reg[17]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            banks[0].front/arithmetic/in_cost_reg[17]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.072ns  (logic 0.039ns (54.167%)  route 0.033ns (45.833%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.006ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.019ns
+    Source Clock Delay      (SCD):    0.013ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.013     0.013    banks[0].front/clk
+    SLICE_X103Y451       FDRE                                         r  banks[0].front/emitcost_reg[17]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X103Y451       FDRE (Prop_HFF_SLICEL_C_Q)
+                                                      0.039     0.052 r  banks[0].front/emitcost_reg[17]/Q
+                         net (fo=1, routed)           0.033     0.085    banks[0].front/arithmetic/cost[17]
+    SLICE_X103Y451       FDRE                                         r  banks[0].front/arithmetic/in_cost_reg[17]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.019     0.019    banks[0].front/arithmetic/clk
+    SLICE_X103Y451       FDRE                                         r  banks[0].front/arithmetic/in_cost_reg[17]/C
+                         clock pessimism              0.000     0.019    
+    SLICE_X103Y451       FDRE (Hold_HFF2_SLICEL_C_D)
+                                                      0.047     0.066    banks[0].front/arithmetic/in_cost_reg[17]
+  -------------------------------------------------------------------
+                         required time                         -0.066    
+                         arrival time                           0.085    
+  -------------------------------------------------------------------
+                         slack                                  0.019    
+
+Slack (MET) :             0.019ns  (arrival time - required time)
+  Source:                 banks[0].front/emitcost_reg[2]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            banks[0].front/arithmetic/in_cost_reg[2]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.072ns  (logic 0.039ns (54.167%)  route 0.033ns (45.833%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.006ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.019ns
+    Source Clock Delay      (SCD):    0.013ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.013     0.013    banks[0].front/clk
+    SLICE_X108Y451       FDRE                                         r  banks[0].front/emitcost_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X108Y451       FDRE (Prop_HFF_SLICEL_C_Q)
+                                                      0.039     0.052 r  banks[0].front/emitcost_reg[2]/Q
+                         net (fo=1, routed)           0.033     0.085    banks[0].front/arithmetic/cost[2]
+    SLICE_X108Y451       FDRE                                         r  banks[0].front/arithmetic/in_cost_reg[2]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.019     0.019    banks[0].front/arithmetic/clk
+    SLICE_X108Y451       FDRE                                         r  banks[0].front/arithmetic/in_cost_reg[2]/C
+                         clock pessimism              0.000     0.019    
+    SLICE_X108Y451       FDRE (Hold_HFF2_SLICEL_C_D)
+                                                      0.047     0.066    banks[0].front/arithmetic/in_cost_reg[2]
+  -------------------------------------------------------------------
+                         required time                         -0.066    
+                         arrival time                           0.085    
+  -------------------------------------------------------------------
+                         slack                                  0.019    
+
+Slack (MET) :             0.019ns  (arrival time - required time)
+  Source:                 banks[0].front/emitcost_reg[40]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            banks[0].front/arithmetic/in_cost_reg[40]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.072ns  (logic 0.039ns (54.167%)  route 0.033ns (45.833%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.006ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.019ns
+    Source Clock Delay      (SCD):    0.013ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.013     0.013    banks[0].front/clk
+    SLICE_X92Y459        FDRE                                         r  banks[0].front/emitcost_reg[40]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X92Y459        FDRE (Prop_HFF_SLICEL_C_Q)
+                                                      0.039     0.052 r  banks[0].front/emitcost_reg[40]/Q
+                         net (fo=1, routed)           0.033     0.085    banks[0].front/arithmetic/cost[40]
+    SLICE_X92Y459        FDRE                                         r  banks[0].front/arithmetic/in_cost_reg[40]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.019     0.019    banks[0].front/arithmetic/clk
+    SLICE_X92Y459        FDRE                                         r  banks[0].front/arithmetic/in_cost_reg[40]/C
+                         clock pessimism              0.000     0.019    
+    SLICE_X92Y459        FDRE (Hold_HFF2_SLICEL_C_D)
+                                                      0.047     0.066    banks[0].front/arithmetic/in_cost_reg[40]
+  -------------------------------------------------------------------
+                         required time                         -0.066    
+                         arrival time                           0.085    
+  -------------------------------------------------------------------
+                         slack                                  0.019    
+
+Slack (MET) :             0.019ns  (arrival time - required time)
+  Source:                 banks[0].front/emitparent_reg[15]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            banks[0].front/arithmetic/in_parent_reg[15]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.072ns  (logic 0.039ns (54.167%)  route 0.033ns (45.833%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.006ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.019ns
+    Source Clock Delay      (SCD):    0.013ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.013     0.013    banks[0].front/clk
+    SLICE_X110Y458       FDRE                                         r  banks[0].front/emitparent_reg[15]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X110Y458       FDRE (Prop_HFF_SLICEL_C_Q)
+                                                      0.039     0.052 r  banks[0].front/emitparent_reg[15]/Q
+                         net (fo=1, routed)           0.033     0.085    banks[0].front/arithmetic/parent[15]
+    SLICE_X110Y458       FDRE                                         r  banks[0].front/arithmetic/in_parent_reg[15]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.019     0.019    banks[0].front/arithmetic/clk
+    SLICE_X110Y458       FDRE                                         r  banks[0].front/arithmetic/in_parent_reg[15]/C
+                         clock pessimism              0.000     0.019    
+    SLICE_X110Y458       FDRE (Hold_HFF2_SLICEL_C_D)
+                                                      0.047     0.066    banks[0].front/arithmetic/in_parent_reg[15]
+  -------------------------------------------------------------------
+                         required time                         -0.066    
+                         arrival time                           0.085    
+  -------------------------------------------------------------------
+                         slack                                  0.019    
+
+Slack (MET) :             0.019ns  (arrival time - required time)
+  Source:                 banks[0].front/emitparent_reg[16]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            banks[0].front/arithmetic/in_parent_reg[16]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.072ns  (logic 0.039ns (54.167%)  route 0.033ns (45.833%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.006ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.019ns
+    Source Clock Delay      (SCD):    0.013ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.013     0.013    banks[0].front/clk
+    SLICE_X110Y459       FDRE                                         r  banks[0].front/emitparent_reg[16]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X110Y459       FDRE (Prop_HFF_SLICEL_C_Q)
+                                                      0.039     0.052 r  banks[0].front/emitparent_reg[16]/Q
+                         net (fo=1, routed)           0.033     0.085    banks[0].front/arithmetic/parent[16]
+    SLICE_X110Y459       FDRE                                         r  banks[0].front/arithmetic/in_parent_reg[16]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.019     0.019    banks[0].front/arithmetic/clk
+    SLICE_X110Y459       FDRE                                         r  banks[0].front/arithmetic/in_parent_reg[16]/C
+                         clock pessimism              0.000     0.019    
+    SLICE_X110Y459       FDRE (Hold_HFF2_SLICEL_C_D)
+                                                      0.047     0.066    banks[0].front/arithmetic/in_parent_reg[16]
+  -------------------------------------------------------------------
+                         required time                         -0.066    
+                         arrival time                           0.085    
+  -------------------------------------------------------------------
+                         slack                                  0.019    
+
+Slack (MET) :             0.019ns  (arrival time - required time)
+  Source:                 banks[0].front/emitparent_reg[17]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            banks[0].front/arithmetic/in_parent_reg[17]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.072ns  (logic 0.039ns (54.167%)  route 0.033ns (45.833%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.006ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.019ns
+    Source Clock Delay      (SCD):    0.013ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.013     0.013    banks[0].front/clk
+    SLICE_X112Y461       FDRE                                         r  banks[0].front/emitparent_reg[17]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X112Y461       FDRE (Prop_HFF_SLICEL_C_Q)
+                                                      0.039     0.052 r  banks[0].front/emitparent_reg[17]/Q
+                         net (fo=1, routed)           0.033     0.085    banks[0].front/arithmetic/parent[17]
+    SLICE_X112Y461       FDRE                                         r  banks[0].front/arithmetic/in_parent_reg[17]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.019     0.019    banks[0].front/arithmetic/clk
+    SLICE_X112Y461       FDRE                                         r  banks[0].front/arithmetic/in_parent_reg[17]/C
+                         clock pessimism              0.000     0.019    
+    SLICE_X112Y461       FDRE (Hold_HFF2_SLICEL_C_D)
+                                                      0.047     0.066    banks[0].front/arithmetic/in_parent_reg[17]
+  -------------------------------------------------------------------
+                         required time                         -0.066    
+                         arrival time                           0.085    
+  -------------------------------------------------------------------
+                         slack                                  0.019    
+
+Slack (MET) :             0.019ns  (arrival time - required time)
+  Source:                 banks[0].front/emitparent_reg[22]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            banks[0].front/arithmetic/in_parent_reg[22]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.072ns  (logic 0.039ns (54.167%)  route 0.033ns (45.833%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.006ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.019ns
+    Source Clock Delay      (SCD):    0.013ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.013     0.013    banks[0].front/clk
+    SLICE_X113Y462       FDRE                                         r  banks[0].front/emitparent_reg[22]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y462       FDRE (Prop_HFF_SLICEL_C_Q)
+                                                      0.039     0.052 r  banks[0].front/emitparent_reg[22]/Q
+                         net (fo=1, routed)           0.033     0.085    banks[0].front/arithmetic/parent[22]
+    SLICE_X113Y462       FDRE                                         r  banks[0].front/arithmetic/in_parent_reg[22]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=121418, unset)       0.019     0.019    banks[0].front/arithmetic/clk
+    SLICE_X113Y462       FDRE                                         r  banks[0].front/arithmetic/in_parent_reg[22]/C
+                         clock pessimism              0.000     0.019    
+    SLICE_X113Y462       FDRE (Hold_HFF2_SLICEL_C_D)
+                                                      0.047     0.066    banks[0].front/arithmetic/in_parent_reg[22]
+  -------------------------------------------------------------------
+                         required time                         -0.066    
+                         arrival time                           0.085    
+  -------------------------------------------------------------------
+                         slack                                  0.019    
+
+
+
+
