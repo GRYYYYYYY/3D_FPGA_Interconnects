@@ -1,0 +1,53 @@
+{
+  "version": "many32_f0_bank_a",
+  "model": "many32_request_f0_model_a",
+  "small8_gate": "model/many8_request_model_b/bank_calibration/calibration.json",
+  "status": "running",
+  "steps": [
+    {
+      "command": [
+        "python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/build_many.py",
+        "many32_f0_bank_a",
+        "32",
+        "32",
+        "-GMEMBER_CAP=8192",
+        "-GCHANGED_LIMIT=8192",
+        "-GUSE_URAM=1",
+        "-GREQUEST_STAGE=1",
+        "-GCACHE_ENABLE=0"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py",
+        "many32_f0_bank_a",
+        "60",
+        "native"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py",
+        "many32_f0_bank_a",
+        "60",
+        "fixtures"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py",
+        "many32_f0_bank_a",
+        "120",
+        "stress,stress_random"
+      ],
+      "returncode": 0
+    }
+  ]
+}

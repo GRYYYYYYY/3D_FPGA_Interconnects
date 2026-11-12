@@ -57,6 +57,7 @@ m3_implemented_services:
   reducer_RAM: {standalone_RAMB36: 7, standalone_RAMB18: 1, scope: single_4096x65_bank_Vivado_2022_2_synthesis}
   complete_tile_OOC: pending
 m4_external_state:
+  scope: frozen_first_external_state_8lane_prototype
   latest_version: external_b
   lanes: 8
   physical_channels: 8
@@ -90,7 +91,7 @@ m5_candidate:
   physical_tag_capacity_per_channel: 64
   shallow_fabric_FIFO_style: distributed
   full_native_samples: 40
-  complete_batch_status: in_progress
+  complete_batch_status: F1_l16_g2_BNN_LSTM40_output_work_capacity_native_identity_passed_other_scenarios_running
   clock_qualified_mhz: null
   ooc_target_period_ns: 5
   ooc_clock_source_assumption: BUFGCE_X0Y144
@@ -103,7 +104,7 @@ m5_candidate:
   current_RTL: many32_bank_tree_a
   last_fully_calibrated_RTL: many32_way_tree_a
   current_model: many32_request_model_c
-  modified_path_calibration: bank_selection_8_97_passed_36_running_32_F1_F0_pending
+  modified_path_calibration: bank_selection_8_97_plus_36_and_two_Q40_passed_32_F1_97_plus_36_passed_F0_in_progress
   shared_fabric_32_calibration: 97_full_cycle_output_traffic_exact
   current_OOC: many32_bank_context_a
   main_seconds_qualified: false
@@ -152,5 +153,42 @@ bank_context_repair:
   XSim_cases: 689840
   XSim_all_pass: true
   complete8_97_cycle_output_traffic_exact: true
+  complete8_fixed_ns36_exact: true
+  complete8_Q40_output_boundaries_passed: 2
   complete32_F1_F0_recalibration: running
+  complete32_F1_97_cycle_output_traffic_exact: true
   clock_inherited: false
+
+qualified_shared_fabric_tile_OOC:
+  RTL: many8_fabric_tree_a
+  OOC: many8_context_reduction_b
+  lanes: 8
+  members_per_owner: 1024
+  changed_ids_per_owner: 512
+  tested_period_ns: 8
+  qualified_mhz: 125
+  setup_hold_pulse_width_ns: [0.177, 0.003, 3.458]
+  resource_counts: {LUT: 234728, FF: 154823, RAMB36: 368, RAMB18: 112, URAM: 0}
+  same_actual_routed_netlist_as_failed_5ns: true
+  source_parameters_and_97_plus_36_calibration_bound: true
+  scope: frozen_8_prototype_only_not_way_bank_32_candidate_or_board
+  report: timing/many8_context_reduction_b/routed_sta_v2/qualification_review.json
+  corrected_dependent_parameter_binding: timing/expression_bindings_2255.json
+
+complete_native_model_verified_scenario:
+  model: many32_request_model_c
+  cache: F1
+  lanes: 32
+  physical_channels: 32
+  jobs_each: 40
+  memory_base_latency_cycles: 16
+  memory_minimum_service_gap_cycles: 2
+  response_jitter_cycles: [0, 12]
+  seeded_ready_probability: 6_over_7_when_credit_and_gap_allow
+  BNN_cycles: 180141407
+  LSTM_cycles: 184018993
+  complete_output_work_ACK_capacity_checked: true
+  native_ALT_output_identity: true
+  work_audit: analysis/complete_work_many32_request_model_c_large_l16_g2.json
+  clock_qualified_mhz: null
+  board_measured: false

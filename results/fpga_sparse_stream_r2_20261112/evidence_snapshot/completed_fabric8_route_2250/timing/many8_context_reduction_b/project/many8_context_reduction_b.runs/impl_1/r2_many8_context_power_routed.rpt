@@ -1,0 +1,303 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version     : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date             : Thu Nov 12 22:29:41 2026
+| Host             : fpgaacc2--72bfa719011c-3hfvuvkzdl running 64-bit Ubuntu 22.04.4 LTS
+| Command          : report_power -file r2_many8_context_power_routed.rpt -pb r2_many8_context_power_summary_routed.pb -rpx r2_many8_context_power_routed.rpx
+| Design           : r2_many8_context
+| Device           : xcu280-fsvh2892-2L-e
+| Design State     : routed
+| Grade            : extended
+| Process          : typical
+| Characterization : Production
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Power Report
+
+Table of Contents
+-----------------
+1. Summary
+1.1 On-Chip Components
+1.2 Power Supply Summary
+1.3 Confidence Level
+2. Settings
+2.1 Environment
+2.2 Clock Constraints
+3. Detailed Reports
+3.1 By Hierarchy
+
+1. Summary
+----------
+
++--------------------------+--------------+
+| Total On-Chip Power (W)  | 11.591       |
+|   FPGA Power (W)         | 11.342       |
+|   HBM Power (W)          | 0.249        |
+| Design Power Budget (W)  | Unspecified* |
+| Power Budget Margin (W)  | NA           |
+| Dynamic (W)              | 8.281        |
+| Device Static (W)        | 3.311        |
+| Effective TJA (C/W)      | 0.4          |
+| Max Ambient (C)          | 94.9         |
+| Junction Temperature (C) | 30.1         |
+| Confidence Level         | Medium       |
+| Setting File             | ---          |
+| Simulation Activity File | ---          |
+| Design Nets Matched      | NA           |
++--------------------------+--------------+
+* Specify Design Power Budget using, set_operating_conditions -design_power_budget <value in Watts>
+
+
+1.1 On-Chip Components
+----------------------
+
++--------------------------+-----------+----------+-----------+-----------------+
+| On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
++--------------------------+-----------+----------+-----------+-----------------+
+| Clocks                   |     0.775 |        3 |       --- |             --- |
+| CLB Logic                |     2.482 |   452393 |       --- |             --- |
+|   LUT as Logic           |     2.008 |   217166 |   1303680 |           16.66 |
+|   LUT as Distributed RAM |     0.386 |    17562 |    600960 |            2.92 |
+|   Register               |     0.070 |   154823 |   2607360 |            5.94 |
+|   CARRY8                 |     0.018 |     3500 |    162960 |            2.15 |
+|   BUFG                   |    <0.001 |       10 |        96 |           10.42 |
+|   Others                 |     0.000 |      853 |       --- |             --- |
+|   F7/F8 Muxes            |     0.000 |    23489 |   1303680 |            1.80 |
+| Signals                  |     3.584 |   327942 |       --- |             --- |
+| Block RAM                |     1.439 |      424 |      2016 |           21.03 |
+| Static Power             |     3.311 |          |           |                 |
+| Total                    |    11.591 |          |           |                 |
++--------------------------+-----------+----------+-----------+-----------------+
+
+
+1.2 Power Supply Summary
+------------------------
+
++------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
+| Source     | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
++------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
+| Vccint     |       0.850 |    11.061 |       9.599 |      1.461 |       NA    | Unspecified | NA         |
+| Vccint_io  |       0.850 |     0.254 |       0.000 |      0.254 |       NA    | Unspecified | NA         |
+| Vccbram    |       0.850 |     0.178 |       0.143 |      0.035 |       NA    | Unspecified | NA         |
+| Vccaux     |       1.800 |     0.814 |       0.000 |      0.814 |       NA    | Unspecified | NA         |
+| Vccaux_io  |       1.800 |     0.035 |       0.000 |      0.035 |       NA    | Unspecified | NA         |
+| Vcco33     |       3.300 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco25     |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco18     |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco15     |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco135    |       1.350 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco12     |       1.200 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vcco10     |       1.000 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vccadc     |       1.800 |     0.024 |       0.000 |      0.024 |       NA    | Unspecified | NA         |
+| VCC_IO_HBM |       1.200 |     0.083 |       0.000 |      0.083 |       NA    | Unspecified | NA         |
+| VCC_HBM    |       1.200 |     0.081 |       0.000 |      0.081 |       NA    | Unspecified | NA         |
+| VCCAUX_HBM |       2.500 |     0.022 |       0.000 |      0.022 |       NA    | Unspecified | NA         |
+| MGTYAVcc   |       0.900 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| MGTYAVtt   |       1.200 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| MGTYVccaux |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
++------------+-------------+-----------+-------------+------------+-------------+-------------+------------+
+
+
+1.3 Confidence Level
+--------------------
+
++-----------------------------+------------+------------------------------------------------+------------------------------------------------------------------------------------------------------------+
+| User Input Data             | Confidence | Details                                        | Action                                                                                                     |
++-----------------------------+------------+------------------------------------------------+------------------------------------------------------------------------------------------------------------+
+| Design implementation state | High       | Design is routed                               |                                                                                                            |
+| Clock nodes activity        | High       | User specified more than 95% of clocks         |                                                                                                            |
+| I/O nodes activity          | High       | User specified more than 95% of inputs         |                                                                                                            |
+| Internal nodes activity     | Medium     | User specified less than 25% of internal nodes | Provide missing internal nodes activity with simulation results or by editing the "By Resource Type" views |
+| Device models               | High       | Device models are Production                   |                                                                                                            |
+|                             |            |                                                |                                                                                                            |
+| Overall confidence level    | Medium     |                                                |                                                                                                            |
++-----------------------------+------------+------------------------------------------------+------------------------------------------------------------------------------------------------------------+
+
+
+2. Settings
+-----------
+
+2.1 Environment
+---------------
+
++-----------------------+--------------------------+
+| Ambient Temp (C)      | 25.0                     |
+| ThetaJA (C/W)         | 0.4                      |
+| Airflow (LFM)         | 250                      |
+| Heat Sink             | medium (Medium Profile)  |
+| ThetaSA (C/W)         | 0.5                      |
+| Board Selection       | medium (10"x10")         |
+| # of Board Layers     | 12to15 (12 to 15 Layers) |
+| Board Temperature (C) | 25.0                     |
++-----------------------+--------------------------+
+
+
+2.2 Clock Constraints
+---------------------
+
++-------+--------+-----------------+
+| Clock | Domain | Constraint (ns) |
++-------+--------+-----------------+
+| clk   | clk    |             5.0 |
++-------+--------+-----------------+
+
+
+3. Detailed Reports
+-------------------
+
+3.1 By Hierarchy
+----------------
+
++------------------------------+-----------+
+| Name                         | Power (W) |
++------------------------------+-----------+
+| r2_many8_context             |     8.281 |
+|   dut                        |     7.947 |
+|     banks[0].bank            |     0.487 |
+|       changes                |     0.028 |
+|       node_state             |     0.314 |
+|       parents                |     0.019 |
+|       pool                   |     0.007 |
+|     banks[0].cached.owner    |     0.167 |
+|       event_fifo             |     0.013 |
+|       request_fifo           |     0.039 |
+|       response_fifo          |     0.047 |
+|     banks[0].front           |     0.069 |
+|       arithmetic             |     0.008 |
+|       node_reg_r2_0_3_0_13   |     0.002 |
+|     banks[0].meta            |     0.020 |
+|       nodes_reg_r2_0_15_0_13 |     0.001 |
+|     banks[1].bank            |     0.480 |
+|       changes                |     0.035 |
+|       node_state             |     0.319 |
+|       parents                |     0.019 |
+|       pool                   |     0.010 |
+|     banks[1].cached.owner    |     0.162 |
+|       event_fifo             |     0.013 |
+|       request_fifo           |     0.039 |
+|       response_fifo          |     0.045 |
+|     banks[1].front           |     0.074 |
+|       arithmetic             |     0.010 |
+|       node_reg_r2_0_3_0_13   |     0.002 |
+|     banks[1].meta            |     0.024 |
+|     banks[2].bank            |     0.485 |
+|       changes                |     0.031 |
+|       node_state             |     0.311 |
+|       parents                |     0.026 |
+|       pool                   |     0.008 |
+|     banks[2].cached.owner    |     0.186 |
+|       event_fifo             |     0.014 |
+|       request_fifo           |     0.042 |
+|       response_fifo          |     0.054 |
+|     banks[2].front           |     0.073 |
+|       arithmetic             |     0.010 |
+|       node_reg_r2_0_3_0_13   |     0.002 |
+|     banks[2].meta            |     0.021 |
+|       nodes_reg_r2_0_15_0_13 |     0.001 |
+|     banks[3].bank            |     0.447 |
+|       changes                |     0.038 |
+|       node_state             |     0.293 |
+|       parents                |     0.016 |
+|       pool                   |     0.005 |
+|     banks[3].cached.owner    |     0.174 |
+|       event_fifo             |     0.015 |
+|       request_fifo           |     0.041 |
+|       response_fifo          |     0.048 |
+|     banks[3].front           |     0.080 |
+|       arithmetic             |     0.011 |
+|       node_reg_r2_0_3_0_13   |     0.002 |
+|     banks[3].meta            |     0.030 |
+|       nodes_reg_r2_0_15_0_13 |     0.001 |
+|     banks[4].bank            |     0.467 |
+|       changes                |     0.041 |
+|       node_state             |     0.308 |
+|       parents                |     0.016 |
+|       pool                   |     0.006 |
+|     banks[4].cached.owner    |     0.170 |
+|       event_fifo             |     0.014 |
+|       request_fifo           |     0.039 |
+|       response_fifo          |     0.050 |
+|     banks[4].front           |     0.077 |
+|       arithmetic             |     0.006 |
+|       node_reg_r2_0_3_0_13   |     0.002 |
+|     banks[4].meta            |     0.031 |
+|     banks[5].bank            |     0.495 |
+|       changes                |     0.043 |
+|       node_state             |     0.317 |
+|       parents                |     0.015 |
+|       pool                   |     0.007 |
+|     banks[5].cached.owner    |     0.167 |
+|       event_fifo             |     0.013 |
+|       request_fifo           |     0.040 |
+|       response_fifo          |     0.047 |
+|     banks[5].front           |     0.072 |
+|       arithmetic             |     0.008 |
+|       node_reg_r2_0_3_0_13   |     0.002 |
+|     banks[5].meta            |     0.029 |
+|     banks[6].bank            |     0.485 |
+|       changes                |     0.036 |
+|       node_state             |     0.310 |
+|       parents                |     0.015 |
+|       pool                   |     0.008 |
+|     banks[6].cached.owner    |     0.160 |
+|       event_fifo             |     0.013 |
+|       request_fifo           |     0.039 |
+|       response_fifo          |     0.046 |
+|     banks[6].front           |     0.068 |
+|       arithmetic             |     0.010 |
+|       node_reg_r2_0_3_0_13   |     0.002 |
+|     banks[6].meta            |     0.019 |
+|     banks[7].bank            |     0.444 |
+|       changes                |     0.035 |
+|       node_state             |     0.283 |
+|       parents                |     0.015 |
+|       pool                   |     0.007 |
+|     banks[7].cached.owner    |     0.160 |
+|       event_fifo             |     0.012 |
+|       request_fifo           |     0.039 |
+|       response_fifo          |     0.047 |
+|     banks[7].front           |     0.067 |
+|       arithmetic             |     0.007 |
+|       node_reg_r2_0_3_0_13   |     0.002 |
+|     banks[7].meta            |     0.022 |
+|     cell_router              |     0.125 |
+|       owners[0].fifo         |     0.014 |
+|       owners[1].fifo         |     0.015 |
+|       owners[2].fifo         |     0.016 |
+|       owners[3].fifo         |     0.017 |
+|       owners[4].fifo         |     0.015 |
+|       owners[5].fifo         |     0.016 |
+|       owners[6].fifo         |     0.015 |
+|       owners[7].fifo         |     0.017 |
+|     control                  |     0.082 |
+|     fabric                   |     1.499 |
+|       central                |     0.634 |
+|       owners[0].mux          |     0.129 |
+|       owners[1].mux          |     0.107 |
+|       owners[2].mux          |     0.115 |
+|       owners[3].mux          |     0.117 |
+|       owners[4].mux          |     0.107 |
+|       owners[5].mux          |     0.092 |
+|       owners[6].mux          |     0.104 |
+|       owners[7].mux          |     0.093 |
+|     minimum_tree             |     0.005 |
+|     reducers[0].reducer      |     0.020 |
+|     reducers[1].reducer      |     0.016 |
+|     reducers[2].reducer      |     0.018 |
+|     reducers[3].reducer      |     0.016 |
+|     reducers[4].reducer      |     0.017 |
+|     reducers[5].reducer      |     0.016 |
+|     reducers[6].reducer      |     0.016 |
+|     reducers[7].reducer      |     0.016 |
+|     router                   |     0.160 |
+|       owners[0].fifo         |     0.019 |
+|       owners[1].fifo         |     0.017 |
+|       owners[2].fifo         |     0.024 |
+|       owners[3].fifo         |     0.018 |
+|       owners[4].fifo         |     0.024 |
+|       owners[5].fifo         |     0.017 |
+|       owners[6].fifo         |     0.014 |
+|       owners[7].fifo         |     0.027 |
++------------------------------+-----------+
+
+
