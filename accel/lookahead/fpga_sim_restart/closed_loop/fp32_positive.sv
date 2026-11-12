@@ -1,8 +1,14 @@
 `timescale 1ns/1ps
 // Positive normal/+0 FP32 addition, round-to-nearest-even, no contraction.
-module pair_lane(input wire clk,rst,iv, output wire ir,
+(* keep_hierarchy = "yes" *) module pair_lane(input wire clk,rst,iv, output wire ir,
  input wire [31:0] dst,input wire [63:0] parent,cost,
- output reg ov,input wire or_,output reg [31:0] od,output reg [63:0] pair,output reg error);
+ output reg ov,input wire or_,output reg [31:0] od,output reg [63:0] pair,output reg error,output wire pending);
+ // Independent operand state gives every lane its own arithmetic data path.
+ // Both stages are elastic; pending includes operands not yet in the output.
+ reg full;reg [31:0] in_dst;reg [63:0] in_parent,in_cost;
+ wire advance=!ov||or_;
+ assign ir=!full||advance;
+ assign pending=full||ov;
  function automatic legal(input [31:0] x);
  legal=(x==0)||(!x[31]&&x[30:23]!=0&&x[30:23]!=255);
  endfunction
@@ -20,10 +26,12 @@ module pair_lane(input wire clk,rst,iv, output wire ir,
  if(rounded[24])begin rounded=rounded>>1;ex=ex+1;end
  add=ex>=255?32'h7f800000:{1'b0,ex[7:0],rounded[22:0]};
  end end endfunction
- assign ir=!ov||or_;
- always @(posedge clk)if(rst)begin ov<=0;error<=0;end else if(ir)begin
- ov<=iv;if(iv)begin od<=dst;pair<={add(parent[63:32],cost[63:32]),add(parent[31:0],cost[31:0])};
- if(!legal(parent[63:32])||!legal(parent[31:0])||!legal(cost[63:32])||!legal(cost[31:0])||
- !legal(add(parent[63:32],cost[63:32]))||!legal(add(parent[31:0],cost[31:0])))error<=1;
+ always @(posedge clk)if(rst)begin full<=0;ov<=0;error<=0;end else begin
+ if(advance)begin
+ ov<=full;if(full)begin od<=in_dst;pair<={add(in_parent[63:32],in_cost[63:32]),add(in_parent[31:0],in_cost[31:0])};
+ if(!legal(in_parent[63:32])||!legal(in_parent[31:0])||!legal(in_cost[63:32])||!legal(in_cost[31:0])||
+ !legal(add(in_parent[63:32],in_cost[63:32]))||!legal(add(in_parent[31:0],in_cost[31:0])))error<=1;
  end end
+ if(ir)begin full<=iv;if(iv)begin in_dst<=dst;in_parent<=parent;in_cost<=cost;end end
+ end
 endmodule

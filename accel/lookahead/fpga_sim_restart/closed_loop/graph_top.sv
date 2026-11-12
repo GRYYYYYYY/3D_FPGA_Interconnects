@@ -19,7 +19,7 @@ module graph_top #(parameter OWNERS=64, OB=$clog2(OWNERS))(
  .base_label(base_label),.base_prop(base_prop),.base_pending(base_pending),.base_closed(base_closed),.base_output(base_output),
  .mv(cmv),.mr(cmr),.mw(cmw),.ma(cma),.md(cmd),.mask(cmm),.rv(crv),.rr(crr),.rd(crd),
  .cv(cv),.cr(cr),.cd(cd),.cp(cp),.cc(cc),.fence(cf),.fence_done(cfd),.done(done),.error(ce),.qid(qid),.waves(waves),.cycle(cycle),.state(state));
- wire [OWNERS-1:0] lir,lov,le;reg [OWNERS-1:0] lor;wire [31:0] ld[0:OWNERS-1];wire [63:0] lp[0:OWNERS-1];
+ wire [OWNERS-1:0] lir,lov,le,lbusy;reg [OWNERS-1:0] lor;wire [31:0] ld[0:OWNERS-1];wire [63:0] lp[0:OWNERS-1];
  reg [OB-1:0] produce,arbit;reg busv;wire busr;reg [31:0] busdst;reg [63:0] buspair;
  wire [OWNERS-1:0] oready,ofd,oe,omv,omw,orr;reg [OWNERS-1:0] omr,orv;
  wire [23:0] oml[0:OWNERS-1];wire [255:0] omd[0:OWNERS-1];wire [5:0] omid[0:OWNERS-1];
@@ -29,7 +29,7 @@ module graph_top #(parameter OWNERS=64, OB=$clog2(OWNERS))(
  assign busr=oready[busdst[2+:OB]];
  genvar g;
  generate for(g=0;g<OWNERS;g=g+1)begin: owners
- pair_lane lane(.clk(clk),.rst(rst),.iv(cv&&produce==g&&!fencing),.ir(lir[g]),.dst(cd),.parent(cp),.cost(cc),.ov(lov[g]),.or_(lor[g]),.od(ld[g]),.pair(lp[g]),.error(le[g]));
+ pair_lane lane(.clk(clk),.rst(rst),.iv(cv&&produce==g&&!fencing),.ir(lir[g]),.dst(cd),.parent(cp),.cost(cc),.ov(lov[g]),.or_(lor[g]),.od(ld[g]),.pair(lp[g]),.error(le[g]),.pending(lbusy[g]));
  owner_service #(.OWNER_BITS(OB)) service(.clk(clk),.rst(rst),.req_valid(busv&&busdst[2+:OB]==g),.req_ready(oready[g]),
  .req_line(busdst[25:2]),.req_sector(busdst[1:0]),.req_pair(buspair),.fence(ofence),.fence_done(ofd[g]),.error(oe[g]),
  .mem_valid(omv[g]),.mem_ready(omr[g]),.mem_write(omw[g]),.mem_line(oml[g]),.mem_data(omd[g]),.mem_id(omid[g]),
@@ -46,7 +46,7 @@ module graph_top #(parameter OWNERS=64, OB=$clog2(OWNERS))(
  if(busv&&busr)busv<=0;
  if((!busv||busr)&&chosen>=0)begin busv<=1;busdst<=ld[chosen];buspair<=lp[chosen];arbit<=chosen+1;end
  if(cf)begin fencing<=1;sent<=0;fenced<=0;end
- if(fencing&&!sent&&lov==0&&!busv)begin ofence<=1;sent<=1;end
+ if(fencing&&!sent&&lbusy==0&&!busv)begin ofence<=1;sent<=1;end
  if(sent)begin fenced<=fenced|ofd;if(&(fenced|ofd))begin cfd<=1;fencing<=0;sent<=0;end end
  end
  // One-entry registered request buffer per physical channel; arbitration rotates

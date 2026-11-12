@@ -6,8 +6,9 @@ def sha(p):
  with open(p,'rb') as f:
   while b:=f.read(8<<20):h.update(b)
  return h.hexdigest()
-idx=json.load(open(dst/'index.json'));idx['files']=[x for x in idx['files'] if not x['path'].startswith('closed_loop/')]
-allowed={'.json','.jsonl','.csv','.hex','.txt','.log','.rpt','.xdc','.sv','.py','.bin','.stderr','.png','.svg','.md'}
+metadata=['status.json','replay_summary.json','resident_existing.json','model_comparison.json']
+idx=json.load(open(dst/'index.json'));idx['files']=[x for x in idx['files'] if not x['path'].startswith('closed_loop/') and x['path'] not in metadata]
+allowed={'.json','.jsonl','.csv','.hex','.txt','.log','.rpt','.xdc','.sv','.py','.bin','.stderr','.png','.svg','.md','.cpp','.hpp','.cuh','.tcl','.sh','.yaml'}
 for src in sorted(srcroot.rglob('*')):
  if not src.is_file() or src.suffix not in allowed:continue
  rel=src.relative_to(r);parts=src.relative_to(srcroot).parts
@@ -17,6 +18,11 @@ for src in sorted(srcroot.rglob('*')):
  data=src.read_bytes();compressed=src.suffix in ['.csv','.hex','.bin'] or (len(data)>150000 and src.suffix not in ['.png','.svg'])
  target=dst/(str(rel)+('.gz' if compressed else ''));target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(gzip.compress(data,mtime=0) if compressed else data)
  idx['files'].append({'path':str(rel),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'snapshot':str(target.relative_to(dst)),'compressed':compressed})
+for name in metadata:
+ src=r/name
+ if not src.exists():continue
+ shutil.copy2(src,dst/name)
+ idx['files'].append({'path':name,'bytes':src.stat().st_size,'sha256':sha(src),'snapshot':name,'compressed':False})
 # Every checkpoint, including superseded attempts, has an explicit local-only binding.
 idx['large_local_checkpoints']=[{'path':str(p.relative_to(r)),'bytes':p.stat().st_size,'sha256':sha(p),'uploaded_to_git':False} for p in sorted(r.rglob('*.dcp'))]
 idx['other_large_local_artifacts']=[{'path':str(p.relative_to(r)),'bytes':p.stat().st_size,'sha256':sha(p),'uploaded_to_git':False} for p in sorted(srcroot.glob('native_*/*.route'))]

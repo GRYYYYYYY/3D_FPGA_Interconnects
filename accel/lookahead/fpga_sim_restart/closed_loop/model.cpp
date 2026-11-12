@@ -47,7 +47,7 @@ struct Owners{
  if(f0){busy[owner]=write(*e,std::max(begin,busy[owner])+3);e->valid=false;}
  return begin-at;
  }
- U fence(U t){U end=t+6;for(unsigned o=0;o<n;++o){U scan=std::max(t+6,busy[o]+2);std::vector<U>dirty;
+ U fence(U t){U end=t+7;for(unsigned o=0;o<n;++o){U scan=std::max(t+7,busy[o]+2);std::vector<U>dirty;
  for(unsigned k=0;k<128;++k){auto&e=cache[o][k];dirty.erase(std::remove_if(dirty.begin(),dirty.end(),[&](U d){return d<=scan;}),dirty.end());
  if(e.valid&&e.dirty){if(dirty.size()==16){scan=std::max(scan,*std::min_element(dirty.begin(),dirty.end()));dirty.erase(std::remove_if(dirty.begin(),dirty.end(),[&](U d){return d<=scan;}),dirty.end());}dirty.push_back(write(e,scan+3)+2);dirty_hwm=std::max<unsigned>(dirty_hwm,dirty.size());}e.valid=false;++scan;}
  for(U done:dirty)scan=std::max(scan,done);busy[o]=scan;end=std::max(end,scan+4);}return end+2;}
@@ -72,7 +72,7 @@ int main(int argc,char**argv){try{
  if(next==UINT32_MAX)break;if(next>=4096)throw std::runtime_error("bucket capacity");bucket=next;have=true;++waves;mark=t;++t;
  U skip=0,first=0;auto flush=[&](){if(skip){bulk(PENDING,first*4,4,skip,false,latency+5);skip=0;}};
  for(unsigned u=0;u<w.h.nodes;++u){if(pending[u]!=bucket){if(!skip)first=u;++skip;continue;}flush();io(PENDING,U(u)*4);++t;io(PENDING,U(u)*4,true);pending[u]=UINT32_MAX;--entries;io(CLOSED,U(u)*4,true);closed[u]=1;io(NODE,U(u)*16);io(LABEL,U(u)*8);io(ROW,U(u)*8);io(ROW,U(u+1)*8);++t;
- const auto parent=label[u];for(U k=w.row[u];k<w.row[u+1];++k){++raw;io(EDGE,k*8);auto v=w.edge[k].dst;io(NODE,U(v)*16);int eligible=la::eligible(w.node[u],w.node[v]);if(eligible<=0){++t;if(eligible<0)break;continue;}io(COST,U(w.node[v].cost)*8);la::Cost pair{parent.delay+w.cost[w.node[v].cost].delay,parent.congestion+w.cost[w.node[v].cost].congestion};if(!la::numeric(pair.delay)||!la::numeric(pair.congestion))throw std::runtime_error("numeric");t+=o.candidate(v,pair,t+4);++accepted;t+=2;}
+ const auto parent=label[u];for(U k=w.row[u];k<w.row[u+1];++k){++raw;io(EDGE,k*8);auto v=w.edge[k].dst;io(NODE,U(v)*16);int eligible=la::eligible(w.node[u],w.node[v]);if(eligible<=0){++t;if(eligible<0)break;continue;}io(COST,U(w.node[v].cost)*8);la::Cost pair{parent.delay+w.cost[w.node[v].cost].delay,parent.congestion+w.cost[w.node[v].cost].congestion};if(!la::numeric(pair.delay)||!la::numeric(pair.congestion))throw std::runtime_error("numeric");t+=o.candidate(v,pair,t+5);++accepted;t+=2;}
  t+=2;
  }
  flush();++t;phase[2]+=t-mark;mark=t;t=o.fence(t);phase[3]+=t-mark;mark=t;++t;

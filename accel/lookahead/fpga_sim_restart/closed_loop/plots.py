@@ -7,18 +7,19 @@ data={p.stem:json.load(open(p)) for p in (r/'large').glob('*.json') if p.name no
 assert len(data)==12
 baseline=json.load(open(r/'baselines/summary.json'))
 plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.spines.right':False,'figure.dpi':160})
-fig,ax=plt.subplots(figsize=(9,4.6));labels=[];values=[];errors=[];colors=[]
+fig,ax=plt.subplots(figsize=(11,5));labels=[];values=[];errors=[];colors=[]
 for case,name in [('bnn_export','BNN'),('lstm_s2','LSTM')]:
  cpu=next(x for x in baseline if x['case']==case and x['backend']=='original_ALT_CPU');labels.append(name+'\nALT CPU');values.append(cpu['mean_s']);errors.append(cpu['sample_sd_s']);colors.append('#0072B2')
  if case=='bnn_export':
   gpu=next(x for x in baseline if x['case']==case and x['backend']=='gpu_compact');labels.append(name+'\ncompact CUDA*');values.append(gpu['mean_s']);errors.append(gpu['sample_sd_s']);colors.append('#009E73')
+ gpu=next(x for x in baseline if x['case']==case and x['backend']=='native_original_ALT_CUDA');labels.append(name+'\nnative ALT CUDA†');values.append(gpu['mean_s']);errors.append(gpu['sample_sd_s']);colors.append('#56B4E9')
  labels.append(name+'\nFPGA model**');values.append(data[('bnn' if name=='BNN' else 'lstm')+'_F1_central']['cycles']/2e8);errors.append(0);colors.append('#D55E00')
 x=np.arange(len(labels));ax.bar(x,values,color=colors);
 for i,e in enumerate(errors):
  if e:ax.errorbar(i,values[i],yerr=e,fmt='none',color='black',capsize=3)
 ax.set_xticks(x,labels);ax.set_yscale('log');ax.set_ylabel('Complete resident batch (seconds, log scale)');ax.set_ylim(.1,1e5)
 for i,v in enumerate(values):ax.text(i,v*1.35,f'{v:,.3f}',ha='center',fontsize=9)
-ax.set_title('40 real samples; all required internal work included');fig.text(.02,.01,'* R6.1 historical warm resident_s; separate host cohort.  ** Projected at assumed 200MHz; full clock not validated.',fontsize=8);fig.tight_layout(rect=(0,.04,1,1))
+ax.set_title('40 real samples; all required internal work included');fig.text(.02,.01,'* Historical warm resident_s (n=9).  † Historical first solve in 3 fresh processes (n=3), not warm repetitions.\nCPU/GPU are separate host cohorts; GPU intervals include host output allocation.  ** Projected at assumed 200MHz; clock not validated.',fontsize=8);fig.tight_layout(rect=(0,.075,1,1))
 for ext in ['png','svg']:fig.savefig(out/f'resident_complete_batch.{ext}')
 plt.close(fig)
 fig,axes=plt.subplots(1,2,figsize=(10,4.6));sc=['central','bandwidth_64','bandwidth_192','latency_150','latency_600'];labels=['128 GB/s\n300 ns','64 GB/s\n300 ns','192 GB/s\n300 ns','128 GB/s\n150 ns','128 GB/s\n600 ns']
