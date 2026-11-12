@@ -17,37 +17,81 @@ finite shared physical-memory fabric. Mutable initialization, all device traffic
 commands, conflicts, commit and write acknowledgements are timed. No host loop
 performs free sample initialization or intermediate output extraction.
 
-Build and run (Python 3, g++, local Verilator 4.038 as recorded in provenance):
+The current implementation is `rtl/many_tile.sv`: 8 or 32 lanes, five finite
+clients per owner through a tagged local uplink to shared physical ports,
+external node-state backing, and a 64-job sequential controller. The tested
+large candidate is 32 lanes/32 ports, 8192 member and changed slots per owner.
+A complete 64-lane implementation is **not** provided or qualified.
+
+Reproduce the current 32-lane RTL and independent cycle model with new names:
 
 ```sh
-python3 accel/lookahead/fpga_sparse_stream_r2/sim/build.py pipe_full_NEW
-python3 accel/lookahead/fpga_sparse_stream_r2/sim/run_small.py pipe_full_NEW 60
-python3 accel/lookahead/fpga_sparse_stream_r2/sim/run_fixtures.py pipe_full_NEW 60
-python3 accel/lookahead/fpga_sparse_stream_r2/sim/run_stress.py pipe_full_NEW
-python3 accel/lookahead/fpga_sparse_stream_r2/sim/test_owner_pipeline.py owner_NEW
-python3 accel/lookahead/fpga_sparse_stream_r2/sim/test_bank_pipeline.py bank_NEW
-python3 accel/lookahead/fpga_sparse_stream_r2/sim/test_node_state.py state_NEW
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/build_many.py replay32 32 32 -GMEMBER_CAP=8192 -GCHANGED_LIMIT=8192 -GUSE_URAM=1 -GREQUEST_STAGE=1
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py replay32 60 native
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py replay32 60 fixtures
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py replay32 120 stress,stress_random
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py replay32 60 external_nodes_65536,external_nodes_4194304
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/build_many_model.py replay32_model 32 32 8192 8192 1 1 1 1 1 1
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/calibrate_many_suites.py replay32_model replay32
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/sweep_fixed_time.py replay32 replay32_model
+python3 accel/lookahead/fpga_sparse_stream_r2/tests/batch_capacity.py replay32
+python3 accel/lookahead/fpga_sparse_stream_r2/tests/many_hot_capacity.py replay32 replay32_model
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/calibrate_many_boundaries.py replay32_model replay32
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/run_large_model.py replay32_model 60 2
 ```
 
-Run names must be new; failed source snapshots/results are not overwritten.
-`pipe_full*` builds substitute the actual pipelined owner, changed service and
-bank commit modules into the complete top. Plain names keep the serial R1 owner
-for controlled ablations. `POP_REDUCE=0` is only an explicit old-closure ablation;
-the new path has no closed scan.
+The model's six final flags are cache enable, registered ready, single
+combinational evaluation, idle-service memoization, request output stage, and
+host packed-bit optimization. Host implementation optimizations do not skip
+hardware clocks. Source hashes, compiler flags and exact executable identities
+are recorded. Calibration requires all 97 completed RTL references and compares
+all cycle rows, all output bytes and every summary counter. A complete native
+batch runs all 40 samples after one DUT start; progress is never a final result.
 
-Generator scripts reproduce the reviewed module variants. Source snapshots in
-each build are authoritative for that experiment; later generator changes do not
-retroactively qualify earlier experiments. Vivado 2022.2 flows use `tile_ooc.xdc`,
-`synth_pre.tcl`, `synth_post.tcl`, and `route_post.tcl`. The failed `pipe_full_c`
-RAM inference and its report are retained; explicit RAM-port repair is in
-`pipe_full_d` and later. No register-dissolve threshold override or false-path
-waiver was used to hide that failure.
+For 8-lane service validation use `L=8`, `P=8`, `MEMBER_CAP=1024`,
+`CHANGED_LIMIT=512`, `USE_URAM=0`; corresponding model capacities must match.
+For F0 add `-GCACHE_ENABLE=0` and set the model cache flag to zero. F0 retains
+32 independent line transactions, 16 writes, finite FIFOs and write-ACK hazards;
+it is separately calibrated against F0 RTL. It does not inherit F1 timing.
 
-The independent `owner_pipeline_model.hpp` is newly calibrated for the two
-recorded owner schedules. This does not calibrate the new whole tile or 32/64
-scale. `r2_node_state` is an actual finite 4 KiB cache for external 128-bit node
-records; its 64 MiB backing / 4M-address unit test is standalone. Integration with
-the full large-graph scheduler and scaled shared topology remains work in progress.
+Selected unit checks:
+
+```sh
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/test_cache_way.py way_replay
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/test_owner_pipeline.py owner_replay -GREQUEST_STAGE=1
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/test_node_state.py state_replay -GREQUEST_STAGE=1 -GOWNER_BITS=5
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/test_pop_epoch.py epoch_replay
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/test_pop_metadata.py metadata_replay
+```
+
+The state test checks the whole finite 64MiB backing across 4M node addresses,
+including command stability, dirty RAW, output backpressure and final fence.
+The way test exhaustively checks 81920 state combinations against the old policy.
+Owner warm II1 is a service-unit measurement, distinct from complete-batch
+average throughput. Independent models retain the original selection algorithms
+so the new balanced RTL is checked against a separately written reference.
+
+Current RTL is maintained directly. Historical bootstrap generators such as
+`gen_node_state.py` are not the authority for the later reviewed source; do not
+regenerate current RTL from them. Earlier `pipe_full*`, `external_*` and their
+negative results remain separate experiments with frozen source directories.
+Every new run needs a new name; no previous experiment is overwritten.
+
+For Vivado 2022.2, `gen_ooc_context.py` and `prepare_context_ooc.py` freeze an
+actual same-clock launch/capture context with a BUFG, source hashes, XDC and
+report hooks. Execute its `setup.tcl`, synthesis and implementation through the
+existing headless Vivado MCP session. `prepare_routed_sta.py` emits a follow-up
+Tcl script that waits for the already launched route and tests explicitly listed
+periods on the same routed netlist. Its output remains pending review: require
+setup **and** hold, complete constraints, route status and methodology checks.
+It adds no false path and removes no IO delay. Unit clock qualification never
+qualifies the full kernel, and no context is a board shell.
+
+`inspect_live_runs.py` provides a read-only recovery view with process identity,
+progress, OOC handles and calibration records. `freeze_checkpoint.py NAME PREV
+--defer-running-batches` preserves completed evidence and active batch receipts;
+full active traces stay on the shared filesystem until completion.
+`verify_snapshot.py NAME` checks all archived bytes including predecessors.
 
 The granular checkpoint and raw logs are in
 `results/fpga_sparse_stream_r2_20261112`; compact immutable checkpoints are under

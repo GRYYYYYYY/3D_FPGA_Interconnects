@@ -7,7 +7,7 @@
   "large_node_state_path_implemented": true,
   "physical_channel_sharing_implemented": true,
   "complete_batch_controller_implemented": true,
-  "tile_timing_closed": false,
+  "tile_timing_closed": true,
   "whole_kernel_timing_closed": false,
   "whole_kernel_clock_mhz": null,
   "clock_qualification_scope": null,
@@ -181,7 +181,7 @@
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "finish new shared-fabric complete32/F0 calibration; finish real native40 batches; route/qualify complete context OOC; recalibrate any further changes; preserve both positive and negative results",
+  "next_action": "review complete8 routed8ns STA; finish parallel-way32 F1/F0 calibration/capacity; complete native40 output checks; route latest resource-feasible32 OOC; no prototype-clock transfer",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -249,15 +249,15 @@
   "vivado_sessions": {
     "many8_reg_b": "vivado-20261112-164509-ef1e3de5",
     "many8_mshr_b": "vivado-20261112-173934-eb0a0adf",
-    "many32_c": "vivado-20261112-183223-bc1f6643",
     "many8_context_tree_a": "vivado-20261112-194208-cd9c35ec",
-    "many32_context_tree_a": "vivado-20261112-171744-63335f93",
-    "many32_request_f0_context_a": "vivado-20261112-161837-7d305dc5",
     "many8_context_reduction_b": "vivado-20261112-203252-7b55fe2c",
     "many32_context_reduction_b": "vivado-20261112-185211-8e7c9bec",
     "many32_request_f0_reduction_b": "vivado-20261112-180611-3c758959",
     "central_reduction_a": "vivado-20261112-191902-487477ac",
-    "state_way_context_a": "vivado-20261112-205847-e7d439e5"
+    "state_way_context_a": "vivado-20261112-205847-e7d439e5",
+    "many32_way_context_a": "vivado-20261112-183223-bc1f6643",
+    "many8_way_context_a": "vivado-20261112-171744-63335f93",
+    "many32_f0_way_context_a": "vivado-20261112-161837-7d305dc5"
   },
   "pending_commands": {
     "owner_mshr_ram_b5": "unit route complete negative5ns-4.508/-2.044;retainedhistoricalnegative",
@@ -265,7 +265,7 @@
     "many8_reg_b": "route active; actual358396LUT214592FF368RAMB36+112RAMB18;5ns synthWNS-3.017",
     "many8_mshr_b": "synthesis completed234982LUT; route active;97cyclecalibration passed",
     "external_f": "route complete376265LUT194137FF516RAMB36+193RAMB18;5ns-13.101/+.015;oldready bare-port context;archive2040b",
-    "many32_c": "synthesisactive;97RTL/modelcalibration andbothQ40outputs passed",
+    "many32_c": "synth complete overdeviceLUT; archived2103; session reused many32_way_context_a",
     "many32_reg_b": "synth complete 1575155LUT848380FF1212BRAMtiles288URAM;120.82percentLUT;route skipped only this old candidate;archive2028",
     "many32_reg_model_d": "97fullcycle/trafficexact; full40runner11783; provisionalmarker outdated scope=now97passed but complete40stillpending",
     "many32_model_e": "BNN/LSTMcomplete40batchrunning; progress/receipt files authoritative; oldmemberpeak counter invalid=8192 untilpoolinitfix; notcomplete",
@@ -277,19 +277,26 @@
     "many32_request_tree_a": "97passed; all4boundaries complete cycle/output/summary exact modelC",
     "many32_reg_model_e": "97fullcycle/trafficexact; full40BNN/LSTM runner15007; preserveallcompletedoutputs",
     "boundary_calibration": "complete:many32_reg_b 4boundaries each exactmodels c/d/e",
-    "many32_context_tree_a": "synthactive19:57:12;27RTLsourcehashesexacttofunctionalbuild",
+    "many32_context_tree_a": "synthcomplete1090753LUT;5ns-5.494/-.080;42leveloldready fabric;route skipped repaired fabric has fresh97+36;archive2134",
     "many32_request_model_c": "97passed; full60runner28583; full16and120runner82226; no fullbatch completedyet",
     "many32_fixedns_a": "36allcycle/output/traffic/contractexact",
     "many32_request_f0_a": "97RTL pipeline67968;gate84864 waits then97modelcal andfull40lat60",
-    "many32_request_f0_context_a": "synthstarted20:24:32",
+    "many32_request_f0_context_a": "synthcomplete952903LUT;5ns-7.244/-.080;52leveloldconsume fabric;route skipped repaired fabric has fresh97;archive2134",
     "many32_f0_model_b": "97passed;host-only benchmark~13percentfaster;preserve running model_a fullbatch; no hardware performance claim",
     "many8_fabric_tree_a": "97newcompletecalibration and36fixed_ns passed; OOC synthesis active",
-    "many32_fabric_tree_a": "built;97thennewcalthen36fixed_ns pipeline70274",
-    "many32_request_f0_reduction_b": "built;97thennewcal pipeline41020;newfullcontextOOC synth active",
+    "many32_fabric_tree_a": "97and36 complete allcycles/output/traffic exact modelC",
+    "many32_request_f0_reduction_b": "97complete fullcycle outputtraffic exact modelrequestF0a",
     "many32_context_reduction_b": "synthstarted20:36:44",
-    "central_reduction_a": "synthstarted20:36:38",
+    "central_reduction_a": "route21:08:32;unit cyclecal andfaultpass",
     "many8_context_reduction_b": "synthesiscomplete;route started20:51:31;97and36newcalpass",
-    "state_way_context_a": "actual state unitOWNER_BITS5 REQUEST_STAGE1 synthesis launched20:59; full32cal pending"
+    "state_way_context_a": "actualstateunit route21:09:57; synth7007LUT;32parameter functional calpending",
+    "many32_way_context_a": "synthesis launched21:03:57",
+    "many8_way_tree_a": "97and36 fullcycle output traffic pass model8request_b",
+    "many32_f0_way_a": "builddone;97thennewwaycalthen36 fixedns pipeline72703",
+    "many32_way_tree_a": "buildcomplete; full97 thenway_calibration/ns36/Q40/hot8192+8193/boundary4 pipeline54277",
+    "many32_request_f0_model_a": "97allcycle outputtraffic exact; complete40BNN/LSTM now running84864 PID3276512/3276515; started21:17:52",
+    "many8_way_context_a": "synth launched21:34:29;97+36 complete cal andsourcebinding passed",
+    "many32_f0_way_context_a": "synth launched21:34:32; functional pipeline72703;sourcebindingexact"
   },
   "large_node_state_path_scope": {
     "build": "external_f",
@@ -384,7 +391,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-12T21:00:11.479296+00:00",
+  "updated_utc": "2026-11-12T21:49:39.981616+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -427,7 +434,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "7574ff1caf89b15404bc2b77bc1ef83ef48ef44b",
+  "checkpoint_commit": "4c140c4f111430d44e7e4b255a79a2fae4ac4f43",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -614,8 +621,19 @@
       "fixed_ns_cases": 36,
       "fixed_ns_pass": true
     },
-    "complete32_new_calibration": "running70274",
-    "complete32_F0_new_calibration": "running41020",
+    "complete32_new_calibration": {
+      "cases": 97,
+      "all_pass": true,
+      "RTL": "many32_fabric_tree_a",
+      "model": "many32_request_model_c",
+      "fixed_ns36": true
+    },
+    "complete32_F0_new_calibration": {
+      "RTL": "many32_request_f0_reduction_b",
+      "model": "many32_request_f0_model_a",
+      "cases": 97,
+      "all_pass": true
+    },
     "old_model_reuse_requires_new_complete_calibration": true
   },
   "request_stage_boundary_calibration": {
@@ -643,6 +661,146 @@
     "unit_state": "state_way_tree_b4Maddress7680operations165669cyclespassed;OWNER_BITS3",
     "exhaustive_XSim": "81920casespassed",
     "first_compile_negative": "owner_way_tree_a/state_way_tree_a used reserved SV matches identifier; source fixed new b runs; old logs retained",
-    "complete_topology_recalibration": "builds many8_way_tree_a55253 andmany32_way_tree_a10770 running"
+    "complete_topology_recalibration": "builds many8_way_tree_a55253 andmany32_way_tree_a10770 running",
+    "complete8": {
+      "RTL": "many8_way_tree_a",
+      "model": "many8_request_model_b",
+      "97cases": true,
+      "36fixed_ns": true
+    },
+    "complete32": "pipeline54277 running",
+    "unit_state_bits5": {
+      "operations": 7680,
+      "cycles": 165653,
+      "address_nodes": 4194304,
+      "output_full_backing_exact": true,
+      "physical_source_binding": "timing/state_way_binding_2130.json"
+    },
+    "full32_97_calibration": {
+      "RTL": "many32_way_tree_a",
+      "model": "many32_request_model_c",
+      "record": "model/many32_request_model_c/way_calibration/calibration.json",
+      "all_pass": true,
+      "fixed_ns_and_capacity": "running"
+    }
+  },
+  "many32_c_resources": {
+    "LUT": 1505153,
+    "FF": 817663,
+    "RAMB36": 1665,
+    "RAMB18": 446,
+    "URAM": 288,
+    "synthesis_ns": [
+      -6.091,
+      0.025
+    ],
+    "period_ns": 5,
+    "route": "skipped only this fixed over-LUT candidate",
+    "archive": "completed_ooc_2103"
+  },
+  "state_way_unit_synth": {
+    "LUT": 7007,
+    "FF": 4565,
+    "RAMB36": 16,
+    "RAMB18": 1,
+    "DUT_LUT": 6157,
+    "DUT_FF": 3349,
+    "period_ns": 5,
+    "synth_ns": [
+      -0.033,
+      -0.074
+    ],
+    "route": "started21:09:57",
+    "scope": "unitactualregisteredcontext; no fullkernelclock"
+  },
+  "central_reduction_synth": {
+    "LUT": 223029,
+    "FF": 100412,
+    "BRAM": 0,
+    "URAM": 0,
+    "period_ns": 5,
+    "synth_ns": [
+      -0.108,
+      -0.074
+    ],
+    "route": "started21:08:32"
+  },
+  "routed_STA_followup": {
+    "execution_cell": "g10:748",
+    "status": "running source run.tcl; do not execute more Tcl on these sessions until done",
+    "contexts": [
+      "many8_context_tree_a",
+      "state_way_context_a",
+      "central_reduction_a"
+    ],
+    "scope": "same routed netlist at stated actual periods; qualification remains pending allreport review; no falsepaths/IOremoval",
+    "tooling_failure": "v1 incorrectly rejected Vivado route_design Complete, Failed Timing!; preserve original script and failure logs",
+    "repair": "v2explicitly accepts bothcompleted status strings; preserves allconstraints; generated for8/state/central",
+    "state_v2_cell": "g10:765",
+    "many8_and_central_v1_cell": "g10:748; expected guard failure afterroute; check sessionthen sourcev2"
+  },
+  "many8_context_tree_routed": {
+    "LUT": 234879,
+    "FF": 154909,
+    "RAMB36": 368,
+    "RAMB18": 112,
+    "period_ns": 5,
+    "routed_setup_hold_ns": [
+      -2.656,
+      0.01
+    ],
+    "clock_qualified_mhz": null,
+    "scope": "complete8 MC1024 CC512 REQUEST_STAGE1 balancedMSHR butoldfabric andoldvictim; no frequency transfer to new8/32"
+  },
+  "state_way_routed": {
+    "LUT": 7095,
+    "FF": 4564,
+    "RAMB36": 16,
+    "RAMB18": 1,
+    "period_ns": 8,
+    "routed_setup_hold_ns": [
+      -0.212,
+      0.012
+    ],
+    "clock_qualified_mhz": 125,
+    "scope": "unitonly OWNER_BITS5 REQUEST_STAGE1 matchedstateunit;STA8pending",
+    "qualified_setup_hold_ns": [
+      2.788,
+      0.012
+    ],
+    "qualification_review": "timing/state_way_context_a/routed_sta_v2/qualification_review.json"
+  },
+  "tile_clock_qualification": {
+    "updated_utc": "2026-11-12T21:49:39.981616+00:00",
+    "scope": "complete 8-lane F1 prototype: L8 P8 MEMBER_CAP1024 CHANGED_LIMIT512 USE_URAM0 REQUEST_STAGE1; frozen many8_request_tree_b, before fabric/way repairs; not complete32, shell or board",
+    "qualified_OOC_mhz": 125,
+    "period_ns": 8,
+    "setup_slack_ns": 0.344,
+    "hold_slack_ns": 0.01,
+    "pulse_width_slack_ns": 3.458,
+    "same_actual_routed_netlist_as_5ns": true,
+    "five_ns_failed_setup_ns": -2.656,
+    "board_measured": false,
+    "check_timing_all_zero": true,
+    "route_errors": 0,
+    "real_synchronous_context_resources_included": true,
+    "resource_counts": {
+      "LUT": 234879,
+      "FF": 154909,
+      "RAMB36": 368,
+      "RAMB18": 112,
+      "URAM": 0
+    },
+    "methodology_review": {
+      "XDCC-4/8": "intentional same-source period replacement; no waiver",
+      "CLKC-3": "fixed actual BUFG location advisory"
+    },
+    "DRC_review": {
+      "RTSTAT-10": "32 terminal signature outputs have no external routable loads in OOC; DUT boundaries use actual same-clock launch/capture registers"
+    },
+    "functional_calibration_97": "model/many8_request_model_a/tree_calibration/calibration.json",
+    "fixed_ns_calibration_36": "rtl/many8_fixedns_a_fixed_time/calibration.json",
+    "scope_binding": "timing/fixedns8_binding_v2_2149.json",
+    "record": "timing/many8_context_tree_a/routed_sta_v2/qualification_review.json"
   }
 }

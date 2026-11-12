@@ -8,6 +8,10 @@ double sc_time_stamp(){return 0;}
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+#ifndef STATE_OWNER_BITS
+#define STATE_OWNER_BITS 3
+#endif
+constexpr unsigned STATE_B=STATE_OWNER_BITS;
 using Line=std::array<uint64_t,4>;
 struct Record{uint64_t label=0x7f8000007f800000ull;uint32_t pending=0,flags=0;};
 struct Expected{bool live=false;unsigned node=0,status=0;Record old;};
@@ -46,7 +50,7 @@ int main(int argc,char**argv){try{
   d.clk=1;d.eval();++tick;if(d.error)throw std::runtime_error("DUT error");if(d.fence_done){if(!pending.empty()||sent!=returned||d.accepted!=d.retired)throw std::runtime_error("early fence");success=true;break;}
  }
  if(!success)throw std::runtime_error("watchdog");
- for(unsigned line=0;line<N/2;++line)for(unsigned sector=0;sector<2;++sector){unsigned n=((line>>4)<<5)|((line&7)<<2)|(((line>>3)&1)<<1)|sector;auto &v=ref[n];if(memory[line][2*sector]!=v.label||memory[line][2*sector+1]!=(uint64_t(v.flags)<<32|v.pending))throw std::runtime_error("full backing mismatch node="+std::to_string(n));}
+ for(unsigned line=0;line<N/2;++line)for(unsigned sector=0;sector<2;++sector){unsigned n=((line>>(STATE_B+1))<<(STATE_B+2))|((line&((1u<<STATE_B)-1))<<2)|(((line>>STATE_B)&1)<<1)|sector;auto &v=ref[n];if(memory[line][2*sector]!=v.label||memory[line][2*sector+1]!=(uint64_t(v.flags)<<32|v.pending))throw std::runtime_error("full backing mismatch node="+std::to_string(n));}
  if(reads<1000||writes<1000||d.mshr_peak<2||peak<2)throw std::runtime_error("working set/concurrency not exercised");
  std::cout<<"NODE_STATE_PASS address_nodes="<<N<<" highest_node="<<N-1<<" operations="<<returned<<" cycles="<<tick<<" reads="<<reads<<" writes="<<writes<<" mshr="<<unsigned(d.mshr_peak)<<" dirty="<<unsigned(d.dirty_peak)<<" outstanding="<<peak<<'\n';
 }catch(const std::exception &e){std::cerr<<e.what()<<'\n';return 1;}}

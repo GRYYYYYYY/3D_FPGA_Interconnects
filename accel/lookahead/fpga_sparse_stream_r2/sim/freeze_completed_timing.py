@@ -12,6 +12,8 @@ for spec in sys.argv[2:]:
  stages.append({'variant':variant,'stage':stage,'end_marker':True,'error_lines':[x for x in text.splitlines() if x.startswith('ERROR:')]})
  for x in p.iterdir():
   if x.is_file() and x.suffix in ['.json','.tcl','.xdc','.rpt','.md','.diff']:files.add(x)
+ for x in p.glob('routed_sta*/*'):
+  if x.is_file() and x.suffix in ['.json','.tcl','.xdc','.rpt','.csv','.log']:files.add(x)
  source=p/'source'
  if not source.is_dir():source=r/'rtl'/(variant+'_build')/'source'
  if not source.is_dir():raise RuntimeError('no frozen RTL source directory: '+variant)

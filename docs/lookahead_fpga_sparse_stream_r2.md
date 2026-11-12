@@ -2,6 +2,39 @@
 
 本轮从 `5651a34abb97939bee6402c5af585753ab07f64b` 建立独立 worktree 与分支。原始 main、原稿、STRICT、旧 golden、历史结果和未跟踪指导文件不修改。当前状态是 **in_progress**；本文件不构成完整候选或板卡性能结论。
 
+## 当前可复核结果（21:49 UTC）
+
+有效 POP 的 whole-pair 归约、原桶闭合后等待所有事件排空的结束规则、稀疏目录/工作列表、有限 owner/state 缓存、changed/commit 流水、共享物理通道、cost 一次加载和 Q=1 batch 控制均已有可运行实现。当前完整32路候选为32 owners、每owner 8192成员/changed容量、32个假设物理通道，每通道64个ID；尚未实现或验证64路完整核。
+
+新共享通道归约版本的8路及32路均通过97个完整RTL/独立模型用例，核对全部周期、输出和流量。8路及32路均完成36组固定纳秒延迟假设校准。进一步的并行4-way缓存选择已通过81920组XSim穷举与owner/state单元检查，完整8路97项及36组固定ns、完整32路97项已重新通过；32路固定ns和容量边界仍在运行。
+
+下表为已完成的真实小图RTL完整batch。统一60-cycle基础延迟、0至12周期随机扰动、最短2-cycle通道接收间隔；不是板测或已定频结果。`F1`为有限4-way×32-set×32B owner缓存，`F0`为保留有限并发与ACK的无合并服务；state backing、物理通道、batch边界与请求流水保持对应。
+
+| 完整RTL配置 | d3：8 sample周期 | d4：12 sample周期 | d4发射/周期 | d4提交/周期 |
+|---|---:|---:|---:|---:|
+| 8-lane F1，many8_fabric_tree_a | 49,224 | 135,871 | 0.112158 | 0.034246 |
+| 32-lane F1，many32_fabric_tree_a | 104,440 | 202,122 | 0.075395 | 0.023021 |
+| 32-lane F0，many32_request_f0_reduction_b | 127,055 | 292,003 | 0.052188 | 0.015935 |
+
+吞吐分母为完整resident batch所有周期，和单元热命中II1是不同量。32路为真实大图配置使用更大的有限目录/成员容量，小图初始化成本因此增加；不能把表格当作只改变lane数的缩放实验。各数组32B事务数、峰值并发、完整输出hash及原始summary引用见[机器可读小图结果](../results/fpga_sparse_stream_r2_20261112/analysis/completed_native_2105.json)。
+
+当前物理证据分层如下。所有资源均为Vivado实际结果；同步集成上下文包含真实BUFG及launch/capture寄存器，其资源计入，不能称为完整shell。
+
+| 版本/范围 | LUT | FF | BRAM36 / BRAM18 / URAM | 5ns结果 | 可用范围 |
+|---|---:|---:|---|---|---|
+| owner_context_a，旧选择单元，已路由 | 7,629 | 4,223 | 13 / 2 / 0 | WNS −1.758，WHS +0.006 | 同一已路由网表8ns重新STA：+1.242/+0.006，仅此单元125MHz |
+| many8_context_tree_a，冻结完整8核已路由 | 234,879 | 154,909 | 368 / 112 / 0 | −2.656/+0.010 | 同一已路由网表8ns STA +0.344/+0.010，匹配97项及36组校准，仅该8核125MHz |
+| many8_context_reduction_b，完整8核综合 | 235,755 | 154,655 | 368 / 112 / 0 | −2.088/−0.080 | 正在布线，无完整核合格频率 |
+| central_reduction_a，33×32共享通道综合 | 223,029 | 100,412 | 0 / 0 / 0 | −0.108/−0.074 | 正在布线，单元结果 |
+| state_way_context_a，新选择state单元已路由 | 7,095 | 4,564 | 16 / 1 / 0 | −0.212/+0.012 | 同一已路由网表8ns STA +2.788/+0.012，仅此单元125MHz |
+| many32_mshr_a，旧线性选择完整32核综合 | 1,083,688 | 586,261 | 1064 / 296 / 288 | −14.408/+0.025 | 旧固定候选负结果，新完整32实现继续 |
+| many32_reg_b，旧多写MSHR完整32核综合 | 1,575,155 | 848,380 | 1064 / 296 / 288 | −7.110/+0.025 | 超LUT容量，停止此固定候选布线 |
+| many32_c，旧ready完整32核综合 | 1,505,153 | 817,663 | 1665 / 446 / 288 | −6.091/+0.025 | 超LUT容量，停止此固定候选布线 |
+
+BNN/LSTM真实40-sample完整架构仿真仍在运行，尚无最终全输出核验、完整服务统计或合格频率下的秒数；进行中的阶段日志仅用于定位瓶颈。`board_measured=false`、`whole_kernel_timing_closed=false`、`fpga_simulated_superiority_supported=false` 保持不变。外存延迟及通道服务是明确假设，不是HBM实测；5ns/8ns固定时间组合目前也只是频率敏感性假设。
+
+软件对照已经完成并保存独立进程原始样本。新增prepared CSR+POP同范围GPU V2均值：BNN basic/compact 0.156690577/0.151799969s，LSTM 0.159888578/0.160247990s；旧GPU V2原样保留。native E2/Process及ALT与STRICT的历史差异另表处理。当前没有FPGA优于这些基线的完整证据。
+
 ## 已实现并核验的证据
 
 - C++ 有效 POP whole-pair 在线归约：d3/d4 和 BNN/LSTM 各完整 batch byte-exact；每个原桶闭合点与独立旧 closed-fold oracle 比较，R1 每 wave 既有工作量列不变。软件 oracle 的额外开销不用于 CPU 速度比较。
@@ -11,7 +44,7 @@
 - m2c 完整 d3/d4、91 个 native RTL fixtures、两个 40-sample 容量用例通过。容量用例覆盖 node 4095/cell 32767、qid 改映射和 25,538-cell 最后不足整行的输出；这是小图节点容量下的真实 batch 控制证据，**不是** BNN/LSTM 大图 RTL 结果。
 - Vivado 2022.2 XSim 单元测试通过 4,000 次双路背压事件和约 1.9 万次 reducer 更新，核验 whole-pair、独立 seen、同地址转发、完整导出及错误 qid。
 
-## 当前周期消融（无合格频率，外存假设）
+## 早期小图周期消融（无合格频率，外存假设）
 
 统一 60-cycle base latency + 有限随机扰动、每物理通道最短 2-cycle 接收间隔。周期包含 device 内部初始化、cost/job/metadata、搜索、控制、commit、输出与 ACK。一次 batch start，初次 H2D/最终 D2H 不计。
 
@@ -48,13 +81,15 @@ prepared_CSR_valid_POP_CPU完整包含每sample mutable初始化、cost复制、
 
 ## 尚未完成
 
-- 完整 tile 和完整32路候选的 routed OOC、setup/hold闭合。已有 pair_lane 单元200MHz闭合不能代替完整核。
-- 新注册ready和F0路径的32路重新校准、容量边界与完整大图；8路F1/F0各97个用例已经逐周期精确校准。
+- 后续 fabric/way 修复版 tile 和完整32路候选的 routed OOC、setup/hold闭合。已通过的冻结8路原型125MHz和pair_lane单元200MHz均不能替代新完整32核。
+- 并行4-way选择路径的完整8/32重新校准，匹配REQUEST_STAGE=1的F0完整97项校准与大图。前一F1请求流水已完成97项和四项容量边界，前一共享通道归约32路也已完成97项。
 - BNN/LSTM各40sample的有限架构仿真已启动，尚无完整输出或性能结论；M1功能正确不等于M5完成。
 - 相同大图状态/物理通道的F0/F1消融和完整核合格频率下的固定ns内存敏感性。
 
 配置在 `accel/lookahead/fpga_sparse_stream_r2/config/experiment_spec.r2.yaml`；逐项状态在 `results/fpga_sparse_stream_r2_20261112/checkpoint.json`。所有失败版本、源代码快照、周期日志与工具日志留在本轮 results。尚未声明 FPGA 胜过 CPU/GPU，尚无 board measured 结果。
 
+
+## 历次实现与失败记录（保留当时状态）
 
 R2 continuation 18:15 UTC (in progress): mapped arithmetic feedback was removed using single-assignment normalization/rounding. The isolated pair_lane routed at 200MHz with WNS +0.077ns and WHS +0.020ns, zero timing loops; OOC clock-source/partition-pin placement warnings remain, and this is not full-kernel qualification. M3d actual synthesis:735949LUT,170150FF,300RAMB36+153RAMB18. M3e explicit reducer ports:589685LUT,167533FF,356RAMB36+161RAMB18. Both retain48old-FP mapped-loop warnings and cannot supply a frequency claim; routing these obsolete candidates was skipped and their evidence retained.
 
@@ -135,3 +170,7 @@ A matchedfinalREQUEST_STAGE1 F0variant is nowbuilding/calibrating,withactualcomp
 旧many32_reg_b超过器件LUT容量；旧many32_mshr_a虽降至83.13%LUT，其旧线性选择路径仍失败。它们仅否决相应固定实现。旧external_f完整8路由结果为376265 LUT、194137 FF、516 RAMB36+193 RAMB18，5ns WNS −13.101ns、WHS +0.015ns，作为负结果保留；未用它给新结构定频。
 
 缓存替换选择的进一步修复：新8-lane综合最坏路径经过state缓存victim的循环优先链（28级）。并行4-way候选掩码与平衡选择替代该链，保留最高匹配way、最低invalid way、圆形替换顺序。81920种状态组合XSim通过；owner stress/warm逐周期与旧stage1版本完全一致（30842/5162周期，4096连续II1退休）；4M地址state测试7680操作通过。初次使用SV保留字matches导致的编译失败日志保留，改名后的测试通过。新8/32完整拓扑构建和state独立OOC已启动，完整时钟与大batch结果仍待验证。
+
+21:46 continuation: the saved routed state context passes setup, hold and pulse-width at8ns, all12 check_timing categories are zero, and every9852 routable net is routed with zero route errors. The mechanical checker separately rejects its5ns negative result. The actual complete8 context routes with234879LUT154909FF368RAMB36+112RAMB18,5ns WNS-2.656/WHS+.010. Its8ns reports currently show+.344/+.010; checkpoint saving and final scope review are still in progress, so no frequency has yet been transferred into results. The immutable snapshot chain through2135 verifies52883files across5snapshots.
+
+21:49 reviewed milestone: many8_context_tree_a is qualified at125MHz only for its frozen complete8 prototype. All328111 routable nets are routed, setup+.344ns/hold+.010ns/pulse-width+3.458ns, all12 check_timing categories zero, no false/multicycle paths or removed IO constraints. The36fixed-ns test executable relinks the identical immutable Verilator RTL archive; the binding audit now follows and verifies this parent archive instead of incorrectly applying default32lane parameters to a C++ relink command. The initial failed audit is retained; v2 verifies all27source files, actualRTLparameters and reused object hashes. The complete32 candidate clock remains null.
