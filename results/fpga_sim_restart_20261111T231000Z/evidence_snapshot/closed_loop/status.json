@@ -1,0 +1,325 @@
+{
+  "candidate": "ALT_LINE_OWNER_REDUCE_V1",
+  "source_base": "7e63b917f37273f80c03327e024d86b797ee221b",
+  "branch": "accel/lookahead-fpga-sim-restart-20261112",
+  "overall_task_complete": false,
+  "first_artifact_delivery_complete": true,
+  "complete_small_batch_RTL": true,
+  "fpga_method_rtl_verified": {
+    "value": true,
+    "scope": "whole d3/d4 batches, 64-owner complete scan-controller RTL; shared candidate bus, serial graph front end"
+  },
+  "fpga_full_kernel_ooc": {
+    "resources": {
+      "luts": 767925,
+      "logic_luts": 472117,
+      "lutram": 295808,
+      "ffs": 159828,
+      "ramb36": 0,
+      "ramb18": 0,
+      "uram": 0,
+      "dsp": 7
+    },
+    "timing_200MHz": {
+      "wns_ns": -8.417,
+      "tns_ns": -5588033.0,
+      "setup_failing_endpoints": 2639910,
+      "whs_ns": -0.145,
+      "all_constraints_met": false
+    },
+    "timing_125MHz": {
+      "wns_ns": -5.417,
+      "tns_ns": -1119628.625,
+      "setup_failing_endpoints": 602295,
+      "whs_ns": -0.145,
+      "all_constraints_met": false
+    },
+    "complete_top_routed": true,
+    "interface": "32 bounded ready/valid transaction channels; no AXI4/shell/board claim"
+  },
+  "architecture_model_rtl_calibrated": {
+    "value": true,
+    "scope": "F1 complete 64-owner small batches, total and phase comparisons; saturated owner service separately tested",
+    "F0_complete_RTL_calibrated": false
+  },
+  "complete_BNN_LSTM_architecture_simulation": true,
+  "large_complete_runs": 12,
+  "jobs_each": 40,
+  "large_performance_label": "projected_at_assumed_200MHz",
+  "resident_batch_superiority_under_declared_model": false,
+  "board_measured": false,
+  "native_bridge_checked_this_round": true,
+  "final_wire_maps_exact": true,
+  "new_GPU_cohort_complete": false,
+  "pending": [
+    "new basic CUDA and LSTM warm resident cohort: Inspire authentication expired; prepared worker not run",
+    "original VPR and best native STRICT CPU matched V2 interval: not_evaluated_same_scope",
+    "full-kernel timing closure"
+  ],
+  "fpga_module_ooc_timing_supported": {
+    "value": false,
+    "scope": "isolated owner; 125MHz setup passes but boundary hold fails",
+    "evidence": "ooc_v2/timing_125MHz.rpt"
+  },
+  "fpga_full_kernel_ooc_timing_supported": {
+    "value": false,
+    "scope": "complete 64-owner graph_top",
+    "evidence": "closed_loop/ooc_64_fixed/timing*.rpt"
+  },
+  "internal_register_timing": {
+    "200": {
+      "setup": {
+        "slack_ns": -8.417,
+        "source": "owners[26].service/requests/rp_reg[2]_replica/C",
+        "destination": "owners[26].service/dirty_reg[32]/D",
+        "data_path_delay": "13.299ns  (logic 2.196ns (16.512%)  route 11.103ns (83.488%))"
+      },
+      "hold": {
+        "slack_ns": 0.01,
+        "source": "owners[1].service/valid_reg[21]/C",
+        "destination": "owners[1].service/valid_reg[21]/D",
+        "data_path_delay": "0.162ns  (logic 0.088ns (54.440%)  route 0.074ns (45.560%))"
+      }
+    },
+    "125": {
+      "setup": {
+        "slack_ns": -5.417,
+        "source": "owners[26].service/requests/rp_reg[2]_replica/C",
+        "destination": "owners[26].service/dirty_reg[32]/D",
+        "data_path_delay": "13.299ns  (logic 2.196ns (16.512%)  route 11.103ns (83.488%))"
+      },
+      "hold": {
+        "slack_ns": 0.01,
+        "source": "owners[1].service/valid_reg[21]/C",
+        "destination": "owners[1].service/valid_reg[21]/D",
+        "data_path_delay": "0.162ns  (logic 0.088ns (54.440%)  route 0.074ns (45.560%))"
+      }
+    }
+  },
+  "physical_resource_and_reserve_audit": {
+    "part": "xcu280-fsvh2892-2L-e",
+    "scope": "final routed standalone module",
+    "aggregate_used": {
+      "CLB": 127133,
+      "CLBL": 62765,
+      "CLBM": 64368,
+      "CLB LUTs": 767925,
+      "LUT as Logic": 472117,
+      "LUT as Memory": 295808,
+      "CLB Registers": 159828,
+      "Block RAM Tile": 0,
+      "URAM": 0,
+      "DSPs": 7
+    },
+    "slrs": [
+      {
+        "slr": 0,
+        "CLB": {
+          "used": 46741,
+          "percent": 85.05
+        },
+        "CLBL": {
+          "used": 23265,
+          "percent": 79.46
+        },
+        "CLBM": {
+          "used": 23476,
+          "percent": 91.42
+        },
+        "CLB LUTs": {
+          "used": 287684,
+          "percent": 65.43
+        },
+        "LUT as Logic": {
+          "used": 204488,
+          "percent": 46.51
+        },
+        "LUT as Memory": {
+          "used": 83196,
+          "percent": 40.5
+        },
+        "CLB Registers": {
+          "used": 57248,
+          "percent": 6.51
+        },
+        "Block RAM Tile": {
+          "used": 0,
+          "percent": 0.0
+        },
+        "URAM": {
+          "used": 0,
+          "percent": 0.0
+        },
+        "DSPs": {
+          "used": 7,
+          "percent": 0.24
+        }
+      },
+      {
+        "slr": 1,
+        "CLB": {
+          "used": 50095,
+          "percent": 92.77
+        },
+        "CLBL": {
+          "used": 25957,
+          "percent": 88.65
+        },
+        "CLBM": {
+          "used": 24138,
+          "percent": 97.65
+        },
+        "CLB LUTs": {
+          "used": 313145,
+          "percent": 72.49
+        },
+        "LUT as Logic": {
+          "used": 174485,
+          "percent": 40.39
+        },
+        "LUT as Memory": {
+          "used": 138660,
+          "percent": 70.12
+        },
+        "CLB Registers": {
+          "used": 66946,
+          "percent": 7.75
+        },
+        "Block RAM Tile": {
+          "used": 0,
+          "percent": 0.0
+        },
+        "URAM": {
+          "used": 0,
+          "percent": 0.0
+        },
+        "DSPs": {
+          "used": 0,
+          "percent": 0.0
+        }
+      },
+      {
+        "slr": 2,
+        "CLB": {
+          "used": 30297,
+          "percent": 56.11
+        },
+        "CLBL": {
+          "used": 13543,
+          "percent": 46.25
+        },
+        "CLBM": {
+          "used": 16754,
+          "percent": 67.78
+        },
+        "CLB LUTs": {
+          "used": 167096,
+          "percent": 38.68
+        },
+        "LUT as Logic": {
+          "used": 93144,
+          "percent": 21.56
+        },
+        "LUT as Memory": {
+          "used": 73952,
+          "percent": 37.39
+        },
+        "CLB Registers": {
+          "used": 35634,
+          "percent": 4.12
+        },
+        "Block RAM Tile": {
+          "used": 0,
+          "percent": 0.0
+        },
+        "URAM": {
+          "used": 0,
+          "percent": 0.0
+        },
+        "DSPs": {
+          "used": 0,
+          "percent": 0.0
+        }
+      }
+    ],
+    "sll_boundaries": [
+      {
+        "boundary": "SLR2 <-> SLR1",
+        "used": 2822,
+        "available": 23040,
+        "percent": 12.25
+      },
+      {
+        "boundary": "SLR1 <-> SLR0",
+        "used": 6752,
+        "available": 23040,
+        "percent": 29.31
+      }
+    ],
+    "total_sll_used": 9574,
+    "nominal_shell_reserve_fraction": 0.2,
+    "reserve_provenance": "assumed allowance, not verified shell quota",
+    "uniform_20pct_free_CLB_sites_each_SLR": false,
+    "uniform_20pct_free_CLBM_sites_each_SLR": false,
+    "actual_shell_fit_verified": false,
+    "reserve_interpretation": "Occupied CLB sites and used LUT counts differ. SLR0/1 lack 20% entirely free CLB/CLBM sites; these observations do not establish actual shell fit or impossibility of sharing partially occupied sites.",
+    "route_complete": true,
+    "routable_nets": 777331,
+    "routing_errors": 0,
+    "unconstrained_internal_endpoints": 0,
+    "drc_rules": [
+      {
+        "rule": "DPIP-2",
+        "severity": "Warning",
+        "description": "Input pipelining",
+        "violations": 7
+      },
+      {
+        "rule": "DPOP-3",
+        "severity": "Warning",
+        "description": "PREG Output pipelining",
+        "violations": 7
+      },
+      {
+        "rule": "DPOP-4",
+        "severity": "Warning",
+        "description": "MREG Output pipelining",
+        "violations": 7
+      },
+      {
+        "rule": "RTSTAT-10",
+        "severity": "Warning",
+        "description": "No routable loads",
+        "violations": 1
+      },
+      {
+        "rule": "CHECK-2",
+        "severity": "Advisory",
+        "description": "Report rule not checked",
+        "violations": 47
+      }
+    ],
+    "checkpoint_sha256": "1f99d45087282325fa63b30e7aeac036f8bf037d515e10c9bce57a827eaadfc1",
+    "source_reports_sha256": {
+      "ooc_64_fixed/slr_utilization.rpt": "68d5cf31606dec591410ce3b440a6d60e2f3f0f1b3c8f0c3301b63c566fc1608",
+      "ooc_64_fixed/clock_source_audit.txt": "1029a809a43b26a9fe5e9de2c1ec860dda37abd379dc9842e709b35f85dc1207",
+      "ooc_64_fixed/routed_utilization.rpt": "3e0123eabd54f5f0ddc43454f31f82cfe1b3917e401c027673aae122070d3b5d"
+    }
+  },
+  "performance_stop_criterion": "serial front-end optimistic non-proposal IO lower bound exceeds matched ALT CPU; no further expansion of this implementation",
+  "arithmetic_coverage": {
+    "logical_pair_lane_instances": 64,
+    "independent_physical_FP32_pipelines_verified": true,
+    "reason": "64 material lane modules with private operand registers and elastic arithmetic/output state verified in synthesis and routed utilization",
+    "evidence": "closed_loop/independent_lane_coverage.json",
+    "sustained_64_edges_per_cycle": false
+  },
+  "ooc_clock_integration_limit": "HD.CLK_SRC is not anchored to a board/shell clock-buffer location; preserve this OOC warning, no platform timing closure claim",
+  "ooc_boundary_integration_limit": "HD.PARTPIN_LOCS is not fixed for OOC ports; boundary route/timing is incomplete. Internal register-to-register setup/hold is reported separately, without a shell claim.",
+  "runtime_configuration_rejections": {
+    "tested_cases": 5,
+    "all_raise_DUT_error_without_complete_output": true,
+    "dynamic_member_pool_overflow_tested": false,
+    "evidence": "closed_loop/runtime_config_rejections/verification.json"
+  }
+}

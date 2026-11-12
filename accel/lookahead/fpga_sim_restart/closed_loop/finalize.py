@@ -12,15 +12,24 @@ ooc=c/'ooc_64_fixed'
 receipt=json.load(open(ooc/'execution_receipt.json'))
 assert receipt['returncode']==0 and receipt['route_complete'], 'completed routed OOC required'
 t200=timing(ooc/'timing.rpt');t125=timing(ooc/'timing_125MHz.rpt')
+def internal_path(p):
+ s=p.read_text();m=re.search(r'Slack \((?:MET|VIOLATED)\)\s*:\s*(-?[\d.]+)ns',s);assert m,p
+ return {'slack_ns':float(m[1]),'source':re.search(r'^\s*Source:\s*(.+)$',s,re.M)[1].strip(),'destination':re.search(r'^\s*Destination:\s*(.+)$',s,re.M)[1].strip(),'data_path_delay':re.search(r'^\s*Data Path Delay:\s*(.+)$',s,re.M)[1].strip()}
+internal={mhz:{kind:internal_path(ooc/f'internal_{kind}_{mhz}MHz.rpt') for kind in ['setup','hold']} for mhz in [200,125]}
+physical=json.load(open(c/'physical_audit.json'))
+assert all(hashlib.sha256((c/p).read_bytes()).hexdigest()==h for p,h in physical['source_reports_sha256'].items())
 s=(ooc/'routed_utilization.rpt').read_text();match=re.search(r'\| graph_top\s*\|.*?\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*\d+\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*(\d+)',s);assert match
 res=dict(zip(['luts','logic_luts','lutram','ffs','ramb36','ramb18','uram','dsp'],map(int,match.groups())))
 gpu=(c/'gpu_v2/completed.json').exists()
 status={'candidate':'ALT_LINE_OWNER_REDUCE_V1','source_base':'7e63b917f37273f80c03327e024d86b797ee221b','branch':'accel/lookahead-fpga-sim-restart-20261112','overall_task_complete':False,'first_artifact_delivery_complete':True,'complete_small_batch_RTL':True,'fpga_method_rtl_verified':{'value':True,'scope':'whole d3/d4 batches, 64-owner complete scan-controller RTL; shared candidate bus, serial graph front end'},'fpga_full_kernel_ooc':{'resources':res,'timing_200MHz':t200,'timing_125MHz':t125,'complete_top_routed':True,'interface':'32 bounded ready/valid transaction channels; no AXI4/shell/board claim'},'architecture_model_rtl_calibrated':{'value':cal['total_cycle_gate'],'scope':'F1 complete 64-owner small batches, total and phase comparisons; saturated owner service separately tested','F0_complete_RTL_calibrated':False},'complete_BNN_LSTM_architecture_simulation':True,'large_complete_runs':12,'jobs_each':40,'large_performance_label':'projected_at_assumed_200MHz','resident_batch_superiority_under_declared_model':False,'board_measured':False,'native_bridge_checked_this_round':True,'final_wire_maps_exact':True,'new_GPU_cohort_complete':gpu,'pending':['new basic CUDA and LSTM warm resident cohort: Inspire authentication expired; prepared worker not run' if not gpu else '','original VPR and best native STRICT CPU matched V2 interval: not_evaluated_same_scope','full-kernel timing closure' if not (t200['all_constraints_met'] or t125['all_constraints_met']) else '']}
 status['fpga_module_ooc_timing_supported']={'value':False,'scope':'isolated owner; 125MHz setup passes but boundary hold fails','evidence':'ooc_v2/timing_125MHz.rpt'}
 status['fpga_full_kernel_ooc_timing_supported']={'value':t200['all_constraints_met'] or t125['all_constraints_met'],'scope':'complete 64-owner graph_top','evidence':'closed_loop/ooc_64_fixed/timing*.rpt'}
+status['internal_register_timing']=internal
+status['physical_resource_and_reserve_audit']=physical
 status['performance_stop_criterion']='serial front-end optimistic non-proposal IO lower bound exceeds matched ALT CPU; no further expansion of this implementation'
 status['arithmetic_coverage']={'logical_pair_lane_instances':64,'independent_physical_FP32_pipelines_verified':True,'reason':'64 material lane modules with private operand registers and elastic arithmetic/output state verified in synthesis and routed utilization','evidence':'closed_loop/independent_lane_coverage.json','sustained_64_edges_per_cycle':False}
 status['ooc_clock_integration_limit']='HD.CLK_SRC is not anchored to a board/shell clock-buffer location; preserve this OOC warning, no platform timing closure claim'
+status['ooc_boundary_integration_limit']='HD.PARTPIN_LOCS is not fixed for OOC ports; boundary route/timing is incomplete. Internal register-to-register setup/hold is reported separately, without a shell claim.'
 status['runtime_configuration_rejections']={'tested_cases':5,'all_raise_DUT_error_without_complete_output':True,'dynamic_member_pool_overflow_tested':False,'evidence':'closed_loop/runtime_config_rejections/verification.json'}
 status['pending']=[x for x in status['pending'] if x];(r/'status.json').write_text(json.dumps(status,indent=2)+'\n');(c/'status.json').write_text(json.dumps(status,indent=2)+'\n')
 cold=json.load(open(c/'cold_call_supplement.json'))
@@ -29,11 +38,16 @@ cpu_means={x['case']:x['mean_s'] for x in software if x['backend']=='original_AL
 # Build tables from values; do not report host simulation runtime as FPGA runtime.
 table=[f"| {name} | {j['cycles']:,} | {j['cycles']/2e8:,.3f} | {100*j['hits']/j['candidates']:.3f}% | {sum(x['reads32B']+x['writes32B'] for x in j['traffic'].values())*32/1e12:.6f} | exact |" for name,j in sorted(large.items())]
 small=[f"| {x['case']} | {x['owners']}/{x['latency_cycles']} | {x['rtl_cycles']:,} | {x['model_cycles']:,} | {100*x['relative_total_error']:.4f}% | exact |" for x in cal['rows']]
-sw=[f"| {x['case']} | {x['backend']} | {x['mean_s']:.9f} ± {x['sample_sd_s']:.9f} | {x['cohort']} |" for x in software]
+smallperf=[]
+for tag,name in [('d3_rtl64_final_l60','native_d3_w8'),('d4_rtl64_final_l60','native_d4_w8')]:
+ x=next(x for x in cal['rows'] if x['case']==tag);b=next(b for b in base if b['case']==name and b['backend']=='original_ALT_CPU')
+ smallperf.append(f"| {name} | {1000*b['mean_s']:.6f} ± {1000*b['sample_sd_s']:.6f} | {x['rtl_cycles']/2e5:.6f} |")
+backend_labels={'gpu_compact':'compact ALT CUDA','early':'STRICT early-exit CPU wrapper','strict':'STRICT CPU wrapper','original_ALT_CPU':'original ALT CPU (8 threads)','native_original_ALT_CUDA':'native original ALT CUDA'}
+sw=[f"| {x['case']} | {backend_labels.get(x['backend'],x['backend'])} | {x['mean_s']:.9f} ± {x['sample_sd_s']:.9f} | {x['cohort']} |" for x in software]
 qr=[f"| {x['case']} | exact | {x['critical_path_ns']:.4f} | {x['wirelength']:,} | FULL pass |" for x in qor]
 report=f'''# 无实板 FPGA 方法重启：实际交付与负结果
 
-本轮完成了单 owner RTL、8/64-owner 完整小图闭环、对应 F1 模型校准、BNN/LSTM 各完整 40 个 sample 的 12 项有限架构模拟，以及实际 native bridge/final-map 回接。**当前实现没有性能优势；整轮请求仍有未完成项**，见末节。没有把板卡、XRT、XPFM 或 shell 缺失用作实验停止条件。
+本轮完成了单 owner RTL、8/64-owner 完整小图闭环、对应 F1 模型校准、BNN/LSTM 各完整 40 个 sample 的 12 项有限架构模拟，以及实际 native bridge/final-map 回接。**当前实现在声明的仿真情景下没有性能优势；整轮请求仍有未完成项**，见末节。没有把板卡、XRT、XPFM 或 shell 缺失用作实验停止条件。
 
 基点 `7e63b917f37273f80c03327e024d86b797ee221b`；独立 worktree `{root}`；分支 `{status['branch']}`。首项交付提交 `857bfce454a86947965f7dd706f643bc376f6cf9` 已单独推送。main、原稿、STRICT、旧 golden 和历史证据未修改。配置依据用户 YAML，模板、执行合同、输入路径/SHA 和全部正负尝试均保留。
 
@@ -59,6 +73,12 @@ report=f'''# 无实板 FPGA 方法重启：实际交付与负结果
 |---|---:|---:|---:|---:|---|
 {chr(10).join(small)}
 
+完整小图也保留负结果。下列RTL秒数同样由**假设200MHz**换算，不能视为已支持频率下的硬件时间；CPU为实际9次warm测量，均执行完整batch。
+
+| 完整小图 | ALT CPU mean ± sample SD，ms | RTL cycles / 假设200MHz，ms |
+|---|---:|---:|
+{chr(10).join(smallperf)}
+
 逐阶段误差保留在校准JSON中；RTL的startup/sample-switch/finish阶段包含JOB读取，模型将JOB读取归入initialization；模型原始阶段数组还未单列已计入total的4+2×jobs个控制周期。校准文件保留原始分解、补齐后的分解和合并阶段比较，未把归类差异当作免费reset。
 
 模型直接执行 labels/proposals/pending 的闭环，不读预先的 golden frontier。每数组的读写、通道预算、RAW、write ack、outstanding、dirty slot 和 fence 均计时。无竞争阻塞扫描仅在条件满足时精确聚合其连续事务；没有免费复制/清空 N。覆盖的大图调度每 owner 最大一个在途 miss、模型 front backpressure=0；该稀疏请求域之外的饱和负载只具备单 owner 校准。F0 是同前端/存储的显式行 RMW 模型消融，**没有独立完整 F0 RTL 校准**。模型 fence 仲裁是有报告误差的事件近似。
@@ -72,9 +92,15 @@ Vivado2022.2，`xcu280-fsvh2892-2L-e`。最终64-owner顶层资源：`{res}`。�
 | 200 MHz | {t200['wns_ns']} | {t200['whs_ns']} | {t200['all_constraints_met']} |
 | 125 MHz 同 route 回退检查 | {t125['wns_ns']} | {t125['whs_ns']} | {t125['all_constraints_met']} |
 
+同一route的内部寄存器路径单独检查：200MHz setup/hold slack为{internal[200]['setup']['slack_ns']}/{internal[200]['hold']['slack_ns']}ns，125MHz为{internal[125]['setup']['slack_ns']}/{internal[125]['hold']['slack_ns']}ns。关键端点及完整路径见内部时序报告，不将边界未路由警告混同于内部路径证据。
+
+最差内部setup路径从`{internal[200]['setup']['source']}`到`{internal[200]['setup']['destination']}`；数据路径延迟为{internal[200]['setup']['data_path_delay']}。该owner内部路径本身未达标。当前串行扫描实现的完整工作量乐观界已经落后于软件，按合同第7节保留这一结果，未继续扩展流水/布局优化。
+
 报告包含 setup/hold、unconstrained、DRC、route status 和约束；未添加 false paths 掩盖依赖。早期8-owner互连资源偏大，随后限制为实际 owner/channel 映射。被替代的64-owner全连接仲裁综合尝试明确中止，保留原因和日志，未写成工具/资源失败。先前 libudev/WebTalk 路由退出问题采用进程级 preload 解决，初次失败及复跑都保留。
 
-`HD.CLK_SRC`未绑定到板级/shell时钟buffer位置，保留Vivado的OOC时钟延迟/偏斜估计警告，不作平台时序闭合主张。SLR资源与时钟源检查另存报告；20%接口/shell预留是设计假设，不能替代实际集成。
+`HD.CLK_SRC`未绑定到板级/shell时钟buffer位置，端口也未固定`HD.PARTPIN_LOCS`；保留Vivado关于时钟偏斜估计和边界路由/时序精度的警告，不作平台时序闭合主张。内部寄存器到寄存器的setup/hold、SLR资源与时钟源检查另存报告；20%接口/shell预留是设计假设，不能替代实际集成。
+
+SLR0/1/2的CLB占用分别为85.05%/92.77%/56.11%，CLBM占用为91.42%/97.65%/67.78%；已用LUT占比分别为65.43%/72.49%/38.68%。已占用站点与已用LUT数量不同，SLR0/1没有20%完全空闲CLB/CLBM站点，不能把名义预留写成已通过的shell适配。实际跨SLR连线占用为9,574个SLL，两个相邻边界分别使用2,822和6,752个。完整数据及预留解释见`physical_audit.json`。
 
 ## 全量架构模型与敏感性
 
@@ -90,7 +116,7 @@ BNN 中央 F1命中率约85.45%，完整周期只比F0少约{100*(1-large['bnn_F
 
 ## RESIDENT_COMPLETE_BATCH_V2 软件边界
 
-起止为各平台输入可消费到全部真实 sample 输出提交；排除外部转换、首次H2D/最终D2H；内部访存、初始化、波次控制、冲突、提交和排空计入。新 ALT CPU 为3独立进程×预热1次+测量3次，全部原始值保存。下列误差为9个实际 warm 值的 sample SD；另存进程身份和进程均值间SD。模型确定周期没有虚构SD。
+起止为各平台输入可消费到全部真实 sample 输出提交；排除外部转换、首次H2D/最终D2H；内部访存、初始化、波次控制、冲突、提交和排空计入。新 ALT CPU 为3独立进程×预热1次+测量3次，全部原始值保存。新CPU和历史warm cohort报告9个实际warm值的sample SD，另存进程身份和进程均值间SD；native CUDA首次solve cohort仅有3个值，单列说明。模型确定周期没有虚构SD。
 
 新CPU主结果使用socket1的32–39核；本轮Vivado限制在socket0的0–15核。原先工具亲和性未限制的CPU样本另存为失败隔离尝试，不混入主统计。内存系统和共享主机上的其他用户仍未隔离。执行时曾有最多3个Vivado实现作业重叠，偏离模板的单作业限制；已记录于 `execution_deviations.json`，不把工具运行耗时用作FPGA性能。
 
@@ -123,6 +149,7 @@ BNN 中央 F1命中率约85.45%，完整周期只比F0少约{100*(1-large['bnn_F
 - 新基础 CUDA 及 LSTM warm GPU cohort：启智 CLI 实际返回 `invalid_grant/session expired`，未提交作业；timer-only源码变体和执行脚本已准备，未冒充已编译/运行。
 - 原 VPR 多线程与最佳 native STRICT CPU 的匹配 V2核心区间仍为 `not_evaluated_same_scope`，不拿其E2与模型相除。
 - 当前全核的时序结论见上表；若未闭合，频率保持假设，不能提升为物理支持的 FPGA服务时间。图前端仍是主要性能限制。
+- 覆盖限制：F0为完整模型消融，未做独立完整F0 RTL校准；动态member容量溢出也尚未取得RTL测试覆盖。
 
 可复现代码：[closed_loop](../accel/lookahead/fpga_sim_restart/closed_loop/README.md)。完整差分、原始计时、周期/事务、OOC、native日志及全输出见 `results/{r.name}/evidence_snapshot/closed_loop`；大DCP仅保留本机路径及SHA，未伪称已经上传Git。所有尝试与未完成项都有机器可读状态。
 
@@ -140,6 +167,10 @@ if '  observed_peak_vivado_jobs:' not in s:s=s.replace('  max_concurrent_vivado_
 s=s.replace('  actual_rtl_simulator: XSim 2022.2','  actual_rtl_simulators: [XSim_2022_2, Verilator_4_038]')
 s=re.sub(r'  actual_cpu_affinity: \[[^\n]*\]', '  actual_cpu_benchmark_affinity: [32, 33, 34, 35, 36, 37, 38, 39]',s)
 s=s.replace('type: finite_AXI_service_model','type: finite_32B_ready_valid_transaction_service_model')
+s=s.replace('capacity_source: intended_target_capacity_verify_in_inventory','capacity_source: assumed_finite_8GiB_service_capacity_no_board_calibration')
+s=s.replace('array_base_addresses_and_strides: must_be_distinct_aligned_and_recorded','array_base_addresses_and_strides: closed_loop/memory_layouts.json')
+s=s.replace('full_kernel_resource_budget: null','full_kernel_resource_budget: closed_loop/physical_audit.json')
+s=s.replace('performance_frequency_scope: null','performance_frequency_scope: projection_at_assumed_200MHz_separate_from_OOC_clock_gate')
 s=s.replace('same_scope_status: must_identify_or_measure','same_scope_status: not_evaluated_same_scope')
 s=s.replace('calibration_configuration_signature: required','calibration_configuration_signature: closed_loop/calibration_freeze.json')
 s=s.replace('large_model_result_label_pending_clock_gate: projected','large_model_result_label: projected_at_assumed_200MHz')

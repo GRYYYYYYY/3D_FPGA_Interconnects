@@ -89,12 +89,28 @@ python3 accel/lookahead/fpga_sim_restart/closed_loop/calibrate.py
 FPGA_OOC_SUFFIX=_fixed LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libudev.so.1 \
  /inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin/vivado \
  -mode batch -source accel/lookahead/fpga_sim_restart/closed_loop/synth.tcl -tclargs 64
-# After routed.dcp exists, inspect_ooc.tcl adds SLR resource and clock-source reports.
+# After routed.dcp exists, inspect_physical.tcl reports SLR/clock/boundary properties
+# and separate internal-register setup/hold at 200/125MHz, without changing the route.
 ```
 
 The executable model takes `INPUT EXPECTED_NATIVE_OUTPUT OUTPUT_PREFIX OWNERS
 F0|F1 LATENCY_CYCLES BANDWIDTH_BYTES_PER_SECOND`; it writes all native output pairs,
 per-qid completion receipts, traffic per array, cycle phases, and high water marks.
+Build it with the frozen floating-point flags:
+
+```bash
+g++ -O3 -std=c++17 -ffp-contract=off -fno-fast-math \
+ -Iaccel/lookahead/round6_1 -Iaccel/lookahead/include \
+ accel/lookahead/fpga_sim_restart/closed_loop/model.cpp -o /tmp/owner_graph_model
+/tmp/owner_graph_model BNN_INPUT.bin EXPECTED_NATIVE.bin OUTPUT_PREFIX \
+ 64 F1 60 128000000000
+```
+
+The output prefix must be in an existing directory. Actual input paths and hashes
+are in `config/inputs.json`; the expected native outputs are the full F1 replay
+outputs under this run's `replay/`. The expected file is used only by the final
+checker. `compiled_model_cpu_binding.json` binds the delivered executable hashes
+and exact compiler/flags; host model elapsed time has no hardware-time meaning.
 F0 is a modeled explicit line RMW control. The complete graph RTL is F1; F0 is not
 claimed to have its own complete RTL/OOC calibration. `run_large.py` queues the
 predeclared full BNN/LSTM cases after the initial BNN central F1 passes.

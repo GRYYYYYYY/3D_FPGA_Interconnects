@@ -1,0 +1,172 @@
+{
+  "cold_scenarios": [
+    {
+      "case": "bnn_export",
+      "scenario": "idealized",
+      "parameter_provenance": "assumed illustration; not PCIe/FPGA measurement",
+      "real_batch_jobs": 40,
+      "reuse_K": 1,
+      "H2D_bytes": 1070726208,
+      "D2H_bytes": 8028160,
+      "PCIe_shared_sequential_bytes_per_s": 32000000000.0,
+      "nonoverlapping_terms": {
+        "external_conversion_s": 0.0,
+        "initial_H2D_s": 0.033460194,
+        "one_time_launch_s": 0.0,
+        "resident_projected_s": 15057.610385455,
+        "final_D2H_s": 0.00025088,
+        "external_postprocess_s": 0.0
+      },
+      "cold_projected_s": 15057.644096529,
+      "cold_speedup_claimed": false
+    },
+    {
+      "case": "bnn_export",
+      "scenario": "illustrative",
+      "parameter_provenance": "assumed illustration; not PCIe/FPGA measurement",
+      "real_batch_jobs": 40,
+      "reuse_K": 1,
+      "H2D_bytes": 1070726208,
+      "D2H_bytes": 8028160,
+      "PCIe_shared_sequential_bytes_per_s": 16000000000.0,
+      "nonoverlapping_terms": {
+        "external_conversion_s": 1.0,
+        "initial_H2D_s": 0.066920388,
+        "one_time_launch_s": 2e-05,
+        "resident_projected_s": 15057.610385455,
+        "final_D2H_s": 0.00050176,
+        "external_postprocess_s": 0.01
+      },
+      "cold_projected_s": 15058.687827603,
+      "cold_speedup_claimed": false
+    },
+    {
+      "case": "bnn_export",
+      "scenario": "higher_overhead",
+      "parameter_provenance": "assumed illustration; not PCIe/FPGA measurement",
+      "real_batch_jobs": 40,
+      "reuse_K": 1,
+      "H2D_bytes": 1070726208,
+      "D2H_bytes": 8028160,
+      "PCIe_shared_sequential_bytes_per_s": 8000000000.0,
+      "nonoverlapping_terms": {
+        "external_conversion_s": 2.0,
+        "initial_H2D_s": 0.133840776,
+        "one_time_launch_s": 0.0001,
+        "resident_projected_s": 15057.610385455,
+        "final_D2H_s": 0.00100352,
+        "external_postprocess_s": 0.05
+      },
+      "cold_projected_s": 15059.795329751,
+      "cold_speedup_claimed": false
+    },
+    {
+      "case": "lstm_s2",
+      "scenario": "idealized",
+      "parameter_provenance": "assumed illustration; not PCIe/FPGA measurement",
+      "real_batch_jobs": 40,
+      "reuse_K": 1,
+      "H2D_bytes": 1087817152,
+      "D2H_bytes": 8172160,
+      "PCIe_shared_sequential_bytes_per_s": 32000000000.0,
+      "nonoverlapping_terms": {
+        "external_conversion_s": 0.0,
+        "initial_H2D_s": 0.033994286,
+        "one_time_launch_s": 0.0,
+        "resident_projected_s": 15544.61724847,
+        "final_D2H_s": 0.00025538,
+        "external_postprocess_s": 0.0
+      },
+      "cold_projected_s": 15544.651498136,
+      "cold_speedup_claimed": false
+    },
+    {
+      "case": "lstm_s2",
+      "scenario": "illustrative",
+      "parameter_provenance": "assumed illustration; not PCIe/FPGA measurement",
+      "real_batch_jobs": 40,
+      "reuse_K": 1,
+      "H2D_bytes": 1087817152,
+      "D2H_bytes": 8172160,
+      "PCIe_shared_sequential_bytes_per_s": 16000000000.0,
+      "nonoverlapping_terms": {
+        "external_conversion_s": 1.0,
+        "initial_H2D_s": 0.067988572,
+        "one_time_launch_s": 2e-05,
+        "resident_projected_s": 15544.61724847,
+        "final_D2H_s": 0.00051076,
+        "external_postprocess_s": 0.01
+      },
+      "cold_projected_s": 15545.695767802,
+      "cold_speedup_claimed": false
+    },
+    {
+      "case": "lstm_s2",
+      "scenario": "higher_overhead",
+      "parameter_provenance": "assumed illustration; not PCIe/FPGA measurement",
+      "real_batch_jobs": 40,
+      "reuse_K": 1,
+      "H2D_bytes": 1087817152,
+      "D2H_bytes": 8172160,
+      "PCIe_shared_sequential_bytes_per_s": 8000000000.0,
+      "nonoverlapping_terms": {
+        "external_conversion_s": 2.0,
+        "initial_H2D_s": 0.135977144,
+        "one_time_launch_s": 0.0001,
+        "resident_projected_s": 15544.61724847,
+        "final_D2H_s": 0.00102152,
+        "external_postprocess_s": 0.05
+      },
+      "cold_projected_s": 15546.804347133999,
+      "cold_speedup_claimed": false
+    }
+  ],
+  "serial_front_end_lower_bounds": [
+    {
+      "case": "bnn_export",
+      "source": "actual complete model traffic excluding ALL proposal transactions, including controller proposal scan traffic, for an optimistic bound",
+      "nonproposal_controller_transactions": 37597050307,
+      "optimistic_controller_transactions_per_cycle": 1,
+      "assumed_hz": 200000000,
+      "optimistic_lower_bound_s": 187.985251535,
+      "interpretation": "applies to this serial scan front end only; changing architecture invalidates this bound"
+    },
+    {
+      "case": "lstm_s2",
+      "source": "actual complete model traffic excluding ALL proposal transactions, including controller proposal scan traffic, for an optimistic bound",
+      "nonproposal_controller_transactions": 38799101545,
+      "optimistic_controller_transactions_per_cycle": 1,
+      "assumed_hz": 200000000,
+      "optimistic_lower_bound_s": 193.995507725,
+      "interpretation": "applies to this serial scan front end only; changing architecture invalidates this bound"
+    }
+  ],
+  "historical_native_module_share": [
+    {
+      "case": "bnn",
+      "source": "results/lookahead_r6_2_20261109T191213Z/evidence_snapshot/targeted_optimization_results.json",
+      "repeat": "reserve_qualification",
+      "cohort": "historical cold native original ALT CPU qualification, same invocation for numerator/denominator",
+      "resident_s": 7.175722668,
+      "E2_s": 11.519811631,
+      "Process_wall_s": 77.04966870695353,
+      "resident_fraction_of_E2": 0.6229027780879692,
+      "resident_fraction_of_Process": 0.0931311294185021,
+      "not_FPGA_application_speedup": true
+    },
+    {
+      "case": "lstm_s2",
+      "source": "results/lookahead_r6_2_20261109T191213Z/evidence_snapshot/holdout_results.json",
+      "repeat": "qualification",
+      "cohort": "historical cold native original ALT CPU qualification, same invocation for numerator/denominator",
+      "resident_s": 6.87101103,
+      "E2_s": 11.744831434,
+      "Process_wall_s": 83.71996062411927,
+      "resident_fraction_of_E2": 0.5850242354359532,
+      "resident_fraction_of_Process": 0.08207136002905022,
+      "not_FPGA_application_speedup": true
+    }
+  ],
+  "observed_win_loss_crossover": "none of five predeclared scenarios wins; even one controller transaction per cycle excluding all proposal work exceeds current ALT CPU batch",
+  "scope": "supplement only; main RESIDENT_COMPLETE_BATCH_V2 unchanged"
+}

@@ -1,6 +1,6 @@
-# 本文件是待执行计划。proposal/assumed 值均非实测；null 不能当作 0。
+# 本文件为本轮执行配置。结果和偏差见独立证据；assumed 非实测，null 不能当作 0。
 schema_version: "2.0"
-status: executing_complete_closed_loop_validation
+status: delivered_with_negative_performance_and_GPU_timing_auth_block
 research_mode: simulation_and_module_ooc
 project:
   repository: https://github.com/GRYYYYYYY/3D_FPGA_Interconnects
@@ -25,6 +25,8 @@ execution:
   independent_worktree: true
   preserve_historical_evidence: true
   max_concurrent_vivado_jobs: 1
+  observed_peak_vivado_jobs: 3
+  concurrency_deviation_evidence: closed_loop/execution_deviations.json
   max_concurrent_timed_benchmarks: 1
   protect_other_user_jobs: true
   continue_after_technical_gate: true
@@ -33,9 +35,9 @@ environment:
   actual_part: xcu280-fsvh2892-2L-e
   actual_vivado_version: "2022.2"
   actual_hls_version: null
-  actual_rtl_simulator: XSim 2022.2
+  actual_rtl_simulators: [XSim_2022_2, Verilator_4_038]
   actual_gpu: null
-  actual_cpu_affinity: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127]
+  actual_cpu_benchmark_affinity: [32, 33, 34, 35, 36, 37, 38, 39]
   physical_board_visible: null
   installed_platforms: null
   tool_or_license_errors: [{"stage": "post-route WebTalk", "signature": "realloc(): invalid pointer; exit 6", "resolved_for_recovery": true, "workaround": "per-process LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libudev.so.1", "evidence": "attempts/crash_diagnosis.json"}]
@@ -147,10 +149,10 @@ timing:
 baselines:
   original_VPR_multithread:
     role: original_method
-    same_scope_status: must_identify_or_measure
+    same_scope_status: not_evaluated_same_scope
   optimized_STRICT_CPU:
     role: optimized_native_method
-    same_scope_status: must_identify_or_measure
+    same_scope_status: not_evaluated_same_scope
   original_ALT_CPU:
     role: same_algorithm_hardware_control
     threads: reuse_best_validated_budget
@@ -175,17 +177,17 @@ clock:
   tile_ooc_hz: null
   full_kernel_ooc_hz: null
   performance_hz: null
-  performance_frequency_scope: null
+  performance_frequency_scope: projection_at_assumed_200MHz_separate_from_OOC_clock_gate
   inherit_old_R4_frequency: false
   tile_frequency_implies_full_kernel_frequency: false
   target_only_result_label: projected
   preserve_memory_ns_and_bytes_per_second_in_frequency_sweep: true
 memory_model:
-  type: finite_AXI_service_model
+  type: finite_32B_ready_valid_transaction_service_model
   physical_board_calibrated: false
   parameter_provenance: assumed_scenarios_not_hardware_measurement
   capacity_bytes: 8589934592
-  capacity_source: intended_target_capacity_verify_in_inventory
+  capacity_source: assumed_finite_8GiB_service_capacity_no_board_calibration
   channels: 32
   beat_bytes: 32
   data_bits: 256
@@ -203,7 +205,7 @@ memory_model:
   address_line_function: "physical_byte_address >> 5"
   channel_function: "address_line % channels"
   abstract_bank_function: "(address_line // channels) % abstract_banks_per_channel"
-  array_base_addresses_and_strides: must_be_distinct_aligned_and_recorded
+  array_base_addresses_and_strides: closed_loop/memory_layouts.json
   bank_model_note: abstract_conflict_service_not_a_claim_of_exact_HBM_row_timing
   scenarios:
     - id: central
@@ -236,8 +238,8 @@ rtl_and_ooc:
   runtime_input_loading: required
   golden_trace_as_complete_kernel: false
   synthesized_component_coverage: full_64_owner_graph_top_with_serial_graph_front_end
-  routed_component_coverage: one_owner_service_only
-  full_kernel_resource_budget: null
+  routed_component_coverage: full_64_owner_graph_top_with_serial_graph_front_end
+  full_kernel_resource_budget: closed_loop/physical_audit.json
   hypothetical_shell_reserve_fraction: 0.20
   reserve_provenance: assumed_not_verified_shell_quota
   report_setup_hold_unconstrained_paths_DRC: true
@@ -254,7 +256,7 @@ model_validation:
   uncalibrated_results: projected
   calibrated_results: architecture_simulated
   per_component_coverage_and_error_report: true
-  calibration_configuration_signature: required
+  calibration_configuration_signature: closed_loop/calibration_freeze.json
   full_64_owner_model_needs_matching_small_complete_RTL: true
   only_8_owner_calibration_allows_64_owner_architecture_simulated_label: false
 qor:
@@ -297,9 +299,10 @@ closed_loop_implementation:
   complete_small_RTL_cases: [native_d3_w8, native_d4_w8]
   small_RTL_backends: [XSim_2022_2, Verilator_4_038]
   large_jobs_per_input: 40
-  large_model_result_label_pending_clock_gate: projected
+  large_model_result_label: projected_at_assumed_200MHz
   sensitivity_nominal_GBps: [64, 128, 192]
   sensitivity_integer_link_effective_GBps_at_200MHz: [51.2, 102.4, 102.4]
   GPU_new_cohort_status: blocked_by_Inspire_expired_login_invalid_grant
   original_VPR_and_best_native_STRICT_V2: not_evaluated_same_scope
   old_E1_renamed: false
+  independent_physical_FP32_pipelines_verified: true

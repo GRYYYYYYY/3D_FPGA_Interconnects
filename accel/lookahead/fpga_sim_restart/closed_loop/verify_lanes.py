@@ -22,4 +22,7 @@ j={'status':'PASS','revision':'independent_operands_v2','physical_lane_instances
  'lanes':rows,'routed_verified':routed.exists()}
 if routed.exists():j['routed_lanes']=check(routed);j['routed_report_sha256']=hashlib.sha256(routed.read_bytes()).hexdigest()
 (r/'independent_lane_coverage.json').write_text(json.dumps(j,indent=2)+'\n')
-print('PASS:64 physical lanes; LUT range',min(x['luts'] for x in rows),max(x['luts'] for x in rows),'FF range',min(x['ffs'] for x in rows),max(x['ffs'] for x in rows))
+print('PASS:64 synthesis lane modules; LUT range',min(x['luts'] for x in rows),max(x['luts'] for x in rows),'FF range',min(x['ffs'] for x in rows),max(x['ffs'] for x in rows))
+if routed.exists():
+ rr=j['routed_lanes']
+ print('PASS:64 routed lane modules; LUT range',min(x['luts'] for x in rr),max(x['luts'] for x in rr),'FF range',min(x['ffs'] for x in rr),max(x['ffs'] for x in rr))

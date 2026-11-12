@@ -1,0 +1,363 @@
+
+****** Vivado v2022.2 (64-bit)
+  **** SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source accel/lookahead/fpga_sim_restart/closed_loop/synth.tcl
+# set root [file normalize [file join [file dirname [info script]] ../../../..]]
+# set owners [lindex $argv 0]
+# if {$owners ni {8 64}} {error {owners must be 8 or 64}}
+# set out $root/results/fpga_sim_restart_20261111T231000Z/closed_loop/ooc_$owners
+# file mkdir $out
+# create_project -in_memory -part xcu280-fsvh2892-2L-e
+# set_param general.maxThreads 4
+# foreach f [list rtl/owner_service.sv closed_loop/fp32_positive.sv closed_loop/graph_control.sv closed_loop/graph_top.sv] {read_verilog -sv $root/accel/lookahead/fpga_sim_restart/$f}
+# synth_design -top graph_top -part xcu280-fsvh2892-2L-e -mode out_of_context -generic OWNERS=$owners -flatten_hierarchy rebuilt
+Command: synth_design -top graph_top -part xcu280-fsvh2892-2L-e -mode out_of_context -generic OWNERS=64 -flatten_hierarchy rebuilt
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xcu280'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xcu280'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 4172712
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2108.180 ; gain = 381.727 ; free physical = 833178 ; free virtual = 1427937
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1374.542; parent = 1226.085; children = 148.457
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3077.172; parent = 2111.152; children = 966.020
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'graph_top' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:4]
+	Parameter OWNERS bound to: 64 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'pair_lane' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/fp32_positive.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'pair_lane' (0#1) [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/fp32_positive.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'owner_service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/rtl/owner_service.sv:16]
+	Parameter OWNER_BITS bound to: 6 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'bounded_fifo' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/rtl/owner_service.sv:4]
+	Parameter W bound to: 90 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'bounded_fifo' (0#1) [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/rtl/owner_service.sv:4]
+INFO: [Synth 8-6157] synthesizing module 'bounded_fifo__parameterized0' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/rtl/owner_service.sv:4]
+	Parameter W bound to: 262 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'bounded_fifo__parameterized0' (0#1) [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/rtl/owner_service.sv:4]
+INFO: [Synth 8-6155] done synthesizing module 'owner_service' (0#1) [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/rtl/owner_service.sv:16]
+WARNING: [Synth 8-7071] port 'hits' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'merges' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'reads' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'writes' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'raw_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'capacity_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'fence_cycles' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'request_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'response_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'mshr_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'dirty_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'hits' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'merges' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'reads' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'writes' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'raw_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'capacity_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'fence_cycles' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'request_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'response_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'mshr_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'dirty_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'hits' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'merges' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'reads' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'writes' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'raw_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'capacity_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'fence_cycles' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'request_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'response_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'mshr_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'dirty_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'hits' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'merges' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'reads' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'writes' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'raw_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'capacity_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'fence_cycles' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'request_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'response_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'mshr_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'dirty_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'hits' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'merges' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'reads' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'writes' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'raw_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'capacity_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'fence_cycles' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'request_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'response_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'mshr_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'dirty_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'hits' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'merges' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'reads' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'writes' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'raw_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'capacity_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'fence_cycles' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'request_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'response_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'mshr_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'dirty_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'hits' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'merges' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'reads' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'writes' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'raw_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'capacity_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'fence_cycles' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'request_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'response_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'mshr_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'dirty_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'hits' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'merges' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'reads' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'writes' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'raw_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'capacity_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'fence_cycles' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'request_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'response_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'mshr_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'dirty_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'hits' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'merges' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'reads' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'writes' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'raw_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'capacity_stall' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'fence_cycles' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'request_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'response_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'mshr_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'dirty_hwm' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7071] port 'hits' of module 'owner_service' is unconnected for instance 'service' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+INFO: [Common 17-14] Message 'Synth 8-7071' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+WARNING: [Synth 8-7023] instance 'service' of module 'owner_service' has 33 connections declared, but only 22 given [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:33]
+INFO: [Synth 8-6157] synthesizing module 'graph_control' [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_control.sv:4]
+INFO: [Synth 8-6155] done synthesizing module 'graph_control' (0#1) [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_control.sv:4]
+INFO: [Synth 8-6155] done synthesizing module 'graph_top' (0#1) [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:4]
+WARNING: [Synth 8-6014] Unused sequential element cnode_reg was removed.  [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_control.sv:68]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 3927.539 ; gain = 2201.086 ; free physical = 831410 ; free virtual = 1426170
+Synthesis current peak Physical Memory [PSS] (MB): peak = 2490.949; parent = 2342.494; children = 148.466
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 4893.562; parent = 3927.543; children = 966.020
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:34 ; elapsed = 00:00:39 . Memory (MB): peak = 3942.383 ; gain = 2215.930 ; free physical = 831460 ; free virtual = 1426220
+Synthesis current peak Physical Memory [PSS] (MB): peak = 2490.949; parent = 2342.494; children = 148.479
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 4908.406; parent = 3942.387; children = 966.020
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-3936] Found unconnected internal register 'data_reg' and it is trimmed from '256' to '128' bits. [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_control.sv:40]
+WARNING: [Synth 8-3936] Found unconnected internal register 'busdst_reg' and it is trimmed from '32' to '26' bits. [/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/accel/lookahead/fpga_sim_restart/closed_loop/graph_top.sv:29]
+INFO: [Synth 8-6904] The RAM "bounded_fifo:/mem_reg" of size (depth=64 x width=90) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+INFO: [Synth 8-6904] The RAM "owner_service:/acc_reg" of size (depth=32 x width=256) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+INFO: [Synth 8-6904] The RAM "owner_service:/slot_reg" of size (depth=32 x width=7) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+INFO: [Synth 8-6904] The RAM "owner_service:/tags_reg" of size (depth=128 x width=24) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+INFO: [Synth 8-6904] The RAM "owner_service:/rr_reg" of size (depth=32 x width=2) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+INFO: [Synth 8-6904] The RAM "owner_service:/dd_reg" of size (depth=16 x width=256) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:07:01 ; elapsed = 00:07:14 . Memory (MB): peak = 6962.121 ; gain = 5235.668 ; free physical = 811694 ; free virtual = 1406460
+Synthesis current peak Physical Memory [PSS] (MB): peak = 15843.618; parent = 5833.752; children = 10025.607
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 21665.883; parent = 6962.125; children = 14703.758
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   64 Bit       Adders := 2     
+	   3 Input   64 Bit       Adders := 2     
+	   2 Input   33 Bit       Adders := 2     
+	   3 Input   32 Bit       Adders := 128   
+	   2 Input   32 Bit       Adders := 231   
+	  31 Input   32 Bit       Adders := 64    
+	  15 Input   32 Bit       Adders := 64    
+	   2 Input   28 Bit       Adders := 128   
+	   2 Input   25 Bit       Adders := 128   
+	   2 Input   10 Bit       Adders := 128   
+	   2 Input    8 Bit       Adders := 128   
+	   2 Input    7 Bit       Adders := 223   
+	   2 Input    6 Bit       Adders := 386   
+	   2 Input    3 Bit       Adders := 128   
+	   2 Input    2 Bit       Adders := 64    
++---Registers : 
+	             8192 Bit    Registers := 1     
+	             1024 Bit    Registers := 2     
+	              416 Bit    Registers := 1     
+	              256 Bit    Registers := 65    
+	              128 Bit    Registers := 66    
+	               64 Bit    Registers := 73    
+	               32 Bit    Registers := 207   
+	               26 Bit    Registers := 1     
+	               24 Bit    Registers := 3136  
+	               18 Bit    Registers := 2     
+	               16 Bit    Registers := 130   
+	                8 Bit    Registers := 64    
+	                7 Bit    Registers := 289   
+	                6 Bit    Registers := 386   
+	                5 Bit    Registers := 65    
+	                1 Bit    Registers := 588   
++---Multipliers : 
+	              32x32  Multipliers := 1     
++---RAMs : 
+	              32K Bit	(128 X 256 bit)          RAMs := 64    
+	              16K Bit	(64 X 262 bit)          RAMs := 64    
+	               8K Bit	(32 X 256 bit)          RAMs := 64    
+	               5K Bit	(64 X 90 bit)          RAMs := 64    
+	               4K Bit	(16 X 256 bit)          RAMs := 64    
+	               3K Bit	(128 X 24 bit)          RAMs := 64    
+	              224 Bit	(32 X 7 bit)          RAMs := 64    
+	               64 Bit	(32 X 2 bit)          RAMs := 64    
++---Muxes : 
+	   2 Input 8192 Bit        Muxes := 1     
+	   2 Input  416 Bit        Muxes := 2     
+	   2 Input  256 Bit        Muxes := 8767  
+	   4 Input  256 Bit        Muxes := 128   
+	  10 Input  256 Bit        Muxes := 1     
+	   2 Input  128 Bit        Muxes := 1152  
+	   4 Input  128 Bit        Muxes := 64    
+	   2 Input   64 Bit        Muxes := 574   
+	   4 Input   64 Bit        Muxes := 128   
+	   2 Input   32 Bit        Muxes := 11683 
+	   5 Input   32 Bit        Muxes := 129   
+	   4 Input   32 Bit        Muxes := 192   
+	  65 Input   32 Bit        Muxes := 32    
+	  12 Input   32 Bit        Muxes := 1     
+	  15 Input   32 Bit        Muxes := 1     
+	   2 Input   31 Bit        Muxes := 576   
+	   2 Input   30 Bit        Muxes := 320   
+	   2 Input   29 Bit        Muxes := 320   
+	   2 Input   28 Bit        Muxes := 320   
+	   2 Input   27 Bit        Muxes := 448   
+	   2 Input   26 Bit        Muxes := 320   
+	   2 Input   25 Bit        Muxes := 320   
+	   2 Input   24 Bit        Muxes := 448   
+	   2 Input   23 Bit        Muxes := 448   
+	   2 Input   22 Bit        Muxes := 320   
+	   2 Input   21 Bit        Muxes := 320   
+	   2 Input   20 Bit        Muxes := 320   
+	   2 Input   19 Bit        Muxes := 384   
+	   2 Input   18 Bit        Muxes := 384   
+	   2 Input   17 Bit        Muxes := 384   
+	   2 Input   16 Bit        Muxes := 2048  
+	   4 Input   16 Bit        Muxes := 128   
+	   2 Input   15 Bit        Muxes := 384   
+	   2 Input   14 Bit        Muxes := 384   
+	   2 Input   13 Bit        Muxes := 416   
+	   4 Input   13 Bit        Muxes := 32    
+	   2 Input   12 Bit        Muxes := 384   
+	   2 Input   11 Bit        Muxes := 384   
+	   2 Input   10 Bit        Muxes := 384   
+	   2 Input    9 Bit        Muxes := 384   
+	   2 Input    8 Bit        Muxes := 577   
+	  32 Input    8 Bit        Muxes := 1     
+	   2 Input    7 Bit        Muxes := 384   
+	   2 Input    6 Bit        Muxes := 8583  
+	   4 Input    6 Bit        Muxes := 64    
+	   3 Input    6 Bit        Muxes := 2     
+	   2 Input    5 Bit        Muxes := 259   
+	  49 Input    5 Bit        Muxes := 2     
+	   3 Input    5 Bit        Muxes := 1     
+	   2 Input    4 Bit        Muxes := 196   
+	  49 Input    4 Bit        Muxes := 4     
+	  49 Input    3 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 3     
+	   2 Input    2 Bit        Muxes := 321   
+	   3 Input    2 Bit        Muxes := 128   
+	  49 Input    2 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 4004  
+	   4 Input    1 Bit        Muxes := 128   
+	   3 Input    1 Bit        Muxes := 128   
+	  49 Input    1 Bit        Muxes := 24    
+	  11 Input    1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 9024 (col length:94)
+BRAMs: 4032 (col length: RAMB18 288 RAMB36 144)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6904] The RAM "owner_service__GBM1:/requests/mem_reg" of size (depth=64 x width=90) is automatically implemented using LUTRAM. BRAM implementation would be inefficient 
+Terminated

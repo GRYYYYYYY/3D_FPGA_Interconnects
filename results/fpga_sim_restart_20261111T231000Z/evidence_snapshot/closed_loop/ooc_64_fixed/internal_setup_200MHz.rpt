@@ -1,0 +1,1124 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date              : Thu Nov 12 05:09:27 2026
+| Host              : fpgaacc2--72bfa719011c-3hfvuvkzdl running 64-bit Ubuntu 22.04.4 LTS
+| Command           : report_timing -from [all_registers] -to [all_registers] -delay_type max -max_paths 10 -file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/results/fpga_sim_restart_20261111T231000Z/closed_loop/ooc_64_fixed/internal_setup_200MHz.rpt
+| Design            : graph_top
+| Device            : xcu280-fsvh2892
+| Speed File        : -2L  PRODUCTION 1.30 05-01-2022
+| Temperature Grade : E
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (VIOLATED) :        -8.417ns  (required time - arrival time)
+  Source:                 owners[26].service/requests/rp_reg[2]_replica/C
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            owners[26].service/dirty_reg[32]/D
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core rise@5.000ns - core rise@0.000ns)
+  Data Path Delay:        13.299ns  (logic 2.196ns (16.512%)  route 11.103ns (83.488%))
+  Logic Levels:           21  (CARRY8=3 LUT2=2 LUT3=3 LUT4=1 LUT5=2 LUT6=7 MUXF7=1 RAMD64E=2)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=531325, unset)       0.028     0.028    owners[26].service/requests/clk
+    SLICE_X151Y187       FDRE                                         r  owners[26].service/requests/rp_reg[2]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X151Y187       FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  owners[26].service/requests/rp_reg[2]_replica/Q
+                         net (fo=7, routed)           0.180     0.287    owners[26].service/requests/mem_reg_0_63_70_76/ADDRD2
+    SLICE_X150Y187       RAMD64E (Prop_D6LUT_SLICEM_RADR2_O)
+                                                      0.099     0.386 r  owners[26].service/requests/mem_reg_0_63_70_76/RAMD/O
+                         net (fo=316, routed)         1.420     1.806    owners[26].service/requests/od[7]
+    SLICE_X186Y234       LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.122     1.928 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25/O
+                         net (fo=1, routed)           0.025     1.953    owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25_n_0
+    SLICE_X186Y234       MUXF7 (Prop_F7MUX_CD_SLICEM_I0_O)
+                                                      0.069     2.022 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25/O
+                         net (fo=1, routed)           0.283     2.305    owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25_n_0
+    SLICE_X185Y235       LUT6 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.099     2.404 f  owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25/O
+                         net (fo=9, routed)           1.393     3.797    owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25_n_0
+    SLICE_X120Y229       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.090     3.887 r  owners[26].service/requests/data_reg_0_127_0_0_i_10__25/O
+                         net (fo=400, routed)         0.987     4.875    owners[26].service/requests/data_reg_r3_0_63_0_6_i_10__25_0
+    SLICE_X163Y234       LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.911 r  owners[26].service/requests/data_reg_0_127_0_0_i_12__25/O
+                         net (fo=84, routed)          1.573     6.483    owners[26].service/requests/data_reg_0_127_0_0_i_10__25_0
+    SLICE_X105Y215       LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     6.534 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_5__25/O
+                         net (fo=518, routed)         1.226     7.760    owners[26].service/data_reg_r3_64_127_14_20/ADDRG1
+    SLICE_X111Y145       RAMD64E (Prop_G6LUT_SLICEM_RADR1_O)
+                                                      0.123     7.883 f  owners[26].service/data_reg_r3_64_127_14_20/RAMG/O
+                         net (fo=1, routed)           0.099     7.982    owners[26].service/requests/data_reg_0_127_20_20_i_2__25
+    SLICE_X111Y147       LUT3 (Prop_E6LUT_SLICEM_I0_O)
+                                                      0.100     8.082 f  owners[26].service/requests/data_reg_0_127_20_20_i_5__25/O
+                         net (fo=2, routed)           0.603     8.685    owners[26].service/requests/(null)[0].b0__0[20]
+    SLICE_X110Y194       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.096     8.781 f  owners[26].service/requests/data_reg_0_127_20_20_i_8__25/O
+                         net (fo=2, routed)           0.249     9.030    owners[26].service/requests/data_reg_0_127_20_20_i_8__25_n_0
+    SLICE_X107Y190       LUT5 (Prop_F6LUT_SLICEM_I4_O)
+                                                      0.123     9.153 r  owners[26].service/requests/data_reg_0_127_0_0_i_165__25/O
+                         net (fo=2, routed)           0.154     9.307    owners[26].service/requests/data_reg_0_127_0_0_i_165__25_n_0
+    SLICE_X104Y190       LUT2 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.088     9.395 f  owners[26].service/requests/data_reg_0_127_0_0_i_174__25/O
+                         net (fo=2, routed)           0.151     9.546    owners[26].service/requests/data_reg_0_127_0_0_i_174__25_n_0
+    SLICE_X105Y190       LUT3 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.146     9.692 r  owners[26].service/requests/data_reg_0_127_0_0_i_68__25/O
+                         net (fo=1, routed)           0.010     9.702    owners[26].service/requests/data_reg_0_127_0_0_i_68__25_n_0
+    SLICE_X105Y190       CARRY8 (Prop_CARRY8_SLICEL_S[2]_CO[7])
+                                                      0.162     9.864 f  owners[26].service/requests/data_reg_0_127_0_0_i_23__25/CO[7]
+                         net (fo=71, routed)          0.285    10.149    owners[26].service/requests/best_return339_in
+    SLICE_X104Y191       LUT3 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.037    10.186 r  owners[26].service/requests/dirty[111]_i_25__25/O
+                         net (fo=16, routed)          0.177    10.362    owners[26].service/requests/dirty[111]_i_25__25_n_0
+    SLICE_X105Y192       LUT6 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.124    10.486 r  owners[26].service/requests/dirty[111]_i_22__25/O
+                         net (fo=1, routed)           0.009    10.495    owners[26].service/requests/dirty[111]_i_22__25_n_0
+    SLICE_X105Y192       CARRY8 (Prop_CARRY8_SLICEL_S[0]_CO[7])
+                                                      0.190    10.685 r  owners[26].service/requests/dirty_reg[111]_i_7__25/CO[7]
+                         net (fo=1, routed)           0.026    10.711    owners[26].service/requests/dirty_reg[111]_i_7__25_n_0
+    SLICE_X105Y193       CARRY8 (Prop_CARRY8_SLICEL_CI_CO[5])
+                                                      0.077    10.788 r  owners[26].service/requests/dirty_reg[111]_i_6__25/CO[5]
+                         net (fo=8, routed)           1.653    12.441    owners[26].service/requests/dirty_reg[111]_i_6__25_n_2
+    SLICE_X181Y193       LUT6 (Prop_E6LUT_SLICEL_I4_O)
+                                                      0.090    12.531 f  owners[26].service/requests/dirty[47]_i_4__25/O
+                         net (fo=16, routed)          0.455    12.986    owners[26].service/requests/dirty[47]_i_4__25_n_0
+    SLICE_X181Y234       LUT6 (Prop_C6LUT_SLICEL_I5_O)
+                                                      0.096    13.082 r  owners[26].service/requests/dirty[32]_i_2__25/O
+                         net (fo=1, routed)           0.097    13.179    owners[26].service/responses/dirty_reg[32]_0
+    SLICE_X183Y234       LUT6 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.099    13.278 r  owners[26].service/responses/dirty[32]_i_1__25/O
+                         net (fo=1, routed)           0.049    13.327    owners[26].service/responses_n_333
+    SLICE_X183Y234       FDRE                                         r  owners[26].service/dirty_reg[32]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core rise edge)       5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=531325, unset)       0.020     5.020    owners[26].service/clk
+    SLICE_X183Y234       FDRE                                         r  owners[26].service/dirty_reg[32]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.135     4.885    
+    SLICE_X183Y234       FDRE (Setup_DFF_SLICEL_C_D)
+                                                      0.025     4.910    owners[26].service/dirty_reg[32]
+  -------------------------------------------------------------------
+                         required time                          4.910    
+                         arrival time                         -13.327    
+  -------------------------------------------------------------------
+                         slack                                 -8.417    
+
+Slack (VIOLATED) :        -8.416ns  (required time - arrival time)
+  Source:                 owners[26].service/requests/rp_reg[2]_replica/C
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            owners[26].service/dirty_reg[41]/D
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core rise@5.000ns - core rise@0.000ns)
+  Data Path Delay:        13.297ns  (logic 2.139ns (16.086%)  route 11.158ns (83.914%))
+  Logic Levels:           21  (CARRY8=3 LUT2=2 LUT3=3 LUT4=1 LUT5=2 LUT6=7 MUXF7=1 RAMD64E=2)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=531325, unset)       0.028     0.028    owners[26].service/requests/clk
+    SLICE_X151Y187       FDRE                                         r  owners[26].service/requests/rp_reg[2]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X151Y187       FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  owners[26].service/requests/rp_reg[2]_replica/Q
+                         net (fo=7, routed)           0.180     0.287    owners[26].service/requests/mem_reg_0_63_70_76/ADDRD2
+    SLICE_X150Y187       RAMD64E (Prop_D6LUT_SLICEM_RADR2_O)
+                                                      0.099     0.386 r  owners[26].service/requests/mem_reg_0_63_70_76/RAMD/O
+                         net (fo=316, routed)         1.420     1.806    owners[26].service/requests/od[7]
+    SLICE_X186Y234       LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.122     1.928 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25/O
+                         net (fo=1, routed)           0.025     1.953    owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25_n_0
+    SLICE_X186Y234       MUXF7 (Prop_F7MUX_CD_SLICEM_I0_O)
+                                                      0.069     2.022 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25/O
+                         net (fo=1, routed)           0.283     2.305    owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25_n_0
+    SLICE_X185Y235       LUT6 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.099     2.404 f  owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25/O
+                         net (fo=9, routed)           1.393     3.797    owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25_n_0
+    SLICE_X120Y229       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.090     3.887 r  owners[26].service/requests/data_reg_0_127_0_0_i_10__25/O
+                         net (fo=400, routed)         0.987     4.875    owners[26].service/requests/data_reg_r3_0_63_0_6_i_10__25_0
+    SLICE_X163Y234       LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.911 r  owners[26].service/requests/data_reg_0_127_0_0_i_12__25/O
+                         net (fo=84, routed)          1.573     6.483    owners[26].service/requests/data_reg_0_127_0_0_i_10__25_0
+    SLICE_X105Y215       LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     6.534 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_5__25/O
+                         net (fo=518, routed)         1.226     7.760    owners[26].service/data_reg_r3_64_127_14_20/ADDRG1
+    SLICE_X111Y145       RAMD64E (Prop_G6LUT_SLICEM_RADR1_O)
+                                                      0.123     7.883 f  owners[26].service/data_reg_r3_64_127_14_20/RAMG/O
+                         net (fo=1, routed)           0.099     7.982    owners[26].service/requests/data_reg_0_127_20_20_i_2__25
+    SLICE_X111Y147       LUT3 (Prop_E6LUT_SLICEM_I0_O)
+                                                      0.100     8.082 f  owners[26].service/requests/data_reg_0_127_20_20_i_5__25/O
+                         net (fo=2, routed)           0.603     8.685    owners[26].service/requests/(null)[0].b0__0[20]
+    SLICE_X110Y194       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.096     8.781 f  owners[26].service/requests/data_reg_0_127_20_20_i_8__25/O
+                         net (fo=2, routed)           0.249     9.030    owners[26].service/requests/data_reg_0_127_20_20_i_8__25_n_0
+    SLICE_X107Y190       LUT5 (Prop_F6LUT_SLICEM_I4_O)
+                                                      0.123     9.153 r  owners[26].service/requests/data_reg_0_127_0_0_i_165__25/O
+                         net (fo=2, routed)           0.154     9.307    owners[26].service/requests/data_reg_0_127_0_0_i_165__25_n_0
+    SLICE_X104Y190       LUT2 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.088     9.395 f  owners[26].service/requests/data_reg_0_127_0_0_i_174__25/O
+                         net (fo=2, routed)           0.151     9.546    owners[26].service/requests/data_reg_0_127_0_0_i_174__25_n_0
+    SLICE_X105Y190       LUT3 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.146     9.692 r  owners[26].service/requests/data_reg_0_127_0_0_i_68__25/O
+                         net (fo=1, routed)           0.010     9.702    owners[26].service/requests/data_reg_0_127_0_0_i_68__25_n_0
+    SLICE_X105Y190       CARRY8 (Prop_CARRY8_SLICEL_S[2]_CO[7])
+                                                      0.162     9.864 f  owners[26].service/requests/data_reg_0_127_0_0_i_23__25/CO[7]
+                         net (fo=71, routed)          0.285    10.149    owners[26].service/requests/best_return339_in
+    SLICE_X104Y191       LUT3 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.037    10.186 r  owners[26].service/requests/dirty[111]_i_25__25/O
+                         net (fo=16, routed)          0.177    10.362    owners[26].service/requests/dirty[111]_i_25__25_n_0
+    SLICE_X105Y192       LUT6 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.124    10.486 r  owners[26].service/requests/dirty[111]_i_22__25/O
+                         net (fo=1, routed)           0.009    10.495    owners[26].service/requests/dirty[111]_i_22__25_n_0
+    SLICE_X105Y192       CARRY8 (Prop_CARRY8_SLICEL_S[0]_CO[7])
+                                                      0.190    10.685 f  owners[26].service/requests/dirty_reg[111]_i_7__25/CO[7]
+                         net (fo=1, routed)           0.026    10.711    owners[26].service/requests/dirty_reg[111]_i_7__25_n_0
+    SLICE_X105Y193       CARRY8 (Prop_CARRY8_SLICEL_CI_CO[5])
+                                                      0.077    10.788 f  owners[26].service/requests/dirty_reg[111]_i_6__25/CO[5]
+                         net (fo=8, routed)           1.653    12.441    owners[26].service/requests/dirty_reg[111]_i_6__25_n_2
+    SLICE_X181Y193       LUT6 (Prop_E6LUT_SLICEL_I4_O)
+                                                      0.090    12.531 r  owners[26].service/requests/dirty[47]_i_4__25/O
+                         net (fo=16, routed)          0.459    12.990    owners[26].service/requests/dirty[47]_i_4__25_n_0
+    SLICE_X181Y231       LUT6 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.050    13.040 r  owners[26].service/requests/dirty[41]_i_2__25/O
+                         net (fo=1, routed)           0.147    13.187    owners[26].service/responses/dirty_reg[41]_0
+    SLICE_X183Y231       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.088    13.275 r  owners[26].service/responses/dirty[41]_i_1__25/O
+                         net (fo=1, routed)           0.050    13.325    owners[26].service/responses_n_324
+    SLICE_X183Y231       FDRE                                         r  owners[26].service/dirty_reg[41]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core rise edge)       5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=531325, unset)       0.020     5.020    owners[26].service/clk
+    SLICE_X183Y231       FDRE                                         r  owners[26].service/dirty_reg[41]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.135     4.885    
+    SLICE_X183Y231       FDRE (Setup_CFF_SLICEL_C_D)
+                                                      0.025     4.910    owners[26].service/dirty_reg[41]
+  -------------------------------------------------------------------
+                         required time                          4.910    
+                         arrival time                         -13.325    
+  -------------------------------------------------------------------
+                         slack                                 -8.416    
+
+Slack (VIOLATED) :        -8.409ns  (required time - arrival time)
+  Source:                 owners[26].service/requests/rp_reg[2]_replica/C
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            owners[26].service/dirty_reg[34]/D
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core rise@5.000ns - core rise@0.000ns)
+  Data Path Delay:        13.291ns  (logic 2.189ns (16.470%)  route 11.102ns (83.530%))
+  Logic Levels:           21  (CARRY8=3 LUT2=2 LUT3=3 LUT4=1 LUT5=2 LUT6=7 MUXF7=1 RAMD64E=2)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=531325, unset)       0.028     0.028    owners[26].service/requests/clk
+    SLICE_X151Y187       FDRE                                         r  owners[26].service/requests/rp_reg[2]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X151Y187       FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  owners[26].service/requests/rp_reg[2]_replica/Q
+                         net (fo=7, routed)           0.180     0.287    owners[26].service/requests/mem_reg_0_63_70_76/ADDRD2
+    SLICE_X150Y187       RAMD64E (Prop_D6LUT_SLICEM_RADR2_O)
+                                                      0.099     0.386 r  owners[26].service/requests/mem_reg_0_63_70_76/RAMD/O
+                         net (fo=316, routed)         1.420     1.806    owners[26].service/requests/od[7]
+    SLICE_X186Y234       LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.122     1.928 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25/O
+                         net (fo=1, routed)           0.025     1.953    owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25_n_0
+    SLICE_X186Y234       MUXF7 (Prop_F7MUX_CD_SLICEM_I0_O)
+                                                      0.069     2.022 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25/O
+                         net (fo=1, routed)           0.283     2.305    owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25_n_0
+    SLICE_X185Y235       LUT6 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.099     2.404 f  owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25/O
+                         net (fo=9, routed)           1.393     3.797    owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25_n_0
+    SLICE_X120Y229       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.090     3.887 r  owners[26].service/requests/data_reg_0_127_0_0_i_10__25/O
+                         net (fo=400, routed)         0.987     4.875    owners[26].service/requests/data_reg_r3_0_63_0_6_i_10__25_0
+    SLICE_X163Y234       LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.911 r  owners[26].service/requests/data_reg_0_127_0_0_i_12__25/O
+                         net (fo=84, routed)          1.573     6.483    owners[26].service/requests/data_reg_0_127_0_0_i_10__25_0
+    SLICE_X105Y215       LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     6.534 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_5__25/O
+                         net (fo=518, routed)         1.226     7.760    owners[26].service/data_reg_r3_64_127_14_20/ADDRG1
+    SLICE_X111Y145       RAMD64E (Prop_G6LUT_SLICEM_RADR1_O)
+                                                      0.123     7.883 f  owners[26].service/data_reg_r3_64_127_14_20/RAMG/O
+                         net (fo=1, routed)           0.099     7.982    owners[26].service/requests/data_reg_0_127_20_20_i_2__25
+    SLICE_X111Y147       LUT3 (Prop_E6LUT_SLICEM_I0_O)
+                                                      0.100     8.082 f  owners[26].service/requests/data_reg_0_127_20_20_i_5__25/O
+                         net (fo=2, routed)           0.603     8.685    owners[26].service/requests/(null)[0].b0__0[20]
+    SLICE_X110Y194       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.096     8.781 f  owners[26].service/requests/data_reg_0_127_20_20_i_8__25/O
+                         net (fo=2, routed)           0.249     9.030    owners[26].service/requests/data_reg_0_127_20_20_i_8__25_n_0
+    SLICE_X107Y190       LUT5 (Prop_F6LUT_SLICEM_I4_O)
+                                                      0.123     9.153 r  owners[26].service/requests/data_reg_0_127_0_0_i_165__25/O
+                         net (fo=2, routed)           0.154     9.307    owners[26].service/requests/data_reg_0_127_0_0_i_165__25_n_0
+    SLICE_X104Y190       LUT2 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.088     9.395 f  owners[26].service/requests/data_reg_0_127_0_0_i_174__25/O
+                         net (fo=2, routed)           0.151     9.546    owners[26].service/requests/data_reg_0_127_0_0_i_174__25_n_0
+    SLICE_X105Y190       LUT3 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.146     9.692 r  owners[26].service/requests/data_reg_0_127_0_0_i_68__25/O
+                         net (fo=1, routed)           0.010     9.702    owners[26].service/requests/data_reg_0_127_0_0_i_68__25_n_0
+    SLICE_X105Y190       CARRY8 (Prop_CARRY8_SLICEL_S[2]_CO[7])
+                                                      0.162     9.864 f  owners[26].service/requests/data_reg_0_127_0_0_i_23__25/CO[7]
+                         net (fo=71, routed)          0.285    10.149    owners[26].service/requests/best_return339_in
+    SLICE_X104Y191       LUT3 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.037    10.186 r  owners[26].service/requests/dirty[111]_i_25__25/O
+                         net (fo=16, routed)          0.177    10.362    owners[26].service/requests/dirty[111]_i_25__25_n_0
+    SLICE_X105Y192       LUT6 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.124    10.486 r  owners[26].service/requests/dirty[111]_i_22__25/O
+                         net (fo=1, routed)           0.009    10.495    owners[26].service/requests/dirty[111]_i_22__25_n_0
+    SLICE_X105Y192       CARRY8 (Prop_CARRY8_SLICEL_S[0]_CO[7])
+                                                      0.190    10.685 f  owners[26].service/requests/dirty_reg[111]_i_7__25/CO[7]
+                         net (fo=1, routed)           0.026    10.711    owners[26].service/requests/dirty_reg[111]_i_7__25_n_0
+    SLICE_X105Y193       CARRY8 (Prop_CARRY8_SLICEL_CI_CO[5])
+                                                      0.077    10.788 f  owners[26].service/requests/dirty_reg[111]_i_6__25/CO[5]
+                         net (fo=8, routed)           1.653    12.441    owners[26].service/requests/dirty_reg[111]_i_6__25_n_2
+    SLICE_X181Y193       LUT6 (Prop_E6LUT_SLICEL_I4_O)
+                                                      0.090    12.531 r  owners[26].service/requests/dirty[47]_i_4__25/O
+                         net (fo=16, routed)          0.452    12.983    owners[26].service/requests/dirty[47]_i_4__25_n_0
+    SLICE_X181Y235       LUT6 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.098    13.081 r  owners[26].service/requests/dirty[34]_i_2__25/O
+                         net (fo=1, routed)           0.100    13.181    owners[26].service/responses/dirty_reg[34]_0
+    SLICE_X183Y235       LUT6 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.090    13.271 r  owners[26].service/responses/dirty[34]_i_1__25/O
+                         net (fo=1, routed)           0.048    13.319    owners[26].service/responses_n_331
+    SLICE_X183Y235       FDRE                                         r  owners[26].service/dirty_reg[34]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core rise edge)       5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=531325, unset)       0.020     5.020    owners[26].service/clk
+    SLICE_X183Y235       FDRE                                         r  owners[26].service/dirty_reg[34]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.135     4.885    
+    SLICE_X183Y235       FDRE (Setup_AFF_SLICEL_C_D)
+                                                      0.025     4.910    owners[26].service/dirty_reg[34]
+  -------------------------------------------------------------------
+                         required time                          4.910    
+                         arrival time                         -13.319    
+  -------------------------------------------------------------------
+                         slack                                 -8.409    
+
+Slack (VIOLATED) :        -8.400ns  (required time - arrival time)
+  Source:                 owners[26].service/requests/rp_reg[2]_replica/C
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            owners[26].service/dirty_reg[118]/D
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core rise@5.000ns - core rise@0.000ns)
+  Data Path Delay:        13.281ns  (logic 2.144ns (16.143%)  route 11.137ns (83.857%))
+  Logic Levels:           21  (CARRY8=3 LUT2=2 LUT3=4 LUT4=1 LUT5=3 LUT6=5 MUXF7=1 RAMD64E=2)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=531325, unset)       0.028     0.028    owners[26].service/requests/clk
+    SLICE_X151Y187       FDRE                                         r  owners[26].service/requests/rp_reg[2]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X151Y187       FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  owners[26].service/requests/rp_reg[2]_replica/Q
+                         net (fo=7, routed)           0.180     0.287    owners[26].service/requests/mem_reg_0_63_70_76/ADDRD2
+    SLICE_X150Y187       RAMD64E (Prop_D6LUT_SLICEM_RADR2_O)
+                                                      0.099     0.386 r  owners[26].service/requests/mem_reg_0_63_70_76/RAMD/O
+                         net (fo=316, routed)         1.420     1.806    owners[26].service/requests/od[7]
+    SLICE_X186Y234       LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.122     1.928 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25/O
+                         net (fo=1, routed)           0.025     1.953    owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25_n_0
+    SLICE_X186Y234       MUXF7 (Prop_F7MUX_CD_SLICEM_I0_O)
+                                                      0.069     2.022 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25/O
+                         net (fo=1, routed)           0.283     2.305    owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25_n_0
+    SLICE_X185Y235       LUT6 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.099     2.404 f  owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25/O
+                         net (fo=9, routed)           1.393     3.797    owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25_n_0
+    SLICE_X120Y229       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.090     3.887 r  owners[26].service/requests/data_reg_0_127_0_0_i_10__25/O
+                         net (fo=400, routed)         0.987     4.875    owners[26].service/requests/data_reg_r3_0_63_0_6_i_10__25_0
+    SLICE_X163Y234       LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.911 r  owners[26].service/requests/data_reg_0_127_0_0_i_12__25/O
+                         net (fo=84, routed)          1.573     6.483    owners[26].service/requests/data_reg_0_127_0_0_i_10__25_0
+    SLICE_X105Y215       LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     6.534 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_5__25/O
+                         net (fo=518, routed)         1.226     7.760    owners[26].service/data_reg_r3_64_127_14_20/ADDRG1
+    SLICE_X111Y145       RAMD64E (Prop_G6LUT_SLICEM_RADR1_O)
+                                                      0.123     7.883 f  owners[26].service/data_reg_r3_64_127_14_20/RAMG/O
+                         net (fo=1, routed)           0.099     7.982    owners[26].service/requests/data_reg_0_127_20_20_i_2__25
+    SLICE_X111Y147       LUT3 (Prop_E6LUT_SLICEM_I0_O)
+                                                      0.100     8.082 f  owners[26].service/requests/data_reg_0_127_20_20_i_5__25/O
+                         net (fo=2, routed)           0.603     8.685    owners[26].service/requests/(null)[0].b0__0[20]
+    SLICE_X110Y194       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.096     8.781 f  owners[26].service/requests/data_reg_0_127_20_20_i_8__25/O
+                         net (fo=2, routed)           0.249     9.030    owners[26].service/requests/data_reg_0_127_20_20_i_8__25_n_0
+    SLICE_X107Y190       LUT5 (Prop_F6LUT_SLICEM_I4_O)
+                                                      0.123     9.153 r  owners[26].service/requests/data_reg_0_127_0_0_i_165__25/O
+                         net (fo=2, routed)           0.154     9.307    owners[26].service/requests/data_reg_0_127_0_0_i_165__25_n_0
+    SLICE_X104Y190       LUT2 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.088     9.395 f  owners[26].service/requests/data_reg_0_127_0_0_i_174__25/O
+                         net (fo=2, routed)           0.151     9.546    owners[26].service/requests/data_reg_0_127_0_0_i_174__25_n_0
+    SLICE_X105Y190       LUT3 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.146     9.692 r  owners[26].service/requests/data_reg_0_127_0_0_i_68__25/O
+                         net (fo=1, routed)           0.010     9.702    owners[26].service/requests/data_reg_0_127_0_0_i_68__25_n_0
+    SLICE_X105Y190       CARRY8 (Prop_CARRY8_SLICEL_S[2]_CO[7])
+                                                      0.162     9.864 f  owners[26].service/requests/data_reg_0_127_0_0_i_23__25/CO[7]
+                         net (fo=71, routed)          0.285    10.149    owners[26].service/requests/best_return339_in
+    SLICE_X104Y191       LUT3 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.037    10.186 r  owners[26].service/requests/dirty[111]_i_25__25/O
+                         net (fo=16, routed)          0.177    10.362    owners[26].service/requests/dirty[111]_i_25__25_n_0
+    SLICE_X105Y192       LUT6 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.124    10.486 r  owners[26].service/requests/dirty[111]_i_22__25/O
+                         net (fo=1, routed)           0.009    10.495    owners[26].service/requests/dirty[111]_i_22__25_n_0
+    SLICE_X105Y192       CARRY8 (Prop_CARRY8_SLICEL_S[0]_CO[7])
+                                                      0.190    10.685 r  owners[26].service/requests/dirty_reg[111]_i_7__25/CO[7]
+                         net (fo=1, routed)           0.026    10.711    owners[26].service/requests/dirty_reg[111]_i_7__25_n_0
+    SLICE_X105Y193       CARRY8 (Prop_CARRY8_SLICEL_CI_CO[5])
+                                                      0.077    10.788 r  owners[26].service/requests/dirty_reg[111]_i_6__25/CO[5]
+                         net (fo=8, routed)           1.902    12.691    owners[26].service/requests/dirty_reg[111]_i_6__25_n_2
+    SLICE_X174Y235       LUT6 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.035    12.726 r  owners[26].service/requests/dirty[127]_i_6__25/O
+                         net (fo=16, routed)          0.192    12.917    owners[26].service/requests/dirty[127]_i_6__25_n_0
+    SLICE_X174Y236       LUT3 (Prop_B6LUT_SLICEL_I2_O)
+                                                      0.148    13.065 r  owners[26].service/requests/dirty[118]_i_2__25/O
+                         net (fo=1, routed)           0.146    13.211    owners[26].service/responses/dirty_reg[118]_0
+    SLICE_X172Y236       LUT5 (Prop_G6LUT_SLICEL_I2_O)
+                                                      0.050    13.261 r  owners[26].service/responses/dirty[118]_i_1__25/O
+                         net (fo=1, routed)           0.048    13.309    owners[26].service/responses_n_260
+    SLICE_X172Y236       FDRE                                         r  owners[26].service/dirty_reg[118]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core rise edge)       5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=531325, unset)       0.020     5.020    owners[26].service/clk
+    SLICE_X172Y236       FDRE                                         r  owners[26].service/dirty_reg[118]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.135     4.885    
+    SLICE_X172Y236       FDRE (Setup_GFF_SLICEL_C_D)
+                                                      0.025     4.910    owners[26].service/dirty_reg[118]
+  -------------------------------------------------------------------
+                         required time                          4.910    
+                         arrival time                         -13.309    
+  -------------------------------------------------------------------
+                         slack                                 -8.400    
+
+Slack (VIOLATED) :        -8.400ns  (required time - arrival time)
+  Source:                 owners[26].service/requests/rp_reg[2]_replica/C
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            owners[26].service/dirty_reg[45]/D
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core rise@5.000ns - core rise@0.000ns)
+  Data Path Delay:        13.281ns  (logic 2.149ns (16.181%)  route 11.132ns (83.819%))
+  Logic Levels:           20  (CARRY8=3 LUT2=2 LUT3=3 LUT4=1 LUT5=2 LUT6=6 MUXF7=1 RAMD64E=2)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=531325, unset)       0.028     0.028    owners[26].service/requests/clk
+    SLICE_X151Y187       FDRE                                         r  owners[26].service/requests/rp_reg[2]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X151Y187       FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  owners[26].service/requests/rp_reg[2]_replica/Q
+                         net (fo=7, routed)           0.180     0.287    owners[26].service/requests/mem_reg_0_63_70_76/ADDRD2
+    SLICE_X150Y187       RAMD64E (Prop_D6LUT_SLICEM_RADR2_O)
+                                                      0.099     0.386 r  owners[26].service/requests/mem_reg_0_63_70_76/RAMD/O
+                         net (fo=316, routed)         1.420     1.806    owners[26].service/requests/od[7]
+    SLICE_X186Y234       LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.122     1.928 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25/O
+                         net (fo=1, routed)           0.025     1.953    owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25_n_0
+    SLICE_X186Y234       MUXF7 (Prop_F7MUX_CD_SLICEM_I0_O)
+                                                      0.069     2.022 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25/O
+                         net (fo=1, routed)           0.283     2.305    owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25_n_0
+    SLICE_X185Y235       LUT6 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.099     2.404 f  owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25/O
+                         net (fo=9, routed)           1.393     3.797    owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25_n_0
+    SLICE_X120Y229       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.090     3.887 r  owners[26].service/requests/data_reg_0_127_0_0_i_10__25/O
+                         net (fo=400, routed)         0.987     4.875    owners[26].service/requests/data_reg_r3_0_63_0_6_i_10__25_0
+    SLICE_X163Y234       LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.911 r  owners[26].service/requests/data_reg_0_127_0_0_i_12__25/O
+                         net (fo=84, routed)          1.573     6.483    owners[26].service/requests/data_reg_0_127_0_0_i_10__25_0
+    SLICE_X105Y215       LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     6.534 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_5__25/O
+                         net (fo=518, routed)         1.226     7.760    owners[26].service/data_reg_r3_64_127_14_20/ADDRG1
+    SLICE_X111Y145       RAMD64E (Prop_G6LUT_SLICEM_RADR1_O)
+                                                      0.123     7.883 f  owners[26].service/data_reg_r3_64_127_14_20/RAMG/O
+                         net (fo=1, routed)           0.099     7.982    owners[26].service/requests/data_reg_0_127_20_20_i_2__25
+    SLICE_X111Y147       LUT3 (Prop_E6LUT_SLICEM_I0_O)
+                                                      0.100     8.082 f  owners[26].service/requests/data_reg_0_127_20_20_i_5__25/O
+                         net (fo=2, routed)           0.603     8.685    owners[26].service/requests/(null)[0].b0__0[20]
+    SLICE_X110Y194       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.096     8.781 f  owners[26].service/requests/data_reg_0_127_20_20_i_8__25/O
+                         net (fo=2, routed)           0.249     9.030    owners[26].service/requests/data_reg_0_127_20_20_i_8__25_n_0
+    SLICE_X107Y190       LUT5 (Prop_F6LUT_SLICEM_I4_O)
+                                                      0.123     9.153 r  owners[26].service/requests/data_reg_0_127_0_0_i_165__25/O
+                         net (fo=2, routed)           0.154     9.307    owners[26].service/requests/data_reg_0_127_0_0_i_165__25_n_0
+    SLICE_X104Y190       LUT2 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.088     9.395 f  owners[26].service/requests/data_reg_0_127_0_0_i_174__25/O
+                         net (fo=2, routed)           0.151     9.546    owners[26].service/requests/data_reg_0_127_0_0_i_174__25_n_0
+    SLICE_X105Y190       LUT3 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.146     9.692 r  owners[26].service/requests/data_reg_0_127_0_0_i_68__25/O
+                         net (fo=1, routed)           0.010     9.702    owners[26].service/requests/data_reg_0_127_0_0_i_68__25_n_0
+    SLICE_X105Y190       CARRY8 (Prop_CARRY8_SLICEL_S[2]_CO[7])
+                                                      0.162     9.864 f  owners[26].service/requests/data_reg_0_127_0_0_i_23__25/CO[7]
+                         net (fo=71, routed)          0.285    10.149    owners[26].service/requests/best_return339_in
+    SLICE_X104Y191       LUT3 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.037    10.186 r  owners[26].service/requests/dirty[111]_i_25__25/O
+                         net (fo=16, routed)          0.177    10.362    owners[26].service/requests/dirty[111]_i_25__25_n_0
+    SLICE_X105Y192       LUT6 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.124    10.486 r  owners[26].service/requests/dirty[111]_i_22__25/O
+                         net (fo=1, routed)           0.009    10.495    owners[26].service/requests/dirty[111]_i_22__25_n_0
+    SLICE_X105Y192       CARRY8 (Prop_CARRY8_SLICEL_S[0]_CO[7])
+                                                      0.190    10.685 f  owners[26].service/requests/dirty_reg[111]_i_7__25/CO[7]
+                         net (fo=1, routed)           0.026    10.711    owners[26].service/requests/dirty_reg[111]_i_7__25_n_0
+    SLICE_X105Y193       CARRY8 (Prop_CARRY8_SLICEL_CI_CO[5])
+                                                      0.077    10.788 f  owners[26].service/requests/dirty_reg[111]_i_6__25/CO[5]
+                         net (fo=8, routed)           1.653    12.441    owners[26].service/requests/dirty_reg[111]_i_6__25_n_2
+    SLICE_X181Y193       LUT6 (Prop_E6LUT_SLICEL_I4_O)
+                                                      0.090    12.531 r  owners[26].service/requests/dirty[47]_i_4__25/O
+                         net (fo=16, routed)          0.581    13.112    owners[26].service/responses/dirty[47]_i_4__25_n_0_alias
+    SLICE_X183Y230       LUT6 (Prop_B6LUT_SLICEL_I4_O)
+                                                      0.148    13.260 r  owners[26].service/responses/dirty[45]_i_1__25_comp/O
+                         net (fo=1, routed)           0.049    13.309    owners[26].service/responses_n_320
+    SLICE_X183Y230       FDRE                                         r  owners[26].service/dirty_reg[45]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core rise edge)       5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=531325, unset)       0.020     5.020    owners[26].service/clk
+    SLICE_X183Y230       FDRE                                         r  owners[26].service/dirty_reg[45]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.135     4.885    
+    SLICE_X183Y230       FDRE (Setup_BFF_SLICEL_C_D)
+                                                      0.025     4.910    owners[26].service/dirty_reg[45]
+  -------------------------------------------------------------------
+                         required time                          4.910    
+                         arrival time                         -13.309    
+  -------------------------------------------------------------------
+                         slack                                 -8.400    
+
+Slack (VIOLATED) :        -8.398ns  (required time - arrival time)
+  Source:                 owners[26].service/requests/rp_reg[2]_replica/C
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            owners[26].service/dirty_reg[38]/D
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core rise@5.000ns - core rise@0.000ns)
+  Data Path Delay:        13.280ns  (logic 2.185ns (16.454%)  route 11.095ns (83.546%))
+  Logic Levels:           21  (CARRY8=3 LUT2=2 LUT3=3 LUT4=1 LUT5=2 LUT6=7 MUXF7=1 RAMD64E=2)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=531325, unset)       0.028     0.028    owners[26].service/requests/clk
+    SLICE_X151Y187       FDRE                                         r  owners[26].service/requests/rp_reg[2]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X151Y187       FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  owners[26].service/requests/rp_reg[2]_replica/Q
+                         net (fo=7, routed)           0.180     0.287    owners[26].service/requests/mem_reg_0_63_70_76/ADDRD2
+    SLICE_X150Y187       RAMD64E (Prop_D6LUT_SLICEM_RADR2_O)
+                                                      0.099     0.386 r  owners[26].service/requests/mem_reg_0_63_70_76/RAMD/O
+                         net (fo=316, routed)         1.420     1.806    owners[26].service/requests/od[7]
+    SLICE_X186Y234       LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.122     1.928 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25/O
+                         net (fo=1, routed)           0.025     1.953    owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25_n_0
+    SLICE_X186Y234       MUXF7 (Prop_F7MUX_CD_SLICEM_I0_O)
+                                                      0.069     2.022 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25/O
+                         net (fo=1, routed)           0.283     2.305    owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25_n_0
+    SLICE_X185Y235       LUT6 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.099     2.404 f  owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25/O
+                         net (fo=9, routed)           1.393     3.797    owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25_n_0
+    SLICE_X120Y229       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.090     3.887 r  owners[26].service/requests/data_reg_0_127_0_0_i_10__25/O
+                         net (fo=400, routed)         0.987     4.875    owners[26].service/requests/data_reg_r3_0_63_0_6_i_10__25_0
+    SLICE_X163Y234       LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.911 r  owners[26].service/requests/data_reg_0_127_0_0_i_12__25/O
+                         net (fo=84, routed)          1.573     6.483    owners[26].service/requests/data_reg_0_127_0_0_i_10__25_0
+    SLICE_X105Y215       LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     6.534 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_5__25/O
+                         net (fo=518, routed)         1.226     7.760    owners[26].service/data_reg_r3_64_127_14_20/ADDRG1
+    SLICE_X111Y145       RAMD64E (Prop_G6LUT_SLICEM_RADR1_O)
+                                                      0.123     7.883 f  owners[26].service/data_reg_r3_64_127_14_20/RAMG/O
+                         net (fo=1, routed)           0.099     7.982    owners[26].service/requests/data_reg_0_127_20_20_i_2__25
+    SLICE_X111Y147       LUT3 (Prop_E6LUT_SLICEM_I0_O)
+                                                      0.100     8.082 f  owners[26].service/requests/data_reg_0_127_20_20_i_5__25/O
+                         net (fo=2, routed)           0.603     8.685    owners[26].service/requests/(null)[0].b0__0[20]
+    SLICE_X110Y194       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.096     8.781 f  owners[26].service/requests/data_reg_0_127_20_20_i_8__25/O
+                         net (fo=2, routed)           0.249     9.030    owners[26].service/requests/data_reg_0_127_20_20_i_8__25_n_0
+    SLICE_X107Y190       LUT5 (Prop_F6LUT_SLICEM_I4_O)
+                                                      0.123     9.153 r  owners[26].service/requests/data_reg_0_127_0_0_i_165__25/O
+                         net (fo=2, routed)           0.154     9.307    owners[26].service/requests/data_reg_0_127_0_0_i_165__25_n_0
+    SLICE_X104Y190       LUT2 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.088     9.395 f  owners[26].service/requests/data_reg_0_127_0_0_i_174__25/O
+                         net (fo=2, routed)           0.151     9.546    owners[26].service/requests/data_reg_0_127_0_0_i_174__25_n_0
+    SLICE_X105Y190       LUT3 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.146     9.692 r  owners[26].service/requests/data_reg_0_127_0_0_i_68__25/O
+                         net (fo=1, routed)           0.010     9.702    owners[26].service/requests/data_reg_0_127_0_0_i_68__25_n_0
+    SLICE_X105Y190       CARRY8 (Prop_CARRY8_SLICEL_S[2]_CO[7])
+                                                      0.162     9.864 f  owners[26].service/requests/data_reg_0_127_0_0_i_23__25/CO[7]
+                         net (fo=71, routed)          0.285    10.149    owners[26].service/requests/best_return339_in
+    SLICE_X104Y191       LUT3 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.037    10.186 r  owners[26].service/requests/dirty[111]_i_25__25/O
+                         net (fo=16, routed)          0.177    10.362    owners[26].service/requests/dirty[111]_i_25__25_n_0
+    SLICE_X105Y192       LUT6 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.124    10.486 r  owners[26].service/requests/dirty[111]_i_22__25/O
+                         net (fo=1, routed)           0.009    10.495    owners[26].service/requests/dirty[111]_i_22__25_n_0
+    SLICE_X105Y192       CARRY8 (Prop_CARRY8_SLICEL_S[0]_CO[7])
+                                                      0.190    10.685 f  owners[26].service/requests/dirty_reg[111]_i_7__25/CO[7]
+                         net (fo=1, routed)           0.026    10.711    owners[26].service/requests/dirty_reg[111]_i_7__25_n_0
+    SLICE_X105Y193       CARRY8 (Prop_CARRY8_SLICEL_CI_CO[5])
+                                                      0.077    10.788 f  owners[26].service/requests/dirty_reg[111]_i_6__25/CO[5]
+                         net (fo=8, routed)           1.653    12.441    owners[26].service/requests/dirty_reg[111]_i_6__25_n_2
+    SLICE_X181Y193       LUT6 (Prop_E6LUT_SLICEL_I4_O)
+                                                      0.090    12.531 r  owners[26].service/requests/dirty[47]_i_4__25/O
+                         net (fo=16, routed)          0.107    12.638    owners[26].service/requests/dirty[47]_i_4__25_n_0
+    SLICE_X183Y193       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.035    12.673 r  owners[26].service/requests/dirty[38]_i_2__25/O
+                         net (fo=1, routed)           0.438    13.111    owners[26].service/responses/dirty_reg[38]_0
+    SLICE_X183Y232       LUT6 (Prop_G6LUT_SLICEL_I4_O)
+                                                      0.149    13.260 r  owners[26].service/responses/dirty[38]_i_1__25/O
+                         net (fo=1, routed)           0.048    13.308    owners[26].service/responses_n_327
+    SLICE_X183Y232       FDRE                                         r  owners[26].service/dirty_reg[38]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core rise edge)       5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=531325, unset)       0.020     5.020    owners[26].service/clk
+    SLICE_X183Y232       FDRE                                         r  owners[26].service/dirty_reg[38]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.135     4.885    
+    SLICE_X183Y232       FDRE (Setup_GFF_SLICEL_C_D)
+                                                      0.025     4.910    owners[26].service/dirty_reg[38]
+  -------------------------------------------------------------------
+                         required time                          4.910    
+                         arrival time                         -13.308    
+  -------------------------------------------------------------------
+                         slack                                 -8.398    
+
+Slack (VIOLATED) :        -8.391ns  (required time - arrival time)
+  Source:                 owners[26].service/requests/rp_reg[2]_replica/C
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            owners[26].service/dirty_reg[29]/D
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core rise@5.000ns - core rise@0.000ns)
+  Data Path Delay:        13.272ns  (logic 2.036ns (15.340%)  route 11.236ns (84.660%))
+  Logic Levels:           21  (CARRY8=3 LUT2=2 LUT3=4 LUT4=1 LUT5=3 LUT6=5 MUXF7=1 RAMD64E=2)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=531325, unset)       0.028     0.028    owners[26].service/requests/clk
+    SLICE_X151Y187       FDRE                                         r  owners[26].service/requests/rp_reg[2]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X151Y187       FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  owners[26].service/requests/rp_reg[2]_replica/Q
+                         net (fo=7, routed)           0.180     0.287    owners[26].service/requests/mem_reg_0_63_70_76/ADDRD2
+    SLICE_X150Y187       RAMD64E (Prop_D6LUT_SLICEM_RADR2_O)
+                                                      0.099     0.386 r  owners[26].service/requests/mem_reg_0_63_70_76/RAMD/O
+                         net (fo=316, routed)         1.420     1.806    owners[26].service/requests/od[7]
+    SLICE_X186Y234       LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.122     1.928 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25/O
+                         net (fo=1, routed)           0.025     1.953    owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25_n_0
+    SLICE_X186Y234       MUXF7 (Prop_F7MUX_CD_SLICEM_I0_O)
+                                                      0.069     2.022 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25/O
+                         net (fo=1, routed)           0.283     2.305    owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25_n_0
+    SLICE_X185Y235       LUT6 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.099     2.404 f  owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25/O
+                         net (fo=9, routed)           1.393     3.797    owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25_n_0
+    SLICE_X120Y229       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.090     3.887 r  owners[26].service/requests/data_reg_0_127_0_0_i_10__25/O
+                         net (fo=400, routed)         0.987     4.875    owners[26].service/requests/data_reg_r3_0_63_0_6_i_10__25_0
+    SLICE_X163Y234       LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.911 r  owners[26].service/requests/data_reg_0_127_0_0_i_12__25/O
+                         net (fo=84, routed)          1.573     6.483    owners[26].service/requests/data_reg_0_127_0_0_i_10__25_0
+    SLICE_X105Y215       LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     6.534 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_5__25/O
+                         net (fo=518, routed)         1.226     7.760    owners[26].service/data_reg_r3_64_127_14_20/ADDRG1
+    SLICE_X111Y145       RAMD64E (Prop_G6LUT_SLICEM_RADR1_O)
+                                                      0.123     7.883 f  owners[26].service/data_reg_r3_64_127_14_20/RAMG/O
+                         net (fo=1, routed)           0.099     7.982    owners[26].service/requests/data_reg_0_127_20_20_i_2__25
+    SLICE_X111Y147       LUT3 (Prop_E6LUT_SLICEM_I0_O)
+                                                      0.100     8.082 f  owners[26].service/requests/data_reg_0_127_20_20_i_5__25/O
+                         net (fo=2, routed)           0.603     8.685    owners[26].service/requests/(null)[0].b0__0[20]
+    SLICE_X110Y194       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.096     8.781 f  owners[26].service/requests/data_reg_0_127_20_20_i_8__25/O
+                         net (fo=2, routed)           0.249     9.030    owners[26].service/requests/data_reg_0_127_20_20_i_8__25_n_0
+    SLICE_X107Y190       LUT5 (Prop_F6LUT_SLICEM_I4_O)
+                                                      0.123     9.153 r  owners[26].service/requests/data_reg_0_127_0_0_i_165__25/O
+                         net (fo=2, routed)           0.154     9.307    owners[26].service/requests/data_reg_0_127_0_0_i_165__25_n_0
+    SLICE_X104Y190       LUT2 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.088     9.395 f  owners[26].service/requests/data_reg_0_127_0_0_i_174__25/O
+                         net (fo=2, routed)           0.151     9.546    owners[26].service/requests/data_reg_0_127_0_0_i_174__25_n_0
+    SLICE_X105Y190       LUT3 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.146     9.692 r  owners[26].service/requests/data_reg_0_127_0_0_i_68__25/O
+                         net (fo=1, routed)           0.010     9.702    owners[26].service/requests/data_reg_0_127_0_0_i_68__25_n_0
+    SLICE_X105Y190       CARRY8 (Prop_CARRY8_SLICEL_S[2]_CO[7])
+                                                      0.162     9.864 f  owners[26].service/requests/data_reg_0_127_0_0_i_23__25/CO[7]
+                         net (fo=71, routed)          0.285    10.149    owners[26].service/requests/best_return339_in
+    SLICE_X104Y191       LUT3 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.037    10.186 r  owners[26].service/requests/dirty[111]_i_25__25/O
+                         net (fo=16, routed)          0.177    10.362    owners[26].service/requests/dirty[111]_i_25__25_n_0
+    SLICE_X105Y192       LUT6 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.124    10.486 r  owners[26].service/requests/dirty[111]_i_22__25/O
+                         net (fo=1, routed)           0.009    10.495    owners[26].service/requests/dirty[111]_i_22__25_n_0
+    SLICE_X105Y192       CARRY8 (Prop_CARRY8_SLICEL_S[0]_CO[7])
+                                                      0.190    10.685 r  owners[26].service/requests/dirty_reg[111]_i_7__25/CO[7]
+                         net (fo=1, routed)           0.026    10.711    owners[26].service/requests/dirty_reg[111]_i_7__25_n_0
+    SLICE_X105Y193       CARRY8 (Prop_CARRY8_SLICEL_CI_CO[5])
+                                                      0.077    10.788 r  owners[26].service/requests/dirty_reg[111]_i_6__25/CO[5]
+                         net (fo=8, routed)           1.959    12.747    owners[26].service/requests/dirty_reg[111]_i_6__25_n_2
+    SLICE_X176Y234       LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038    12.785 f  owners[26].service/requests/dirty[31]_i_4__25/O
+                         net (fo=16, routed)          0.340    13.125    owners[26].service/requests/dirty[31]_i_4__25_n_0
+    SLICE_X178Y236       LUT3 (Prop_E6LUT_SLICEL_I1_O)
+                                                      0.051    13.176 r  owners[26].service/requests/dirty[29]_i_2__25/O
+                         net (fo=1, routed)           0.039    13.215    owners[26].service/responses/dirty_reg[29]_0
+    SLICE_X178Y236       LUT5 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.036    13.251 r  owners[26].service/responses/dirty[29]_i_1__25/O
+                         net (fo=1, routed)           0.049    13.300    owners[26].service/responses_n_336
+    SLICE_X178Y236       FDRE                                         r  owners[26].service/dirty_reg[29]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core rise edge)       5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=531325, unset)       0.020     5.020    owners[26].service/clk
+    SLICE_X178Y236       FDRE                                         r  owners[26].service/dirty_reg[29]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.135     4.885    
+    SLICE_X178Y236       FDRE (Setup_DFF_SLICEL_C_D)
+                                                      0.025     4.910    owners[26].service/dirty_reg[29]
+  -------------------------------------------------------------------
+                         required time                          4.910    
+                         arrival time                         -13.300    
+  -------------------------------------------------------------------
+                         slack                                 -8.391    
+
+Slack (VIOLATED) :        -8.389ns  (required time - arrival time)
+  Source:                 owners[26].service/requests/rp_reg[2]_replica/C
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            owners[26].service/dirty_reg[19]/D
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core rise@5.000ns - core rise@0.000ns)
+  Data Path Delay:        13.271ns  (logic 2.089ns (15.741%)  route 11.182ns (84.259%))
+  Logic Levels:           21  (CARRY8=3 LUT2=2 LUT3=4 LUT4=1 LUT5=3 LUT6=5 MUXF7=1 RAMD64E=2)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=531325, unset)       0.028     0.028    owners[26].service/requests/clk
+    SLICE_X151Y187       FDRE                                         r  owners[26].service/requests/rp_reg[2]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X151Y187       FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  owners[26].service/requests/rp_reg[2]_replica/Q
+                         net (fo=7, routed)           0.180     0.287    owners[26].service/requests/mem_reg_0_63_70_76/ADDRD2
+    SLICE_X150Y187       RAMD64E (Prop_D6LUT_SLICEM_RADR2_O)
+                                                      0.099     0.386 r  owners[26].service/requests/mem_reg_0_63_70_76/RAMD/O
+                         net (fo=316, routed)         1.420     1.806    owners[26].service/requests/od[7]
+    SLICE_X186Y234       LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.122     1.928 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25/O
+                         net (fo=1, routed)           0.025     1.953    owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25_n_0
+    SLICE_X186Y234       MUXF7 (Prop_F7MUX_CD_SLICEM_I0_O)
+                                                      0.069     2.022 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25/O
+                         net (fo=1, routed)           0.283     2.305    owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25_n_0
+    SLICE_X185Y235       LUT6 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.099     2.404 f  owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25/O
+                         net (fo=9, routed)           1.393     3.797    owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25_n_0
+    SLICE_X120Y229       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.090     3.887 r  owners[26].service/requests/data_reg_0_127_0_0_i_10__25/O
+                         net (fo=400, routed)         0.987     4.875    owners[26].service/requests/data_reg_r3_0_63_0_6_i_10__25_0
+    SLICE_X163Y234       LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.911 r  owners[26].service/requests/data_reg_0_127_0_0_i_12__25/O
+                         net (fo=84, routed)          1.573     6.483    owners[26].service/requests/data_reg_0_127_0_0_i_10__25_0
+    SLICE_X105Y215       LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     6.534 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_5__25/O
+                         net (fo=518, routed)         1.226     7.760    owners[26].service/data_reg_r3_64_127_14_20/ADDRG1
+    SLICE_X111Y145       RAMD64E (Prop_G6LUT_SLICEM_RADR1_O)
+                                                      0.123     7.883 f  owners[26].service/data_reg_r3_64_127_14_20/RAMG/O
+                         net (fo=1, routed)           0.099     7.982    owners[26].service/requests/data_reg_0_127_20_20_i_2__25
+    SLICE_X111Y147       LUT3 (Prop_E6LUT_SLICEM_I0_O)
+                                                      0.100     8.082 f  owners[26].service/requests/data_reg_0_127_20_20_i_5__25/O
+                         net (fo=2, routed)           0.603     8.685    owners[26].service/requests/(null)[0].b0__0[20]
+    SLICE_X110Y194       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.096     8.781 f  owners[26].service/requests/data_reg_0_127_20_20_i_8__25/O
+                         net (fo=2, routed)           0.249     9.030    owners[26].service/requests/data_reg_0_127_20_20_i_8__25_n_0
+    SLICE_X107Y190       LUT5 (Prop_F6LUT_SLICEM_I4_O)
+                                                      0.123     9.153 r  owners[26].service/requests/data_reg_0_127_0_0_i_165__25/O
+                         net (fo=2, routed)           0.154     9.307    owners[26].service/requests/data_reg_0_127_0_0_i_165__25_n_0
+    SLICE_X104Y190       LUT2 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.088     9.395 f  owners[26].service/requests/data_reg_0_127_0_0_i_174__25/O
+                         net (fo=2, routed)           0.151     9.546    owners[26].service/requests/data_reg_0_127_0_0_i_174__25_n_0
+    SLICE_X105Y190       LUT3 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.146     9.692 r  owners[26].service/requests/data_reg_0_127_0_0_i_68__25/O
+                         net (fo=1, routed)           0.010     9.702    owners[26].service/requests/data_reg_0_127_0_0_i_68__25_n_0
+    SLICE_X105Y190       CARRY8 (Prop_CARRY8_SLICEL_S[2]_CO[7])
+                                                      0.162     9.864 f  owners[26].service/requests/data_reg_0_127_0_0_i_23__25/CO[7]
+                         net (fo=71, routed)          0.285    10.149    owners[26].service/requests/best_return339_in
+    SLICE_X104Y191       LUT3 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.037    10.186 r  owners[26].service/requests/dirty[111]_i_25__25/O
+                         net (fo=16, routed)          0.177    10.362    owners[26].service/requests/dirty[111]_i_25__25_n_0
+    SLICE_X105Y192       LUT6 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.124    10.486 r  owners[26].service/requests/dirty[111]_i_22__25/O
+                         net (fo=1, routed)           0.009    10.495    owners[26].service/requests/dirty[111]_i_22__25_n_0
+    SLICE_X105Y192       CARRY8 (Prop_CARRY8_SLICEL_S[0]_CO[7])
+                                                      0.190    10.685 r  owners[26].service/requests/dirty_reg[111]_i_7__25/CO[7]
+                         net (fo=1, routed)           0.026    10.711    owners[26].service/requests/dirty_reg[111]_i_7__25_n_0
+    SLICE_X105Y193       CARRY8 (Prop_CARRY8_SLICEL_CI_CO[5])
+                                                      0.077    10.788 r  owners[26].service/requests/dirty_reg[111]_i_6__25/CO[5]
+                         net (fo=8, routed)           1.959    12.747    owners[26].service/requests/dirty_reg[111]_i_6__25_n_2
+    SLICE_X176Y234       LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038    12.785 f  owners[26].service/requests/dirty[31]_i_4__25/O
+                         net (fo=16, routed)          0.281    13.067    owners[26].service/requests/dirty[31]_i_4__25_n_0
+    SLICE_X178Y235       LUT3 (Prop_F6LUT_SLICEL_I1_O)
+                                                      0.089    13.156 r  owners[26].service/requests/dirty[19]_i_2__25/O
+                         net (fo=1, routed)           0.041    13.197    owners[26].service/responses/dirty_reg[19]_0
+    SLICE_X178Y235       LUT5 (Prop_H6LUT_SLICEL_I2_O)
+                                                      0.051    13.248 r  owners[26].service/responses/dirty[19]_i_1__25/O
+                         net (fo=1, routed)           0.051    13.299    owners[26].service/responses_n_346
+    SLICE_X178Y235       FDRE                                         r  owners[26].service/dirty_reg[19]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core rise edge)       5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=531325, unset)       0.020     5.020    owners[26].service/clk
+    SLICE_X178Y235       FDRE                                         r  owners[26].service/dirty_reg[19]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.135     4.885    
+    SLICE_X178Y235       FDRE (Setup_HFF_SLICEL_C_D)
+                                                      0.025     4.910    owners[26].service/dirty_reg[19]
+  -------------------------------------------------------------------
+                         required time                          4.910    
+                         arrival time                         -13.299    
+  -------------------------------------------------------------------
+                         slack                                 -8.389    
+
+Slack (VIOLATED) :        -8.387ns  (required time - arrival time)
+  Source:                 owners[26].service/requests/rp_reg[2]_replica/C
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            owners[26].service/dirty_reg[25]/D
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core rise@5.000ns - core rise@0.000ns)
+  Data Path Delay:        13.269ns  (logic 2.035ns (15.337%)  route 11.234ns (84.663%))
+  Logic Levels:           21  (CARRY8=3 LUT2=2 LUT3=4 LUT4=1 LUT5=3 LUT6=5 MUXF7=1 RAMD64E=2)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=531325, unset)       0.028     0.028    owners[26].service/requests/clk
+    SLICE_X151Y187       FDRE                                         r  owners[26].service/requests/rp_reg[2]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X151Y187       FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  owners[26].service/requests/rp_reg[2]_replica/Q
+                         net (fo=7, routed)           0.180     0.287    owners[26].service/requests/mem_reg_0_63_70_76/ADDRD2
+    SLICE_X150Y187       RAMD64E (Prop_D6LUT_SLICEM_RADR2_O)
+                                                      0.099     0.386 r  owners[26].service/requests/mem_reg_0_63_70_76/RAMD/O
+                         net (fo=316, routed)         1.420     1.806    owners[26].service/requests/od[7]
+    SLICE_X186Y234       LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.122     1.928 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25/O
+                         net (fo=1, routed)           0.025     1.953    owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25_n_0
+    SLICE_X186Y234       MUXF7 (Prop_F7MUX_CD_SLICEM_I0_O)
+                                                      0.069     2.022 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25/O
+                         net (fo=1, routed)           0.283     2.305    owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25_n_0
+    SLICE_X185Y235       LUT6 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.099     2.404 f  owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25/O
+                         net (fo=9, routed)           1.393     3.797    owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25_n_0
+    SLICE_X120Y229       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.090     3.887 r  owners[26].service/requests/data_reg_0_127_0_0_i_10__25/O
+                         net (fo=400, routed)         0.987     4.875    owners[26].service/requests/data_reg_r3_0_63_0_6_i_10__25_0
+    SLICE_X163Y234       LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.911 r  owners[26].service/requests/data_reg_0_127_0_0_i_12__25/O
+                         net (fo=84, routed)          1.573     6.483    owners[26].service/requests/data_reg_0_127_0_0_i_10__25_0
+    SLICE_X105Y215       LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     6.534 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_5__25/O
+                         net (fo=518, routed)         1.226     7.760    owners[26].service/data_reg_r3_64_127_14_20/ADDRG1
+    SLICE_X111Y145       RAMD64E (Prop_G6LUT_SLICEM_RADR1_O)
+                                                      0.123     7.883 f  owners[26].service/data_reg_r3_64_127_14_20/RAMG/O
+                         net (fo=1, routed)           0.099     7.982    owners[26].service/requests/data_reg_0_127_20_20_i_2__25
+    SLICE_X111Y147       LUT3 (Prop_E6LUT_SLICEM_I0_O)
+                                                      0.100     8.082 f  owners[26].service/requests/data_reg_0_127_20_20_i_5__25/O
+                         net (fo=2, routed)           0.603     8.685    owners[26].service/requests/(null)[0].b0__0[20]
+    SLICE_X110Y194       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.096     8.781 f  owners[26].service/requests/data_reg_0_127_20_20_i_8__25/O
+                         net (fo=2, routed)           0.249     9.030    owners[26].service/requests/data_reg_0_127_20_20_i_8__25_n_0
+    SLICE_X107Y190       LUT5 (Prop_F6LUT_SLICEM_I4_O)
+                                                      0.123     9.153 r  owners[26].service/requests/data_reg_0_127_0_0_i_165__25/O
+                         net (fo=2, routed)           0.154     9.307    owners[26].service/requests/data_reg_0_127_0_0_i_165__25_n_0
+    SLICE_X104Y190       LUT2 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.088     9.395 f  owners[26].service/requests/data_reg_0_127_0_0_i_174__25/O
+                         net (fo=2, routed)           0.151     9.546    owners[26].service/requests/data_reg_0_127_0_0_i_174__25_n_0
+    SLICE_X105Y190       LUT3 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.146     9.692 r  owners[26].service/requests/data_reg_0_127_0_0_i_68__25/O
+                         net (fo=1, routed)           0.010     9.702    owners[26].service/requests/data_reg_0_127_0_0_i_68__25_n_0
+    SLICE_X105Y190       CARRY8 (Prop_CARRY8_SLICEL_S[2]_CO[7])
+                                                      0.162     9.864 f  owners[26].service/requests/data_reg_0_127_0_0_i_23__25/CO[7]
+                         net (fo=71, routed)          0.285    10.149    owners[26].service/requests/best_return339_in
+    SLICE_X104Y191       LUT3 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.037    10.186 r  owners[26].service/requests/dirty[111]_i_25__25/O
+                         net (fo=16, routed)          0.177    10.362    owners[26].service/requests/dirty[111]_i_25__25_n_0
+    SLICE_X105Y192       LUT6 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.124    10.486 r  owners[26].service/requests/dirty[111]_i_22__25/O
+                         net (fo=1, routed)           0.009    10.495    owners[26].service/requests/dirty[111]_i_22__25_n_0
+    SLICE_X105Y192       CARRY8 (Prop_CARRY8_SLICEL_S[0]_CO[7])
+                                                      0.190    10.685 r  owners[26].service/requests/dirty_reg[111]_i_7__25/CO[7]
+                         net (fo=1, routed)           0.026    10.711    owners[26].service/requests/dirty_reg[111]_i_7__25_n_0
+    SLICE_X105Y193       CARRY8 (Prop_CARRY8_SLICEL_CI_CO[5])
+                                                      0.077    10.788 r  owners[26].service/requests/dirty_reg[111]_i_6__25/CO[5]
+                         net (fo=8, routed)           1.959    12.747    owners[26].service/requests/dirty_reg[111]_i_6__25_n_2
+    SLICE_X176Y234       LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038    12.785 f  owners[26].service/requests/dirty[31]_i_4__25/O
+                         net (fo=16, routed)          0.337    13.123    owners[26].service/requests/dirty[31]_i_4__25_n_0
+    SLICE_X178Y233       LUT3 (Prop_E6LUT_SLICEL_I1_O)
+                                                      0.051    13.174 r  owners[26].service/requests/dirty[25]_i_2__25/O
+                         net (fo=1, routed)           0.038    13.212    owners[26].service/responses/dirty_reg[25]_0
+    SLICE_X178Y233       LUT5 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.035    13.247 r  owners[26].service/responses/dirty[25]_i_1__25/O
+                         net (fo=1, routed)           0.050    13.297    owners[26].service/responses_n_340
+    SLICE_X178Y233       FDRE                                         r  owners[26].service/dirty_reg[25]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core rise edge)       5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=531325, unset)       0.020     5.020    owners[26].service/clk
+    SLICE_X178Y233       FDRE                                         r  owners[26].service/dirty_reg[25]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.135     4.885    
+    SLICE_X178Y233       FDRE (Setup_CFF_SLICEL_C_D)
+                                                      0.025     4.910    owners[26].service/dirty_reg[25]
+  -------------------------------------------------------------------
+                         required time                          4.910    
+                         arrival time                         -13.297    
+  -------------------------------------------------------------------
+                         slack                                 -8.387    
+
+Slack (VIOLATED) :        -8.386ns  (required time - arrival time)
+  Source:                 owners[26].service/requests/rp_reg[2]_replica/C
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            owners[26].service/dirty_reg[81]/D
+                            (rising edge-triggered cell FDRE clocked by core  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core rise@5.000ns - core rise@0.000ns)
+  Data Path Delay:        13.268ns  (logic 2.130ns (16.054%)  route 11.138ns (83.946%))
+  Logic Levels:           21  (CARRY8=3 LUT2=2 LUT3=4 LUT4=1 LUT5=3 LUT6=5 MUXF7=1 RAMD64E=2)
+  Clock Path Skew:        -0.008ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.020ns = ( 5.020 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.028ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=531325, unset)       0.028     0.028    owners[26].service/requests/clk
+    SLICE_X151Y187       FDRE                                         r  owners[26].service/requests/rp_reg[2]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X151Y187       FDRE (Prop_BFF_SLICEL_C_Q)
+                                                      0.079     0.107 r  owners[26].service/requests/rp_reg[2]_replica/Q
+                         net (fo=7, routed)           0.180     0.287    owners[26].service/requests/mem_reg_0_63_70_76/ADDRD2
+    SLICE_X150Y187       RAMD64E (Prop_D6LUT_SLICEM_RADR2_O)
+                                                      0.099     0.386 r  owners[26].service/requests/mem_reg_0_63_70_76/RAMD/O
+                         net (fo=316, routed)         1.420     1.806    owners[26].service/requests/od[7]
+    SLICE_X186Y234       LUT6 (Prop_D6LUT_SLICEM_I2_O)
+                                                      0.122     1.928 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25/O
+                         net (fo=1, routed)           0.025     1.953    owners[26].service/requests/data_reg_r3_0_63_0_6_i_30__25_n_0
+    SLICE_X186Y234       MUXF7 (Prop_F7MUX_CD_SLICEM_I0_O)
+                                                      0.069     2.022 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25/O
+                         net (fo=1, routed)           0.283     2.305    owners[26].service/requests/data_reg_r3_0_63_0_6_i_12__25_n_0
+    SLICE_X185Y235       LUT6 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.099     2.404 f  owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25/O
+                         net (fo=9, routed)           1.393     3.797    owners[26].service/requests/data_reg_r3_0_63_0_6_i_7__25_n_0
+    SLICE_X120Y229       LUT4 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.090     3.887 r  owners[26].service/requests/data_reg_0_127_0_0_i_10__25/O
+                         net (fo=400, routed)         0.987     4.875    owners[26].service/requests/data_reg_r3_0_63_0_6_i_10__25_0
+    SLICE_X163Y234       LUT5 (Prop_H6LUT_SLICEL_I4_O)
+                                                      0.036     4.911 r  owners[26].service/requests/data_reg_0_127_0_0_i_12__25/O
+                         net (fo=84, routed)          1.573     6.483    owners[26].service/requests/data_reg_0_127_0_0_i_10__25_0
+    SLICE_X105Y215       LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     6.534 r  owners[26].service/requests/data_reg_r3_0_63_0_6_i_5__25/O
+                         net (fo=518, routed)         1.226     7.760    owners[26].service/data_reg_r3_64_127_14_20/ADDRG1
+    SLICE_X111Y145       RAMD64E (Prop_G6LUT_SLICEM_RADR1_O)
+                                                      0.123     7.883 f  owners[26].service/data_reg_r3_64_127_14_20/RAMG/O
+                         net (fo=1, routed)           0.099     7.982    owners[26].service/requests/data_reg_0_127_20_20_i_2__25
+    SLICE_X111Y147       LUT3 (Prop_E6LUT_SLICEM_I0_O)
+                                                      0.100     8.082 f  owners[26].service/requests/data_reg_0_127_20_20_i_5__25/O
+                         net (fo=2, routed)           0.603     8.685    owners[26].service/requests/(null)[0].b0__0[20]
+    SLICE_X110Y194       LUT6 (Prop_C6LUT_SLICEL_I4_O)
+                                                      0.096     8.781 f  owners[26].service/requests/data_reg_0_127_20_20_i_8__25/O
+                         net (fo=2, routed)           0.249     9.030    owners[26].service/requests/data_reg_0_127_20_20_i_8__25_n_0
+    SLICE_X107Y190       LUT5 (Prop_F6LUT_SLICEM_I4_O)
+                                                      0.123     9.153 r  owners[26].service/requests/data_reg_0_127_0_0_i_165__25/O
+                         net (fo=2, routed)           0.154     9.307    owners[26].service/requests/data_reg_0_127_0_0_i_165__25_n_0
+    SLICE_X104Y190       LUT2 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.088     9.395 f  owners[26].service/requests/data_reg_0_127_0_0_i_174__25/O
+                         net (fo=2, routed)           0.151     9.546    owners[26].service/requests/data_reg_0_127_0_0_i_174__25_n_0
+    SLICE_X105Y190       LUT3 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.146     9.692 r  owners[26].service/requests/data_reg_0_127_0_0_i_68__25/O
+                         net (fo=1, routed)           0.010     9.702    owners[26].service/requests/data_reg_0_127_0_0_i_68__25_n_0
+    SLICE_X105Y190       CARRY8 (Prop_CARRY8_SLICEL_S[2]_CO[7])
+                                                      0.162     9.864 f  owners[26].service/requests/data_reg_0_127_0_0_i_23__25/CO[7]
+                         net (fo=71, routed)          0.285    10.149    owners[26].service/requests/best_return339_in
+    SLICE_X104Y191       LUT3 (Prop_E6LUT_SLICEM_I1_O)
+                                                      0.037    10.186 r  owners[26].service/requests/dirty[111]_i_25__25/O
+                         net (fo=16, routed)          0.177    10.362    owners[26].service/requests/dirty[111]_i_25__25_n_0
+    SLICE_X105Y192       LUT6 (Prop_A6LUT_SLICEL_I2_O)
+                                                      0.124    10.486 r  owners[26].service/requests/dirty[111]_i_22__25/O
+                         net (fo=1, routed)           0.009    10.495    owners[26].service/requests/dirty[111]_i_22__25_n_0
+    SLICE_X105Y192       CARRY8 (Prop_CARRY8_SLICEL_S[0]_CO[7])
+                                                      0.190    10.685 r  owners[26].service/requests/dirty_reg[111]_i_7__25/CO[7]
+                         net (fo=1, routed)           0.026    10.711    owners[26].service/requests/dirty_reg[111]_i_7__25_n_0
+    SLICE_X105Y193       CARRY8 (Prop_CARRY8_SLICEL_CI_CO[5])
+                                                      0.077    10.788 r  owners[26].service/requests/dirty_reg[111]_i_6__25/CO[5]
+                         net (fo=8, routed)           1.476    12.265    owners[26].service/requests/dirty_reg[111]_i_6__25_n_2
+    SLICE_X147Y229       LUT6 (Prop_A6LUT_SLICEL_I1_O)
+                                                      0.035    12.300 f  owners[26].service/requests/dirty[95]_i_4__25/O
+                         net (fo=16, routed)          0.722    13.022    owners[26].service/requests/dirty[95]_i_4__25_n_0
+    SLICE_X170Y234       LUT3 (Prop_F6LUT_SLICEL_I1_O)
+                                                      0.148    13.170 r  owners[26].service/requests/dirty[81]_i_2__25/O
+                         net (fo=1, routed)           0.039    13.209    owners[26].service/responses/dirty_reg[81]_0
+    SLICE_X170Y234       LUT5 (Prop_H6LUT_SLICEL_I2_O)
+                                                      0.036    13.245 r  owners[26].service/responses/dirty[81]_i_1__25/O
+                         net (fo=1, routed)           0.051    13.296    owners[26].service/responses_n_284
+    SLICE_X170Y234       FDRE                                         r  owners[26].service/dirty_reg[81]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core rise edge)       5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=531325, unset)       0.020     5.020    owners[26].service/clk
+    SLICE_X170Y234       FDRE                                         r  owners[26].service/dirty_reg[81]/C
+                         clock pessimism              0.000     5.020    
+                         clock uncertainty           -0.135     4.885    
+    SLICE_X170Y234       FDRE (Setup_HFF_SLICEL_C_D)
+                                                      0.025     4.910    owners[26].service/dirty_reg[81]
+  -------------------------------------------------------------------
+                         required time                          4.910    
+                         arrival time                         -13.296    
+  -------------------------------------------------------------------
+                         slack                                 -8.386    
+
+
+
+
