@@ -1,0 +1,7 @@
+# Arithmetic mapped timing-loop diagnostic (interim M3d)
+
+Actual frozen source inspected: fp32_positive.sv, pair_lane add function lines15-29. Synth8-295 shows CARRY8 CO[7] -> LUT -> S[4..6] -> CO[7], both delay and congestion paths in the replicated arithmetic. Vivado inferred set_disable_timing on those arcs. Such a netlist cannot establish complete-kernel frequency qualification merely from a positive slack report. This is a mapped-netlist warning; the observed RTL simulation remains acyclic/correct for tested inputs.
+
+Proposed repair: replace in-place n/sum/rounded/ex mutations and 32-bit integer exponent additions with distinct single-assignment alignment, raw-sum, normalized-sum, rounded-result and 9-bit final-exponent intermediates. Mantissa carries feed a separate exponent calculation; no exponent result is reused to compute those carries. Preserve FP32 RNE, positive numeric admission, lane latency and ready/valid behavior. Do not insert timing exceptions or blanket KEEP/DONT_TOUCH. Confirm with bit-exact C++ FP32 unit tests, full cycle regression, and fresh focused synthesis. Reasoned candidate fix, not a proven cure until new mapped netlist is audited.
+
+No installed per-ID295 handler or amd-doc-search tool is available; fallback is actual RTL/netlist diagnostic analysis. Other current messages have prior RAM/dead-state reviews; newly appearing8-7052 notes missing optional RAM output registers, requiring final timing-path evidence. This snapshot is not a completed-run all-warning waiver.

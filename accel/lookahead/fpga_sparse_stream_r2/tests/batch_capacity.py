@@ -1,6 +1,6 @@
 from pathlib import Path
 import struct,subprocess,json,hashlib,sys
-root=Path(__file__).resolve().parents[4];r=root/'results/fpga_sparse_stream_r2_20261112';v=sys.argv[1] if len(sys.argv)>1 else 'm2c';out=r/'rtl'/f'{v}_batch_capacity';out.mkdir(exist_ok=False)
+root=Path(__file__).resolve().parents[4];r=root/'results/fpga_sparse_stream_r2_20261112';v=sys.argv[1] if len(sys.argv)>1 else 'm2c';exe='Vr2_external_tile' if v.startswith('external') else 'Vsparse_tile';out=r/'rtl'/f'{v}_batch_capacity';out.mkdir(exist_ok=False)
 for name,n,cells,jobs,target in [('max_node_max_cell_q40',4096,32768,40,True),('partial_line_missing_q40',1,25538,40,False)]:
  d=out/name;d.mkdir();w=d/'workload.bin';mapping=[]
  for q in range(jobs):mapping.extend([-1]*(n-1)+[cells-1 if q%2==0 else 0])
@@ -10,7 +10,7 @@ for name,n,cells,jobs,target in [('max_node_max_cell_q40',4096,32768,40,True),('
   f.write(struct.pack('<2f',0,0))
   for q in range(jobs):f.write(struct.pack('<6I',n-1,0,q,0,0,0))
   f.write(struct.pack('<%di'%len(mapping),*mapping));f.write(struct.pack('<%dI'%(cells*jobs*2),*([0x7fc00000]*(cells*jobs*2))))
- cmds=[[str(r/'semantics/original_ALT'),str(w),str(d/'original_ALT.bin')],[str(r/'semantics/reference_pop_reduce'),str(w),str(d/'original_ALT.bin'),str(d/'pop'),'524288','524288'],[str(r/f'rtl/{v}_build/Vsparse_tile'),str(w),str(d/'pop/prepared.bin'),str(d/'original_ALT.bin'),str(d/'rtl'),'60','20261112','4']]
+ cmds=[[str(r/'semantics/original_ALT'),str(w),str(d/'original_ALT.bin')],[str(r/'semantics/reference_pop_reduce'),str(w),str(d/'original_ALT.bin'),str(d/'pop'),'524288','524288'],[str(r/f'rtl/{v}_build/{exe}'),str(w),str(d/'pop/prepared.bin'),str(d/'original_ALT.bin'),str(d/'rtl'),'60','20261112','4']]
  for i,cmd in enumerate(cmds):
   with (d/f'run{i}.log').open('w') as log:p=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT)
   (d/f'receipt{i}.json').write_text(json.dumps({'command':cmd,'returncode':p.returncode},indent=2))

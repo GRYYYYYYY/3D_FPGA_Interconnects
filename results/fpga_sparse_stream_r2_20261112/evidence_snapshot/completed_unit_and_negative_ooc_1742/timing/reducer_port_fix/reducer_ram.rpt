@@ -1,0 +1,110 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+-------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date         : Thu Nov 12 17:19:39 2026
+| Host         : fpgaacc2--72bfa719011c-3hfvuvkzdl running 64-bit Ubuntu 22.04.4 LTS
+| Command      : report_ram_utilization -file reducer_ram.rpt
+| Design       : r2_cell_reducer
+| Device       : xcu280-fsvh2892-2L-e
+| Speed File   : -2L
+-------------------------------------------------------------------------------------
+
+RAM Usage Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Memory Description
+3. Memory Utilization - Inferred
+4. Memory Performance - Inferred
+5. Block Ram / URAM Memory Power - Inferred
+
+1. Summary
+----------
+
++--------------------------+------------+-----------+-------+-----------+
+| Memory Type              | Total Used | Available | Util% | Inferred% |
++--------------------------+------------+-----------+-------+-----------+
+| URAM                     |          0 |       960 |  0.00 |      0.00 |
+| BlockRAM                 |        7.5 |      2016 |  0.37 |    100.00 |
+|  RAMB36E2                |          7 |           |       |    100.00 |
+|  RAMB18E2                |          1 |           |       |    100.00 |
+| LUTMs as Distributed RAM |          0 |    600960 |  0.00 |      0.00 |
++--------------------------+------------+-----------+-------+-----------+
+*  Each RAMB18 is calculated as 0.5 BlockRAM
+**  Tables 2, 3, 4 and 5 cover RAMs inferred by Vivado Synthesis using XPMs or RTL inference
+***  XRAMs are not reported for detailed tables
+
+
+2. Memory Description
+---------------------
+
++--------------------+------------+-------------+------------------------+------------------------+
+| Memory Name        | Array Size | Memory Type | Port 1 Dimension / Map | Port 2 Dimension / Map |
++--------------------+------------+-------------+------------------------+------------------------+
+| memory             |     266240 | RAM_SDP     | 4096x65                | 4096x65                |
+|  memory_reg_bram_0 |      36864 |             |  A:A:1024x36           |  B:B:1024x36           |
+|  memory_reg_bram_1 |      36864 |             |  A:A:1024x36           |  B:B:1024x36           |
+|  memory_reg_bram_2 |      36864 |             |  A:A:1024x36           |  B:B:1024x36           |
+|  memory_reg_bram_3 |      36864 |             |  A:A:1024x36           |  B:B:1024x36           |
+|  memory_reg_bram_4 |      36864 |             |  A:A:2048x18           |  B:B:2048x18           |
+|  memory_reg_bram_5 |      36864 |             |  A:A:2048x18           |  B:B:2048x18           |
+|  memory_reg_bram_6 |      36864 |             |  A:A:4096x9            |  B:B:4096x9            |
+|  memory_reg_bram_7 |       8192 |             |  A:A:4096x2            |  B:B:4096x2            |
++--------------------+------------+-------------+------------------------+------------------------+
+
+
+3. Memory Utilization - Inferred
+--------------------------------
+
++--------------------+-----------+----------------+-----------+-----------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+
+| Memory Name        | Primitive | Available Bits | Used Bits | Bit Util% | A Depth | A Depth Avail | A Depth Util% | A Width | A Width Avail | A Width Util% | B Depth | B Depth Avail | B Depth Util% | B Width | B Width Avail | B Width Util% |
++--------------------+-----------+----------------+-----------+-----------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+
+| memory             |           |                |           |           |         |               |               |         |               |               |         |               |               |         |               |               |
+|  memory_reg_bram_0 | RAMB36E2  |          36864 |     36864 |    100.00 |    1024 |          1024 |        100.00 |      36 |            36 |        100.00 |    1024 |          1024 |        100.00 |      36 |            36 |        100.00 |
+|  memory_reg_bram_1 | RAMB36E2  |          36864 |     36864 |    100.00 |    1024 |          1024 |        100.00 |      36 |            36 |        100.00 |    1024 |          1024 |        100.00 |      36 |            36 |        100.00 |
+|  memory_reg_bram_2 | RAMB36E2  |          36864 |     36864 |    100.00 |    1024 |          1024 |        100.00 |      36 |            36 |        100.00 |    1024 |          1024 |        100.00 |      36 |            36 |        100.00 |
+|  memory_reg_bram_3 | RAMB36E2  |          36864 |     36864 |    100.00 |    1024 |          1024 |        100.00 |      36 |            36 |        100.00 |    1024 |          1024 |        100.00 |      36 |            36 |        100.00 |
+|  memory_reg_bram_4 | RAMB36E2  |          36864 |     36864 |    100.00 |    2048 |          2048 |        100.00 |      18 |            18 |        100.00 |    2048 |          2048 |        100.00 |      18 |            18 |        100.00 |
+|  memory_reg_bram_5 | RAMB36E2  |          36864 |     36864 |    100.00 |    2048 |          2048 |        100.00 |      18 |            18 |        100.00 |    2048 |          2048 |        100.00 |      18 |            18 |        100.00 |
+|  memory_reg_bram_6 | RAMB36E2  |          36864 |     36864 |    100.00 |    4096 |          4096 |        100.00 |       9 |             9 |        100.00 |    4096 |          4096 |        100.00 |       9 |             9 |        100.00 |
+|  memory_reg_bram_7 | RAMB18E2  |          18432 |      8192 |     44.44 |    4096 |          4096 |        100.00 |       2 |             4 |         50.00 |    4096 |          4096 |        100.00 |       2 |             4 |         50.00 |
++--------------------+-----------+----------------+-----------+-----------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+---------+---------------+---------------+
+
+
+4. Memory Performance - Inferred
+--------------------------------
+
++--------------------+-----------+------------------------+------------------------+-------------+-------------------------+-------------+-------------------------+-----------+--------+--------+---------+-----------+--------+--------+---------+
+| Memory Name        | Primitive | Port 1 Dimension / Map | Port 2 Dimension / Map | Port A Type | Port A Requirement (ns) | Port B Type | Port B Requirement (ns) | A Cascade | IREG_A | OREG_A | DOA_REG | B Cascade | IREG_B | OREG_B | DOB_REG |
++--------------------+-----------+------------------------+------------------------+-------------+-------------------------+-------------+-------------------------+-----------+--------+--------+---------+-----------+--------+--------+---------+
+| memory             |           | 4096x65                | 4096x65                |             |                         |             |                         |           |        |        |         |           |        |        |         |
+|  memory_reg_bram_0 | RAMB36E2  |  A:A:1024x36           |  B:B:1024x36           |       Write |                     0.0 |        Read |                     0.0 |      NONE |        |        |       0 |     FIRST |        |        |       0 |
+|  memory_reg_bram_1 | RAMB36E2  |  A:A:1024x36           |  B:B:1024x36           |       Write |                     0.0 |        Read |                     0.0 |      NONE |        |        |       0 |    MIDDLE |        |        |       0 |
+|  memory_reg_bram_2 | RAMB36E2  |  A:A:1024x36           |  B:B:1024x36           |       Write |                     0.0 |        Read |                     0.0 |      NONE |        |        |       0 |    MIDDLE |        |        |       0 |
+|  memory_reg_bram_3 | RAMB36E2  |  A:A:1024x36           |  B:B:1024x36           |       Write |                     0.0 |        Read |                     0.0 |      NONE |        |        |       0 |      LAST |        |        |       0 |
+|  memory_reg_bram_4 | RAMB36E2  |  A:A:2048x18           |  B:B:2048x18           |       Write |                     0.0 |        Read |                     0.0 |      NONE |        |        |       0 |     FIRST |        |        |       0 |
+|  memory_reg_bram_5 | RAMB36E2  |  A:A:2048x18           |  B:B:2048x18           |       Write |                     0.0 |        Read |                     0.0 |      NONE |        |        |       0 |      LAST |        |        |       0 |
+|  memory_reg_bram_6 | RAMB36E2  |  A:A:4096x9            |  B:B:4096x9            |       Write |                     0.0 |        Read |                     0.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
+|  memory_reg_bram_7 | RAMB18E2  |  A:A:4096x2            |  B:B:4096x2            |       Write |                     0.0 |        Read |                     0.0 |      NONE |        |        |       0 |      NONE |        |        |       0 |
++--------------------+-----------+------------------------+------------------------+-------------+-------------------------+-------------+-------------------------+-----------+--------+--------+---------+-----------+--------+--------+---------+
+
+
+5. Block Ram / URAM Memory Power - Inferred
+-------------------------------------------
+
++--------------------+-----------+------------------------+------------------------+--------------------+---------------+-------------------+-----------+--------------------+---------------+-------------------+-----------+
+| Memory Name        | Primitive | Port 1 Dimension / Map | Port 2 Dimension / Map | Port A Power Gated | Port A Enable | Port A WRITE_MODE | A Cascade | Port B Power Gated | Port B Enable | Port B WRITE_MODE | B Cascade |
++--------------------+-----------+------------------------+------------------------+--------------------+---------------+-------------------+-----------+--------------------+---------------+-------------------+-----------+
+| memory             |           | 4096x65                | 4096x65                |                    |               |                   |           |                    |               |                   |           |
+|  memory_reg_bram_0 | RAMB36E2  |  A:A:1024x36           |  B:B:1024x36           |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |       WRITE_FIRST |     FIRST |
+|  memory_reg_bram_1 | RAMB36E2  |  A:A:1024x36           |  B:B:1024x36           |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |       WRITE_FIRST |    MIDDLE |
+|  memory_reg_bram_2 | RAMB36E2  |  A:A:1024x36           |  B:B:1024x36           |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |       WRITE_FIRST |    MIDDLE |
+|  memory_reg_bram_3 | RAMB36E2  |  A:A:1024x36           |  B:B:1024x36           |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |       WRITE_FIRST |      LAST |
+|  memory_reg_bram_4 | RAMB36E2  |  A:A:2048x18           |  B:B:2048x18           |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |       WRITE_FIRST |     FIRST |
+|  memory_reg_bram_5 | RAMB36E2  |  A:A:2048x18           |  B:B:2048x18           |                    |        SIGNAL |        READ_FIRST |      NONE |                    |        SIGNAL |       WRITE_FIRST |      LAST |
+|  memory_reg_bram_6 | RAMB36E2  |  A:A:4096x9            |  B:B:4096x9            |                    |         POWER |        READ_FIRST |      NONE |                    |        SIGNAL |       WRITE_FIRST |      NONE |
+|  memory_reg_bram_7 | RAMB18E2  |  A:A:4096x2            |  B:B:4096x2            |                    |         POWER |        READ_FIRST |      NONE |                    |        SIGNAL |       WRITE_FIRST |      NONE |
++--------------------+-----------+------------------------+------------------------+--------------------+---------------+-------------------+-----------+--------------------+---------------+-------------------+-----------+
+
+

@@ -29,13 +29,28 @@
 
 新 changed 服务用四个 sector append 端口处理整行 mask，membership 直到 commit ACK 才清除。owner/changed 组合测试通过跨驱逐重复改善：2534 个 fence 前写回、3281 次 sector events、2793 个唯一 changed IDs，完整 backing 和 ACK 清标验证通过。
 
-新增 commit proposal response、label/pending read、allocator、directory forwarding/publication 流水；独立持续吞吐、同 tail append/stale/capacity 校验仍在执行。小图通过不能替代大图状态 backing、完整候选 OOC 或新架构模型校准。
+新增 commit proposal response、label/pending read、allocator、directory forwarding/publication 流水。bank_pipe_b 独立测试完成 1038 次 commit、512 次 POP、16 次 stale，5009 cycles，连续 511 周期各确认一次 commit，member peak 527。pipe_full_d 通过 d3/d4、全部91fixtures和两组压力图；仅修正 reducer RAM 端口的 pipe_full_e 保持 d3/d4 39531/102270 cycles。小图通过不能替代大图状态 backing、完整候选 OOC 或新架构模型校准。
+
+
+## M4 外部状态闭环与新模型
+
+external_b 实现每 owner 4KiB state cache、32 MSHR、16 dirty buffers、64-entry FIFOs；每 node128bit(label64/pending32/flags32)，32个 POP/commit contexts 和32个 changed-mark contexts。changed 的 membership 存在外部状态中，目录发布后才请求 CLEAR，写 ACK屏障后才能完成 wave。初始化真实写 proposal与全部state backing，不能从 host免费复位。全部41逻辑clients共享8物理通道。
+
+完整d3/d4为47824/131079 cycles（60-cycle假设、gap2）；91fixtures和两组热点图均核对输出、wave label/home/changed集合。真实4,194,304-node地址范围的构造图完整初始化并搜索到node4194303，输出32768cells，1856186cycles；这是地址与协议测试，不是BNN/LSTM工作量。每owner changed容量512时，8192-node星图实际触发显式容量拒绝，未发布输出。两个40sample容量batch也通过。
+
+新的独立C++逐周期模型：owner stress/warm、node-state7680ops/165414cycles、fabric33000requests/25091cycles分别日志精确一致。完整external_model_b对97个独立RTL用例全部周期日志与输出精确一致（2native、91fixtures、2stress、2大地址）。该校准只覆盖8路及列出的有限内存配置；不能继承给尚未实现的32/64路。
+
+## 通用变换软件对照（实测CPU）
+
+prepared_CSR_valid_POP_CPU完整包含每sample mutable初始化、cost复制、搜索、changed commit、原桶闭合点结束和输出写入。3进程各1预热+3正式完整batch，8线程，完整输出与ALT golden一致。BNN均值3.307430729s、样本标准差0.086225747s；LSTM均值3.438127634s、标准差0.068122253s。外部CSR准备与首次装载不计，符合V2；CPU主机并发运行Vivado且不同于GPU主机，不能声称同机软件speedup。
+
+已检查旧basic/compact CUDA：expand仍运行时eligible判断，confirm在闭合点扫描settled，不是prepared CSR+POP在线归约的等价优化实现。原GPU V2结果保留；新的通用变换CUDA对照仍待实现/测量，不能给旧结果改名。
 
 ## 尚未完成
 
-- m2c routed OOC 正在执行；资源、最坏路径、setup/hold 资格以实际报告为准。
-- M3 完整并发域与容量验证、新模型校准、修改后 tile OOC。
-- 大地址 node-state backing/cache、统一可扩展映射、32/64 topology 与全部共享物理资源的实现和资格。
+- m2c/m3d/m3e 综合正在执行。m3c 多写位置导致 RAM 推断失败；m3d reducer 映射 LUTRAM，改为显式读/写端口后单元实际为7 RAMB36+1 RAMB18，XSim通过。m3d又报告浮点 CARRY8 timing loops并自动disable timing；不能据此获得完整频率资格。单赋值算术修复通过500000次FP32位精确加法，单元综合待核验。全部负结果保留。
+- 完整 tile routed OOC、真实 setup/hold 闭合仍未完成。
+- 32/64 topology、有限分层汇聚及候选完整核资格仍未完成；开始验证5-client/1-uplink和33-client/32-physical-port单元。
 - BNN/LSTM 完整 40-sample 有限架构仿真、新完整候选 OOC；目前只有 M1 功能结果，不得当成硬件性能。
 - 通用表示变换 CPU/CUDA 对照及 native 身份/回接。已有 GPU V2 和 R1 证据复用，不申请新 GPU 补测。
 

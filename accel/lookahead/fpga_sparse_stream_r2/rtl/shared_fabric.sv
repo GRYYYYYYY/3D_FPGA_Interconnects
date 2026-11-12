@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 // All logical clients share physical line-striped channels. Tags survive OOO returns.
 // No external response address reaches client RAM without a register boundary.
-module r2_shared_fabric #(parameter C=33,P=8,PB=$clog2(P),TAGS=64)(input wire clk,rst,
+module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input wire clk,rst,
  input wire [C-1:0] cv,output wire [C-1:0] cr,input wire [C-1:0] cw,input wire [C*32-1:0] cl,input wire [C*6-1:0] ci,input wire [C*256-1:0] cd,
  output reg [C-1:0] rv,input wire [C-1:0] rr,output reg [C*6-1:0] ri,output reg [C*256-1:0] rd,
  output reg [P-1:0] mv,input wire [P-1:0] mr,output reg [P-1:0] mw,output reg [P*32-1:0] ml,output reg [P*6-1:0] mi,output reg [P*256-1:0] md,
@@ -24,7 +24,7 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=$clog2(P),TAGS=64)(input wire cl
   for(integer p=0;p<P;p=p+1)begin
    selected[p]=-1;tag[p]=-1;if(busy[p]!=0)any_busy=1;
    for(integer t=0;t<TAGS;t=t+1)if(!busy[p][t]&&tag[p]<0)tag[p]=t;
-   for(integer c=0;c<C;c=c+1)begin n=arb[p]+c;if(n>=C)n=n-C;if(qv[n]&&qwords[n][262+:PB]==p&&selected[p]<0)selected[p]=n;end
+   for(integer c=0;c<C;c=c+1)begin n=arb[p]+c;if(n>=C)n=n-C;if(qv[n]&&(P==1||qwords[n][262+:PB]==p)&&selected[p]<0)selected[p]=n;end
    if((!mv[p]||mr[p])&&tag[p]>=0&&selected[p]>=0)qr[selected[p]]=1;
   end
   for(integer c=0;c<C;c=c+1)begin chosen=-1;

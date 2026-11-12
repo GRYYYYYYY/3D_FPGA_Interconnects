@@ -1,0 +1,8 @@
+{
+  "build": "rtl/owner_pipe_a",
+  "warm_hit": "4096 consecutive single retire cycles passed",
+  "stress": "watchdog at accepted446 retired350, no physical outstanding",
+  "cause": "dirty buffer credit not reserved at dispatch; blocked eviction stage waited for write ACK behind a fill response requiring empty stage",
+  "repair": "reserve dirty slot on miss/flush dispatch; payload-ready bit gates command issuance; stage never waits for dirty credit after admission",
+  "scope": "fix pending stress rerun; M3 not qualified by warm-hit pass"
+}

@@ -14,12 +14,16 @@ module r2_cell_reducer #(parameter AW=12)(input wire clk,rst,init,
  wire [64:0] value={1'b1,(!baseline[64]||spair<baseline[63:0])?spair:baseline[63:0]};
  assign ir=init_done&&!initializing&&!init&&!export_en;
  assign idle=!sv&&!initializing;
+ wire ram_re=(iv&&ir)||export_en;
+ wire [AW-1:0] ram_ra=(iv&&ir)?index:export_index;
+ wire init_write=initializing&&init_index<entries;
+ wire ram_we=init_write||sv;
+ wire [AW-1:0] ram_wa=init_write?init_index[AW-1:0]:saddr;
+ wire [64:0] ram_wd=init_write?65'b0:value;
  always @(posedge clk)begin
-  if(iv&&ir)ram_q<=memory[index];
-  else if(export_en)ram_q<=memory[export_index];
+  if(ram_re)ram_q<=memory[ram_ra];
   export_pair<=ram_q[64]?ram_q[63:0]:64'h7fc000007fc00000;
-  if(initializing&&init_index<entries)memory[init_index[AW-1:0]]<=0;
-  else if(sv)memory[saddr]<=value;
+  if(ram_we)memory[ram_wa]<=ram_wd;
   if(rst)begin sv<=0;last_valid<=0;initializing<=0;init_index<=0;init_done<=0;error<=0;recorded<=0;retired<=0;forwarded<=0;end
   else begin
    sv<=iv&&ir;last_valid<=sv;
