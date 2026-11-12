@@ -148,3 +148,9 @@ complete output. This admission test does not cover dynamic member-pool overflow
 same-invocation historical native module shares, and a deliberately optimistic
 non-proposal transaction lower bound for this particular serial front end. It
 does not turn transfer assumptions into FPGA measurements or change the main scope.
+
+## GPU V2 supplement after authorization recovery
+
+The successful H100 job `job-0afcca08-4376-45b4-9711-61940a922bad` runs `gpu_worker.py`: four complete inputs, basic/compact CUDA, three processes per configuration, one warmup and three measured batches per process. All 96 batches must match. No original CUDA algorithm file is modified; generated timer-only variants retain their source and binary hashes in the supplement.
+
+Run `collect_gpu_v2.py` to verify all process receipts, all output bytes and all raw measurements. After refreshing the authoritative platform status into `closed_loop/gpu_v2/latest_status.json`, run `publish_gpu_v2.py` **after** the earlier `finalize.py`/`archive.py` workflow. This updates the report/configuration and writes a separate `gpu_v2_supplement` archive and SHA index. The original evidence snapshot remains the immutable delivery at `cde531d0fb54a54e76e97aa6108fd4f237a1b847`; its source/report hashes describe that commit. The supplement binds the current files and supersedes only the expired-authentication/pending-GPU status. CPU and GPU measurements are not paired on the same host.

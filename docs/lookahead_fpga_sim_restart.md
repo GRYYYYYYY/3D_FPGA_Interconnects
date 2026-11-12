@@ -101,6 +101,29 @@ BNN 中央 F1命中率约85.45%，完整周期只比F0少约0.0164%。全局按�
 
 另复用BNN/LSTM原始表示native ALT CUDA的 `LA_LIVE.resident_s`：每图3个独立进程、各一次首次solve，完整40个sample；这两行SD来自3个值，**不是9次warm cohort**。它们已排除最终D2H、包含必需波次host控制，仍含入口host输出vector构造。它们是R6.1/R6.2 live原始表示CUDA参考，与旧cuda6基础实现分别保留，不能互相代名。
 
+<!-- GPU_V2_SUPPLEMENT_BEGIN -->
+## 授权恢复后的新 GPU V2 补测（2026-11-12）
+
+启智授权已恢复；作业 `job-0afcca08-4376-45b4-9711-61940a922bad` 成功执行。实际 GPU 为 NVIDIA H100 80GB HBM3，CUDA 12.8，单卡10核配额，主机控制线程固定在8个不同物理核。基础与compact CUDA顺序运行，每个输入/实现3个独立进程，每进程1次预热加3次正式测量；共96个完整batch全部输出逐字一致，统计使用72个正式测量值。BNN/LSTM每batch均为真实完整40个sample。
+
+基础CUDA新增resident终点，包含初始化、波次host控制、错误确认与设备输出提交，排除最终输出D2H。compact将入口host输出vector分配移出resident，算法和kernel不变。两者均排除外部准备/转换及首次H2D；保留原E1和新resident原始值，没有重命名旧E1。
+
+| 输入 | CUDA实现 | resident mean ± sample SD，s |
+|---|---|---:|
+| native_d3_w8 | basic | 0.000312635 ± 0.000007526 |
+| native_d3_w8 | compact | 0.000281051 ± 0.000004479 |
+| native_d4_w8 | basic | 0.000488135 ± 0.000010959 |
+| native_d4_w8 | compact | 0.000459745 ± 0.000011700 |
+| bnn_export | basic | 0.312342177 ± 0.000721963 |
+| bnn_export | compact | 0.304680242 ± 0.000359606 |
+| lstm_s2 | basic | 0.311485814 ± 0.001153644 |
+| lstm_s2 | compact | 0.306053250 ± 0.002376012 |
+
+每行9次正式测量，另保留3个进程均值及其SD。CPU仍为先前本机测量，未声称新GPU与CPU同主机配对。新GPU数据取代“登录阻塞/未执行”的状态；历史数据、先前失败和图表原始来源保持不变，上方历史表与末尾原图不混入新cohort。当前FPGA实现的负性能结论不变。
+
+补充原始日志、完整输出、编译源码/二进制、运行回执、资源查询及SHA索引见 [GPU补测证据](../results/fpga_sim_restart_20261111T231000Z/gpu_v2_supplement/index.json)。此前 `evidence_snapshot/index.json` 的源码/报告绑定对应提交 `cde531d0fb54a54e76e97aa6108fd4f237a1b847`；新索引单独绑定补测后的文件，未重写旧快照。
+<!-- GPU_V2_SUPPLEMENT_END -->
+
 ## 冷调用与应用占比补充
 
 `cold_call_supplement.json`将外部转换、首次H2D、一次入口控制、驻留服务、最终D2H及后处理逐项相加；不重复同步等待，K固定为1个真实batch。PCIe 8/16/32GB/s、转换0/1/2s等仅是明确的 assumed 情景，非CPU memcpy、GPU传输或FPGA实测。内部初始化留在resident时间中。job的不可变target计数在外部输入准备时生成，与软件基线Prepared范围一致；运行内仍计target读取、closure去重、输出更新。
@@ -120,7 +143,6 @@ BNN 中央 F1命中率约85.45%，完整周期只比F0少约0.0164%。全局按�
 
 ## 未完成项与证据范围
 
-- 新基础 CUDA 及 LSTM warm GPU cohort：启智 CLI 实际返回 `invalid_grant/session expired`，未提交作业；timer-only源码变体和执行脚本已准备，未冒充已编译/运行。
 - 原 VPR 多线程与最佳 native STRICT CPU 的匹配 V2核心区间仍为 `not_evaluated_same_scope`，不拿其E2与模型相除。
 - 当前全核的时序结论见上表；若未闭合，频率保持假设，不能提升为物理支持的 FPGA服务时间。图前端仍是主要性能限制。
 - 覆盖限制：F0为完整模型消融，未做独立完整F0 RTL校准；动态member容量溢出也尚未取得RTL测试覆盖。

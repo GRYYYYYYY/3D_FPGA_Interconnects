@@ -1,9 +1,16 @@
 # Prepared reproducible cohort. Requires a valid GPU worker; does not submit jobs.
-import pathlib,json,subprocess,os,shutil,hashlib,time
+import pathlib,json,subprocess,os,shutil,hashlib,time,socket
 root=pathlib.Path(__file__).resolve().parents[4];r=root/'results/fpga_sim_restart_20261111T231000Z/closed_loop/gpu_v2';r.mkdir(exist_ok=True)
 nvcc=shutil.which('nvcc');assert nvcc,'nvcc required';assert shutil.which('nvidia-smi'),'CUDA worker required'
 subprocess.run(['nvidia-smi'],stdout=open(r/'nvidia-smi.txt','w'),check=True)
-cpus=sorted(os.sched_getaffinity(0))[:8];assert len(cpus)==8;os.sched_setaffinity(0,cpus)
+allowed=os.sched_getaffinity(0); cpus=[]; cores=set()
+for cpu in sorted(allowed):
+ topology=pathlib.Path(f'/sys/devices/system/cpu/cpu{cpu}/topology')
+ key=((topology/'physical_package_id').read_text(),(topology/'core_id').read_text())
+ if key not in cores: cores.add(key);cpus.append(cpu)
+ if len(cpus)==8:break
+assert len(cpus)==8;os.sched_setaffinity(0,cpus)
+(r/'worker.json').write_text(json.dumps({'hostname':socket.gethostname(),'pid':os.getpid(),'affinity':cpus,'started_unix':time.time(),'nvcc':subprocess.check_output([nvcc,'--version'],text=True),'lscpu':subprocess.check_output(['lscpu'],text=True)},indent=2))
 src=root/'accel/lookahead/round6/cuda6.cu';s=src.read_text();old='CK(cudaMemcpy(&err,error,4,cudaMemcpyDeviceToHost));CK(cudaMemcpy(packed.data()';new='CK(cudaMemcpy(&err,error,4,cudaMemcpyDeviceToHost));double resident_s=seconds(start);CK(cudaMemcpy(packed.data()';assert s.count(old)==1;s=s.replace(old,new)
 old='<<elapsed<<",\\\"device_timeline_including_host_gaps_s\\\":"';new='<<elapsed<<",\\\"resident_s\\\":"<<resident_s<<",\\\"device_timeline_including_host_gaps_s\\\":"';assert s.count(old)==1;s=s.replace(old,new)
 (r/'cuda6_resident.cu').write_text(s)
@@ -23,6 +30,10 @@ for x in json.load(open(root/'accel/lookahead/fpga_sim_restart/config/inputs.jso
   for kind in ['basic','compact']:
    out=r/f"{x['case']}_{kind}_p{process}";command=[str(r/kind),x['path'],'20','3',reference,str(out)+'.bin']
    if kind=='compact':command+=['compact','0']
-   with open(str(out)+'.jsonl','w') as log,open(str(out)+'.stderr','w') as err:subprocess.run(command,stdout=log,stderr=err,check=True)
+   started=time.time()
+   with open(str(out)+'.jsonl','w') as log,open(str(out)+'.stderr','w') as err:
+    child=subprocess.Popen(command,stdout=log,stderr=err);code=child.wait()
+   (pathlib.Path(str(out)+'.receipt.json')).write_text(json.dumps({'command':command,'pid':child.pid,'started_unix':started,'ended_unix':time.time(),'returncode':code},indent=2))
+   assert code==0,(command,code)
    assert pathlib.Path(str(out)+'.bin').read_bytes()==pathlib.Path(reference).read_bytes()
 (r/'completed.json').write_text(json.dumps({'status':'complete','scope':'RESIDENT_COMPLETE_BATCH_V2'}))
