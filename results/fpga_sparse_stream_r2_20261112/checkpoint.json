@@ -158,12 +158,30 @@
       "all_pass": true,
       "record": "model/many32_reg_model_e/mshr_calibration/calibration.json",
       "scope": "complete bound topology; full cycle/output/traffic/phase/histogram exact"
+    },
+    {
+      "version": "many32_request_model_c",
+      "RTL": "many32_request_tree_a",
+      "cases": 97,
+      "all_pass": true,
+      "all_cycle_output_traffic_histogram_phase_exact": true,
+      "record": "model/many32_request_model_c/suite_calibration/calibration.json",
+      "scope": "full32topology at frozen default memory; full40andnewpipelinecapacityresults separate"
+    },
+    {
+      "version": "many32_f0_model_a",
+      "RTL": "many32_f0_a",
+      "cases": 97,
+      "all_pass": true,
+      "all_cycle_output_traffic_histogram_phase_exact": true,
+      "record": "model/many32_f0_model_a/suite_calibration/calibration.json",
+      "scope": "full32topology at frozen default memory; full40andnewpipelinecapacityresults separate"
     }
   ],
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "Finish actual routed contexts,32newrequest/selectiondomaincalibration, fullnative40batches,F0/F1 and sensitivity. Internalholdpositive is not completebareportclockqualification. No fullkernel clock or FPGAwin claimed.",
+  "next_action": "finish new32 request-stage/tree RTL and capacity calibration; complete fullnative40 models; qualify complete8/32 routed OOC at actual supported clocks; retain all negatives",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -209,7 +227,7 @@
     "node_capacity": 512,
     "independent_model_calibrated": false
   },
-  "complete_small_rtl_latest": "32registered-ready/singlewriteMSHR97exact;8newrequest-stage/balancedselection97exact;32newrequest_stage calibration pending",
+  "complete_small_rtl_latest": "complete32 newREQUEST_STAGE1+balancedtree andF0 each97exact; capacityQ40/newhotcases running",
   "large_node_state_standalone": {
     "rtl": "node_state_b",
     "node_address_space": 4194304,
@@ -229,7 +247,6 @@
     "OOC_verified": false
   },
   "vivado_sessions": {
-    "bank8192_reg": "vivado-20261112-171744-63335f93",
     "many8_reg_b": "vivado-20261112-164509-ef1e3de5",
     "many8_mshr_b": "vivado-20261112-173934-eb0a0adf",
     "external_f": "vivado-20261112-180611-3c758959",
@@ -237,7 +254,8 @@
     "many32_reg_b": "vivado-20261112-185211-8e7c9bec",
     "owner_context_a": "vivado-20261112-161837-7d305dc5",
     "many32_mshr_a": "vivado-20261112-191902-487477ac",
-    "many8_context_tree_a": "vivado-20261112-194208-cd9c35ec"
+    "many8_context_tree_a": "vivado-20261112-194208-cd9c35ec",
+    "many32_context_tree_a": "vivado-20261112-171744-63335f93"
   },
   "pending_commands": {
     "owner_mshr_ram_b5": "route active; actual synthesis6909LUT; unitwarm/stresspass",
@@ -249,14 +267,17 @@
     "many32_reg_b": "synthesisactive;complete97RTLregressionactive;newhotcapacity8192/8193active;many32_reg_model_c exactnative only",
     "many32_reg_model_d": "97fullcycle/trafficexact; full40runner11783; provisionalmarker outdated scope=now97passed but complete40stillpending",
     "many32_model_e": "BNN/LSTMcomplete40batchrunning; progress/receipt files authoritative; oldmemberpeak counter invalid=8192 untilpoolinitfix; notcomplete",
-    "owner_context_a": "route active19:41; true BUFG/registeredphysicalcontext, REQUEST_STAGE1 oldlinearselect",
-    "many8_context_tree_a": "complete8 actualcontextandbalancedselection synthactive19:43",
+    "owner_context_a": "complete unitonly125MHz same-routed-netlist STA; archived2010",
+    "many8_context_tree_a": "routeactive19:58:58 actual235849LUT154686FF424BRAMtiles",
     "many32_mshr_a": "synthesisactive;97fullcycle/traffic/outputcalibration passed",
     "many8_request_tree_b": "97fullcycle/traffic/outputcalibration passed",
-    "many32_f0_a": "complete97regression+modelcal45723",
-    "many32_request_tree_a": "build70084, modelbuild44080; fullRTLcalibration stillrequired",
+    "many32_f0_a": "97passed; matchedR0 completebatchrunner29212",
+    "many32_request_tree_a": "97passed; Q40runner46652/hotrunner15011 running",
     "many32_reg_model_e": "97fullcycle/trafficexact; full40BNN/LSTM runner15007; preserveallcompletedoutputs",
-    "boundary_calibration": "many32_reg_b exact8192/8193pass; Q40firstpass secondrunning68615; then calibrate_many_boundaries.py many32_reg_model_c,many32_reg_model_d,many32_reg_model_e many32_reg_b"
+    "boundary_calibration": "complete:many32_reg_b 4boundaries each exactmodels c/d/e",
+    "many32_context_tree_a": "synthactive19:57:12;27RTLsourcehashesexacttofunctionalbuild",
+    "many32_request_model_c": "97passed; full60runner28583; full16and120runner82226; no fullbatch completedyet",
+    "many32_fixedns_a": "36allcycle/output/traffic/contractexact"
   },
   "large_node_state_path_scope": {
     "build": "external_f",
@@ -351,7 +372,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-12T19:56:16.677694+00:00",
+  "updated_utc": "2026-11-12T20:20:17.501863+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -394,7 +415,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "d2b32e13d225b93b748fda7846abe1ce41e8c295",
+  "checkpoint_commit": "f24db3f9",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -416,13 +437,13 @@
     "stress_accepted_retired": 4800,
     "stress_cycles": 30842,
     "complete8calibrated": true,
-    "complete32calibrated": false
+    "complete32calibrated": true
   },
   "owner_selection_tree": {
     "change": "balanced low-ID free/issue, preservedhigh-ID match selection",
     "reason": "many8_mshr_b actualsynth80logic-level wait_write to wb enable",
     "unit_traces_identical_to_request_stage": true,
-    "complete_regression": "8lane97exact;32newREQUEST_STAGEbuild pending"
+    "complete_regression": "complete8and32 each97cases exact"
   },
   "many8_mshr_resources": {
     "LUT": 234982,
@@ -447,7 +468,86 @@
       "RAMB18": 2,
       "WNS_ns": -0.146,
       "WHS_ns": -0.074
+    },
+    "owner_context_routed": {
+      "LUT": 7629,
+      "FF": 4223,
+      "RAMB36": 13,
+      "RAMB18": 2,
+      "five_ns_WNS_ns": -1.758,
+      "five_ns_WHS_ns": 0.006,
+      "eight_ns_same_routed_netlist_STA_WNS_ns": 1.242,
+      "eight_ns_WHS_ns": 0.006,
+      "unit_only_qualified_mhz": 125,
+      "check_timing_all_zero": true,
+      "scope": "oldlinearselector REQUEST_STAGE1; actuallaunch/capture/BUFG; notfullkernel/shell/board",
+      "record": "timing/owner_context_a/routed_STA_8ns.rpt"
+    },
+    "complete8_context_synth": {
+      "LUT": 235849,
+      "FF": 154686,
+      "RAMB36": 368,
+      "RAMB18": 112,
+      "WNS_ns": -2.088,
+      "WHS_ns": -0.08,
+      "record": "timing/many8_context_tree_a",
+      "route_status": "in_progress"
     }
   },
-  "fixed_ns_service": "new opt-in ps contract; roundbase+seededjitter andservicegap upward to kernel cycles; ports synchronous, noCDC/board; calibration pending"
+  "fixed_ns_service": {
+    "contract": "ceil(base+jitter)/kernel_period andceilgap/period; synchronouskernelports; noCDC/board",
+    "periods_ps": [
+      5000,
+      8000
+    ],
+    "base_ps": [
+      80000,
+      300000,
+      600000
+    ],
+    "gaps_ps": [
+      5000,
+      10000,
+      20000
+    ],
+    "jitter_step_ps": 5000,
+    "scenarios_per_topology": 36,
+    "complete8_all_pass": true,
+    "complete32_status": "all36_fullcycle_output_traffic_contract_exact",
+    "frequencies_hypothetical": true
+  },
+  "epoch_qid_boundary": {
+    "record": "rtl/pop_epoch_a/receipt.json",
+    "XSim_pass": true,
+    "epoch_wrap": "ffff_to_0000_after_drain",
+    "qid_wrap": "63_to_0_after_reset_and_mutable_init",
+    "stale_epoch_and_qid_explicitly_rejected": true,
+    "unit_scope": "cell_reducer_only"
+  },
+  "registered_ready_boundary_calibration": {
+    "RTL": "many32_reg_b",
+    "models": [
+      "many32_reg_model_c",
+      "many32_reg_model_d",
+      "many32_reg_model_e"
+    ],
+    "cases_per_model": 4,
+    "all_pass": true,
+    "cases": [
+      "max_node_max_cell_q40",
+      "partial_line_missing_q40",
+      "hot8192_exact",
+      "hot8193_explicit_reject"
+    ]
+  },
+  "pop_metadata_protocol": {
+    "record": "rtl/pop_metadata_a/receipt.json",
+    "contexts": 16,
+    "reverse_order_returns": true,
+    "immutable_pair_qid_epoch": true,
+    "output_backpressure": true,
+    "duplicate_response_explicit_reject": true,
+    "reset_recovery": true,
+    "unit_only": true
+  }
 }

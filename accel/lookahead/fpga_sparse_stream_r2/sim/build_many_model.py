@@ -9,5 +9,6 @@ cmd=['g++','-O3','-std=c++17','-ffp-contract=off','-DR2_ARCH_MODEL=1',*(['-DR2_R
 if len(sys.argv)>8 and sys.argv[8]=='1':cmd.insert(1,'-DR2_SINGLE_COMBIN=1')
 if len(sys.argv)>9 and sys.argv[9]=='1':cmd.insert(1,'-DR2_IDLE_CACHE=1')
 if len(sys.argv)>10 and sys.argv[10]=='1':cmd.insert(1,'-DR2_REQUEST_STAGE=1')
+if len(sys.argv)>11 and sys.argv[11]=='1':cmd.insert(1,'-DR2_FAST_PACK=1')
 with (r/'build.log').open('w') as log:rc=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT).returncode
 (r/'source_binding.json').write_text(json.dumps({'command':cmd,'returncode':rc,'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in f.iterdir()}},indent=2));print('BUILD',rc,r);sys.exit(rc)

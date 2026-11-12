@@ -22,8 +22,23 @@ template<unsigned L,unsigned P,unsigned MC,unsigned CC,bool CACHE=true>struct Ma
  bool cost_we=false,ctl_valid=false,ctl_write=false,export_en=false,local_error=false;unsigned cost_index=0,cost_pos=0,ctl_id=0,export_index=0,output_sent=0,output_acked=0;uint16_t write_busy=0;uint64_t cost_data=0;Line cost_beat{},ctl_data{};std::array<uint64_t,8>export_hold{};uint32_t ctl_line=0;
  std::array<uint32_t,4>record_a{};std::array<uint32_t,2>record_b{};uint32_t recorded=0;unsigned after_neutral=0,closure_drain=0,held_minimum=0;
  ManyTileModel(){for(unsigned i=0;i<L;++i){banks[i].number=i;owners[i].owner_bits=B;}}
- template<size_t N>static void set(std::array<uint32_t,N>&w,unsigned at,unsigned width,uint64_t val){for(unsigned i=0;i<width;++i){uint32_t mask=1u<<((at+i)%32);w[(at+i)/32]=(w[(at+i)/32]&~mask)|(((val>>i)&1)?mask:0);}}
- template<size_t N>static uint64_t get(const std::array<uint32_t,N>&w,unsigned at,unsigned width){uint64_t val=0;for(unsigned i=0;i<width;++i)val|=uint64_t(w[(at+i)/32]>>((at+i)%32)&1)<<i;return val;}
+ template<size_t N>static void set(std::array<uint32_t,N>&w,unsigned at,unsigned width,uint64_t val){
+#ifdef R2_FAST_PACK
+  while(width){unsigned offset=at%32,n=std::min(width,32-offset);uint32_t mask=n==32?~0u:(1u<<n)-1;
+   w[at/32]=(w[at/32]&~(mask<<offset))|((uint32_t(val)&mask)<<offset);at+=n;width-=n;val>>=n;}
+#else
+  for(unsigned i=0;i<width;++i){uint32_t mask=1u<<((at+i)%32);w[(at+i)/32]=(w[(at+i)/32]&~mask)|(((val>>i)&1)?mask:0);}
+#endif
+ }
+ template<size_t N>static uint64_t get(const std::array<uint32_t,N>&w,unsigned at,unsigned width){uint64_t val=0;
+#ifdef R2_FAST_PACK
+  unsigned shift=0;while(width){unsigned offset=at%32,n=std::min(width,32-offset);uint32_t mask=n==32?~0u:(1u<<n)-1;
+   val|=uint64_t((w[at/32]>>offset)&mask)<<shift;at+=n;width-=n;shift+=n;}
+#else
+  for(unsigned i=0;i<width;++i)val|=uint64_t(w[(at+i)/32]>>((at+i)%32)&1)<<i;
+#endif
+  return val;
+ }
  void request(unsigned c,bool v,bool wr,uint32_t line,unsigned id,const Line&data){fabric.cv[c]=v;fabric.cw[c]=wr;fabric.cl[c]=line;fabric.ci[c]=id;fabric.cd[c]=data;}
  static Line unpack(const std::array<uint32_t,8>&x){Line a{};for(unsigned i=0;i<4;++i)a[i]=uint64_t(x[2*i+1])<<32|x[2*i];return a;}
  void combin(){

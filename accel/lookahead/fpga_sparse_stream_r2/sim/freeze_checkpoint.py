@@ -28,8 +28,20 @@ for p in sorted(set(files)):
  dest.parent.mkdir(parents=True,exist_ok=True)
  raw=p.read_bytes()
  if known.get(str(rel))==hashlib.sha256(raw).hexdigest():continue
- if dest.suffix=='.gz':dest.write_bytes(gzip.compress(raw,compresslevel=6,mtime=0))
- else:dest.write_bytes(raw)
- manifest.append({'raw_path':str(rel),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'archive':str(dest.relative_to(out))})
+ record={'raw_path':str(rel),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+ # Complete-batch commit traces can exceed hosting single-file limits even
+ # after compression. Preserve exact bytes in individually bounded chunks.
+ if len(raw)>64*1024*1024:
+  parts=[];folder=out/rel.parent/(rel.name+'.parts');folder.mkdir(exist_ok=True)
+  for offset in range(0,len(raw),64*1024*1024):
+   block=raw[offset:offset+64*1024*1024];part=folder/(f'{len(parts):06d}.gz')
+   part.write_bytes(gzip.compress(block,compresslevel=6,mtime=0))
+   parts.append({'archive':str(part.relative_to(out)),'offset':offset,'bytes':len(block),'sha256':hashlib.sha256(block).hexdigest()})
+  record['archive_parts']=parts
+ else:
+  if dest.suffix=='.gz':dest.write_bytes(gzip.compress(raw,compresslevel=6,mtime=0))
+  else:dest.write_bytes(raw)
+  record['archive']=str(dest.relative_to(out))
+ manifest.append(record)
 (out/'manifest.json').write_text(json.dumps({'scope':'checkpoint; raw evidence retained; active Vivado timing runs excluded until completed','predecessor':previous,'files':manifest,'source_base':'5651a34abb97939bee6402c5af585753ab07f64b'},indent=2)+'\n')
 print('FROZEN',len(manifest),sum(x['bytes'] for x in manifest),'raw bytes',sum(p.stat().st_size for p in out.rglob('*') if p.is_file()),'archive bytes')

@@ -9,6 +9,7 @@ functional_transform:
   stopping_point: original_bucket_closure_after_all_reduction_events_drain
   candidate_numeric: positive_finite_normal_or_positive_zero_FP32
 m2_rtl:
+  scope: frozen_first_small_on_chip_candidate_not_latest
   lanes: 8
   owners: 8
   node_capacity: 4096
@@ -45,7 +46,9 @@ calibration:
     - {RTL: many32_b, model: many32_model_e, cases: 95, cycle_log_exact: true, lanes: 32, physical: 32, registered_ready: false}
     - {RTL: many8_reg_a, model: many8_reg_model_a, cases: 97, cycle_log_exact: true, lanes: 8, physical: 8, cache: F1, registered_ready: true}
     - {RTL: many8_reg_f0_a, model: many8_reg_f0_model_a, cases: 97, cycle_log_exact: true, lanes: 8, physical: 8, cache: F0, registered_ready: true}
-  registered_ready_32_calibration: pending
+  registered_ready_32_calibration: 97_full_cycle_output_traffic_and_4_capacity_boundaries_passed
+  request_stage_8_calibration: 97_full_cycle_output_traffic_passed
+  request_stage_32_calibration: 97_full_cycles_output_traffic_exact
 m3_implemented_services:
   owner: synchronous_hit_pipeline_II1_measured_warm
   changed: four_sector_mask_service_marks_until_commit_ack
@@ -91,6 +94,35 @@ m5_candidate:
   clock_qualified_mhz: null
   ooc_target_period_ns: 5
   ooc_clock_source_assumption: BUFGCE_X0Y144
-  ooc_external_clock_routing: estimated_no_shell_no_board
+  ooc_external_clock_routing: actual_internal_BUFG_with_launch_capture_registers_no_shell_no_board
   member_peak_note: many32_model_e_counter_invalid_until_pool_initialized_fix_in_model_f_and_reg_b
-  owner_mshr_single_write: standalone_verified_complete_integration_in_progress
+  owner_mshr_single_write: complete_8_and_32_each_97_cases_passed
+  request_output_stage: 1
+  request_FIFO_total_capacity_including_stages: 64
+  owner_selection: balanced_first32_preserving_original_selection_order
+  current_RTL: many32_request_tree_a
+  current_model: many32_request_model_c
+  modified_path_calibration: new_97_case_stage1_calibration_passed
+  current_OOC: many32_context_tree_a
+  main_seconds_qualified: false
+fixed_physical_time_sensitivity:
+  kernel_period_ps: [5000, 8000]
+  base_latency_ps: [80000, 300000, 600000]
+  minimum_service_gap_ps: [5000, 10000, 20000]
+  jitter_step_ps: 5000
+  jitter_steps: 13
+  quantization: ceil_delay_to_synchronous_kernel_edge
+  CDC: none_assumed_synchronous_ports
+  all_frequencies_hypothetical: true
+  complete_8_case_count: 36
+  complete_8_all_cycles_output_traffic_exact: true
+  complete_32_status: 36_full_cycle_output_traffic_exact
+unit_owner_OOC:
+  scope: owner_context_a_REQUEST_STAGE1_old_linear_selection
+  physical_context: actual_launch_capture_registers_and_BUFG_with_overhead_included
+  five_ns_routed_setup_hold_ns: [-1.758, 0.006]
+  eight_ns_same_routed_netlist_STA_setup_hold_ns: [1.242, 0.006]
+  unit_only_qualified_mhz: 125
+  check_timing_all_zero: true
+  full_kernel_qualification: false
+  board_measured: false
