@@ -20,10 +20,23 @@ if kind == 'owner':
                ('mem_valid',1),('mem_write',1),('mem_line',32),('mem_id',6),('mem_data',256),
                ('rsp_ready',1),('idle',1),('error',1),('accepted',32),('retired',32),
                ('merges',32),('hits',32),('misses',32),('raw_stall',32),('mshr_peak',6),('dirty_peak',5)]
+elif kind == 'state':
+    top,dut = 'r2_state_context','r2_node_state'
+    params = '.OWNER_BITS(5),.REQUEST_STAGE(1)'
+    inputs = [('rst',1),('iv',1),('node',32),('opcode',3),('operand',64),
+              ('argument',32),('tag',6),('state_base',32),('node_count',32),
+              ('fence',1),('ordy',1),('mem_ready',1),('rsp_valid',1),
+              ('rsp_id',6),('rsp_data',256)]
+    outputs = [('ir',1),('fence_done',1),('ov',1),('onode',32),('otag',6),
+               ('status',4),('old_record',128),('mem_valid',1),('mem_write',1),
+               ('mem_line',32),('mem_id',6),('mem_data',256),('rsp_ready',1),
+               ('idle',1),('error',1),('accepted',32),('retired',32),
+               ('merges',32),('hits',32),('misses',32),('raw_stall',32),
+               ('mshr_peak',6),('dirty_peak',5)]
 elif kind == 'many':
     L,P,MC,CC,U,R = map(int,sys.argv[2:8])
     CACHE = int(sys.argv[8]) if len(sys.argv)>8 else 1
-    top, dut = f'r2_many{L}_context', 'r2_many_tile'
+    top, dut = f'r2_many{L}' + ('_f0' if CACHE == 0 else '') + '_context', 'r2_many_tile'
     params = f'.L({L}),.PHYS({P}),.MEMBER_CAP({MC}),.CHANGED_LIMIT({CC}),.USE_URAM({U}),.REQUEST_STAGE({R}),.CACHE_ENABLE({CACHE})'
     inputs = [('rst',1),('start',1),('row_base',32),('edge_base',32),('cost_base',32),('job_base',32),
               ('node_count',32),('state_base',32),('jobs',7),('cell_count',16),('cost_count',5),
@@ -32,6 +45,15 @@ elif kind == 'many':
                ('physical_id',P*6),('physical_data',P*256),('physical_rsp_ready',P),('issued',L),('accepted',L),
                ('committed',L),('commit_nodes',L*32),('wave',32),('phase',6),('qid',6),('owner_error',L),
                ('active_counts',L*32),('commit_counts',L*32),('mshr_peaks',L*6),('dirty_peaks',L*5)]
+elif kind == 'fabric':
+    C,P = map(int,sys.argv[2:4])
+    top,dut = f'r2_fabric{C}x{P}_context','r2_shared_fabric'
+    params = f'.C({C}),.P({P})'
+    inputs = [('rst',1),('cv',C),('cw',C),('cl',C*32),('ci',C*6),('cd',C*256),
+              ('rr',C),('mr',P),('sv',P),('si',P*6),('sd',P*256)]
+    outputs = [('cr',C),('rv',C),('ri',C*6),('rd',C*256),('mv',P),('mw',P),
+               ('ml',P*32),('mi',P*6),('md',P*256),('sr',P),('idle',1),('error',1),
+               ('accepted',32),('returned',32)]
 else:
     raise ValueError('unknown context kind')
 ni, no = sum(w for _,w in inputs), sum(w for _,w in outputs)

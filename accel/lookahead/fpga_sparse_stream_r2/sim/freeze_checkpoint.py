@@ -5,6 +5,11 @@ root=Path(__file__).resolve().parents[4];r=root/'results/fpga_sparse_stream_r2_2
 # Optional predecessor: retain an append-only delta instead of recopying every
 # unchanged historical trace. The manifest explicitly binds the predecessor.
 previous=sys.argv[2] if len(sys.argv)>2 else None
+defer_running='--defer-running-batches' in sys.argv[3:]
+running=[]
+if defer_running:
+ for receipt in (r/'model').glob('*/large*/*/receipt.json'):
+  if json.loads(receipt.read_text()).get('status')=='running':running.append(receipt.parent)
 known={}
 if previous:
  def inherit(name):
@@ -15,6 +20,9 @@ if previous:
 files=[]
 for p in r.rglob('*'):
  if not p.is_file() or 'evidence_snapshot' in p.parts or 'timing' in p.relative_to(r).parts:continue
+ # Running complete batches retain all raw evidence locally. Checkpoint only
+ # their status/progress now; freeze their full traces after terminal receipts.
+ if any(parent==p.parent for parent in running) and p.name not in ['receipt.json','progress.json']:continue
  rel=p.relative_to(r)
  if p.suffix in ['.json','.csv','.log'] or ('source' in p.parts and p.suffix in ['.sv','.cpp','.hpp']):
   # Exclude generated compiler logs only when they are pure C++ build output;
@@ -43,5 +51,5 @@ for p in sorted(set(files)):
   else:dest.write_bytes(raw)
   record['archive']=str(dest.relative_to(out))
  manifest.append(record)
-(out/'manifest.json').write_text(json.dumps({'scope':'checkpoint; raw evidence retained; active Vivado timing runs excluded until completed','predecessor':previous,'files':manifest,'source_base':'5651a34abb97939bee6402c5af585753ab07f64b'},indent=2)+'\n')
+(out/'manifest.json').write_text(json.dumps({'scope':'checkpoint; raw evidence retained; active Vivado timing runs excluded until completed','predecessor':previous,'deferred_running_batches':[str(x.relative_to(r)) for x in running],'files':manifest,'source_base':'5651a34abb97939bee6402c5af585753ab07f64b'},indent=2)+'\n')
 print('FROZEN',len(manifest),sum(x['bytes'] for x in manifest),'raw bytes',sum(p.stat().st_size for p in out.rglob('*') if p.is_file()),'archive bytes')

@@ -12,7 +12,13 @@ for spec in sys.argv[2:]:
  stages.append({'variant':variant,'stage':stage,'end_marker':True,'error_lines':[x for x in text.splitlines() if x.startswith('ERROR:')]})
  for x in p.iterdir():
   if x.is_file() and x.suffix in ['.json','.tcl','.xdc','.rpt','.md','.diff']:files.add(x)
- files.update(x for x in (p/'source').iterdir() if x.is_file())
+ source=p/'source'
+ if not source.is_dir():source=r/'rtl'/(variant+'_build')/'source'
+ if not source.is_dir():raise RuntimeError('no frozen RTL source directory: '+variant)
+ stages[-1]['frozen_source_directory']=str(source.relative_to(r))
+ files.update(x for x in source.iterdir() if x.is_file())
+ binding=source.parent/'source_binding.json'
+ if binding.exists():files.add(binding)
  files.update(x for x in run.iterdir() if x.is_file() and x.suffix in ['.log','.rpt','.tcl','.rst'])
 items=[]
 for p in sorted(files):

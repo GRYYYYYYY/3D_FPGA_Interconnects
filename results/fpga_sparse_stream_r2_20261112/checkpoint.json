@@ -181,7 +181,7 @@
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "finish new32 request-stage/tree RTL and capacity calibration; complete fullnative40 models; qualify complete8/32 routed OOC at actual supported clocks; retain all negatives",
+  "next_action": "finish new shared-fabric complete32/F0 calibration; finish real native40 batches; route/qualify complete context OOC; recalibrate any further changes; preserve both positive and negative results",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -249,35 +249,47 @@
   "vivado_sessions": {
     "many8_reg_b": "vivado-20261112-164509-ef1e3de5",
     "many8_mshr_b": "vivado-20261112-173934-eb0a0adf",
-    "external_f": "vivado-20261112-180611-3c758959",
     "many32_c": "vivado-20261112-183223-bc1f6643",
-    "many32_reg_b": "vivado-20261112-185211-8e7c9bec",
-    "owner_context_a": "vivado-20261112-161837-7d305dc5",
-    "many32_mshr_a": "vivado-20261112-191902-487477ac",
     "many8_context_tree_a": "vivado-20261112-194208-cd9c35ec",
-    "many32_context_tree_a": "vivado-20261112-171744-63335f93"
+    "many32_context_tree_a": "vivado-20261112-171744-63335f93",
+    "many32_request_f0_context_a": "vivado-20261112-161837-7d305dc5",
+    "many8_context_reduction_b": "vivado-20261112-203252-7b55fe2c",
+    "many32_context_reduction_b": "vivado-20261112-185211-8e7c9bec",
+    "many32_request_f0_reduction_b": "vivado-20261112-180611-3c758959",
+    "central_reduction_a": "vivado-20261112-191902-487477ac",
+    "state_way_context_a": "vivado-20261112-205847-e7d439e5"
   },
   "pending_commands": {
-    "owner_mshr_ram_b5": "route active; actual synthesis6909LUT; unitwarm/stresspass",
+    "owner_mshr_ram_b5": "unit route complete negative5ns-4.508/-2.044;retainedhistoricalnegative",
     "bank8192_reg": "route completed negative; see routed reports",
     "many8_reg_b": "route active; actual358396LUT214592FF368RAMB36+112RAMB18;5ns synthWNS-3.017",
     "many8_mshr_b": "synthesis completed234982LUT; route active;97cyclecalibration passed",
-    "external_f": "oldready full8route active; TIMING-16 remains1000reports; clock-source assumption alone does not resolve setup",
+    "external_f": "route complete376265LUT194137FF516RAMB36+193RAMB18;5ns-13.101/+.015;oldready bare-port context;archive2040b",
     "many32_c": "synthesisactive;97RTL/modelcalibration andbothQ40outputs passed",
-    "many32_reg_b": "synthesisactive;complete97RTLregressionactive;newhotcapacity8192/8193active;many32_reg_model_c exactnative only",
+    "many32_reg_b": "synth complete 1575155LUT848380FF1212BRAMtiles288URAM;120.82percentLUT;route skipped only this old candidate;archive2028",
     "many32_reg_model_d": "97fullcycle/trafficexact; full40runner11783; provisionalmarker outdated scope=now97passed but complete40stillpending",
     "many32_model_e": "BNN/LSTMcomplete40batchrunning; progress/receipt files authoritative; oldmemberpeak counter invalid=8192 untilpoolinitfix; notcomplete",
     "owner_context_a": "complete unitonly125MHz same-routed-netlist STA; archived2010",
     "many8_context_tree_a": "routeactive19:58:58 actual235849LUT154686FF424BRAMtiles",
-    "many32_mshr_a": "synthesisactive;97fullcycle/traffic/outputcalibration passed",
+    "many32_mshr_a": "synth complete1083688LUT586261FF1212BRAMtiles288URAM;5ns -14.408/+.025;oldlinear80levels;route skipped in favor of implemented/recalibrated balanced request candidate;archive2028",
     "many8_request_tree_b": "97fullcycle/traffic/outputcalibration passed",
     "many32_f0_a": "97passed; matchedR0 completebatchrunner29212",
-    "many32_request_tree_a": "97passed; Q40runner46652/hotrunner15011 running",
+    "many32_request_tree_a": "97passed; all4boundaries complete cycle/output/summary exact modelC",
     "many32_reg_model_e": "97fullcycle/trafficexact; full40BNN/LSTM runner15007; preserveallcompletedoutputs",
     "boundary_calibration": "complete:many32_reg_b 4boundaries each exactmodels c/d/e",
     "many32_context_tree_a": "synthactive19:57:12;27RTLsourcehashesexacttofunctionalbuild",
     "many32_request_model_c": "97passed; full60runner28583; full16and120runner82226; no fullbatch completedyet",
-    "many32_fixedns_a": "36allcycle/output/traffic/contractexact"
+    "many32_fixedns_a": "36allcycle/output/traffic/contractexact",
+    "many32_request_f0_a": "97RTL pipeline67968;gate84864 waits then97modelcal andfull40lat60",
+    "many32_request_f0_context_a": "synthstarted20:24:32",
+    "many32_f0_model_b": "97passed;host-only benchmark~13percentfaster;preserve running model_a fullbatch; no hardware performance claim",
+    "many8_fabric_tree_a": "97newcompletecalibration and36fixed_ns passed; OOC synthesis active",
+    "many32_fabric_tree_a": "built;97thennewcalthen36fixed_ns pipeline70274",
+    "many32_request_f0_reduction_b": "built;97thennewcal pipeline41020;newfullcontextOOC synth active",
+    "many32_context_reduction_b": "synthstarted20:36:44",
+    "central_reduction_a": "synthstarted20:36:38",
+    "many8_context_reduction_b": "synthesiscomplete;route started20:51:31;97and36newcalpass",
+    "state_way_context_a": "actual state unitOWNER_BITS5 REQUEST_STAGE1 synthesis launched20:59; full32cal pending"
   },
   "large_node_state_path_scope": {
     "build": "external_f",
@@ -372,7 +384,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-12T20:20:17.501863+00:00",
+  "updated_utc": "2026-11-12T21:00:11.479296+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -415,7 +427,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "f24db3f9",
+  "checkpoint_commit": "7574ff1caf89b15404bc2b77bc1ef83ef48ef44b",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -549,5 +561,88 @@
     "duplicate_response_explicit_reject": true,
     "reset_recovery": true,
     "unit_only": true
+  },
+  "many32_reg_resources": {
+    "LUT": 1575155,
+    "FF": 848380,
+    "BRAM36_equivalent": 1212,
+    "URAM": 288,
+    "device_LUT": 1303680,
+    "candidate_status": "no-go_for_this_frozen_multiwrite_MSHR_variant",
+    "binding": "actual synthesis LUT120.82percent; do not route oversized oldvariant",
+    "not_global_FPGA_stop": true
+  },
+  "many32_mshr_resources": {
+    "LUT": 1083688,
+    "FF": 586261,
+    "RAMB36": 1064,
+    "RAMB18": 296,
+    "URAM": 288,
+    "LUT_percent": 83.13,
+    "scope": "complete32 oldlinearselector REQUEST_STAGE0 synthesis; clocknotqualified; newtree/requestcontextstillpending"
+  },
+  "shared_fabric_reduction": {
+    "change": "per-client request-ready OR; per-port response-consume OR; balanced busy/error OR; no intended latency or ordering changes",
+    "basis": "many32_reg_b actual synth central bc-to-error 52 levels 12.092ns",
+    "unit_tests": [
+      {
+        "case": "hier8_reduction_a",
+        "commands": 41000,
+        "cycles": 30782,
+        "peak": 182
+      },
+      {
+        "case": "hier32_reduction_a",
+        "commands": 161000,
+        "cycles": 97337,
+        "peak": 346
+      },
+      {
+        "case": "fabric32_reduction_fault_a",
+        "commands": 33000,
+        "cycles": 21492,
+        "peak": 193,
+        "simultaneous_invalid_ID_and_sticky_reset_exact": true
+      }
+    ],
+    "unit_all_cycle_logs_exact": true,
+    "complete8_new_calibration": {
+      "cases": 97,
+      "all_pass": true,
+      "model": "many8_request_model_b",
+      "RTL": "many8_fabric_tree_a",
+      "fixed_ns_cases": 36,
+      "fixed_ns_pass": true
+    },
+    "complete32_new_calibration": "running70274",
+    "complete32_F0_new_calibration": "running41020",
+    "old_model_reuse_requires_new_complete_calibration": true
+  },
+  "request_stage_boundary_calibration": {
+    "RTL": "many32_request_tree_a",
+    "model": "many32_request_model_c",
+    "cases": 4,
+    "all_pass": true
+  },
+  "many8_reduction_resources": {
+    "LUT": 235755,
+    "FF": 154655,
+    "RAMB36": 368,
+    "RAMB18": 112,
+    "URAM": 0,
+    "synth_WNS_ns": -2.088,
+    "synth_WHS_ns": -0.08,
+    "period_ns": 5,
+    "route_status": "running",
+    "full_qualified_clock_mhz": null
+  },
+  "cache_way_selection": {
+    "basis": "actual many8_context_reduction_b node_state requestRAM to wait_write CE;28levels including long victim loop",
+    "change": "parallel4way masks then balanced first selection preserves old invalid-first circular replacement and highest match",
+    "unit_owner": "owner_way_tree_b passed exact stress/warm traces versus old stage1;4096 II1 streak",
+    "unit_state": "state_way_tree_b4Maddress7680operations165669cyclespassed;OWNER_BITS3",
+    "exhaustive_XSim": "81920casespassed",
+    "first_compile_negative": "owner_way_tree_a/state_way_tree_a used reserved SV matches identifier; source fixed new b runs; old logs retained",
+    "complete_topology_recalibration": "builds many8_way_tree_a55253 andmany32_way_tree_a10770 running"
   }
 }

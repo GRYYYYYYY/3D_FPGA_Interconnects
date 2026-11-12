@@ -1,4 +1,23 @@
 `timescale 1ns/1ps
+// Preserve exact four-way cache policy without a loop-carried victim chain:
+// highest matching way, lowest invalid available way, otherwise first
+// available way in circular replacement order. Masks are evaluated in parallel.
+module r2_cache_way_select(input wire [3:0] match_mask,available,invalid,
+ input wire [1:0] cursor,output wire hit_valid,output wire [1:0] hit_way,
+ output wire victim_valid,output wire [1:0] victim_way);
+ function automatic [1:0] first4(input [3:0] mask);
+  begin first4=(|mask[1:0])?{1'b0,!mask[0]}:{1'b1,!mask[2]};end
+ endfunction
+ wire [3:0] after_cursor;
+ for(genvar w=0;w<4;w=w+1)begin:after_bits
+  assign after_cursor[w]=available[w]&&(w>=cursor);
+ end
+ wire [3:0] choose=(|invalid)?invalid:(|after_cursor)?after_cursor:available;
+ assign hit_valid=|match_mask;
+ assign hit_way=~first4({match_mask[0],match_mask[1],match_mask[2],match_mask[3]});
+ assign victim_valid=|choose;assign victim_way=first4(choose);
+endmodule
+
 // Balanced binary selection, not a serial 64-element priority-for loop.
 module r2_first64(input wire [63:0] mask,output wire valid,output wire [5:0] index);
  wire [6:0] level0[0:63];

@@ -120,3 +120,18 @@ Hostmodel profile_b identifies combinationalmodel evaluation andfinitefabric pro
 
 
 20:20 update: many32_request_model_c passes97 completeRTLcases fornewREQUEST_STAGE1/balancedtree;many32_f0_model_a passes97for matchedexternalstate/sharedchannelF0REQUEST_STAGE0. Both gatedrealBNN/LSTM40samplebatches have started. Newcandidate also runs full40samples at16and120kernel-cyclememorylatencies, alongside60; these are explicitlycycle-basedsensitivity assumptions, notfixed-ns orqualifiedclockresults. Physicalns mustbe disclosed usingthe actual eventualclock; the separate36scenariofixed-nsRTLcalibrations remainbound to theirrecordedperiods. No completebatchhasyetfinished.
+
+
+20:25 actual32resourceaudit: oldmultiwrite-MSHR many32_reg_b synthesizes1575155LUT848380FF1212BRAMtiles288URAM,120.82percentofU280LUTcapacity. Thatfrozenvariantwillnotberouted. Singlewrite-MSHR many32_mshr_a drops to1083688LUT586261FF1064RAMB36+296RAMB18+288URAM(83.13percentLUT); itstillusesoldlinearselection/REQUEST_STAGE0andhasnoclockqualification. Thematchednewrequest/treecomplete32contextcontinues. Thisresourceimprovementisactualsynthesis,notanaggregateestimateorFPGAwideproof.
+
+A matchedfinalREQUEST_STAGE1 F0variant is nowbuilding/calibrating,withactualcomplete32physicalcontext synthesisstarted20:24:32. OldREQUEST_STAGE0F0/F1runs remainseparatelybound. AnF0hostmodel optimization snapshots onlyoldFIFOheads/validbits instead of copyingentireFIFOstorageeveryclock; itmust passitsown97caseRTLcomparison beforeuse. Hardwarestate transitions andeventclocks remainunchanged.
+
+## 20:51 UTC：共享通道归约修复与独立重新校准
+
+旧32-lane综合显示中央共享通道有52级 bc→error 路径。现将可独立计算的请求ready、响应consume、busy和错误条件改为向量归约，保持原仲裁次序、有限容量和协议拍数。8/32-lane分层单元分别完成41000/161000请求的逐周期差分；中央33×32单元另外通过两个物理端口同时非法ID注入和sticky error复位测试。
+
+新完整8-lane已通过97项逐周期/全输出/全部流量校准及36项固定纳秒假设组合。完整32-lane F1/F0回归与匹配的新OOC均已实际启动，尚未继承旧结构校准或时钟资格。请求流水版本的两项Q40容量测试和8192/8193成员边界通过；这两项Q40构造图不代表真实BNN/LSTM完整batch。真实完整batch仍逐周期运行，未报告最终性能。
+
+旧many32_reg_b超过器件LUT容量；旧many32_mshr_a虽降至83.13%LUT，其旧线性选择路径仍失败。它们仅否决相应固定实现。旧external_f完整8路由结果为376265 LUT、194137 FF、516 RAMB36+193 RAMB18，5ns WNS −13.101ns、WHS +0.015ns，作为负结果保留；未用它给新结构定频。
+
+缓存替换选择的进一步修复：新8-lane综合最坏路径经过state缓存victim的循环优先链（28级）。并行4-way候选掩码与平衡选择替代该链，保留最高匹配way、最低invalid way、圆形替换顺序。81920种状态组合XSim通过；owner stress/warm逐周期与旧stage1版本完全一致（30842/5162周期，4096连续II1退休）；4M地址state测试7680操作通过。初次使用SV保留字matches导致的编译失败日志保留，改名后的测试通过。新8/32完整拓扑构建和state独立OOC已启动，完整时钟与大batch结果仍待验证。

@@ -62,4 +62,20 @@ int main(int argc,char**argv){try{
   d.step();++tick;for(unsigned c=0;c<C;++c)if(take[c])d.cv[c]=false;
  }
  if(!success)throw std::runtime_error("watchdog");std::cout<<"FABRIC_PASS clients="<<C<<" ports="<<P<<" commands="<<total_retired<<" cycles="<<tick<<" peak="<<peak<<'\n';
+ if(argc>2){
+  // After every legitimate transaction is acknowledged, both injected IDs
+  // are unallocated. Simultaneous faults must set the same sticky error on
+  // the acceptance edge; reset must clear it without retaining live tags.
+  std::fill(d.cv.begin(),d.cv.end(),0);std::fill(d.sv.begin(),d.sv.end(),0);
+  std::fill(d.rr.begin(),d.rr.end(),1);std::fill(d.mr.begin(),d.mr.end(),1);
+  d.sv[0]=d.sv[P-1]=1;d.si[0]=17;d.si[P-1]=63;d.combin();
+  if(d.error||!d.sr[0]||!d.sr[P-1])throw std::runtime_error("fault admission setup");
+  d.step();d.combin();log<<"fault,0,"<<d.error<<'\n';
+  if(!d.error)throw std::runtime_error("simultaneous unallocated responses not rejected");
+  std::fill(d.sv.begin(),d.sv.end(),0);d.combin();d.step();d.combin();log<<"fault,1,"<<d.error<<'\n';
+  if(!d.error)throw std::runtime_error("fault not sticky");
+  d.rst=true;d.combin();d.step();d.combin();log<<"fault,2,"<<d.error<<','<<d.idle<<'\n';
+  if(d.error||!d.idle)throw std::runtime_error("fault reset recovery");
+  std::cout<<"FABRIC_FAULT_PASS simultaneous_invalid_ids sticky_error reset_clean\n";
+ }
 }catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}}

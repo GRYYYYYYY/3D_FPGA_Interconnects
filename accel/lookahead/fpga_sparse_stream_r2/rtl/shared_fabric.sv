@@ -7,17 +7,33 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
  output reg [P-1:0] mv,input wire [P-1:0] mr,output reg [P-1:0] mw,output reg [P*32-1:0] ml,output reg [P*6-1:0] mi,output reg [P*256-1:0] md,
  input wire [P-1:0] sv,output wire [P-1:0] sr,input wire [P*6-1:0] si,input wire [P*256-1:0] sd,
  output wire idle,output reg error,output reg [31:0] accepted,returned);
- wire [C-1:0] qv;reg [C-1:0] qr;wire [294:0] qwords[0:C-1];wire [C*3-1:0] count;
+ wire [C-1:0] qv,qr;wire [294:0] qwords[0:C-1];wire [C*3-1:0] count;
  reg [63:0] busy[0:P-1];reg [5:0] client[0:P-1][0:63],local_id[0:P-1][0:63];
  reg [5:0] arb[0:P-1];reg [P-1:0] bv;reg [5:0] bc[0:P-1],bi[0:P-1];reg [255:0] bd[0:P-1];
- reg [PB-1:0] return_arb[0:C-1];reg [P-1:0] consume;
+ reg [PB-1:0] return_arb[0:C-1];wire [P-1:0] consume;
  reg [C-1:0] next_rv;reg [C*6-1:0] next_ri;reg [C*256-1:0] next_rd;
- wire [5:0] selected[0:P-1],tag[0:P-1],chosen[0:C-1];wire [P-1:0] select_valid,tag_valid;wire [C-1:0] chosen_valid;reg any_busy;
+ wire [5:0] selected[0:P-1],tag[0:P-1],chosen[0:C-1];wire [P-1:0] select_valid,tag_valid;wire [C-1:0] chosen_valid;wire [P-1:0] busy_ports,response_fault;
  for(genvar c=0;c<C;c=c+1)begin:requests
   sparse_fifo #(.WIDTH(295),.DEPTH(4),.STYLE("distributed")) fifo(clk,rst,cv[c],cr[c],{cw[c],cl[c*32+:32],ci[c*6+:6],cd[c*256+:256]},qv[c],qr[c],qwords[c],count[c*3+:3]);
  end
  for(genvar p=0;p<P;p=p+1)begin:response_ports
   assign sr[p]=!bv[p]||consume[p];
+  assign busy_ports[p]=|busy[p];
+  assign response_fault[p]=sr[p]&&sv[p]&&!busy[p][si[p*6+:6]];
+  // A buffered return belongs to exactly one client. Construct each consume
+  // bit directly instead of cascading C variable-index writes to one vector.
+  wire [C-1:0] consume_terms;
+  for(genvar c=0;c<C;c=c+1)begin:consumers
+   assign consume_terms[c]=chosen_valid[c]&&chosen[c]==p&&(!rv[c]||rr[c]);
+  end
+  assign consume[p]=|consume_terms;
+ end
+ for(genvar c=0;c<C;c=c+1)begin:request_ready
+  wire [P-1:0] ready_terms;
+  for(genvar p=0;p<P;p=p+1)begin:ports
+   assign ready_terms[p]=(!mv[p]||mr[p])&&tag_valid[p]&&select_valid[p]&&selected[p]==c;
+  end
+  assign qr[c]=|ready_terms;
  end
  // Fixed-index eligibility and balanced first-bit trees avoid C rotated
  // variable-index muxes per port. Round-robin order is cycle-identical.
@@ -47,22 +63,19 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
   assign chosen[c]=hv?hi:lo;assign chosen_valid[c]=lv;
  end
  always @*begin
-  qr=0;next_rv=0;next_ri=0;next_rd=0;consume=0;any_busy=0;
-  for(integer p=0;p<P;p=p+1)begin
-   if(busy[p]!=0)any_busy=1;
-   if((!mv[p]||mr[p])&&tag_valid[p]&&select_valid[p])qr[selected[p]]=1;
-  end
+  next_rv=0;next_ri=0;next_rd=0;
   for(integer c=0;c<C;c=c+1)begin
-   if(chosen_valid[c])begin next_rv[c]=1;next_ri[c*6+:6]=bi[chosen[c]];next_rd[c*256+:256]=bd[chosen[c]];consume[chosen[c]]=!rv[c]||rr[c];end
+   if(chosen_valid[c])begin next_rv[c]=1;next_ri[c*6+:6]=bi[chosen[c]];next_rd[c*256+:256]=bd[chosen[c]];end
   end
  end
- assign idle=qv==0&&count==0&&mv==0&&bv==0&&rv==0&&!any_busy;
+ assign idle=qv==0&&count==0&&mv==0&&bv==0&&rv==0&&!(|busy_ports);
  integer issued_count,return_count;
  always @(posedge clk)begin
   if(rst)begin mv<=0;bv<=0;rv<=0;error<=0;accepted<=0;returned<=0;
    for(integer p=0;p<P;p=p+1)begin busy[p]<=0;arb[p]<=0;end
    for(integer c=0;c<C;c=c+1)return_arb[c]<=0;
   end else begin
+   if(|response_fault)error<=1;
    issued_count=0;return_count=0;
    for(integer p=0;p<P;p=p+1)begin
     if(!mv[p]||mr[p])begin mv[p]<=0;if(tag_valid[p]&&select_valid[p])begin
@@ -70,7 +83,6 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
      busy[p][tag[p]]<=1;client[p][tag[p]]<=selected[p];local_id[p][tag[p]]<=qwords[selected[p]][256+:6];arb[p]<=selected[p]==C-1?0:selected[p]+1;issued_count=issued_count+1;
     end end
     if(sr[p])begin bv[p]<=sv[p];if(sv[p])begin
-     if(!busy[p][si[p*6+:6]])error<=1;
      bc[p]<=client[p][si[p*6+:6]];bi[p]<=local_id[p][si[p*6+:6]];bd[p]<=sd[p*256+:256];busy[p][si[p*6+:6]]<=0;return_count=return_count+1;
     end end
    end

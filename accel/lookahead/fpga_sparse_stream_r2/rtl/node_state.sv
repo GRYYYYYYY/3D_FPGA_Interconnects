@@ -29,7 +29,7 @@ module r2_node_state #(parameter OWNER_BITS=3,REQUEST_STAGE=0)(input wire clk,rs
  reg [255:0] ram_q,last_data;reg [6:0] last_slot;reg last_valid;
  reg flushing;reg [7:0] flush_index;reg command_turn;
  wire [31:0] qline=state_base+((((qnode>>(OWNER_BITS+2))<<1)|((qnode>>1)&1))<<OWNER_BITS)+((qnode>>2)&((1<<OWNER_BITS)-1));
- integer hit,victim,count_m,count_w;integer candidate;
+ wire signed [31:0] hit,victim;integer count_m,count_w;
  wire signed [31:0] matching,fm,fw,issue_m,issue_w;
  reg [15:0] wait_write[0:31];wire [15:0] allocation_wait;
  wire write_ack=rv&&rr&&rd[261];
@@ -63,16 +63,23 @@ module r2_node_state #(parameter OWNER_BITS=3,REQUEST_STAGE=0)(input wire clk,rs
  assign fm=free_m[5]?{27'b0,free_m[4:0]}:32'hffffffff;
  assign fw=free_w[5]?{27'b0,free_w[4:0]}:32'hffffffff;
  assign matching=match_id[5]?32'd31-{27'b0,match_id[4:0]}:32'hffffffff;
+ wire [4:0] lookup_set=qline[OWNER_BITS+:5];
+ wire [3:0] way_matches,way_available,way_invalid;
+ wire hit_valid,victim_valid;wire [1:0] hit_way,victim_way;
+ for(genvar w=0;w<4;w=w+1)begin:parallel_cache_ways
+  wire [6:0] slot={2'(w),lookup_set};
+  assign way_matches[w]=valid[slot]&&!busy[slot]&&tags[slot]==qline;
+  assign way_available[w]=!busy[slot]&&!(sv&&sslot==slot);
+  assign way_invalid[w]=way_available[w]&&!valid[slot];
+ end
+ r2_cache_way_select way_select(way_matches,way_available,way_invalid,
+  replacement[lookup_set],hit_valid,hit_way,victim_valid,victim_way);
+ assign hit=hit_valid?{25'b0,hit_way,lookup_set}:32'hffffffff;
+ assign victim=victim_valid?{25'b0,victim_way,lookup_set}:32'hffffffff;
  always @*begin
-  hit=-1;victim=-1;count_m=0;count_w=0;candidate=0;
+  count_m=0;count_w=0;
   for(integer i=0;i<32;i=i+1)if(mv[i])count_m=count_m+1;
   for(integer i=0;i<16;i=i+1)if(wv[i])count_w=count_w+1;
-  for(integer w=0;w<4;w=w+1)begin
-   candidate=(w<<5)|qline[OWNER_BITS+:5];
-   if(valid[candidate]&&!busy[candidate]&&tags[candidate]==qline)hit=candidate;
-   if(!valid[candidate]&&!busy[candidate]&&!(sv&&sslot==candidate)&&victim<0)victim=candidate;
-  end
-  if(victim<0)for(integer w=0;w<4;w=w+1)begin candidate=(((replacement[qline[OWNER_BITS+:5]]+w)%4)<<5)|qline[OWNER_BITS+:5];if(!busy[candidate]&&!(sv&&sslot==candidate)&&victim<0)victim=candidate;end
  end
  wire [255:0] base_data=last_valid&&last_slot==sslot?last_data:ram_q;
  // The operation returns the immutable old record and atomically computes a
