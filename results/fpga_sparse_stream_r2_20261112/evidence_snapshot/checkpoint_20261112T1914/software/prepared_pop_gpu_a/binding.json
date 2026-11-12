@@ -1,0 +1,33 @@
+{
+  "build_commands": [
+    [
+      "/usr/local/cuda/bin/nvcc",
+      "-O3",
+      "-std=c++17",
+      "--fmad=false",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/include",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/round6_1",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/prepared_pop_gpu_a/source/cuda_prepared_pop.cu",
+      "-o",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/prepared_pop_gpu_a/gpu"
+    ],
+    [
+      "g++",
+      "-O3",
+      "-std=c++17",
+      "-fopenmp",
+      "-ffp-contract=off",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/include",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/round6_1",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/prepared_pop_gpu_a/source/cpu_prepared_pop.cpp",
+      "-o",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/prepared_pop_gpu_a/cpu"
+    ]
+  ],
+  "source_sha256": {
+    "cpu_prepared_pop.cpp": "5b7c422820fe041bc3e1bc8f63aedc47840226176fc5ed3f243eb7ad63cdd306",
+    "cuda_prepared_pop.cu": "4944b08b53aa0e2ec18eb06761ffc00a6cf95941afc8b4908561ee1e7b254b53"
+  },
+  "scope": "RESIDENT_COMPLETE_BATCH_V2",
+  "old_GPU_V2_rerun": false
+}

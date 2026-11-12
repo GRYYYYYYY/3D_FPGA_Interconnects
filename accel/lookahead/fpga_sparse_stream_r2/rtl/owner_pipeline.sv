@@ -19,7 +19,10 @@ module sparse_owner_pipe #(parameter OWNER_BITS=3)(input wire clk,rst,iv,output 
  assign {update_line,update_mask}=event_out;
  (* ram_style="block" *) reg [255:0] data_ram[0:127];
  reg [31:0] tags[0:127];reg [127:0] valid,dirty,busy;reg [1:0] replacement[0:31];
- reg [31:0] ml[0:31],mcount[0:31];reg [6:0] slot_for_miss[0:31];reg [255:0] mc[0:31];reg [31:0] mv,ms,mg;
+ reg [31:0] ml[0:31];
+ (* ram_style="distributed" *) reg [31:0] mcount[0:31];
+ reg [6:0] slot_for_miss[0:31];
+ (* ram_style="distributed" *) reg [255:0] mc[0:31];reg [31:0] mv,ms,mg;
  reg [31:0] wl[0:15];(* ram_style="block" *) reg [255:0] wb[0:15];reg [15:0] wv,ws,wg;reg [3:0] swrite;
  reg sv,skind,sdirty;reg [6:0] sslot;reg [31:0] snode,sline,evict_line;reg [63:0] spair;reg [4:0] smiss;
  reg [255:0] ram_q,last_data;reg [6:0] last_slot;reg last_valid;
@@ -62,6 +65,21 @@ module sparse_owner_pipe #(parameter OWNER_BITS=3)(input wire clk,rst,iv,output 
  wire dispatch=qv&&qr;
  wire hit_dispatch=dispatch&&matching<0&&hit>=0;
  wire miss_dispatch=dispatch&&matching<0&&hit<0;
+ // Allocation and merge are mutually exclusive: expose one whole-word write
+ // port. Separate partial/nonpartial NBA writes prevented RAM inference.
+ wire merge_dispatch=dispatch&&matching>=0;
+ wire candidate_we=!rst&&(miss_dispatch||merge_dispatch);
+ wire [4:0] candidate_wa=miss_dispatch?fm[4:0]:matching[4:0];
+ reg [255:0] candidate_wd;
+ always @*begin
+  candidate_wd=miss_dispatch?{4{INF}}:mc[matching[4:0]];
+  if(miss_dispatch||qd[63:0]<candidate_wd[qd[65:64]*64+:64])
+   candidate_wd[qd[65:64]*64+:64]=qd[63:0];
+ end
+ always @(posedge clk)if(candidate_we)begin
+  mc[candidate_wa]<=candidate_wd;
+  mcount[candidate_wa]<=miss_dispatch?32'd1:mcount[matching[4:0]]+32'd1;
+ end
  wire flush_dispatch=flushing&&flush_index<128&&dirty[flush_index[6:0]]&&advance&&fw>=0;
  wire ram_re=hit_dispatch||miss_dispatch||flush_dispatch;
  wire [6:0] ram_ra=flush_dispatch?flush_index[6:0]:hit_dispatch?hit[6:0]:victim[6:0];
@@ -108,12 +126,12 @@ module sparse_owner_pipe #(parameter OWNER_BITS=3)(input wire clk,rst,iv,output 
      sv<=1;skind<=1;sslot<=victim;sdirty<=dirty[victim];evict_line<=tags[victim];smiss<=fm;
      if(dirty[victim])begin swrite<=fw;wv[fw]<=1;ws[fw]<=0;wg[fw]<=0;wl[fw]<=tags[victim];end
      wait_write[fm]<=allocation_wait;
-     mv[fm]<=1;ms[fm]<=0;mg[fm]<=0;ml[fm]<=qline;slot_for_miss[fm]<=victim;mcount[fm]<=1;mc[fm]<={4{INF}};mc[fm][qd[65:64]*64+:64]<=qd[63:0];
+     mv[fm]<=1;ms[fm]<=0;mg[fm]<=0;ml[fm]<=qline;slot_for_miss[fm]<=victim;
      valid[victim]<=0;dirty[victim]<=0;busy[victim]<=1;tags[victim]<=qline;replacement[qline[OWNER_BITS+:5]]<=victim[6:5]+1;misses<=misses+1;
     end
     if(flush_dispatch)begin swrite<=fw;wv[fw]<=1;ws[fw]<=0;wg[fw]<=0;wl[fw]<=tags[flush_index[6:0]];sv<=1;skind<=1;sslot<=flush_index[6:0];sdirty<=1;evict_line<=tags[flush_index[6:0]];dirty[flush_index[6:0]]<=0;flush_index<=flush_index+1;end
    end
-   if(dispatch&&matching>=0)begin if(qd[63:0]<mc[matching][qd[65:64]*64+:64])mc[matching][qd[65:64]*64+:64]<=qd[63:0];mcount[matching]<=mcount[matching]+1;merges<=merges+1;end
+   if(merge_dispatch)merges<=merges+1;
    if(!fence)fence_done<=0;
    if(fence&&!fence_done&&!flushing&&idle)begin flushing<=1;flush_index<=0;end
    if(flushing&&flush_index<128&&!dirty[flush_index[6:0]])flush_index<=flush_index+1;

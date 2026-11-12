@@ -11,6 +11,8 @@ double sc_time_stamp(){return 0;}
 #include <filesystem>
 #include <set>
 #include <map>
+#include <chrono>
+#include <cstdlib>
 #include <type_traits>
 #ifndef TILE_L
 #define TILE_L 32
@@ -50,8 +52,11 @@ int main(int argc,char**argv){try{
  auto clock=[&](){d.clk=0;d.eval();d.clk=1;d.eval();++tick;};
  d.rst=1;d.start=0;d.physical_rsp_valid=0;d.physical_ready=0;clock();clock();d.rst=0;
  d.node_count=w.h.nodes;d.state_base=SB;d.row_base=RB;d.edge_base=EB;d.cost_base=CB;d.job_base=JB;d.jobs=w.h.jobs;d.cost_count=w.h.costs;d.cell_count=w.h.cells;
+ uint64_t max_cycles=std::getenv("R2_MAX_CYCLES")?std::stoull(std::getenv("R2_MAX_CYCLES")):20000000ull;
+ bool full_trace=!std::getenv("R2_COMPACT_TRACE");uint64_t trace_hash=1469598103934665603ull;
+ const auto wall_start=std::chrono::steady_clock::now();
  uint64_t start=tick;d.start=1;clock();d.start=0;bool success=false;
- for(unsigned steps=0;steps<20000000;++steps){
+ for(uint64_t steps=0;steps<max_cycles;++steps){
   d.clk=0;d.physical_ready=d.physical_rsp_valid=0;
   for(unsigned c=0;c<P;++c){if(pending[c].size()<64&&tick>=next[c]&&rng()%7)d.physical_ready|=1u<<c;
    if(response[c]<0)for(int i=int(pending[c].size())-1;i>=0;--i)if(pending[c][i].due<=tick){response[c]=i;break;}
@@ -81,8 +86,10 @@ int main(int argc,char**argv){try{
    high[c]=std::max<unsigned>(high[c],pending[c].size());outstanding+=pending[c].size();
   }
   auto a=__builtin_popcount(d.issued),b=__builtin_popcount(d.accepted),c=__builtin_popcount(d.committed);++ih[a];++ah[b];++ch[c];++phases[d.phase];
-  cycles<<tick<<','<<unsigned(d.qid)<<','<<d.wave<<','<<unsigned(d.phase)<<','<<a<<','<<b<<','<<c<<','<<outstanding<<'\n';
+  if(full_trace)cycles<<tick<<','<<unsigned(d.qid)<<','<<d.wave<<','<<unsigned(d.phase)<<','<<a<<','<<b<<','<<c<<','<<outstanding<<'\n';
   for(unsigned k=0;k<L;++k){if(d.committed>>k&1)commits<<unsigned(d.qid)<<','<<d.wave<<','<<d.commit_nodes[k]<<'\n';mshr_peak=std::max(mshr_peak,unsigned(getbits(d.mshr_peaks,k*6,6)));dirty_peak=std::max(dirty_peak,unsigned(getbits(d.dirty_peaks,k*5,5)));}
+  for(uint64_t v:{tick,uint64_t(d.qid),uint64_t(d.wave),uint64_t(d.phase),uint64_t(a),uint64_t(b),uint64_t(c),uint64_t(outstanding)}){trace_hash^=v;trace_hash*=1099511628211ull;}
+  if(steps%1000000==0){auto seconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-wall_start).count();std::ofstream progress(out+"/progress.json");progress<<"{\"cycles\":"<<steps<<",\"sample\":"<<unsigned(d.qid)<<",\"wave\":"<<d.wave<<",\"phase\":"<<unsigned(d.phase)<<",\"host_elapsed_s\":"<<seconds<<"}\n";}
   d.clk=1;d.eval();++tick;
   if(d.error){std::cerr<<"bank="<<unsigned(d.r2_many_tile__DOT__bank_error)<<" meta="<<unsigned(d.r2_many_tile__DOT__meta_error)<<" reduce="<<unsigned(d.r2_many_tile__DOT__reduce_error)<<" front="<<unsigned(d.r2_many_tile__DOT__front_error)<<" queue="<<unsigned(d.r2_many_tile__DOT__queue_error)<<'\n';throw std::runtime_error("DUT error sample="+std::to_string(d.qid)+" wave="+std::to_string(d.wave)+" phase="+std::to_string(d.phase)+" owner="+std::to_string(d.owner_error));}
   if(d.done){if(outstanding)throw std::runtime_error("done before physical drain");success=true;break;}
@@ -91,5 +98,9 @@ int main(int argc,char**argv){try{
  for(unsigned q=0;q<w.h.jobs;++q)for(unsigned c=0;c<w.h.cells;++c){auto v=memory[OB+q*OS+c/4][c%4];actual.push_back(v);if(v!=reference[q*w.h.cells+c])throw std::runtime_error("output mismatch q="+std::to_string(q)+" cell="+std::to_string(c)+" got="+std::to_string(v)+" expected="+std::to_string(reference[q*w.h.cells+c]));}
  std::ofstream summary(out+"/summary.json");summary<<"{\"scope\":\"RTL functional cycles; hypothetical bounded physical memory; no qualified clock\",\"all_outputs_exact\":true,\"batch_starts\":1,\"jobs\":"<<w.h.jobs<<",\"resident_cycles\":"<<tick-start<<",\"wave_invariant_checks\":"<<checks<<",\"latency_cycles\":"<<latency<<",\"service_gap_cycles\":"<<gap<<",\"seed\":"<<seed<<",\"physical_channels\":"<<P<<",\"lanes\":"<<L<<",\"physical_outstanding_cap\":64,\"mshr_peak\":"<<mshr_peak<<",\"dirty_peak\":"<<dirty_peak<<",\"array_beats_prop_write_prop_read_row_edge_cost_cell_job_output_state_write_state_read\":[";
  for(unsigned i=0;i<10;++i)summary<<(i?",":"")<<arrays[i];summary<<"],\"issue_histogram\":[";for(unsigned i=0;i<L+1;++i)summary<<(i?",":"")<<ih[i];summary<<"],\"accept_histogram\":[";for(unsigned i=0;i<L+1;++i)summary<<(i?",":"")<<ah[i];summary<<"],\"commit_histogram\":[";for(unsigned i=0;i<L+1;++i)summary<<(i?",":"")<<ch[i];summary<<"],\"phase_cycles\":[";for(unsigned i=0;i<64;++i)summary<<(i?",":"")<<phases[i];summary<<"],\"channels\":[";for(unsigned i=0;i<P;++i)summary<<(i?",":"")<<"{\"reads\":"<<reads[i]<<",\"writes\":"<<writes[i]<<",\"peak\":"<<high[i]<<"}";summary<<"]}\n";
+ std::ofstream trace(out+"/trace_mode.json");trace<<"{\"cycle_rows\":"<<tick-start-1<<",\"full_cycle_csv\":"<<(full_trace?"true":"false")<<",\"trace_fnv64_integer_stream\":"<<trace_hash<<",\"exact_clock_evaluation\":true,\"event_skipping\":false,\"max_cycles\":"<<max_cycles<<"}\n";
+#ifdef R2_ARCH_MODEL
+ d.write_metrics(out);
+#endif
  std::ofstream binary(out+"/output.bin",std::ios::binary);for(auto v:actual){uint64_t native=(v<<32)|(v>>32);binary.write((char*)&native,8);}std::cout<<"BATCH_PASS cycles="<<tick-start<<" jobs="<<w.h.jobs<<" checks="<<checks<<'\n';
 }catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}}

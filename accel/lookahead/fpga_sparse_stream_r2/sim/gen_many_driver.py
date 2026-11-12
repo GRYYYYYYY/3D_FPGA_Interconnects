@@ -26,6 +26,7 @@ d=d.replace('unsigned((d.mshr_peaks>>(k*6))&63)','unsigned(getbits(d.mshr_peaks,
 d=d.replace('for(unsigned i=0;i<9;++i)','for(unsigned i=0;i<L+1;++i)').replace('for(unsigned i=0;i<8;++i)summary','for(unsigned i=0;i<P;++i)summary')
 d=d.replace('physical_channels\\\":8,','physical_channels\\\":"<<P<<",\\\"lanes\\\":"<<L<<",')
 d=d.replace('<<\" fabric=\"<<unsigned(d.r2_many_tile__DOT__fabric_error)', '')
+d=d.replace(' std::ofstream binary(out+\"/output.bin\"', '#ifdef R2_ARCH_MODEL\n d.write_metrics(out);\n#endif\n std::ofstream binary(out+\"/output.bin\"')
 (s/'sim/many_tile_driver.cpp').write_text(d)
 p=(s/'sim/build_external.py').read_text().replace("(sys.argv[1]+'_build')","(sys.argv[1]+'_build')").replace('external_tile_driver.cpp','many_tile_driver.cpp').replace('r2_external_tile','r2_many_tile')
 p=p.replace("f'-O3 -std=c++17 -I{root}/accel/lookahead/include'", "f'-O3 -std=c++17 -DTILE_L={sys.argv[2]} -DTILE_P={sys.argv[3]} -I{root}/accel/lookahead/include'")

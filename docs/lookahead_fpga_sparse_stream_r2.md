@@ -44,15 +44,14 @@ external_b 实现每 owner 4KiB state cache、32 MSHR、16 dirty buffers、64-en
 
 prepared_CSR_valid_POP_CPU完整包含每sample mutable初始化、cost复制、搜索、changed commit、原桶闭合点结束和输出写入。3进程各1预热+3正式完整batch，8线程，完整输出与ALT golden一致。BNN均值3.307430729s、样本标准差0.086225747s；LSTM均值3.438127634s、标准差0.068122253s。外部CSR准备与首次装载不计，符合V2；CPU主机并发运行Vivado且不同于GPU主机，不能声称同机软件speedup。
 
-已检查旧basic/compact CUDA：expand仍运行时eligible判断，confirm在闭合点扫描settled，不是prepared CSR+POP在线归约的等价优化实现。原GPU V2结果保留；新的通用变换CUDA对照仍待实现/测量，不能给旧结果改名。
+已检查旧basic/compact CUDA：expand仍运行时eligible判断，confirm在闭合点扫描settled，不是prepared CSR+POP在线归约的等价优化实现。原GPU V2结果保留；新增 prepared CSR+POP CUDA 已完成，见后面的独立实测结果，未给旧结果改名。
 
 ## 尚未完成
 
-- m2c/m3d/m3e 综合正在执行。m3c 多写位置导致 RAM 推断失败；m3d reducer 映射 LUTRAM，改为显式读/写端口后单元实际为7 RAMB36+1 RAMB18，XSim通过。m3d又报告浮点 CARRY8 timing loops并自动disable timing；不能据此获得完整频率资格。单赋值算术修复通过500000次FP32位精确加法，单元综合待核验。全部负结果保留。
-- 完整 tile routed OOC、真实 setup/hold 闭合仍未完成。
-- 32/64 topology、有限分层汇聚及候选完整核资格仍未完成；开始验证5-client/1-uplink和33-client/32-physical-port单元。
-- BNN/LSTM 完整 40-sample 有限架构仿真、新完整候选 OOC；目前只有 M1 功能结果，不得当成硬件性能。
-- 通用表示变换 CPU/CUDA 对照及 native 身份/回接。已有 GPU V2 和 R1 证据复用，不申请新 GPU 补测。
+- 完整 tile 和完整32路候选的 routed OOC、setup/hold闭合。已有 pair_lane 单元200MHz闭合不能代替完整核。
+- 新注册ready和F0路径的32路重新校准、容量边界与完整大图；8路F1/F0各97个用例已经逐周期精确校准。
+- BNN/LSTM各40sample的有限架构仿真已启动，尚无完整输出或性能结论；M1功能正确不等于M5完成。
+- 相同大图状态/物理通道的F0/F1消融和完整核合格频率下的固定ns内存敏感性。
 
 配置在 `accel/lookahead/fpga_sparse_stream_r2/config/experiment_spec.r2.yaml`；逐项状态在 `results/fpga_sparse_stream_r2_20261112/checkpoint.json`。所有失败版本、源代码快照、周期日志与工具日志留在本轮 results。尚未声明 FPGA 胜过 CPU/GPU，尚无 board measured 结果。
 
@@ -66,3 +65,25 @@ New software measurements are independent of oldGPU V2, which remains unchanged.
 This tighter software baseline excludes a fixed32-lane<=200MHz candidate with unchanged edgework and one candidate/lane/cycle even before initialization/commit/memory. It does not exclude changedwork/higher-frequency/wider structures. Actual hierarchy is now coded: five bounded clients per owner ->one64taguplink->shared physical ports; parameterized many_tile has8reducer banks and bounded8192member/changed entries per32-owner. Modules and complete8/32topologies are being independently calibrated; no8-lane calibration is claimed for32. Full BNN/LSTM architecture simulation, complete-kernel timing, F0/F1 large-state ablation, and native timing-scope audit remain pending.
 
 18:20 continuation: composed161client/32physical fabric passed161000transactions at96775cycles with every cycle equal to its independent model. many8_b integrated topology passed95cases exact to many8_model_a; native cycles48873/135753. Full32RTL compilation/calibration remains in progress. The actual8192-entry bank synthesized13989LUT,8416FF,57RAMB36+15RAMB18. Vivado confirms2016BRAM36equivalent and960URAM available onxcu280:32banks alone require2064BRAM36equivalent, so the all-BRAM fixedcandidate cannot fit. A separately frozen USE_URAM version moves large directory/member/free/changed arrays to URAM; inference and implementation are pending, not presumed.
+
+
+18:47 continuation (in progress): many32_b now passes the complete95case RTL suite (2native,91fixtures,2pressure), and independent many32_model_b/d/e logs are exact. Native32 cycles are104498/201809. Models d/e remove host-only full-cache copies and replace nested arbiter searches by equivalent bitsets; no clocks, dependencies or events are sampled/skipped. Every optimization was recalibrated. Full BNN/LSTM models b/d were explicitly interrupted as superseded, with partial logs/receipts retained; e owns the current complete-batch run. Only one hardware start drives all40samples; compact trace suppresses text rows, retains all cycle evaluation, counters, phase/commit logs and a cycle digest. No elapsed host-model time is used as FPGA performance.
+
+Actual bank8192_uram synthesis gives13962LUT8432FF31RAMB36+14RAMB18+7URAM. The synthesis posthook had unloaded timing constraints (WNS/WHS infinity, no clocks); these reports are not qualification evidence. Opening the synthesized design reloads the XDC:5ns WNS-1.130/WHS+.025, zero combinational/latch loops. Routing is ongoing. A subsequent RTL repair snapshots the original bucket tail and ends POP there, eliminating the new-member NIL write. This makes member_next one synchronous read/one write and MA-bit wide; the independent old NIL-terminated model remains the cycle/output reference. many32_c RTL compiled; full regressions and complete-kernel synthesis are running.
+
+external_f actual complete8 synthesis:376759LUT194031FF516RAMB36+193RAMB18. Opened valid5ns constraints giveWNS-4.876/WHS+.025, zero mapped loops. Critical path goes from state-request BRAM through ready logic to physical_rsp_ready,36logic levels. A new FIFO only advertises registered free space, adding a single full-to-nonfull acceptance bubble and breaking this combinational ready path. New RTL and independent models must be calibrated again; old zero-error calibration is not inherited.
+
+The standalone C33/P32 physical fabric synthesized200285LUT54069FF132RAMB36+33RAMB18. Its four-entry request FIFOs waste4.5BRAM each; new source uses synchronous distributed RAM for these shallow FIFOs. Complete many8_reg_b OOC includes the registered-ready/tail repair and shallow-memory mapping. many32_reg_a RTL compilation is underway. No new candidate is yet declared resource/timing qualified.
+
+Native reuse audit in baselines/native_reuse/audit.json verifies actual input-prefix hashes and complete ALT-output hashes for both BNN/LSTM;21historical native timing/qualification rows are preserved with host/binary/library/map/route bindings. Native E2/Process remains a separate timing scope and never enters V2 speedup denominators. Existing ALT versus STRICT congestion differences remain. The new CUDA job finished with API state job_succeeded (job-eb9a21bb-c74e-46f6-98b8-4d485c2a4236); originalGPU V2 and failedfirst transformed-worker evidence are retained.
+
+
+19:13 continuation (in progress): registered-ready complete8F1 and F0 each pass97RTL tests and independent cycle logs, including both large-address graphs. Same60cycle/gap2 assumptions: F1 d3/d4=48873/135753cycles, F0=77421/270142cycles. Proposal write/read beats are F1:1824/1348 and7543/6734, F0:2276/3068 and9458/19892. These are functional RTL cycle results, not board timings or32-lane extrapolation. many32_c also passes97RTL output tests; its independent tail calibration and40-job boundary tests are running.
+
+The original8192URAM bank routes with WNS-1.402ns/WHS+.020ns at5ns, a retained negative. The tail-snapshot/13-bit single-write next-array and registered-ready bank synthesizes14628LUT8418FF17RAMB36+6RAMB18+9URAM, WNS-.502ns/WHS+.025ns; its route is active. Complete8 many8_reg_b has358396LUT214592FF368RAMB36+112RAMB18 and valid5ns synthesis WNS-3.017ns/WHS+.025ns; route remains active.
+
+Owner MSHR candidate/count arrays now have one whole-word allocation/merge write port. Standalone actual synthesis falls from24036LUT12460FF to6909LUT3236FF (644LUTRAM,13RAMB36+2RAMB18). All warm/stress cycles are byte-identical to the previous owner:4096 consecutive warm retirements;4800stress accepted=retired,32MSHR/16dirty/48physical outstanding,395merges. Its standalone synthesis WNS-1.126ns remains negative; route and full8/32integration are pending. Earlier many8_mshr_a build used nonexistent command-line MC/CC parameter names and failed before elaboration; corrected many8_mshr_b uses MEMBER_CAP/CHANGED_LIMIT and retains the first log.
+
+The OOC source assumption for new implementations is BUFGCE_X0Y144 in regionX4Y6, checked on the actual device; external global clock routing is estimated, without a containing shell. Ross methodology skill targets2026.1, so local2022.2 text reports are used. Adding the source assumption does not erase external_f's1000 reported TIMING-16 violations or change its-4.876ns opened-synth WNS. No false path, waiver or multicycle exception was added. See completed_ooc_1913 for archived methodology reports and constraints diff.
+
+Full many32_model_e BNN/LSTM40-job batches remain in progress. Its members_peak counter falsely includes uninitialized free-pool entries and must not be interpreted as occupancy; the pool_initialized fix is in model_f/reg_b and later, with small-native actual peaks9–16. All cycle/output comparisons remain exact. New byte-vector and optional one-combin-evaluation-per-cycle host models retain every clock/event and require independent RTL calibration; only two native traces are yet verified for many32_reg_model_d. No host-model elapsed time contributes to FPGA speedup.

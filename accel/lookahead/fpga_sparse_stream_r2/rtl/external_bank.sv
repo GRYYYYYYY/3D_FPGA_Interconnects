@@ -66,22 +66,24 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
  wire pop_credit=parent_count+pop_count<64;
  (* ram_style=(USE_URAM?"ultra":"block") *) reg [63:0] directory[0:4095];reg [63:0] directory_q;
  (* ram_style=(USE_URAM?"ultra":"block") *) reg [47:0] member_header[0:MC-1];
- (* ram_style=(USE_URAM?"ultra":"block") *) reg [31:0] member_next[0:MC-1];
- reg [47:0] header_q;reg [31:0] next_q,pointer;reg [11:0] key;
+ (* ram_style=(USE_URAM?"ultra":"block") *) reg [MA-1:0] member_next[0:MC-1];
+ reg [47:0] header_q;reg [MA-1:0] next_q,pop_tail;reg [31:0] pointer;reg [11:0] key;
  (* ram_style="distributed" *) reg [63:0] bitmap_words[0:63];
  reg [63:0] bitmap_q;reg [63:0] groups;wire [63:0] selected_word=bitmap_q;reg [5:0] selected_group;
  reg last_bitmap_valid;reg [5:0] last_bitmap_group;reg [63:0] last_bitmap_value;
  wire gv,wv;wire [5:0] gi,wi;
  r2_first64 first_group(groups,gv,gi);r2_first64 first_word(selected_word,wv,wi);
  wire pool_iv,pool_ir,pool_ov,pool_or;wire [MA-1:0] pool_in,pool_out;wire [MA:0] pool_count;
- reg [MA:0] pool_init;
+ reg [MA:0] pool_init;reg pool_initialized;
  sparse_fifo #(.WIDTH(MA),.DEPTH(MC),.STYLE(USE_URAM?"ultra":"block")) pool(clk,rst,pool_iv,pool_ir,pool_in,pool_ov,pool_or,pool_out,pool_count);
  wire pop_capture=state==POP_CAPTURE&&free_context>=0&&pop_credit&&pool_ir;
  wire append_select=publish_context>=0&&pool_ov;
  assign pool_iv=(state==INIT&&pool_init<MC)||pop_capture;
  assign pool_in=state==INIT?pool_init[MA-1:0]:pointer[MA-1:0];
  assign pool_or=append_select;
- // One directory read, one write; two next-link ports (new entry and old tail).
+ // A POP snapshots both directory endpoints. The tail terminates the list;
+ // its next word is never consumed. Thus next links need only one write port
+ // (the previous tail) and one synchronous read, without a new-entry NIL write.
  reg av;reg [4:0] actx;reg [MA-1:0] aid;reg [11:0] akey;reg [31:0] anode;reg [15:0] aversion;reg apresent;
  reg last_valid;reg [11:0] last_key;reg [63:0] last_dir;
  wire forwarded=last_valid&&last_key==akey;
@@ -104,9 +106,9 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
   if(av)member_header[aid]<={aversion,anode};else header_q<=member_header[pointer[MA-1:0]];
  end
  always @(posedge clk)begin
-  if(av)member_next[aid]<=NIL;else next_q<=member_next[pointer[MA-1:0]];
+  if(av&&present)member_next[old_dir[MA-1:0]]<=aid;
+  if(!av)next_q<=member_next[pointer[MA-1:0]];
  end
- always @(posedge clk)begin if(av&&present)member_next[old_dir[MA-1:0]]<=extended_id;end
  reg [31:0] init_sent,init_acked;reg [15:0] init_busy;integer init_free;
  wire [31:0] groups_per_bank=(node_count+((1<<(OWNER_BITS+2))-1))>>(OWNER_BITS+2);
  wire [31:0] init_total=groups_per_bank*3;
@@ -118,11 +120,11 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
    state<=IDLE;done<=0;local_error<=0;has_bucket<=0;min_bucket<=0;groups<=0;last_bitmap_valid<=0;pointer<=NIL;key<=0;
    sv<=0;av<=0;state_fence<=0;last_valid<=0;mem_valid<=0;mem_id<=0;mem_write<=0;mem_line<=0;mem_data<=0;
    ca<=0;commit_node<=0;active_count<=0;commit_count<=0;stale_count<=0;member_peak<=0;
-   pool_init<=0;init_sent<=0;init_acked<=0;init_busy<=0;
+   pool_initialized<=0;pool_init<=0;init_sent<=0;init_acked<=0;init_busy<=0;
    for(integer i=0;i<32;i=i+1)cs[i]<=FREE;
   end else begin
    ca<=0;av<=0;
-   if(MC-pool_count>member_peak&&state!=INIT)member_peak<=MC-pool_count;
+   if(pool_initialized&&MC-pool_count>member_peak&&state!=INIT)member_peak<=MC-pool_count;
    if(parent_iv&&!parent_ir)local_error<=1;
    if(command==0)done<=0;
    if(mem_valid&&mem_ready)mem_valid<=0;
@@ -169,7 +171,7 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
    end
    case(state)
     IDLE:if(command!=0&&!done)case(command)
-     1:begin state<=INIT;last_bitmap_valid<=0;groups<=0;last_valid<=0;pool_init<=0;init_sent<=0;init_acked<=0;init_busy<=0;end
+     1:begin state<=INIT;last_bitmap_valid<=0;groups<=0;last_valid<=0;pool_initialized<=0;pool_init<=0;init_sent<=0;init_acked<=0;init_busy<=0;end
      2:begin key<=bucket;last_valid<=0;last_bitmap_valid<=0;state<=POP_HEAD;end
      3:state<=COMMIT;
      4:done<=1;
@@ -190,7 +192,7 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
      end
      if(rsp_valid)begin if(rsp_id>=16||!init_busy[rsp_id[3:0]])local_error<=1;else begin init_busy[rsp_id[3:0]]<=0;init_acked<=init_acked+1;end end
      if(pool_init==MC&&init_acked==init_total&&init_busy==0&&!mem_valid)begin
-      state<=SEED;
+      pool_initialized<=1;state<=SEED;
       if(((source>>2)&((1<<OWNER_BITS)-1))==BANK)begin cn[0]<=source;cp[0]<=0;cs[0]<=SEED_SEND;end
      end
     end
@@ -198,13 +200,14 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
     POP_HEAD:state<=POP_DIR;
     POP_DIR:begin
      pointer<=bitmap_q[key[5:0]]?directory_q[63:32]:NIL;
+     pop_tail<=directory_q[MA-1:0];
      if(bitmap_new==0)groups[key[11:6]]<=0;
      state<=POP_READ;
     end
     POP_READ:if(pointer==NIL)state<=POP_DRAIN;else state<=POP_CAPTURE;
     POP_CAPTURE:if(pop_capture)begin
      cn[free_context]<=header_q[31:0];carg[free_context]<={header_q[47:32],key};cs[free_context]<=POP_SEND;
-     pointer<=next_q;state<=POP_READ;
+     pointer<=pointer[MA-1:0]==pop_tail?NIL:{{(32-MA){1'b0}},next_q};state<=POP_READ;
     end
     POP_DRAIN:if(live_count==0&&!sv&&parent_count==0&&!pv)begin done<=1;state<=IDLE;end
     COMMIT:if(!cv&&live_count==0&&!sv&&!av&&!mem_valid)begin state_fence<=1;if(state_done)begin state_fence<=0;done<=1;state<=IDLE;end end

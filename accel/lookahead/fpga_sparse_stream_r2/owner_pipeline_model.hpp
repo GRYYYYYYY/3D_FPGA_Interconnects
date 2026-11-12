@@ -24,7 +24,7 @@ struct OwnerCycle {
  void command(bool wr,uint32_t line,unsigned id,const Line& data){mem_valid=true;mem_write=wr;mem_line=line;mem_id=id;for(unsigned i=0;i<4;++i){mem_data[2*i]=data[i];mem_data[2*i+1]=data[i]>>32;}}
  void combin(){
   w=Wires{};auto q=c.requests.od;uint32_t line=q.node>>2;
-  for(unsigned i=0;i<32;++i){auto &m=c.misses[i];if(m.valid){++w.cm;if(m.line==line)w.matching=i;}else if(w.fm<0)w.fm=i;bool hazard=false;for(auto &b:c.writes)hazard|=b.valid&&b.line==m.line;if(m.valid&&m.go&&!m.sent&&!hazard&&w.im<0)w.im=i;}
+  for(unsigned i=0;i<32;++i){auto &m=c.misses[i];if(m.valid){++w.cm;if(m.line==line)w.matching=i;}else if(w.fm<0)w.fm=i;if(m.valid&&m.go&&!m.sent&&w.im<0){bool hazard=false;for(auto &b:c.writes)if(b.valid&&b.line==m.line){hazard=true;break;}if(!hazard)w.im=i;}}
   for(unsigned i=0;i<16;++i){auto &b=c.writes[i];if(b.valid)++w.cw;else if(w.fw<0)w.fw=i;if(b.valid&&b.ready&&!b.sent&&w.iw<0)w.iw=i;}
   unsigned set=(line>>owner_bits)&31;
   for(unsigned k=0;k<4;++k){unsigned s=k*32+set;auto &a=c.cache[s];if(a.valid&&!a.busy&&a.tag==line)w.hit=s;if(!a.valid&&!a.busy&&!(c.stage.valid&&c.stage.slot==s)&&w.victim<0)w.victim=s;}
@@ -46,34 +46,46 @@ struct OwnerCycle {
  void eval(){if(clk&&!last_clk)step();last_clk=clk;combin();}
  void step(){
   if(rst){c=Core{};mem_valid=fence_done=error=false;accepted=retired=merges=hits=misses=raw_stall=0;mshr_peak=dirty_peak=0;return;}
-  const bool old_mem_valid=mem_valid;const Core old=c;const auto z=w;const bool old_idle=idle;auto &n=c;auto s=old.stage;auto q=old.requests.od;auto response=old.responses.od;
+  // Snapshot only values read across this edge, not entire FIFO/cache arrays.
+  // Every cycle is still evaluated; this is host implementation optimization.
+  const bool old_mem_valid=mem_valid;const auto z=w;const bool old_idle=idle;auto &n=c;
+  const auto s=c.stage;const auto q=c.requests.od;const auto response=c.responses.od;
+  const bool old_flushing=c.flushing,old_turn=c.turn,old_requests_ov=c.requests.ov,old_responses_ov=c.responses.ov,old_events_ov=c.events.ov;
+  const unsigned old_flush_index=c.flush_index,old_responses_count=c.responses.count,old_events_count=c.events.count;
+  const auto fill_miss=c.misses[response.id&31];
+  const auto send_miss=z.im>=0?c.misses[z.im]:Miss{};
+  const auto send_write=z.iw>=0?c.writes[z.iw]:Write{};
+  const auto ack_write=response.id>=32&&response.id<48?c.writes[response.id-32]:Write{};
+  const auto victim_cache=z.victim>=0?c.cache[z.victim]:Cache{};
+  const auto flush_cache=c.cache[c.flush_index&127];
+  const Line read_data=(z.hitdispatch||z.missdispatch||z.flushdispatch)?c.cache[z.flushdispatch?c.flush_index:z.hitdispatch?unsigned(z.hit):unsigned(z.victim)].data:Line{};
   bool hitwrite=s.valid&&!s.eviction&&z.advance&&z.hitmask;
-  bool event_v=hitwrite||(z.filltake&&z.fillmask);Event event=z.filltake?Event{old.misses[response.id&31].line,z.fillmask}:Event{s.line,z.hitmask};
+  bool event_v=hitwrite||(z.filltake&&z.fillmask);Event event=z.filltake?Event{fill_miss.line,z.fillmask}:Event{s.line,z.hitmask};
   n.requests.step(iv&&!fence,{node,pair},z.qr);n.responses.step(rsp_valid,{rsp_id,unpack(rsp_data)},z.rr);n.events.step(event_v,event,update_ready);
-  if(iv&&ir)++accepted;if(old.requests.ov&&!z.qr)++raw_stall;mshr_peak=std::max(mshr_peak,z.cm);dirty_peak=std::max(dirty_peak,z.cw);
-  if(z.hitdispatch||z.missdispatch||z.flushdispatch){unsigned addr=z.flushdispatch?old.flush_index:z.hitdispatch?z.hit:z.victim;n.ram_q=old.cache[addr].data;}
-  if(hitwrite||z.filltake){unsigned slot=z.filltake?old.misses[response.id&31].slot:s.slot;auto data=z.filltake?z.filldata:z.hitdata;n.cache[slot].data=data;n.last_valid=true;n.last_slot=slot;n.last_data=data;}
-  if(!mem_valid||mem_ready){mem_valid=false;if(z.iw>=0&&(z.im<0||!old.turn)){auto b=old.writes[z.iw];command(true,b.line,32+z.iw,b.data);n.writes[z.iw].sent=true;n.turn=true;}else if(z.im>=0){command(false,old.misses[z.im].line,z.im,{});n.misses[z.im].sent=true;n.turn=false;}}
-  if(old.responses.ov&&z.rr&&response.id>=32){unsigned i=response.id-32;if(i>=16||!old.writes[i].valid||!old.writes[i].sent)error=true;else{n.writes[i].valid=n.writes[i].sent=n.writes[i].ready=false;}}
-  if(z.filltake){unsigned i=response.id;auto m=old.misses[i];if(!m.valid||!m.sent)error=true;n.cache[m.slot].valid=true;n.cache[m.slot].busy=false;n.cache[m.slot].dirty=z.fillmask!=0;n.misses[i].valid=n.misses[i].sent=n.misses[i].go=false;retired+=m.count;}
+  if(iv&&ir)++accepted;if(old_requests_ov&&!z.qr)++raw_stall;mshr_peak=std::max(mshr_peak,z.cm);dirty_peak=std::max(dirty_peak,z.cw);
+  if(z.hitdispatch||z.missdispatch||z.flushdispatch){unsigned addr=z.flushdispatch?old_flush_index:z.hitdispatch?z.hit:z.victim;n.ram_q=read_data;}
+  if(hitwrite||z.filltake){unsigned slot=z.filltake?fill_miss.slot:s.slot;auto data=z.filltake?z.filldata:z.hitdata;n.cache[slot].data=data;n.last_valid=true;n.last_slot=slot;n.last_data=data;}
+  if(!mem_valid||mem_ready){mem_valid=false;if(z.iw>=0&&(z.im<0||!old_turn)){auto b=send_write;command(true,b.line,32+z.iw,b.data);n.writes[z.iw].sent=true;n.turn=true;}else if(z.im>=0){command(false,send_miss.line,z.im,{});n.misses[z.im].sent=true;n.turn=false;}}
+  if(old_responses_ov&&z.rr&&response.id>=32){unsigned i=response.id-32;if(i>=16||!ack_write.valid||!ack_write.sent)error=true;else{n.writes[i].valid=n.writes[i].sent=n.writes[i].ready=false;}}
+  if(z.filltake){unsigned i=response.id;auto m=fill_miss;if(!m.valid||!m.sent)error=true;n.cache[m.slot].valid=true;n.cache[m.slot].busy=false;n.cache[m.slot].dirty=z.fillmask!=0;n.misses[i].valid=n.misses[i].sent=n.misses[i].go=false;retired+=m.count;}
   if(z.advance){
    n.stage.valid=false;
-   if(s.valid){if(!s.eviction){++retired;if(z.hitmask)n.cache[s.slot].dirty=true;}else{if(s.dirty){n.writes[s.write].data=z.base;n.writes[s.write].ready=true;}if(!old.flushing)n.misses[s.miss].go=true;}}
+   if(s.valid){if(!s.eviction){++retired;if(z.hitmask)n.cache[s.slot].dirty=true;}else{if(s.dirty){n.writes[s.write].data=z.base;n.writes[s.write].ready=true;}if(!old_flushing)n.misses[s.miss].go=true;}}
    if(z.hitdispatch){n.stage.valid=true;n.stage.eviction=false;n.stage.slot=z.hit;n.stage.cand=q;n.stage.line=q.node>>2;++hits;}
    if(z.missdispatch){
-    auto v=old.cache[z.victim];auto &st=n.stage;st.valid=true;st.eviction=true;st.slot=z.victim;st.dirty=v.dirty;st.evict_line=v.tag;st.miss=z.fm;
+    auto v=victim_cache;auto &st=n.stage;st.valid=true;st.eviction=true;st.slot=z.victim;st.dirty=v.dirty;st.evict_line=v.tag;st.miss=z.fm;
     if(v.dirty){st.write=z.fw;n.writes[z.fw].valid=true;n.writes[z.fw].sent=n.writes[z.fw].ready=false;n.writes[z.fw].line=v.tag;}
     auto &m=n.misses[z.fm];m.valid=true;m.sent=m.go=false;m.line=q.node>>2;m.slot=z.victim;m.count=1;m.candidates.fill(INF);m.candidates[q.node&3]=q.pair;
     n.cache[z.victim].valid=n.cache[z.victim].dirty=false;n.cache[z.victim].busy=true;n.cache[z.victim].tag=q.node>>2;n.replacement[(q.node>>(owner_bits+2))&31]=((unsigned(z.victim)>>5)+1)&3;++misses;
    }
-   if(z.flushdispatch){auto &st=n.stage;st.write=z.fw;n.writes[z.fw].valid=true;n.writes[z.fw].sent=n.writes[z.fw].ready=false;n.writes[z.fw].line=old.cache[old.flush_index].tag;st.valid=true;st.eviction=true;st.slot=old.flush_index;st.dirty=true;st.evict_line=old.cache[old.flush_index].tag;n.cache[old.flush_index].dirty=false;n.flush_index=old.flush_index+1;}
+   if(z.flushdispatch){auto &st=n.stage;st.write=z.fw;n.writes[z.fw].valid=true;n.writes[z.fw].sent=n.writes[z.fw].ready=false;n.writes[z.fw].line=flush_cache.tag;st.valid=true;st.eviction=true;st.slot=old_flush_index;st.dirty=true;st.evict_line=flush_cache.tag;n.cache[old_flush_index].dirty=false;n.flush_index=old_flush_index+1;}
   }
   if(z.dispatch&&z.matching>=0){auto &m=n.misses[z.matching];m.candidates[q.node&3]=std::min(m.candidates[q.node&3],q.pair);++m.count;++merges;}
   if(!fence)fence_done=false;
-  if(fence&&!fence_done&&!old.flushing&&old_idle){n.flushing=true;n.flush_index=0;}
-  if(old.flushing&&old.flush_index<128&&!old.cache[old.flush_index].dirty)n.flush_index=old.flush_index+1;
+  if(fence&&!fence_done&&!old_flushing&&old_idle){n.flushing=true;n.flush_index=0;}
+  if(old_flushing&&old_flush_index<128&&!flush_cache.dirty)n.flush_index=old_flush_index+1;
   // mem_valid is a register: use its PRE-edge value at the fence boundary.
-  if(old.flushing&&old.flush_index==128&&!s.valid&&!z.cw&&!old.responses.count&&!old.responses.ov&&!old.events.count&&!old.events.ov&&!old_mem_valid){n.flushing=false;fence_done=true;}
+  if(old_flushing&&old_flush_index==128&&!s.valid&&!z.cw&&!old_responses_count&&!old_responses_ov&&!old_events_count&&!old_events_ov&&!old_mem_valid){n.flushing=false;fence_done=true;}
  }
 };
 }

@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-module r2_many_tile #(parameter L=32,PHYS=32,OWNER_BITS=$clog2(L),C=5*L+1,CTL=4*L,USE_URAM=1, POP_REDUCE=1,MEMBER_CAP=8192,CHANGED_LIMIT=8192,CLOSED_LIMIT=512,INIT_OUTSTANDING=16)(
+module r2_many_tile #(parameter L=32,PHYS=32,OWNER_BITS=$clog2(L),C=5*L+1,CTL=4*L,USE_URAM=1,CACHE_ENABLE=1, POP_REDUCE=1,MEMBER_CAP=8192,CHANGED_LIMIT=8192,CLOSED_LIMIT=512,INIT_OUTSTANDING=16)(
  input wire clk,rst,start,input wire [31:0] row_base,edge_base,cost_base,job_base,
  input wire [31:0] node_count,state_base,
  input wire [6:0] jobs,input wire [15:0] cell_count,input wire [4:0] cost_count,
@@ -96,8 +96,13 @@ module r2_many_tile #(parameter L=32,PHYS=32,OWNER_BITS=$clog2(L),C=5*L+1,CTL=4*
    mem_valid[L+n],mem_ready[L+n],mem_line[(L+n)*32+:32],front_id,rsp_valid[L+n],rsp_ready[L+n],rsp_id[(L+n)*6+:4],rsp_data[(L+n)*256+:256],
    fv[n],fr[n],fn[n*32+:32],fp[n*64+:64],front_idle[n],front_error[n],f0,f1,f2,f3,f4,fpeak);
   assign mem_id[(L+n)*6+:6]={2'b00,front_id};assign mem_write[L+n]=0;assign mem_data[(L+n)*256+:256]=0;
+  if(CACHE_ENABLE)begin:cached
   sparse_owner_pipe #(.OWNER_BITS(OWNER_BITS)) owner(clk,leaf_reset,ov[n],ordy[n],on[n*32+:32],op[n*64+:64],leaf_command==6,owner_done[n],uv[n],ur[n],ul[n*32+:32],um[n*4+:4],
    mem_valid[n],mem_ready[n],mem_write[n],mem_line[n*32+:32],mem_id[n*6+:6],mem_data[n*256+:256],rsp_valid[n],rsp_ready[n],rsp_id[n*6+:6],rsp_data[n*256+:256],owner_idle[n],owner_error[n],dummy0,dummy1,dummy2,dummy3,dummy4,dummy5,mshr_peaks[n*6+:6],dirty_peaks[n*5+:5]);
+  end else begin:uncached
+  sparse_owner_f0 owner(clk,leaf_reset,ov[n],ordy[n],on[n*32+:32],op[n*64+:64],leaf_command==6,owner_done[n],uv[n],ur[n],ul[n*32+:32],um[n*4+:4],
+   mem_valid[n],mem_ready[n],mem_write[n],mem_line[n*32+:32],mem_id[n*6+:6],mem_data[n*256+:256],rsp_valid[n],rsp_ready[n],rsp_id[n*6+:6],rsp_data[n*256+:256],owner_idle[n],owner_error[n],dummy0,dummy1,dummy2,dummy3,dummy4,dummy5,mshr_peaks[n*6+:6],dirty_peaks[n*5+:5]);
+  end
 
  end
 

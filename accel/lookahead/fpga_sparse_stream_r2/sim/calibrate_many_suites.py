@@ -1,6 +1,6 @@
 from pathlib import Path
 import sys,json,subprocess,concurrent.futures
-root=Path(__file__).resolve().parents[4];r=root/'results/fpga_sparse_stream_r2_20261112';variant=sys.argv[1];rtl=sys.argv[2] if len(sys.argv)>2 else 'external_b';d=r/'model'/variant;out=d/'suite_calibration';out.mkdir(exist_ok=False)
+root=Path(__file__).resolve().parents[4];r=root/'results/fpga_sparse_stream_r2_20261112';variant=sys.argv[1];rtl=sys.argv[2] if len(sys.argv)>2 else 'external_b';d=r/'model'/variant;out=d/(sys.argv[3] if len(sys.argv)>3 else 'suite_calibration');out.mkdir(exist_ok=False)
 references=[]
 for pattern in [f'{rtl}_native_l60/*/receipt.json',f'{rtl}_fixtures_l60/*/receipt.json',f'{rtl}_stress,stress_random_l120/*/receipt.json',f'{rtl}_external_nodes_65536,external_nodes_4194304_l60/*/receipt.json']:
  references.extend((r/'rtl').glob(pattern))

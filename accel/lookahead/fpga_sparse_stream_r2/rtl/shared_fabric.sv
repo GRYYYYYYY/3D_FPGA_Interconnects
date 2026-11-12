@@ -14,7 +14,7 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
  reg [C-1:0] next_rv;reg [C*6-1:0] next_ri;reg [C*256-1:0] next_rd;
  wire [5:0] selected[0:P-1],tag[0:P-1],chosen[0:C-1];wire [P-1:0] select_valid,tag_valid;wire [C-1:0] chosen_valid;reg any_busy;
  for(genvar c=0;c<C;c=c+1)begin:requests
-  sparse_fifo #(.WIDTH(295),.DEPTH(4)) fifo(clk,rst,cv[c],cr[c],{cw[c],cl[c*32+:32],ci[c*6+:6],cd[c*256+:256]},qv[c],qr[c],qwords[c],count[c*3+:3]);
+  sparse_fifo #(.WIDTH(295),.DEPTH(4),.STYLE("distributed")) fifo(clk,rst,cv[c],cr[c],{cw[c],cl[c*32+:32],ci[c*6+:6],cd[c*256+:256]},qv[c],qr[c],qwords[c],count[c*3+:3]);
  end
  for(genvar p=0;p<P;p=p+1)begin:response_ports
   assign sr[p]=!bv[p]||consume[p];

@@ -1,0 +1,313 @@
+{
+  "base_sha": "5651a34abb97939bee6402c5af585753ab07f64b",
+  "board_measured": false,
+  "pop_reduce_native_exact": true,
+  "complete_small_rtl_verified": true,
+  "owner_retirement_service_verified": true,
+  "large_node_state_path_implemented": true,
+  "physical_channel_sharing_implemented": true,
+  "complete_batch_controller_implemented": true,
+  "tile_timing_closed": false,
+  "whole_kernel_timing_closed": false,
+  "whole_kernel_clock_mhz": null,
+  "clock_qualification_scope": null,
+  "large_complete_batch_model_verified": false,
+  "model_calibration_scope": [
+    {
+      "module": "owner pipeline",
+      "independent_Cpp_cycle_model": true,
+      "cases": [
+        "cold/eviction/OOO/backpressure stress",
+        "warm sustained hit"
+      ],
+      "cycle_log_rows_exact": true,
+      "record": "rtl/owner_model_c/calibration.json",
+      "not_qualified": [
+        "whole tile",
+        "large node-state",
+        "32/64 topology"
+      ]
+    },
+    {
+      "module": "node-state finite cache",
+      "record": "large_state/node_state_model_a/calibration.json",
+      "cycle_rows_exact": true,
+      "cycles": 165414,
+      "operations": 7680,
+      "whole_tile": false
+    },
+    {
+      "module": "shared physical fabric C33/P8",
+      "record": "rtl/fabric_a/calibration.json",
+      "cycle_rows_exact": true,
+      "cycles": 25091,
+      "commands": 33000,
+      "peak_outstanding": 177,
+      "whole_tile": false
+    },
+    {
+      "module": "complete external-state tile",
+      "version": "external_model_b against external_b/a RTL",
+      "cases": 97,
+      "cycle_log_exact_all": true,
+      "scope": "8 lanes/8 physical ports, d3/d4,91fixtures,2stress,2address; no32/64 qualification",
+      "record": "model/external_model_b/suite_calibration/calibration.json"
+    },
+    {
+      "version": "external_d",
+      "cases": 97,
+      "cycle_error": 0,
+      "scope": "8lane complete external state topo only"
+    },
+    {
+      "version": "external_f",
+      "cases": 97,
+      "cycle_error": 0,
+      "scope": "tree arbiter+write dependency scoreboard 8lane; two large-address followups passed output, cycle compare pending"
+    },
+    {
+      "version": "many8_b",
+      "cases": 95,
+      "cycle_error": 0,
+      "scope": "new composed owner uplink+shared8physical complete8lane topology; 32lane not implied"
+    },
+    {
+      "version": "many32_model_e versus many32_b",
+      "cases": 95,
+      "cycle_error": 0,
+      "scope": "complete32owner32physical hierarchy,8192members+changed,2native91fixtures2pressure; source-frozen pre-reg-ready variant"
+    },
+    {
+      "version": "many8_reg_model_a",
+      "RTL": "many8_reg_a",
+      "cache": "F1",
+      "cases": 97,
+      "cycle_log_exact_all": true,
+      "scope": "complete8/8 externalstate,registered-ready,2native91fixtures2stress2address; not32",
+      "record": "model/many8_reg_model_a/suite_calibration/calibration.json"
+    },
+    {
+      "version": "many8_reg_f0_model_a",
+      "RTL": "many8_reg_f0_a",
+      "cache": "F0",
+      "cases": 97,
+      "cycle_log_exact_all": true,
+      "scope": "complete8/8 externalstate,registered-ready,2native91fixtures2stress2address; not32",
+      "record": "model/many8_reg_f0_model_a/suite_calibration/calibration.json"
+    }
+  ],
+  "software_baselines_complete": true,
+  "fpga_simulated_superiority_supported": false,
+  "candidate_status": "in_progress",
+  "next_action": "Finish complete8/32 OOC and32registered-ready domain calibration; integrateverifiedsinglewriteMSHR; finish40-native simulations,exactcapacity,F0/F1 and sensitivities. No qualified fullkernel clock.",
+  "semantics_scope": {
+    "native_complete_batches": [
+      "d3:8",
+      "d4:12",
+      "BNN:40",
+      "LSTM:40"
+    ],
+    "native_fixture_graphs": 91,
+    "native_fixture_jobs": 182,
+    "provided_algorithm_model_checks": 180,
+    "numeric_bit_exact_rejections": 5,
+    "R1_per_wave_counts_exact": true,
+    "closed_scan_retained_only_as_software_validation_oracle": true
+  },
+  "small_rtl_scope": {
+    "build": "m2c",
+    "lanes": 8,
+    "physical_channels": 8,
+    "node_capacity": 4096,
+    "cells_per_sample": 32768,
+    "native_samples": 20,
+    "directed_random_fixtures": 91,
+    "fixture_samples": 182,
+    "capacity_q40_tests": 2,
+    "new_model_calibrated": false
+  },
+  "physical_channel_scope": "8/32 finite hierarchical ports;32oldready95traces exact,32tail97outputs passed;8registeredreadyF1/F0 each97traces exact;32registeredready calibration pending",
+  "owner_service_scope": {
+    "version": "owner_pipe_c",
+    "warm_hit_max_retire_II1_streak": 4096,
+    "stress_accepted_retired": 4800,
+    "mshr_peak": 32,
+    "dirty_peak": 16,
+    "physical_outstanding_peak": 48,
+    "failure_and_fix": "failures/owner_pipe_a_deadlock.json"
+  },
+  "commit_pipeline_scope": {
+    "version": "bank_pipe_b",
+    "commits": 1038,
+    "max_II1_streak": 511,
+    "stale": 16,
+    "max_members": 527,
+    "node_capacity": 512,
+    "independent_model_calibrated": false
+  },
+  "complete_small_rtl_latest": "many32_c97outputs pass;many8_reg_a and many8_reg_f0_a97RTL/model logs exact;many32_reg_b full regression running",
+  "large_node_state_standalone": {
+    "rtl": "node_state_b",
+    "node_address_space": 4194304,
+    "highest_node": 4194303,
+    "operations": 7680,
+    "cycles": 165414,
+    "backing_bytes": 67108864,
+    "cache_bytes": 4096,
+    "read_lines": 7653,
+    "write_lines": 5358,
+    "mshr_peak": 11,
+    "dirty_peak": 13,
+    "outstanding_peak": 21,
+    "complete_backing_exact": true,
+    "full_graph_integrated": true,
+    "independent_model_calibrated": true,
+    "OOC_verified": false
+  },
+  "vivado_sessions": {
+    "owner_mshr_ram_b5": "vivado-20261112-161837-7d305dc5",
+    "bank8192_reg": "vivado-20261112-171744-63335f93",
+    "many8_reg_b": "vivado-20261112-164509-ef1e3de5",
+    "many8_mshr_b": "vivado-20261112-173934-eb0a0adf",
+    "external_f": "vivado-20261112-180611-3c758959",
+    "many32_c": "vivado-20261112-183223-bc1f6643",
+    "many32_reg_b": "vivado-20261112-185211-8e7c9bec"
+  },
+  "pending_commands": {
+    "owner_mshr_ram_b5": "route active; actual synthesis6909LUT; unitwarm/stresspass",
+    "bank8192_reg": "route active; actualsynthesis14628LUT20BRAMequiv9URAM",
+    "many8_reg_b": "route active; actual358396LUT214592FF368RAMB36+112RAMB18;5ns synthWNS-3.017",
+    "many8_mshr_b": "synthesisactive19:09; same8modelrecalibration required",
+    "external_f": "oldready full8route active; TIMING-16 remains1000reports; clock-source assumption alone does not resolve setup",
+    "many32_c": "synthesisactive;97RTLoutputs pass;many32_model_f tail_calibration active;2Q40checksactive",
+    "many32_reg_b": "synthesisactive;complete97RTLregressionactive;newhotcapacity8192/8193active;many32_reg_model_c exactnative only",
+    "many32_reg_model_d": "experimental one low-phase combin evaluation, everyedge executed, native2cycletraces exact; fullsuite pending",
+    "many32_model_e": "BNN/LSTMcomplete40batchrunning; progress/receipt files authoritative; oldmemberpeak counter invalid=8192 untilpoolinitfix; notcomplete"
+  },
+  "large_node_state_path_scope": {
+    "build": "external_f",
+    "lanes": 8,
+    "logical_clients": 41,
+    "physical_channels": 8,
+    "node_capacity": 4194304,
+    "same_finite_cache_interface_small_large": true,
+    "native_small_d3_d4": true,
+    "native_fixture_graphs": 91,
+    "stress_graphs": 2,
+    "large_address_test": "external_nodes_4194304",
+    "large_address_cycles": 1856186,
+    "large_address_graph_is_BNN_or_LSTM": false,
+    "full_graph_capacity_per_owner": {
+      "members": 1024,
+      "changed": 512
+    },
+    "full_native_large_batch_still_pending": true,
+    "qualified_frequency_mhz": null
+  },
+  "software_transforms": {
+    "prepared_CSR_POP_CPU": "software/prepared_pop_a/summary.json",
+    "threads": 8,
+    "complete_batches": 48,
+    "warmup_batches": 12,
+    "measurement_host": "FPGA host with concurrent synthesis",
+    "same_GPU_host": false,
+    "BNN_mean_s": 3.3074307294444445,
+    "LSTM_mean_s": 3.438127633666667,
+    "CUDA_equivalence_audit_pending": false,
+    "new_CUDA_has_prepared_CSR_and_valid_POP": true,
+    "GPU_summary": "software/prepared_pop_gpu_b/summary.json",
+    "same_worker_CPU": true,
+    "GPU_job_id": "job-eb9a21bb-c74e-46f6-98b8-4d485c2a4236",
+    "GPU_compact_BNN_mean_s": 0.15179996944444446,
+    "GPU_compact_LSTM_mean_s": 0.16024799044444443,
+    "GPU_basic_BNN_mean_s": 0.15669057711111112,
+    "GPU_basic_LSTM_mean_s": 0.15988857844444446,
+    "native_STRICT_VPR_scope_audit": "baselines/native_reuse/audit.json; input and ALToutput hashes identical;21native historical E2/Process rows reused separately, not V2 denominators",
+    "receipt_count": 218,
+    "GPU_final_API_status": "job_succeeded"
+  },
+  "external_capacity": {
+    "40_sample_boundary_tests": 2,
+    "changed_overflow_explicit_reject": true,
+    "record": "rtl/external_b_external_changed_overflow/receipt.json"
+  },
+  "arithmetic_unit_routed": {
+    "WNS_ns": 0.077,
+    "WHS_ns": 0.02,
+    "clock_mhz": 200,
+    "scope": "pair_lane only; no fullkernel or board qualification; OOC HD.CLK_SRC/partition pin placement warnings retained",
+    "report": "timing/arithmetic_port_fix/arithmetic_routed_200.rpt"
+  },
+  "new_candidate_constraint": "32 owners,unchangedwork,<=200MHz and<=1candidate/cycle/lane cannot beat new prepared/POP GPU even ignoring all nonedge work; restriction binds that candidate only.",
+  "physical_channel_sharing_hierarchy": {
+    "hier32_b_clients": 161,
+    "physical_ports": 32,
+    "commands_verified": 161000,
+    "cycles": 96775,
+    "model_cycle_log_exact": true,
+    "scope": "standalone composed interconnect, not complete32kernel"
+  },
+  "bank8192_resources": {
+    "LUT": 13989,
+    "FF": 8416,
+    "RAMB36": 57,
+    "RAMB18": 15,
+    "URAM": 0,
+    "available_BRAM36": 2016,
+    "available_URAM": 960,
+    "scope": "synthesis of one complete externalstate/bucket/changed bank",
+    "32banks_BRAM36_equivalent": 2064,
+    "next": "USE_URAM=1 variant synthesized separately; do not assume inference/latency until verified"
+  },
+  "native_identity_audit_passed": true,
+  "bank8192_uram_resources": {
+    "LUT": 13962,
+    "FF": 8432,
+    "RAMB36": 31,
+    "RAMB18": 14,
+    "URAM": 7,
+    "scope": "one bank actual synthesis; member_next replication unresolved in this frozen variant",
+    "frequency_qualified": false,
+    "routed_WNS_ns": -1.402,
+    "routed_WHS_ns": 0.02
+  },
+  "supervision": {
+    "skill": "long-run-supervision",
+    "origin": "main Codex session",
+    "luna_interface_available": false,
+    "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
+  },
+  "updated_utc": "2026-11-12T19:13:15.564813+00:00",
+  "bank8192_reg_resources": {
+    "LUT": 14628,
+    "FF": 8418,
+    "RAMB36": 17,
+    "RAMB18": 6,
+    "URAM": 9,
+    "synth_WNS_ns": -0.502,
+    "scope": "actual singlebank; tail snapshot avoids uninitialized tail read and second write; registered ready; route pending"
+  },
+  "owner_mshr_single_write": {
+    "LUT": 6909,
+    "FF": 3236,
+    "RAMB36": 13,
+    "RAMB18": 2,
+    "LUTRAM": 644,
+    "previous_LUT": 24036,
+    "previous_FF": 12460,
+    "synth_WNS_ns": -1.126,
+    "warm_consecutive_retirements": 4096,
+    "stress_accepted_retired": 4800,
+    "trace_identical_to_previous": true,
+    "scope": "standalone owner; complete integration and routed clock pending"
+  },
+  "clock_assumptions": {
+    "new_OOC_HD_CLK_SRC": "BUFGCE_X0Y144",
+    "region": "X4Y6",
+    "clock_ns": 5,
+    "external_clock_route": "estimated; no shell/board",
+    "methodology_skill_requires": "2026.1",
+    "local_version": "2022.2",
+    "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
+  }
+}

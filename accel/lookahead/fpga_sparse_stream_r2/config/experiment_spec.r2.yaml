@@ -41,7 +41,11 @@ sensitivity:
   physical_timing_units_note: cycle scenarios only; ns and B/s conversion requires an explicitly stated clock
 calibration:
   R1_calibration_inherited: false
-  new_full_model_calibrated: false
+  qualified_scopes:
+    - {RTL: many32_b, model: many32_model_e, cases: 95, cycle_log_exact: true, lanes: 32, physical: 32, registered_ready: false}
+    - {RTL: many8_reg_a, model: many8_reg_model_a, cases: 97, cycle_log_exact: true, lanes: 8, physical: 8, cache: F1, registered_ready: true}
+    - {RTL: many8_reg_f0_a, model: many8_reg_f0_model_a, cases: 97, cycle_log_exact: true, lanes: 8, physical: 8, cache: F0, registered_ready: true}
+  registered_ready_32_calibration: pending
 m3_implemented_services:
   owner: synchronous_hit_pipeline_II1_measured_warm
   changed: four_sector_mask_service_marks_until_commit_ack
@@ -70,3 +74,23 @@ m4_external_state:
   write_ACK_at_wave_fences: true
   full_BNN_LSTM_architecture_batch: pending
   clock_qualified_mhz: null
+m5_candidate:
+  topology: owner_five_clients_to_one_finite_uplink_to_shared_physical_ports
+  lanes: 32
+  physical_channels: 32
+  members_per_owner: 8192
+  changed_ids_per_owner: 8192
+  reducer_banks: 8
+  member_next: synchronous_single_write_tail_snapshot
+  large_arrays: URAM_where_inferred_by_separate_OOC
+  fifo_ready: registered_occupancy
+  physical_tag_capacity_per_channel: 64
+  shallow_fabric_FIFO_style: distributed
+  full_native_samples: 40
+  complete_batch_status: in_progress
+  clock_qualified_mhz: null
+  ooc_target_period_ns: 5
+  ooc_clock_source_assumption: BUFGCE_X0Y144
+  ooc_external_clock_routing: estimated_no_shell_no_board
+  member_peak_note: many32_model_e_counter_invalid_until_pool_initialized_fix_in_model_f_and_reg_b
+  owner_mshr_single_write: standalone_verified_complete_integration_in_progress

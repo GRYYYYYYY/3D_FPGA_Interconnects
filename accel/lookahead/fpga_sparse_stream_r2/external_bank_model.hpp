@@ -15,7 +15,7 @@ template<unsigned MC=1024,unsigned CC=512,unsigned B=3>struct ExternalBankT {
  uint32_t sn=0,sarg=0;uint64_t sval=0;unsigned sop=0,sid=0;
  bool pr=false,ev=false,er=false,mark_idle=false;uint32_t event_line=0;unsigned event_mask=0;
  bool mem_valid=false,mem_ready=false,mem_write=false,rsp_valid=false;uint32_t mem_line=0;unsigned mem_id=0,rsp_id=0;Line mem_data{},rsp_data{};
- unsigned pool_init=0,init_sent=0,init_acked=0;uint16_t init_busy=0;
+ bool pool_initialized=false;unsigned pool_init=0,init_sent=0,init_acked=0;uint16_t init_busy=0;
  uint32_t active_count=0,commit_count=0,stale_count=0;unsigned member_peak=0;
  int free_context=-1,send_context=-1,prop_context=-1,publish_context=-1,init_free=-1;unsigned live_count=0,pop_count=0;
  bool selected=false,sr=false,bank_response=false,parent_iv=false,pop_capture=false,append_select=false,cr=false;PopEvent parent_data{};
@@ -37,7 +37,7 @@ template<unsigned MC=1024,unsigned CC=512,unsigned B=3>struct ExternalBankT {
  }
  void step(bool rst){
   cache.rst=rst;
-  if(rst){cache.step();changed.edge(true);parents={};pool={};ctx={};append={};state=IDLE;done=has_bucket=local_error=sv=arb_hold=arb_turn=arb_selected=state_fence=last_valid=mem_valid=ca=false;min_bucket=0;bitmap={};groups=0;pointer=~0u;key=0;mem_id=0;mem_write=false;mem_line=0;mem_data={};commit_node=active_count=commit_count=stale_count=member_peak=0;pool_init=init_sent=init_acked=init_busy=0;return;}
+  if(rst){cache.step();changed.edge(true);parents={};pool={};ctx={};append={};state=IDLE;done=has_bucket=local_error=sv=arb_hold=arb_turn=arb_selected=state_fence=last_valid=mem_valid=ca=false;min_bucket=0;bitmap={};groups=0;pointer=~0u;key=0;mem_id=0;mem_write=false;mem_line=0;mem_data={};commit_node=active_count=commit_count=stale_count=member_peak=0;pool_initialized=false;pool_init=init_sent=init_acked=init_busy=0;return;}
   const auto oldctx=ctx;const auto a=append;unsigned oldstate=state;bool oldsv=sv,oldmem=mem_valid,oldlast=last_valid;auto oldlastkey=last_key;auto oldlastdir=last_dir;auto olddirq=directory_q;auto oldheader=header_q;auto oldnext=next_q;auto oldpointer=pointer;auto oldkey=key;auto oldgroups=groups;auto oldword=selected_word;auto oldselectedgroup=selected_group;
   auto oldinit=init_sent,oldacked=init_acked,oldpoolinit=pool_init;auto oldbusy=init_busy;unsigned oldpoolcount=pool.count+pool.ov,oldpoolout=pool.od;bool poolir=pool.ready(append_select);
   bool response=bank_response;unsigned response_id=cache.otag&31,response_status=cache.status;uint32_t response_node=cache.onode,response_pending=cache.old_record[2];bool cache_done=cache.fence_done;bool oldmarkidle=mark_idle;bool oldcv=changed.cv;uint32_t changednode=changed.node;bool parent_empty=parents.count==0&&!parents.ov;
@@ -53,7 +53,7 @@ template<unsigned MC=1024,unsigned CC=512,unsigned B=3>struct ExternalBankT {
   changed.edge(false);cache.step();
   if(niv){if(nir){arb_hold=false;arb_turn=!selected;}else{arb_hold=true;arb_selected=selected;}}
   ca=false;append.valid=false;
-  if(oldstate!=INIT)member_peak=std::max(member_peak,MC-oldpoolcount);
+  if(pool_initialized&&oldstate!=INIT)member_peak=std::max(member_peak,MC-oldpoolcount);
   // Readiness was checked before parents.step; POP credit guarantees capacity.
   if(command==0)done=false;if(oldmem&&mem_ready)mem_valid=false;if(oldsv&&sr)sv=false;
   if((!oldsv||sr)&&send_context>=0){auto c=oldctx[send_context];sv=true;sid=send_context;sn=c.node;sval=c.pair;sarg=c.arg;
@@ -78,7 +78,7 @@ template<unsigned MC=1024,unsigned CC=512,unsigned B=3>struct ExternalBankT {
   unsigned gpb=(node_count+(1u<<(B+2))-1)>>(B+2),init_total=gpb*3;
   switch(oldstate){
    case IDLE:if(command&&!done)switch(command){
-    case 1:state=INIT;bitmap={};groups=0;last_valid=false;pool_init=init_sent=init_acked=init_busy=0;break;
+    case 1:state=INIT;bitmap={};groups=0;last_valid=false;pool_initialized=false;pool_init=init_sent=init_acked=init_busy=0;break;
     case 2:key=bucket;last_valid=false;state=POP_HEAD;break;case 3:state=COMMIT;break;case 4:done=true;break;
     case 5:has_bucket=oldgroups!=0;selected_group=oldgroups?__builtin_ctzll(oldgroups):63;state=MIN_WORD;break;case 6:state=FENCE;break;default:local_error=true;
    }break;
@@ -89,7 +89,7 @@ template<unsigned MC=1024,unsigned CC=512,unsigned B=3>struct ExternalBankT {
      else{mem_line=state_base+(oldinit-gpb)*(1u<<B)+number;mem_data={INF,0,INF,0};}
     }
     if(rsp_valid){if(rsp_id>=16||!(oldbusy>>rsp_id&1))local_error=true;else{init_busy&=~(1u<<rsp_id);init_acked=oldacked+1;}}
-    if(oldpoolinit==MC&&oldacked==init_total&&!oldbusy&&!oldmem){state=SEED;if(((source>>2)&((1u<<B)-1))==number)ctx[0]={SEED_SEND,source,0,0};}break;
+    if(oldpoolinit==MC&&oldacked==init_total&&!oldbusy&&!oldmem){pool_initialized=true;state=SEED;if(((source>>2)&((1u<<B)-1))==number)ctx[0]={SEED_SEND,source,0,0};}break;
    case SEED:if(live_count==0&&!oldsv&&!a.valid){state_fence=true;if(cache_done){state_fence=false;done=true;state=IDLE;}}break;
    case POP_HEAD:state=POP_DIR;break;
    case POP_DIR:{bool has=bitmap[oldkey/64]>>(oldkey%64)&1;pointer=has?olddirq>>32:~0u;bitmap[oldkey/64]&=~(1ull<<(oldkey%64));if(!bitmap[oldkey/64])groups&=~(1ull<<(oldkey/64));state=POP_READ;break;}

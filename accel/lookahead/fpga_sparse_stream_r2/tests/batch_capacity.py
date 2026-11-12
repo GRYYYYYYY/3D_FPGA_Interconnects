@@ -1,6 +1,6 @@
 from pathlib import Path
 import struct,subprocess,json,hashlib,sys
-root=Path(__file__).resolve().parents[4];r=root/'results/fpga_sparse_stream_r2_20261112';v=sys.argv[1] if len(sys.argv)>1 else 'm2c';exe='Vr2_external_tile' if v.startswith('external') else 'Vsparse_tile';out=r/'rtl'/f'{v}_batch_capacity';out.mkdir(exist_ok=False)
+root=Path(__file__).resolve().parents[4];r=root/'results/fpga_sparse_stream_r2_20261112';v=sys.argv[1] if len(sys.argv)>1 else 'm2c';exe='Vr2_many_tile' if v.startswith('many') else 'Vr2_external_tile' if v.startswith('external') else 'Vsparse_tile';out=r/'rtl'/f'{v}_batch_capacity';out.mkdir(exist_ok=False)
 for name,n,cells,jobs,target in [('max_node_max_cell_q40',4096,32768,40,True),('partial_line_missing_q40',1,25538,40,False)]:
  d=out/name;d.mkdir();w=d/'workload.bin';mapping=[]
  for q in range(jobs):mapping.extend([-1]*(n-1)+[cells-1 if q%2==0 else 0])

@@ -2,9 +2,12 @@
 #include "external_bank_model.hpp"
 #include "many_support_models.hpp"
 #include "owner_pipeline_model.hpp"
+#include "owner_f0_cycle_model.hpp"
+#include <type_traits>
+#include <fstream>
 #include "../fpga_sparse_stream/tile_model.hpp"
 namespace r2_model {
-template<unsigned L,unsigned P,unsigned MC,unsigned CC>struct ManyTileModel {
+template<unsigned L,unsigned P,unsigned MC,unsigned CC,bool CACHE=true>struct ManyTileModel {
  static constexpr unsigned B=__builtin_ctz(L),CTL=4*L;
  bool clk=false,last_clk=false,rst=false,start=false,done=false,error=false;
  uint32_t node_count=0,state_base=0,row_base=0,edge_base=0,cost_base=0,job_base=0;unsigned jobs=0,cell_count=0,cost_count=0;
@@ -12,7 +15,7 @@ template<unsigned L,unsigned P,unsigned MC,unsigned CC>struct ManyTileModel {
  std::array<uint32_t,P> physical_line{};std::array<uint32_t,P*8>physical_data{},physical_rsp_data{};
  unsigned issued=0,accepted=0,committed=0,owner_error=0,phase=0,qid=0;uint32_t wave=0;std::array<uint32_t,L>commit_nodes{},active_counts{},commit_counts{};std::array<uint32_t,(L*6+31)/32>mshr_peaks{};std::array<uint32_t,(L*5+31)/32>dirty_peaks{};
  unsigned r2_many_tile__DOT__bank_error=0,r2_many_tile__DOT__meta_error=0,r2_many_tile__DOT__reduce_error=0,r2_many_tile__DOT__fabric_error=0,r2_many_tile__DOT__front_error=0,r2_many_tile__DOT__queue_error=0;
- std::array<ExternalBankT<MC,CC,B>,L>banks;std::array<OwnerCycle,L>owners;std::array<sparse_model::Front,L>fronts;std::array<Metadata,L>meta;std::array<PopFork,L>forks;std::array<CellReducer,8>reducers;
+ std::array<ExternalBankT<MC,CC,B>,L>banks;std::array<std::conditional_t<CACHE,OwnerCycle,OwnerF0Cycle>,L>owners;std::array<sparse_model::Front,L>fronts;std::array<Metadata,L>meta;std::array<PopFork,L>forks;std::array<CellReducer,8>reducers;
  RouterMany<PopEvent,L,L>router;RouterMany<CellEvent,L,8>cellrouter;ControlMany<L> control;MinimumMany<L> minimum;HierFabricCycle fabric{5*L+1,P};
  unsigned command=7,command_epoch=0,bucket=0,bucket_epoch=0;uint32_t source=0,targets=0,cell_base=0,output_base=0;
  std::array<bool,L>reset_seen{},leaf_cost_we{},cost_seen{},local_reset{};std::array<unsigned,L>leaf_cost_index{};std::array<uint64_t,L>leaf_cost_data{};
@@ -28,7 +31,7 @@ template<unsigned L,unsigned P,unsigned MC,unsigned CC>struct ManyTileModel {
   error=local_error;issued=accepted=committed=owner_error=0;mshr_peaks={};dirty_peaks={};r2_many_tile__DOT__bank_error=r2_many_tile__DOT__meta_error=r2_many_tile__DOT__reduce_error=r2_many_tile__DOT__front_error=0;r2_many_tile__DOT__queue_error=0;
   for(unsigned i=0;i<L;++i){unsigned op=control.leaf_op[i];local_reset[i]=rst||op==7;auto &b=banks[i];auto&o=owners[i];auto&f=fronts[i];auto&m=meta[i];auto&fork=forks[i];
    b.command=(op==1||op==2||op==3||op==5||op==6)?op:0;b.bucket=bucket;b.source=source;b.node_count=node_count;b.state_base=state_base;b.upstream_fenced=o.fence_done;
-   b.ev=o.c.events.ov;b.event_line=o.c.events.od.line;b.event_mask=o.c.events.od.mask;b.combin();
+   if constexpr(CACHE){b.ev=o.c.events.ov;b.event_line=o.c.events.od.line;b.event_mask=o.c.events.od.mask;}else{b.ev=o.update_valid;b.event_line=o.update_line;b.event_mask=o.update_mask;}b.combin();
    o.update_ready=b.er;o.fence=op==6;o.combin();
    f.row_base=row_base;f.edge_base=edge_base;f.cost_we=leaf_cost_we[i];f.cost_index=leaf_cost_index[i];f.cost_data=leaf_cost_data[i];f.combin();
    m.base=cell_base;m.cells=cell_count;m.qid=qid;m.epoch=bucket_epoch;m.combin();
@@ -93,9 +96,21 @@ if(re.error)r2_many_tile__DOT__reduce_error|=1u<<i;error|=re.error;}
    default:local_error=true;
   }
  }
+ struct SampleStats{unsigned qid;std::array<uint64_t,12>total{};unsigned members=0,changed=0,owner_mshr=0,owner_dirty=0,state_mshr=0,state_dirty=0;};
+ std::vector<SampleStats>sample_stats;
+ void capture_stats(){SampleStats st{};st.qid=qid;
+  for(unsigned i=0;i<L;++i){auto&o=owners[i];auto&b=banks[i];auto&c=b.cache;
+   std::array<uint64_t,12>n={o.accepted,o.retired,o.hits,o.misses,o.merges,o.raw_stall,c.accepted,c.retired,c.hits,c.misses,c.raw_stall,b.stale_count};
+   for(unsigned k=0;k<12;++k)st.total[k]+=n[k];
+   st.members=std::max(st.members,b.member_peak);st.changed=std::max(st.changed,b.changed.peak);
+   st.owner_mshr=std::max(st.owner_mshr,o.mshr_peak);st.owner_dirty=std::max(st.owner_dirty,o.dirty_peak);st.state_mshr=std::max(st.state_mshr,c.mshr_peak);st.state_dirty=std::max(st.state_dirty,c.dirty_peak);
+  }sample_stats.push_back(st);
+ }
+ void write_metrics(const std::string&dir){std::ofstream f(dir+"/service_metrics.csv");f<<"sample,owner_accepted,owner_retired,owner_hits,owner_misses,owner_merges,owner_request_stall,state_accepted,state_retired,state_hits,state_misses,state_request_stall,stale,members_peak,changed_peak,owner_mshr_peak,owner_dirty_peak,state_mshr_peak,state_dirty_peak\n";for(auto&s:sample_stats){f<<s.qid;for(auto v:s.total)f<<','<<v;f<<','<<s.members<<','<<s.changed<<','<<s.owner_mshr<<','<<s.owner_dirty<<','<<s.state_mshr<<','<<s.state_dirty<<'\n';}}
  void step(){
   const auto olda=record_a;const auto oldb=record_b;auto oldcostwe=cost_we;auto oldcostindex=cost_index;auto oldcostdata=cost_data;bool globalreset=rst||command==7;
   for(unsigned i=0;i<4;++i)record_a[i]=reducers[2*i].recorded+reducers[2*i+1].recorded;for(unsigned i=0;i<2;++i)record_b[i]=olda[2*i]+olda[2*i+1];
+  if(!rst&&phase==37&&output_acked==output_sent&&!write_busy&&!ctl_valid&&fabric.idle)capture_stats();
   controller();recorded=oldb[0]+oldb[1];
   for(unsigned i=0;i<L;++i){auto op=control.leaf_op[i];bool oldwe=leaf_cost_we[i];unsigned oldindex=leaf_cost_index[i];leaf_cost_we[i]=oldcostwe&&(op==7||op==0);if(leaf_cost_we[i]){leaf_cost_index[i]=oldcostindex;leaf_cost_data[i]=oldcostdata;}if(rst||start)cost_seen[i]=false;else if(oldwe&&oldindex==cost_count-1)cost_seen[i]=true;reset_seen[i]=op==7;
    banks[i].step(local_reset[i]);owners[i].rst=local_reset[i];owners[i].step();fronts[i].step(local_reset[i]);meta[i].step(local_reset[i]);forks[i].step(local_reset[i]);
@@ -103,6 +118,33 @@ if(re.error)r2_many_tile__DOT__reduce_error|=1u<<i;error|=re.error;}
   for(unsigned i=0;i<8;++i)reducers[i].step(local_reset[i]);
   router.step(globalreset);cellrouter.step(globalreset);fabric.step();control.step(rst);minimum.step(rst);
  }
- void eval(){if(clk&&!last_clk)step();last_clk=clk;combin();}
+ void edge_errors(){
+  // Only registered error outputs are observed by the driver after a rising
+  // edge. All transaction wires are evaluated with the next low-phase inputs.
+  // This optional host scheduling optimization still executes every clock.
+  error=local_error;owner_error=0;
+  r2_many_tile__DOT__bank_error=r2_many_tile__DOT__meta_error=0;
+  r2_many_tile__DOT__front_error=r2_many_tile__DOT__reduce_error=0;
+  for(unsigned i=0;i<L;++i){auto &b=banks[i];
+   bool be=b.local_error||b.changed.error||b.cache.error;
+   if(be)r2_many_tile__DOT__bank_error|=1u<<i;
+   if(owners[i].error)owner_error|=1u<<i;
+   if(fronts[i].local_error)r2_many_tile__DOT__front_error|=1u<<i;
+   if(meta[i].error)r2_many_tile__DOT__meta_error|=1u<<i;
+   error|=be||owners[i].error||fronts[i].local_error||meta[i].error;
+  }
+  for(unsigned i=0;i<8;++i){if(reducers[i].error)r2_many_tile__DOT__reduce_error|=1u<<i;error|=reducers[i].error;}
+  bool fe=fabric.central.error;for(auto &f:fabric.local)fe|=f.error;
+  r2_many_tile__DOT__fabric_error=fe;error|=fe;
+ }
+ void eval(){
+  bool rising=clk&&!last_clk;
+  if(rising)step();last_clk=clk;
+#ifdef R2_SINGLE_COMBIN
+  if(rising)edge_errors();else combin();
+#else
+  combin();
+#endif
+ }
 };
 }

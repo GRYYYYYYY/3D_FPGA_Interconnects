@@ -70,12 +70,36 @@
       "cases": 95,
       "cycle_error": 0,
       "scope": "new composed owner uplink+shared8physical complete8lane topology; 32lane not implied"
+    },
+    {
+      "version": "many32_model_e versus many32_b",
+      "cases": 95,
+      "cycle_error": 0,
+      "scope": "complete32owner32physical hierarchy,8192members+changed,2native91fixtures2pressure; source-frozen pre-reg-ready variant"
+    },
+    {
+      "version": "many8_reg_model_a",
+      "RTL": "many8_reg_a",
+      "cache": "F1",
+      "cases": 97,
+      "cycle_log_exact_all": true,
+      "scope": "complete8/8 externalstate,registered-ready,2native91fixtures2stress2address; not32",
+      "record": "model/many8_reg_model_a/suite_calibration/calibration.json"
+    },
+    {
+      "version": "many8_reg_f0_model_a",
+      "RTL": "many8_reg_f0_a",
+      "cache": "F0",
+      "cases": 97,
+      "cycle_log_exact_all": true,
+      "scope": "complete8/8 externalstate,registered-ready,2native91fixtures2stress2address; not32",
+      "record": "model/many8_reg_f0_model_a/suite_calibration/calibration.json"
     }
   ],
-  "software_baselines_complete": false,
+  "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "Finish external_e/f OOC, audit 8192-entry state bank and actual hierarchical interconnect; calibrate complete many8/many32, decide resource-supported next candidate and complete native architecture batches.",
+  "next_action": "Finish complete8/32 OOC and32registered-ready domain calibration; integrateverifiedsinglewriteMSHR; finish40-native simulations,exactcapacity,F0/F1 and sensitivities. No qualified fullkernel clock.",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -102,7 +126,7 @@
     "capacity_q40_tests": 2,
     "new_model_calibrated": false
   },
-  "physical_channel_scope": "M2 33 clients / 8 physical ports, 64 finite IDs/port, fixed line striping; no 32/64 topology qualification yet",
+  "physical_channel_scope": "8/32 finite hierarchical ports;32oldready95traces exact,32tail97outputs passed;8registeredreadyF1/F0 each97traces exact;32registeredready calibration pending",
   "owner_service_scope": {
     "version": "owner_pipe_c",
     "warm_hit_max_retire_II1_streak": 4096,
@@ -121,7 +145,7 @@
     "node_capacity": 512,
     "independent_model_calibrated": false
   },
-  "complete_small_rtl_latest": "pipe_full_e d3/d4 pass; pipe_full_d all91 fixtures+stress pass; e changes only reducer RAM port form (XSim checked)",
+  "complete_small_rtl_latest": "many32_c97outputs pass;many8_reg_a and many8_reg_f0_a97RTL/model logs exact;many32_reg_b full regression running",
   "large_node_state_standalone": {
     "rtl": "node_state_b",
     "node_address_space": 4194304,
@@ -141,21 +165,24 @@
     "OOC_verified": false
   },
   "vivado_sessions": {
-    "m2c": "vivado-20261112-161837-7d305dc5",
-    "m3d": "vivado-20261112-164509-ef1e3de5",
-    "m3e": "vivado-20261112-171744-63335f93",
-    "arithmetic": "vivado-20261112-173934-eb0a0adf"
+    "owner_mshr_ram_b5": "vivado-20261112-161837-7d305dc5",
+    "bank8192_reg": "vivado-20261112-171744-63335f93",
+    "many8_reg_b": "vivado-20261112-164509-ef1e3de5",
+    "many8_mshr_b": "vivado-20261112-173934-eb0a0adf",
+    "external_f": "vivado-20261112-180611-3c758959",
+    "many32_c": "vivado-20261112-183223-bc1f6643",
+    "many32_reg_b": "vivado-20261112-185211-8e7c9bec"
   },
   "pending_commands": {
-    "m2c": "original slow synthesis still running; obsolete arithmetic loop audit required",
-    "m3d": "synth complete735949LUT;48mappedFPloops; routed skipped with negative audit",
-    "m3e": "synth complete589685LUT;356RAMB36+161RAMB18;48mappedFPloops; routed skipped",
-    "external_e": "synth running sessionvivado-20261112-173934-eb0a0adf",
-    "external_f": "synth running sessionvivado-20261112-180611-3c758959",
-    "central_fabric32": "synth/posthooks sessionvivado-20261112-164509-ef1e3de5",
-    "bank8192": "bank8192_uram synth running sessionvivado-20261112-171744-63335f93",
-    "many32_RTL": "build session75663",
-    "hier32": "unit regression session2112"
+    "owner_mshr_ram_b5": "route active; actual synthesis6909LUT; unitwarm/stresspass",
+    "bank8192_reg": "route active; actualsynthesis14628LUT20BRAMequiv9URAM",
+    "many8_reg_b": "route active; actual358396LUT214592FF368RAMB36+112RAMB18;5ns synthWNS-3.017",
+    "many8_mshr_b": "synthesisactive19:09; same8modelrecalibration required",
+    "external_f": "oldready full8route active; TIMING-16 remains1000reports; clock-source assumption alone does not resolve setup",
+    "many32_c": "synthesisactive;97RTLoutputs pass;many32_model_f tail_calibration active;2Q40checksactive",
+    "many32_reg_b": "synthesisactive;complete97RTLregressionactive;newhotcapacity8192/8193active;many32_reg_model_c exactnative only",
+    "many32_reg_model_d": "experimental one low-phase combin evaluation, everyedge executed, native2cycletraces exact; fullsuite pending",
+    "many32_model_e": "BNN/LSTMcomplete40batchrunning; progress/receipt files authoritative; oldmemberpeak counter invalid=8192 untilpoolinitfix; notcomplete"
   },
   "large_node_state_path_scope": {
     "build": "external_f",
@@ -195,8 +222,9 @@
     "GPU_compact_LSTM_mean_s": 0.16024799044444443,
     "GPU_basic_BNN_mean_s": 0.15669057711111112,
     "GPU_basic_LSTM_mean_s": 0.15988857844444446,
-    "native_STRICT_VPR_scope_audit": "pending",
-    "receipt_count": 218
+    "native_STRICT_VPR_scope_audit": "baselines/native_reuse/audit.json; input and ALToutput hashes identical;21native historical E2/Process rows reused separately, not V2 denominators",
+    "receipt_count": 218,
+    "GPU_final_API_status": "job_succeeded"
   },
   "external_capacity": {
     "40_sample_boundary_tests": 2,
@@ -230,5 +258,56 @@
     "scope": "synthesis of one complete externalstate/bucket/changed bank",
     "32banks_BRAM36_equivalent": 2064,
     "next": "USE_URAM=1 variant synthesized separately; do not assume inference/latency until verified"
+  },
+  "native_identity_audit_passed": true,
+  "bank8192_uram_resources": {
+    "LUT": 13962,
+    "FF": 8432,
+    "RAMB36": 31,
+    "RAMB18": 14,
+    "URAM": 7,
+    "scope": "one bank actual synthesis; member_next replication unresolved in this frozen variant",
+    "frequency_qualified": false,
+    "routed_WNS_ns": -1.402,
+    "routed_WHS_ns": 0.02
+  },
+  "supervision": {
+    "skill": "long-run-supervision",
+    "origin": "main Codex session",
+    "luna_interface_available": false,
+    "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
+  },
+  "updated_utc": "2026-11-12T19:13:15.564813+00:00",
+  "bank8192_reg_resources": {
+    "LUT": 14628,
+    "FF": 8418,
+    "RAMB36": 17,
+    "RAMB18": 6,
+    "URAM": 9,
+    "synth_WNS_ns": -0.502,
+    "scope": "actual singlebank; tail snapshot avoids uninitialized tail read and second write; registered ready; route pending"
+  },
+  "owner_mshr_single_write": {
+    "LUT": 6909,
+    "FF": 3236,
+    "RAMB36": 13,
+    "RAMB18": 2,
+    "LUTRAM": 644,
+    "previous_LUT": 24036,
+    "previous_FF": 12460,
+    "synth_WNS_ns": -1.126,
+    "warm_consecutive_retirements": 4096,
+    "stress_accepted_retired": 4800,
+    "trace_identical_to_previous": true,
+    "scope": "standalone owner; complete integration and routed clock pending"
+  },
+  "clock_assumptions": {
+    "new_OOC_HD_CLK_SRC": "BUFGCE_X0Y144",
+    "region": "X4Y6",
+    "clock_ns": 5,
+    "external_clock_route": "estimated; no shell/board",
+    "methodology_skill_requires": "2026.1",
+    "local_version": "2022.2",
+    "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   }
 }

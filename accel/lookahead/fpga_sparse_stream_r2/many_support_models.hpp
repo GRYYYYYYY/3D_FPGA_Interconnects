@@ -6,7 +6,7 @@ template<class T,unsigned I,unsigned O>struct RouterMany {
  std::array<Fifo<T>,O>q;std::array<unsigned,O>rotate{};std::array<bool,I>iv{},ir{};std::array<bool,O>ordy{};std::array<T,I>input{};std::array<int,O>selection{};
  static unsigned destination(const PopEvent&e){return (e.node>>2)&(O-1);}
  static unsigned destination(const CellEvent&e){return e.cell&(O-1);}
- void combin(){ir.fill(false);for(unsigned b=0;b<O;++b){selection[b]=-1;for(unsigned p=0;p<I;++p){unsigned l=(rotate[b]+p)&(I-1);if(iv[l]&&destination(input[l])==b){selection[b]=l;ir[l]=q[b].ready(ordy[b]);break;}}}}
+ void combin(){ir.fill(false);std::array<uint64_t,O>mask{};for(unsigned i=0;i<I;++i)if(iv[i])mask[destination(input[i])]|=1ull<<i;for(unsigned b=0;b<O;++b){uint64_t after=mask[b]&(~0ull<<rotate[b]),choice=after?after:mask[b];selection[b]=choice?__builtin_ctzll(choice):-1;if(choice)ir[selection[b]]=q[b].ready(ordy[b]);}}
  bool idle()const{for(auto&f:q)if(f.ov||f.count)return false;return true;}
  void step(bool rst){if(rst){q={};rotate={};return;}for(unsigned b=0;b<O;++b){bool put=selection[b]>=0;T data=put?input[selection[b]]:T{};bool accepted=put&&q[b].ready(ordy[b]);q[b].step(put,data,ordy[b]);if(accepted)rotate[b]=(rotate[b]+1)&(I-1);}}
 };
