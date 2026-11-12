@@ -1,7 +1,9 @@
 # ALT_LINE_OWNER_REDUCE_V1 restart
 
-The frozen contract and supplied YAML are in `config/`. This directory implements
-one owner service. It is **not yet a full graph-processing kernel**.
+The frozen contract and supplied YAML are in `config/`. The first delivery implements one owner service.
+The subsequent [closed-loop prototype](closed_loop/README.md) adds a complete runtime
+graph controller, 8/64-owner RTL, full-batch model, calibration and native round trip.
+Its serial graph front end and projected clock are explicit limitations.
 
 `rtl/owner_service.sv` implements 4 ways × 32 sets × 32-byte lines, round-robin
 replacement with explicit lowest-index invalid-way selection, 32 line-matched MSHRs, 16 acknowledged dirty-write slots, and 64-entry
@@ -26,8 +28,8 @@ barrier: request FIFO, MSHRs, dirty writes, response FIFO and the command regist
 must all drain; all 128 cache lines are scanned and invalidated. A subsequent
 sample may reset only after that barrier. Reset clears all identity state and
 spends 128 actual cycles initializing replacement state. There is no epoch wrap
-alias. External proposal-home initialization is outside this module and must be
-implemented and timed in the eventual full kernel. An invalid pair sets sticky
+alias. External proposal-home initialization is outside this module and is implemented
+and timed by the closed-loop graph controller. An invalid pair sets sticky
 `error` and suppresses successful fence publication. Reset during live memory
 transactions is outside the interface contract.
 

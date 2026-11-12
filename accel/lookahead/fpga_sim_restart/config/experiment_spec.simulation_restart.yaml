@@ -1,6 +1,6 @@
 # 本文件是待执行计划。proposal/assumed 值均非实测；null 不能当作 0。
 schema_version: "2.0"
-status: partial_owner_delivery_full_experiment_incomplete
+status: executing_complete_closed_loop_validation
 research_mode: simulation_and_module_ooc
 project:
   repository: https://github.com/GRYYYYYYY/3D_FPGA_Interconnects
@@ -83,13 +83,13 @@ candidate:
     finite_queues: true
     arbitration_and_backpressure: required
     free_crossbar: false
-    topology_and_depths: null
+    topology_and_depths: registered_shared_candidate_bus_and_32_registered_channel_arbiters
   directory:
     logical_bucket_capacity: 4096
     member_pool_capacity: 524288
     chunk_capacity: 16384
     provenance: initial_capacity_proposal_revalidate_on_trace
-    physical_layout_and_ports: null
+    physical_layout_and_ports: external_pending_u32_N_with_bounded_live_members_and_blocking_scan_port
     overflow_policy: explicit_failure
     free_golden_frontier_input: false
   ablations:
@@ -235,7 +235,7 @@ rtl_and_ooc:
   final_top_scope: complete_selected_kernel_and_interconnect
   runtime_input_loading: required
   golden_trace_as_complete_kernel: false
-  synthesized_component_coverage: one_owner_service_only
+  synthesized_component_coverage: full_64_owner_graph_top_with_serial_graph_front_end
   routed_component_coverage: one_owner_service_only
   full_kernel_resource_budget: null
   hypothetical_shell_reserve_fraction: 0.20
@@ -284,3 +284,22 @@ outputs:
     - mechanism_and_memory_sensitivity_results
     - raw_evidence_and_provenance
     - concise_report_and_independent_commit
+
+closed_loop_implementation:
+  directory_realization: bounded_pending_array_scan
+  chunk_pool_realization: not_allocated_scan_layout_replaces_proposed_linked_chunks
+  control_requests_outstanding: 1
+  arithmetic_lane_instances: 64
+  sustained_64_edges_per_cycle_claimed: false
+  candidate_bus_transfers_per_cycle_max: 1
+  physical_channels: 32
+  proposal_base_alignment_bytes: 1024
+  complete_small_RTL_cases: [native_d3_w8, native_d4_w8]
+  small_RTL_backends: [XSim_2022_2, Verilator_4_038]
+  large_jobs_per_input: 40
+  large_model_result_label_pending_clock_gate: projected
+  sensitivity_nominal_GBps: [64, 128, 192]
+  sensitivity_integer_link_effective_GBps_at_200MHz: [51.2, 102.4, 102.4]
+  GPU_new_cohort_status: blocked_by_Inspire_expired_login_invalid_grant
+  original_VPR_and_best_native_STRICT_V2: not_evaluated_same_scope
+  old_E1_renamed: false
