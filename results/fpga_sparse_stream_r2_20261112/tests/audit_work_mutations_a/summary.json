@@ -1,0 +1,72 @@
+{
+  "utc": "2026-11-12T22:00:19.841836+00:00",
+  "all_mutations_rejected": true,
+  "results": [
+    {
+      "mutation": "dropped_candidate",
+      "command": [
+        "/usr/bin/python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/audit_complete_work.py",
+        "audit_negative_dropped_candidate_a.json",
+        "8192",
+        "8192",
+        "tests/audit_work_mutations_a/dropped_candidate=native_d4_w8"
+      ],
+      "returncode": 1,
+      "rejected": true,
+      "failed_checks": [
+        "candidate_work_exact"
+      ]
+    },
+    {
+      "mutation": "duplicate_commit",
+      "command": [
+        "/usr/bin/python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/audit_complete_work.py",
+        "audit_negative_duplicate_commit_a.json",
+        "8192",
+        "8192",
+        "tests/audit_work_mutations_a/duplicate_commit=native_d4_w8"
+      ],
+      "returncode": 1,
+      "rejected": true,
+      "failed_checks": [
+        "no_duplicate_commit_per_wave",
+        "per_wave_commit_counts_exact"
+      ]
+    },
+    {
+      "mutation": "free_state_initialization",
+      "command": [
+        "/usr/bin/python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/audit_complete_work.py",
+        "audit_negative_free_state_initialization_a.json",
+        "8192",
+        "8192",
+        "tests/audit_work_mutations_a/free_state_initialization=native_d4_w8"
+      ],
+      "returncode": 1,
+      "rejected": true,
+      "failed_checks": [
+        "physical_traffic_matches_arrays",
+        "state_initialization_not_free"
+      ]
+    },
+    {
+      "mutation": "event_sampling",
+      "command": [
+        "/usr/bin/python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/audit_complete_work.py",
+        "audit_negative_event_sampling_a.json",
+        "8192",
+        "8192",
+        "tests/audit_work_mutations_a/event_sampling=native_d4_w8"
+      ],
+      "returncode": 1,
+      "rejected": true,
+      "failed_checks": [
+        "no_cycle_or_event_sampling"
+      ]
+    }
+  ]
+}

@@ -87,6 +87,8 @@ setup **and** hold, complete constraints, route status and methodology checks.
 It adds no false path and removes no IO delay. Unit clock qualification never
 qualifies the full kernel, and no context is a board shell.
 
+`check_routed_sta.py` mechanically checks a saved period, including setup, hold, pulse width, zero unconstrained endpoints, complete routing and retained IO constraints. Unknown methodology/DRC rules require review. `audit_complete_work.py` checks completed native output, candidate/commit work against M1, every wave's unique commit count, service peaks, cost/job/output traffic and real mutable initialization. Its positive d3/d4 checks and four rejected mutations are retained. Neither tool assigns a full-kernel clock from a unit result.
+
 `inspect_live_runs.py` provides a read-only recovery view with process identity,
 progress, OOC handles and calibration records. `freeze_checkpoint.py NAME PREV
 --defer-running-batches` preserves completed evidence and active batch receipts;

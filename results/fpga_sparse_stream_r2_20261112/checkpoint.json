@@ -181,7 +181,7 @@
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "review complete8 routed8ns STA; finish parallel-way32 F1/F0 calibration/capacity; complete native40 output checks; route latest resource-feasible32 OOC; no prototype-clock transfer",
+  "next_action": "finish bank8/32 F1/F0 fresh calibrations; finish native40 exact work/output audits; qualify matching complete32 routed OOC; preserve all failures and clocks scopes",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -249,20 +249,20 @@
   "vivado_sessions": {
     "many8_reg_b": "vivado-20261112-164509-ef1e3de5",
     "many8_mshr_b": "vivado-20261112-173934-eb0a0adf",
-    "many8_context_tree_a": "vivado-20261112-194208-cd9c35ec",
     "many8_context_reduction_b": "vivado-20261112-203252-7b55fe2c",
     "many32_context_reduction_b": "vivado-20261112-185211-8e7c9bec",
-    "many32_request_f0_reduction_b": "vivado-20261112-180611-3c758959",
     "central_reduction_a": "vivado-20261112-191902-487477ac",
-    "state_way_context_a": "vivado-20261112-205847-e7d439e5",
     "many32_way_context_a": "vivado-20261112-183223-bc1f6643",
     "many8_way_context_a": "vivado-20261112-171744-63335f93",
-    "many32_f0_way_context_a": "vivado-20261112-161837-7d305dc5"
+    "many32_f0_way_context_a": "vivado-20261112-161837-7d305dc5",
+    "many8_bank_context_a": "vivado-20261112-205847-e7d439e5",
+    "many32_bank_context_a": "vivado-20261112-194208-cd9c35ec",
+    "many32_f0_bank_context_a": "vivado-20261112-180611-3c758959"
   },
   "pending_commands": {
     "owner_mshr_ram_b5": "unit route complete negative5ns-4.508/-2.044;retainedhistoricalnegative",
     "bank8192_reg": "route completed negative; see routed reports",
-    "many8_reg_b": "route active; actual358396LUT214592FF368RAMB36+112RAMB18;5ns synthWNS-3.017",
+    "many8_reg_b": "route complete22:18:31 negative setup/hold; archivedcompleted_old8_reg_2221",
     "many8_mshr_b": "synthesis completed234982LUT; route active;97cyclecalibration passed",
     "external_f": "route complete376265LUT194137FF516RAMB36+193RAMB18;5ns-13.101/+.015;oldready bare-port context;archive2040b",
     "many32_c": "synth complete overdeviceLUT; archived2103; session reused many32_way_context_a",
@@ -270,7 +270,7 @@
     "many32_reg_model_d": "97fullcycle/trafficexact; full40runner11783; provisionalmarker outdated scope=now97passed but complete40stillpending",
     "many32_model_e": "BNN/LSTMcomplete40batchrunning; progress/receipt files authoritative; oldmemberpeak counter invalid=8192 untilpoolinitfix; notcomplete",
     "owner_context_a": "complete unitonly125MHz same-routed-netlist STA; archived2010",
-    "many8_context_tree_a": "routeactive19:58:58 actual235849LUT154686FF424BRAMtiles",
+    "many8_context_tree_a": "complete frozen full8 prototype125MHz OOC qualified +.344/+.010; reviewed/sourcebound97+36; not main32",
     "many32_mshr_a": "synth complete1083688LUT586261FF1212BRAMtiles288URAM;5ns -14.408/+.025;oldlinear80levels;route skipped in favor of implemented/recalibrated balanced request candidate;archive2028",
     "many8_request_tree_b": "97fullcycle/traffic/outputcalibration passed",
     "many32_f0_a": "97passed; matchedR0 completebatchrunner29212",
@@ -283,20 +283,26 @@
     "many32_request_f0_a": "97RTL pipeline67968;gate84864 waits then97modelcal andfull40lat60",
     "many32_request_f0_context_a": "synthcomplete952903LUT;5ns-7.244/-.080;52leveloldconsume fabric;route skipped repaired fabric has fresh97;archive2134",
     "many32_f0_model_b": "97passed;host-only benchmark~13percentfaster;preserve running model_a fullbatch; no hardware performance claim",
-    "many8_fabric_tree_a": "97newcompletecalibration and36fixed_ns passed; OOC synthesis active",
+    "many8_fabric_tree_a": "97+36 exact; context_reduction_b route active",
     "many32_fabric_tree_a": "97and36 complete allcycles/output/traffic exact modelC",
-    "many32_request_f0_reduction_b": "97complete fullcycle outputtraffic exact modelrequestF0a",
-    "many32_context_reduction_b": "synthstarted20:36:44",
+    "many32_request_f0_reduction_b": "oldway synthnegative archived2155; route skipped in favor of verifiedway and bank repairs; sessionE nowF0bank",
+    "many32_context_reduction_b": "synthcomplete1085529LUT607662FF1212BRAMtiles288URAM;5ns -2.705/-.080; route launched22:01:39",
     "central_reduction_a": "route21:08:32;unit cyclecal andfaultpass",
     "many8_context_reduction_b": "synthesiscomplete;route started20:51:31;97and36newcalpass",
-    "state_way_context_a": "actualstateunit route21:09:57; synth7007LUT;32parameter functional calpending",
+    "state_way_context_a": "complete state unit125MHz OOC +2.788/+.012; OWNER_BITS5 fullbacking PASS",
     "many32_way_context_a": "synthesis launched21:03:57",
     "many8_way_tree_a": "97and36 fullcycle output traffic pass model8request_b",
-    "many32_f0_way_a": "builddone;97thennewwaycalthen36 fixedns pipeline72703",
-    "many32_way_tree_a": "buildcomplete; full97 thenway_calibration/ns36/Q40/hot8192+8193/boundary4 pipeline54277",
+    "many32_f0_way_a": "97+modelway_calibration passed;36fixed_ns pipeline72703 running;Q40/hot/boundary4 pipeline67707",
+    "many32_way_tree_a": "97+36 passed; Q40/hot8192+8193/boundary4 pipeline54277",
     "many32_request_f0_model_a": "97allcycle outputtraffic exact; complete40BNN/LSTM now running84864 PID3276512/3276515; started21:17:52",
-    "many8_way_context_a": "synth launched21:34:29;97+36 complete cal andsourcebinding passed",
-    "many32_f0_way_context_a": "synth launched21:34:32; functional pipeline72703;sourcebindingexact"
+    "many8_way_context_a": "synthcomplete236696LUT154718FF424BRAMtiles;5ns-1.075/-.080; route21:51:32",
+    "many32_f0_way_context_a": "synth launched21:34:32; functional pipeline72703;sourcebindingexact",
+    "many8_bank_tree_a": "build+97+bank_calibration againstmodel8request_b+36+Q40 pipeline28534",
+    "many8_bank_context_a": "synth launched22:11:22; actual context with frozen new bank selector",
+    "many32_bank_tree_a": "pipeline53028: build97/bank_calibration/36/Q40/hot/boundary4; detailed receipt rtl/many32_bank_tree_a_pipeline_receipt.json",
+    "many32_f0_bank_a": "pipeline53028: build97/bank_calibration/36/Q40/hot/boundary4; detailed receipt rtl/many32_f0_bank_a_pipeline_receipt.json",
+    "many32_bank_context_a": "synth22:18:27 sessionI; route pending actual resource/calibration",
+    "many32_f0_bank_context_a": "synth22:18:29 sessionE; route pending actual resource/calibration"
   },
   "large_node_state_path_scope": {
     "build": "external_f",
@@ -391,7 +397,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-12T21:49:39.981616+00:00",
+  "updated_utc": "2026-11-12T22:21:07.178862+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -434,7 +440,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "4c140c4f111430d44e7e4b255a79a2fae4ac4f43",
+  "checkpoint_commit": "380e93d2aaff0229719e36d620cf20b0982f7aeb",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -682,6 +688,11 @@
       "record": "model/many32_request_model_c/way_calibration/calibration.json",
       "all_pass": true,
       "fixed_ns_and_capacity": "running"
+    },
+    "full32_fixed_ns_36": {
+      "all_pass": true,
+      "record": "rtl/many32_way_tree_a_fixed_time/calibration.json",
+      "scope": "matched32wayRTL/model; hypothetical periods until matching complete32 OOC"
     }
   },
   "many32_c_resources": {
@@ -802,5 +813,59 @@
     "fixed_ns_calibration_36": "rtl/many8_fixedns_a_fixed_time/calibration.json",
     "scope_binding": "timing/fixedns8_binding_v2_2149.json",
     "record": "timing/many8_context_tree_a/routed_sta_v2/qualification_review.json"
+  },
+  "many8_way_synth": {
+    "LUT": 236696,
+    "FF": 154718,
+    "RAMB36": 368,
+    "RAMB18": 112,
+    "URAM": 0,
+    "period_ns": 5,
+    "WNS_ns": -1.075,
+    "WHS_ns": -0.08,
+    "critical_path": "frontend parent arithmetic to error",
+    "route_started_utc": "2026-11-12T21:51:32Z",
+    "qualified_mhz": null
+  },
+  "many32_reduction_synth": {
+    "LUT": 1085529,
+    "FF": 607662,
+    "RAMB36": 1064,
+    "RAMB18": 296,
+    "URAM": 288,
+    "WNS_5ns": -2.705,
+    "WHS_5ns": -0.08,
+    "route_started_utc": "2026-11-12T22:01:39Z"
+  },
+  "complete_work_audit": {
+    "small32_native_cases": 2,
+    "all_pass": true,
+    "record": "analysis/small_work_audit_2201.json",
+    "negative_mutations_rejected": 4,
+    "negative_record": "tests/audit_work_mutations_a/summary.json",
+    "full_native_status": "pending completed batches; no partial extrapolation"
+  },
+  "bank_context_selection": {
+    "reason": "actual complete32F1 synth cs to carg30logic-level critical path -2.705ns at5ns; external_bank serial low-ID context selection",
+    "implementation": "parallel state masks, balanced low-ID selectors/popcounts/init16selector; no added hardware cycles or capacity changes",
+    "XSim_cases": 689840,
+    "XSim_pass": true,
+    "record": "rtl/bank_context_tree_a/receipt.json",
+    "new_full8_pipeline": 28534,
+    "new_full8_RTL": "many8_bank_tree_a",
+    "new_full8_OOC": "many8_bank_context_a",
+    "new32_status": "F1/F0 pipelines53028 and actual synth22:18:27/29 started after full8 fresh97 gate",
+    "new_full8_97_all_pass": true,
+    "new_full8_binding": "timing/bank8_binding_2215.json"
+  },
+  "many8_reg_b_routed": {
+    "LUT": 357919,
+    "FF": 214646,
+    "RAMB36": 368,
+    "RAMB18": 112,
+    "WNS_5ns": -13.101,
+    "WHS_5ns": -2.977,
+    "qualified_mhz": null,
+    "scope": "historical old multiwrite MSHR/registered-ready bare-port candidate; neither setup nor hold passed; no clock claim"
   }
 }

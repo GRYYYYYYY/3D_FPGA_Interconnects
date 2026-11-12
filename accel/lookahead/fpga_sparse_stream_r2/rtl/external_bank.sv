@@ -23,18 +23,13 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
   PUBLISH_READY=7,PUBLISH_WAIT=8,CLEAR_SEND=9,CLEAR_WAIT=10,SEED_SEND=11,SEED_WAIT=12;
  reg [3:0] state;reg local_error;assign error=local_error||changed_error||state_error;
  reg [31:0] cn[0:31];reg [63:0] cp[0:31];reg [27:0] carg[0:31];reg [3:0] cs[0:31];
- integer free_context,send_context,prop_context,publish_context,live_count,pop_count;
- always @*begin
-  free_context=-1;send_context=-1;prop_context=-1;publish_context=-1;live_count=0;pop_count=0;
-  for(integer i=0;i<32;i=i+1)begin
-   if(cs[i]==FREE&&free_context<0)free_context=i;
-   if(cs[i]!=FREE)live_count=live_count+1;
-   if(cs[i]==POP_SEND||cs[i]==POP_WAIT)pop_count=pop_count+1;
-   if((cs[i]==POP_SEND||cs[i]==COMMIT_SEND||cs[i]==CLEAR_SEND||cs[i]==SEED_SEND)&&send_context<0)send_context=i;
-   if(cs[i]==PROP_SEND&&prop_context<0)prop_context=i;
-   if(cs[i]==PUBLISH_READY&&publish_context<0)publish_context=i;
-  end
+ wire signed [31:0] free_context,send_context,prop_context,publish_context;
+ wire [5:0] live_count,pop_count;wire [127:0] context_states;
+ for(genvar ci=0;ci<32;ci=ci+1)begin:context_decode
+  assign context_states[ci*4+:4]=cs[ci];
  end
+ r2_bank_context_select context_select(context_states,free_context,send_context,
+  prop_context,publish_context,live_count,pop_count);
  // Atomic changed marks are serviced in the same cache as POP and COMMIT.
  wire mv,mr,mrv,first_mark,changed_error,cv,cr;wire [31:0] mn,rn,changed_node;wire [4:0] mid,rid;
  wire [$clog2(CC):0] changed_peak,changed_count;wire [31:0] marks,duplicates,unique_ids;
@@ -109,12 +104,14 @@ module r2_external_bank #(parameter BANK=0,OWNER_BITS=3,MC=1024,CC=1024,MA=$clog
   if(av&&present)member_next[old_dir[MA-1:0]]<=aid;
   if(!av)next_q<=member_next[pointer[MA-1:0]];
  end
- reg [31:0] init_sent,init_acked;reg [15:0] init_busy;integer init_free;
+ reg [31:0] init_sent,init_acked;reg [15:0] init_busy;
+ wire signed [31:0] init_free;wire init_free_valid;wire [5:0] init_free_index;
  wire [31:0] groups_per_bank=(node_count+((1<<(OWNER_BITS+2))-1))>>(OWNER_BITS+2);
  wire [31:0] init_total=groups_per_bank*3;
  wire [31:0] state_i=init_sent-groups_per_bank;
  wire [31:0] init_node=((state_i>>1)<<(OWNER_BITS+2))|(BANK<<2)|((state_i&1)<<1);
- always @*begin init_free=-1;for(integer i=0;i<16;i=i+1)if(!init_busy[i]&&init_free<0)init_free=i;end
+ r2_first64 init_select({48'b0,~init_busy},init_free_valid,init_free_index);
+ assign init_free=init_free_valid?{28'b0,init_free_index[3:0]}:32'hffffffff;
  always @(posedge clk)begin
   if(rst)begin
    state<=IDLE;done<=0;local_error<=0;has_bucket<=0;min_bucket<=0;groups<=0;last_bitmap_valid<=0;pointer<=NIL;key<=0;

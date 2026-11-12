@@ -1,4 +1,41 @@
 `timescale 1ns/1ps
+// The external bank's 32 live contexts keep their original low-ID priority.
+// Decode each state in parallel, then select through balanced trees. Counts
+// have bounded widths at every adder level, including the all-32-live case.
+module r2_bank_context_select(input wire [127:0] states,
+ output wire signed [31:0] free_context,send_context,prop_context,publish_context,
+ output wire [5:0] live_count,pop_count);
+ wire [31:0] free_bits,send_bits,prop_bits,publish_bits,pop_bits;
+ for(genvar i=0;i<32;i=i+1)begin:decode
+  wire [3:0] state=states[i*4+:4];
+  assign free_bits[i]=state==0;
+  assign send_bits[i]=state==1||state==5||state==9||state==11;
+  assign prop_bits[i]=state==3;
+  assign publish_bits[i]=state==7;
+  assign pop_bits[i]=state==1||state==2;
+ end
+ wire fv,sv,pv,av;wire [5:0] fi,si,pi,ai;
+ r2_first64 free_select({32'b0,free_bits},fv,fi);
+ r2_first64 send_select({32'b0,send_bits},sv,si);
+ r2_first64 prop_select({32'b0,prop_bits},pv,pi);
+ r2_first64 publish_select({32'b0,publish_bits},av,ai);
+ assign free_context=fv?{27'b0,fi[4:0]}:32'hffffffff;
+ assign send_context=sv?{27'b0,si[4:0]}:32'hffffffff;
+ assign prop_context=pv?{27'b0,pi[4:0]}:32'hffffffff;
+ assign publish_context=av?{27'b0,ai[4:0]}:32'hffffffff;
+ r2_popcount32 live_sum(~free_bits,live_count);
+ r2_popcount32 pop_sum(pop_bits,pop_count);
+endmodule
+
+module r2_popcount32(input wire [31:0] bits,output wire [5:0] count);
+ wire [1:0] a[0:15];wire [2:0] b[0:7];wire [3:0] c[0:3];wire [4:0] d[0:1];
+ for(genvar i=0;i<16;i=i+1)begin:l1 assign a[i]={1'b0,bits[2*i]}+{1'b0,bits[2*i+1]};end
+ for(genvar i=0;i<8;i=i+1)begin:l2 assign b[i]={1'b0,a[2*i]}+{1'b0,a[2*i+1]};end
+ for(genvar i=0;i<4;i=i+1)begin:l3 assign c[i]={1'b0,b[2*i]}+{1'b0,b[2*i+1]};end
+ for(genvar i=0;i<2;i=i+1)begin:l4 assign d[i]={1'b0,c[2*i]}+{1'b0,c[2*i+1]};end
+ assign count={1'b0,d[0]}+{1'b0,d[1]};
+endmodule
+
 // Preserve exact four-way cache policy without a loop-carried victim chain:
 // highest matching way, lowest invalid available way, otherwise first
 // available way in circular replacement order. Masks are evaluated in parallel.

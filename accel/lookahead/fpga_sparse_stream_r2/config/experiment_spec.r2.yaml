@@ -100,12 +100,12 @@ m5_candidate:
   request_output_stage: 1
   request_FIFO_total_capacity_including_stages: 64
   owner_selection: balanced_first32_and_parallel_way_masks_preserving_original_order
-  current_RTL: many32_way_tree_a
+  current_RTL: many32_bank_tree_a
   last_fully_calibrated_RTL: many32_way_tree_a
   current_model: many32_request_model_c
-  modified_path_calibration: parallel_way_8_97_and_36_passed_32_97_passed_36_and_capacity_running
+  modified_path_calibration: bank_selection_8_97_passed_36_running_32_F1_F0_pending
   shared_fabric_32_calibration: 97_full_cycle_output_traffic_exact
-  current_OOC: many32_way_context_a
+  current_OOC: many32_bank_context_a
   main_seconds_qualified: false
 fixed_physical_time_sensitivity:
   kernel_period_ps: [5000, 8000]
@@ -142,3 +142,15 @@ qualified_frozen_tile_OOC:
   source_parameters_and_97_plus_36_calibration_bound: true
   scope: frozen_8_prototype_only_not_new_fabric_way_32_candidate_or_board
   report: timing/many8_context_tree_a/routed_sta_v2/qualification_review.json
+
+bank_context_repair:
+  basis: actual_complete32_commit_context_priority_critical_path
+  context_count: 32
+  priority: original_low_ID_preserved_balanced_tree
+  population_counts: bounded_width_balanced_tree
+  initializer_selection: original_low_ID_16_entry_balanced_tree
+  XSim_cases: 689840
+  XSim_all_pass: true
+  complete8_97_cycle_output_traffic_exact: true
+  complete32_F1_F0_recalibration: running
+  clock_inherited: false
