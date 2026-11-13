@@ -273,9 +273,10 @@
   },
   "pending_commands": [
     "Continue authorized R2 execution; no stage approvals. Latest complete P8 calibration97+36+18+4 passed; do not repeat or overwrite completed evidence.",
-    "Physical jobs in active_physical_jobs are authoritative. H runs P8 impl/parentSTA. B onehot impl exited08:13:36 legally468494nets,414660LUT100427FF; parent5/8/10STA active; 5ns mechanical negative saved, do not source again. D uses impl_spread_a/routed_sta_spread_a; original impl_1 failed and preserved. Other P32 routes continue.",
+    "B central_onehot_a is finished, only unit80MHz at12.5ns qualified; all5/8/10ns setup failures preserved. 133files archive completed_central_onehot_route_0840 verified. B idle, no new source needed. Never transfer unit clock to complete32; defaultDATA_ONEHOT0 unchanged.",
+    "A P8 readonly placement diagnosis finished and archived0843(15files), matched27core/P32F1 comparison passed; A idle. J P32F1 diagnosis archived0806, idle. No diagnostic source needs relaunching; original H route continues.",
+    "Physical jobs in active_physical_jobs are authoritative. H runs P8 impl/parentSTA. D uses impl_spread_a/routed_sta_spread_a; original impl_1 failed and preserved. Other P32 routes continue.",
     "P8 native40 handles15506(60g2),10162(16g2),99451(120g2),87809(16g1), each BNN/LSTM40, all running. P32gap4 handle89340 still running. For each terminal pair audit_complete_work.py capacities8192/8192, audit_model_native_reuse.py, then exact candidate binding; partial progress is not a result. Fresh P8 input checks recorded per run.",
-    "A runs read-only P8 placement_diagnosis_0747 source on copied DCPe9f21516f4afe65a9fed43d70ca344cc0eb3599b28986a96baa7375c56521f53; capture47550 retrieved. Exec g10:1665 may need handoff retrieval. Query A before Tcl and never source twice. J P32F1 placement_diagnosis_0749 completed/archived0806(15files), idle. Review/archive A when source ends, compare matched P32F1/P8F1 core sources and scope.",
     "Main0808 snapshot VERIFIED96410files across18snapshots; next predecessor0808. New1220files contain793258651rawbytes/105704156archivebytes, including full P8 RTL calibration. Ten active native batches explicitly deferred and require final raw-evidence delta. Side completed_router_F1_placement_0806 VERIFIED15files.",
     "Only exact complete32 routed setup/hold/pulse/constraints/fully-routed qualification can assign seconds. Unit/8lane clocks and synthesis/placement estimates cannot. Bind all native complete work and extra actual-period RTL calibration, explicitly convert cycle-memory parameters to ns. Preserve all failures and null seconds where unqualified.",
     "After remaining experiments finish, consolidate report, verify archives, recheck original protection, commit and push independent branch through bounded fast-forward checkpoints; never force or merge main. Branch has not yet been pushed."
@@ -417,7 +418,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "96b1d3b13efd2561bda1a3daa7669a413e6770e6",
+  "checkpoint_commit": "a6e56c749043f66d653a1e5c1ad7370afb63c386",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -2049,13 +2050,6 @@
       "strategy": "Congestion_SSI_SpreadLogic_high",
       "recovery": "same project separate run already active; original impl_1 preserved failed; do not reset or relaunch"
     },
-    "central_onehot_a": {
-      "session": "vivado-20261112-171744-63335f93",
-      "last_observed_stage": "impl_1",
-      "STA_followup": "routed_sta_v2",
-      "status": "standalone_physical_followup_active",
-      "recovery": "same frozen previously synthesized413842LUT DATA_ONEHOT1 unit; first route launched05:30:30; no full32 integration"
-    },
     "many32_p8_router_context_10ns_a": {
       "session": "vivado-20261112-191902-487477ac",
       "last_observed_stage": "impl_1",
@@ -2107,6 +2101,16 @@
       "qualification": "timing/many8_router_ready_context_a/routed_sta_v2/qualification_review.json",
       "archive": "evidence_snapshot/completed_router8_route_0602",
       "scope": "8lane only"
+    },
+    "central_onehot_a": {
+      "session": "vivado-20261112-171744-63335f93",
+      "last_observed_stage": "impl_1",
+      "STA_followup": "routed_sta_12p5_0829",
+      "status": "complete_unitonly80MHz_qualified",
+      "recovery": "same frozen previously synthesized413842LUT DATA_ONEHOT1 unit; first route launched05:30:30; no full32 integration",
+      "qualification": "timing/central_onehot_a/routed_sta_12p5_0829/unit_qualification_review.json",
+      "archive": "evidence_snapshot/completed_central_onehot_route_0840",
+      "scope": "C33P32 DATA_ONEHOT1 unit only, not full32 or board"
     }
   },
   "failed_route_diagnosis": {
@@ -2157,7 +2161,7 @@
     }
   },
   "payload_onehot_physical_followup": {
-    "status": "route_completed_STA_active",
+    "status": "completed_unit80MHz_qualified",
     "launch_utc": "2026-11-13T05:30:30Z",
     "OOC": "central_onehot_a",
     "new_basis": "central_reduction_a completed with62694resource-conflict nets,17.146ns worst data path96.092percent wire",
@@ -2165,7 +2169,7 @@
     "frozen_source_and_previous_evidence_rehashed": true,
     "default_RTL_DATA_ONEHOT": 0,
     "full_kernel_integration": false,
-    "clock_qualified": false,
+    "clock_qualified": true,
     "source_scope": "read-only existing frozen candidate; no new RTL source edit",
     "not_one_factor_ablation_against_old_reduction_unit": true,
     "route_child_exit_utc": "2026-11-13T08:13:36Z",
@@ -2182,7 +2186,24 @@
       "RAMB36": 0,
       "RAMB18": 0,
       "URAM": 0
-    }
+    },
+    "slower_period_test": {
+      "period_ns": 12.5,
+      "tag": "routed_sta_12p5_0829",
+      "status": "passed_unitonly",
+      "record": "timing/central_onehot_a/slower_period_followup_0829.json",
+      "scope": "unitonly; no reroute/RTL change; no assumed complete32 clock",
+      "exec_handoff": "g10:1675 retrieved300s handoff; query B current status before Tcl",
+      "source_exit_code": 0,
+      "source_elapsed_s": 407.928
+    },
+    "primary_STA_status": "completed5_8_10_all_negative_setup_hold_positive",
+    "primary_STA_source_exit_code": 0,
+    "primary_STA_elapsed_s": 10645.149,
+    "unit_qualified_mhz": 80,
+    "whole_kernel_clock_qualified": false,
+    "qualification": "timing/central_onehot_a/routed_sta_12p5_0829/unit_qualification_review.json",
+    "archive": "evidence_snapshot/completed_central_onehot_route_0840"
   },
   "ports8_candidate": {
     "decision": "analysis/ports8_candidate_decision_0556.json",
@@ -2331,7 +2352,9 @@
         "directory": "model/many32_p8_request_model_a/large_l16_g1"
       }
     ],
-    "native_launched_utc": "2026-11-13T08:08:00.049969+00:00"
+    "native_launched_utc": "2026-11-13T08:08:00.049969+00:00",
+    "placement_review": "timing/many32_p8_router_context_10ns_a/placement_diagnosis_0747/review.json",
+    "matched_P32_placement_comparison": "analysis/ports8_vs32_placed_0843.json"
   },
   "router8_clock_qualification": {
     "RTL": "many8_router_ready_a",
@@ -2378,13 +2401,17 @@
     },
     "P8_placement": {
       "session": "vivado-20261112-161837-7d305dc5",
-      "status": "reports_running",
+      "status": "completed",
       "log": "supervision/ports8_placement_capture_0747.log",
       "directory": "timing/many32_p8_router_context_10ns_a/placement_diagnosis_0747",
-      "recovery": "A source already launched; parent exec g10:1665 may need handoff retrieval; query A before any Tcl, never source twice. Original H implementation untouched.",
+      "recovery": "A source running; 300s handoff g10:1665 retrieved. Query A before any Tcl, never source twice. Original H implementation untouched.",
       "scope": "read-only P8 placed DCP resources/congestion/setup estimate; not frequency qualification",
       "capture_handle": 47550,
-      "input_sha256": "e9f21516f4afe65a9fed43d70ca344cc0eb3599b28986a96baa7375c56521f53"
+      "input_sha256": "e9f21516f4afe65a9fed43d70ca344cc0eb3599b28986a96baa7375c56521f53",
+      "review": "timing/many32_p8_router_context_10ns_a/placement_diagnosis_0747/review.json",
+      "archive": "evidence_snapshot/completed_ports8_placement_0843",
+      "comparison": "analysis/ports8_vs32_placed_0843.json",
+      "clock_qualified": false
     },
     "router32_F1_placement": {
       "session": "vivado-20261112-203252-7b55fe2c",
