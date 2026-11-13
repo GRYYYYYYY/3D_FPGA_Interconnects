@@ -176,12 +176,24 @@
       "all_cycle_output_traffic_histogram_phase_exact": true,
       "record": "model/many32_f0_model_a/suite_calibration/calibration.json",
       "scope": "full32topology at frozen default memory; full40andnewpipelinecapacityresults separate"
+    },
+    {
+      "RTL": [
+        "many32_checked_a",
+        "many32_f0_checked_a"
+      ],
+      "models": [
+        "many32_request_model_c",
+        "many32_request_f0_model_a"
+      ],
+      "scope": "L32P32 MC8192 CC8192 U1R1 F1/F0 each97 fullcases+36 fixedns+4 boundaries; cycles/output/traffic exact; no inherited clock",
+      "native_complete40_verified": true
     }
   ],
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "finish address/checked32 calibration; review actual full-core routed STA; await matchedF0 native40 audits; bind exact clock only after qualification, archive,verify,push independent branch",
+  "next_action": "review copied full32 placement diagnostics and actual full32 routed STA; qualify only tested setup/hold/pulse period; bind clock to exact completed calibration/native40; final archive, preservation audit and independent branch push",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -208,7 +220,7 @@
     "capacity_q40_tests": 2,
     "new_model_calibrated": false
   },
-  "physical_channel_scope": "complete8 latestbank97+36+Q40; complete32 latestbankF1/F0 eachfresh97+36; theirQ40/hotboundariesrunning",
+  "physical_channel_scope": "latest checked32 F1/F0 each fresh97+36+4 exact; same full32 topology/model binaries audited on complete native40; no full32 clock qualification",
   "owner_service_scope": {
     "version": "owner_pipe_c",
     "warm_hit_max_retire_II1_streak": 4096,
@@ -227,7 +239,7 @@
     "node_capacity": 512,
     "independent_model_calibrated": false
   },
-  "complete_small_rtl_latest": "many32_bank_tree_a fresh97+36 all exact; newQ40/hot boundaries running; many32_f0_bank_a address suite running",
+  "complete_small_rtl_latest": "many32_checked_a and many32_f0_checked_a: each97 full cases,36 fixed-ns cases,4 Q40/hot boundaries all exact",
   "large_node_state_standalone": {
     "rtl": "node_state_b",
     "node_address_space": 4194304,
@@ -260,12 +272,13 @@
     "many32_f0_bank_context_a": "vivado-20261112-180611-3c758959"
   },
   "pending_commands": [
-    "All existing native jobs, calibration pipelines and source-Tcl STA waits remain owned by this session; never resubmit them.",
-    "Poll active_vivado_sessions with vivado_status(action=session); read completed files. Both latest32checked F1/F0 routes are now launched and their existing routed_sta_v2/run.tcl waits must finish.",
-    "After H central_reduction_a old routed_sta/run.tcl becomes idle, preserve its expected stale status-guard error and source its already prepared routed_sta_v2/run.tcl.",
-    "After nativeF0 terminal receipts, existing work-audit gates run; then bind native ALT identity and summarize.",
-    "After exact full32clock review and full97+36+4boundaries pass, use bind_complete_candidate.py to assign simulated seconds with explicit cycle-to-ns memory assumptions.",
-    "Archive remaining completed artifacts using checkpoint_20261113T0235 as predecessor; verify; commit; audit protected originalworktree; push independent branch using bounded fastforward checkpoints."
+    "All planned native40 jobs and all four validation/recovery pipelines completed. Never resubmit them. Latest32 F1/F0 each97+36+4 pass and match native work/ALT identity audits.",
+    "Poll active original implementations C,D,E,G,H,I with vivado_status(action=session). Do not restart active source-Tcl commands. Do not infer run completion from stale progress_hint.",
+    "Additional exact-target10ns fixed-time calibrations running: F1 exec78185 and F0 exec28947, each18cases via existing frozen executables; inspect logs/calibration receipts and archive after completion. No native40 replays.",
+    "B vivado-20261112-171744-63335f93 executes placement_diagnosis_0331/run.tcl on a hash-verified copy of completed D placement. Inspect completion, review reports, archive diagnostics without DCP; original D implementation continues untouched.",
+    "When H central_reduction_a old routed_sta/run.tcl is idle, preserve stale status-guard failure if present, then source existing routed_sta_v2/run.tcl.",
+    "After exact complete32 route/STA review, qualify only tested nonnegative setup/hold/pulse period; bind_complete_candidate.py must validate exact frozen32 source, parameters, calibration and native model before simulated seconds.",
+    "Checkpoint0314 verified83525files/12snapshots. Use0314 as predecessor for later calibration/boundary/diagnostic deltas; commit explicitly selected archives and never stage raw DCPs or protected original files. Final preserve audit then bounded fast-forward push of independent branch."
   ],
   "large_node_state_path_scope": {
     "build": "external_f",
@@ -284,8 +297,9 @@
       "members": 1024,
       "changed": 512
     },
-    "full_native_large_batch_still_pending": true,
-    "qualified_frequency_mhz": null
+    "full_native_large_batch_still_pending": false,
+    "qualified_frequency_mhz": null,
+    "completion_scope": "historical external_f8 source remains small-prototype-only; native40 completion belongs to separately bound latest full32 in complete_candidate_binding"
   },
   "software_transforms": {
     "prepared_CSR_POP_CPU": "software/prepared_pop_a/summary.json",
@@ -360,7 +374,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-13T02:54:42.287044+00:00",
+  "updated_utc": "2026-11-13T03:35:32.940857+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -403,7 +417,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "7b3d7c47a4b481b3ac99af9a5c51b53d37fcf013",
+  "checkpoint_commit": "a34191b2e7c4cc930294eb3495efeeef2961525c",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -1150,7 +1164,7 @@
     "RTL": "many8_grant_a",
     "main_candidate_qualification_inherited": false
   },
-  "latest_fully_calibrated_32_F1": "many32_address_a:97+36+4boundaries all exact; original missing-argv wrapper failure preserved, resumed missing tail passed",
+  "latest_fully_calibrated_32_F1": "many32_checked_a:97+36+4 all exact; resumed only missing boundary tail after preserved CLI failure",
   "bank8_clock_qualification": {
     "updated_utc": "2026-11-13T00:08:05.812010+00:00",
     "scope": "complete8 F1 bank-tree prototype L8 P8 MC1024 CC512 U0 R1, many8_bank_tree_a. Not newer grant/address variants, any32kernel, native timing, shell or board.",
@@ -1251,12 +1265,12 @@
     "route_started_utc": "2026-11-13T00:11:25Z",
     "clock_qualified_mhz": null
   },
-  "verified_checkpoint_snapshot": "evidence_snapshot/checkpoint_20261113T0235",
-  "verified_checkpoint_files": 83267,
+  "verified_checkpoint_snapshot": "evidence_snapshot/checkpoint_20261113T0314",
+  "verified_checkpoint_files": 83525,
   "verified_checkpoint_predecessor_count": 10,
   "conditional_issue_screen": "analysis/issue_bound_0019.json",
   "branch_pushed": false,
-  "latest_fully_calibrated_32_F0": "many32_f0_address_a:97+36+4boundaries all exact; missing-argv wrapper failure preserved with passed tail-only recovery",
+  "latest_fully_calibrated_32_F0": "many32_f0_checked_a:97+36+4 all exact; tail-only recovery after preserved missing-model-argv failure",
   "active_address_candidate": {
     "F1_RTL": "many32_address_a",
     "F0_RTL": "many32_f0_address_a",
@@ -1366,7 +1380,7 @@
   },
   "active_vivado_sessions": {
     "vivado-20261112-161837-7d305dc5": "many8_checked_context_a DONE qualified125MHz only this8prototype",
-    "vivado-20261112-171744-63335f93": "central_onehot_a standalone synthesis_active; prior grant8 completed/archived",
+    "vivado-20261112-171744-63335f93": "central_onehot_a DONE synthesis; resource negative, no unit route or full integration",
     "vivado-20261112-164509-ef1e3de5": "many32_checked_context_10ns_a route_launched02:04",
     "vivado-20261112-173934-eb0a0adf": "many32_f0_checked_context_10ns_a route_launched01:57",
     "vivado-20261112-180611-3c758959": "many32_f0_bank_context_a route_and_STA_active",
@@ -1385,7 +1399,9 @@
     "implementation_target_ns": 10,
     "qualified_clock_mhz": null,
     "source_binding": "timing/checked32_bindings_0055.json",
-    "8_gate": "model/many8_request_model_b/checked_calibration/calibration.json"
+    "8_gate": "model/many8_request_model_b/checked_calibration/calibration.json",
+    "F1_validation": "97+36+4boundaries passed",
+    "F0_validation": "97+36+4boundaries passed"
   },
   "complete_candidate_binding": {
     "record": "analysis/bank32_bound_0129.json",
@@ -1395,7 +1411,9 @@
     "rejected_wrong_width_cache_run_native_identity_and_unit_clock": true,
     "whole32_clock_qualified": false,
     "main_seconds": null,
-    "native40_scenarios": 6
+    "native40_scenarios": 6,
+    "latest_checked32_F1": "analysis/checked32_bound_0256.json",
+    "latest_checked32_F0": "analysis/checked32_F0_bound_0328.json"
   },
   "evidence_restore_test": "supervision/restoration_test_0055.json",
   "legacy_pre_registered_complete": "analysis/legacy_pre_registered_complete_0102.json",
@@ -1473,7 +1491,7 @@
     "evidence": "snapshot checkpoint_20261113T0130 exists, verify_0130.log pending. Next snapshot must use it as predecessor. Latest committed HEAD52d3c8faccc7d0af5f186e9db71f26d62bddd8f0; not pushed.",
     "push": "After completion/protection audit push independent branch in fastforward checkpoints336bb48f,fbd1cf5a,d46f5f17,52d3c8fa,later commits to avoid >2GB packs; never force or modify main."
   },
-  "verified_checkpoint_snapshot_count": 11,
+  "verified_checkpoint_snapshot_count": 12,
   "many32_f0_checked_synth": {
     "LUT": 944933,
     "FF": 551508,
@@ -1557,7 +1575,7 @@
     "clock_qualified": false,
     "fresh32_calibration97_passed": true,
     "fixedns36_passed": true,
-    "boundaries": "running",
+    "boundaries": "four passed; exact cycle/output/traffic",
     "archive": "completed_checked32_f1_synth_0204"
   },
   "boundary_pipeline_argument_failure": {
@@ -1575,7 +1593,8 @@
     ],
     "resume_receipts": "rtl/<variant>_boundary_resume_0209.json",
     "no_RTL_or_native_batch_restart": true,
-    "capacity_validation_still_pending": true
+    "capacity_validation_still_pending": false,
+    "all_four_missing_tails_completed": true
   },
   "fabric_payload_onehot_candidate": {
     "RTL_parameter": "DATA_ONEHOT",
@@ -1590,7 +1609,7 @@
     "unit_OOC": "timing/central_onehot_a",
     "implementation_target_period_ns": 5,
     "qualified_clock_mhz": null,
-    "status": "unit_RTL_and_fault_checks_passed_actual_synthesis_pending",
+    "status": "functional_pass_synthesis_resource_negative_not_integrated",
     "integration_gate": "require independent cycle exactness and actual resource/path evidence before full integration",
     "unit_RTL_validation": {
       "all_pass": true,
@@ -1603,6 +1622,55 @@
       "faults": "simultaneous unused IDs17/63,sticky error,reset recovery all exact",
       "calibration": "rtl/fabric_onehot_a/calibration.json",
       "fault_receipt": "rtl/fabric_onehot_a/fault_validation/receipt.json"
+    },
+    "actual_result": {
+      "updated_utc": "2026-11-13T03:12:04.604365+00:00",
+      "candidate": "DATA_ONEHOT=1 central C33P32 only",
+      "decision": "not_integrated_resource_objective_failed",
+      "functional_cycle_and_fault_equivalence_passed": true,
+      "actual_synthesis": {
+        "LUT": 413842,
+        "FF": 100412,
+        "RAMB36": 0,
+        "RAMB18": 0,
+        "URAM": 0,
+        "period_ns": 5,
+        "setup_ns": 0.198,
+        "hold_ns": -0.074
+      },
+      "matched_previous_actual_synthesis": {
+        "OOC": "central_grant_a",
+        "LUT": 227188,
+        "FF": 100414,
+        "period_ns": 5,
+        "setup_ns": -0.259,
+        "hold_ns": -0.074
+      },
+      "LUT_increase": 186654,
+      "LUT_increase_fraction": 0.8215838864728771,
+      "same_physical_interface": {
+        "clients": 33,
+        "ports": 32,
+        "launch_bits": 18250,
+        "capture_bits": 18282,
+        "real_BUFG_and_context_included": true
+      },
+      "reason": "The goal was to reduce central interconnect resource pressure observed in current32 placement/routing. Actual standalone LUT grows82.16%; synthesis setup improves but is not routed clock qualification. This option retains all-to-all connectivity and is not promoted into the already congested complete32 candidate. No full32 resource or frequency extrapolation is published.",
+      "route_status": "not_launched_for_this_standalone_option",
+      "complete_kernel_integration": false,
+      "default_DATA_ONEHOT": 0,
+      "qualified_clock_mhz": null,
+      "board_measured": false,
+      "evidence_sha256": {
+        "timing/central_onehot_a/source_binding.json": "2e39a5be0905ff7429cc23ecc1ad57c9d6f3729d99c8d69916ef1987ae8cb8bf",
+        "timing/central_onehot_a/project/central_onehot_a.runs/synth_1/synth_timing.rpt": "6555032b0eca7d324335793d9c3afe2ff6ab3b50401d8348be6473eb11dd2921",
+        "timing/central_onehot_a/project/central_onehot_a.runs/synth_1/synth_utilization.rpt": "0904ce9ed013cd99e739d0dde5a4f87feeadc810a2d7f8aa0ffc986fc0edb023",
+        "timing/central_onehot_a/project/central_onehot_a.runs/synth_1/ram_utilization.rpt": "9568fa8ab51e12ba627dc1b0c8868bc56ebbe0652a8357de099a1473dfe840c9",
+        "timing/central_onehot_a/project/central_onehot_a.runs/synth_1/runme.log": "a070fa65a3400050ebf860a5365068d87e7cd703234626995281268a025e6226",
+        "rtl/fabric_onehot_a/calibration.json": "01f5ff79730f4024d3acd05ed85187b9e9fb51f76dcc244328f3fdc5e7718705",
+        "rtl/fabric_onehot_a/build_command.json": "f37ce391a59c6313fa2f157948b732afd828f597bd6d03c80cc0a78140605221",
+        "rtl/fabric_onehot_a/fault_validation/receipt.json": "0918898f61d0d5c597ad825436b430055f0f0d11a7bf0e362ea27268bdc70ab8"
+      }
     }
   },
   "address8_clock_qualification": {
@@ -1740,13 +1808,40 @@
     },
     "native_ALT_identity": "baselines/native_reuse/request_f0_complete_outputs_0252.json",
     "work_capacity_ACK_audit_status": "passed",
-    "full_trace_archive_status": "raw complete on shared filesystem; after0235 snapshot, pending next archive",
+    "full_trace_archive_status": "all completed native40 raw traces included in verified0314 delta; later checked-F0 boundary tail remains for next delta",
     "qualified_clock_mhz": null,
     "work_capacity_ACK_audit": "analysis/complete_work_many32_request_f0_model_a_large_l60_g2.json",
     "matched_cache_cycle_ablation": "analysis/cache_R1_complete_0255.json",
     "candidate_bindings": [
       "analysis/address32_F0_bound_0255.json",
-      "analysis/bank32_F0_bound_0255.json"
+      "analysis/bank32_F0_bound_0255.json",
+      "analysis/checked32_F0_bound_0328.json"
     ]
+  },
+  "placement_diagnosis": {
+    "variant": "many32_f0_checked_context_10ns_a",
+    "folder": "timing/many32_f0_checked_context_10ns_a/placement_diagnosis_0331",
+    "status": "input_frozen_sha_verified_read_only_reports_running_in_B",
+    "Vivado_session_reserved": "vivado-20261112-171744-63335f93",
+    "commands_verified_on_local_2022_2": [
+      "report_design_analysis -congestion",
+      "report_utilization -slr"
+    ],
+    "scope": "read-only reports from copied placed DCP, no impact on active original implementation and no routed frequency qualification",
+    "input_sha256": "e3347c2e029bdd2fc7001bfeb6fd374a04920df4904da2a3749aff4e779e929b"
+  },
+  "checkpoint_verification_log": "supervision/verify_0314.log",
+  "additional_fixed_time_calibration_10ns": {
+    "reason": "current full32 implementation target10ns differs from existing5/8ns36-case calibration",
+    "period_ns": 10,
+    "scenarios_each": 18,
+    "F1_RTL": "many32_checked_a",
+    "F0_RTL": "many32_f0_checked_a",
+    "F1_exec_handle": 78185,
+    "F0_exec_handle": 28947,
+    "tag": "fixed_time_10ns_0338",
+    "status": "running",
+    "clock_qualified": false,
+    "scope": "same frozen executables, explicit ns-to-cycle quantization, synchronous ports without CDC, not native40 rerun"
   }
 }
