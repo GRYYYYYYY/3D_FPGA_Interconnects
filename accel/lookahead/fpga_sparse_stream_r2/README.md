@@ -225,3 +225,9 @@ plan is `config/p8_f0_native_plan.json`; the active watcher is recorded in
 before recovery; a second launch must not overwrite or duplicate existing runs.
 Architecture cycles do not require a qualified OOC clock, but simulated seconds
 and FPGA/software time ratios remain unavailable until qualification.
+
+`compare_port_count.py OUTPUT.json P32_BINDING.json P8_BINDING.json` accepts
+matched F0 or F1 evidence. F0 requires every frozen model source to be identical;
+only F1 permits the two explicitly reviewed historical versions of its unused
+F0 class. Mixed cache modes are rejected before writing a result. New P8-F0
+native comparisons remain pending their own complete batch and binding gates.

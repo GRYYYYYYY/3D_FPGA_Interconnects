@@ -1,4 +1,4 @@
-"""Compare completed F1 native batches whose only active design change is P.
+"""Compare completed native batches whose only active design change is P.
 
 Usage: OUTPUT.json P32_BINDING.json P8_BINDING.json (basenames below analysis).
 Both bindings must already contain exact source/calibration/work/ACK audits.
@@ -45,11 +45,12 @@ def read(rel):
 
 bindings = [read('analysis/' + n) for n in [a.p32, a.p8]]
 assert [b['parameters']['PHYS'] for b in bindings] == [32, 8], 'expected ordered P32/P8 bindings'
-assert all(b['parameters']['CACHE_ENABLE'] == 1 for b in bindings), 'F1 bindings required'
+cache_mode = bindings[0]['parameters']['CACHE_ENABLE']
+assert cache_mode in [0, 1] and all(b['parameters']['CACHE_ENABLE'] == cache_mode for b in bindings), 'same F0/F1 cache choice required'
 model_sources, macros, rtl_sources, indexed = [], [], [], []
 for b, ports in zip(bindings, [32, 8]):
     assert b['complete97_fixed36_boundaries4_calibrated']
-    assert b['parameters']['CACHE_ENABLE'] == 1
+    assert b['parameters']['CACHE_ENABLE'] == cache_mode
     assert b['parameters']['L'] == 32 and b['parameters']['PHYS'] == ports
     for rel, expected in b['evidence_sha256'].items():
         assert sha(r / rel) == expected, 'changed binding evidence: ' + rel
@@ -59,7 +60,7 @@ for b, ports in zip(bindings, [32, 8]):
         assert sha(r / model / 'source' / name) == expected, 'changed frozen model: ' + name
     model_sources.append(mb['source_sha256'])
     macros.append(dict(x[2:].split('=', 1) for x in mb['command'] if x.startswith('-D') and '=' in x))
-    assert macros[-1]['TILE_CACHE'] == '1' and macros[-1]['TILE_P'] == str(ports)
+    assert macros[-1]['TILE_CACHE'] == str(cache_mode) and macros[-1]['TILE_P'] == str(ports)
     # The sole historic source difference is inside methods of this unselected
     # F0 class. Bind the exact reviewed versions; do not waive arbitrary edits.
     source = r / model / 'source'
@@ -109,6 +110,7 @@ assert model_sources[0].keys() == model_sources[1].keys()
 different = [k for k in model_sources[0] if model_sources[0][k] != model_sources[1][k]]
 assert set(different) <= {'owner_f0_cycle_model.hpp'}
 if different:
+    assert cache_mode == 1, 'F0 requires identical active model sources'
     assert [s[different[0]] for s in model_sources] == [
         '2cc16bdf9456e93bb8b65d2f49cb88e8b3faff6edd38ccceea20cbfe9e9ac68f',
         'a3305758a2f42acf9385ad2537c4a4a4122f922db8f03be894782fa1120179ba']
@@ -146,7 +148,8 @@ result = {'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
           'all_pass': True, 'rows': rows, 'evidence_sha256': hashes,
           'common_RTL_files': 27, 'same_active_model_and_macros_except_ports': True,
           'inactive_model_source_difference': different,
-          'inactive_source_reason': 'TILE_CACHE=1 instantiates OwnerCycle; the exact reviewed F0 method-only change is not instantiated',
+          'cache_enabled': cache_mode,
+          'inactive_source_reason': ('TILE_CACHE=1 instantiates OwnerCycle; the exact reviewed F0 method-only change is not instantiated' if different else 'all frozen model source files identical'),
           'unmatched_P32_contracts': sorted(set(indexed[0]) - set(indexed[1])),
           'unmatched_P8_contracts': sorted(set(indexed[1]) - set(indexed[0])),
           'scope': 'matched complete native40 cycle-domain simulations; each port retains64IDs so total physical credits also change with port count; routing/resource/clock evidence is separate',
