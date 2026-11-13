@@ -8,6 +8,7 @@ No timing exception is emitted. Resources include the context overhead.
 """
 from pathlib import Path
 import sys
+from topology_limits import validate_many_topology
 
 kind = sys.argv[1]
 s = Path(__file__).resolve().parents[1]
@@ -39,6 +40,7 @@ elif kind == 'state':
                ('mshr_peak',6),('dirty_peak',5)]
 elif kind == 'many':
     L,P,MC,CC,U,R = map(int,sys.argv[2:8])
+    validate_many_topology(L, P)
     CACHE = int(sys.argv[8]) if len(sys.argv)>8 else 1
     top, dut = f'r2_many{L}' + ('_f0' if CACHE == 0 else '') + '_context', 'r2_many_tile'
     params = f'.L({L}),.PHYS({P}),.MEMBER_CAP({MC}),.CHANGED_LIMIT({CC}),.USE_URAM({U}),.REQUEST_STAGE({R}),.CACHE_ENABLE({CACHE})'

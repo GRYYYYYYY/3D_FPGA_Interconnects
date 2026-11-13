@@ -4,7 +4,7 @@
 
 ## 当前可复核结果
 
-有效 POP 的 whole-pair 归约、原桶闭合后等待所有事件排空的结束规则、稀疏目录/工作列表、有限 owner/state 缓存、changed/commit 流水、共享物理通道、cost 一次加载和 Q=1 batch 控制均已有可运行实现。当前完整32路候选为32 owners、每owner 8192成员/changed容量、32个假设物理通道，每通道64个ID；尚未实现或验证64路完整核。
+有效 POP 的 whole-pair 归约、原桶闭合后等待所有事件排空的结束规则、稀疏目录/工作列表、有限 owner/state 缓存、changed/commit 流水、共享物理通道、cost 一次加载和 Q=1 batch 控制均已有可运行实现。当前完整32路候选为32 owners、每owner 8192成员/changed容量、32个假设物理通道，每通道64个ID；尚未实现或验证64路完整核。 当前harness物理/发射掩码为32bit，central client ID为6bit；64个owner再加controller需要65个central clients，不能只改lane参数。构建入口已显式拒绝超出当前实现范围的配置，见 `analysis/topology_limit_guards_0137.json`；此限制不代表新互连实现不可行。
 
 新共享通道归约版本的8路及32路均通过97个完整RTL/独立模型用例，核对全部周期、输出和流量。8路及32路均完成36组固定纳秒延迟假设校准。进一步的并行4-way缓存选择已通过81920组XSim穷举与owner/state单元检查，完整8路和32路F1/F0均重新通过97项及36组固定ns校准。最新bank上下文选择树的完整8路通过97项、36组固定ns及两个Q40输出边界；对应32路F1/F0均已通过新的97项、36组及四项Q40/容量边界校准。随后直接one-hot握手与state物理地址前移版本的完整8路分别通过97项、36组及两个Q40；地址前移32路F1/F0的重新校准和完整OOC正在运行。进一步的FP32错误路径修复已通过完整8路97项、36组固定ns及两个Q40；完整32路重新校准和独立10ns目标OOC正在运行，尚无完整32核时钟结论。
 
@@ -36,9 +36,9 @@
 | many32_reg_b，旧多写MSHR完整32核综合 | 1,575,155 | 848,380 | 1064 / 296 / 288 | −7.110/+0.025 | 超LUT容量，停止此固定候选布线 |
 | many32_c，旧ready完整32核综合 | 1,505,153 | 817,663 | 1665 / 446 / 288 | −6.091/+0.025 | 超LUT容量，停止此固定候选布线 |
 
-真实40-sample完整架构仿真已通过一个新请求流水场景：16-cycle基础延迟、2-cycle通道间隔、0至12周期扰动下，BNN/LSTM分别180,141,407/184,018,993cycles。完整输出、逐wave提交唯一性与工作量、全部ACK、初始化/输出流量和有限容量审计通过，且输出与合格native ALT一致。旧registered-ready模型60-cycle场景分别285,155,267/293,638,486cycles也通过；两组同时改变请求流水与延迟，不能把其比值当作单项流水收益。默认60-cycle场景也已完成并通过审计（见下表）；120-cycle和F0继续运行，尚无合格32核频率下的秒数。`board_measured=false`、`whole_kernel_timing_closed=false`、`fpga_simulated_superiority_supported=false` 保持不变。外存延迟及通道服务是明确假设，不是HBM实测；5ns/8ns固定时间组合目前也只是频率敏感性假设。
+真实40-sample完整架构仿真已通过一个新请求流水场景：16-cycle基础延迟、2-cycle通道间隔、0至12周期扰动下，BNN/LSTM分别180,141,407/184,018,993cycles。完整输出、逐wave提交唯一性与工作量、全部ACK、初始化/输出流量和有限容量审计通过，且输出与合格native ALT一致。旧registered-ready模型60-cycle场景分别285,155,267/293,638,486cycles也通过；两组同时改变请求流水与延迟，不能把其比值当作单项流水收益。默认60-cycle及120-cycle场景也已完成并通过审计（见下表）；F0继续运行，尚无合格32核频率下的秒数。`board_measured=false`、`whole_kernel_timing_closed=false`、`fpga_simulated_superiority_supported=false` 保持不变。外存延迟及通道服务是明确假设，不是HBM实测；5ns/8ns固定时间组合目前也只是频率敏感性假设。
 
-完整候选绑定检查已将bank32的97项、36组固定ns、四项容量边界、冻结RTL/模型参数、16/60-cycle真实40batch工作审计和native ALT输出关联到同一模型可执行文件。由于完整32核尚无合格时钟，四个batch的模拟秒数均保持null。五项反例确认8路时钟、算术单元时钟、错误cache配置、其他模型run及其他native绑定不能混入；见 `analysis/bank32_bound_0104.json` 与 `analysis/binding_guard_tests_0104.json`。
+完整候选绑定检查已将bank32的97项、36组固定ns、四项容量边界、冻结RTL/模型参数、16/60/120-cycle真实40batch工作审计和native ALT输出关联到同一模型可执行文件。由于完整32核尚无合格时钟，六个batch的模拟秒数均保持null。五项反例确认8路时钟、算术单元时钟、错误cache配置、其他模型run及其他native绑定不能混入；见 `analysis/bank32_bound_0129.json` 与 `analysis/binding_guard_tests_0104.json`。
 
 软件对照已经完成并保存独立进程原始样本。新增prepared CSR+POP同范围GPU V2均值：BNN basic/compact 0.156690577/0.151799969s，LSTM 0.159888578/0.160247990s；旧GPU V2原样保留。native E2/Process及ALT与STRICT的历史差异另表处理。当前没有FPGA优于这些基线的完整证据。
 
@@ -50,13 +50,14 @@
 |---|---:|---:|---:|---:|---|
 | F1，新请求流水modelC | 16 | 180,141,407 | 184,018,993 | 75.889 / 77.446 | 完整输出、工作量、容量、native ALT身份通过 |
 | F1，新请求流水modelC | 60 | 285,126,884 | 293,652,813 | 75.479 / 77.029 | 完整输出、工作量、容量、native ALT身份通过 |
+| F1，新请求流水modelC | 120 | 476,474,977 | 491,059,110 | 75.459 / 77.020 | 完整输出、工作量、容量、native ALT身份通过 |
 | F1，旧registered-ready modelD | 60 | 285,155,267 | 293,638,486 | 75.475 / 77.032 | 完整输出、工作量、容量通过；历史对照 |
 
-16与60-cycle行的延迟假设不同，不能从比值归因流水加速。同为60-cycle时，新请求流水BNN周期下降0.00995%，LSTM上升0.00488%，不支持吞吐显著改善。120-cycle场景及匹配F0仍运行。旧modelE仅优化主机求值，完整两图总周期、阶段日志、服务计数、逐周期摘要及输出与modelD完全一致；它是模型实现一致性检查，不是独立硬件测量样本。
+16与60-cycle行的延迟假设不同，不能从比值归因流水加速。同为60-cycle时，新请求流水BNN周期下降0.00995%，LSTM上升0.00488%，不支持吞吐显著改善。三档F1场景均已完成；匹配F0仍运行。旧modelE仅优化主机求值，完整两图总周期、阶段日志、服务计数、逐周期摘要及输出与modelD完全一致；它是模型实现一致性检查，不是独立硬件测量样本。
 
 新F1的BNN/LSTM逐wave唯一提交数分别104,210,988/106,141,205，与M1全部匹配；成员/changed峰值为6892/6863和6986/6982，均低于8192。owner/state MSHR与dirty峰值均实际达到32/16。16-cycle延迟场景的完整batch平均发射7.144/7.116候选/周期，观测峰值25/24，存在真实多候选并行；不以32-lane名义值充当实际吞吐。
 
-在16-cycle延迟场景的已观测流量及gap2假设下，平均事务吞吐约为gap限制上限的82.3%/82.2%；60-cycle场景降为51.7%/51.2%，平均候选发射4.514/4.459每周期。该条件服务界用于解释已完成结果，既不是其他架构的上限，也不是HBM板测。每数组事务、阶段占比、重叠的owner/state请求停顿计数见 `analysis/completed_native_2349.json`；工作审计和native身份引用见checkpoint。旧阶段记录中的“尚无完整大图”仅描述其当时状态。
+在16-cycle延迟场景的已观测流量及gap2假设下，平均事务吞吐约为gap限制上限的82.3%/82.2%；60-cycle场景降为51.7%/51.2%，平均候选发射4.514/4.459每周期。该条件服务界用于解释已完成结果，既不是其他架构的上限，也不是HBM板测。每数组事务、阶段占比、重叠的owner/state请求停顿计数见 `analysis/completed_native_0126.json`；工作审计和native身份引用见checkpoint。旧阶段记录中的“尚无完整大图”仅描述其当时状态。
 
 ## 已实现并核验的证据
 
@@ -106,7 +107,7 @@ prepared_CSR_valid_POP_CPU完整包含每sample mutable初始化、cost复制、
 
 - 新grant/address/checked完整8路及完整32路的routed OOC与setup/hold审查。已有冻结8路100/125MHz和state/pair单元200MHz不能转移给新完整32核。
 - 最新address与checked完整32路F1/F0的独立97项、36组固定ns及四项Q40/容量边界校准；bank版本的这些验证已全部通过。
-- 完整大图120-cycle内存敏感性、匹配F0对照、逐wave工作/容量审计和native输出身份核验。16/60-cycle F1已完成；不外推未结束batch。
+- 匹配F0完整大图对照、逐wave工作/容量审计和native输出身份核验。16/60/120-cycle F1均已完成；不外推未结束batch。
 - 通过完整核OOC后，绑定其精确版本和频率，明确内存周期参数到纳秒的换算，再建立模拟秒数列；无板卡shell/实板结论。
 - 汇总全部正负结果、验证证据快照、复核原worktree保护状态并推送独立分支。
 
@@ -266,3 +267,5 @@ The completed-native work auditor passes d3/d4: candidate and changed work equal
 2026-11-13T00:54:56.536734+00:00 checked-arithmetic milestone: new and original pair units both pass actual5ns setup/hold/pulse with zeroDRC and12check_timing categories zero; matchedcontext resources783/813LUT and612/611FF. The first mechanical review falsely required an RTSTAT-10 warning; clean zero-violation DRC is now explicitly accepted, and the failed review artifacts remain. Complete8checked97+36+twoQ40passes; full8physical5ns target starts00:49:46. Complete32checked F1/F0 fresh calibration starts from that passed8gate; immutable complete32physical contexts launch synthesis00:52:47/53 with explicit10ns target. This target is motivated by actualbank8only100MHz and ongoing32routing congestion, not claimedfrequency or an isolated arithmetic timing comparison. Old5ns candidates continue unchanged. Main32clock remainsnull.
 
 2026-11-13T01:10:26.771967+00:00 follow-up: bank8 at its actually qualified10ns period passes18fixed-ns RTL/model cases (80/300/600ns base,5/10/20ns minimum gap,integer-cycle ceil and5ns jitter steps); this is conditional memory calibration, not memory measurement. Complete8checked synthesis235674LUT154723FF368RAMB36+120RAMB18,5ns setup-.346/hold-.080,26level result-data path; route starts01:06:06. Two existing evidence archives are actually restored into a new directory:193files110703498rawbytes, all hashes verified; full archive-chain hashes are separately verified.
+
+2026-11-13T01:30:15.450110+00:00 completion: latency120/gap2 F1 native40 completes at476474977/491059110cycles; complete work/capacity/ACK and per-wave commit uniqueness audits pass, nativeALTidentityexact. Meanissue2.701/2.667 and observed gap-only transfer utilization30.93%/30.63% are model observations, not fixed service ceilings. F0native stillruns. Intermediate address32 F1/F0 syntheses finish1091778/952227LUT,607749/551476FF,1064RAMB36+328/296RAMB18+288URAM; both5ns-1.075/-.080 legacy arithmetic error path. Their individualroutes are skipped because implemented checked-error successors already synthesize; bank baselines and latest full32OOCs continue. All predecessor evidence retained.

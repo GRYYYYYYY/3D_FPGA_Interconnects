@@ -1,0 +1,81 @@
+{
+  "all_pass": true,
+  "supported_validation_cases": 4,
+  "invalid_configurations": [
+    {
+      "configuration": [
+        64,
+        32
+      ],
+      "error": "implemented many-tile lanes must be a power of two in 2..32; 64 needs wider host masks and central client IDs/grants"
+    },
+    {
+      "configuration": [
+        32,
+        64
+      ],
+      "error": "implemented many-tile physical ports must be a power of two in 1..32"
+    },
+    {
+      "configuration": [
+        3,
+        8
+      ],
+      "error": "implemented many-tile lanes must be a power of two in 2..32; 64 needs wider host masks and central client IDs/grants"
+    },
+    {
+      "configuration": [
+        8,
+        0
+      ],
+      "error": "implemented many-tile physical ports must be a power of two in 1..32"
+    },
+    {
+      "configuration": [
+        1,
+        8
+      ],
+      "error": "implemented many-tile lanes must be a power of two in 2..32; 64 needs wider host masks and central client IDs/grants"
+    }
+  ],
+  "CLI_rejections_before_output_mutation": [
+    {
+      "command": [
+        "build_many.py",
+        "unsupported64_guard",
+        "64",
+        "32"
+      ],
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/build_many.py\", line 4, in <module>\n    validate_many_topology(int(sys.argv[2]), int(sys.argv[3]))\n  File \"/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/topology_limits.py\", line 4, in validate_many_topology\n    raise ValueError('implemented many-tile lanes must be a power of two in 2..32; 64 needs wider host masks and central client IDs/grants')\nValueError: implemented many-tile lanes must be a power of two in 2..32; 64 needs wider host masks and central client IDs/grants\n"
+    },
+    {
+      "command": [
+        "build_many_model.py",
+        "unsupported64_guard",
+        "64",
+        "32",
+        "8192",
+        "8192"
+      ],
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/build_many_model.py\", line 4, in <module>\n    validate_many_topology(int(sys.argv[2]), int(sys.argv[3]))\n  File \"/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/topology_limits.py\", line 4, in validate_many_topology\n    raise ValueError('implemented many-tile lanes must be a power of two in 2..32; 64 needs wider host masks and central client IDs/grants')\nValueError: implemented many-tile lanes must be a power of two in 2..32; 64 needs wider host masks and central client IDs/grants\n"
+    },
+    {
+      "command": [
+        "gen_ooc_context.py",
+        "many",
+        "64",
+        "32",
+        "8192",
+        "8192",
+        "1",
+        "1",
+        "1"
+      ],
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/gen_ooc_context.py\", line 43, in <module>\n    validate_many_topology(L, P)\n  File \"/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/topology_limits.py\", line 4, in validate_many_topology\n    raise ValueError('implemented many-tile lanes must be a power of two in 2..32; 64 needs wider host masks and central client IDs/grants')\nValueError: implemented many-tile lanes must be a power of two in 2..32; 64 needs wider host masks and central client IDs/grants\n"
+    }
+  ],
+  "scope": "guard only; does not qualify untested2/16lane designs or modify current8/32RTL/model"
+}

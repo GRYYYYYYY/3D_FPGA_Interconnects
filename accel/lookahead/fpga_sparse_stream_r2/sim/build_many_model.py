@@ -1,5 +1,7 @@
 from pathlib import Path
 import subprocess,shutil,json,hashlib,sys
+from topology_limits import validate_many_topology
+validate_many_topology(int(sys.argv[2]), int(sys.argv[3]))
 root=Path(__file__).resolve().parents[4];s=root/'accel/lookahead/fpga_sparse_stream_r2';r=root/'results/fpga_sparse_stream_r2_20261112/model'/sys.argv[1];r.mkdir(parents=True,exist_ok=False);f=r/'source';f.mkdir()
 for p in [*s.glob('*model*.hpp'),s.parent/'fpga_sparse_stream/tile_model.hpp',s/'sim/many_tile_driver.cpp']:
  dst=f/p.name;shutil.copy2(p,dst);dst.write_text(dst.read_text().replace('../fpga_sparse_stream/owner_model.hpp','owner_model.hpp').replace('../fpga_sparse_stream/tile_model.hpp','tile_model.hpp'))

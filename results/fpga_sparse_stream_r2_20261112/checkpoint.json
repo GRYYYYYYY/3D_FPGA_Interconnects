@@ -181,7 +181,7 @@
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "finish address/checked32 independent calibration and actual full-core route/STA; await C120 and matchedF0 native40 audits; bind exact clock only after qualification, archive and push independent branch",
+  "next_action": "finish address/checked32 calibration; review actual full-core routed STA; await matchedF0 native40 audits; bind exact clock only after qualification, archive,verify,push independent branch",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -397,7 +397,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-13T01:19:24.681358+00:00",
+  "updated_utc": "2026-11-13T01:50:21.021941+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -440,7 +440,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "d46f5f17d386531b3944887b7a168b5e4a3d4d5e",
+  "checkpoint_commit": "52d3c8faccc7d0af5f186e9db71f26d62bddd8f0",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -1165,8 +1165,8 @@
     "V2_denominator": false,
     "native_ALT_STRICT_congestion_differences": 24434
   },
-  "complete_native_latest_summary": "analysis/completed_native_2349.json",
-  "complete_native_latest_service": "analysis/completed_service_2349.json",
+  "complete_native_latest_summary": "analysis/completed_native_0126.json",
+  "complete_native_latest_service": "analysis/completed_service_0126.json",
   "large_complete_batch_default_scenario": {
     "model": "many32_request_model_c",
     "cache": "F1",
@@ -1297,8 +1297,8 @@
     "route_started_utc": "2026-11-13T00:11:25Z",
     "clock_qualified_mhz": null
   },
-  "verified_checkpoint_snapshot": "checkpoint_20261113T0103",
-  "verified_checkpoint_files": 75421,
+  "verified_checkpoint_snapshot": "checkpoint_20261113T0130",
+  "verified_checkpoint_files": 80410,
   "verified_checkpoint_predecessor_count": 9,
   "conditional_issue_screen": "analysis/issue_bound_0019.json",
   "branch_pushed": false,
@@ -1423,12 +1423,12 @@
     "vivado-20261112-164509-ef1e3de5": "many32_checked_context_10ns_a synth; previouscheckedpairunit200qualified",
     "vivado-20261112-173934-eb0a0adf": "many32_f0_checked_context_10ns_a synth; previouslegacypairunit200qualified",
     "vivado-20261112-180611-3c758959": "many32_f0_bank_context_a route_and_STA_active",
-    "vivado-20261112-183223-bc1f6643": "many32_address_context_a synth",
+    "vivado-20261112-183223-bc1f6643": "many32_address_context_a synthDONE;routeSKIPPEDsuperseded;freshcalibration_active",
     "vivado-20261112-185211-8e7c9bec": "many32_context_reduction_b route_and_STA_active",
     "vivado-20261112-191902-487477ac": "central_reduction_a route_active_v1_STA_guard_needs_v2_after_completion",
     "vivado-20261112-194208-cd9c35ec": "many32_bank_context_a route_and_STA_active",
     "vivado-20261112-203252-7b55fe2c": "many8_address_context_a route_and_STA_active",
-    "vivado-20261112-205847-e7d439e5": "many32_f0_address_context_a synth"
+    "vivado-20261112-205847-e7d439e5": "many32_f0_address_context_a synthDONE;routeSKIPPEDsuperseded;freshcalibration_active"
   },
   "active_checked_candidate": {
     "RTL_F1": "many32_checked_a",
@@ -1441,13 +1441,14 @@
     "8_gate": "model/many8_request_model_b/checked_calibration/calibration.json"
   },
   "complete_candidate_binding": {
-    "record": "analysis/bank32_bound_0104.json",
+    "record": "analysis/bank32_bound_0129.json",
     "exact_same_model_executable_calibration_and_native": true,
     "checks": "97complete+36fixedns+4boundaries+frozen_source/parameters+complete_work/native_ALT",
     "negative_guards": "analysis/binding_guard_tests_0104.json",
     "rejected_wrong_width_cache_run_native_identity_and_unit_clock": true,
     "whole32_clock_qualified": false,
-    "main_seconds": null
+    "main_seconds": null,
+    "native40_scenarios": 6
   },
   "evidence_restore_test": "supervision/restoration_test_0055.json",
   "legacy_pre_registered_complete": "analysis/legacy_pre_registered_complete_0102.json",
@@ -1469,5 +1470,61 @@
     "hold_ns": -0.08,
     "critical_path": "frontend arithmetic operand to result,26logic levels",
     "scope": "synthesis only; route starts01:06:06"
-  }
+  },
+  "many32_f0_address_synth": {
+    "LUT": 952227,
+    "FF": 551476,
+    "RAMB36": 1064,
+    "RAMB18": 296,
+    "URAM": 288,
+    "period_ns": 5,
+    "setup_ns": -1.075,
+    "hold_ns": -0.08,
+    "critical_path": "legacy frontend arithmetic operand to sticky error",
+    "route": "skipped_only_this_intermediate_successor_checked_error_full32_is_already_synthesizing",
+    "archive": "completed_address32_f0_synth_0122"
+  },
+  "many32_address_synth": {
+    "LUT": 1091778,
+    "FF": 607749,
+    "RAMB36": 1064,
+    "RAMB18": 328,
+    "URAM": 288,
+    "period_ns": 5,
+    "setup_ns": -1.075,
+    "hold_ns": -0.08,
+    "critical_path": "legacy frontend arithmetic operand to sticky error",
+    "route": "skipped_only_this_intermediate_successor_checked_error_full32_is_already_synthesizing",
+    "archive": "completed_address32_f1_synth_0129"
+  },
+  "large_complete_batch_latency120": {
+    "model": "many32_request_model_c",
+    "BNN_cycles": 476474977,
+    "LSTM_cycles": 491059110,
+    "work_output_capacity_ACK_audit": "analysis/complete_work_many32_request_model_c_large_l120_g2.json",
+    "native_identity": "baselines/native_reuse/complete_model_outputs_0125.json",
+    "all_pass": true,
+    "clock_qualified_mhz": null
+  },
+  "topology_implementation_limit": {
+    "maximum_many_lanes": 32,
+    "maximum_many_physical_ports": 32,
+    "basis": "current host uint32 masks and central6bit client IDs;64owners would need65centralclients",
+    "guard_test": "analysis/topology_limit_guards_0137.json",
+    "scope": "current implementation only; no global architecture no-go",
+    "RTL_or_model_cycle_change": false
+  },
+  "continuation_commands_0143": {
+    "note": "Do not resubmit existing jobs or execute Tcl while a session source command is active. No qualified32clock yet.",
+    "complete32_checked": [
+      "After synth runme.log actual ExitingVivado, review resources/timing and fresh pipeline_receipt.json tests.",
+      "C=vivado-20261112-164509-ef1e3de5 F1;D=vivado-20261112-173934-eb0a0adf F0; setup already loaded, synth running.",
+      "After review: launch_runs impl_1 -to_step route_design -jobs 1; then source corresponding already prepared routed_sta_v2/run.tcl (contains wait_on_run)."
+    ],
+    "central_legacy_STA": "H=vivado-20261112-191902-487477ac source routed_sta/run.tcl remains active; after completion v1 may reject Complete, Failed Timing. Preserve failure and execute existing routed_sta_v2/run.tcl only after session is idle.",
+    "native_F0": "Existing audit gates for model/many32_request_f0_model_a/large_l60_g2 and model/many32_f0_model_a/large_l60_g2 wait for bothnative40 outputs. Do not duplicate gates. After audits pass bind native identity, summarize, qualify via exact fullkernelOOC only.",
+    "evidence": "snapshot checkpoint_20261113T0130 exists, verify_0130.log pending. Next snapshot must use it as predecessor. Latest committed HEAD52d3c8faccc7d0af5f186e9db71f26d62bddd8f0; not pushed.",
+    "push": "After completion/protection audit push independent branch in fastforward checkpoints336bb48f,fbd1cf5a,d46f5f17,52d3c8fa,later commits to avoid >2GB packs; never force or modify main."
+  },
+  "verified_checkpoint_snapshot_count": 10
 }
