@@ -1,0 +1,116 @@
+{
+  "variant": "many32_p8_router_a",
+  "model": "many32_p8_request_model_a",
+  "lanes": 32,
+  "physical_channels": 8,
+  "cache": 1,
+  "gate": {
+    "path": "model/many8_request_model_b/router_ready_calibration/calibration.json",
+    "sha256": "6a444a026eb2108f5c9679766e4bb7a5762725869f292af42bfc6e29cef7e1d0"
+  },
+  "status": "passed",
+  "steps": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/build_many.py",
+        "many32_p8_router_a",
+        "32",
+        "8",
+        "-GMEMBER_CAP=8192",
+        "-GCHANGED_LIMIT=8192",
+        "-GUSE_URAM=1",
+        "-GREQUEST_STAGE=1",
+        "-GCACHE_ENABLE=1"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py",
+        "many32_p8_router_a",
+        "60",
+        "native"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py",
+        "many32_p8_router_a",
+        "60",
+        "fixtures"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py",
+        "many32_p8_router_a",
+        "120",
+        "stress,stress_random"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/run_many.py",
+        "many32_p8_router_a",
+        "60",
+        "external_nodes_65536,external_nodes_4194304"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/calibrate_many_suites.py",
+        "many32_p8_request_model_a",
+        "many32_p8_router_a",
+        "router_ready_calibration"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/sweep_fixed_time.py",
+        "many32_p8_router_a",
+        "many32_p8_request_model_a"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/tests/batch_capacity.py",
+        "many32_p8_router_a"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/tests/many_hot_capacity.py",
+        "many32_p8_router_a",
+        "many32_p8_request_model_a"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/calibrate_many_boundaries.py",
+        "many32_p8_request_model_a",
+        "many32_p8_router_a"
+      ],
+      "returncode": 0
+    }
+  ],
+  "started_utc": "2026-11-13T05:55:58.676002+00:00",
+  "ended_utc": "2026-11-13T08:05:44.319414+00:00"
+}

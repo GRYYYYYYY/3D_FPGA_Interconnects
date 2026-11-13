@@ -6,7 +6,7 @@
 
 有效 POP 的 whole-pair 归约、原桶闭合后等待所有事件排空的结束规则、稀疏目录/工作列表、有限 owner/state 缓存、changed/commit 流水、共享物理通道、cost 一次加载和 Q=1 batch 控制均已有可运行实现。当前完整32路候选为32 owners、每owner 8192成员/changed容量、32个假设物理通道，每通道64个ID；另有保持32 owners、改为8共享物理通道的P8候选正在独立验证。尚未实现或验证64路完整核。 当前harness物理/发射掩码为32bit，central client ID为6bit；64个owner再加controller需要65个central clients，不能只改lane参数。构建入口已显式拒绝超出当前实现范围的配置，见 `analysis/topology_limit_guards_0137.json`；此限制不代表新互连实现不可行。
 
-最新P32候选是按真实布局路径修复的并行router ready归约。完整8路已通过97项、36组固定纳秒、两个Q40并取得本版本125MHz OOC资格。新32路F1现已通过97项逐周期/输出/流量/阶段核对、36组固定ns、18组10ns补充及4项Q40/热点容量边界；同一模型的三档延迟、两张图共六个native40完整batch已重新绑定，见`analysis/router32_bound_0627.json`；额外gap1两项完整batch也已通过审计并绑定，见`analysis/router32_gap1_bound_0725.json`。F0也已通过97+36+18+4，同一模型的BNN/LSTM两个native40 batch已经重新绑定，见`analysis/router32_F0_bound_0658.json`。对应完整32核综合已完成，实际布局布线仍在运行；所有完整32核时钟均为null。旧checked F0默认route拥塞失败和中央33×32单元非法路由的证据均已保存，同网表SSI策略与更小的32-owner/8共享通道完整候选正在验证。
+最新P32候选是按真实布局路径修复的并行router ready归约。完整8路已通过97项、36组固定纳秒、两个Q40并取得本版本125MHz OOC资格。新32路F1现已通过97项逐周期/输出/流量/阶段核对、36组固定ns、18组10ns补充及4项Q40/热点容量边界；同一模型的三档延迟、两张图共六个native40完整batch已重新绑定，见`analysis/router32_bound_0627.json`；额外gap1两项完整batch也已通过审计并绑定，见`analysis/router32_gap1_bound_0725.json`。F0也已通过97+36+18+4，同一模型的BNN/LSTM两个native40 batch已经重新绑定，见`analysis/router32_F0_bound_0658.json`。对应完整32核综合已完成，实际布局布线仍在运行；所有完整32核时钟均为null。旧checked F0默认route拥塞失败和中央33×32单元非法路由的证据均已保存，同网表SSI策略继续执行。32-owner/8共享通道P8候选已通过独立97+36+18+4校准，八个真实完整40batch和物理实现正在运行。
 
 下表为已完成的真实小图RTL完整batch。统一60-cycle基础延迟、0至12周期随机扰动、最短2-cycle通道接收间隔；不是板测或已定频结果。`F1`为有限4-way×32-set×32B owner缓存，`F0`为保留有限并发与ACK的无合并服务；state backing、物理通道、batch边界与请求流水保持对应。
 
@@ -48,7 +48,7 @@
 | many32_f0_checked_context_10ns_a，F0 | 944,933 | 551,508 | 1064 / 296 / 288 | +4.590 / −0.080ns | 路由失败，无频率资格 |
 | many32_router_ready_context_10ns_a，新P32 F1 | 1,079,700 | 607,788 | 1064 / 328 / 288 | +4.359 / −0.080ns | 实现中，无频率资格 |
 | many32_f0_router_ready_context_10ns_a，新P32 F0 | 947,951 | 551,507 | 1064 / 296 / 288 | +4.590 / −0.080ns | 实现中；只读布局诊断setup/hold仍负 |
-| many32_p8_router_context_10ns_a，P8 F1 | 920,818 | 560,586 | 1064 / 328 / 288 | +4.590 / −0.080ns | 独立校准及实现中，无频率资格 |
+| many32_p8_router_context_10ns_a，P8 F1 | 920,818 | 560,586 | 1064 / 328 / 288 | +4.590 / −0.080ns | 校准通过，完整模型与实现中，无频率资格 |
 
 完整BNN/LSTM模型、97项完整用例、36组固定纳秒校准与四项Q40/容量边界已分别绑定至同一F1/F0模型和冻结RTL，见 `analysis/checked32_bound_0256.json`、`analysis/checked32_F0_bound_0328.json`。这些绑定仍输出null秒数，等待对应完整核的实际路由资格。
 
@@ -125,7 +125,7 @@ prepared_CSR_valid_POP_CPU完整包含每sample mutable初始化、cost复制、
 
 ## 尚未完成
 
-- P8四项容量/批控制边界门、其独立BNN/LSTM完整40batch及延迟/带宽敏感性；已通过97+36+18项重新校准。P32 gap4完整模型仍在执行。
+- P8独立BNN/LSTM完整40batch及延迟/带宽敏感性：已通过97+36+18+4全部重新校准，四组配置共8个完整batch正在执行。P32 gap4完整模型仍在执行。
 - 完整32路的routed OOC与setup/hold审查；address与checked完整8路均已通过125MHz，grant完整8路通过100MHz。已有冻结8路100/125MHz和state/pair单元200MHz不能转移给新完整32核。
 - 将已完成的全部F1/F0 native40结果绑定到最终合格的完整核版本；完整输出、逐wave工作/容量/ACK审计与native身份已通过。
 - 通过完整核OOC后，绑定其精确版本和频率，明确内存周期参数到纳秒的换算，再建立模拟秒数列；无板卡shell/实板结论。
@@ -418,3 +418,24 @@ P8另已通过97+36+18，正执行四项容量/完整batch边界。该配置后�
 
 
 07:43证据补记：`checkpoint_20261113T0726`新增48文件，2,894,508,908原始字节、799,506,595归档字节，已通过全链逐文件SHA核验（95,190文件/17快照）。其中包含gap1两项完整提交/阶段/流量/输出记录；P8与gap4运行中的日志继续明确延后。P8最大cell Q40 RTL已单次启动完成40sample、1,889,264cycle、输出完全一致，其余边界仍在执行。
+
+
+## 08:06：新P32 F1布局诊断完成
+
+独立J会话读取已复制的placed DCP，输入SHA为`4b818b80863c696fb2075acfcf24f44e9b569fe5c1834fe024097a0f96f4c054`，原F实现继续运行。10ns估计setup−1.973ns、hold−0.338ns、pulse+4.300ns；1,405,256条可路由net中1,405,217尚未布线、39条显式gap，12类check_timing为0。实际placed资源1,070,543 LUT、608,190 FF、1064 RAMB36、328 RAMB18、288 URAM。SLR0/1/2 CLB占用97.47%/99.96%/98.75%，最大拥塞7；最坏路径从bank12前端候选经router仲裁/ready至bank26前端position，12层逻辑、11.394ns估计数据延迟，10.496ns估计布线（92.119%）、数据跨SLR五次。此为未布线估计，不能授予频率。15文件归档`completed_router_F1_placement_0806`已完整验证，作为同核心F1 P8布局的后续对照。
+
+## 08:07：P8独立并发域门通过，完整大图运行已启动
+
+`many32_p8_router_a`与独立模型通过97+36+18+4全部校准。两个Q40 RTL分别1,889,264/1,528,133cycle，单次启动完成40sample、全部输出一致；8192热点接受用例覆盖1,048,577节点地址、955,453cycle，8193用例按预期显式拒绝且无输出，均与独立模型逐周期相同。四项边界另行重放也全部一致。证据索引为`analysis/ports8_complete_calibration_0808.json`。
+
+现已启动P8自身的四组native40：基础延迟/最小服务间隔为60/2、16/2、120/2、16/1 cycle，每组BNN和LSTM各40sample，共8个完整batch。每次启动均再次验证workload、prepared CSR、golden和模型可执行文件身份，回执已记录。八项目前仍运行中；不借用P32流量、输出计时或时钟，也不以进度日志作为完整性能结果。P8物理实现和只读布局副本捕获继续执行。
+
+
+## 08:17：one-hot共享通道单元取得合法布线，时序审查继续
+
+`central_onehot_a`的实现子进程08:13:36正常退出，468,494条可路由net全部布通、错误为0；实际资源414,660 LUT、100,427 FF、无BRAM/URAM。5ns最终setup−6.302ns、hold+0.001ns、pulse+1.968ns，因此没有5ns频率资格。父会话仍执行同一实际网表的5/8/10ns STA，尚未完成最终审查，见`route_stage_review_0817.json`。
+
+该单元解决了本版本的路由合法性，但保留先前相对matched grant综合面积增加82.16%的负结果；与旧reduction单元比较还混入较新的direct-grant修复，不能作纯one-hot收益归因。默认完整核仍DATA_ONEHOT=0，未将该大面积单元集成到完整32核，也没有传递其单元时钟。
+
+
+08:26证据补记：`checkpoint_20261113T0808`新增1,220文件，793,258,651原始字节、105,704,156归档字节；全链96,410文件/18快照SHA校验通过。P8完成的RTL原始记录已包含，10个仍活动的native batch明确延后。原worktree HEAD、main、全部tracked文件状态及11个受保护指导/压缩文件复查不变，见`protection_0826.json`。A已启动P8布局副本的只读诊断，原H实现继续；其结果仍待完成。
