@@ -21,8 +21,10 @@ def read(name):
     return (d / name).read_text()
 
 def rules(text):
-    return {m[0]: {'severity': m[1], 'count': int(m[2])}
-            for m in re.findall(r'^\|\s*([A-Z]+-\d+)\s*\|\s*(\w+)\s*\|[^\n|]*\|\s*(\d+)\s*\|', text, re.M)}
+    # Vivado emits multiword severities such as "Critical Warning". Retain
+    # the entire cell so the allowlist rejects them instead of dropping rows.
+    return {m[0]: {'severity': m[1].strip(), 'count': int(m[2])}
+            for m in re.findall(r'^\|\s*([A-Z]+-\d+)\s*\|\s*([^\n|]+?)\s*\|[^\n|]*\|\s*(\d+)\s*\|', text, re.M)}
 
 checks = {}
 binding = json.loads((p / 'source_binding.json').read_text())
@@ -69,6 +71,7 @@ for f in files:
             h.update(part)
     hashes[str(f.relative_to(p))] = h.hexdigest()
 result = {'all_mechanical_checks_pass': all(checks.values()), 'checks': checks,
+          'checker_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
           'version': version, 'top': binding['top'], 'tested_period_ns': period,
           'setup_ns': wns, 'hold_ns': whs, 'pulse_width_ns': wpws,
           'route_counts': counts, 'methodology_rules': methodology, 'DRC_rules': drc,

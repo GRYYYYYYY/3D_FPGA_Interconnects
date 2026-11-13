@@ -4,6 +4,8 @@
 
 ## 当前可复核结果
 
+11:11 UTC 更新：旧 `many32_context_reduction_b` 完整32核已结束，仍有134,257条资源冲突，5ns setup/hold均负；父级资格检查已拒绝该结果。其余7个完整核物理任务和8个P8完整batch继续运行。此负结果及新的报告解析回归已保存，不能将命令退出成功视作合法路由或可用时钟。
+
 有效 POP 的 whole-pair 归约、原桶闭合后等待所有事件排空的结束规则、稀疏目录/工作列表、有限 owner/state 缓存、changed/commit 流水、共享物理通道、cost 一次加载和 Q=1 batch 控制均已有可运行实现。当前完整32路候选为32 owners、每owner 8192成员/changed容量、32个假设物理通道，每通道64个ID；另有保持32 owners、改为8共享物理通道的P8候选正在独立验证。尚未实现或验证64路完整核。 当前harness物理/发射掩码为32bit，central client ID为6bit；64个owner再加controller需要65个central clients，不能只改lane参数。构建入口已显式拒绝超出当前实现范围的配置，见 `analysis/topology_limit_guards_0137.json`；此限制不代表新互连实现不可行。
 
 最新P32候选是按真实布局路径修复的并行router ready归约。完整8路已通过97项、36组固定纳秒、两个Q40并取得本版本125MHz OOC资格。新32路F1现已通过97项逐周期/输出/流量/阶段核对、36组固定ns、18组10ns补充及4项Q40/热点容量边界；同一模型的三档延迟、两张图共六个native40完整batch已重新绑定，见`analysis/router32_bound_0627.json`；额外gap1/gap4四项完整batch也已通过审计并绑定，见`analysis/router32_gap1_bound_0725.json`和`analysis/router32_gap4_bound_0907.json`。F0也已通过97+36+18+4，同一模型的BNN/LSTM两个native40 batch已经重新绑定，见`analysis/router32_F0_bound_0658.json`。对应完整32核综合已完成，实际布局布线仍在运行；所有完整32核时钟均为null。旧checked F0默认route拥塞失败和中央33×32单元非法路由的证据均已保存，同网表SSI策略继续执行。32-owner/8共享通道P8候选已通过独立97+36+18+4校准，八个真实完整40batch和物理实现正在运行。
@@ -37,6 +39,7 @@
 | many8_router_ready_context_a，并行ready归约完整8核已路由 | 234,392 | 155,114 | 368 / 120 / 0 | −1.859/+0.007 | 同一网表8ns +1.141/+0.007，仅此8核125MHz |
 | state_address_context_a，地址前移state单元已路由 | 6,989 | 4,556 | 16 / 2 / 0 | +0.014/+0.001 | 完整性、4M backing与独立周期差分通过，仅此单元200MHz |
 | state_way_context_a，新选择state单元已路由 | 7,095 | 4,564 | 16 / 1 / 0 | −0.212/+0.012 | 同一已路由网表8ns STA +2.788/+0.012，仅此单元125MHz |
+| many32_context_reduction_b，旧共享通道归约完整32核，非法布线 | 1,078,639 | 607,495 | 1064 / 296 / 288 | −22.325/−0.088 | 134,257条资源冲突，RTSTAT-6，无频率资格 |
 | many32_mshr_a，旧线性选择完整32核综合 | 1,083,688 | 586,261 | 1064 / 296 / 288 | −14.408/+0.025 | 旧固定候选负结果，新完整32实现继续 |
 | many32_reg_b，旧多写MSHR完整32核综合 | 1,575,155 | 848,380 | 1064 / 296 / 288 | −7.110/+0.025 | 超LUT容量，停止此固定候选布线 |
 | many32_c，旧ready完整32核综合 | 1,505,153 | 817,663 | 1665 / 446 / 288 | −6.091/+0.025 | 超LUT容量，停止此固定候选布线 |
@@ -465,3 +468,17 @@ P8只读placed DCP的源/副本SHA为`e9f21516f4afe65a9fed43d70ca344cc0eb3599b28
 
 
 09:28证据补记：`checkpoint_20261113T0909`新增56份原始文件，2,895,182,371原始字节、802,413,160归档字节；全链96,466文件/19快照SHA核验通过。gap4的完整commit/phase/traffic/output证据已包含，八个P8仍活动的batch明确延后。`protection_0919.json`再次确认原worktree、main及11个受保护文件不变。P8终态监督流程已启动，仅等待现有运行，再顺序执行完整工作、native身份及精确绑定；失败保留现场，不重复启动实验。
+
+
+## 10:44：真实完整batch的有限外存布局核对
+
+P32/P8冻结harness的同一地址布局、真实workload/prepared header及完整job/output事务核对后，BNN/LSTM backing分别为1,605,730,304/1,631,147,264 bytes（约1.495/1.519 GiB）。其中proposal为32,825,344/33,341,440 bytes，128bit node-state为65,642,496/66,674,688 bytes，40sample的type/cell metadata为1,313,013,760/1,333,657,600 bytes；其余包括CSR、prepared edges、cost、job表和完整输出缓冲。LSTM最后不足整32B行累计640 bytes padding也已计入，输出写事务与完整结果一致。
+
+这些是`std::vector<Line>`实际分配公式及输入header推导出的有限设备backing容量；每笔接受地址都有边界和`line mod P`映射检查。它们不是板测容量、片上RAM数、运行时流量或零延迟存储模型，也不含host oracle/snapshot容器。每类区域的起止行、padding、8/32物理端口容量分配、输入及冻结driver SHA见`analysis/native_backing_layout_1044.json`；复现工具为`sim/analyze_backing_layout.py`。不改变任何运行中的RTL、模型、输入或周期。
+
+
+## 11:11 UTC：旧完整32核布线负结果和报告解析修复
+
+`many32_context_reduction_b` 的子进程于10:56:31退出，最终状态是 `route_design Complete, Failed Timing & Nets!`。1,392,311条可路由网中1,258,054条已完整布线，134,257条存在资源冲突，仍有276,497处node overlap；RTSTAT-6为Critical Warning。实际5ns报告setup −22.325ns、hold −0.088ns、pulse +1.800ns，12项check_timing均0不能弥补非法路由。实际资源1,078,639 LUT、607,495 FF、1064 RAMB36、296 RAMB18、288 URAM。父级STA门禁退出1，未执行8/10ns；不从负slack推导可用频率。完整原始报告、32份冻结源码和DCP hash已记录于 `timing/many32_context_reduction_b/completed_route_rejection_1102.json`，76份紧凑归档逐文件校验通过。新P32/P8实现继续，旧候选的失败不扩展为整个研究结论。
+
+检查这份真实报告时发现机械报告解析器的严重性列仅匹配单词，会漏掉 `Critical Warning`。已改为保留整个表格单元并按原allowlist拒绝未知/严重规则；没有放宽资格。旧完整核仍被独立的路由计数、setup、hold和父级状态检查拒绝，原结论未错误升级。新解析器在真实RTSTAT-6报告、13份既有合格报告、2个既有失败频点上复核，全部符合预期；原报告和资格文件均保留，没有重跑RTL或Vivado。回归入口为 `analysis/routed_rule_parser_regression_1101.json` 和 `analysis/routed_rule_parser_real_negative_1101.json`。
