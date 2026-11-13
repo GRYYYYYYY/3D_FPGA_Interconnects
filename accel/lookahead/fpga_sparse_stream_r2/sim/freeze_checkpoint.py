@@ -9,6 +9,17 @@ defer_running='--defer-running-batches' in sys.argv[3:]
 defer_rtl='--defer-running-rtl' in sys.argv[3:]
 running=[]
 running_rtl=[]
+completed_recovery_dirs=set()
+if '--include-completed-recovery' in sys.argv:
+ from recovery_evidence import validate_recovery
+ for terminal in (r/'recovery').glob('*/terminal.json'):
+  receipt=json.loads(terminal.read_text())
+  if receipt.get('status')!='passed':continue
+  qpath=terminal.parent/'qualification.json';q=json.loads(qpath.read_text())
+  validate_recovery(str(qpath.relative_to(r)),q)
+  for key in ['hot_summary','boundary_calibration','fixed10ns_calibration']:
+   completed_recovery_dirs.add((r/q[key]).parent)
+
 if defer_rtl:
  for receipt in (r/'rtl').glob('*_pipeline_receipt.json'):
   state=json.loads(receipt.read_text())
@@ -35,7 +46,8 @@ for p in r.rglob('*'):
  # in the next snapshot instead of repeatedly archiving growing prefixes.
  if (len(rel.parts)>2 and rel.parts[0]=='rtl' and
      any(rel.parts[1].startswith(v+'_') and rel.parts[1]!=v+'_build' for v in running_rtl)
-     and p.suffix in ['.csv','.bin','.log']):continue
+     and p.suffix in ['.csv','.bin','.log']
+     and not any(parent==p.parent or parent in p.parents for parent in completed_recovery_dirs)):continue
  # XSim unit runners freeze their SV directly inside rtl/<run>, unlike
  # Verilator runs which use source/. Preserve those exact unit test versions
  # too, while continuing to exclude generated C++ and simulator binaries.
@@ -44,7 +56,8 @@ for p in r.rglob('*'):
   # Exclude generated compiler logs only when they are pure C++ build output;
   # Verilator diagnostics/build failures remain in the compact evidence.
   files.append(p)
- if p.name=='output.bin':files.append(p)
+ if p.name in ['output.bin','representative_wave.bin']:files.append(p)
+ if p.suffix=='.jsonl' and rel.parts[0] in ['accumulator','software']:files.append(p)
 manifest=[]
 for p in sorted(set(files)):
  rel=p.relative_to(r);dest=out/rel
@@ -67,5 +80,5 @@ for p in sorted(set(files)):
   else:dest.write_bytes(raw)
   record['archive']=str(dest.relative_to(out))
  manifest.append(record)
-(out/'manifest.json').write_text(json.dumps({'scope':'checkpoint; raw evidence retained; active Vivado timing runs excluded until completed','predecessor':previous,'deferred_running_batches':[str(x.relative_to(r)) for x in running],'deferred_running_rtl_variants':running_rtl,'files':manifest,'source_base':'5651a34abb97939bee6402c5af585753ab07f64b'},indent=2)+'\n')
+(out/'manifest.json').write_text(json.dumps({'scope':'checkpoint; raw evidence retained; active Vivado timing runs excluded until completed','predecessor':previous,'deferred_running_batches':[str(x.relative_to(r)) for x in running],'deferred_running_rtl_variants':running_rtl,'completed_recovery_dirs':[str(p.relative_to(r)) for p in sorted(completed_recovery_dirs)],'files':manifest,'source_base':'5651a34abb97939bee6402c5af585753ab07f64b'},indent=2)+'\n')
 print('FROZEN',len(manifest),sum(x['bytes'] for x in manifest),'raw bytes',sum(p.stat().st_size for p in out.rglob('*') if p.is_file()),'archive bytes')

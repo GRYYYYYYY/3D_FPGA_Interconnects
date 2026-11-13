@@ -1,0 +1,50 @@
+experiment: R2_CONTINUATION_82860ce
+review_base: 82860ced203bde54f1fa267446b3d0edc521a293
+branch: accel/lookahead-sparse-stream-r2-20261112
+policy:
+  historical_evidence: append_only
+  original_interrupted_receipts: immutable
+  main_and_STRICT: unchanged
+  board_measured: false
+  full_kernel_qualified_fpga_seconds: null
+recovery:
+  plan: config/p8_f0_recovery_plan.json
+  manifest: recovery/p8_f0_resume_2108/qualification.json
+  reused_stages: [build_identity, native2, fixtures91, stress2, address2, calibration97, fixed36, batch40x2]
+  new_tail_stages: [hot8192_8193, boundary4, fixed10ns18]
+  check_only_must_pass_before_native_launch: true
+  native_batches:
+    workloads: [bnn_export, lstm_s2]
+    scenarios: [{latency_cycles: 60, gap_cycles: 2}, {latency_cycles: 16, gap_cycles: 2}, {latency_cycles: 16, gap_cycles: 1}]
+    jobs_per_start: 40
+    Q: 1
+accumulator:
+  semantic_contract: wave_private_INF_whole_pair_min_at_original_bucket_closure
+  owners: 32
+  candidate_lanes: 64
+  subbanks_per_owner: 2
+  owner: line4_low5
+  subbank: line4_bit5
+  sets_per_subbank: 1024
+  ways: 4
+  canonical_state_bits_per_node: 128
+  physical_row_bytes: 32
+  micro_scope: two_independent_subbanks_only
+  fragment_fifo_depth_per_subbank: 8
+  testbench_scratch_rows: 1048576
+  scratch_bytes_per_accumulator_line: 64
+  scratch_fragment_RMW_requests32B: 4
+  occupied_list_slots_per_subbank: 4096
+  empty_slot_scan_candidate: rejected_necessary_compute_enumeration_bound
+  flush_all_scratch_candidate: rejected_necessary_traffic_bound
+  hybrid_resident_direct: conditional_budget_only_unimplemented
+  inherited_calibration: none
+  assumed_frequencies_MHz: [125, 200]
+  OOC_target_period_ns: 5.0
+  complete_kernel_clock_qualification: null
+comparison:
+  timing_contract: RESIDENT_COMPLETE_BATCH_V2
+  prepared_POP_CUDA_seconds: {bnn_export: 0.151799969444, lstm_s2: 0.159888578444}
+  private_INF_GPU_job: job-7977d112-86f2-42f0-9c4e-6481294f1e30
+  controls: paired_prepared_POP_and_private_INF_on_same_worker
+  local_CPU_scope: separate_FPGA_host_not_H100_worker

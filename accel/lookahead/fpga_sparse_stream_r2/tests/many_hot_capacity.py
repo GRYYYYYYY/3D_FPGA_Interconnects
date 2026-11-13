@@ -5,12 +5,17 @@ than one million node addresses; no full-node state is placed in the RTL.
 """
 from pathlib import Path
 from array import array
-import json, struct, subprocess, sys
+import argparse, json, struct, subprocess, sys
 
 root = Path(__file__).resolve().parents[4]
 r = root / 'results/fpga_sparse_stream_r2_20261112'
-variant, model = sys.argv[1:3]
-out = r / 'rtl' / (variant + '_hot_capacity8192')
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('variant'); parser.add_argument('model')
+parser.add_argument('--tag', default='hot_capacity8192')
+a = parser.parse_args()
+variant, model = a.variant, a.model
+assert Path(a.tag).name == a.tag and a.tag not in ['.', '..']
+out = r / 'rtl' / (variant + '_' + a.tag)
 out.mkdir(exist_ok=False)
 receipts = []
 for count in [8192, 8193]:

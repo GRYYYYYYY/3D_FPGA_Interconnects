@@ -6,6 +6,7 @@ All inputs are existing evidence; this script launches no experiment.
 """
 from pathlib import Path
 import argparse, datetime, hashlib, json, re
+from recovery_evidence import validate_recovery
 
 root = Path(__file__).resolve().parents[4]
 r = root / 'results/fpga_sparse_stream_r2_20261112'
@@ -16,6 +17,7 @@ for name in ['rtl', 'model', 'calibration', 'ooc', 'binding']:
 p.add_argument('--work-audit', action='append', required=True)
 p.add_argument('--native-binding', action='append', required=True)
 p.add_argument('--sta-tag', default='routed_sta_v2', help='exact independently reviewed physical run tag')
+p.add_argument('--recovery-manifest', help='append-only qualification; old receipts remain unchanged')
 a = p.parse_args()
 require_tag = re.fullmatch(r'routed_sta[A-Za-z0-9_]*', a.sta_tag)
 if not require_tag:
@@ -78,7 +80,12 @@ fixed = read(fixed_path)
 require(fixed['all_pass'] and fixed['cases'] == len(fixed['results']) == 36, 'fixed-time36 calibration missing/failed')
 for row in fixed['results']:
     require(row['all_pass'] and row['results'][1]['executable_sha256'] == exe, 'fixed-time model differs')
-boundary = read(mp / ('boundary_calibration_' + a.rtl) / 'calibration.json')
+recovery = None
+if a.recovery_manifest:
+    recovery = validate_recovery(a.recovery_manifest, {'RTL':a.rtl,'model':a.model,'OOC':a.ooc})
+    read(a.recovery_manifest)
+boundary = read(recovery['boundary_calibration'] if recovery else
+                mp / ('boundary_calibration_' + a.rtl) / 'calibration.json')
 require(boundary['all_pass'] and len(boundary['results']) == 4 and boundary['executable_sha256'] == exe,
         'complete capacity/batch calibration missing/failed')
 require(all(x['passed'] and x['cycle_log_exact'] for x in boundary['results']), 'capacity/batch comparison failed')

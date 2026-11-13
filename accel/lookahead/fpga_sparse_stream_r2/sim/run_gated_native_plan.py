@@ -15,6 +15,7 @@ import subprocess
 import sys
 import threading
 import time
+from recovery_evidence import validate_recovery
 
 root = Path(__file__).resolve().parents[4]
 r = root / 'results/fpga_sparse_stream_r2_20261112'
@@ -52,10 +53,19 @@ def gates():
         return data
 
     try:
-        pipeline = read('rtl/' + plan['RTL'] + '_pipeline_receipt.json')
+        recovery = None
+        if plan.get('recovery_manifest'):
+            directory = (r / plan['recovery_manifest']).parent
+            if (directory / 'failed.json').exists():
+                raise RuntimeError('recovery dependency failed')
+            recovery = validate_recovery(plan['recovery_manifest'], plan)
+            read(plan['recovery_manifest'])
+            pipeline = dict(status='passed',model=plan['model'],variant=plan['RTL'],steps=[])
+        else:
+            pipeline = read('rtl/' + plan['RTL'] + '_pipeline_receipt.json')
         if pipeline['status'] == 'failed':
             raise RuntimeError('RTL validation dependency failed')
-        if plan.get('extra_parent_receipt'):
+        if plan.get('extra_parent_receipt') and recovery is None:
             extra_parent = read(plan['extra_parent_receipt'])
             if extra_parent['status'] in ['failed', 'not_run_dependency_failed']:
                 raise RuntimeError('extra fixed-time dependency failed')
@@ -87,10 +97,12 @@ def gates():
         assert full['model_executable_sha256'] == exe
         assert all(x['cycle_log_exact'] and x['outputs_exact'] and x['all_traffic_histogram_phase_summary_exact'] for x in full['results'])
         for tag, count in [('fixed_time', 36), ('fixed_time_10ns_a', 18)]:
-            fixed = read('rtl/' + plan['RTL'] + '_' + tag + '/calibration.json')
+            fixed = read(recovery['fixed10ns_calibration'] if recovery and count == 18 else
+                         'rtl/' + plan['RTL'] + '_' + tag + '/calibration.json')
             assert fixed['all_pass'] and fixed['cases'] == len(fixed['results']) == count
             assert all(x['all_pass'] and x['results'][1]['executable_sha256'] == exe for x in fixed['results'])
-        boundary = read(model / ('boundary_calibration_' + plan['RTL']) / 'calibration.json')
+        boundary = read(recovery['boundary_calibration'] if recovery else
+                        model / ('boundary_calibration_' + plan['RTL']) / 'calibration.json')
         assert boundary['all_pass'] and len(boundary['results']) == 4 and boundary['executable_sha256'] == exe
         assert all(x['passed'] and x['cycle_log_exact'] for x in boundary['results'])
         synth = read(plan['synthesis_review'])
@@ -110,6 +122,8 @@ def gates():
         ]
         if plan.get('extra_parent_receipt'):
             pending.append(plan['extra_parent_receipt'])
+        if plan.get('recovery_manifest'):
+            pending += [plan['recovery_manifest'], str(Path(plan['recovery_manifest']).parent/'terminal.json')]
         if Path(error.filename).resolve() not in {(r / x).resolve() for x in pending}:
             raise
         return None
@@ -152,6 +166,8 @@ def execute(latency, gap):
          '--calibration', plan['calibration'], '--ooc', plan['OOC'], '--binding', plan['binding'],
          '--work-audit', 'analysis/' + audit, '--native-binding', 'baselines/native_reuse/' + native],
     ]
+    if plan.get('recovery_manifest'):
+        commands[-1] += ['--recovery-manifest', plan['recovery_manifest']]
     for step, argv in enumerate(commands):
         cmd = [sys.executable, str(scripts / argv[0]), *argv[1:]]
         entry = dict(command=cmd, script_sha256=sha(scripts / argv[0]), returncode=None)
@@ -182,6 +198,14 @@ try:
         if result:
             break
         time.sleep(30)
+    # Persist an actual successful check-only invocation before any batch starts.
+    check_command = [sys.executable, str(Path(__file__).resolve()), str(plan_path), args.tag+'_check', '--check-only']
+    with (r/'supervision'/(args.tag+'_check_only.log')).open('x') as log:
+        check_rc = subprocess.run(check_command,cwd=root,stdout=log,stderr=subprocess.STDOUT).returncode
+    state['check_only'] = {'command':check_command,'returncode':check_rc,
+                          'completed_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+    save()
+    assert check_rc == 0, 'check-only must pass before starting any batch'
     for latency, gap in scenarios:
         run = f'large_l{latency}_g{gap}'
         assert not (r / 'model' / plan['model'] / run).exists(), 'existing native run; refusing duplicate'

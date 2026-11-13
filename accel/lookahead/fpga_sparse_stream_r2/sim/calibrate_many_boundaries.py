@@ -1,9 +1,15 @@
 """Independently replay the complete Q40 and exact/overflow capacity boundaries."""
 from pathlib import Path
-import concurrent.futures, hashlib, json, subprocess, sys
+import argparse, concurrent.futures, hashlib, json, subprocess, sys
 root=Path(__file__).resolve().parents[4]
 r=root/'results/fpga_sparse_stream_r2_20261112'
-models=sys.argv[1].split(',');rtl=sys.argv[2]
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('models');parser.add_argument('rtl')
+parser.add_argument('--hot-tag',default='hot_capacity8192')
+parser.add_argument('--tag')
+a=parser.parse_args();models=a.models.split(',');rtl=a.rtl
+for tag in [a.hot_tag,a.tag]:
+ if tag is not None:assert Path(tag).name==tag and tag not in ['.','..']
 references=[]
 for case in ['max_node_max_cell_q40','partial_line_missing_q40']:
  d=r/'rtl'/f'{rtl}_batch_capacity'/case
@@ -11,12 +17,12 @@ for case in ['max_node_max_cell_q40','partial_line_missing_q40']:
  assert ref['returncode']==0
  references.append((case,ref['command'],d/'rtl',False))
 for count in [8192,8193]:
- d=r/'rtl'/f'{rtl}_hot_capacity8192'/str(count)
+ d=r/'rtl'/f'{rtl}_{a.hot_tag}'/str(count)
  ref=json.loads((d/'receipt.json').read_text())
  assert ref['passed']
  references.append((f'hot_{count}',ref['results'][2]['command'],d/'rtl',count==8193))
 for model in models:
- out=r/'model'/model/f'boundary_calibration_{rtl}';out.mkdir(exist_ok=False)
+ out=r/'model'/model/(a.tag or f'boundary_calibration_{rtl}');out.mkdir(exist_ok=False)
  def run(item):
   name,original,old,reject=item;d=out/name;d.mkdir();cmd=original.copy()
   cmd[0]=str(r/'model'/model/'model');cmd[4]=str(d)
