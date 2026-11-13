@@ -527,3 +527,8 @@ F0/F1的实现子进程分别于12:32:56/12:37:55退出，两者实际run状态�
 P8/P32实际placed fabric层次分别120,194/269,476 LUT，降低149,282；这是报告层次差额，不是独立模块成本定理。只读查询P8 DCP的32个state event_fifo范围发现103,407个逻辑LUT primitive，其中FILE_NAME归于external_bank 67,251、node_state 33,214、external_changed 2,334，sync_fifo仅608；具体active_count LUT的FILE_NAME也明确为external_bank.sv。逻辑primitive数与打包后的LUT资源数不同，不能将重建后的FIFO层次总数归因于FIFO独立实现。此观察不支持据该数字重写FIFO。原property输出与两侧报告hash保存在 `analysis/placed_FIFO_source_properties_1253.json` 和 `placed_hierarchy_attribution_1253.json`。
 
 已有P32 F0/F1实际面积对照与P8减少共享端口的结果，支持试验尚未组合的P8-F0：32 owners、8共享同步物理通道、8192成员/changed容量、32个F0事务槽/16写缓冲、原有限state backing和完整Q1控制。只关闭owner合并缓存，state缓存保持；默认DATA_ONEHOT仍0。预计面积下降仅是假设，F0可能增加流量和周期，不能用P32 F0或P8 F1旧周期代替。新名字 `many32_p8_f0_router_a` / `many32_p8_f0_request_model_a` / `many32_p8_f0_router_context_10ns_a` 已冻结，独立模型编译成功，真实综合与97+36+4全套RTL重新校准已启动，10ns额外18组在其后执行。两项旧组合门已通过，所有新组合结果与频率仍待验证，原运行继续。决策与具体证据hash见 `analysis/ports8_f0_candidate_decision_1255.json`。
+
+
+13:20进度：P8-F0实际编译与d3/d4完整RTL已通过（127,343/292,728cycles，8/12samples各一次start、完整输出一致），91fixtures也通过；压力/大地址、独立模型、fixed-time和容量门仍在执行，尚未启动该新配置的大图模型。27份RTL和全部依赖参数与物理上下文绑定通过，见 `timing/ports8_F0_binding_1310.json`。其14份冻结模型源与既有P32 F0完全相同，仅编译宏TILE_P从32变8；这只是源码关系核对，不能替代新并发域校准。
+
+当前额外计划为P8-F0自身60/gap2、16/gap2、16/gap1三个合同，每项BNN/LSTM各完整40sample，用于同端口F0/F1、延迟及服务间隔比较；无笛卡尔积扫参。均等待新校准和实际综合资源审查。13:17保护核对再次通过：原HEAD/main、tracked状态及11个受保护文件不变。远端R1分支仍为起点5651a34，本R2分支尚未推送。
