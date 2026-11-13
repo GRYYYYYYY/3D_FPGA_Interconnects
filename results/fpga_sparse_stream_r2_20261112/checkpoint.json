@@ -250,7 +250,7 @@
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "Finish six active P8 native40 runs; existing supervisor audits completed gap1 pair and later runs, then bind/compare exact P8/P32 sources. Collect six physical implementations (two old bank routes report illegal routing, final child exit pending), finish G read-only SSI failure diagnosis, archive evidence, protect originals and push independent branch.",
+  "next_action": "Finish six P8 native40 simulations through existing terminal audit/bind pipeline, then exact P8/P32 comparisons and sensitivity. Collect four ongoing complete-kernel implementations, review real route/setup/hold/constraints before any clock. Archive all final evidence, recheck protected originals, push independent branch.",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -433,7 +433,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-13T11:11:08.136892+00:00",
+  "updated_utc": "2026-11-13T12:43:49.872972+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -476,7 +476,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "a6e56c749043f66d653a1e5c1ad7370afb63c386",
+  "checkpoint_commit": "eb1daa8f628a73762659b1ce559b59285f1e8b15",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -1455,8 +1455,6 @@
     "vivado-20261112-183223-bc1f6643": "many32_router_ready_context_10ns_a impl_1 and routed_sta_v2 active",
     "vivado-20261112-205847-e7d439e5": "many32_f0_router_ready_context_10ns_a impl_1 and routed_sta_v2 active",
     "vivado-20261112-164509-ef1e3de5": "many32_checked_context_10ns_a impl_1 and routed_sta_v2 active",
-    "vivado-20261112-180611-3c758959": "many32_f0_bank_context_a impl_1 and routed_sta_v2 active",
-    "vivado-20261112-194208-cd9c35ec": "many32_bank_context_a impl_1 and routed_sta_v2 active",
     "vivado-20261112-191902-487477ac": "many32_p8_router_context_10ns_a impl_1 and routed_sta_v2 active"
   },
   "active_checked_candidate": {
@@ -2069,24 +2067,10 @@
       "STA_followup": "routed_sta_v2",
       "recovery": "query session and existing run logs; do not reset/relaunch active work"
     },
-    "many32_f0_bank_context_a": {
-      "session": "vivado-20261112-180611-3c758959",
-      "last_observed_stage": "impl_1",
-      "STA_followup": "routed_sta_v2",
-      "recovery": "query session and existing run logs; do not reset/relaunch active work",
-      "observed_rejection_before_terminal": "303124 signals failed routing,639027node overlaps; final reports/child exit pending"
-    },
-    "many32_bank_context_a": {
-      "session": "vivado-20261112-194208-cd9c35ec",
-      "last_observed_stage": "impl_1",
-      "STA_followup": "routed_sta_v2",
-      "recovery": "query session and existing run logs; do not reset/relaunch active work",
-      "observed_rejection_before_terminal": "157654 signals failed routing,305628node overlaps; final reports/child exit pending"
-    },
     "many32_p8_router_context_10ns_a": {
       "session": "vivado-20261112-191902-487477ac",
       "last_observed_stage": "impl_1",
-      "status": "implementation_active_fresh_all_calibration_passed_native8runs_active",
+      "status": "implementation_active_fresh_calibration_passed_two_native40_complete_six_active",
       "recovery": "H already runs parent STA source waiting forimpl_1; do not reset/relaunch",
       "STA_followup": "routed_sta_v2"
     }
@@ -2166,6 +2150,28 @@
         "evidence_snapshot/completed_SSI_retry_run_1220",
         "evidence_snapshot/completed_SSI_retry_diagnosis_1220"
       ]
+    },
+    "many32_f0_bank_context_a": {
+      "session": "vivado-20261112-180611-3c758959",
+      "status": "completed_illegal_route_no_clock",
+      "review": "timing/many32_f0_bank_context_a/completed_route_rejection_1247.json",
+      "route_errors": 303124,
+      "parent_STA_gate_exit_code": 1,
+      "qualified_clock_mhz": null,
+      "recovery": "preserve negative result and original DCP; do not scan slower periods on illegal route; independent repaired candidates continue",
+      "archive": "evidence_snapshot/completed_bank32_routes_1248",
+      "archive_verified": true
+    },
+    "many32_bank_context_a": {
+      "session": "vivado-20261112-194208-cd9c35ec",
+      "status": "completed_illegal_route_no_clock",
+      "review": "timing/many32_bank_context_a/completed_route_rejection_1247.json",
+      "route_errors": 157654,
+      "parent_STA_gate_exit_code": 1,
+      "qualified_clock_mhz": null,
+      "recovery": "preserve negative result and original DCP; do not scan slower periods on illegal route; independent repaired candidates continue",
+      "archive": "evidence_snapshot/completed_bank32_routes_1248",
+      "archive_verified": true
     }
   },
   "failed_route_diagnosis": {
@@ -2593,7 +2599,9 @@
     "vivado-20261112-171744-63335f93": "central_onehot_a unit80MHz completed/archive0840; all todos done",
     "vivado-20261112-203252-7b55fe2c": "P32F1 readonly placement diagnosis completed/archive0806; all todos done",
     "vivado-20261112-173934-eb0a0adf": "default and SSI retry both completed negative; all todos done",
-    "vivado-20261112-185211-8e7c9bec": "SSI failed DCP read-only diagnosis done; archives1220 verified; all todos done"
+    "vivado-20261112-185211-8e7c9bec": "SSI failed DCP read-only diagnosis done; archives1220 verified; all todos done",
+    "vivado-20261112-180611-3c758959": "completed bank-tree illegal route; reports archived1248; no clock qualification",
+    "vivado-20261112-194208-cd9c35ec": "completed bank-tree illegal route; reports archived1248; no clock qualification"
   },
   "historical_address_candidate": {
     "F1_RTL": "many32_address_a",

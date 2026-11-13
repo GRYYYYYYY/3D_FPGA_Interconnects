@@ -4,7 +4,7 @@
 
 ## 当前可复核结果
 
-12:11 UTC 更新：P8 gap1的BNN/LSTM完整40batch已通过输出、逐wave工作量、容量、ACK、native身份及版本绑定，周期分别359,062,210/366,543,747。同条件周期为P32的2.463/2.446倍；其余6个P8 batch继续。旧完整32核及SSI重试已有路由负结果，两个旧bank候选也报告非法路由、等待最终文件。尚无完整32核时钟，全部主比较FPGA秒数仍为null。
+12:44 UTC 更新：P8 gap1的BNN/LSTM完整40batch已通过输出、逐wave工作量、容量、ACK、native身份及版本绑定，周期分别359,062,210/366,543,747。同条件周期为P32的2.463/2.446倍；其余6个P8 batch继续。旧完整32核、SSI重试及两个旧bank候选的非法路由均已取得终态报告并归档；另四项完整核实现继续。尚无完整32核时钟，全部主比较FPGA秒数仍为null。
 
 有效 POP 的 whole-pair 归约、原桶闭合后等待所有事件排空的结束规则、稀疏目录/工作列表、有限 owner/state 缓存、changed/commit 流水、共享物理通道、cost 一次加载和 Q=1 batch 控制均已有可运行实现。当前完整32路候选为32 owners、每owner 8192成员/changed容量、32个假设物理通道，每通道64个ID；另有保持32 owners、改为8共享物理通道的P8候选正在独立验证。尚未实现或验证64路完整核。 当前harness物理/发射掩码为32bit，central client ID为6bit；64个owner再加controller需要65个central clients，不能只改lane参数。构建入口已显式拒绝超出当前实现范围的配置，见 `analysis/topology_limit_guards_0137.json`；此限制不代表新互连实现不可行。
 
@@ -40,6 +40,8 @@
 | state_address_context_a，地址前移state单元已路由 | 6,989 | 4,556 | 16 / 2 / 0 | +0.014/+0.001 | 完整性、4M backing与独立周期差分通过，仅此单元200MHz |
 | state_way_context_a，新选择state单元已路由 | 7,095 | 4,564 | 16 / 1 / 0 | −0.212/+0.012 | 同一已路由网表8ns STA +2.788/+0.012，仅此单元125MHz |
 | many32_context_reduction_b，旧共享通道归约完整32核，非法布线 | 1,078,639 | 607,495 | 1064 / 296 / 288 | −22.325/−0.088 | 134,257条资源冲突，RTSTAT-6，无频率资格 |
+| many32_f0_bank_context_a，旧bank-tree F0完整32核，非法布线 | 952,048 | 551,610 | 1064 / 264 / 288 | −18.813/−0.157 | 303,124条资源冲突，RTSTAT-13，无频率资格 |
+| many32_bank_context_a，旧bank-tree F1完整32核，非法布线 | 1,084,944 | 607,756 | 1064 / 296 / 288 | −20.054/−0.105 | 157,654条资源冲突，RTSTAT-13，无频率资格 |
 | many32_mshr_a，旧线性选择完整32核综合 | 1,083,688 | 586,261 | 1064 / 296 / 288 | −14.408/+0.025 | 旧固定候选负结果，新完整32实现继续 |
 | many32_reg_b，旧多写MSHR完整32核综合 | 1,575,155 | 848,380 | 1064 / 296 / 288 | −7.110/+0.025 | 超LUT容量，停止此固定候选布线 |
 | many32_c，旧ready完整32核综合 | 1,505,153 | 817,663 | 1665 / 446 / 288 | −6.091/+0.025 | 超LUT容量，停止此固定候选布线 |
@@ -509,3 +511,12 @@ P32/P8冻结harness的同一地址布局、真实workload/prepared header及完�
 冻结错误DCP后，在独立空闲会话只读生成报告：1,250,752条可路由网中仅35条完整布线，1,250,717条未布线，RTSTAT-13为Critical Warning。报告中routing errors=0及utilization页的Routed标题不能证明合法布线。实际placed资源937,605 LUT、552,323 FF、1064 RAMB36、296 RAMB18、288 URAM，三个SLR的CLB占用87.11%/99.90%/95.96%。原错误DCP、副本及32份冻结源码hash已重新核对，没有改原run或约束。
 
 完整审查见 `timing/many32_f0_checked_context_10ns_a/failed_spread_diagnosis_1205/review.json`。61份run文件和13份诊断文件分别归档于 `completed_SSI_retry_run_1220` 与 `completed_SSI_retry_diagnosis_1220`，逐文件校验通过。本固定网表两种物理策略均失败；新router/P8结构的独立实现仍在执行，没有从此失败赋予全局no-go结论。
+
+
+## 12:44 UTC：两项旧bank-tree完整核路由终态
+
+F0/F1的实现子进程分别于12:32:56/12:37:55退出，两者实际run状态均为 `route_design Complete, Failed Timing & Nets!`；父级STA门禁退出1，未开始额外8/10ns扫描。F0有1,252,957条可路由net，949,833条布通、303,124条资源冲突、639,027处最终node overlap；F1对应1,395,718、1,238,064、157,654和305,628。两者RTSTAT-13均为Critical Warning。
+
+实际5ns setup/hold分别为−18.813/−0.157ns和−20.054/−0.105ns，pulse均+1.800ns，12类check_timing均0。实际F0资源952,048 LUT、551,610 FF、1064 RAMB36、264 RAMB18、288 URAM；F1为1,084,944 LUT、607,756 FF、1064 RAMB36、296 RAMB18、288 URAM。资源页标题Routed和子命令完成均不代表合法路由，也不赋予完整核频率。
+
+两套32份冻结源逐一重核，原DCP仅留共享文件系统并记录SHA。`completed_route_rejection_1247.json`、独立MCP父命令终态及148份报告/源码紧凑归档 `completed_bank32_routes_1248` 保留正负证据。归档前的解析核对还纠正了overlap统计：必须取最终Route35-2与Phase8一致的数值，不能取较早global iteration计数，修正记录见 `supervision/bank_rejection_collector_validation_1247.json`。这两项旧结构结束；四项新/修复后完整核实现及六项P8完整batch模拟继续。
