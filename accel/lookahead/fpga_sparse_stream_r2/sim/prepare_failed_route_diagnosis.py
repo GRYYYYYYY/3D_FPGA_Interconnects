@@ -1,6 +1,7 @@
 """Copy a completed failed-route checkpoint for read-only physical diagnosis.
 
-Usage: VARIANT NEW_TAG. The original implementation must have exited and its
+Usage: VARIANT NEW_TAG [RUN_NAME]. The default run is impl_1.
+The original implementation must have exited and its
 error checkpoint must have a completion marker. No run reset, placement, route,
 clock change or timing exception is issued. These reports cannot qualify a clock.
 """
@@ -15,10 +16,11 @@ import sys
 root = Path(__file__).resolve().parents[4]
 r = root / 'results/fpga_sparse_stream_r2_20261112'
 variant, tag = sys.argv[1:3]
-assert all(re.fullmatch(r'[A-Za-z0-9_]+', x) for x in [variant, tag])
+run_name = sys.argv[3] if len(sys.argv) > 3 else 'impl_1'
+assert all(re.fullmatch(r'[A-Za-z0-9_]+', x) for x in [variant, tag, run_name])
 p = r / 'timing' / variant
 binding = json.loads((p / 'source_binding.json').read_text())
-run = next(p.glob('project/*.runs/impl_1'))
+run = next(p.glob('project/*.runs/' + run_name))
 source = run / (binding['top'] + '_routed_error.dcp')
 text = (run / 'runme.log').read_text()
 assert 'Exiting Vivado' in text, 'original child run is still active'
@@ -52,7 +54,7 @@ commands = [f'open_checkpoint {{{copy}}}',
             f'write_xdc {{{d / "constraints.xdc"}}}',
             'puts R2_FAILED_ROUTE_DIAGNOSIS_COMPLETE_NO_CLOCK_QUALIFICATION']
 (d / 'run.tcl').write_text('\n'.join(commands) + '\n')
-state = dict(variant=variant, source=str(source), input_sha256=h,
+state = dict(variant=variant, implementation_run=run_name, source=str(source), input_sha256=h,
              input_bytes=copy.stat().st_size,
              source_binding_sha256=digest(d / 'source_binding.json'),
              captured_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),

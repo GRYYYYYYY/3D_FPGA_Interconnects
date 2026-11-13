@@ -146,6 +146,15 @@ qualifies the full kernel, and no context is a board shell.
 
 `check_routed_sta.py` mechanically checks a saved period, including setup, hold, pulse width, zero unconstrained endpoints, complete routing and retained IO constraints. Unknown methodology/DRC rules require review. `audit_complete_work.py` checks completed native output, candidate/commit work against M1, every wave's unique commit count, service peaks, cost/job/output traffic and real mutable initialization. Its positive d3/d4 checks and four rejected mutations are retained. Neither tool assigns a full-kernel clock from a unit result.
 
+`compare_port_count.py NEW.json P32_BINDING.json P8_BINDING.json` compares only
+matched, fully audited native40 F1 runs, with exact active sources, inputs and
+work sets. It reports cycles and per-array traffic without assigning a clock.
+The unchanged limit of 64 IDs per port means total physical credits also change
+with port count.
+`prepare_failed_route_diagnosis.py VARIANT NEW_TAG RUN_NAME` can inspect a
+completed alternate implementation run from a copied error checkpoint; it
+preserves the original run and cannot qualify a clock.
+
 `inspect_live_runs.py` provides a read-only recovery view with process identity,
 progress, OOC handles and calibration records. `freeze_checkpoint.py NAME PREV
 --defer-running-batches` preserves completed evidence and active batch receipts;
@@ -162,7 +171,7 @@ scope and unresolved work. No FPGA speedup claim or board measurement is made.
 
 
 Archived evidence can be restored into a **new** destination with
-`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T1114 completed_address8_route_0231 completed_checked8_route_0245`.
+`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T1212 completed_address8_route_0231 completed_checked8_route_0245`.
 The main checkpoint recursively restores its predecessors; explicitly named
 OOC archives add their timing reports. Use the desired completed-stage archive
 from `evidence_snapshot` for other physical candidates. Every part, original

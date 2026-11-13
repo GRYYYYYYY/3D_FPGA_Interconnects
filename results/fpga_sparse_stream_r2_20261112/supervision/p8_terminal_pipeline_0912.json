@@ -14,7 +14,49 @@
       "status": "waiting_terminal"
     },
     "large_l16_g1": {
-      "status": "waiting_terminal"
+      "status": "completed_audited_bound",
+      "commands": [
+        [
+          "python3",
+          "accel/lookahead/fpga_sparse_stream_r2/sim/audit_complete_work.py",
+          "complete_work_many32_p8_request_model_a_large_l16_g1.json",
+          "8192",
+          "8192",
+          "model/many32_p8_request_model_a/large_l16_g1/bnn_export=bnn_export",
+          "model/many32_p8_request_model_a/large_l16_g1/lstm_s2=lstm_s2"
+        ],
+        [
+          "python3",
+          "accel/lookahead/fpga_sparse_stream_r2/sim/audit_model_native_reuse.py",
+          "p8_large_l16_g1_outputs_terminal.json",
+          "many32_p8_request_model_a/large_l16_g1"
+        ],
+        [
+          "python3",
+          "accel/lookahead/fpga_sparse_stream_r2/sim/bind_complete_candidate.py",
+          "p8_large_l16_g1_bound_terminal.json",
+          "--rtl",
+          "many32_p8_router_a",
+          "--model",
+          "many32_p8_request_model_a",
+          "--calibration",
+          "router_ready_calibration",
+          "--ooc",
+          "many32_p8_router_context_10ns_a",
+          "--binding",
+          "timing/ports8_binding_0557.json",
+          "--work-audit",
+          "analysis/complete_work_many32_p8_request_model_a_large_l16_g1.json",
+          "--native-binding",
+          "baselines/native_reuse/p8_large_l16_g1_outputs_terminal.json"
+        ]
+      ],
+      "terminal_observed_utc": "2026-11-13T12:02:20.653266+00:00",
+      "last_step": 2,
+      "last_returncode": 0,
+      "last_log": "supervision/p8_large_l16_g1_terminal_step2.log",
+      "binding": "analysis/p8_large_l16_g1_bound_terminal.json",
+      "completed_utc": "2026-11-13T12:06:04.994117+00:00"
     }
   }
 }

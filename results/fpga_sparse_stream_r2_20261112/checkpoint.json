@@ -250,7 +250,7 @@
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "Finish eight active P8 native40 runs, audit complete work/ACK/capacity and native identity, bind exact P8 calibration; collect seven active complete-kernel physical runs and qualify actual STA only if legal; verify final raw archives/protected originals and push independent branch.",
+  "next_action": "Finish six active P8 native40 runs; existing supervisor audits completed gap1 pair and later runs, then bind/compare exact P8/P32 sources. Collect six physical implementations (two old bank routes report illegal routing, final child exit pending), finish G read-only SSI failure diagnosis, archive evidence, protect originals and push independent branch.",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -332,10 +332,10 @@
     "Continue authorized R2 execution; no stage approvals. Latest complete P8 calibration97+36+18+4 passed; do not repeat or overwrite completed evidence.",
     "B central_onehot_a is finished, only unit80MHz at12.5ns qualified; all5/8/10ns setup failures preserved. 133files archive completed_central_onehot_route_0840 verified. B idle, no new source needed. Never transfer unit clock to complete32; defaultDATA_ONEHOT0 unchanged.",
     "A P8 readonly placement diagnosis finished and archived0843(15files), matched27core/P32F1 comparison passed; A idle. J P32F1 diagnosis archived0806, idle. No diagnostic source needs relaunching; original H route continues.",
-    "G many32_context_reduction_b finished illegal:134257conflictingnets/276497nodeoverlaps; actual5ns setup-22.325 hold-.088. Parent rejected Failed Timing & Nets before later STA, no8/10ns tests. G idle. Completed negative review1102; 76-file side archive completed_full32_reduction_route_1103 verified; all three G todos done; no relaunch.",
-    "Physical jobs in active_physical_jobs are authoritative. H runs P8 impl/parentSTA. D uses impl_spread_a/routed_sta_spread_a; original impl_1 failed and preserved. Other P32 routes continue.",
-    "P8 native handles15506(60g2),10162(16g2),99451(120g2),87809(16g1) remain active. Terminal supervisor63482 already waits all four pairs and runs audits/bindings; inspect supervision/p8_terminal_pipeline_0912.json before any manual audit. P32gap4 and audits58083 completed PASS, bindings/comparison0907 complete; do not repeat.",
-    "Snapshot1114 delta33 files154157rawbytes82411archivebytes verified; inherits fully verified0909 chain96466 records19snapshots. Next predecessor1114. Gap4 full raw remains in0909. Eight active P8 batch traces remain explicitly deferred and need final raw deltas.",
+    "G many32_context_reduction_b finished illegal:134257conflictingnets/276497nodeoverlaps; actual5ns setup-22.325 hold-.088. Parent rejected Failed Timing & Nets before later STA, no8/10ns tests. G completed its own negative review1102 and later SSI read-only diagnosis1220; currently idle. Completed negative review1102; 76-file side archive completed_full32_reduction_route_1103 verified; all three G todos done; no relaunch.",
+    "Physical jobs in active_physical_jobs are authoritative. H runs P8 impl/parentSTA. D default and impl_spread_a both ended negative;61run+13diagnostic files archived1220, G and D idle. Other P32 routes continue.",
+    "P8 handles15506(60g2),10162(16g2),99451(120g2) remain active (six cases). 87809(16g1) completed exit0 and both outputs exact; supervisor currently audits this pair. Terminal supervisor63482 already waits all four pairs and runs audits/bindings; inspect supervision/p8_terminal_pipeline_0912.json before any manual audit. P32gap4 and audits58083 completed PASS, bindings/comparison0907 complete; do not repeat.",
+    "Snapshot1212 delta53files2895089775rawbytes803128488archivebytes VERIFIED, inherits1114/0909 verified chain. Next predecessor1212. P8gap1 full raw in1212; six active P8 batch traces remain explicitly deferred.",
     "Only exact complete32 routed setup/hold/pulse/constraints/fully-routed qualification can assign seconds. Unit/8lane clocks and synthesis/placement estimates cannot. Bind all native complete work and extra actual-period RTL calibration, explicitly convert cycle-memory parameters to ns. Preserve all failures and null seconds where unqualified.",
     "After remaining experiments finish, consolidate report, verify archives, recheck original protection, commit and push independent branch through bounded fast-forward checkpoints; never force or merge main. Branch has not yet been pushed."
   ],
@@ -1341,7 +1341,7 @@
     "route_started_utc": "2026-11-13T00:11:25Z",
     "clock_qualified_mhz": null
   },
-  "verified_checkpoint_snapshot": "checkpoint_20261113T1114",
+  "verified_checkpoint_snapshot": "checkpoint_20261113T1212",
   "verified_checkpoint_files": 96466,
   "verified_checkpoint_predecessor_count": 18,
   "conditional_issue_screen": "analysis/issue_bound_0019.json",
@@ -1457,7 +1457,6 @@
     "vivado-20261112-164509-ef1e3de5": "many32_checked_context_10ns_a impl_1 and routed_sta_v2 active",
     "vivado-20261112-180611-3c758959": "many32_f0_bank_context_a impl_1 and routed_sta_v2 active",
     "vivado-20261112-194208-cd9c35ec": "many32_bank_context_a impl_1 and routed_sta_v2 active",
-    "vivado-20261112-173934-eb0a0adf": "many32_f0_checked_context_10ns_a impl_spread_a and routed_sta_spread_a active",
     "vivado-20261112-191902-487477ac": "many32_p8_router_context_10ns_a impl_1 and routed_sta_v2 active"
   },
   "active_checked_candidate": {
@@ -1562,7 +1561,7 @@
     "evidence": "snapshot checkpoint_20261113T0130 exists, verify_0130.log pending. Next snapshot must use it as predecessor. Latest committed HEAD52d3c8faccc7d0af5f186e9db71f26d62bddd8f0; not pushed.",
     "push": "After completion/protection audit push independent branch in fastforward checkpoints336bb48f,fbd1cf5a,d46f5f17,52d3c8fa,later commits to avoid >2GB packs; never force or modify main."
   },
-  "verified_checkpoint_snapshot_count": 20,
+  "verified_checkpoint_snapshot_count": 21,
   "many32_f0_checked_synth": {
     "LUT": 944933,
     "FF": 551508,
@@ -2074,21 +2073,15 @@
       "session": "vivado-20261112-180611-3c758959",
       "last_observed_stage": "impl_1",
       "STA_followup": "routed_sta_v2",
-      "recovery": "query session and existing run logs; do not reset/relaunch active work"
+      "recovery": "query session and existing run logs; do not reset/relaunch active work",
+      "observed_rejection_before_terminal": "303124 signals failed routing,639027node overlaps; final reports/child exit pending"
     },
     "many32_bank_context_a": {
       "session": "vivado-20261112-194208-cd9c35ec",
       "last_observed_stage": "impl_1",
       "STA_followup": "routed_sta_v2",
-      "recovery": "query session and existing run logs; do not reset/relaunch active work"
-    },
-    "many32_f0_checked_context_10ns_a": {
-      "session": "vivado-20261112-173934-eb0a0adf",
-      "implementation_run": "impl_spread_a",
-      "last_observed_stage": "impl_spread_a",
-      "STA_followup": "routed_sta_spread_a",
-      "strategy": "Congestion_SSI_SpreadLogic_high",
-      "recovery": "same project separate run already active; original impl_1 preserved failed; do not reset or relaunch"
+      "recovery": "query session and existing run logs; do not reset/relaunch active work",
+      "observed_rejection_before_terminal": "157654 signals failed routing,305628node overlaps; final reports/child exit pending"
     },
     "many32_p8_router_context_10ns_a": {
       "session": "vivado-20261112-191902-487477ac",
@@ -2153,6 +2146,26 @@
       "recovery": "G idle; no further clock scan for this illegal route; preserve original reports and DCP; independent repaired P32/P8 routes continue",
       "archive": "evidence_snapshot/completed_full32_reduction_route_1103",
       "archive_verified": true
+    },
+    "many32_f0_checked_context_10ns_a__impl_spread_a": {
+      "session": "vivado-20261112-173934-eb0a0adf",
+      "implementation_run": "impl_spread_a",
+      "last_observed_stage": "impl_spread_a",
+      "STA_followup": "routed_sta_spread_a",
+      "strategy": "Congestion_SSI_SpreadLogic_high",
+      "recovery": "same project separate run already active; original impl_1 preserved failed; do not reset or relaunch",
+      "observed_rejection_before_terminal": "impl_spread_a Route35-3339 localized SLL demand / Route35-368 global congestion; errorDCP writing pending",
+      "status": "completed_route_error_no_clock",
+      "run_status": "route_design ERROR",
+      "review": "timing/many32_f0_checked_context_10ns_a/routed_sta_spread_a/termination_review_1205.json",
+      "qualified_clock_mhz": null,
+      "read_only_diagnosis": "timing/many32_f0_checked_context_10ns_a/failed_spread_diagnosis_1205",
+      "archive_status": "verified_61_run_plus13_diagnostic_files",
+      "diagnostic_review": "timing/many32_f0_checked_context_10ns_a/failed_spread_diagnosis_1205/review.json",
+      "archives": [
+        "evidence_snapshot/completed_SSI_retry_run_1220",
+        "evidence_snapshot/completed_SSI_retry_diagnosis_1220"
+      ]
     }
   },
   "failed_route_diagnosis": {
@@ -2423,8 +2436,8 @@
     "scope": "8lane only, no transfer to32owner P32/P8"
   },
   "resident_comparison_latest": {
-    "record": "analysis/resident_router32_0907.json",
-    "scope": "newrouter32 ten F1 and two F0 native40 model rows plus measured prepared CPU/basic/compact V2",
+    "record": "analysis/resident_with_P8_gap1_1208.json",
+    "scope": "ten P32F1, two P32F0 and two P8F1 complete native40 model rows plus measured prepared CPU/basic/compact V2",
     "complete_kernel_seconds_available": false,
     "FPGA_board_measurement": false
   },
@@ -2476,6 +2489,21 @@
       "review": "timing/many32_router_ready_context_10ns_a/placement_diagnosis_0749/review.json",
       "archive": "evidence_snapshot/completed_router_F1_placement_0806",
       "clock_qualified": false
+    },
+    "spread_failure": {
+      "session": "vivado-20261112-185211-8e7c9bec",
+      "status": "completed",
+      "directory": "timing/many32_f0_checked_context_10ns_a/failed_spread_diagnosis_1205",
+      "input_sha256": "99ad05b95e41f77cb146429abd82b1e66a2550105b41f72f88713d6b88410de1",
+      "scope": "readonly errorDCP copy, no clock qualification",
+      "recovery": "G diagnostic source completed0; all G and D todos done; both idle. Do not rerun this diagnosis. Original default and SSI failures retained.",
+      "launch_exec_cell": "g10:1929",
+      "review": "timing/many32_f0_checked_context_10ns_a/failed_spread_diagnosis_1205/review.json",
+      "archives": [
+        "evidence_snapshot/completed_SSI_retry_run_1220",
+        "evidence_snapshot/completed_SSI_retry_diagnosis_1220"
+      ],
+      "archive_files_verified": 74
     }
   },
   "gap1_complete_audit": {
@@ -2511,7 +2539,7 @@
     "verification_handle": 44082,
     "verification_log": "supervision/verify_0808.log"
   },
-  "latest_protection_audit": "protection_0919.json",
+  "latest_protection_audit": "protection_1227.json",
   "latest_memory_sensitivity_summary": "analysis/memory_sensitivity_P32_completed_0907.json",
   "gap4_complete_audit": {
     "all_pass": true,
@@ -2557,13 +2585,15 @@
     "existing_qualified_reports_rechecked": 13,
     "negative_period_reports_rechecked": 2,
     "all_pass": true,
-    "RTL_or_Vivado_rerun": false
+    "RTL_or_Vivado_rerun": false,
+    "legacy_manual_owner_report": "analysis/legacy_owner_rule_parser_audit_1133.json"
   },
   "idle_vivado_sessions": {
     "vivado-20261112-161837-7d305dc5": "P8 readonly placement diagnosis completed/archive0843; all todos done",
     "vivado-20261112-171744-63335f93": "central_onehot_a unit80MHz completed/archive0840; all todos done",
-    "vivado-20261112-185211-8e7c9bec": "many32_context_reduction_b completed illegal route/archive1103; all todos done",
-    "vivado-20261112-203252-7b55fe2c": "P32F1 readonly placement diagnosis completed/archive0806; all todos done"
+    "vivado-20261112-203252-7b55fe2c": "P32F1 readonly placement diagnosis completed/archive0806; all todos done",
+    "vivado-20261112-173934-eb0a0adf": "default and SSI retry both completed negative; all todos done",
+    "vivado-20261112-185211-8e7c9bec": "SSI failed DCP read-only diagnosis done; archives1220 verified; all todos done"
   },
   "historical_address_candidate": {
     "F1_RTL": "many32_address_a",
@@ -2602,6 +2632,113 @@
       "model/many32_p8_request_model_a/large_l16_g2/bnn_export",
       "model/many32_p8_request_model_a/large_l16_g1/lstm_s2",
       "model/many32_p8_request_model_a/large_l16_g1/bnn_export"
+    ]
+  },
+  "pending_port_count_comparison": {
+    "script": "accel/lookahead/fpga_sparse_stream_r2/sim/compare_port_count.py",
+    "positive_validation": "passed actual complete gap1 BNN/LSTM; source/input/work/traffic checked",
+    "negative_guard": "analysis/port_comparison_guard_1145.json",
+    "scope": "same F1,32owners,8192capacities and per-port64IDs; compare complete matching latency/gap cases only; inactive exact F0 method-only source difference bound explicitly",
+    "do_not_duplicate_terminal_audits": true,
+    "dependency": "supervision/p8_terminal_pipeline_0912.json must show completed_audited_bound for each scenario before comparison",
+    "commands": {
+      "large_l16_g1": [
+        "python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/compare_port_count.py",
+        "ports8_vs32_complete_large_l16_g1_terminal.json",
+        "router32_gap1_bound_0725.json",
+        "p8_large_l16_g1_bound_terminal.json"
+      ],
+      "large_l16_g2": [
+        "python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/compare_port_count.py",
+        "ports8_vs32_complete_large_l16_g2_terminal.json",
+        "router32_bound_0627.json",
+        "p8_large_l16_g2_bound_terminal.json"
+      ],
+      "large_l60_g2": [
+        "python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/compare_port_count.py",
+        "ports8_vs32_complete_large_l60_g2_terminal.json",
+        "router32_bound_0627.json",
+        "p8_large_l60_g2_bound_terminal.json"
+      ],
+      "large_l120_g2": [
+        "python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/compare_port_count.py",
+        "ports8_vs32_complete_large_l120_g2_terminal.json",
+        "router32_bound_0627.json",
+        "p8_large_l120_g2_bound_terminal.json"
+      ]
+    },
+    "completed_gap1": "analysis/ports8_vs32_complete_large_l16_g1_terminal.json",
+    "remaining_scenarios": [
+      "large_l16_g2",
+      "large_l60_g2",
+      "large_l120_g2"
+    ]
+  },
+  "pending_spread_failure_diagnosis": {
+    "command": [
+      "python3",
+      "accel/lookahead/fpga_sparse_stream_r2/sim/prepare_failed_route_diagnosis.py",
+      "many32_f0_checked_context_10ns_a",
+      "failed_spread_diagnosis_1205",
+      "impl_spread_a"
+    ],
+    "requires": "child Exiting Vivado and errorDCP generation marker; query parent D terminal before any new Tcl",
+    "scope": "read-only diagnosis of copied errorDCP, never clock qualification",
+    "session_candidate": "G is idle and can be reused after querying it; original impl_1 evidence preserved",
+    "status": "completed_archived_verified_do_not_rerun"
+  },
+  "completed_P8_native_gap1": {
+    "status": "completed_audited_bound",
+    "exec_handle_87809": "completed_exit0",
+    "cases": [
+      "bnn_export",
+      "lstm_s2"
+    ],
+    "jobs_each": 40,
+    "cycles": [
+      359062210,
+      366543747
+    ],
+    "internal_bytes": [
+      76456715936,
+      78047525376
+    ],
+    "supervisor": "supervision/p8_terminal_pipeline_0912.json",
+    "native_output_exact": true,
+    "independent_work_capacity_ACK_audit": "analysis/complete_work_many32_p8_request_model_a_large_l16_g1.json",
+    "clock_qualified": false,
+    "native_ALT_identity": "baselines/native_reuse/p8_large_l16_g1_outputs_terminal.json",
+    "complete_candidate_binding": "analysis/p8_large_l16_g1_bound_terminal.json",
+    "port_comparison": "analysis/ports8_vs32_complete_large_l16_g1_terminal.json",
+    "conditional_traffic_screen": "analysis/traffic_screen_P8_large_l16_g1_terminal.json",
+    "P8_over_P32_cycles": [
+      2.463405014826717,
+      2.4460670191621374
+    ]
+  },
+  "snapshot_1212": {
+    "utc": "2026-11-13T12:23:56.211441+00:00",
+    "snapshot": "checkpoint_20261113T1212",
+    "all_new_files_verified": true,
+    "new_file_count": 53,
+    "new_raw_bytes": 2895089775,
+    "archive_bytes": 803128488,
+    "predecessor": "checkpoint_20261113T1114",
+    "predecessor_verification": "supervision/verify_delta_1114.json",
+    "predecessor_verification_sha256": "c5faddb26fa745f8f4c884a512c6daa606e824c9f2d8368b2e3bbfb9ee3169d7",
+    "predecessor_record_count": 96499,
+    "scope": "new delta exact archived bytes verified; prior1114 delta and0909 full chain already verified and committed; includes both complete P8gap1 raw traces",
+    "deferred_running_batches": [
+      "model/many32_p8_request_model_a/large_l120_g2/lstm_s2",
+      "model/many32_p8_request_model_a/large_l120_g2/bnn_export",
+      "model/many32_p8_request_model_a/large_l60_g2/lstm_s2",
+      "model/many32_p8_request_model_a/large_l60_g2/bnn_export",
+      "model/many32_p8_request_model_a/large_l16_g2/lstm_s2",
+      "model/many32_p8_request_model_a/large_l16_g2/bnn_export"
     ]
   }
 }
