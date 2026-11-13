@@ -14,8 +14,14 @@ module r2_node_state #(parameter OWNER_BITS=3,REQUEST_STAGE=0)(input wire clk,rs
  output wire idle,output reg error,output reg [31:0] accepted,retired,merges,hits,misses,raw_stall,
  output reg [5:0] mshr_peak,output reg [4:0] dirty_peak);
  localparam [63:0] INF=64'h7f8000007f800000;
- wire qv,qr,fifo_ir,rv,rr;wire [136:0] qd;wire [31:0] qnode=qd[136:105];wire [261:0] rd;wire [6:0] qc,rc;
- sparse_fifo #(.WIDTH(137),.OUTPUT_STAGE(REQUEST_STAGE)) request_fifo(clk,rst,iv&&!fence,fifo_ir,{node,opcode,operand,argument,tag},qv,qr,qd,qc);
+ // Resolve the immutable batch base on enqueue, before the existing sync RAM
+ // boundary. Cache lookup no longer includes a live configuration adder.
+ // Depth/output-stage accounting is unchanged; only the stored word widens.
+ wire [31:0] incoming_line=state_base+((((node>>(OWNER_BITS+2))<<1)|((node>>1)&1))<<OWNER_BITS)+((node>>2)&((1<<OWNER_BITS)-1));
+ wire qv,qr,fifo_ir,rv,rr;wire [168:0] request_word;
+ wire [136:0] qd=request_word[136:0];wire [31:0] qline=request_word[168:137];
+ wire [31:0] qnode=qd[136:105];wire [261:0] rd;wire [6:0] qc,rc;
+ sparse_fifo #(.WIDTH(169),.OUTPUT_STAGE(REQUEST_STAGE)) request_fifo(clk,rst,iv&&!fence,fifo_ir,{incoming_line,node,opcode,operand,argument,tag},qv,qr,request_word,qc);
  sparse_fifo #(.WIDTH(262)) response_fifo(clk,rst,rsp_valid,rsp_ready,{rsp_id,rsp_data},rv,rr,rd,rc);
  assign ir=fifo_ir&&!fence;
  wire event_v,event_r;wire [169:0] event_data,event_out;wire [6:0] event_count;
@@ -28,7 +34,6 @@ module r2_node_state #(parameter OWNER_BITS=3,REQUEST_STAGE=0)(input wire clk,rs
  reg sv,skind,sdirty;reg [6:0] sslot;reg [31:0] snode,sline,evict_line;reg [136:0] srequest;reg [4:0] smiss;
  reg [255:0] ram_q,last_data;reg [6:0] last_slot;reg last_valid;
  reg flushing;reg [7:0] flush_index;reg command_turn;
- wire [31:0] qline=state_base+((((qnode>>(OWNER_BITS+2))<<1)|((qnode>>1)&1))<<OWNER_BITS)+((qnode>>2)&((1<<OWNER_BITS)-1));
  wire signed [31:0] hit,victim;integer count_m,count_w;
  wire signed [31:0] matching,fm,fw,issue_m,issue_w;
  reg [15:0] wait_write[0:31];wire [15:0] allocation_wait;

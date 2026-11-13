@@ -4,7 +4,10 @@ root=Path(__file__).resolve().parents[4];s=root/'accel/lookahead/fpga_sparse_str
 u=root.parent/'3D_FPGA_Interconnects_SIM_RESTART_R62/results/fpga_sim_restart_20261111T231000Z/tools/verilator_local/usr';env=os.environ.copy();env['VERILATOR_ROOT']=str(u/'share/verilator')
 for p in [s/'rtl/node_state.sv',s/'rtl/sync_fifo.sv',s/'rtl/priority_tree.sv',s/'sim/node_state_driver.cpp']:shutil.copy2(p,f/p.name)
 owner_bits=next((int(x.split('=')[1]) for x in sys.argv[2:] if x.startswith('-GOWNER_BITS=')),3)
-cmd=[str(u/'bin/verilator'),'--cc','--exe','--build','-j','4','--top-module','r2_node_state','--Mdir',str(r/'build'),'-Wno-fatal','-O3','-CFLAGS',f'-O3 -std=c++17 -DSTATE_OWNER_BITS={owner_bits}',*sys.argv[2:],*map(str,f.glob('*.sv')),str(f/'node_state_driver.cpp')]
+state_base=next((int(x.split('=')[1],0) for x in sys.argv[2:] if x.startswith('--state-base=')),0)
+assert 0<=state_base<=0xffffffff-(1<<21)
+generics=[x for x in sys.argv[2:] if not x.startswith('--state-base=')]
+cmd=[str(u/'bin/verilator'),'--cc','--exe','--build','-j','4','--top-module','r2_node_state','--Mdir',str(r/'build'),'-Wno-fatal','-O3','-CFLAGS',f'-O3 -std=c++17 -DSTATE_OWNER_BITS={owner_bits} -DSTATE_BASE={state_base}',*generics,*map(str,f.glob('*.sv')),str(f/'node_state_driver.cpp')]
 build_command=cmd.copy()
 with (r/'build.log').open('w') as log:p=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,env=env)
 if p.returncode:raise SystemExit('build failed: '+str(r))

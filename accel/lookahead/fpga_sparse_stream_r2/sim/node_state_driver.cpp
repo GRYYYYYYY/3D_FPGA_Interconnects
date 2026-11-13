@@ -12,6 +12,10 @@ double sc_time_stamp(){return 0;}
 #define STATE_OWNER_BITS 3
 #endif
 constexpr unsigned STATE_B=STATE_OWNER_BITS;
+#ifndef STATE_BASE
+#define STATE_BASE 0
+#endif
+constexpr uint32_t BASE=STATE_BASE;
 using Line=std::array<uint64_t,4>;
 struct Record{uint64_t label=0x7f8000007f800000ull;uint32_t pending=0,flags=0;};
 struct Expected{bool live=false;unsigned node=0,status=0;Record old;};
@@ -22,7 +26,10 @@ int main(int argc,char**argv){try{
  std::vector<unsigned> nodes;for(unsigned i=0;i<765;++i)nodes.push_back(i*4096+(i%32));nodes.push_back(4102607);nodes.push_back(4166723);nodes.push_back(N-1);
  std::mt19937 rng(20261112);uint64_t tick=0,reads=0,writes=0,returned=0;unsigned sent=0,peak=0;int response=-1;bool input_held=false;unsigned input_tag=0;
  std::ofstream log(argv[1]);log<<"cycle,sent,returned,cache_retired,read_commands,write_commands,outstanding,mshr,dirty\n";
- d.rst=1;d.iv=d.fence=d.rsp_valid=d.mem_ready=0;d.ordy=0;d.state_base=0;d.node_count=N;
+ d.rst=1;d.iv=d.fence=d.rsp_valid=d.mem_ready=0;d.ordy=0;d.state_base=BASE;d.node_count=N;
+#ifdef INDEPENDENT_STATE_MODEL
+ d.owner_bits=STATE_B;
+#endif
  auto clock=[&](){d.clk=0;d.eval();d.clk=1;d.eval();++tick;};clock();clock();d.rst=0;bool success=false;
  bool held=false;unsigned held_line=0,held_id=0;bool held_write=false;Line held_payload{};
  for(unsigned step=0;step<3000000;++step){
@@ -41,8 +48,8 @@ int main(int argc,char**argv){try{
    ++sent;input_held=false;
   }
   if(d.ov&&d.ordy){auto &e=scoreboard[d.otag];Record actual{uint64_t(d.old_record[1])<<32|d.old_record[0],d.old_record[2],d.old_record[3]};if(!e.live||e.node!=d.onode||e.status!=d.status||actual.label!=e.old.label||actual.pending!=e.old.pending||actual.flags!=e.old.flags)throw std::runtime_error("node response mismatch tag="+std::to_string(d.otag)+" node="+std::to_string(d.onode)+" returned="+std::to_string(returned));e.live=false;++returned;}
-  bool pop=response>=0&&d.rsp_ready;if(pop){auto &p=pending[response];if(p.wr)memory[p.line]=p.data;}
-  if(d.mem_valid&&d.mem_ready){if(d.mem_line>=N/2)throw std::runtime_error("finite backing range");for(auto &p:pending)if(p.id==d.mem_id)throw std::runtime_error("physical ID reuse");Line data=memory[d.mem_line];if(d.mem_write){++writes;for(unsigned s=0;s<4;++s)data[s]=uint64_t(d.mem_data[2*s+1])<<32|d.mem_data[2*s];}else{++reads;for(unsigned i=0;i<pending.size();++i)if(pending[i].wr&&pending[i].line==d.mem_line&&!(pop&&int(i)==response))throw std::runtime_error("unacknowledged dirty RAW");}
+  bool pop=response>=0&&d.rsp_ready;if(pop){auto &p=pending[response];if(p.wr)memory[p.line-BASE]=p.data;}
+  if(d.mem_valid&&d.mem_ready){if(d.mem_line<BASE||d.mem_line-BASE>=N/2)throw std::runtime_error("finite backing range");for(auto &p:pending)if(p.id==d.mem_id)throw std::runtime_error("physical ID reuse");Line data=memory[d.mem_line-BASE];if(d.mem_write){++writes;for(unsigned s=0;s<4;++s)data[s]=uint64_t(d.mem_data[2*s+1])<<32|d.mem_data[2*s];}else{++reads;for(unsigned i=0;i<pending.size();++i)if(pending[i].wr&&pending[i].line==d.mem_line&&!(pop&&int(i)==response))throw std::runtime_error("unacknowledged dirty RAW");}
    pending.push_back({bool(d.mem_write),d.mem_line,d.mem_id,data,tick+120+rng()%80});
   }
   if(pop){pending.erase(pending.begin()+response);response=-1;}peak=std::max<unsigned>(peak,pending.size());
@@ -52,5 +59,5 @@ int main(int argc,char**argv){try{
  if(!success)throw std::runtime_error("watchdog");
  for(unsigned line=0;line<N/2;++line)for(unsigned sector=0;sector<2;++sector){unsigned n=((line>>(STATE_B+1))<<(STATE_B+2))|((line&((1u<<STATE_B)-1))<<2)|(((line>>STATE_B)&1)<<1)|sector;auto &v=ref[n];if(memory[line][2*sector]!=v.label||memory[line][2*sector+1]!=(uint64_t(v.flags)<<32|v.pending))throw std::runtime_error("full backing mismatch node="+std::to_string(n));}
  if(reads<1000||writes<1000||d.mshr_peak<2||peak<2)throw std::runtime_error("working set/concurrency not exercised");
- std::cout<<"NODE_STATE_PASS address_nodes="<<N<<" highest_node="<<N-1<<" operations="<<returned<<" cycles="<<tick<<" reads="<<reads<<" writes="<<writes<<" mshr="<<unsigned(d.mshr_peak)<<" dirty="<<unsigned(d.dirty_peak)<<" outstanding="<<peak<<'\n';
+ std::cout<<"NODE_STATE_PASS address_nodes="<<N<<" highest_node="<<N-1<<" state_base="<<BASE<<" operations="<<returned<<" cycles="<<tick<<" reads="<<reads<<" writes="<<writes<<" mshr="<<unsigned(d.mshr_peak)<<" dirty="<<unsigned(d.dirty_peak)<<" outstanding="<<peak<<'\n';
 }catch(const std::exception &e){std::cerr<<e.what()<<'\n';return 1;}}

@@ -1,0 +1,33 @@
+{
+  "utc": "2026-11-12T23:53:21.293932+00:00",
+  "scope": "saved physopt DCP; estimated routes only, no operating frequency qualification",
+  "reports": [
+    {
+      "report": "setup.rpt",
+      "sha256": "d5597bf801f6b68b752643c93fb70871068236186f7007ef85c1361a18b0ef6e",
+      "worst_slack_ns": -1.984,
+      "source": "dut/bc_reg[2][4]/C",
+      "destination": "dut/returned_reg[31]/D"
+    },
+    {
+      "report": "setup_non_counter.rpt",
+      "sha256": "7ad16ed42d6fa7f312d64ec30c31cb9f83838f8c90df4300e1575a1ef2a415c1",
+      "worst_slack_ns": -1.981,
+      "source": "dut/bc_reg[5][5]/C",
+      "destination": "dut/busy_reg[3][57]/D"
+    }
+  ],
+  "findings": [
+    "Worst recorded path: return client decode/round-robin -> consumed physical buffer -> 32-bit returned counter,20logic levels,72.137% estimated interconnect delay.",
+    "Removing counters only from the report endpoint selection reveals nearly identical -1.981ns slack to busy[3][57],15logic levels,85.013% estimated interconnect delay. No constraint or netlist was removed.",
+    "Both paths are internal DUT paths, crossing SLR0 to SLR1. Context launch/capture is not their data endpoint.",
+    "The report selection generated Vivado12-4439 for100447 endpoints but completed successfully; original full report remains."
+  ],
+  "bounded_repair": "direct one-hot round-robin grants for consume/ready, balanced bounded-width per-cycle issue/return population counts; same state transitions and finite capacities, independent model unchanged; new functional and OOC checks pending",
+  "not_claimed": [
+    "post-route timing",
+    "full32 frequency",
+    "congestion solved",
+    "cycle or throughput improvement"
+  ]
+}

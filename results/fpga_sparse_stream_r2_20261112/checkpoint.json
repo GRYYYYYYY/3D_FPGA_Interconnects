@@ -208,7 +208,7 @@
     "capacity_q40_tests": 2,
     "new_model_calibrated": false
   },
-  "physical_channel_scope": "complete8 latestbank97+36; complete32 latestbankF1 fresh97+36; priorwayF1/F0 each97+36+4boundaries; bank32F0 fresh calibration continues",
+  "physical_channel_scope": "complete8 latestbank97+36+Q40; complete32 latestbankF1/F0 eachfresh97+36; theirQ40/hotboundariesrunning",
   "owner_service_scope": {
     "version": "owner_pipe_c",
     "warm_hit_max_retire_II1_streak": 4096,
@@ -397,7 +397,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-12T23:07:43.128466+00:00",
+  "updated_utc": "2026-11-13T00:12:58.928984+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -854,7 +854,7 @@
     "new_full8_pipeline": 28534,
     "new_full8_RTL": "many8_bank_tree_a",
     "new_full8_OOC": "many8_bank_context_a",
-    "new32_status": "F1/F0 pipelines53028 and actual synth22:18:27/29 started after full8 fresh97 gate",
+    "new32_status": "bothF1/F0 fresh97+36passed; Q40/hot/capacity followups active; complete physical contexts routing",
     "new_full8_97_all_pass": true,
     "new_full8_binding": "timing/bank8_binding_2215.json",
     "new_full8_fixed_ns36_all_pass": true,
@@ -865,7 +865,9 @@
     "new_full32_F1_fixed_ns36_all_pass": true,
     "new_full32_F1_fixed_ns_record": "rtl/many32_bank_tree_a_fixed_time/calibration.json",
     "new_full32_F0_97_all_pass": true,
-    "new_full32_F0_97_record": "model/many32_request_f0_model_a/bank_calibration/calibration.json"
+    "new_full32_F0_97_record": "model/many32_request_f0_model_a/bank_calibration/calibration.json",
+    "new_full32_F0_fixed_ns36_all_pass": true,
+    "new_full32_F0_fixed_ns_record": "rtl/many32_f0_bank_a_fixed_time/calibration.json"
   },
   "many8_reg_b_routed": {
     "LUT": 357919,
@@ -1010,6 +1012,27 @@
       "resident_cycles": 285155267,
       "output_sha256": "a8ca4003a3b015145635a3f776bb62a3aec1ec2121a1fbfc8712d2a2dc1c8c3f",
       "clock_assigned": false
+    },
+    "model/many32_request_model_c/large_l16_g2/lstm_s2": {
+      "status": "passed",
+      "jobs": 40,
+      "resident_cycles": 184018993,
+      "output_sha256": "6b2acd7718d880075d653b3b83f1fa3abb5161f6f346ed39c3aa1285160a95cf",
+      "clock_assigned": false
+    },
+    "model/many32_request_model_c/large_l60_g2/bnn_export": {
+      "status": "passed",
+      "jobs": 40,
+      "resident_cycles": 285126884,
+      "output_sha256": "a8ca4003a3b015145635a3f776bb62a3aec1ec2121a1fbfc8712d2a2dc1c8c3f",
+      "clock_assigned": false
+    },
+    "model/many32_request_model_c/large_l60_g2/lstm_s2": {
+      "status": "passed",
+      "jobs": 40,
+      "resident_cycles": 293652813,
+      "output_sha256": "6b2acd7718d880075d653b3b83f1fa3abb5161f6f346ed39c3aa1285160a95cf",
+      "clock_assigned": false
     }
   },
   "binding_expression_report_correction": {
@@ -1046,5 +1069,233 @@
     "clock_qualified_mhz": null,
     "other_memory_scenarios_and_F0": "running"
   },
-  "checkpoint_commit_relation": "last committed checkpoint before this working update"
+  "checkpoint_commit_relation": "last committed checkpoint before this working update",
+  "many32_bank_synth": {
+    "LUT": 1091365,
+    "FF": 607867,
+    "RAMB36": 1064,
+    "RAMB18": 296,
+    "URAM": 288,
+    "period_ns": 5,
+    "WNS_ns": -1.075,
+    "WHS_ns": -0.08,
+    "critical_path": "frontend arithmetic29logic levels; oldbank cs-carg path removed as worst",
+    "routed_OOC_started_utc": "2026-11-12T23:25:54Z",
+    "qualified_mhz": null,
+    "archive": "completed_bank32_synth_2327"
+  },
+  "many32_f0_bank_synth": {
+    "LUT": 957243,
+    "FF": 551610,
+    "RAMB36": 1064,
+    "RAMB18": 264,
+    "URAM": 288,
+    "period_ns": 5,
+    "WNS_ns": -1.075,
+    "WHS_ns": -0.08,
+    "critical_path": "frontend arithmetic29logic levels; oldbank cs-carg path removed as worst",
+    "routed_OOC_started_utc": "2026-11-12T23:25:55Z",
+    "qualified_mhz": null,
+    "archive": "completed_bank32_synth_2327"
+  },
+  "way8_clock_qualification": {
+    "updated_utc": "2026-11-12T23:34:48.024846+00:00",
+    "scope": "complete8 F1 prototype L8 P8 MC1024 CC512 U0 R1, many8_way_tree_a with shared-fabric and parallel-way repairs; old bank selector. Not latestbank8, any32kernel, native performance, shell or board.",
+    "qualified_OOC_mhz": 125,
+    "period_ns": 8,
+    "setup_slack_ns": 0.5,
+    "hold_slack_ns": 0.006,
+    "pulse_width_slack_ns": 3.458,
+    "same_actual_routed_netlist_as_5ns": true,
+    "five_ns_failed_setup_ns": -2.5,
+    "board_measured": false,
+    "check_timing_all_zero": true,
+    "route_errors": 0,
+    "routable_nets": 328794,
+    "real_synchronous_context_resources_included": true,
+    "resource_counts": {
+      "LUT": 235916,
+      "FF": 154920,
+      "RAMB36": 368,
+      "RAMB18": 112,
+      "URAM": 0
+    },
+    "methodology_review": {
+      "XDCC-4/8": "intentional same-source clock replacement; no waiver",
+      "CLKC-3": "actual fixed BUFG LOC advisory"
+    },
+    "DRC_review": {
+      "RTSTAT-10": "only32 terminal signature outputs have no external routable load; DUT boundaries retain actual launch/capture FFs"
+    },
+    "functional_calibration_97": "model/many8_request_model_b/way_calibration/calibration.json",
+    "fixed_ns_calibration_36": "rtl/many8_way_tree_a_fixed_time/calibration.json",
+    "scope_binding": "timing/expression_bindings_2255.json",
+    "evidence_sha256": {
+      "source_binding.json": "35f6689b942d9c7af2cf925d106fc308294f43b759251bd32a86de1dc0474d7f",
+      "routed_sta_v2/run.tcl": "213a30cfcb47ff86452b848139fe0c456fb6ef2fb398b250ba1d165c718d1cc8",
+      "routed_sta_v2/scope.json": "c90eb76d9495bb1c377e58216b6c4229db772f1ee373bf6fdfd5f4bec7958123",
+      "routed_sta_v2/route_status.rpt": "11ae0768999f0c3736703c30fb3e7b9dbdef89706c5e842618515afe613d533e",
+      "routed_sta_v2/p8000ps.dcp": "a940689d81bf6ccba1d7813f237f1955e6498fdb5c4faeca1edd494c33fb89ac",
+      "routed_sta_v2/p8000ps.xdc": "afd038f13efbee4c99e057d844efa19326ccafc1171e7f7c8671ec30601edeaa",
+      "routed_sta_v2/p8000ps_check_timing.rpt": "d6183e4eed02b4410d7e813fb553625be4e78eb88312050fef016e7d6bf2f2b1",
+      "routed_sta_v2/p8000ps_clocks.rpt": "639d45ce0d1dce487e0b6c9afdb0f359f74718ce0215c593da4d07c9d70b9387",
+      "routed_sta_v2/p8000ps_drc.rpt": "18fe5a514eb2fa175acfe0bf0d96d337678a6763643934b7b92fdad79f511451",
+      "routed_sta_v2/p8000ps_hold.rpt": "659b05e213bd34f3dd8cb78073026b309d031bb4c5ce2fa16e571184f136bb6c",
+      "routed_sta_v2/p8000ps_methodology.rpt": "3d584f0759b1e92f9c0f5409546745d4a4848abc6f019a5a99cb2e1c1469a39a",
+      "routed_sta_v2/p8000ps_setup.rpt": "d4e1c4748cac97379ed1c8fc65904dc61aee5ff3e273ea0378bcd5783adf5e62",
+      "routed_sta_v2/p8000ps_timing.rpt": "692a65d1be11523446dd841d93ac11f1e9173377660f74f14e71cb2e3de292a0",
+      "model/many8_request_model_b/way_calibration/calibration.json": "bf8861b96e16671704bcf5da4da66b03c0d6d0081f760424d1f98d81b24d9999",
+      "rtl/many8_way_tree_a_fixed_time/calibration.json": "f9d539f7b33a53f843c6ccb9585f78b7bc5fe7a0b20bdc36ced61885efbe1777",
+      "timing/expression_bindings_2255.json": "e4563387b243c0a84200a5869601059a2178c02253a8749f5fb51072cc1c0d44",
+      "timing/many8_way_context_a/routed_sta_v2/review_checks.json": "50c98d5c298f143bf6a43b82d2d7495b6c74b561f2b0648c6e4b7ac0f901e06a"
+    }
+  },
+  "native_baseline_r61_BNN_supplement": {
+    "record": "baselines/native_reuse/r61_bnn_baseline_supplement.json",
+    "formal_rows": 12,
+    "backends": [
+      "stock",
+      "optimized",
+      "alt_cpu",
+      "alt_cuda"
+    ],
+    "all_qualified": true,
+    "same_native_input_and_ALT_output": true,
+    "distinct_R61_worker_cohort": true,
+    "V2_denominator": false,
+    "native_ALT_STRICT_congestion_differences": 24434
+  },
+  "complete_native_latest_summary": "analysis/completed_native_2349.json",
+  "complete_native_latest_service": "analysis/completed_service_2349.json",
+  "large_complete_batch_default_scenario": {
+    "model": "many32_request_model_c",
+    "cache": "F1",
+    "latency_cycles": 60,
+    "service_gap_cycles": 2,
+    "jobs_each": 40,
+    "BNN_cycles": 285126884,
+    "LSTM_cycles": 293652813,
+    "work_audit": "analysis/complete_work_many32_request_model_c_large_l60_g2.json",
+    "native_ALT_identity": "baselines/native_reuse/complete_model_outputs_2349.json",
+    "clock_qualified_mhz": null,
+    "board_measured": false
+  },
+  "fabric_grant_repair": {
+    "diagnosis": "timing/central_reduction_a/physopt_diagnosis_2343/review.json",
+    "source": "rtl/shared_fabric.sv and priority_tree.sv",
+    "status": "XSim1156896_cases_central33000_hier8_41000_hier32_161000_allcycleexact_complete8_97plus36plusQ40_passed",
+    "RTL": "many8_grant_a",
+    "main_candidate_qualification_inherited": false
+  },
+  "latest_fully_calibrated_32_F1": {
+    "RTL": "many32_bank_tree_a",
+    "model": "many32_request_model_c",
+    "complete_cycle_output_traffic_cases": 97,
+    "fixed_ns_cases": 36,
+    "Q40_and_exact_overflow_boundaries": 4,
+    "receipt": "rtl/many32_bank_tree_a_pipeline_receipt.json",
+    "OOC": "many32_bank_context_a",
+    "whole_kernel_clock_mhz": null
+  },
+  "bank8_clock_qualification": {
+    "updated_utc": "2026-11-13T00:08:05.812010+00:00",
+    "scope": "complete8 F1 bank-tree prototype L8 P8 MC1024 CC512 U0 R1, many8_bank_tree_a. Not newer grant/address variants, any32kernel, native timing, shell or board.",
+    "qualified_OOC_mhz": 100,
+    "period_ns": 10,
+    "setup_slack_ns": 1.897,
+    "hold_slack_ns": 0.003,
+    "pulse_width_slack_ns": 4.458,
+    "same_actual_routed_netlist_as_5ns": true,
+    "failed_periods": {
+      "5ns_setup": -3.103,
+      "8ns_setup": -0.103
+    },
+    "board_measured": false,
+    "check_timing_all_zero": true,
+    "route_errors": 0,
+    "routable_nets": 330191,
+    "real_synchronous_context_resources_included": true,
+    "resource_counts": {
+      "LUT": 235511,
+      "FF": 154845,
+      "RAMB36": 368,
+      "RAMB18": 112,
+      "URAM": 0
+    },
+    "methodology_review": {
+      "XDCC-4/8": "same-source clock replacement for5/8/10ns STA; no waiver",
+      "CLKC-3": "actual fixed BUFG LOC advisory"
+    },
+    "DRC_review": {
+      "RTSTAT-10": "32 signature terminal outputs only; real same-clock launch/capture FFs retained"
+    },
+    "functional_calibration_97": "model/many8_request_model_b/bank_calibration/calibration.json",
+    "fixed_ns_calibration_36": "rtl/many8_bank_tree_a_fixed_time/calibration.json",
+    "scope_binding": "timing/bank8_binding_0008.json",
+    "physical_path_review": "5ns worst path real launch state_base register to state cache RAM address,16logic levels,80.514% routed interconnect; successor stores computed physical address in existing request FIFO. No constraint changed or path waived.",
+    "evidence_sha256": {
+      "source_binding.json": "a6e3a3083d66a3053e7cbbb769d97b4f3321f18fde822c20ac2da6e690889f27",
+      "routed_sta_v2/run.tcl": "afc1c8b8e7e9dbbcca60978c96fb18a3222237e9e5611463dafb871af7970d51",
+      "routed_sta_v2/scope.json": "0a03767939b03f521d7b4be1bbb34286322519fb4a3ac630c12025dd5ed35365",
+      "routed_sta_v2/route_status.rpt": "a4168b465fa7d2ca661f385d937833988682ecaa145f1f13bd0b2a0448d67392",
+      "routed_sta_v2/p10000ps.dcp": "c1ef274b78f46a215aeebb971e2d30cf40e977bff78135d735e8e36ef734af6e",
+      "routed_sta_v2/p10000ps.xdc": "c7f6b24e90bacc324e377ae09b5d60237949f9d139588ae0120dddc31fb58cc9",
+      "routed_sta_v2/p10000ps_check_timing.rpt": "9360c7a1bab137170619e5783799470579f96655e92a6d9f3573bd8b96b356d4",
+      "routed_sta_v2/p10000ps_clocks.rpt": "aa3efa9672fa442c6e781ec031371ae70719d67e731414aa6aea6a5bf7f48ef3",
+      "routed_sta_v2/p10000ps_drc.rpt": "a2419709e63351938113debab8740afc9e8300ed4046e6587880813bd6619b2f",
+      "routed_sta_v2/p10000ps_hold.rpt": "2244768065465a45fffee872be2813de28d876d36fb257b08ed3d1ef500f2ffd",
+      "routed_sta_v2/p10000ps_methodology.rpt": "37ccf816efdb2b8440691505b52109906deecf0588159c8f52599097831004d6",
+      "routed_sta_v2/p10000ps_setup.rpt": "3689b6a54c39b9ab738755f7d1059ba18c648bd27dfd7f9469bf9007d3f052b7",
+      "routed_sta_v2/p10000ps_timing.rpt": "0817bbeb5a1ec2b4d5515e96c8da17443af1d651f7ae20b3212c5f7bc95a28e9",
+      "model/many8_request_model_b/bank_calibration/calibration.json": "2ea8d873b662281805dbbaee883371910b92c0805fb92e0b7168ceafb0b407b3",
+      "rtl/many8_bank_tree_a_fixed_time/calibration.json": "603304d3cd33345cb9c9e113c20d03ddd3dd56751ea2bf8ae7f200d29ef67a26",
+      "timing/bank8_binding_0008.json": "2a7f1de9b7f1905c855159d11a48356a3bd7b73463872ecd91e0db61b27886cf",
+      "timing/many8_bank_context_a/routed_sta_v2/review_checks.json": "072639bfb562b139870ac6ac8d9a41402d8a884f6d8d95ef8e5c95e0a2d61d1f",
+      "timing/many8_bank_context_a/routed_sta_v2/routed_utilization.rpt": "13832b1315e923f41147fa140ba16423f3706e4c48baf0e1cac5628af047e917"
+    }
+  },
+  "state_address_repair": {
+    "mechanism": "physical_line_address_enqueued_in_existing_request_FIFO_169bits_instead_of137",
+    "FIFO_capacity": 64,
+    "cycle_stage_count_unchanged": true,
+    "base_contract": "immutable per batch",
+    "unit_owner_bits": [
+      3,
+      5
+    ],
+    "unit_nonzero_base_4M_full_backing_operations": 15360,
+    "unit_cycle_calibration": "both_passed",
+    "complete8": "many8_address_a_running",
+    "scope_no_inherited_clock": true
+  },
+  "central_grant_synthesis": {
+    "LUT": 227188,
+    "FF": 100414,
+    "RAMB36": 0,
+    "RAMB18": 0,
+    "setup5ns": -0.259,
+    "hold5ns": -0.074,
+    "prior_same_context_LUT": 223029,
+    "prior_setup5ns": -0.108,
+    "result": "resource_and_synthesis_setup_not_improved",
+    "standalone_route": "skipped",
+    "complete8_combined_OOC": "many8_grant_context_a_synthesizing",
+    "clock_qualified_mhz": null
+  },
+  "state_address_synthesis": {
+    "LUT": 6848,
+    "FF": 4556,
+    "RAMB36": 16,
+    "RAMB18": 2,
+    "setup5ns": 0.022,
+    "hold5ns": -0.074,
+    "actual_request_FIFO_bits": 169,
+    "REQUEST_STAGE": 1,
+    "OWNER_BITS": 5,
+    "route_started_utc": "2026-11-13T00:11:25Z",
+    "clock_qualified_mhz": null
+  },
+  "verified_checkpoint_snapshot": "evidence_snapshot/checkpoint_20261112T2357/manifest.json",
+  "verified_checkpoint_files": 64959,
+  "verified_checkpoint_predecessor_count": 8
 }

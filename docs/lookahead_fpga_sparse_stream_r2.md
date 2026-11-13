@@ -6,7 +6,7 @@
 
 有效 POP 的 whole-pair 归约、原桶闭合后等待所有事件排空的结束规则、稀疏目录/工作列表、有限 owner/state 缓存、changed/commit 流水、共享物理通道、cost 一次加载和 Q=1 batch 控制均已有可运行实现。当前完整32路候选为32 owners、每owner 8192成员/changed容量、32个假设物理通道，每通道64个ID；尚未实现或验证64路完整核。
 
-新共享通道归约版本的8路及32路均通过97个完整RTL/独立模型用例，核对全部周期、输出和流量。8路及32路均完成36组固定纳秒延迟假设校准。进一步的并行4-way缓存选择已通过81920组XSim穷举与owner/state单元检查，完整8路和32路F1/F0均重新通过97项及36组固定ns校准。最新bank上下文选择树的完整8路通过97项、36组固定ns及两个Q40输出边界；对应32路F1/F0校准与容量边界继续运行。
+新共享通道归约版本的8路及32路均通过97个完整RTL/独立模型用例，核对全部周期、输出和流量。8路及32路均完成36组固定纳秒延迟假设校准。进一步的并行4-way缓存选择已通过81920组XSim穷举与owner/state单元检查，完整8路和32路F1/F0均重新通过97项及36组固定ns校准。最新bank上下文选择树的完整8路通过97项、36组固定ns及两个Q40输出边界；对应32路F1/F0均已通过新的97项及36组校准，Q40与容量边界继续运行。
 
 下表为已完成的真实小图RTL完整batch。统一60-cycle基础延迟、0至12周期随机扰动、最短2-cycle通道接收间隔；不是板测或已定频结果。`F1`为有限4-way×32-set×32B owner缓存，`F0`为保留有限并发与ACK的无合并服务；state backing、物理通道、batch边界与请求流水保持对应。
 
@@ -25,7 +25,9 @@
 | owner_context_a，旧选择单元，已路由 | 7,629 | 4,223 | 13 / 2 / 0 | WNS −1.758，WHS +0.006 | 同一已路由网表8ns重新STA：+1.242/+0.006，仅此单元125MHz |
 | many8_context_tree_a，冻结完整8核已路由 | 234,879 | 154,909 | 368 / 112 / 0 | −2.656/+0.010 | 同一已路由网表8ns STA +0.344/+0.010，匹配97项及36组校准，仅该8核125MHz |
 | many8_context_reduction_b，共享通道修复完整8核已路由 | 234,728 | 154,823 | 368 / 112 / 0 | −2.823/+0.003 | 同一实际网表8ns STA +0.177/+0.003，匹配97项及36组校准，仅此8核125MHz |
+| many8_way_context_a，并行way完整8核已路由 | 235,916 | 154,920 | 368 / 112 / 0 | −2.500/+0.006 | 同一实际网表8ns STA +0.500/+0.006，匹配97项及36组校准，仅此8核125MHz |
 | central_reduction_a，33×32共享通道综合 | 223,029 | 100,412 | 0 / 0 / 0 | −0.108/−0.074 | 正在布线，单元结果 |
+| many8_bank_context_a，bank选择树完整8核已路由 | 235,511 | 154,845 | 368 / 112 / 0 | −3.103/+0.003 | 8ns仍−0.103；同一网表10ns +1.897/+0.003，仅此8核100MHz |
 | state_way_context_a，新选择state单元已路由 | 7,095 | 4,564 | 16 / 1 / 0 | −0.212/+0.012 | 同一已路由网表8ns STA +2.788/+0.012，仅此单元125MHz |
 | many32_mshr_a，旧线性选择完整32核综合 | 1,083,688 | 586,261 | 1064 / 296 / 288 | −14.408/+0.025 | 旧固定候选负结果，新完整32实现继续 |
 | many32_reg_b，旧多写MSHR完整32核综合 | 1,575,155 | 848,380 | 1064 / 296 / 288 | −7.110/+0.025 | 超LUT容量，停止此固定候选布线 |
@@ -34,6 +36,22 @@
 真实40-sample完整架构仿真已通过一个新请求流水场景：16-cycle基础延迟、2-cycle通道间隔、0至12周期扰动下，BNN/LSTM分别180,141,407/184,018,993cycles。完整输出、逐wave提交唯一性与工作量、全部ACK、初始化/输出流量和有限容量审计通过，且输出与合格native ALT一致。旧registered-ready模型60-cycle场景分别285,155,267/293,638,486cycles也通过；两组同时改变请求流水与延迟，不能把其比值当作单项流水收益。默认60cycle、120cycle和F0继续运行，尚无合格32核频率下的秒数。`board_measured=false`、`whole_kernel_timing_closed=false`、`fpga_simulated_superiority_supported=false` 保持不变。外存延迟及通道服务是明确假设，不是HBM实测；5ns/8ns固定时间组合目前也只是频率敏感性假设。
 
 软件对照已经完成并保存独立进程原始样本。新增prepared CSR+POP同范围GPU V2均值：BNN basic/compact 0.156690577/0.151799969s，LSTM 0.159888578/0.160247990s；旧GPU V2原样保留。native E2/Process及ALT与STRICT的历史差异另表处理。当前没有FPGA优于这些基线的完整证据。
+
+## 已完成的大图架构模型场景（周期结果）
+
+每项均为一次硬件启动、40个sample，包含mutable初始化、cost/job、搜索、提交、归约、输出写回和全部ACK。外存为32个共享同步假设物理通道，每通道64个ID、32B事务、最短2-cycle接收间隔，ready允许时采用固定seed的6/7接受条件，返回有0至12周期扰动。完整32核尚无合格频率，表中不填主比较秒数。
+
+| 配置 | 基础延迟(cycles) | BNN完整周期 | LSTM完整周期 | BNN/LSTM内部流量(GB) | 验证 |
+|---|---:|---:|---:|---:|---|
+| F1，新请求流水modelC | 16 | 180,141,407 | 184,018,993 | 75.889 / 77.446 | 完整输出、工作量、容量、native ALT身份通过 |
+| F1，新请求流水modelC | 60 | 285,126,884 | 293,652,813 | 75.479 / 77.029 | 完整输出、工作量、容量、native ALT身份通过 |
+| F1，旧registered-ready modelD | 60 | 285,155,267 | 293,638,486 | 75.475 / 77.032 | 完整输出、工作量、容量通过；历史对照 |
+
+16与60-cycle行的延迟假设不同，不能从比值归因流水加速。同为60-cycle时，新请求流水BNN周期下降0.00995%，LSTM上升0.00488%，不支持吞吐显著改善。120-cycle场景及匹配F0仍运行。旧modelE仅优化主机求值，完整两图总周期、阶段日志、服务计数、逐周期摘要及输出与modelD完全一致；它是模型实现一致性检查，不是独立硬件测量样本。
+
+新F1的BNN/LSTM逐wave唯一提交数分别104,210,988/106,141,205，与M1全部匹配；成员/changed峰值为6892/6863和6986/6982，均低于8192。owner/state MSHR与dirty峰值均实际达到32/16。16-cycle延迟场景的完整batch平均发射7.144/7.116候选/周期，观测峰值25/24，存在真实多候选并行；不以32-lane名义值充当实际吞吐。
+
+在16-cycle延迟场景的已观测流量及gap2假设下，平均事务吞吐约为gap限制上限的82.3%/82.2%；60-cycle场景降为51.7%/51.2%，平均候选发射4.514/4.459每周期。该条件服务界用于解释已完成结果，既不是其他架构的上限，也不是HBM板测。每数组事务、阶段占比、重叠的owner/state请求停顿计数见 `analysis/completed_native_2349.json`；工作审计和native身份引用见checkpoint。旧阶段记录中的“尚无完整大图”仅描述其当时状态。
 
 ## 已实现并核验的证据
 
@@ -105,6 +123,17 @@ prepared_CSR_valid_POP_CPU完整包含每sample mutable初始化、cost复制、
 | s38417 | pipeline | 0.160015837 | 6.022681292 | 3 |
 
 LSTM ALT相对STRICT保留23,111个congestion-word差异，delay/missing差异均0；相同ALT输出仅复用ALT的native资格，未声明STRICT等价。新增prepared-POP CUDA/CPU实测另列V2，不赋予历史native E2新的计时含义。
+
+另补入已冻结的R6.1 BNN native cohort，复用12个合格独立进程，覆盖原VPR多线程、optimized STRICT、ALT CPU和基础CUDA。该worker与上表R6.2及本轮prepared-POP worker不同，不计算跨cohort速度比。下表保持其历史中位数口径，E2/Process均不改名为V2。
+
+| BNN backend（R6.1） | E2中位数(s) | Process中位数(s) | n |
+|---|---:|---:|---:|
+| stock | 63.030000000 | 125.577600437 | 3 |
+| optimized | 10.393390145 | 73.061830186 | 3 |
+| alt_cpu | 9.751707411 | 72.823985672 | 3 |
+| alt_cuda | 3.104359912 | 66.725847946 | 3 |
+
+输入prefix和完整ALT输出hash与R2一致；原始行、命令、binary/map/route/输入绑定及统计见 `baselines/native_reuse/r61_bnn_baseline_supplement.json`。BNN ALT对STRICT的24,434个native congestion-word差异同样保留，不能与历史offline sample的133,798个差异混为一谈。
 
 ## 历次实现与失败记录（保留当时状态）
 
@@ -209,3 +238,13 @@ The completed-native work auditor passes d3/d4: candidate and changed work equal
 2026-11-12T22:54:22.607552+00:00 continuation: latest bank-tree complete32F1 passes97fresh RTL/model full-cycle/output/traffic tests. Parallel-way32F1/F0 each also passes allfourQ40/hot8192/overflow8193 boundary calibrations. Binding audit now evaluates complete dependent parameter expressions instead of a numeric prefix: C=41/161 and CTL=32/128 for8/32, OWNER_BITS=3/5. Seven actual source/parameter bindings pass; old artifacts retain their misleading display fields, while identical source hashes and explicit topology checks were unaffected. This audit correction changes no RTL, model cycles or OOC constraints.
 
 2026-11-12T22:59:45.872214+00:00 complete-native milestone: new request-stage F1 modelC at16cyclebase/gap2 completes BNN180141407cycles and LSTM184018993cycles, each40samples with one hardware start. Both complete work audits pass, including physical/array traffic, init/output counts, capacity, per-wave unique commits and all outputs. Member/changed peaks BNN6892/6863 and LSTM6986/6982 fit8192. Both per-wave commit-set digests equal the completed oldR0lat60 control. Native output identity reuse passes allfour completed model cases. `large_complete_batch_model_verified=true` is scoped only to this completed scenario; no main clock or FPGA superiority is claimed.
+
+2026-11-12T23:27:27.656063+00:00 continuation: new bank-tree complete32 F1/F0 syntheses finish with1091365/957243LUT,607867/551610FF,1064RAMB36+296/264RAMB18 and288URAM. Both fit the actual part; both5ns synthesis reports are WNS-1.075/WHS-.080, with frontend arithmetic29levels now worst. Fresh complete32F1 calibration97+36 andF0 calibration97pass;Q40/hot/fixed-ns followups continue. Actual full32F1/F0 routing launches23:25:54/55. Separate5/8/10ns routed STA scripts preserve constraints and wait for actual completion; no current complete32clock.
+
+2026-11-12T23:34:48.024846+00:00 reviewed milestone: complete8 parallel-way context passes8ns setup+.500/hold+.006/pulsewidth+3.458, all328794routable nets complete, no route errors and all12 check_timing categories zero. Real context resources235916LUT154920FF368RAMB36+112RAMB18. Source and actual dependent parameters bind the independently passed97+36case many8_way_tree_a. This additional125MHz qualification remains limited to its frozen8prototype; bank32F1/F0 routing is still active and no main clock is assigned.
+
+2026-11-12T23:53:21.293932+00:00 diagnosis: saved central33x32 physopt DCP reports internal return-arbitration to returned counter -1.984ns, and excluding counter endpoints only from report selection still shows -1.981ns to busy tag state. Estimated interconnect fractions72.137%/85.013%, with internal SLR crossing; no routed clock claim. Direct one-hot grants avoid encode/decode on handshake paths; bounded population trees replace serial counter increments. Same-cycle independent calibration and fresh8tile checks are underway; old active32 routes use immutable sources.
+
+2026-11-13T00:08:05.812010+00:00 reviewed milestone: bank-tree complete8 routes all330191nets withzeroerrors.5ns/8ns setup failures retained; actual10ns STA setup+1.897,hold+.003,pulsewidth+4.458 and12check_timing categories allzero. Source/parameters bind97+36passing cases. Qualification is100MHz only for many8_bank_tree_a; no clock transfer to neweronehot/address versions or32native.
+
+2026-11-13T00:12:58.928984+00:00 continuation: onehot fabric unit passes33000transactions+invalid-ID recovery;8/32hierarchies pass41000/161000transactions with exactly matching old independent model cycles.1156896 XSim priority/count cases pass. Complete8grant97+36andQ40pass. Its central-unit synthesis227188LUT100414FF,5ns-.259/-.074 is worse than prior223029LUT100412FF,-.108/-.074, so this standalone successor route is skipped; combined8OOC and baseline32routes continue. Separately, physical state-address precompute stores32extra bits in the existing64-entry request FIFO, no added cycles. Two nonzero-base4M-backing tests (ownerbits3/5) pass15360operations and exact independent cycle logs; complete8address97passes,36andQ40continue. State-address unit synthesis6848LUT4556FF16RAMB36+2RAMB18,5ns+.022/-.074,route started00:11:25; no unit clock claim yet.

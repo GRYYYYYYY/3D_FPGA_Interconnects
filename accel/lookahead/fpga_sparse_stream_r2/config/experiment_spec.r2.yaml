@@ -80,6 +80,8 @@ m4_external_state:
   clock_qualified_mhz: null
 m5_candidate:
   topology: owner_five_clients_to_one_finite_uplink_to_shared_physical_ports
+  Q: 1
+  maximum_sequential_jobs: 64
   lanes: 32
   physical_channels: 32
   members_per_owner: 8192
@@ -91,7 +93,7 @@ m5_candidate:
   physical_tag_capacity_per_channel: 64
   shallow_fabric_FIFO_style: distributed
   full_native_samples: 40
-  complete_batch_status: F1_l16_g2_BNN_LSTM40_output_work_capacity_native_identity_passed_other_scenarios_running
+  complete_batch_status: F1_l16_and_l60_g2_BNN_LSTM40_output_work_capacity_native_identity_passed_other_scenarios_running
   clock_qualified_mhz: null
   ooc_target_period_ns: 5
   ooc_clock_source_assumption: BUFGCE_X0Y144
@@ -102,9 +104,9 @@ m5_candidate:
   request_FIFO_total_capacity_including_stages: 64
   owner_selection: balanced_first32_and_parallel_way_masks_preserving_original_order
   current_RTL: many32_bank_tree_a
-  last_fully_calibrated_RTL: many32_way_tree_a
+  last_fully_calibrated_RTL: many32_bank_tree_a
   current_model: many32_request_model_c
-  modified_path_calibration: bank_selection_8_97_plus_36_and_two_Q40_passed_32_F1_97_plus_36_passed_F0_in_progress
+  modified_path_calibration: bank_selection_8_97_plus_36_and_two_Q40_passed_32_F1_97_plus36_plus4boundaries_passed_F0_97plus36_passed_boundaries_running
   shared_fabric_32_calibration: 97_full_cycle_output_traffic_exact
   current_OOC: many32_bank_context_a
   main_seconds_qualified: false
@@ -192,3 +194,48 @@ complete_native_model_verified_scenario:
   work_audit: analysis/complete_work_many32_request_model_c_large_l16_g2.json
   clock_qualified_mhz: null
   board_measured: false
+
+complete_native_default_verified_scenario:
+  model: many32_request_model_c
+  cache: F1
+  memory_base_latency_cycles: 60
+  memory_minimum_service_gap_cycles: 2
+  jobs_each: 40
+  BNN_cycles: 285126884
+  LSTM_cycles: 293652813
+  complete_output_work_ACK_capacity_checked: true
+  native_ALT_output_identity: true
+  work_audit: analysis/complete_work_many32_request_model_c_large_l60_g2.json
+  clock_qualified_mhz: null
+  board_measured: false
+
+fabric_grant_repair_under_validation:
+  basis: saved_central_physopt_internal_return_arbitration_to_counter_and_busy_paths
+  mechanism: direct_onehot_handshake_grants_and_balanced_population_counts
+  cycle_model: unchanged_independent_serial_priority
+  complete8_RTL: many8_grant_a
+  main_candidate_qualification_inherited: false
+
+qualified_bank_tree_tile_OOC:
+  RTL: many8_bank_tree_a
+  OOC: many8_bank_context_a
+  lanes: 8
+  tested_period_ns: 10
+  qualified_mhz: 100
+  setup_hold_pulse_width_ns: [1.897, 0.003, 4.458]
+  failed_setup_ns: {period5: -3.103, period8: -0.103}
+  resource_counts: {LUT: 235511, FF: 154845, RAMB36: 368, RAMB18: 112, URAM: 0}
+  complete97_plus_fixed_ns36_source_bound: true
+  report: timing/many8_bank_context_a/routed_sta_v2/qualification_review.json
+  scope: frozen_bank8_only_not_grant_address_32native_or_board
+
+state_address_repair_under_validation:
+  basis: actual_bank8_routed_state_base_to_RAM_address_path
+  request_FIFO_word_bits: 169
+  request_FIFO_capacity: 64
+  extra_cycles: 0
+  base_contract: immutable_per_batch
+  nonzero_base_owner_bits3_and5_full4M_backing_ops: 15360
+  independent_unit_cycle_exact: true
+  complete8_RTL: many8_address_a
+  main_candidate_qualification_inherited: false

@@ -1,4 +1,17 @@
 `timescale 1ns/1ps
+// One-hot grants preserve the existing first-after-cursor, then wrap policy.
+// Handshake paths use prefix reductions directly instead of encoding the
+// selected index and immediately decoding it across all destinations.
+module r2_round_robin_grant64(input wire [63:0] eligible,after_cursor,
+ output wire [63:0] grant);
+ wire use_after=|after_cursor;
+ for(genvar i=0;i<64;i=i+1)begin:grant_bits
+  if(i==0)assign grant[i]=use_after?after_cursor[i]:eligible[i];
+  else assign grant[i]=use_after?(after_cursor[i]&&!(|after_cursor[i-1:0])):
+                                  (eligible[i]&&!(|eligible[i-1:0]));
+ end
+endmodule
+
 // The external bank's 32 live contexts keep their original low-ID priority.
 // Decode each state in parallel, then select through balanced trees. Counts
 // have bounded widths at every adder level, including the all-32-live case.

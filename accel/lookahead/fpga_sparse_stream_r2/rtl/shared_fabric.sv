@@ -13,6 +13,20 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
  reg [PB-1:0] return_arb[0:C-1];wire [P-1:0] consume;
  reg [C-1:0] next_rv;reg [C*6-1:0] next_ri;reg [C*256-1:0] next_rd;
  wire [5:0] selected[0:P-1],tag[0:P-1],chosen[0:C-1];wire [P-1:0] select_valid,tag_valid;wire [C-1:0] chosen_valid;wire [P-1:0] busy_ports,response_fault;
+ wire [63:0] request_grant[0:P-1],return_grant[0:C-1];
+ wire [63:0] issue_bits,return_bits;wire [5:0] issue_lo,issue_hi,return_lo,return_hi;
+ wire [6:0] issued_count={1'b0,issue_lo}+{1'b0,issue_hi};
+ wire [6:0] return_count={1'b0,return_lo}+{1'b0,return_hi};
+ r2_popcount32 issued_low(issue_bits[31:0],issue_lo);
+ r2_popcount32 issued_high(issue_bits[63:32],issue_hi);
+ r2_popcount32 returned_low(return_bits[31:0],return_lo);
+ r2_popcount32 returned_high(return_bits[63:32],return_hi);
+ for(genvar p=0;p<64;p=p+1)begin:accounting
+  if(p<P)begin
+   assign issue_bits[p]=(!mv[p]||mr[p])&&tag_valid[p]&&select_valid[p];
+   assign return_bits[p]=sr[p]&&sv[p];
+  end else begin assign issue_bits[p]=0;assign return_bits[p]=0;end
+ end
  for(genvar c=0;c<C;c=c+1)begin:requests
   sparse_fifo #(.WIDTH(295),.DEPTH(4),.STYLE("distributed")) fifo(clk,rst,cv[c],cr[c],{cw[c],cl[c*32+:32],ci[c*6+:6],cd[c*256+:256]},qv[c],qr[c],qwords[c],count[c*3+:3]);
  end
@@ -24,14 +38,14 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
   // bit directly instead of cascading C variable-index writes to one vector.
   wire [C-1:0] consume_terms;
   for(genvar c=0;c<C;c=c+1)begin:consumers
-   assign consume_terms[c]=chosen_valid[c]&&chosen[c]==p&&(!rv[c]||rr[c]);
+   assign consume_terms[c]=return_grant[c][p]&&(!rv[c]||rr[c]);
   end
   assign consume[p]=|consume_terms;
  end
  for(genvar c=0;c<C;c=c+1)begin:request_ready
   wire [P-1:0] ready_terms;
   for(genvar p=0;p<P;p=p+1)begin:ports
-   assign ready_terms[p]=(!mv[p]||mr[p])&&tag_valid[p]&&select_valid[p]&&selected[p]==c;
+   assign ready_terms[p]=(!mv[p]||mr[p])&&tag_valid[p]&&request_grant[p][c];
   end
   assign qr[c]=|ready_terms;
  end
@@ -49,6 +63,7 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
   r2_first64 first_all(eligible,lv,lo);
   r2_first64 first_after(after_cursor,hv,hi);
   r2_first64 first_tag(free_tags,tag_valid[p],tag[p]);
+  r2_round_robin_grant64 grant(eligible,after_cursor,request_grant[p]);
   assign selected[p]=hv?hi:lo;assign select_valid[p]=lv;
  end
  for(genvar c=0;c<C;c=c+1)begin:return_select
@@ -60,6 +75,7 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
    end else begin assign eligible[p]=0;assign after_cursor[p]=0;end
   end
   r2_first64 first_all(eligible,lv,lo);r2_first64 first_after(after_cursor,hv,hi);
+  r2_round_robin_grant64 grant(eligible,after_cursor,return_grant[c]);
   assign chosen[c]=hv?hi:lo;assign chosen_valid[c]=lv;
  end
  always @*begin
@@ -69,21 +85,19 @@ module r2_shared_fabric #(parameter C=33,P=8,PB=(P>1?$clog2(P):1),TAGS=64)(input
   end
  end
  assign idle=qv==0&&count==0&&mv==0&&bv==0&&rv==0&&!(|busy_ports);
- integer issued_count,return_count;
  always @(posedge clk)begin
   if(rst)begin mv<=0;bv<=0;rv<=0;error<=0;accepted<=0;returned<=0;
    for(integer p=0;p<P;p=p+1)begin busy[p]<=0;arb[p]<=0;end
    for(integer c=0;c<C;c=c+1)return_arb[c]<=0;
   end else begin
    if(|response_fault)error<=1;
-   issued_count=0;return_count=0;
    for(integer p=0;p<P;p=p+1)begin
     if(!mv[p]||mr[p])begin mv[p]<=0;if(tag_valid[p]&&select_valid[p])begin
      mv[p]<=1;{mw[p],ml[p*32+:32]}<=qwords[selected[p]][262+:33];md[p*256+:256]<=qwords[selected[p]][255:0];mi[p*6+:6]<=tag[p];
-     busy[p][tag[p]]<=1;client[p][tag[p]]<=selected[p];local_id[p][tag[p]]<=qwords[selected[p]][256+:6];arb[p]<=selected[p]==C-1?0:selected[p]+1;issued_count=issued_count+1;
+     busy[p][tag[p]]<=1;client[p][tag[p]]<=selected[p];local_id[p][tag[p]]<=qwords[selected[p]][256+:6];arb[p]<=selected[p]==C-1?0:selected[p]+1;
     end end
     if(sr[p])begin bv[p]<=sv[p];if(sv[p])begin
-     bc[p]<=client[p][si[p*6+:6]];bi[p]<=local_id[p][si[p*6+:6]];bd[p]<=sd[p*256+:256];busy[p][si[p*6+:6]]<=0;return_count=return_count+1;
+     bc[p]<=client[p][si[p*6+:6]];bi[p]<=local_id[p][si[p*6+:6]];bd[p]<=sd[p*256+:256];busy[p][si[p*6+:6]]<=0;
     end end
    end
    for(integer c=0;c<C;c=c+1)if(!rv[c]||rr[c])begin rv[c]<=next_rv[c];ri[c*6+:6]<=next_ri[c*6+:6];rd[c*256+:256]<=next_rd[c*256+:256];if(next_rv[c])return_arb[c]<=return_arb[c]+1;end
