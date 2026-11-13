@@ -53,8 +53,10 @@ elif kind == 'many':
                ('active_counts',L*32),('commit_counts',L*32),('mshr_peaks',L*6),('dirty_peaks',L*5)]
 elif kind == 'fabric':
     C,P = map(int,sys.argv[2:4])
-    top,dut = f'r2_fabric{C}x{P}_context','r2_shared_fabric'
-    params = f'.C({C}),.P({P})'
+    onehot = int(sys.argv[4]) if len(sys.argv)>4 else 0
+    if onehot not in [0,1]: raise ValueError('DATA_ONEHOT must be zero or one')
+    top,dut = f'r2_fabric{C}x{P}' + ('_onehot' if onehot else '') + '_context','r2_shared_fabric'
+    params = f'.C({C}),.P({P}),.DATA_ONEHOT({onehot})'
     inputs = [('rst',1),('cv',C),('cw',C),('cl',C*32),('ci',C*6),('cd',C*256),
               ('rr',C),('mr',P),('sv',P),('si',P*6),('sd',P*256)]
     outputs = [('cr',C),('rv',C),('ri',C*6),('rd',C*256),('mv',P),('mw',P),

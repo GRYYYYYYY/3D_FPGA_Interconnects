@@ -99,3 +99,22 @@ The granular checkpoint and raw logs are in
 `results/fpga_sparse_stream_r2_20261112`; compact immutable checkpoints are under
 its `evidence_snapshot`. See `docs/lookahead_fpga_sparse_stream_r2.md` for current
 scope and unresolved work. No FPGA speedup claim or board measurement is made.
+
+
+Archived evidence can be restored into a **new** destination with
+`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T0235 completed_address8_route_0231 completed_checked8_route_0245`.
+The main checkpoint recursively restores its predecessors; explicitly named
+OOC archives add their timing reports. Use the desired completed-stage archive
+from `evidence_snapshot` for other physical candidates. Every part, original
+file size and SHA256 is verified. Only this invocation may overwrite its own
+restored files; an existing destination is rejected. The actual two-archive
+restore test is recorded in `supervision/restoration_test_0055.json`; it is
+separate from verification of the entire checkpoint chain. Large native input
+workloads, generated executables and Vivado DCPs remain on the shared filesystem
+at the bound paths; the compact Git evidence includes their recorded identities
+and source/build commands, not those external artifacts themselves.
+
+`analyze_cache_ablation.py` compares complete audited F0/F1 native batches only
+when hardware parameters (except proposal cache), full input/output identities,
+work counts and the memory service contract agree. It publishes cycle and
+traffic ratios, never an unqualified full-kernel frequency or FPGA/GPU speedup.

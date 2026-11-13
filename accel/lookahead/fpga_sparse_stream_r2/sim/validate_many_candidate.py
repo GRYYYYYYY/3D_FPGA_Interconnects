@@ -41,7 +41,7 @@ cmds = [
     ['tests/batch_capacity.py', a.variant],
 ]
 if large:
-    cmds += [['tests/many_hot_capacity.py', a.variant],
+    cmds += [['tests/many_hot_capacity.py', a.variant, a.model],
              ['sim/calibrate_many_boundaries.py', a.model, a.variant]]
 state = {'variant': a.variant, 'model': a.model, 'lanes': a.lanes,
          'cache': a.cache, 'gate': gate, 'status': 'running', 'steps': [],

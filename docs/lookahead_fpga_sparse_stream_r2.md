@@ -6,7 +6,7 @@
 
 有效 POP 的 whole-pair 归约、原桶闭合后等待所有事件排空的结束规则、稀疏目录/工作列表、有限 owner/state 缓存、changed/commit 流水、共享物理通道、cost 一次加载和 Q=1 batch 控制均已有可运行实现。当前完整32路候选为32 owners、每owner 8192成员/changed容量、32个假设物理通道，每通道64个ID；尚未实现或验证64路完整核。 当前harness物理/发射掩码为32bit，central client ID为6bit；64个owner再加controller需要65个central clients，不能只改lane参数。构建入口已显式拒绝超出当前实现范围的配置，见 `analysis/topology_limit_guards_0137.json`；此限制不代表新互连实现不可行。
 
-新共享通道归约版本的8路及32路均通过97个完整RTL/独立模型用例，核对全部周期、输出和流量。8路及32路均完成36组固定纳秒延迟假设校准。进一步的并行4-way缓存选择已通过81920组XSim穷举与owner/state单元检查，完整8路和32路F1/F0均重新通过97项及36组固定ns校准。最新bank上下文选择树的完整8路通过97项、36组固定ns及两个Q40输出边界；对应32路F1/F0均已通过新的97项、36组及四项Q40/容量边界校准。随后直接one-hot握手与state物理地址前移版本的完整8路分别通过97项、36组及两个Q40；地址前移32路F1/F0的重新校准和完整OOC正在运行。进一步的FP32错误路径修复已通过完整8路97项、36组固定ns及两个Q40；完整32路重新校准和独立10ns目标OOC正在运行，尚无完整32核时钟结论。
+新共享通道归约版本的8路及32路均通过97个完整RTL/独立模型用例，核对全部周期、输出和流量。8路及32路均完成36组固定纳秒延迟假设校准。进一步的并行4-way缓存选择已通过81920组XSim穷举与owner/state单元检查，完整8路和32路F1/F0均重新通过97项及36组固定ns校准。最新bank上下文选择树的完整8路通过97项、36组固定ns及两个Q40输出边界；对应32路F1/F0均已通过新的97项、36组及四项Q40/容量边界校准。随后直接one-hot握手与state物理地址前移版本的完整8路分别通过97项、36组及两个Q40；地址前移32路F1/F0已分别通过97项、36组及四项Q40/热点边界；其完整综合已结束，布线由已实现的FP32修复后继版本接替。进一步的FP32错误路径修复已通过完整8路97项、36组固定ns及两个Q40；完整32路重新校准和独立10ns目标OOC正在运行，尚无完整32核时钟结论。
 
 下表为已完成的真实小图RTL完整batch。统一60-cycle基础延迟、0至12周期随机扰动、最短2-cycle通道接收间隔；不是板测或已定频结果。`F1`为有限4-way×32-set×32B owner缓存，`F0`为保留有限并发与ACK的无合并服务；state backing、物理通道、batch边界与请求流水保持对应。
 
@@ -30,13 +30,16 @@
 | many8_bank_context_a，bank选择树完整8核已路由 | 235,511 | 154,845 | 368 / 112 / 0 | −3.103/+0.003 | 8ns仍−0.103；同一网表10ns +1.897/+0.003，仅此8核100MHz |
 | pair_legacy_context_a，原FP32单元已路由 | 813 | 611 | 0 / 0 / 0 | +0.043/+0.005 | 相同真实同步上下文，仅此算术单元200MHz |
 | pair_checked_context_a，错误路径修复单元已路由 | 783 | 612 | 0 / 0 / 0 | +0.221/+0.016 | 新旧所有输出周期等价，仅此算术单元200MHz |
+| many8_grant_context_a，one-hot仲裁完整8核已路由 | 235,875 | 154,905 | 368 / 112 / 0 | −3.012/+0.010 | 8ns仍−0.012；同一网表10ns +1.988/+0.010，仅此8核100MHz |
+| many8_address_context_a，地址前移完整8核已路由 | 234,657 | 155,130 | 368 / 120 / 0 | −2.201/+0.001 | 同一网表8ns +0.799/+0.001，仅此8核125MHz |
+| many8_checked_context_a，FP32修复完整8核已路由 | 234,904 | 154,972 | 368 / 120 / 0 | −2.531/+0.010 | 同一网表8ns +0.469/+0.010，仅此8核125MHz |
 | state_address_context_a，地址前移state单元已路由 | 6,989 | 4,556 | 16 / 2 / 0 | +0.014/+0.001 | 完整性、4M backing与独立周期差分通过，仅此单元200MHz |
 | state_way_context_a，新选择state单元已路由 | 7,095 | 4,564 | 16 / 1 / 0 | −0.212/+0.012 | 同一已路由网表8ns STA +2.788/+0.012，仅此单元125MHz |
 | many32_mshr_a，旧线性选择完整32核综合 | 1,083,688 | 586,261 | 1064 / 296 / 288 | −14.408/+0.025 | 旧固定候选负结果，新完整32实现继续 |
 | many32_reg_b，旧多写MSHR完整32核综合 | 1,575,155 | 848,380 | 1064 / 296 / 288 | −7.110/+0.025 | 超LUT容量，停止此固定候选布线 |
 | many32_c，旧ready完整32核综合 | 1,505,153 | 817,663 | 1665 / 446 / 288 | −6.091/+0.025 | 超LUT容量，停止此固定候选布线 |
 
-真实40-sample完整架构仿真已通过一个新请求流水场景：16-cycle基础延迟、2-cycle通道间隔、0至12周期扰动下，BNN/LSTM分别180,141,407/184,018,993cycles。完整输出、逐wave提交唯一性与工作量、全部ACK、初始化/输出流量和有限容量审计通过，且输出与合格native ALT一致。旧registered-ready模型60-cycle场景分别285,155,267/293,638,486cycles也通过；两组同时改变请求流水与延迟，不能把其比值当作单项流水收益。默认60-cycle及120-cycle场景也已完成并通过审计（见下表）；F0继续运行，尚无合格32核频率下的秒数。`board_measured=false`、`whole_kernel_timing_closed=false`、`fpga_simulated_superiority_supported=false` 保持不变。外存延迟及通道服务是明确假设，不是HBM实测；5ns/8ns固定时间组合目前也只是频率敏感性假设。
+真实40-sample完整架构仿真已通过一个新请求流水场景：16-cycle基础延迟、2-cycle通道间隔、0至12周期扰动下，BNN/LSTM分别180,141,407/184,018,993cycles。完整输出、逐wave提交唯一性与工作量、全部ACK、初始化/输出流量和有限容量审计通过，且输出与合格native ALT一致。旧registered-ready模型60-cycle场景分别285,155,267/293,638,486cycles也通过；两组同时改变请求流水与延迟，不能把其比值当作单项流水收益。默认60-cycle及120-cycle场景也已完成并通过审计（见下表）；匹配F0也已完成并通过全部工作/容量/ACK审计及native身份核验；仍无合格32核频率下的秒数。`board_measured=false`、`whole_kernel_timing_closed=false`、`fpga_simulated_superiority_supported=false` 保持不变。外存延迟及通道服务是明确假设，不是HBM实测；5ns/8ns固定时间组合目前也只是频率敏感性假设。
 
 完整候选绑定检查已将bank32的97项、36组固定ns、四项容量边界、冻结RTL/模型参数、16/60/120-cycle真实40batch工作审计和native ALT输出关联到同一模型可执行文件。由于完整32核尚无合格时钟，六个batch的模拟秒数均保持null。五项反例确认8路时钟、算术单元时钟、错误cache配置、其他模型run及其他native绑定不能混入；见 `analysis/bank32_bound_0129.json` 与 `analysis/binding_guard_tests_0104.json`。
 
@@ -52,12 +55,14 @@
 | F1，新请求流水modelC | 60 | 285,126,884 | 293,652,813 | 75.479 / 77.029 | 完整输出、工作量、容量、native ALT身份通过 |
 | F1，新请求流水modelC | 120 | 476,474,977 | 491,059,110 | 75.459 / 77.020 | 完整输出、工作量、容量、native ALT身份通过 |
 | F1，旧registered-ready modelD | 60 | 285,155,267 | 293,638,486 | 75.475 / 77.032 | 完整输出、工作量、容量通过；历史对照 |
+| F0，新请求流水 | 60 | 596,202,956 | 606,725,605 | 85.844 / 87.488 | 完整输出、工作量、容量、native ALT身份通过 |
+| F0，旧registered-ready | 60 | 596,009,195 | 606,848,449 | 85.843 / 87.488 | 完整输出、工作量、容量、native ALT身份通过 |
 
-16与60-cycle行的延迟假设不同，不能从比值归因流水加速。同为60-cycle时，新请求流水BNN周期下降0.00995%，LSTM上升0.00488%，不支持吞吐显著改善。三档F1场景均已完成；匹配F0仍运行。旧modelE仅优化主机求值，完整两图总周期、阶段日志、服务计数、逐周期摘要及输出与modelD完全一致；它是模型实现一致性检查，不是独立硬件测量样本。
+16与60-cycle行的延迟假设不同，不能从比值归因流水加速。同为60-cycle时，新请求流水BNN周期下降0.00995%，LSTM上升0.00488%，不支持吞吐显著改善。三档F1及匹配60-cycle F0场景均已完成并通过审计。旧modelE仅优化主机求值，完整两图总周期、阶段日志、服务计数、逐周期摘要及输出与modelD完全一致；它是模型实现一致性检查，不是独立硬件测量样本。
 
 新F1的BNN/LSTM逐wave唯一提交数分别104,210,988/106,141,205，与M1全部匹配；成员/changed峰值为6892/6863和6986/6982，均低于8192。owner/state MSHR与dirty峰值均实际达到32/16。16-cycle延迟场景的完整batch平均发射7.144/7.116候选/周期，观测峰值25/24，存在真实多候选并行；不以32-lane名义值充当实际吞吐。
 
-在16-cycle延迟场景的已观测流量及gap2假设下，平均事务吞吐约为gap限制上限的82.3%/82.2%；60-cycle场景降为51.7%/51.2%，平均候选发射4.514/4.459每周期。该条件服务界用于解释已完成结果，既不是其他架构的上限，也不是HBM板测。每数组事务、阶段占比、重叠的owner/state请求停顿计数见 `analysis/completed_native_0126.json`；工作审计和native身份引用见checkpoint。旧阶段记录中的“尚无完整大图”仅描述其当时状态。
+在16-cycle延迟场景的已观测流量及gap2假设下，平均事务吞吐约为gap限制上限的82.3%/82.2%；60-cycle场景降为51.7%/51.2%，平均候选发射4.514/4.459每周期。该条件服务界用于解释已完成结果，既不是其他架构的上限，也不是HBM板测。每数组事务、阶段占比、重叠的owner/state请求停顿计数见 `analysis/completed_native_0252.json`；工作审计和native身份引用见checkpoint。旧阶段记录中的“尚无完整大图”仅描述其当时状态。
 
 ## 已实现并核验的证据
 
@@ -105,9 +110,9 @@ prepared_CSR_valid_POP_CPU完整包含每sample mutable初始化、cost复制、
 
 ## 尚未完成
 
-- 新grant/address/checked完整8路及完整32路的routed OOC与setup/hold审查。已有冻结8路100/125MHz和state/pair单元200MHz不能转移给新完整32核。
-- 最新address与checked完整32路F1/F0的独立97项、36组固定ns及四项Q40/容量边界校准；bank版本的这些验证已全部通过。
-- 匹配F0完整大图对照、逐wave工作/容量审计和native输出身份核验。16/60/120-cycle F1均已完成；不外推未结束batch。
+- 完整32路的routed OOC与setup/hold审查；address与checked完整8路均已通过125MHz，grant完整8路通过100MHz。已有冻结8路100/125MHz和state/pair单元200MHz不能转移给新完整32核。
+- 最新checked完整32路F1/F0的末尾Q40/容量边界校准；其97项和36组已通过，bank与address版本的四项边界也已全部通过。
+- 将已完成的全部F1/F0 native40结果绑定到最终合格的完整核版本；完整输出、逐wave工作/容量/ACK审计与native身份已通过。
 - 通过完整核OOC后，绑定其精确版本和频率，明确内存周期参数到纳秒的换算，再建立模拟秒数列；无板卡shell/实板结论。
 - 汇总全部正负结果、验证证据快照、复核原worktree保护状态并推送独立分支。
 
@@ -141,6 +146,8 @@ LSTM ALT相对STRICT保留23,111个congestion-word差异，delay/missing差异�
 | alt_cuda | 3.104359912 | 66.725847946 | 3 |
 
 输入prefix和完整ALT输出hash与R2一致；原始行、命令、binary/map/route/输入绑定及统计见 `baselines/native_reuse/r61_bnn_baseline_supplement.json`。BNN ALT对STRICT的24,434个native congestion-word差异同样保留，不能与历史offline sample的133,798个差异混为一谈。
+
+同一新请求流水、共享通道和外部state服务下，F1相对F0使BNN/LSTM完整周期减少52.176%/51.600%，流量减少12.074%/11.956%；见`analysis/cache_R1_complete_0255.json`。此处只有模型周期与流量比。两类cache配置中新/旧请求流水的native周期变化均小于0.04%，不支持它带来显著吞吐收益。
 
 ## 历次实现与失败记录（保留当时状态）
 
@@ -269,3 +276,27 @@ The completed-native work auditor passes d3/d4: candidate and changed work equal
 2026-11-13T01:10:26.771967+00:00 follow-up: bank8 at its actually qualified10ns period passes18fixed-ns RTL/model cases (80/300/600ns base,5/10/20ns minimum gap,integer-cycle ceil and5ns jitter steps); this is conditional memory calibration, not memory measurement. Complete8checked synthesis235674LUT154723FF368RAMB36+120RAMB18,5ns setup-.346/hold-.080,26level result-data path; route starts01:06:06. Two existing evidence archives are actually restored into a new directory:193files110703498rawbytes, all hashes verified; full archive-chain hashes are separately verified.
 
 2026-11-13T01:30:15.450110+00:00 completion: latency120/gap2 F1 native40 completes at476474977/491059110cycles; complete work/capacity/ACK and per-wave commit uniqueness audits pass, nativeALTidentityexact. Meanissue2.701/2.667 and observed gap-only transfer utilization30.93%/30.63% are model observations, not fixed service ceilings. F0native stillruns. Intermediate address32 F1/F0 syntheses finish1091778/952227LUT,607749/551476FF,1064RAMB36+328/296RAMB18+288URAM; both5ns-1.075/-.080 legacy arithmetic error path. Their individualroutes are skipped because implemented checked-error successors already synthesize; bank baselines and latest full32OOCs continue. All predecessor evidence retained.
+
+2026-11-13T02:04:20.331899+00:00 physical milestone: direct-onehot complete8 is qualified only at100MHz after real10ns STA+1.988/+.010/pulse4.458,330154netsfullyrouted,12checktimingcategorieszero.8ns-.012failure remains. Its worst5ns path is state_base to node_state busyCE acrossSLR, already addressed in the independently running address/checked successors. Latestchecked32 F1/F0 actual10ns syntheses1075171/944933LUT,607781/551508FF,1064RAMB36+328/296RAMB18+288URAM;bothsynthsetup+4.590/hold-.080,notclocks. Their fresh97pass,F1fixedns36pass;fullrouteslaunch02:04/01:57:08;remainingboundariescontinue.
+
+2026-11-13T02:13:33.292027+00:00 test-orchestration failure: the new generic32candidate wrapper omitted the model argument when calling many_hot_capacity.py. AddressF1 first completes its8priorsteps (97+36+bothQ40) then stops before any hot-capacity DUT execution. Original script/receipt/log are preserved in failures/boundary_cli_argument_0209. The wrapper is corrected; already-started wrappers are observed until that exact argument failure and resume only the two missing tail tests in separate receipts. No RTL or nativebatch is restarted, no capacity pass is inferred.
+
+
+## 02:27 UTC：宽载荷选择器独立候选
+
+中央共享通道grant版本实际综合227188LUT，完整32核布线日志已报告局部SLL拥塞。新增默认关闭的`DATA_ONEHOT`候选，以已有one-hot仲裁结果驱动固定索引AND/OR平衡树，选择请求/返回的宽载荷；不改变优先级、ID、FIFO或寄存器边界。`fabric_onehot_a`独立RTL/模型验证和`central_onehot_a`相同33×32同步上下文综合正在运行。仅有测试/综合结果支持时继续集成，当前完整核和模型均未启用此候选，不能转移既有校准或频率。
+
+
+## 02:30 UTC：地址前移8核时钟与32路边界
+
+`many8_address_context_a`全部331690条可布线net已完成且无routing error；8ns STA setup +0.799ns、hold +0.001ns、pulse +3.458ns，12类check_timing均为零，实际234657LUT/155130FF/368BRAM36+120BRAM18。最坏路径转到bank5 state response RAM至data RAM，11级逻辑、路由占73.731%。5ns仍−2.201ns，保留失败；125MHz只绑定此8核的27个冻结RTL文件、有效参数及97+36项独立校准。
+
+地址前移32路F1的两个Q40及8192恰满/8193显式拒绝均已完成，并与独立模型全周期一致。最初批处理遗漏模型参数的失败记录保留，修复只执行缺失尾项。旧REQUEST_STAGE0 F0的BNN/LSTM真实40batch分别596009195/606848449cycles，完整输出与native ALT一致；逐wave工作审计正在进行，不能将其与REQUEST_STAGE1 F1直接归因为单一cache收益。
+
+
+旧REQUEST_STAGE0的完整F0逐wave工作/容量/ACK审计已通过。与相同R0、相同输入/内存假设的F1比较，BNN/LSTM F0/F1周期比约2.090/2.067，内部流量分别85.843→75.475GB、87.488→77.032GB。此处是模型周期消融，未赋予任何FPGA秒数；F0仍有有限读写/ACK和state cache，F1额外具有proposal owner缓存及miss合并。F0的owner停顿计数仅同node冲突，F1计全部dispatch阻塞，二者不能直接按同定义相减。新REQUEST_STAGE1 F0仍在运行。
+
+
+## 02:45 UTC：FP32修复完整8核资格
+
+`many8_checked_context_a`实际布线完成，331839条可布线net全部完成、零routing error。8ns下setup +0.469ns、hold +0.010ns、pulse +3.458ns，12类check_timing均零；实际234904LUT/154972FF/368BRAM36+120BRAM18。27个冻结RTL文件、有效参数及新的97+36项校准已绑定。最坏路径是bank6 owner请求FIFO RAM到MSHR候选RAM，17级逻辑、72.519%路径延迟为布线。单独FP32单元时序改善没有转化成完整8核更高的合格频率；新旧address/checked版本均仅证明125MHz，200MHz负结果保留。完整32核仍在布线。
