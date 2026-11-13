@@ -25,18 +25,41 @@ env.update(R2_MAX_CYCLES='5000000000', R2_COMPACT_TRACE='1')
 env.update(physical)
 items = json.loads((r / 'semantics/native_complete.json').read_text())[2:]
 
+def digest(path):
+    h = hashlib.sha256()
+    with Path(path).open('rb') as f:
+        for block in iter(lambda: f.read(8 << 20), b''):
+            h.update(block)
+    return h.hexdigest()
+
 def run(item):
     c = item['command']
     name = Path(c[3]).name
+    prepared = r / 'semantics/large_prepared' / (name + '.bin')
+    prepared_receipt = prepared.with_suffix('.json')
+    preparation = json.loads(prepared_receipt.read_text())
+    actual = {'workload_sha256': digest(c[1]),
+              'golden_sha256': digest(c[2]),
+              'prepared_sha256': digest(prepared)}
+    if (preparation['returncode'] != 0 or
+        actual['workload_sha256'] != item['workload_sha256'] or
+        actual['workload_sha256'] != preparation['workload_sha256'] or
+        actual['golden_sha256'] != item['golden_sha256'] or
+        actual['prepared_sha256'] != preparation['prepared_sha256']):
+        raise RuntimeError('native input identity mismatch before model launch: ' + name)
     d = out / name
     d.mkdir()
-    cmd = [str(exe), c[1], str(r / 'semantics/large_prepared' / (name + '.bin')),
+    cmd = [str(exe), c[1], str(prepared),
            c[2], str(d), latency, '1729', gap]
     receipt = {'command': cmd, 'status': 'running', 'whole_native_batch': True,
                'scope': 'exact cycle architecture model; hypothetical physical memory; no qualified clock',
                'executable_sha256': hashlib.sha256(exe.read_bytes()).hexdigest(),
                'workload_sha256': item['workload_sha256'],
                'golden_sha256': item['golden_sha256'],
+               'prepared_sha256': actual['prepared_sha256'],
+               'preparation_receipt_sha256': digest(prepared_receipt),
+               'all_input_hashes_rechecked_before_launch': True,
+               'runner_sha256': digest(__file__),
                'env': {k: v for k, v in env.items() if k.startswith('R2_')},
                'started_unix': time.time()}
     with (d / 'console.log').open('w') as log:

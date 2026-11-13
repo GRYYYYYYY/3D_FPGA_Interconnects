@@ -1,0 +1,69 @@
+{
+  "updated_utc": "2026-11-13T07:25:32.845910+00:00",
+  "classification": "conditional_screening_only_not_FPGA_performance_or_global_no_go",
+  "premises": [
+    "same observed per-port traffic and mapping",
+    "same finite synchronous cycle-gap port contract"
+  ],
+  "omitted_costs": [
+    "response latency",
+    "arbitration",
+    "dependency stalls",
+    "required control",
+    "final drain"
+  ],
+  "scope_limit": "Changes to traffic, layout, workload or physical service invalidate this screening; no measured HBM claim.",
+  "clock_qualified_by_this_analysis": false,
+  "board_measured": false,
+  "rows": [
+    {
+      "run": "model/many32_request_model_c/large_l16_g1/bnn_export",
+      "memory_base_latency_cycles": 16,
+      "memory_min_gap_cycles": 1,
+      "observed_internal_bytes": 75587946528,
+      "trace_conditional_minimum_transfer_cycles": 73960329,
+      "GPU_comparisons": {
+        "basic": {
+          "measured_resident_mean_seconds": 0.15669057711111112,
+          "necessary_kernel_MHz_if_observed_traffic_mapping_and_cycle_gap_unchanged": 472.0151674950681,
+          "necessary_aggregate_GB_per_second_if_observed_bytes_unchanged": 482.40263021304537
+        },
+        "compact": {
+          "measured_resident_mean_seconds": 0.15179996944444446,
+          "necessary_kernel_MHz_if_observed_traffic_mapping_and_cycle_gap_unchanged": 487.2222917480092,
+          "necessary_aggregate_GB_per_second_if_observed_bytes_unchanged": 497.94441200901275
+        }
+      },
+      "FPGA_performance_seconds": null
+    },
+    {
+      "run": "model/many32_request_model_c/large_l16_g1/lstm_s2",
+      "memory_base_latency_cycles": 16,
+      "memory_min_gap_cycles": 1,
+      "observed_internal_bytes": 77152373792,
+      "trace_conditional_minimum_transfer_cycles": 75745819,
+      "GPU_comparisons": {
+        "basic": {
+          "measured_resident_mean_seconds": 0.15988857844444446,
+          "necessary_kernel_MHz_if_observed_traffic_mapping_and_cycle_gap_unchanged": 473.74127493615157,
+          "necessary_aggregate_GB_per_second_if_observed_bytes_unchanged": 482.53836854774266
+        },
+        "compact": {
+          "measured_resident_mean_seconds": 0.16024799044444443,
+          "necessary_kernel_MHz_if_observed_traffic_mapping_and_cycle_gap_unchanged": 472.67874492479166,
+          "necessary_aggregate_GB_per_second_if_observed_bytes_unchanged": 481.45610798625
+        }
+      },
+      "FPGA_performance_seconds": null
+    }
+  ],
+  "evidence_sha256": {
+    "analysis/router32_gap1_bound_0725.json": "e09031941cb7a70d3dae8408516fd1bc2200378273372e3801f844a375a7deb2",
+    "software/prepared_pop_gpu_b/summary.json": "6132340c19894aeaabbe9486037b295625ea5215a48813994917e3f1d95f4526",
+    "model/many32_request_model_c/large_l16_g1/bnn_export/summary.json": "fe0052efb0d88aba5432d77df99acd6bd731d75dc6f8980fc1f5971db40f9a54",
+    "model/many32_request_model_c/large_l16_g1/bnn_export/output.bin": "a8ca4003a3b015145635a3f776bb62a3aec1ec2121a1fbfc8712d2a2dc1c8c3f",
+    "analysis/complete_work_many32_request_model_c_large_l16_g1.json": "e06ec4a92720c00023b19ff93fb063ed0888be1af6edd8b925f37b4ed98cb456",
+    "model/many32_request_model_c/large_l16_g1/lstm_s2/summary.json": "841dd3e3f112366d53f0cf58a7dc820b03b1cb5b445db54cb8c8db11af1d6f8d",
+    "model/many32_request_model_c/large_l16_g1/lstm_s2/output.bin": "6b2acd7718d880075d653b3b83f1fa3abb5161f6f346ed39c3aa1285160a95cf"
+  }
+}

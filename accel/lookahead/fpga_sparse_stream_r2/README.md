@@ -136,7 +136,7 @@ scope and unresolved work. No FPGA speedup claim or board measurement is made.
 
 
 Archived evidence can be restored into a **new** destination with
-`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T0700 completed_address8_route_0231 completed_checked8_route_0245`.
+`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T0726 completed_address8_route_0231 completed_checked8_route_0245`.
 The main checkpoint recursively restores its predecessors; explicitly named
 OOC archives add their timing reports. Use the desired completed-stage archive
 from `evidence_snapshot` for other physical candidates. Every part, original
@@ -162,3 +162,11 @@ reviewed report set; a missing or failed qualification leaves seconds null.
 completed error-checkpoint marker and rechecks both SHA256 identities before
 emitting read-only reports. The default-route failure and its physical-strategy
 follow-up remain different results even when their RTL is identical.
+
+
+`run_large_model.py` rehashes workload, golden and prepared CSR against the
+existing native/preparation manifests before launching each new full batch.
+Its new receipts record the prepared hash, preparation receipt hash and runner
+hash. This changes provenance only, not model cycles or input data. Earlier
+receipts remain unchanged; the separately dated current-input audit is not
+presented as a historical startup measurement.

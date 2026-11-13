@@ -386,3 +386,20 @@ ports8_complete_batch_sensitivity_plan:
   seed: 1729
   status: not_launched_pending_four_boundary_gate
   physical_memory_measured: false
+
+
+completed_gap1_sensitivity:
+  model: many32_request_model_c
+  RTL: many32_router_ready_a
+  jobs_each: 40
+  base_latency_cycles: 16
+  service_gap_cycles: 1
+  physical_channels: 32
+  seed: 1729
+  changed_factor_against_existing_gap2: service_gap_only
+  work_capacity_ACK_and_native_output_audits: passed
+  exact_source_and_fresh_RTL_calibration_binding: analysis/router32_gap1_bound_0725.json
+  comparison: analysis/gap1_vs2_complete_0725.json
+  hypothetical_memory: true
+  qualified_full_kernel_clock: null
+  FPGA_board_measured: false

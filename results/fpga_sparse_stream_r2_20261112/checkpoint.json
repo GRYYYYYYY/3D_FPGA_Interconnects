@@ -277,9 +277,9 @@
     "P32 F/K newrouter implementation and parent routed_sta_v2 are already active; C/E/G/I older implementations also active. D runs separate impl_spread_a with routed_sta_spread_a; original impl_1 failed and must remain untouched. B runs independent central_onehot_a unit. Query each session before further Tcl.",
     "P8 H vivado-20261112-191902-487477ac now runs impl_1 and parent routed_sta_v2, launched06:51:20. Synthesis passed920818LUT560586FF1064RAMB36+328RAMB18+288URAM; no clock. New pipeline38837 passed97 and extra18@10ns; fixed36+4 still active. Do not relaunch physical runs.",
     "P8 fresh97+fixed36+extra10ns18 PASS. After main pipeline38837 passes all4 boundaries, run four matching native40 scenario commands: run_large_model.py many32_p8_request_model_a 60 2; 16 2; 120 2; 16 1 (each starts bothBNN/LSTM40). Then full work/native identity audits and exact P8 binding. These P8 runs have not been launched; no P32 sensitivity transfer.",
-    "Gap1/gap4 native sensitivity already active handles98442/89340: model/many32_request_model_c/large_l16_g1 and large_l16_g4. Require both terminal40 receipts, then audit_complete_work.py with8192/8192 and audit_model_native_reuse.py. Partial progress is not a result.",
+    "Gap1 complete and audited/bound0725 (handle98442/86873 retrieved); gap4 still active89340. Require both gap4 terminal40 receipts then work/native audits and exact binding. Partial progress is not a result.",
     "New complete8 router is finished/qualified125MHz only. A finished readonly P32F0 placement diagnosis; review/archive0722. Central legacy H project already ended illegal with62694conflicting nets and was archived; DO NOT execute its prepared v2 sweep. H now belongs to P8.",
-    "Main0700 snapshot VERIFIED95142files across16snapshots; next predecessor must be0700. Its4262newfiles contain1778234310rawbytes/237840120archivebytes. Active native and RTL raw traces were explicitly deferred; later final delta required. Side archives0522/0527/0602 verified224files.",
+    "Main0726 snapshot VERIFIED95190files across17snapshots; next predecessor must be0726. Its48newfiles contain2894508908rawbytes/799506595archivebytes; includes complete gap1 traces. Active native and RTL raw traces were explicitly deferred; later final delta required. Side archives0522/0527/0602 verified224files.",
     "Only exact full32 routed setup/hold/pulse/constraints/fully-routed evidence can assign seconds. Finish report and evidence, preserve original refs/files, commit and push independent branch through bounded fastforward checkpoints; never force or merge main."
   ],
   "large_node_state_path_scope": {
@@ -419,7 +419,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "143d8ec85e3ec2affe71a3bde462b51126d8b1ca",
+  "checkpoint_commit": "b3d03de9a56a30dccac905ebd3676f87c6ac7ac9",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -1278,9 +1278,9 @@
     "route_started_utc": "2026-11-13T00:11:25Z",
     "clock_qualified_mhz": null
   },
-  "verified_checkpoint_snapshot": "checkpoint_20261113T0700",
-  "verified_checkpoint_files": 95142,
-  "verified_checkpoint_predecessor_count": 15,
+  "verified_checkpoint_snapshot": "checkpoint_20261113T0726",
+  "verified_checkpoint_files": 95190,
+  "verified_checkpoint_predecessor_count": 16,
   "conditional_issue_screen": "analysis/issue_bound_0019.json",
   "branch_pushed": false,
   "latest_fully_calibrated_32_F0": {
@@ -1517,7 +1517,7 @@
     "evidence": "snapshot checkpoint_20261113T0130 exists, verify_0130.log pending. Next snapshot must use it as predecessor. Latest committed HEAD52d3c8faccc7d0af5f186e9db71f26d62bddd8f0; not pushed.",
     "push": "After completion/protection audit push independent branch in fastforward checkpoints336bb48f,fbd1cf5a,d46f5f17,52d3c8fa,later commits to avoid >2GB packs; never force or modify main."
   },
-  "verified_checkpoint_snapshot_count": 16,
+  "verified_checkpoint_snapshot_count": 17,
   "many32_f0_checked_synth": {
     "LUT": 944933,
     "FF": 551508,
@@ -2258,7 +2258,14 @@
       "jobs_each": 40,
       "scope": "P8 must have its own complete-batch sensitivity; no inherited P32 traffic or time; no Cartesian parameter sweep",
       "status": "not_launched_gate_pending"
-    }
+    },
+    "completed_Q40_max_cell": {
+      "all_pass": true,
+      "cycles": 1889264,
+      "jobs": 40,
+      "record": "rtl/many32_p8_router_a_batch_capacity/max_node_max_cell_q40/receipt2.json"
+    },
+    "native_input_identity_audit": "analysis/current_large_input_identity_0740.json"
   },
   "router8_clock_qualification": {
     "RTL": "many8_router_ready_a",
@@ -2305,9 +2312,24 @@
     }
   },
   "gap1_complete_audit": {
-    "status": "running",
+    "status": "passed",
     "handle": 86873,
     "log": "supervision/audit_gap1_0720.log",
-    "native_batch_receipts": "both passed, all40 outputs exact; full work audit pending"
+    "native_batch_receipts": "both passed, all40 outputs exact; full work audit pending",
+    "full_work_audit": "analysis/complete_work_many32_request_model_c_large_l16_g1.json",
+    "native_binding": "baselines/native_reuse/gap1_outputs_0723.json",
+    "candidate_binding": "analysis/router32_gap1_bound_0725.json",
+    "comparison": "analysis/resident_router32_0725.json",
+    "sensitivity": "analysis/gap1_vs2_complete_0725.json",
+    "clock_qualified": false
+  },
+  "snapshot_0726": {
+    "status": "verified",
+    "new_files": 48,
+    "raw_bytes": 2894508908,
+    "archive_bytes": 799506595,
+    "verification_handle": 77367,
+    "log": "supervision/verify_0726.log",
+    "predecessor": "checkpoint_20261113T0700"
   }
 }
