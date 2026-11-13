@@ -57,7 +57,7 @@ for p in r.rglob('*'):
   # Verilator diagnostics/build failures remain in the compact evidence.
   files.append(p)
  if p.name in ['output.bin','representative_wave.bin']:files.append(p)
- if p.suffix=='.jsonl' and rel.parts[0] in ['accumulator','software']:files.append(p)
+ if p.suffix in ['.jsonl','.stderr'] and rel.parts[0] in ['accumulator','software']:files.append(p)
 manifest=[]
 for p in sorted(set(files)):
  rel=p.relative_to(r);dest=out/rel

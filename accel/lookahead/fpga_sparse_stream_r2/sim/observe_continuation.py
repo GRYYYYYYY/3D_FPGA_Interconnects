@@ -19,6 +19,9 @@ v['original_P8_F0_ooc']['variant']='many32_p8_f0_router_context_10ns_a'
 for p in sorted((r/'timing').glob('*/completed_route_rejection_continuation2054.json')):
  v['terminal_route_reviews'].append({'path':str(p.relative_to(r)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'result':read(p)})
 v['micro_OOC_terminal']=read(r/'timing/wave_inf_micro_ram_d_5ns/terminal.json')
+v['micro_OOC_recovery1_terminal']=read(r/'timing/wave_inf_micro_ram_d_5ns_recovery1/terminal.json')
+v['original_OOC_MCP_last_snapshot']=read(out/'original_ooc_MCP_2138.json')
+v['original_OOC_MCP_snapshot_notice']='The MCP result has its own observation time and must not be refreshed from parent PID alone.'
 v['micro_resource_gate']=read(r/'analysis/wave_inf_ram_d_resource_gate.json')
 v['GPU_job']='job-7977d112-86f2-42f0-9c4e-6481294f1e30'
 v['recovery_terminal']=read(r/'recovery/p8_f0_resume_2108/terminal.json')

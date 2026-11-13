@@ -1,0 +1,124 @@
+{
+  "status": "running_validated_plan",
+  "pid": 3577197,
+  "plan": {
+    "RTL": "many32_p8_f0_router_a",
+    "model": "many32_p8_f0_request_model_a",
+    "OOC": "many32_p8_f0_router_context_10ns_a",
+    "prefix": "p8_f0",
+    "calibration": "router_ready_calibration",
+    "binding": "timing/ports8_F0_binding_1310.json",
+    "synthesis_review": "timing/many32_p8_f0_router_context_10ns_a/synthesis_review_1346.json",
+    "scenarios": [
+      {
+        "latency_cycles": 60,
+        "gap_cycles": 2
+      },
+      {
+        "latency_cycles": 16,
+        "gap_cycles": 2
+      },
+      {
+        "latency_cycles": 16,
+        "gap_cycles": 1
+      }
+    ],
+    "recovery_manifest": "recovery/p8_f0_resume_2108/qualification.json"
+  },
+  "plan_path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/config/p8_f0_recovery_plan.json",
+  "plan_sha256": "4719ec9952148978fbe4bbb179c7633fa44367070afc68c8a5263c0ba9c33be1",
+  "launcher_sha256": "8c79162d5ee78485259ae5280d2b9c1258d493551fe8e0f2cff0b44a39b4a127",
+  "started_utc": "2026-11-13T21:08:02.949315+00:00",
+  "runs": {
+    "large_l60_g2": {
+      "status": "running_native",
+      "steps": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/run_large_model.py",
+            "many32_p8_f0_request_model_a",
+            "60",
+            "2"
+          ],
+          "script_sha256": "eebbdc70d95a131a12f68f7fa729dec8321a437256cab65c8368460f02390bf4",
+          "returncode": null
+        }
+      ]
+    },
+    "large_l16_g2": {
+      "status": "running_native",
+      "steps": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/run_large_model.py",
+            "many32_p8_f0_request_model_a",
+            "16",
+            "2"
+          ],
+          "script_sha256": "eebbdc70d95a131a12f68f7fa729dec8321a437256cab65c8368460f02390bf4",
+          "returncode": null
+        }
+      ]
+    },
+    "large_l16_g1": {
+      "status": "running_native",
+      "steps": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/run_large_model.py",
+            "many32_p8_f0_request_model_a",
+            "16",
+            "1"
+          ],
+          "script_sha256": "eebbdc70d95a131a12f68f7fa729dec8321a437256cab65c8368460f02390bf4",
+          "returncode": null
+        }
+      ]
+    }
+  },
+  "check_only": {
+    "command": [
+      "/usr/bin/python3",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/run_gated_native_plan.py",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/config/p8_f0_recovery_plan.json",
+      "p8_f0_recovered_native_2110b_check",
+      "--check-only"
+    ],
+    "returncode": 0,
+    "completed_utc": "2026-11-13T21:31:07.947370+00:00"
+  },
+  "gates": {
+    "evidence_sha256": {
+      "recovery/p8_f0_resume_2108/qualification.json": "befb1b8857c2702df7e5fce0db21f8afab7129a985229dd64a2fcab80ad84eb0",
+      "timing/ports8_F0_binding_1310.json": "cc9a98cc8067727089f41ed779f5bb09dc6108ed5fa04c7b1a47b085595808fe",
+      "rtl/many32_p8_f0_router_a_build/source_binding.json": "6e5ebaac8839d796ab26622e22f2456669d3c78df2c7d9206cfebe0e597db272",
+      "timing/many32_p8_f0_router_context_10ns_a/source_binding.json": "9e058e461eb9b708047e71f9517c71e9e2ddf6623a671e697137382a4452fb1a",
+      "model/many32_p8_f0_request_model_a/source_binding.json": "b87f05c69d340b5315727d001df996e74af7b64ececa97f4038d86570bd19766",
+      "model/many32_p8_f0_request_model_a/router_ready_calibration/calibration.json": "6bbc576e871a3040b2963c1aa5e4774afe571d3074a774990ba25840c9a9999c",
+      "rtl/many32_p8_f0_router_a_fixed_time/calibration.json": "6a4be497b0630a2d7c2a1ac5e1579475a5d05d999328395d6162002708b71e5f",
+      "rtl/many32_p8_f0_router_a_fixed10ns_p8_f0_resume_2108/calibration.json": "e481c404c29ce678f6b8e1a90ea0e9b8afe4fc8d7c645633c78fedb9e1791177",
+      "model/many32_p8_f0_request_model_a/boundary_p8_f0_resume_2108/calibration.json": "8ebdeb1449179e6148db824b2b1186e44b4587479e68f4ced59d546a64933549",
+      "timing/many32_p8_f0_router_context_10ns_a/synthesis_review_1346.json": "c3d71036ffec497ebedd433f93aef36f38aec740929369d575e90e7e79628645"
+    },
+    "parameters": {
+      "L": 32,
+      "PHYS": 8,
+      "OWNER_BITS": 5,
+      "C": 161,
+      "CTL": 128,
+      "USE_URAM": 1,
+      "CACHE_ENABLE": 0,
+      "REQUEST_STAGE": 1,
+      "POP_REDUCE": 1,
+      "MEMBER_CAP": 8192,
+      "CHANGED_LIMIT": 8192,
+      "CLOSED_LIMIT": 512,
+      "INIT_OUTSTANDING": 16
+    },
+    "executable_sha256": "10f6a59bb3a2cc79b6f5e2c6f71bc674bdb42d13564b032e99063e29b22b7c07",
+    "clock_qualification_not_required_for_cycle_simulation": true
+  }
+}

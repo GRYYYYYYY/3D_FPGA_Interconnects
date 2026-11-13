@@ -15,9 +15,11 @@ not proof of current liveness. All statements below are scoped to their evidence
 
 The original interrupted P8/F0 pipeline retains its receipt and partial hot-capacity
 output. The append-only `recovery/p8_f0_resume_2108` manifest rechecks 1,103 source,
-executable and evidence hashes, preserves eight passed stages, and runs only new
+executable and evidence hashes, preserves eight passed stages, and has passed newly tagged
 8192/8193 hot cases, four boundary calibrations and eighteen fixed-10ns cases.
-The gated supervisor records a successful `--check-only` invocation before starting
+The terminal qualification SHA256 is
+`befb1b8857c2702df7e5fce0db21f8afab7129a985229dd64a2fcab80ad84eb0`.
+The gated supervisor recorded `GATES_PASS` from an actual `--check-only` invocation before starting
 BNN/LSTM native40 at 60/g2, 16/g2 and 16/g1. No clock qualification is inferred from
 cycle-model eligibility. Original missing-stage receipts are never fabricated.
 
@@ -67,8 +69,9 @@ and physical-port traffic include all touched lines. The bounded scratch layout
 uses 64 bytes per line and four 32-byte transactions per fragment RMW, plus sparse
 enumeration and final canonical state128 reads/writes.
 
-The actual two-subbank RTL passes eight tests: empty,4096/4097 lines per subbank,
+The actual two-subbank RTL passes eight single-wave tests: empty,4096/4097 lines per subbank,
 continuous RAW and conflict/backpressure stress, and four recorded complete waves.
+A ninth test reuses the same RAM for two consecutive waves without reset, with worse second-wave pairs to expose stale accumulation; all512 candidates and both complete outputs pass.
 Finite testbench queues are depth8; scratch has 1,048,576 lines. Real-wave stress
 feeds all owner IDs into only two test subbanks; it is **not** evidence of a full
 32-owner router. An independent sequential cache model matches fragment/residency
@@ -103,9 +106,15 @@ functional failure. New RAM-repaired OOC uses local Vivado2022.2 batch mode.
 
 ## Outstanding
 
-Check the current manifest for actual liveness. Recovery tail calibration, six
-P8/F0 batches, original P8/F0 routing, bounded accumulator traffic/throughput model,
-RTL microprototype and software-transform comparison remain separate gates.
+Check the current manifest for actual liveness. Recovery tail calibration, the full-input finite-table profile, necessary budget
+analysis and RTL microprototype are complete. Six P8/F0 full batch cycle runs and
+the original P8/F0 routing are still running at this checkpoint. The new H100
+control job is queued. New micro OOC recovery is tracked separately. Per-opcode
+state-cache attribution for an integrated INF kernel and full-candidate cycle
+calibration have not been produced: the implemented organization fails the
+resource/traffic gates, so no full integration or full-candidate OOC is launched.
 Full integration is conditional on the guide's technical gates; failures do not
 cancel independent authorized work. Final remote SHA verification follows archive
 verification and normal pushes to the independent branch.
+
+After the initial archive checkpoint is pushed, `finalize_recovered_native.py` can supervise the six already launched runs, recheck qualification, archive all terminal output/trace/audit evidence, and perform normal bounded pushes. It refuses dirty tracked/index state and never restarts experiments. Its append-only receipt directory identifies whether this finalizer was actually launched and what it completed.

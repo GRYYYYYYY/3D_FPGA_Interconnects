@@ -24,7 +24,10 @@ int main(int argc,char**argv){try{
   expected[line].p[e.node&3]=std::min(expected[line].p[e.node&3],e.pair);
   events[(line>>5)&1].push_back(e);
  };
- if(std::string(argv[1])=="empty"){
+ unsigned wave_count=std::string(argv[1])=="two_waves"?2:1,wave_index=0;
+ if(std::string(argv[1])=="two_waves"){
+  for(unsigned i=0;i<128;++i)for(unsigned b=0;b<2;++b)add({((i%12)*64+b*32)*4+(i%4),0x3f80000040000000ull+(127-i)});
+ }else if(std::string(argv[1])=="empty"){
  }else if(std::string(argv[1])=="capacity4096"||std::string(argv[1])=="capacity4097"){
   unsigned count=std::string(argv[1])=="capacity4096"?4096:4097;
   for(unsigned i=0;i<count;++i)for(unsigned b=0;b<2;++b)add({(i*64+b*32)*4,0x3f80000040000000ull});
@@ -66,10 +69,18 @@ int main(int argc,char**argv){try{
       rr=b^1;busy=20;requests+=4;++merges;break;}}
    log<<cycle<<','<<a<<','<<uint32_t(d.retired)<<','<<uint32_t(d.retired>>32)<<','<<fg<<','<<fifo[0].size()<<','<<fifo[1].size()<<','<<busy<<','<<requests<<'\n';
    d.clk=1;d.eval();
-   if(d.done==3&&fifo[0].empty()&&fifo[1].empty()&&!busy){finished=true;break;}
+   if(d.done==3&&fifo[0].empty()&&fifo[1].empty()&&!busy){
+     if(++wave_index<wave_count){
+       std::ofstream prior(std::string(argv[3])+".wave0.csv");prior<<"line,sector,actual,expected\n";
+       for(auto line:lines)for(unsigned k=0;k<4;++k){prior<<line<<','<<k<<','<<scratch[line].p[k]<<','<<expected[line].p[k]<<'\n';require(scratch[line].p[k]==expected[line].p[k],"wave0 fragment differential");}
+       for(auto line:lines){scratch[line]=Row{};expected[line]=Row{};}
+       for(auto& bank:events)for(auto& e:bank){e.pair+=uint64_t(0x1000)<<32;expected[e.node>>2].p[e.node&3]=std::min(expected[e.node>>2].p[e.node&3],e.pair);}
+       pos={0,0}; // deassert flush on next cycle, reuse cleared RAM without reset
+     }else{finished=true;break;}
+   }
  }
- require(finished,"timeout");require(uint32_t(d.accepted)==events[0].size()&&uint32_t(d.accepted>>32)==events[1].size(),"accept count");require(d.retired==d.accepted,"retirement drain");
+ require(finished,"timeout");require(uint32_t(d.accepted)==wave_count*events[0].size()&&uint32_t(d.accepted>>32)==wave_count*events[1].size(),"accept count");require(d.retired==d.accepted,"retirement drain");
  std::ofstream out(argv[3]);out<<"line,sector,actual,expected\n";
  for(auto line:lines)for(unsigned k=0;k<4;++k){auto a=std::min(before[line].p[k],scratch[line].p[k]);auto e=std::min(before[line].p[k],expected[line].p[k]);out<<line<<','<<k<<','<<a<<','<<e<<'\n';require(a==e,"complete pair differential");}
- std::cout<<"{\"passed\":true,\"accepted\":"<<pos[0]+pos[1]<<",\"dual_accept_cycles\":"<<duals<<",\"accept_span_cycles\":"<<last-first+1<<",\"spill_fragments\":"<<uint32_t(d.spill_count)+uint32_t(d.spill_count>>32)<<",\"total_fragments\":"<<merges<<",\"queue_peak\":"<<peak<<",\"scratch_requests32B\":"<<requests<<",\"enumerated_slots\":"<<uint32_t(d.enumerated)+uint32_t(d.enumerated>>32)<<",\"board_measured\":false}"<<std::endl;
+ std::cout<<"{\"passed\":true,\"accepted\":"<<wave_count*(pos[0]+pos[1])<<",\"dual_accept_cycles\":"<<duals<<",\"accept_span_cycles\":"<<last-first+1<<",\"spill_fragments\":"<<uint32_t(d.spill_count)+uint32_t(d.spill_count>>32)<<",\"total_fragments\":"<<merges<<",\"queue_peak\":"<<peak<<",\"scratch_requests32B\":"<<requests<<",\"enumerated_slots\":"<<uint32_t(d.enumerated)+uint32_t(d.enumerated>>32)<<",\"board_measured\":false}"<<std::endl;
 }catch(std::exception&e){std::cerr<<e.what()<<std::endl;return 1;}}
