@@ -16,13 +16,14 @@ for p in sorted(out.glob('*launch*.json')):
   v['processes'].append({'launch':str(p.relative_to(r)),**observed})
 v['original_P8_F0_ooc']=proc(1125009)
 v['original_P8_F0_ooc']['variant']='many32_p8_f0_router_context_10ns_a'
-for p in sorted((r/'timing').glob('*/completed_route_rejection_continuation2054.json')):
+for p in sorted((r/'timing').glob('*/completed_route_rejection_*.json')):
  v['terminal_route_reviews'].append({'path':str(p.relative_to(r)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'result':read(p)})
 v['micro_OOC_terminal']=read(r/'timing/wave_inf_micro_ram_d_5ns/terminal.json')
 v['micro_OOC_recovery2_terminal']=read(r/'timing/wave_inf_micro_ram_d_5ns_recovery2/terminal.json')
 v['micro_OOC_review']=read(r/'timing/wave_inf_micro_ram_d_5ns_recovery2/review.json')
 v['micro_OOC_recovery1_terminal']=read(r/'timing/wave_inf_micro_ram_d_5ns_recovery1/terminal.json')
-v['original_OOC_MCP_last_snapshot']=read(out/'original_ooc_MCP_2156.json')
+v['original_OOC_MCP_last_snapshot']=read(r/'inf_followup_5af9908/original_OOC_terminal_input_v2.json') or read(out/'original_ooc_MCP_2156.json')
+v['original_P8_F0_ooc']['execution_state']='completed_failed' if (r/'timing/many32_p8_f0_router_context_10ns_a/completed_route_rejection_followup_2246.json').exists() else 'see_MCP_observation'
 v['original_OOC_MCP_snapshot_notice']='The MCP result has its own observation time and must not be refreshed from parent PID alone.'
 v['micro_resource_gate']=read(r/'analysis/wave_inf_ram_d_resource_gate.json')
 software=read(root/'accel/lookahead/fpga_sparse_stream_r2/config/current_software_run.json')
