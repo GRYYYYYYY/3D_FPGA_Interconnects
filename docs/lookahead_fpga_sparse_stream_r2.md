@@ -520,3 +520,10 @@ F0/F1的实现子进程分别于12:32:56/12:37:55退出，两者实际run状态�
 实际5ns setup/hold分别为−18.813/−0.157ns和−20.054/−0.105ns，pulse均+1.800ns，12类check_timing均0。实际F0资源952,048 LUT、551,610 FF、1064 RAMB36、264 RAMB18、288 URAM；F1为1,084,944 LUT、607,756 FF、1064 RAMB36、296 RAMB18、288 URAM。资源页标题Routed和子命令完成均不代表合法路由，也不赋予完整核频率。
 
 两套32份冻结源逐一重核，原DCP仅留共享文件系统并记录SHA。`completed_route_rejection_1247.json`、独立MCP父命令终态及148份报告/源码紧凑归档 `completed_bank32_routes_1248` 保留正负证据。归档前的解析核对还纠正了overlap统计：必须取最终Route35-2与Phase8一致的数值，不能取较早global iteration计数，修正记录见 `supervision/bank_rejection_collector_validation_1247.json`。这两项旧结构结束；四项新/修复后完整核实现及六项P8完整batch模拟继续。
+
+
+## 12:55 UTC：P8-F0组合候选与只读资源归因核对
+
+P8/P32实际placed fabric层次分别120,194/269,476 LUT，降低149,282；这是报告层次差额，不是独立模块成本定理。只读查询P8 DCP的32个state event_fifo范围发现103,407个逻辑LUT primitive，其中FILE_NAME归于external_bank 67,251、node_state 33,214、external_changed 2,334，sync_fifo仅608；具体active_count LUT的FILE_NAME也明确为external_bank.sv。逻辑primitive数与打包后的LUT资源数不同，不能将重建后的FIFO层次总数归因于FIFO独立实现。此观察不支持据该数字重写FIFO。原property输出与两侧报告hash保存在 `analysis/placed_FIFO_source_properties_1253.json` 和 `placed_hierarchy_attribution_1253.json`。
+
+已有P32 F0/F1实际面积对照与P8减少共享端口的结果，支持试验尚未组合的P8-F0：32 owners、8共享同步物理通道、8192成员/changed容量、32个F0事务槽/16写缓冲、原有限state backing和完整Q1控制。只关闭owner合并缓存，state缓存保持；默认DATA_ONEHOT仍0。预计面积下降仅是假设，F0可能增加流量和周期，不能用P32 F0或P8 F1旧周期代替。新名字 `many32_p8_f0_router_a` / `many32_p8_f0_request_model_a` / `many32_p8_f0_router_context_10ns_a` 已冻结，独立模型编译成功，真实综合与97+36+4全套RTL重新校准已启动，10ns额外18组在其后执行。两项旧组合门已通过，所有新组合结果与频率仍待验证，原运行继续。决策与具体证据hash见 `analysis/ports8_f0_candidate_decision_1255.json`。
