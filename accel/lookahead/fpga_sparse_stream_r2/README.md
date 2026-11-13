@@ -102,7 +102,7 @@ scope and unresolved work. No FPGA speedup claim or board measurement is made.
 
 
 Archived evidence can be restored into a **new** destination with
-`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T0314 completed_address8_route_0231 completed_checked8_route_0245`.
+`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T0400 completed_address8_route_0231 completed_checked8_route_0245`.
 The main checkpoint recursively restores its predecessors; explicitly named
 OOC archives add their timing reports. Use the desired completed-stage archive
 from `evidence_snapshot` for other physical candidates. Every part, original

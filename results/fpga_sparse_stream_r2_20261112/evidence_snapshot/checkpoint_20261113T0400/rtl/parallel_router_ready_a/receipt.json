@@ -1,0 +1,42 @@
+{
+  "all_pass": true,
+  "scope": "four8/32 candidate and cell routers, legacy full-cycle differential plus independent bounded FIFO/order/serial-arbitration scoreboard, reset under load, saturation/drain",
+  "results": [
+    {
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin/xvlog",
+        "--sv",
+        "priority_tree.sv",
+        "sync_fifo.sv",
+        "parallel_router.sv",
+        "parallel_router_legacy.sv",
+        "parallel_router_tb.sv"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin/xelab",
+        "parallel_router_tb",
+        "-s",
+        "router"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin/xsim",
+        "router",
+        "-runall"
+      ],
+      "returncode": 0
+    }
+  ],
+  "source_sha256": {
+    "priority_tree.sv": "d92d9cb1da300b832cae58eec707f43f8d040107bbebc6d3bade93fa7a8483a6",
+    "sync_fifo.sv": "9d0e2ac782e861c32cdac96b4887daabcf6fb82889394bfd382210e06a59d59b",
+    "parallel_router.sv": "627b8e6af62f4f4574bfe6b7f548a987cc61f6fb5a879069efc6749f1351bba7",
+    "parallel_router_legacy.sv": "0024dc7e5dd54a3ae332cbff8b4fd8c341a01d5554e5eb52e3d50019a634a8f3",
+    "parallel_router_tb.sv": "24e9c11187b499370843861c5add9cd9d54e0ffbf6e4cabf3fdca11b98aa8e29"
+  }
+}

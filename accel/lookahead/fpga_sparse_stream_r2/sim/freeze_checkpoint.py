@@ -24,7 +24,11 @@ for p in r.rglob('*'):
  # their status/progress now; freeze their full traces after terminal receipts.
  if any(parent==p.parent for parent in running) and p.name not in ['receipt.json','progress.json']:continue
  rel=p.relative_to(r)
- if p.suffix in ['.json','.csv','.log'] or ('source' in p.parts and p.suffix in ['.sv','.cpp','.hpp']):
+ # XSim unit runners freeze their SV directly inside rtl/<run>, unlike
+ # Verilator runs which use source/. Preserve those exact unit test versions
+ # too, while continuing to exclude generated C++ and simulator binaries.
+ unit_sv=p.suffix=='.sv' and p.parent.parent==r/'rtl'
+ if p.suffix in ['.json','.csv','.log'] or ('source' in p.parts and p.suffix in ['.sv','.cpp','.hpp']) or unit_sv:
   # Exclude generated compiler logs only when they are pure C++ build output;
   # Verilator diagnostics/build failures remain in the compact evidence.
   files.append(p)
