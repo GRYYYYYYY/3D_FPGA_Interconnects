@@ -33,6 +33,9 @@ watch=r/'supervision'/software['watch_tag'] if software else r/'supervision/priv
 gpu_observations=sorted(watch.glob('observation_*.json'),key=lambda p:int(p.stem.rsplit('_',1)[1]))
 v['GPU_last_status_change']=read(gpu_observations[-1]) if gpu_observations else None
 v['GPU_watch_terminal']=read(watch/'terminal.json')
+v['targeted_INF_micro_OOC']=read(r/'timing/inf_combo_c_5ns/review.json')
+v['targeted_INF_finite_budget']=read(r/'inf_followup_5af9908/finite_budget_v2.json')
+v['software_finalizers']=[{'path':str(p.relative_to(r)),'receipt':read(p)} for p in sorted((r/'supervision').glob('software_finalize_*/*.json')) if p.name in ['started.json','terminal.json','failed_preserved.json']]
 v['native_finalizers']=[{'path':str(p.relative_to(r)), 'receipt':read(p)} for p in sorted((r/'supervision').glob('finalize_recovered_native_*/*.json')) if p.name in ['started.json','terminal.json','failed_preserved.json']]
 v['recovery_terminal']=read(r/'recovery/p8_f0_resume_2108/terminal.json')
 v['native_supervisor']=read(r/'supervision/p8_f0_recovered_native_2110b.json')

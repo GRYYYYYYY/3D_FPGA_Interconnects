@@ -18,13 +18,13 @@ struct InfFiniteService {
  std::array<Bank,B> banks;std::array<T,32> port_next{};std::array<std::deque<T>,32> credits;
  std::array<T,B> front{};std::vector<T> line_ack,pending_word;std::vector<uint8_t> spilled,seen;
  std::array<std::array<T,32>,12> traffic{};std::array<T,12> onchip{};T cycle=0,arrival=0,edge_ready=0,parent_done=0,total_candidates=0;unsigned current_front=0,front_turn=0,edge_in_row=0;
- unsigned gap=1,nodes;T accepted=0,retired=0,spills=0,commits=0,intersection=0;unsigned peak_spill=0,peak_frag=0,peak_credit=0;
+ unsigned gap=1,nodes,freq=200,latency=16,gap_ns=5;T accepted=0,retired=0,spills=0,commits=0,intersection=0;unsigned peak_spill=0,peak_frag=0,peak_credit=0;
  std::ofstream log;std::string dir;
  enum {LABEL_INIT,POP_LABEL,CSR_ROW,CSR_EDGE,NODE_META,SCRATCH_READ,SCRATCH_WRITE,LABEL_READ,LABEL_WRITE,OUTPUT_READ,OUTPUT_WRITE,COST_LOAD};
  static unsigned bank(unsigned line){return (line&31)*2+((line>>5)&1);}
- T mem(unsigned b,T at,unsigned kind){unsigned p=b/2;auto&q=credits[p];T t=std::max(at,port_next[p]);while(!q.empty()&&q.front()<=t)q.pop_front();if(q.size()==32){t=std::max(t,q.front());q.pop_front();while(!q.empty()&&q.front()<=t)q.pop_front();}T ack=t+16;port_next[p]=t+gap;q.push_back(ack);peak_credit=std::max<unsigned>(peak_credit,q.size());++traffic[kind][p];return ack;}
+ T mem(unsigned b,T at,unsigned kind){unsigned p=b/2;auto&q=credits[p];T t=std::max(at,port_next[p]);while(!q.empty()&&q.front()<=t)q.pop_front();if(q.size()==32){t=std::max(t,q.front());q.pop_front();while(!q.empty()&&q.front()<=t)q.pop_front();}T ack=t+latency;port_next[p]=t+gap;q.push_back(ack);peak_credit=std::max<unsigned>(peak_credit,q.size());++traffic[kind][p];return ack;}
  T drain()const {T t=cycle;for(auto&q:credits)if(!q.empty())t=std::max(t,q.back());for(auto&b:banks)t=std::max(t,b.next);return t;}
- InfFiniteService(unsigned n,const std::string&d):line_ack(L),pending_word(L),spilled(L),seen(L),nodes(n),dir(d),log(d+"/finite_service_cycles.csv"){if(n>N)throw std::runtime_error("MAX_N_REJECT");log<<"sample,wave,start,end,candidates,spill_fragments,unique_commits,intersection\n";if(const char*p=getenv("INF_GAP"))gap=std::stoul(p);}
+ InfFiniteService(unsigned n,const std::string&d):line_ack(L),pending_word(L),spilled(L),seen(L),nodes(n),dir(d),log(d+"/finite_service_cycles.csv"){if(n>N)throw std::runtime_error("MAX_N_REJECT");log<<"sample,wave,start,end,candidates,spill_fragments,unique_commits,intersection\n";if(const char*p=getenv("INF_FREQ_MHZ"))freq=std::stoul(p);if(const char*p=getenv("INF_GAP_NS"))gap_ns=std::stoul(p);latency=(80*freq+999)/1000;gap=(gap_ns*freq+999)/1000;}
  void init(){cycle=drain();T start=cycle;for(unsigned l=0;l<(nodes+3)/4;++l)mem(bank(l),start,LABEL_INIT);for(unsigned b=0;b<B;++b){banks[b].pv=start+16384;onchip[0]+=16384;}cycle=std::max(drain(),start+16384);mem(0,cycle,COST_LOAD);mem(0,cycle,COST_LOAD);cycle=drain();}
  void begin(){cycle=drain()+1;for(unsigned b=0;b<B;++b){banks[b].next=cycle;banks[b].spilled.clear();banks[b].fragments.clear();}front.fill(cycle);front_turn=0;accepted=retired=spills=commits=intersection=0;std::fill(seen.begin(),seen.end(),0);}
  // POP uses old label and whole pending-word lock. Directory member service and
@@ -71,7 +71,7 @@ struct InfFiniteService {
   }
   cycle=drain()+1;log<<sample<<','<<wave<<','<<start<<','<<cycle<<','<<accepted<<','<<spills<<','<<commits<<','<<intersection<<'\n';
  }
- void save(){std::ofstream f(dir+"/finite_service.json");f<<"{\"scope\":\"new conservative finite event schedule, not RTL calibrated or complete-kernel clock qualified\",\"cycles\":"<<cycle<<",\"assumed_MHz\":200,\"latency_ns\":80,\"issue_gap_ns\":"<<5*gap<<",\"fpga_seconds\":null,\"board_measured\":false,\"candidates\":"<<total_candidates<<",\"peak_spill_list\":"<<peak_spill<<",\"peak_fragment_queue\":"<<peak_frag<<",\"peak_port_credits\":"<<peak_credit<<",\"traffic32B_by_operation_by_physical_port\":[";
+ void save(){std::ofstream f(dir+"/finite_service.json");f<<"{\"scope\":\"new conservative finite event schedule, not RTL calibrated or complete-kernel clock qualified\",\"cycles\":"<<cycle<<",\"assumed_MHz\":"<<freq<<",\"latency_ns\":80,\"issue_gap_ns\":"<<gap_ns<<",\"fpga_seconds\":null,\"board_measured\":false,\"candidates\":"<<total_candidates<<",\"peak_spill_list\":"<<peak_spill<<",\"peak_fragment_queue\":"<<peak_frag<<",\"peak_port_credits\":"<<peak_credit<<",\"traffic32B_by_operation_by_physical_port\":[";
   for(unsigned k=0;k<12;++k){if(k)f<<',';f<<'[';for(unsigned p=0;p<32;++p)f<<(p?",":"")<<traffic[k][p];f<<']';}f<<"],\"onchip_operations\":[";for(unsigned k=0;k<12;++k)f<<(k?",":"")<<onchip[k];f<<"]}\n";
  }
 };

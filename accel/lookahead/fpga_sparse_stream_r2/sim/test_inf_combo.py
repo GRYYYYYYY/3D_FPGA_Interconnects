@@ -1,4 +1,4 @@
-"""Real two-subbank RTL, finite 8-entry fragment queues and bounded scratch TB."""
+"""Real two-subbank RTL, one reserved scratch command/bank and bounded physical TB."""
 from pathlib import Path
 import os,sys,json,hashlib,subprocess,shutil,datetime
 root=Path(__file__).resolve().parents[4];s=root/'accel/lookahead/fpga_sparse_stream_r2';r=root/'results/fpga_sparse_stream_r2_20261112';out=r/'accumulator'/sys.argv[1];out.mkdir(exist_ok=False);f=out/'source';f.mkdir()
@@ -8,8 +8,8 @@ cmd=[str(u/'bin/verilator'),'--cc','--exe','--build','-j','4','--top-module','in
 with (out/'build.log').open('x') as log:rc=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,env=env).returncode
 (out/'source_binding.json').write_text(json.dumps({'command':cmd,'returncode':rc,'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in f.iterdir()},'scope':'two subbanks only; not full kernel; physical frequency unqualified'},indent=2)+'\n');assert rc==0
 results=[]
-for case in (sys.argv[2].split(',') if len(sys.argv)>2 else ['empty','maxn_overflow','operations','capacity4096','capacity4097','spill2048','spill2049','directed','two_waves','native_d3_w8','native_d4_w8','bnn_export','lstm_s2']):
- source=case if case in ['two_waves','empty','maxn_overflow','operations','capacity4096','capacity4097','spill2048','spill2049','directed'] else str(r/'accumulator/profile_a'/case/'representative_wave.bin')
+for case in (sys.argv[2].split(',') if len(sys.argv)>2 else ['empty','maxn_overflow','operations','capacity4096','capacity4097','spill2048','spill2049','concurrent_word','directed','two_waves','native_d3_w8','native_d4_w8','bnn_export','lstm_s2']):
+ source=case if case in ['two_waves','empty','maxn_overflow','operations','capacity4096','capacity4097','spill2048','spill2049','concurrent_word','directed'] else str(r/'accumulator/profile_a'/case/'representative_wave.bin')
  cmd=[str(out/'build/Vinf_combo_owner'),source,str(out/(case+'_cycles.csv')),str(out/(case+'_output.csv'))]
  with (out/(case+'.log')).open('x') as log:rc=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT).returncode
  results.append({'case':case,'command':cmd,'returncode':rc,'log':(out/(case+'.log')).read_text()});print(case,rc,flush=True)

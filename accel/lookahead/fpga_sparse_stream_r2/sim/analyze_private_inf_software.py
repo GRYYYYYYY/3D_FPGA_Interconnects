@@ -30,3 +30,34 @@ if (o/'summary.json').exists():assert json.loads((o/'summary.json').read_text())
 else:
  with (o/'summary.json').open('x') as f:json.dump(summary,f,indent=2);f.write('\n')
 print(json.dumps(budgets,indent=2))
+
+# Append a new comparison view; never rewrite historical experiments/budgets.
+updates=[]
+for budget in budgets:
+ case=budget['case'];target=budget['comparison_GPU_seconds']
+ for path in sorted((r/'accumulator').glob('inf_finite_native_*/'+case+'/finite_service.json')):
+  receipt=path.with_name('receipt.json')
+  if not receipt.exists():continue
+  qualified=json.loads(receipt.read_text())
+  if qualified['returncode'] or not qualified['output_exact']:continue
+  model=json.loads(path.read_text());cycles=model['cycles'];freq=model['assumed_MHz']
+  updates.append({'case':case,'source':str(path.relative_to(r)),'source_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'qualified_software_target_s':target,'conditional_model_s':cycles/(freq*1e6),'fails_necessary_budget_for_this_schedule':cycles>target*freq*1e6,'fpga_seconds':None,'board_measured':False,'scope':model['scope']})
+old=r/'analysis/wave_accumulator_bounded_a.json'
+if old.exists():
+ for row in json.loads(old.read_text())['rows']:
+  target=next(x['comparison_GPU_seconds'] for x in budgets if x['case']==row['case'])
+  updates.append({'case':row['case'],'historical_layout':row['layout'],'ports':row['physical_ports'],'gap_cycles':row['gap_cycles'],'assumed_frequency_MHz':row['assumed_frequency_MHz'],'qualified_software_target_s':target,'conditional_lower_bound_s':row['conditional_seconds_lower_bound'],'fails_necessary_budget':row['conditional_seconds_lower_bound']>target,'fpga_seconds':None,'board_measured':False})
+derived=r/'inf_followup_5af9908/review_bundle/FPGA_INF_Followup_5af9908/derived_layout_screen.json'
+if derived.exists():
+ for row in json.loads(derived.read_text())['rows']:
+  target=next(x['comparison_GPU_seconds'] for x in budgets if x['case']==row['case'])
+  cycles=row.get('phase_bound_plus_init_and_bitmap_cycles',row['limited_phase_bound_cycles'])
+  updates.append({'case':row['case'],'historical_layout':row['layout'],'source':str(derived.relative_to(r)),'source_sha256':hashlib.sha256(derived.read_bytes()).hexdigest(),'gap_cycles':row['gap_cycles'],'assumed_frequency_MHz':200,'qualified_software_target_s':target,'partial_bound_s':cycles/2e8,'remaining_budget_s':target-cycles/2e8,'scope':'partial arithmetic bound only; omits actual frontend/controller/RAW/ACK; not FPGA prediction','fpga_seconds':None,'board_measured':False})
+# Content-address each comparison view so independently finishing model evidence
+# can add a later view without invalidating the earlier software measurement.
+value={'scope':'comparison update only; retains stronger historical target; no historical result rewritten','rows':updates}
+raw=(json.dumps(value,indent=2)+'\n').encode();digest=hashlib.sha256(raw).hexdigest()
+new=o/('architecture_budget_update_'+digest[:16]+'.json')
+if new.exists():assert new.read_bytes()==raw
+else:
+ with new.open('xb') as f:f.write(raw)
