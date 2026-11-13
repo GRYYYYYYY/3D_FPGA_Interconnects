@@ -25,12 +25,14 @@ v['micro_OOC_recovery1_terminal']=read(r/'timing/wave_inf_micro_ram_d_5ns_recove
 v['original_OOC_MCP_last_snapshot']=read(out/'original_ooc_MCP_2156.json')
 v['original_OOC_MCP_snapshot_notice']='The MCP result has its own observation time and must not be refreshed from parent PID alone.'
 v['micro_resource_gate']=read(r/'analysis/wave_inf_ram_d_resource_gate.json')
-v['GPU_job']='job-7977d112-86f2-42f0-9c4e-6481294f1e30'
-gpu_observations=sorted((r/'supervision/private_inf_gpu_watch').glob('observation_*.json'),key=lambda p:int(p.stem.rsplit('_',1)[1]))
+software=read(root/'accel/lookahead/fpga_sparse_stream_r2/config/current_software_run.json')
+v['software_run_config']=software
+v['GPU_job']=software['job_id'] if software else None
+watch=r/'supervision'/software['watch_tag'] if software else r/'supervision/private_inf_gpu_watch'
+gpu_observations=sorted(watch.glob('observation_*.json'),key=lambda p:int(p.stem.rsplit('_',1)[1]))
 v['GPU_last_status_change']=read(gpu_observations[-1]) if gpu_observations else None
-v['GPU_watch_terminal']=read(r/'supervision/private_inf_gpu_watch/terminal.json')
-v['native_finalizer_terminal']=read(r/'supervision/finalize_recovered_native_2150/terminal.json')
-v['native_finalizer_failure']=read(r/'supervision/finalize_recovered_native_2150/failed_preserved.json')
+v['GPU_watch_terminal']=read(watch/'terminal.json')
+v['native_finalizers']=[{'path':str(p.relative_to(r)), 'receipt':read(p)} for p in sorted((r/'supervision').glob('finalize_recovered_native_*/*.json')) if p.name in ['started.json','terminal.json','failed_preserved.json']]
 v['recovery_terminal']=read(r/'recovery/p8_f0_resume_2108/terminal.json')
 v['native_supervisor']=read(r/'supervision/p8_f0_recovered_native_2110b.json')
 v['archive_four_routes']=read(out/'verify_four_routes.json')

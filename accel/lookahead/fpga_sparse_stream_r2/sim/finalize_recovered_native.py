@@ -15,7 +15,7 @@ def record(name,x):
 def execute(name,cmd,env=None):
  with (d/(name+'.log')).open('x') as log:rc=subprocess.run(cmd,cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT).returncode
  record(name,{'command':cmd,'returncode':rc,'utc':utc()});assert rc==0,name
-record('started',{'pid':os.getpid(),'start_ticks':Path('/proc/self/stat').read_text().split()[21],'utc':utc(),'predecessor':a.predecessor,'scope':'six already authorized full native40 runs only; append-only archive, independent branch push'})
+record('started',{'pid':os.getpid(),'start_ticks':Path('/proc/self/stat').read_text().split()[21],'utc':utc(),'predecessor':a.predecessor,'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'HEAD':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'scope':'six already authorized full native40 runs only; append-only archive, independent branch push'})
 try:
  while True:
   p=r/'supervision/p8_f0_recovered_native_2110b.json';state=json.loads(p.read_text())
@@ -28,17 +28,27 @@ try:
  plan=json.loads((root/'accel/lookahead/fpga_sparse_stream_r2/config/p8_f0_recovery_plan.json').read_text());validate_recovery(plan['recovery_manifest'],plan)
  tag='checkpoint_'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'_recovered_native'
  observation_tag=a.tag+'_native_complete'
+ # Check external dirt BEFORE generating our tracked pointer.
+ assert subprocess.run(['git','diff','--quiet'],cwd=root).returncode==0,'preexisting tracked changes; preserve results'
+ assert subprocess.run(['git','diff','--cached','--quiet'],cwd=root).returncode==0,'preexisting index changes; preserve results'
+ record('clean_before_generation',{'HEAD':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'utc':utc()})
  execute('observe',[sys.executable,str(scripts/'observe_continuation.py'),observation_tag])
- gpu=r/'software/private_inf_gpu_a'
+ owned=r/'continuation_82860ce/current_manifest.json';owned_sha=hashlib.sha256(owned.read_bytes()).hexdigest()
+ gpu_config=json.loads((root/'accel/lookahead/fpga_sparse_stream_r2/config/current_software_run.json').read_text())
+ gpu=r/'software'/gpu_config['run_tag']
  if (gpu/'completed.json').exists() and not (gpu/'summary.json').exists():
-  execute('analyze_GPU',[sys.executable,str(scripts/'analyze_private_inf_software.py'),'private_inf_gpu_a'])
+  execute('analyze_GPU',[sys.executable,str(scripts/'analyze_private_inf_software.py'),gpu_config['run_tag']])
  execute('freeze',[sys.executable,str(scripts/'freeze_checkpoint.py'),tag,a.predecessor,'--defer-running-batches','--defer-running-rtl','--include-completed-recovery'])
  verification='supervision/'+a.tag+'/verified_delta.json'
  execute('verify',[sys.executable,str(scripts/'verify_snapshot_delta.py'),tag,a.predecessor_verification,verification])
  # Publish complete verified evidence in bounded packs. Refuse any user/index dirt.
  assert subprocess.check_output(['git','branch','--show-current'],cwd=root,text=True).strip()==branch
  assert subprocess.run(['git','merge-base','--is-ancestor','82860ced203bde54f1fa267446b3d0edc521a293','HEAD'],cwd=root).returncode==0
- assert subprocess.run(['git','diff','--quiet'],cwd=root).returncode==0,'tracked working tree changed; preserve results without staging'
+ changed=set(subprocess.check_output(['git','diff','--name-only'],cwd=root,text=True).splitlines())
+ assert changed <= {str(owned.relative_to(root))},'unrelated tracked changes; preserve results'
+ assert hashlib.sha256(owned.read_bytes()).hexdigest()==owned_sha,'owned pointer modified after generation'
+ pointer=json.loads(owned.read_text());obs=r/pointer['authoritative_observation']
+ assert obs.name=='observation_'+observation_tag+'.json' and hashlib.sha256(obs.read_bytes()).hexdigest()==pointer['observation_sha256']
  assert subprocess.run(['git','diff','--cached','--quiet'],cwd=root).returncode==0,'index changed; preserve results'
  folder=r/'evidence_snapshot'/tag;groups=[];group=[];size=0
  for p in sorted(folder.rglob('*')):
