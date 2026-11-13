@@ -1,0 +1,86 @@
+{
+  "utc": "2026-11-13T13:53:06.430852+00:00",
+  "all_pass": true,
+  "launcher_sha256": "791c9e803a0d5d32b33f5fa67f123ce4f39ffebb3f4088cdb59f871811bdd314",
+  "tests": [
+    {
+      "case": "positive_existing_F1",
+      "plan": {
+        "RTL": "many32_p8_router_a",
+        "model": "many32_p8_request_model_a",
+        "OOC": "many32_p8_router_context_10ns_a",
+        "prefix": "gate_check_only",
+        "calibration": "router_ready_calibration",
+        "binding": "timing/ports8_binding_0557.json",
+        "synthesis_review": "timing/many32_p8_router_context_10ns_a/synthesis_review_0651.json",
+        "scenarios": [
+          {
+            "latency_cycles": 60,
+            "gap_cycles": 2
+          }
+        ]
+      },
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "stdout": "GATES_PASS\n",
+      "stderr": "",
+      "no_batch_launch": true
+    },
+    {
+      "case": "reject_wrong_model",
+      "plan": {
+        "RTL": "many32_p8_router_a",
+        "model": "many32_request_model_c",
+        "OOC": "many32_p8_router_context_10ns_a",
+        "prefix": "gate_check_only",
+        "calibration": "router_ready_calibration",
+        "binding": "timing/ports8_binding_0557.json",
+        "synthesis_review": "timing/many32_p8_router_context_10ns_a/synthesis_review_0651.json",
+        "scenarios": [
+          {
+            "latency_cycles": 60,
+            "gap_cycles": 2
+          }
+        ]
+      },
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/run_gated_native_plan.py\", line 121, in <module>\n    checked = gates()\n  File \"/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/accel/lookahead/fpga_sparse_stream_r2/sim/run_gated_native_plan.py\", line 64, in gates\n    assert pipeline['model'] == plan['model'] and pipeline['variant'] == plan['RTL'], 'pipeline/model/RTL identity mismatch'\nAssertionError: pipeline/model/RTL identity mismatch\n",
+      "no_batch_launch": true
+    },
+    {
+      "case": "pending_new_F0",
+      "plan": {
+        "RTL": "many32_p8_f0_router_a",
+        "model": "many32_p8_f0_request_model_a",
+        "OOC": "many32_p8_f0_router_context_10ns_a",
+        "prefix": "p8_f0",
+        "calibration": "router_ready_calibration",
+        "binding": "timing/ports8_F0_binding_1310.json",
+        "synthesis_review": "timing/many32_p8_f0_router_context_10ns_a/synthesis_review_1346.json",
+        "extra_parent_receipt": "supervision/p8_f0_fixed10ns_followup_1301.json",
+        "scenarios": [
+          {
+            "latency_cycles": 60,
+            "gap_cycles": 2
+          },
+          {
+            "latency_cycles": 16,
+            "gap_cycles": 2
+          },
+          {
+            "latency_cycles": 16,
+            "gap_cycles": 1
+          }
+        ]
+      },
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "stdout": "GATES_PENDING\n",
+      "stderr": "",
+      "no_batch_launch": true
+    }
+  ],
+  "scope": "check-only mode; accepts actually completed F1 gates, rejects different model and reports newF0 pending; no duplicate experiments"
+}
