@@ -213,3 +213,15 @@ Its new receipts record the prepared hash, preparation receipt hash and runner
 hash. This changes provenance only, not model cycles or input data. Earlier
 receipts remain unchanged; the separately dated current-input audit is not
 presented as a historical startup measurement.
+
+`run_gated_native_plan.py PLAN.json NEW_SUPERVISION_TAG` waits for the exact
+candidate's completed 97+36+18+4 calibration, frozen source/parameter identity
+and actual synthesis review before starting the configured full BNN/LSTM
+batches. Each completed pair is audited for work, native identity and candidate
+binding. `--check-only` launches nothing: exit 0 means the gates pass, 2 means
+pending, and 1 rejects a failed dependency or mismatched candidate. The P8-F0
+plan is `config/p8_f0_native_plan.json`; the active watcher is recorded in
+`supervision/p8_f0_native_pipeline_1359.json`. Inspect this record and the process
+before recovery; a second launch must not overwrite or duplicate existing runs.
+Architecture cycles do not require a qualified OOC clock, but simulated seconds
+and FPGA/software time ratios remain unavailable until qualification.
