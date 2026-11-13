@@ -124,7 +124,7 @@ of this combination; it does not prove all future INF structures impossible.
 four schedule comparisons. `analyze_inf_combo.py <newtag>.json` derives handshake
 rates and client traffic from raw cycle logs. Keep output tags new (append-only).
 
-## Independent result-chain status at2026-11-13 23:10UTC
+## Independent result-chain status at2026-11-13 23:03UTC
 
 - Original P8/F0 OOC: terminal negative, raw reports and frozen-source review
   archived and remote-verified at `e5ea6c6cdd687684b7a9d0ea947e0c0bbf903697`.
@@ -132,7 +132,7 @@ rates and client traffic from raw cycle logs. Keep output tags new (append-only)
   current samples8–15 of40. Native finalizer1187993 waits for all audited outputs,
   then verifies/freezes/pushes under a shared publication lock. No restart.
 - Replacement GPU `job-b0b53982-9534-405e-a441-83c777b9e93d`: still queued at
-  23:03UTC. No new GPU timing claimed. Watcher1145001 and independent software
+  23:00UTC. No new GPU timing claimed. Watcher1145001 and independent software
   finalizer1653677 wait for the frozen worker. All254 successful receipts are
   required; software target is min(historical qualified,new qualified CUDA).
   The analyzer retains process pairs and appends budget views for all old partial
