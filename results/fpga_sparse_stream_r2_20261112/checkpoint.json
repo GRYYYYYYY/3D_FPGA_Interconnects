@@ -273,13 +273,13 @@
   },
   "pending_commands": [
     "Inspect current physical/job state: python3 accel/lookahead/fpga_sparse_stream_r2/sim/inspect_live_runs.py. active_physical_jobs is authoritative; do not use dated historical session maps.",
-    "P32 F1/F0 pipelines52972/86625 each passed97+36+18@10ns. F1 twoQ40 passed; remaining hotspot/capacity boundaries active. Await pipeline passed, then bind unchanged existing native40 outputs using new router_ready calibration and timing/router_ready32_bindings_0416.json. Do not rerun completed native40 scenarios.",
+    "P32F1/F0 pipelines52972/86625 both finished PASS97+36+4 plus18@10ns. New router32_bound_0627 and router32_F0_bound_0658 bind six F1/two F0 existing native40 rows; clocks remainfalse. Both full physical runs continue. Do not rerun those unchanged native scenarios.",
     "P32 F/K newrouter implementation and parent routed_sta_v2 are already active; C/E/G/I older implementations also active. D runs separate impl_spread_a with routed_sta_spread_a; original impl_1 failed and must remain untouched. B runs independent central_onehot_a unit. Query each session before further Tcl.",
-    "P8 H session vivado-20261112-191902-487477ac now runs many32_p8_router_context_10ns_a synth_1. Actual RTL build passed; pipeline38837 uses --lanes32 --ports8 and fresh model e17194cc. After synth completion review actual resources, launch_runs impl_1 -to_step route_design -jobs 1, then source prepared routed_sta_v2/run.tcl which waits for impl. Do not act while wait_on_run synth_1 is active.",
-    "P8 extra10ns18 already running: sweep_fixed_time.py many32_p8_router_a many32_p8_request_model_a --period-ps 10000 --tag fixed_time_10ns_a (do not duplicate). After full pipeline97+36+4 pass: run_large_model.py many32_p8_request_model_a 60 2 for two complete40 batches, then full work/native identity audits and exact binding; no P32 performance transfer.",
+    "P8 H vivado-20261112-191902-487477ac now runs impl_1 and parent routed_sta_v2, launched06:51:20. Synthesis passed920818LUT560586FF1064RAMB36+328RAMB18+288URAM; no clock. New pipeline38837 passed97 and extra18@10ns; fixed36+4 still active. Do not relaunch physical runs.",
+    "P8 fresh97+fixed36+extra10ns18 PASS. After main pipeline38837 passes all4 boundaries, run four matching native40 scenario commands: run_large_model.py many32_p8_request_model_a 60 2; 16 2; 120 2; 16 1 (each starts bothBNN/LSTM40). Then full work/native identity audits and exact P8 binding. These P8 runs have not been launched; no P32 sensitivity transfer.",
     "Gap1/gap4 native sensitivity already active handles98442/89340: model/many32_request_model_c/large_l16_g1 and large_l16_g4. Require both terminal40 receipts, then audit_complete_work.py with8192/8192 and audit_model_native_reuse.py. Partial progress is not a result.",
-    "New complete8 router is finished/qualified125MHz only. A idle. Central legacy H project already ended illegal with62694conflicting nets and was archived; DO NOT execute its prepared v2 sweep. H now belongs to P8.",
-    "Main0607 snapshot VERIFIED90880files across15snapshots; next predecessor must be0607. Its1948newfiles contain154555590rawbytes/22831323archivebytes. Active native and RTL raw traces were explicitly deferred; later final delta required. Side archives0522/0527/0602 verified224files.",
+    "New complete8 router is finished/qualified125MHz only. A finished readonly P32F0 placement diagnosis; review/archive0722. Central legacy H project already ended illegal with62694conflicting nets and was archived; DO NOT execute its prepared v2 sweep. H now belongs to P8.",
+    "Main0700 snapshot VERIFIED95142files across16snapshots; next predecessor must be0700. Its4262newfiles contain1778234310rawbytes/237840120archivebytes. Active native and RTL raw traces were explicitly deferred; later final delta required. Side archives0522/0527/0602 verified224files.",
     "Only exact full32 routed setup/hold/pulse/constraints/fully-routed evidence can assign seconds. Finish report and evidence, preserve original refs/files, commit and push independent branch through bounded fastforward checkpoints; never force or merge main."
   ],
   "large_node_state_path_scope": {
@@ -376,7 +376,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-13T06:21:42.204221+00:00",
+  "updated_utc": "2026-11-13T07:00:09.237291+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -419,7 +419,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "f7fc195e9b697f63dff4492ce6e948bac547c103",
+  "checkpoint_commit": "143d8ec85e3ec2affe71a3bde462b51126d8b1ca",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -1166,7 +1166,18 @@
     "RTL": "many8_grant_a",
     "main_candidate_qualification_inherited": false
   },
-  "latest_fully_calibrated_32_F1": "many32_checked_a:97+36+4 all exact; resumed only missing boundary tail after preserved CLI failure",
+  "latest_fully_calibrated_32_F1": {
+    "RTL": "many32_router_ready_a",
+    "model": "many32_request_model_c",
+    "calibration": "router_ready_calibration",
+    "expected_cases": 97,
+    "fixed_time_cases": 36,
+    "extra10ns_cases": 18,
+    "boundary_cases": 4,
+    "complete_native_binding": "analysis/router32_bound_0627.json",
+    "native40_runs": 6,
+    "clock_qualified": false
+  },
   "bank8_clock_qualification": {
     "updated_utc": "2026-11-13T00:08:05.812010+00:00",
     "scope": "complete8 F1 bank-tree prototype L8 P8 MC1024 CC512 U0 R1, many8_bank_tree_a. Not newer grant/address variants, any32kernel, native timing, shell or board.",
@@ -1267,12 +1278,23 @@
     "route_started_utc": "2026-11-13T00:11:25Z",
     "clock_qualified_mhz": null
   },
-  "verified_checkpoint_snapshot": "checkpoint_20261113T0607",
-  "verified_checkpoint_files": 90880,
-  "verified_checkpoint_predecessor_count": 14,
+  "verified_checkpoint_snapshot": "checkpoint_20261113T0700",
+  "verified_checkpoint_files": 95142,
+  "verified_checkpoint_predecessor_count": 15,
   "conditional_issue_screen": "analysis/issue_bound_0019.json",
   "branch_pushed": false,
-  "latest_fully_calibrated_32_F0": "many32_f0_checked_a:97+36+4 all exact; tail-only recovery after preserved missing-model-argv failure",
+  "latest_fully_calibrated_32_F0": {
+    "RTL": "many32_f0_router_ready_a",
+    "model": "many32_request_f0_model_a",
+    "calibration": "router_ready_calibration",
+    "expected_cases": 97,
+    "fixed_time_cases": 36,
+    "extra10ns_cases": 18,
+    "boundary_cases": 4,
+    "complete_native_binding": "analysis/router32_F0_bound_0658.json",
+    "native40_runs": 2,
+    "clock_qualified": false
+  },
   "active_address_candidate": {
     "F1_RTL": "many32_address_a",
     "F0_RTL": "many32_f0_address_a",
@@ -1415,7 +1437,9 @@
     "main_seconds": null,
     "native40_scenarios": 6,
     "latest_checked32_F1": "analysis/checked32_bound_0256.json",
-    "latest_checked32_F0": "analysis/checked32_F0_bound_0328.json"
+    "latest_checked32_F0": "analysis/checked32_F0_bound_0328.json",
+    "router32": "analysis/router32_bound_0627.json",
+    "router32_F0": "analysis/router32_F0_bound_0658.json"
   },
   "evidence_restore_test": "supervision/restoration_test_0055.json",
   "legacy_pre_registered_complete": "analysis/legacy_pre_registered_complete_0102.json",
@@ -1493,7 +1517,7 @@
     "evidence": "snapshot checkpoint_20261113T0130 exists, verify_0130.log pending. Next snapshot must use it as predecessor. Latest committed HEAD52d3c8faccc7d0af5f186e9db71f26d62bddd8f0; not pushed.",
     "push": "After completion/protection audit push independent branch in fastforward checkpoints336bb48f,fbd1cf5a,d46f5f17,52d3c8fa,later commits to avoid >2GB packs; never force or modify main."
   },
-  "verified_checkpoint_snapshot_count": 15,
+  "verified_checkpoint_snapshot_count": 16,
   "many32_f0_checked_synth": {
     "LUT": 944933,
     "FF": 551508,
@@ -1868,7 +1892,7 @@
     "complete8_model": "many8_request_model_b",
     "complete8_calibration": "router_ready_calibration",
     "complete8_OOC": "many8_router_ready_context_a",
-    "status": "complete8_qualified125MHz;P32F1F0each97+36+18passed;four_boundaries_and_full32routes_pending",
+    "status": "complete8qualified125MHz;P32F1F0fullcalibration_and_native_binding_passed;full32physical_pending",
     "qualified_clock_mhz": null,
     "unit_total_cycles": 400000,
     "unit_total_accepted": 3106952,
@@ -1911,7 +1935,7 @@
     "complete32_source_binding": "timing/router_ready32_bindings_0416.json",
     "complete32_F1_97": "all_pass_full_cycles_outputs_traffic_histograms_phases",
     "complete32_F1_model_executable_sha256": "839e18598582680bc2c02a83751f5578501264fde82eecaa5372c8e8a9c73acf",
-    "complete32_F1_remaining": "fourQ40/hot capacity boundaries still active; no native binding yet",
+    "complete32_F1_remaining": "physical full-kernel qualification pending; fresh97+36+18+4 complete and six native40 model rows bound",
     "additional_fixed_time_10ns": {
       "F1_RTL": "many32_router_ready_a",
       "F1_status": "all18_passed",
@@ -1973,7 +1997,12 @@
       "worst_setup": "central busy to top phase CE,23logic levels,5.400ns estimated data; no timing qualification"
     },
     "complete8_qualified_clock_mhz": 125,
-    "complete8_route_review": "timing/many8_router_ready_context_a/routed_sta_v2/qualification_review.json"
+    "complete8_route_review": "timing/many8_router_ready_context_a/routed_sta_v2/qualification_review.json",
+    "complete32_F1_complete_pipeline": "passed",
+    "complete32_F1_binding": "analysis/router32_bound_0627.json",
+    "complete32_F0_remaining": "only physical full-kernel qualification pending",
+    "complete32_F0_complete_pipeline": "passed",
+    "complete32_F0_binding": "analysis/router32_F0_bound_0658.json"
   },
   "active_physical_jobs": {
     "many32_router_ready_context_10ns_a": {
@@ -1981,14 +2010,14 @@
       "last_observed_stage": "impl_1",
       "STA_followup": "routed_sta_v2",
       "recovery": "query session and existing run logs; do not reset/relaunch active work",
-      "status": "implementation_and_calibration_running"
+      "status": "implementation_active_fresh_calibration_and_native_binding_complete"
     },
     "many32_f0_router_ready_context_10ns_a": {
       "session": "vivado-20261112-205847-e7d439e5",
       "last_observed_stage": "impl_1",
       "STA_followup": "routed_sta_v2",
       "recovery": "query session and existing run logs; do not reset/relaunch active work",
-      "status": "implementation_and_calibration_running"
+      "status": "implementation_active_fresh_calibration_and_native_binding_complete"
     },
     "many32_checked_context_10ns_a": {
       "session": "vivado-20261112-164509-ef1e3de5",
@@ -2031,28 +2060,13 @@
     },
     "many32_p8_router_context_10ns_a": {
       "session": "vivado-20261112-191902-487477ac",
-      "last_observed_stage": "synth_1",
-      "status": "synthesis_running",
-      "recovery": "query existing run, do not reset or relaunch; former central unit has completed and is archived"
+      "last_observed_stage": "impl_1",
+      "status": "implementation_and_calibration_running",
+      "recovery": "H already runs parent STA source waiting forimpl_1; do not reset/relaunch",
+      "STA_followup": "routed_sta_v2"
     }
   },
   "active_validation_jobs": [
-    {
-      "RTL": "many32_router_ready_a",
-      "model": "many32_request_model_c",
-      "exec_handle": 52972,
-      "log": "supervision/many32_router_ready_a.log",
-      "receipt": "rtl/many32_router_ready_a_pipeline_receipt.json",
-      "recovery": "check receipt and process identity; existing pipeline already runs97+36+4; do not rebuild same run name"
-    },
-    {
-      "RTL": "many32_f0_router_ready_a",
-      "model": "many32_request_f0_model_a",
-      "exec_handle": 86625,
-      "log": "supervision/many32_f0_router_ready_a.log",
-      "receipt": "rtl/many32_f0_router_ready_a_pipeline_receipt.json",
-      "recovery": "check receipt and process identity; existing pipeline already runs97+36+4; do not rebuild same run name"
-    },
     {
       "RTL": "many32_p8_router_a",
       "model": "many32_p8_request_model_a",
@@ -2165,7 +2179,7 @@
     "OOC": "many32_p8_router_context_10ns_a",
     "L": 32,
     "PHYS": 8,
-    "status": "fresh_build_calibration_and_synthesis_active",
+    "status": "fresh97_plus36_plus18_passed_four_boundaries_and_implementation_running",
     "model_build_handle": 34017,
     "RTL_pipeline_handle": 38837,
     "model_build_log": "supervision/p8_model_build_0557.log",
@@ -2175,14 +2189,75 @@
     "board_measured": false,
     "model_build_status": "passed",
     "model_executable_sha256": "e17194cca9c0a3797095553583ed34ea0854bee65e6fd278b6b5033de9ad1a70",
-    "physical_STA_prepared_not_launched": "timing/many32_p8_router_context_10ns_a/routed_sta_v2/run.tcl",
-    "followup_after_synthesis_and_calibration": "Review synthesis then launch impl_1 and prepared STA in H when idle; extra10ns18 already runs43089; after fresh97+36+4 passes run newP8 complete40 native60/gap2 and audit all work/output/ACK before exact binding.",
+    "followup_after_synthesis_and_calibration": "Full impl and parent STA already active in H; never relaunch. After pipeline97+36+4 passes run matching newP8 native40 60/gap2, audit complete work/outputs/ACK and native identity, then exact P8 binding.",
     "additional_10ns_calibration": {
-      "status": "running",
+      "status": "passed",
       "tag": "fixed_time_10ns_a",
       "log": "supervision/p8_fixed10ns_0615.log",
       "scope": "fresh18 RTL/model comparisons at hypothetical10ns; notclockqualification",
-      "exec_handle": 43089
+      "exec_handle": 43089,
+      "cases": 18,
+      "record": "rtl/many32_p8_router_a_fixed_time_10ns_a/calibration.json",
+      "sha256": "f6d2f9c0499ed0770b625d42e09c61c03e7b3ce31fad182fff00b08d413af059"
+    },
+    "fresh97_calibration": {
+      "record": "model/many32_p8_request_model_a/router_ready_calibration/calibration.json",
+      "all_pass": true,
+      "cycle_output_traffic_phases_exact": true,
+      "model_executable_sha256": "e17194cca9c0a3797095553583ed34ea0854bee65e6fd278b6b5033de9ad1a70"
+    },
+    "small_graph_port_comparison": "analysis/ports8_vs32_small_0637.json",
+    "synthesis_review": "timing/many32_p8_router_context_10ns_a/synthesis_review_0651.json",
+    "synthesis_archive": "evidence_snapshot/completed_ports8_synth_0651",
+    "synthesis_resources": {
+      "LUT": 920818,
+      "FF": 560586,
+      "RAMB36": 1064,
+      "RAMB18": 328,
+      "URAM": 288,
+      "target_ns": 10,
+      "setup_ns": 4.59,
+      "hold_ns": -0.08,
+      "pulse_width_ns": 4.3
+    },
+    "implementation_started_utc": "2026-11-13T06:51:20Z",
+    "physical_STA_running": "timing/many32_p8_router_context_10ns_a/routed_sta_v2/run.tcl",
+    "fixed36_calibration": {
+      "record": "rtl/many32_p8_router_a_fixed_time/calibration.json",
+      "all_pass": true,
+      "cases": 36
+    },
+    "complete_native_plan_after_boundary_gate": {
+      "model": "many32_p8_request_model_a",
+      "scenarios": [
+        {
+          "latency_cycles": 60,
+          "gap_cycles": 2,
+          "role": "default"
+        },
+        {
+          "latency_cycles": 16,
+          "gap_cycles": 2,
+          "role": "latency_lower"
+        },
+        {
+          "latency_cycles": 120,
+          "gap_cycles": 2,
+          "role": "latency_upper"
+        },
+        {
+          "latency_cycles": 16,
+          "gap_cycles": 1,
+          "role": "bandwidth_sensitivity"
+        }
+      ],
+      "cases_each": [
+        "bnn_export",
+        "lstm_s2"
+      ],
+      "jobs_each": 40,
+      "scope": "P8 must have its own complete-batch sensitivity; no inherited P32 traffic or time; no Cartesian parameter sweep",
+      "status": "not_launched_gate_pending"
     }
   },
   "router8_clock_qualification": {
@@ -2199,9 +2274,40 @@
     "scope": "8lane only, no transfer to32owner P32/P8"
   },
   "resident_comparison_latest": {
-    "record": "analysis/resident_checked_0600.json",
-    "scope": "checked32 F1six/F0two complete40 model rows and measured transformed software V2",
+    "record": "analysis/resident_router32_0658.json",
+    "scope": "newrouter32 F1six/F0two full40 model rows and measured prepared CPU/basic/compact V2",
     "complete_kernel_seconds_available": false,
     "FPGA_board_measurement": false
+  },
+  "router_F0_placement_diagnosis": {
+    "status": "readonly_reports_running",
+    "variant": "many32_f0_router_ready_context_10ns_a",
+    "tag": "placement_diagnosis_0632",
+    "capture_log": "supervision/routerF0_placement_capture_0632.log",
+    "planned_readonly_session": "vivado-20261112-161837-7d305dc5",
+    "basis": "compare new repaired ready structure against actual oldcheckedF0 placement diagnosis and congestion; no original run mutation",
+    "scope": "placement diagnosis only; no routed clock",
+    "capture_exec_handle": 54314,
+    "captured_utc": "2026-11-13T06:54:03.742973+00:00",
+    "input_sha256": "d13ea5f5ec450b885a8aa4e465c13433f07dc23a83c479a450ffefc8188cb7a1",
+    "input_bytes": 461322249
+  },
+  "active_diagnostic_jobs": {
+    "new_router_F0_placement": {
+      "session": "vivado-20261112-161837-7d305dc5",
+      "command": "source timing/many32_f0_router_ready_context_10ns_a/placement_diagnosis_0632/run.tcl",
+      "status": "completed",
+      "scope": "readonly placed DCP copy; not routed clock",
+      "recovery": "poll session; do not source twice; original K implementation continues independently",
+      "review": "timing/many32_f0_router_ready_context_10ns_a/placement_diagnosis_0632/review.json",
+      "archive": "evidence_snapshot/completed_router_F0_placement_0722",
+      "clock_qualified": false
+    }
+  },
+  "gap1_complete_audit": {
+    "status": "running",
+    "handle": 86873,
+    "log": "supervision/audit_gap1_0720.log",
+    "native_batch_receipts": "both passed, all40 outputs exact; full work audit pending"
   }
 }

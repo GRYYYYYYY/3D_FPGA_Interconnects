@@ -6,7 +6,7 @@
 
 有效 POP 的 whole-pair 归约、原桶闭合后等待所有事件排空的结束规则、稀疏目录/工作列表、有限 owner/state 缓存、changed/commit 流水、共享物理通道、cost 一次加载和 Q=1 batch 控制均已有可运行实现。当前完整32路候选为32 owners、每owner 8192成员/changed容量、32个假设物理通道，每通道64个ID；尚未实现或验证64路完整核。 当前harness物理/发射掩码为32bit，central client ID为6bit；64个owner再加controller需要65个central clients，不能只改lane参数。构建入口已显式拒绝超出当前实现范围的配置，见 `analysis/topology_limit_guards_0137.json`；此限制不代表新互连实现不可行。
 
-最新候选是按真实布局路径修复的并行router ready归约。完整8路已通过97项、36组固定纳秒及两个Q40边界；新32路F1/F0均重新通过97项逐周期、输出、流量及阶段核对。F1/F0各自另通过36组固定ns与18组10ns补充；两者的四项Q40/热点容量边界尚未全部完成，不能提前给新候选完整native资格。对应完整32核综合已完成，实际布局布线于05:21启动。旧checked F1/F0各自的97+36+4及10ns18项校准继续保留，不能替代新router路径校准。旧checked F0默认route已因拥塞失败，同一综合网表的独立SSI策略run正在执行；所有完整32核时钟仍为null。
+最新P32候选是按真实布局路径修复的并行router ready归约。完整8路已通过97项、36组固定纳秒、两个Q40并取得本版本125MHz OOC资格。新32路F1现已通过97项逐周期/输出/流量/阶段核对、36组固定ns、18组10ns补充及4项Q40/热点容量边界；同一模型的三档延迟、两张图共六个native40完整batch已重新绑定，见`analysis/router32_bound_0627.json`。F0也已通过97+36+18+4，同一模型的BNN/LSTM两个native40 batch已经重新绑定，见`analysis/router32_F0_bound_0658.json`。对应完整32核综合已完成，实际布局布线仍在运行；所有完整32核时钟均为null。旧checked F0默认route拥塞失败和中央33×32单元非法路由的证据均已保存，同网表SSI策略与更小的32-owner/8共享通道完整候选正在验证。
 
 下表为已完成的真实小图RTL完整batch。统一60-cycle基础延迟、0至12周期随机扰动、最短2-cycle通道接收间隔；不是板测或已定频结果。`F1`为有限4-way×32-set×32B owner缓存，`F0`为保留有限并发与ACK的无合并服务；state backing、物理通道、batch边界与请求流水保持对应。
 
@@ -367,3 +367,33 @@ F0完整32布局诊断（独立DCP副本，不改正在运行的实现）显示S
 资源为234,392 LUT、155,114 FF、368 RAMB36和120 RAMB18，包含同步上下文开销。最坏路径转移到bank2前端FP32的parent至pair，25层逻辑、6.735ns数据延迟，其中4.673ns是实际布线。合格档仍为125MHz；没有声称完整核频率超过旧checked8。该资格严格限于L8/P8、MC1024/CC512配置，不能传递给L32/P32或L32/P8。见`timing/many8_router_ready_context_a/routed_sta_v2/qualification_review.json`。
 
 `analysis/resident_checked_0600.json`及同名CSV将已绑定的六个F1、两个F0完整batch与新prepared CPU/basic/compact软件实测分别列出。8个完整模型行的FPGA秒数和全部软件/FPGA比值均为null，因为这些完整32核尚无合格时钟；模型主机耗时和native E2/Process未作为resident分母。该表是旧checked候选的可追溯汇总，新的P32/P8变体将分别生成新绑定。
+
+
+## 06:27：新P32 F1完成全部并发域校准和native身份绑定
+
+`many32_router_ready_a`通过完整97项、36组固定ns、18组10ns及4项Q40/8192容量/8193拒绝校准，逐周期、全部输出和报告的流量/阶段均与独立模型一致。8193用例的RTL和模型都返回非零错误且无output，负结果按预期核验。`analysis/router32_bound_0627.json`绑定至同一可执行文件`839e18598582680bc2c02a83751f5578501264fde82eecaa5372c8e8a9c73acf`、27份冻结SV及L32/P32/MC8192/CC8192/U1/R1/F1参数。既有三档延迟的BNN/LSTM完整40batch及native ALT身份因此可复用；没有重跑相同模型、没有使用旧校准替代新并发路径。完整32核物理实现仍在运行，六行模型秒数继续为null。
+
+
+## 06:51：P8完整核综合完成并进入实际实现
+
+`many32_p8_router_context_10ns_a`实际综合为920,818 LUT、560,586 FF、1064 RAMB36、328 RAMB18和288 URAM；BRAM tile等效1228/2016，URAM288/960，LUT920818/1303680。相对于对应新P32 F1，LUT少158,882、FF少47,202，RAM数量相同；27份核心SV完全相同，差别来自PHYS32→8及相应同步上下文宽度，不能把总差额解释为某一个模块的纯资源成本。
+
+10ns综合后STA为setup +4.590ns、hold −0.080ns、pulse +4.300ns；最坏setup是bank0前端FP32 parent至pair的26层逻辑，5.255ns估计数据路径。综合结果不授予频率。原XDC在综合时已解析/应用，post hook在空clock查询后重新加载相同冻结XDC，保存的时钟/时序报告对应10ns。47文件完成归档并核验；06:51:20已经启动完整impl及5/8/10ns实际网表STA流程。
+
+P8已独立通过97项和18组10ns校准，固定ns36及四项边界继续执行。其完整小图d3/d4周期为104,587/203,964，对应P32为104,440/202,122；这是共享同一小图输入的完整batch周期，不能推断4M真实batch的端口瓶颈。见`analysis/ports8_vs32_small_0637.json`与`timing/many32_p8_router_context_10ns_a/synthesis_review_0651.json`。完整P8 native40尚未运行，不借用P32的流量或时间。
+
+
+## 06:58：新P32 F0完成并发域校准；P8进入容量门
+
+新F0的97+36+18+4全部通过；8192完整输出和8193明确拒绝、无输出行为均正确。`analysis/router32_F0_bound_0658.json`将两个已有真实40-sample完整模型结果绑定到本次冻结源与参数。新的`analysis/resident_router32_0658.json`及CSV包含F1六行、F0两行；对应完整核尚未获得合格时钟，所有FPGA秒数、软件/FPGA比值仍为null。
+
+P8另已通过97+36+18，正执行四项容量/完整batch边界。该配置后续必须运行自己的真实完整batch及内存敏感性：固定gap2下16/60/120周期基础延迟，以及16周期延迟下gap1对照；每项均为BNN/LSTM各40sample。这样检验减少端口后的延迟与带宽影响，不借用P32的流量或结果，也不做全部参数笛卡尔积。当前这些P8大图运行尚未启动。
+
+
+## 07:22：新P32 F0布局诊断与证据快照
+
+从正在运行的K实现中只读复制完整placed DCP，并在独立A会话生成报告；源与副本SHA均为`d13ea5f5ec450b885a8aa4e465c13433f07dc23a83c479a450ffefc8188cb7a1`，未修改原实现。10ns估计setup−2.601ns、hold−0.317ns、pulse+4.300ns；1,252,808条可路由net中1,252,781条尚未布线，27条显式gap。因此不是可用频率证据。
+
+最坏数据路径由bank4 metadata valid，经cell-router仲裁/输出FIFO ready到bank25 metadata旋转CE，9层逻辑、11.837ns估计数据延迟，其中11.205ns（94.661%）为估计布线；数据路径三次跨SLR。SLR0/1/2的CLB占用96.19%/99.83%/86.45%，最大拥塞等级7。相对旧checked F0的较少逻辑层级不能解释为时序已改善：网表、布局和最坏路径都不同。继续已启动的P8减少物理交换范围候选与原有实际路由；15份诊断文件见`completed_router_F0_placement_0722`。
+
+`checkpoint_20261113T0700`的4,262份新增文件已冻结并校验；连同前序共95,142份文件、16个快照。P8运行中的RTL和当时未结束的gap1/gap4原始记录明确延后归档，不将中间文件作为最终结果。gap1两个真实40batch现均已完成并与native ALT全部输出一致，工作/容量/流量的独立审计仍在运行。

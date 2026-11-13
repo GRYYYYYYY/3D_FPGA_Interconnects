@@ -104,9 +104,9 @@ m5_candidate:
   request_FIFO_total_capacity_including_stages: 64
   owner_selection: balanced_first32_and_parallel_way_masks_preserving_original_order
   current_RTL: many32_router_ready_a
-  last_fully_calibrated_RTL: many32_checked_a
+  last_fully_calibrated_RTL: many32_router_ready_a
   current_model: many32_request_model_c
-  modified_path_calibration: new_router_F1_F0_each97_plus36_plus18_passed_four_boundaries_pending
+  modified_path_calibration: new_router_F1_F0_each97_plus36_plus18_plus4_passed_eight_native40_runs_bound
   shared_fabric_32_calibration: 97_full_cycle_output_traffic_exact
   current_OOC: many32_router_ready_context_10ns_a
   main_seconds_qualified: false
@@ -352,7 +352,7 @@ ports8_physical_candidate:
   motivation: actual33x32central_routing_conflicts_and_full32default_congestion
   tradeoff: four_times_less_aggregate_service_capacity_at_equal_per_channel_gap
   calibration_inherited: false
-  status: fresh_RTL_model_and_OOC_running
+  status: fresh97_plus36_plus18_passed_four_boundaries_and_actual_implementation_running
   clock_qualified_mhz: null
   board_measured: false
 
@@ -370,3 +370,19 @@ qualified_router_ready_tile_OOC:
   source_parameters_and_97_plus_36_calibration_bound: true
   scope: complete8_prototype_only_not32owner_P32_or_P8_kernel_or_board
   report: timing/many8_router_ready_context_a/routed_sta_v2/qualification_review.json
+
+
+ports8_complete_batch_sensitivity_plan:
+  model: many32_p8_request_model_a
+  gate: fresh_complete97_fixed36_boundaries4
+  jobs_each: 40
+  cases_each: [bnn_export, lstm_s2]
+  cycle_contracts:
+    - {latency: 60, service_gap: 2, role: default}
+    - {latency: 16, service_gap: 2, role: lower_latency}
+    - {latency: 120, service_gap: 2, role: upper_latency}
+    - {latency: 16, service_gap: 1, role: bandwidth_sensitivity}
+  jitter_cycles: [0, 12]
+  seed: 1729
+  status: not_launched_pending_four_boundary_gate
+  physical_memory_measured: false
