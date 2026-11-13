@@ -1,0 +1,284 @@
+{
+  "scope": "explicit finite storage reservation and uncalibrated event schedules; not a full-candidate OOC or measured speed",
+  "ledger": [
+    {
+      "module": "flat payload",
+      "count": 64,
+      "shape": "4 columns4096x64/subbank",
+      "URAM": 256,
+      "BRAM36eq": 0,
+      "basis": "two-bank synth8URAM"
+    },
+    {
+      "module": "pending17",
+      "count": 64,
+      "shape": "4 columns4096x68/subbank; whole-word1R1W; ECCoff",
+      "URAM": 256,
+      "BRAM36eq": 0,
+      "basis": "two-bank synth8URAM"
+    },
+    {
+      "module": "tag+mask",
+      "count": 64,
+      "shape": "4ways1024x36",
+      "URAM": 0,
+      "BRAM36eq": 256,
+      "basis": "two-bank synth8BRAM36"
+    },
+    {
+      "module": "occupied slot list",
+      "count": 64,
+      "shape": "4096x12",
+      "URAM": 0,
+      "BRAM36eq": 96,
+      "basis": "two-bank synth2BRAM36+2BRAM18"
+    },
+    {
+      "module": "spill and consumed bitmap",
+      "count": 64,
+      "shape": "256x128",
+      "URAM": 0,
+      "BRAM36eq": 128,
+      "basis": "two-bank synth4BRAM36"
+    },
+    {
+      "module": "spilled IDs",
+      "count": 64,
+      "shape": "2048x20",
+      "URAM": 0,
+      "BRAM36eq": 96,
+      "basis": "two-bank synth2BRAM36+2BRAM18"
+    },
+    {
+      "module": "directory/member/header/next/free pool",
+      "count": 32,
+      "shape": "existing5 direct+2pool URAM perowner",
+      "URAM": 224,
+      "BRAM36eq": 0,
+      "basis": "old actual9URAM/owner less2 changed-list URAM; no state128 mirror"
+    },
+    {
+      "module": "phase-separated active parents",
+      "count": 32,
+      "shape": "8192x96 perowner;2width x2depth URAM",
+      "URAM": 128,
+      "BRAM36eq": 0,
+      "basis": "reservation required by finite model POP-before-expansion; not present in micro"
+    },
+    {
+      "module": "physical request and response FIFOs",
+      "count": 128,
+      "shape": "64x320 request +64x288 response; pessimistic72bit BRAM width packing",
+      "URAM": 0,
+      "BRAM36eq": 1152,
+      "basis": "explicit future reservation9blocks/client; existing old-router BRAM NOT added"
+    },
+    {
+      "module": "front-end queues",
+      "count": 64,
+      "shape": "64x96",
+      "URAM": 0,
+      "BRAM36eq": 96,
+      "basis": "1BRAM36+1BRAM18/client; no double counting active storage"
+    },
+    {
+      "module": "runtime cost table",
+      "count": 64,
+      "shape": "16x64 duplicated registers/LUTRAM",
+      "URAM": 0,
+      "BRAM36eq": 0,
+      "basis": "65536bits register reservation; mandatory HBM load counted"
+    },
+    {
+      "module": "output/control buffers",
+      "count": 1,
+      "shape": "64BRAM36 reserved; no graph-sized onchip output mirror",
+      "URAM": 0,
+      "BRAM36eq": 64,
+      "basis": "external output lines and final drain count in finite model"
+    }
+  ],
+  "totals": {
+    "URAM": 864,
+    "BRAM36eq": 1888
+  },
+  "device_capacity": {
+    "URAM": 960,
+    "BRAM36eq": 2016
+  },
+  "removed": [
+    "old128bit canonical cache/mirror",
+    "old changed-list URAM64 and four mark FIFOs perowner",
+    "old owner random-RMW cache",
+    "old router FIFO allocations replaced by explicit new allocation"
+  ],
+  "external_storage": {
+    "MAX_N": 4194304,
+    "canonical_bytes": 33554432,
+    "scratch_bytes": 33554432,
+    "scratch_validity": "two finite per-subbank bitmaps; no uninitialized read",
+    "graph_CSR": "finite input-bound allocations, eligible prepared CSR identity preserved; no hidden onchip full graph",
+    "output": "input.cells x jobs x8, external bound checked by workload loader"
+  },
+  "clock_contract": {
+    "assumed_MHz": 200,
+    "latency_ns": 80,
+    "gap_ns": 5,
+    "board_measured": false,
+    "full_kernel_FPGA_seconds": null
+  },
+  "finite_schedule_rows": [
+    {
+      "case": "bnn_export",
+      "variant": "inf_finite_native_a",
+      "model_sha256": "a159d95fb968978f3593a83840463e0bd09df5b664f57b80f9e886a64fc55343",
+      "cycles": 3002508956,
+      "assumed_MHz": 200,
+      "conditional_schedule_seconds": 15.01254478,
+      "prepared_POP_target_s": 0.151799969444,
+      "exceeds_target_for_this_schedule": true,
+      "capacity_per_owner_upper_bounds": {
+        "member": 6924,
+        "active": 6216
+      },
+      "total_external_bytes": 27364223360,
+      "spill_peak": 1028,
+      "fpga_seconds": null,
+      "board_measured": false
+    },
+    {
+      "case": "bnn_export",
+      "variant": "inf_finite_native_b",
+      "model_sha256": "dbf07bd47867b1c0d4fc73e7881828b998c18a175dfc46b0c3ebdd30113d2ce9",
+      "cycles": 344171019,
+      "assumed_MHz": 200,
+      "conditional_schedule_seconds": 1.720855095,
+      "prepared_POP_target_s": 0.151799969444,
+      "exceeds_target_for_this_schedule": true,
+      "capacity_per_owner_upper_bounds": {
+        "member": 6924,
+        "active": 6216
+      },
+      "total_external_bytes": 27364297728,
+      "spill_peak": 1028,
+      "fpga_seconds": null,
+      "board_measured": false
+    },
+    {
+      "case": "bnn_export",
+      "variant": "inf_finite_native_c_gap10ns",
+      "model_sha256": "4116f35791662bd267ba04b2268f70b7bc2365dc4c78d6c50678d9d49f83c474",
+      "cycles": 364993924,
+      "assumed_MHz": 200,
+      "conditional_schedule_seconds": 1.82496962,
+      "prepared_POP_target_s": 0.151799969444,
+      "exceeds_target_for_this_schedule": true,
+      "capacity_per_owner_upper_bounds": {
+        "member": 6924,
+        "active": 6216
+      },
+      "total_external_bytes": 27364281216,
+      "spill_peak": 1028,
+      "fpga_seconds": null,
+      "board_measured": false
+    },
+    {
+      "case": "bnn_export",
+      "variant": "inf_finite_native_d_125MHz",
+      "model_sha256": "27ee66209d5065559ce635c76a4ea4ab16373448c45854ccbf249974e23d03e4",
+      "cycles": 244515899,
+      "assumed_MHz": 125,
+      "conditional_schedule_seconds": 1.956127192,
+      "prepared_POP_target_s": 0.151799969444,
+      "exceeds_target_for_this_schedule": true,
+      "capacity_per_owner_upper_bounds": {
+        "member": 6924,
+        "active": 6216
+      },
+      "total_external_bytes": 27364308352,
+      "spill_peak": 1028,
+      "fpga_seconds": null,
+      "board_measured": false
+    },
+    {
+      "case": "lstm_s2",
+      "variant": "inf_finite_native_a",
+      "model_sha256": "76efea5c821b6f2855364489ef5f23d70a93d1b646886577a7279368550a6b95",
+      "cycles": 3076659005,
+      "assumed_MHz": 200,
+      "conditional_schedule_seconds": 15.383295025,
+      "prepared_POP_target_s": 0.159888578444,
+      "exceeds_target_for_this_schedule": true,
+      "capacity_per_owner_upper_bounds": {
+        "member": 7015,
+        "active": 6367
+      },
+      "total_external_bytes": 27807359552,
+      "spill_peak": 965,
+      "fpga_seconds": null,
+      "board_measured": false
+    },
+    {
+      "case": "lstm_s2",
+      "variant": "inf_finite_native_b",
+      "model_sha256": "1764ed08a50a7ac4e14e1fa7385c00225793671dd7bbfb00042f9c2f7aa2f188",
+      "cycles": 348810901,
+      "assumed_MHz": 200,
+      "conditional_schedule_seconds": 1.744054505,
+      "prepared_POP_target_s": 0.159888578444,
+      "exceeds_target_for_this_schedule": true,
+      "capacity_per_owner_upper_bounds": {
+        "member": 7015,
+        "active": 6367
+      },
+      "total_external_bytes": 27807449664,
+      "spill_peak": 965,
+      "fpga_seconds": null,
+      "board_measured": false
+    },
+    {
+      "case": "lstm_s2",
+      "variant": "inf_finite_native_c_gap10ns",
+      "model_sha256": "4111e028ada91d2077b48f82c8522d0969354ec6400a7770fc1e3bc39d22b946",
+      "cycles": 369577158,
+      "assumed_MHz": 200,
+      "conditional_schedule_seconds": 1.84788579,
+      "prepared_POP_target_s": 0.159888578444,
+      "exceeds_target_for_this_schedule": true,
+      "capacity_per_owner_upper_bounds": {
+        "member": 7015,
+        "active": 6367
+      },
+      "total_external_bytes": 27807455872,
+      "spill_peak": 965,
+      "fpga_seconds": null,
+      "board_measured": false
+    },
+    {
+      "case": "lstm_s2",
+      "variant": "inf_finite_native_d_125MHz",
+      "model_sha256": "256340ffdee0323f72f4f9247e4734cb75a3bf47e3c04ef793f6d62840b7ac59",
+      "cycles": 247756181,
+      "assumed_MHz": 125,
+      "conditional_schedule_seconds": 1.982049448,
+      "prepared_POP_target_s": 0.159888578444,
+      "exceeds_target_for_this_schedule": true,
+      "capacity_per_owner_upper_bounds": {
+        "member": 7015,
+        "active": 6367
+      },
+      "total_external_bytes": 27807459904,
+      "spill_peak": 965,
+      "fpga_seconds": null,
+      "board_measured": false
+    }
+  ],
+  "limitations": [
+    "Resource reservation is not physical placement. LUT/FF/global fanout/arbitration timing require full integration; no full integration passes the performance gate.",
+    "Schedule A retains conservative source-order reservations as a negative diagnostic. Schedule B uses64 finite chronological contexts and recomputes spills; neither inherits old calibration.",
+    "Model PV/control latencies and phase-separated active-list scheduling are assumptions; no exact full-candidate RTL cycle calibration.",
+    "Micro has serial pending service and one outstanding scratch command per subbank; it proves finite protocols and atomicity, not high-throughput integrated finalization.",
+    "Remaining router/global-controller costs cannot be assumed free. Model schedules already miss the strongest old software target by a large margin.",
+    "The partial0.143656/0.145130s bounds are neither full prediction nor measurements."
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "review_commit": "5af99087a9d7055d468cc5269326d985b911919d",
+  "source": "accel/lookahead/fpga_sparse_stream_r2/rtl/node_state.sv:apply_record",
+  "scope": "Read-only equivalence argument for pending encoding on initialized reachable states; no new RTL or experiment",
+  "old_fields": {
+    "present": "pending[28]",
+    "version": "pending[27:12]",
+    "bucket": "pending[11:0]",
+    "reserved": "pending[31:29]=0"
+  },
+  "invariants": [
+    "present implies pending.bucket == canonical_label[63:52]",
+    "not present implies complete pending word zero under the current initialized transition system"
+  ],
+  "encoding": "{present,version[15:0]}",
+  "decode": "present ? {3b0,1b1,version,label[63:52]} : 32b0",
+  "transitions": {
+    "INIT": "label=INF, P=0,V=0",
+    "SEED": "label=0,P=1,V=1",
+    "VALID_POP": "Require P && V==arg[27:12] && old_label[63:52]==arg[11:0]; then P=0,V=0; label unchanged",
+    "COMMIT": "Reject unless new_pair<old_label. Compare new_bucket against OLD label bucket. If !P or bucket changed: P=1,V=(oldV+1) mod 2^16; otherwise preserve P,V. Update label to new_pair.",
+    "READ_MARK_CLEAR": "Pending and label unchanged by these operations; changed flag handling remains separate"
+  },
+  "wrap": "Preserve original16-bit modulo behavior. V=0 alone is not absence. From legal INIT/SEED, each increment while present accompanies strictly decreasing12-bit bucket; at most4095 such migrations before a successful POP resets V, so natural reachable execution does not wrap16bits.",
+  "physical_packing": {
+    "MAX_N": 4194304,
+    "bits_per_node": 17,
+    "nodes_per_word": 4,
+    "bits_per_word": 68,
+    "banks": 64,
+    "words_per_bank": 16384,
+    "URAM_4Kx72_per_bank": 4,
+    "total_URAM": 256,
+    "requires_ECC_disabled": true,
+    "full40sample_init_cycles_if64banks_parallel_one_word_per_cycle": 655360,
+    "payload_plus_pending_plus_existing288_URAM_organization_total": 800,
+    "synthesis_verified": false
+  },
+  "hazards": [
+    "Packed68-bit word RAW across different node fields",
+    "label/pending coherent snapshot and unified retirement",
+    "old label bucket must be captured before overwriting label",
+    "in-flight forwarding/scoreboard covers all synchronous URAM stages",
+    "partial17-bit update is a full-word RMW unless an explicitly correct merge is implemented",
+    "directory publication and all required ACKs complete before next wave",
+    "metadata/sample initialization and node capacity admission are charged"
+  ],
+  "does_not_prove": [
+    "new complete-kernel frequency",
+    "actual resource implementation",
+    "full performance",
+    "general external-memory atomic service",
+    "global software equivalence beyond the inherited ALT contract"
+  ]
+}
