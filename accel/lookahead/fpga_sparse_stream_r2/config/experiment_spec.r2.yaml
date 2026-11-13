@@ -106,7 +106,7 @@ m5_candidate:
   current_RTL: many32_bank_tree_a
   last_fully_calibrated_RTL: many32_bank_tree_a
   current_model: many32_request_model_c
-  modified_path_calibration: bank_selection_8_97_plus_36_and_two_Q40_passed_32_F1_97_plus36_plus4boundaries_passed_F0_97plus36_passed_boundaries_running
+  modified_path_calibration: bank_selection_8_97_plus36_plus_two_Q40_passed_32_F1_F0_each97_plus36_plus4boundaries_passed
   shared_fabric_32_calibration: 97_full_cycle_output_traffic_exact
   current_OOC: many32_bank_context_a
   main_seconds_qualified: false
@@ -157,7 +157,7 @@ bank_context_repair:
   complete8_97_cycle_output_traffic_exact: true
   complete8_fixed_ns36_exact: true
   complete8_Q40_output_boundaries_passed: 2
-  complete32_F1_F0_recalibration: running
+  complete32_F1_F0_recalibration: each97_plus36_plus4boundaries_passed
   complete32_F1_97_cycle_output_traffic_exact: true
   clock_inherited: false
 
@@ -239,3 +239,33 @@ state_address_repair_under_validation:
   independent_unit_cycle_exact: true
   complete8_RTL: many8_address_a
   main_candidate_qualification_inherited: false
+
+active_address32_candidates:
+  F1_RTL: many32_address_a
+  F0_RTL: many32_f0_address_a
+  F1_OOC: many32_address_context_a
+  F0_OOC: many32_f0_address_context_a
+  complete8_gate: 97_plus36_plus_two_Q40_passed
+  complete32_calibration: running
+  source_parameters_binding: timing/address32_bindings_0020.json
+  inherited_clock: false
+
+active_checked_arithmetic_candidates:
+  mechanism: captured_input_legality_and_exact_overflow_predicate_same_cycle
+  standalone_old_new_cycle_equivalence: passed
+  standalone_actual_OOC_mhz: 200
+  standalone_clock_scope: pair_unit_only
+  complete8_RTL: many8_checked_a
+  complete8_gate: 97_plus36_plus_two_Q40_passed
+  complete8_OOC: many8_checked_context_a
+  complete8_implementation_target_ns: 5
+  F1_RTL: many32_checked_a
+  F0_RTL: many32_f0_checked_a
+  F1_OOC: many32_checked_context_10ns_a
+  F0_OOC: many32_f0_checked_context_10ns_a
+  complete32_implementation_target_ns: 10
+  complete32_calibration: running
+  target_basis: measured_bank8_route100MHz_and_observed32routing_congestion
+  source_parameters_binding: timing/checked32_bindings_0055.json
+  qualified_complete32_mhz: null
+  board_measured: false

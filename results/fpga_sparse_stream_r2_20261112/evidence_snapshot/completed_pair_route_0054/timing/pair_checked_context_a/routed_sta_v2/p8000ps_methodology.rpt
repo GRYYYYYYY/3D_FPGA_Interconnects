@@ -1,0 +1,70 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date         : Fri Nov 13 00:42:02 2026
+| Host         : fpgaacc2--72bfa719011c-3hfvuvkzdl running 64-bit Ubuntu 22.04.4 LTS
+| Command      : report_methodology -file /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/timing/pair_checked_context_a/routed_sta_v2/p8000ps_methodology.rpt
+| Design       : r2_pair_context
+| Device       : xcu280-fsvh2892-2L-e
+| Speed File   : -2L
+| Design State : Fully Routed
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Report Methodology
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: impl_1
+      Design limits: <entire design considered>
+             Max violations: <unlimited>
+             Violations found: 5
++--------+----------+------------------------------------------------------+------------+
+| Rule   | Severity | Description                                          | Violations |
++--------+----------+------------------------------------------------------+------------+
+| XDCC-4 | Warning  | User Clock constraint overwritten with the same name | 2          |
+| XDCC-8 | Warning  | User Clock constraint overwritten on the same source | 2          |
+| CLKC-3 | Advisory | Clock Buffer has LOC and not CLOCK_REGION            | 1          |
++--------+----------+------------------------------------------------------+------------+
+
+2. REPORT DETAILS
+-----------------
+XDCC-4#1 Warning
+User Clock constraint overwritten with the same name  
+A new clock constraint create_clock overrides a previous user clock constraint with the same name.
+New: create_clock -period 5.000 -name clk [get_ports clk] (Source: Not Available)
+Previous: create_clock -period 5.000 -name clk [get_ports clk] (Source: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/timing/pair_checked_context_a/source/tile_ooc.xdc (Line: 1))
+Related violations: <none>
+
+XDCC-4#2 Warning
+User Clock constraint overwritten with the same name  
+A new clock constraint create_clock overrides a previous user clock constraint with the same name.
+New: create_clock -period 8.000 -name clk [get_ports clk] (Source: Not Available)
+Previous: create_clock -period 5.000 -name clk [get_ports clk] (Source: Not Available)
+Related violations: <none>
+
+XDCC-8#1 Warning
+User Clock constraint overwritten on the same source  
+A new clock constraint create_clock overrides a previous user clock constraint defined on the same source.
+New: create_clock -period 5.000 -name clk [get_ports clk] (Source: Not Available)
+Previous: create_clock -period 5.000 -name clk [get_ports clk] (Source: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/timing/pair_checked_context_a/source/tile_ooc.xdc (Line: 1))
+Related violations: <none>
+
+XDCC-8#2 Warning
+User Clock constraint overwritten on the same source  
+A new clock constraint create_clock overrides a previous user clock constraint defined on the same source.
+New: create_clock -period 8.000 -name clk [get_ports clk] (Source: Not Available)
+Previous: create_clock -period 5.000 -name clk [get_ports clk] (Source: Not Available)
+Related violations: <none>
+
+CLKC-3#1 Advisory
+Clock Buffer has LOC and not CLOCK_REGION  
+The BUFGCE cell clock_buffer has a LOC constraint, but using the CLOCK_REGION property instead would give more flexibility to the Placer to select the appropriate routing/distribution track.
+Related violations: <none>
+
+

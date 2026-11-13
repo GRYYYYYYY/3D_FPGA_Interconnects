@@ -11,7 +11,11 @@ import sys
 
 kind = sys.argv[1]
 s = Path(__file__).resolve().parents[1]
-if kind == 'owner':
+if kind == 'pair':
+    top, dut, params = 'r2_pair_context', 'pair_lane', ''
+    inputs = [('rst',1),('iv',1),('dst',32),('parent',64),('cost',64),('or_',1)]
+    outputs = [('ir',1),('ov',1),('od',32),('pair',64),('error',1),('pending',1)]
+elif kind == 'owner':
     top, dut = 'r2_owner_context', 'sparse_owner_pipe'
     params = '.OWNER_BITS(5),.REQUEST_STAGE(1)'
     inputs = [('rst',1),('iv',1),('node',32),('pair',64),('fence',1),
@@ -77,7 +81,8 @@ for ports, bus in [(inputs,'stimulus'),(outputs,'observed')]:
         at+=width
 if no != wo*32:
     lines.append(f' assign observed[{wo*32-1}:{no}]=0;')
-lines.extend([f' (* KEEP_HIERARCHY="yes" *) {dut} #({params}) dut('+','.join(port)+');',
+parameter_clause = f' #({params})' if params else ''
+lines.extend([f' (* KEEP_HIERARCHY="yes" *) {dut}{parameter_clause} dut('+','.join(port)+');',
               f' for(genvar k=0;k<{wo};k=k+1)begin:capture',
               '  (* DONT_TOUCH="yes" *) reg [31:0] state=0;',
               '  always @(posedge core_clk)state<={state[30:0],state[31]}^observed[k*32+:32];',

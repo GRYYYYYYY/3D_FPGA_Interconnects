@@ -181,7 +181,7 @@
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "finish bank32 F1 boundaries and F0 fresh97+36+boundaries; finish default60/120/F0 native40 and audits; route and qualify actual bank32 F1/F0 complete contexts; archive, verify, push independent branch",
+  "next_action": "finish address/checked32 independent calibration and actual full-core route/STA; await C120 and matchedF0 native40 audits; bind exact clock only after qualification, archive and push independent branch",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -397,7 +397,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-13T00:12:58.928984+00:00",
+  "updated_utc": "2026-11-13T01:19:24.681358+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -440,7 +440,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "336bb48f936b2afeb07e97539402d0d0100c6e31",
+  "checkpoint_commit": "d46f5f17d386531b3944887b7a168b5e4a3d4d5e",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -1069,7 +1069,7 @@
     "clock_qualified_mhz": null,
     "other_memory_scenarios_and_F0": "running"
   },
-  "checkpoint_commit_relation": "last committed checkpoint before this working update",
+  "checkpoint_commit_relation": "parent HEAD at checkpoint update; use git log for the containing commit, not a self-referential SHA",
   "many32_bank_synth": {
     "LUT": 1091365,
     "FF": 607867,
@@ -1265,8 +1265,10 @@
     ],
     "unit_nonzero_base_4M_full_backing_operations": 15360,
     "unit_cycle_calibration": "both_passed",
-    "complete8": "many8_address_a_running",
-    "scope_no_inherited_clock": true
+    "complete8": "many8_address_a_97plus36plus_two_Q40_passed",
+    "scope_no_inherited_clock": true,
+    "complete32_F1_F0": "fresh_functional_pipeline_running_after8gate",
+    "complete8_OOC": "many8_address_context_a_synthesizing"
   },
   "central_grant_synthesis": {
     "LUT": 227188,
@@ -1295,7 +1297,177 @@
     "route_started_utc": "2026-11-13T00:11:25Z",
     "clock_qualified_mhz": null
   },
-  "verified_checkpoint_snapshot": "evidence_snapshot/checkpoint_20261112T2357/manifest.json",
-  "verified_checkpoint_files": 64959,
-  "verified_checkpoint_predecessor_count": 8
+  "verified_checkpoint_snapshot": "checkpoint_20261113T0103",
+  "verified_checkpoint_files": 75421,
+  "verified_checkpoint_predecessor_count": 9,
+  "conditional_issue_screen": "analysis/issue_bound_0019.json",
+  "branch_pushed": false,
+  "latest_fully_calibrated_32_F0": {
+    "RTL": "many32_f0_bank_a",
+    "model": "many32_request_f0_model_a",
+    "complete_cycle_output_traffic_cases": 97,
+    "fixed_ns_cases": 36,
+    "Q40_and_exact_overflow_boundaries": 4,
+    "receipt": "rtl/many32_f0_bank_a_pipeline_receipt.json",
+    "OOC": "many32_f0_bank_context_a",
+    "whole_kernel_clock_mhz": null
+  },
+  "active_address_candidate": {
+    "F1_RTL": "many32_address_a",
+    "F0_RTL": "many32_f0_address_a",
+    "F1_OOC": "many32_address_context_a",
+    "F0_OOC": "many32_f0_address_context_a",
+    "OOC_synth_started_utc": [
+      "2026-11-13T00:21:00Z",
+      "2026-11-13T00:21:02Z"
+    ],
+    "source_parameters_binding": "timing/address32_bindings_0020.json",
+    "previous_complete32_clock_inherited": false
+  },
+  "many8_grant_synth": {
+    "LUT": 236600,
+    "FF": 154720,
+    "RAMB36": 368,
+    "RAMB18": 112,
+    "setup5ns": -1.075,
+    "hold5ns": -0.08,
+    "route_started_utc": "2026-11-13T00:19:23Z",
+    "qualified_clock_mhz": null
+  },
+  "many8_address_synth": {
+    "LUT": 235316,
+    "FF": 154701,
+    "RAMB36": 368,
+    "RAMB18": 120,
+    "setup5ns": -1.075,
+    "hold5ns": -0.08,
+    "route_started_utc": "2026-11-13T00:24:50Z",
+    "qualified_clock_mhz": null
+  },
+  "state_address_clock_qualification": {
+    "updated_utc": "2026-11-13T00:31:05.870176+00:00",
+    "scope": "standalone state_address_context_a OWNER_BITS5 REQUEST_STAGE1 only; no complete8/32 clock, shell or board transfer",
+    "qualified_OOC_mhz": 200,
+    "period_ns": 5,
+    "setup_slack_ns": 0.014,
+    "hold_slack_ns": 0.001,
+    "pulse_width_slack_ns": 1.958,
+    "routable_nets": 9818,
+    "route_errors": 0,
+    "check_timing_all_zero": true,
+    "board_measured": false,
+    "resource_counts": {
+      "LUT": 6989,
+      "FF": 4556,
+      "RAMB36": 16,
+      "RAMB18": 2,
+      "URAM": 0
+    },
+    "actual_synchronous_partner_context_included": true,
+    "functional_reference": "large_state/state_address_bits5_a/receipt.json",
+    "independent_model_calibration": "large_state/state_address_bits5_model_a/calibration.json",
+    "functional_scope": "7680operations,4Mfinitebacking,nonzero immutable base0x32100107; full backing and old records checked",
+    "methodology_review": {
+      "XDCC-4/8": "same clock recreated at same source for explicit STA period; no waivers",
+      "CLKC-3": "actual BUFG LOC advisory"
+    },
+    "DRC_review": {
+      "RTSTAT-10": "only32terminal signature outputs; launch/capture FFs retain all DUT endpoints"
+    },
+    "evidence_sha256": {
+      "source_binding.json": "515a690e0486125183ba8f15155fca92696599c834d015c80e6bf7b796f8a5e6",
+      "routed_sta_v2/run.tcl": "ad520a646fad3cc98b9dc6401e4c2f1400dd81463aa1ca5cc04eeea7ff1e6167",
+      "routed_sta_v2/scope.json": "fb7380a3bf72ed424276b002640ee3765bd6da322beebd4c8b8ffab621ce340e",
+      "routed_sta_v2/route_status.rpt": "0b1281170352b4cfc244bb0425464523bfc9dfc1b84dffe6916fdf7620003e65",
+      "routed_sta_v2/p5000ps.dcp": "636ea87ee62a273ac8f5d51a4858e48e37e9313b07b5b2c2d7b427f8cb78f3d6",
+      "routed_sta_v2/p5000ps.xdc": "3e0cea2a01aed21025f5c31f416e050dc7092055e57bce68815188f500122f45",
+      "routed_sta_v2/p5000ps_check_timing.rpt": "434535867c830f2666ce17bfbe375e9ae38e9c201a922d17ab1680155ea86367",
+      "routed_sta_v2/p5000ps_clocks.rpt": "9d5cd6e4dc9824eb0ea6a79436a2bd1d448a09fc32afd6090fe4824a3e0a48b9",
+      "routed_sta_v2/p5000ps_drc.rpt": "f0eb329bee0ae271b795daefde423d71cf372a568f224ad6d1c06cdf8de86b45",
+      "routed_sta_v2/p5000ps_hold.rpt": "4c5e3387a02b7d10bf7422243baddc9ee9b80344a1036080a5c1182fa97298cd",
+      "routed_sta_v2/p5000ps_methodology.rpt": "8f4ba6956b378e2035477844dc10349c6cab74e714c99acda1fac36728864257",
+      "routed_sta_v2/p5000ps_setup.rpt": "8cbac01f7f0ae4e1daedce87695deff0b24c33c420de1a16ae10921cda4b5704",
+      "routed_sta_v2/p5000ps_timing.rpt": "2422bede1557fe7c85afa4b5943c4a52480667c7e9682eee29b5fabefb8607df",
+      "large_state/state_address_bits5_a/receipt.json": "7adc50343fe32d87404bac23bb7fcf08a4dc8c20698a987da4ab349950a80aa2",
+      "large_state/state_address_bits5_model_a/calibration.json": "3bc00e2c4d796d0bc33362a8f05755864e61c9a0b779bdc61177ce314d20308f",
+      "timing/state_address_context_a/routed_sta_v2/review_checks.json": "a8b0c61c600fb303cbae382dba47660d3c4bd2707cb185682635f19cecc87aac",
+      "timing/state_address_context_a/routed_sta_v2/routed_utilization.rpt": "5d4563453489a7189cd9cc5daa1e910272fa1b03ed8e13c35fbd72fcfa794001"
+    }
+  },
+  "arithmetic_checked_repair": {
+    "basis": "repeated_complete8_32_synthesis_frontend_operand_to_error29logic_level_path",
+    "change": "input legality captured with operands; exact overflow predicate from input exponent and normalization/rounding carries, no extra data/error latency",
+    "host_FP32_sums_bit_exact": 500000,
+    "new_old_RTL_directed_pairs": 262144,
+    "new_old_RTL_random_cycles": 500000,
+    "data_handshake_error_reset_exact": true,
+    "records": [
+      "rtl/arithmetic_checked_a/receipt.json",
+      "rtl/arithmetic_equivalence_a/receipt.json"
+    ],
+    "complete8": "many8_checked_a_passed97_plus36_plus2Q40",
+    "unit_OOC": [
+      "pair_checked_context_a",
+      "pair_legacy_context_a"
+    ],
+    "clock_inherited": false,
+    "complete8_receipt": "rtl/many8_checked_a_pipeline_receipt.json",
+    "unit_qualified_OOC_mhz": 200,
+    "unit_scope": "pair_only_not_whole_kernel",
+    "complete32": "many32_checked_a_and_F0_running",
+    "complete32_implementation_target_ns": 10
+  },
+  "active_vivado_sessions": {
+    "vivado-20261112-161837-7d305dc5": "many8_checked_context_a route_and_STA_active",
+    "vivado-20261112-171744-63335f93": "many8_grant_context_a route_and_STA_active",
+    "vivado-20261112-164509-ef1e3de5": "many32_checked_context_10ns_a synth; previouscheckedpairunit200qualified",
+    "vivado-20261112-173934-eb0a0adf": "many32_f0_checked_context_10ns_a synth; previouslegacypairunit200qualified",
+    "vivado-20261112-180611-3c758959": "many32_f0_bank_context_a route_and_STA_active",
+    "vivado-20261112-183223-bc1f6643": "many32_address_context_a synth",
+    "vivado-20261112-185211-8e7c9bec": "many32_context_reduction_b route_and_STA_active",
+    "vivado-20261112-191902-487477ac": "central_reduction_a route_active_v1_STA_guard_needs_v2_after_completion",
+    "vivado-20261112-194208-cd9c35ec": "many32_bank_context_a route_and_STA_active",
+    "vivado-20261112-203252-7b55fe2c": "many8_address_context_a route_and_STA_active",
+    "vivado-20261112-205847-e7d439e5": "many32_f0_address_context_a synth"
+  },
+  "active_checked_candidate": {
+    "RTL_F1": "many32_checked_a",
+    "RTL_F0": "many32_f0_checked_a",
+    "OOC_F1": "many32_checked_context_10ns_a",
+    "OOC_F0": "many32_f0_checked_context_10ns_a",
+    "implementation_target_ns": 10,
+    "qualified_clock_mhz": null,
+    "source_binding": "timing/checked32_bindings_0055.json",
+    "8_gate": "model/many8_request_model_b/checked_calibration/calibration.json"
+  },
+  "complete_candidate_binding": {
+    "record": "analysis/bank32_bound_0104.json",
+    "exact_same_model_executable_calibration_and_native": true,
+    "checks": "97complete+36fixedns+4boundaries+frozen_source/parameters+complete_work/native_ALT",
+    "negative_guards": "analysis/binding_guard_tests_0104.json",
+    "rejected_wrong_width_cache_run_native_identity_and_unit_clock": true,
+    "whole32_clock_qualified": false,
+    "main_seconds": null
+  },
+  "evidence_restore_test": "supervision/restoration_test_0055.json",
+  "legacy_pre_registered_complete": "analysis/legacy_pre_registered_complete_0102.json",
+  "bank8_fixed_ns_at_qualified_clock": {
+    "record": "rtl/many8_bank_tree_a_fixed_time_p10000/calibration.json",
+    "kernel_period_ns": 10,
+    "cases": 18,
+    "all_pass": true,
+    "scope": "bank8 prototype only; no32clock transfer"
+  },
+  "many8_checked_synth": {
+    "LUT": 235674,
+    "FF": 154723,
+    "RAMB36": 368,
+    "RAMB18": 120,
+    "URAM": 0,
+    "period_ns": 5,
+    "setup_ns": -0.346,
+    "hold_ns": -0.08,
+    "critical_path": "frontend arithmetic operand to result,26logic levels",
+    "scope": "synthesis only; route starts01:06:06"
+  }
 }

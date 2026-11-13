@@ -4,15 +4,25 @@ Kernel periods are sensitivity assumptions, not OOC-qualified operating clocks.
 Every request/response and all output are evaluated with the same seeded TB.
 """
 from pathlib import Path
-import concurrent.futures, hashlib, itertools, json, os, subprocess, sys
+import argparse, concurrent.futures, hashlib, itertools, json, os, subprocess, sys
 
 root = Path(__file__).resolve().parents[4]
 r = root / 'results/fpga_sparse_stream_r2_20261112'
-rtl, model = sys.argv[1:3]
-out = r / 'rtl' / (rtl + '_fixed_time')
+p = argparse.ArgumentParser()
+p.add_argument('rtl')
+p.add_argument('model')
+p.add_argument('--period-ps', type=int, nargs='+', default=[5000, 8000])
+p.add_argument('--tag', default='fixed_time')
+a = p.parse_args()
+rtl, model = a.rtl, a.model
+if not a.period_ps or min(a.period_ps) <= 0 or len(set(a.period_ps)) != len(a.period_ps):
+    raise ValueError('unique positive kernel periods required')
+if Path(a.tag).name != a.tag:
+    raise ValueError('tag must be a single path component')
+out = r / 'rtl' / (rtl + '_' + a.tag)
 out.mkdir(exist_ok=False)
 native = json.loads((r / 'semantics/native_complete.json').read_text())[:2]
-cases = list(itertools.product(native, [5000, 8000], [80000, 300000, 600000], [5000, 10000, 20000]))
+cases = list(itertools.product(native, a.period_ps, [80000, 300000, 600000], [5000, 10000, 20000]))
 
 def run(case):
     item, period, latency, gap = case

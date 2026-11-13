@@ -53,7 +53,9 @@ methodology = rules(read(stem + '_methodology.rpt'))
 drc_text = read(stem + '_drc.rpt')
 drc = rules(drc_text)
 checks['reviewed_methodology_only'] = set(methodology) <= {'XDCC-4', 'XDCC-8', 'CLKC-3'} and all(x['severity'] in ['Warning', 'Advisory'] for x in methodology.values())
-checks['reviewed_terminal_OOC_DRC_only'] = set(drc) == {'RTSTAT-10'} and drc['RTSTAT-10'] == {'severity': 'Warning', 'count': 1} and 'signature[31:0]' in drc_text
+clean_drc = not drc and re.search(r'^\s*Violations found:\s*0\s*$', drc_text, re.M) is not None
+terminal_drc = set(drc) == {'RTSTAT-10'} and drc['RTSTAT-10'] == {'severity': 'Warning', 'count': 1} and 'signature[31:0]' in drc_text
+checks['reviewed_terminal_OOC_DRC_only'] = clean_drc or terminal_drc
 xdc = read(stem + '.xdc')
 checks['no_timing_exception'] = not re.search(r'^\s*(set_false_path|set_multicycle_path|set_clock_groups|set_disable_timing|reset_timing)', xdc, re.M)
 checks['signature_IO_delays_retained'] = 'set_output_delay -clock clk -max 0.500' in xdc and 'set_output_delay -clock clk -min 0.100' in xdc
