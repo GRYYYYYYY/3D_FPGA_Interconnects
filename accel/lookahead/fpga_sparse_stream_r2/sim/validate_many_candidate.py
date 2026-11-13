@@ -5,6 +5,7 @@ Existing outputs are never overwritten. A 32-lane run can require a completed
 """
 from pathlib import Path
 import argparse, datetime, hashlib, json, subprocess, sys
+from topology_limits import validate_many_topology
 
 root = Path(__file__).resolve().parents[4]
 s = root / 'accel/lookahead/fpga_sparse_stream_r2'
@@ -14,9 +15,12 @@ p.add_argument('variant')
 p.add_argument('model')
 p.add_argument('calibration')
 p.add_argument('--lanes', type=int, choices=[8, 32], default=8)
+p.add_argument('--ports', type=int, help='shared physical channels; defaults to lane count')
 p.add_argument('--cache', type=int, choices=[0, 1], default=1)
 p.add_argument('--gate', help='completed calibration JSON relative to results')
 a = p.parse_args()
+ports = a.ports if a.ports is not None else a.lanes
+validate_many_topology(a.lanes, ports)
 out = r / 'rtl' / (a.variant + '_pipeline_receipt.json')
 if out.exists():
     raise RuntimeError('append-only candidate already exists')
@@ -28,7 +32,7 @@ if a.gate:
     gate = {'path': a.gate, 'sha256': hashlib.sha256(f.read_bytes()).hexdigest()}
 large = a.lanes == 32
 cmds = [
-    ['sim/build_many.py', a.variant, str(a.lanes), str(a.lanes),
+    ['sim/build_many.py', a.variant, str(a.lanes), str(ports),
      '-GMEMBER_CAP=' + ('8192' if large else '1024'),
      '-GCHANGED_LIMIT=' + ('8192' if large else '512'),
      '-GUSE_URAM=' + str(int(large)), '-GREQUEST_STAGE=1', '-GCACHE_ENABLE=' + str(a.cache)],
@@ -44,7 +48,7 @@ if large:
     cmds += [['tests/many_hot_capacity.py', a.variant, a.model],
              ['sim/calibrate_many_boundaries.py', a.model, a.variant]]
 state = {'variant': a.variant, 'model': a.model, 'lanes': a.lanes,
-         'cache': a.cache, 'gate': gate, 'status': 'running', 'steps': [],
+         'physical_channels': ports, 'cache': a.cache, 'gate': gate, 'status': 'running', 'steps': [],
          'started_utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
 def save():
     out.write_text(json.dumps(state, indent=2) + '\n')

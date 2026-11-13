@@ -42,7 +42,8 @@ elif kind == 'many':
     L,P,MC,CC,U,R = map(int,sys.argv[2:8])
     validate_many_topology(L, P)
     CACHE = int(sys.argv[8]) if len(sys.argv)>8 else 1
-    top, dut = f'r2_many{L}' + ('_f0' if CACHE == 0 else '') + '_context', 'r2_many_tile'
+    top = f'r2_many{L}' + (f'_p{P}' if P != L else '') + ('_f0' if CACHE == 0 else '') + '_context'
+    dut = 'r2_many_tile'
     params = f'.L({L}),.PHYS({P}),.MEMBER_CAP({MC}),.CHANGED_LIMIT({CC}),.USE_URAM({U}),.REQUEST_STAGE({R}),.CACHE_ENABLE({CACHE})'
     inputs = [('rst',1),('start',1),('row_base',32),('edge_base',32),('cost_base',32),('job_base',32),
               ('node_count',32),('state_base',32),('jobs',7),('cell_count',16),('cost_count',5),

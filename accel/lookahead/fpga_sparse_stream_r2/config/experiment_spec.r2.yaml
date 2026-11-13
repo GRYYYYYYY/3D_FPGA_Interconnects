@@ -103,12 +103,12 @@ m5_candidate:
   request_output_stage: 1
   request_FIFO_total_capacity_including_stages: 64
   owner_selection: balanced_first32_and_parallel_way_masks_preserving_original_order
-  current_RTL: many32_checked_a
+  current_RTL: many32_router_ready_a
   last_fully_calibrated_RTL: many32_checked_a
   current_model: many32_request_model_c
-  modified_path_calibration: checked32_F1_F0_each97_plus36_plus4boundaries_passed
+  modified_path_calibration: new_router_F1_F0_each97_plus36_plus18_passed_four_boundaries_pending
   shared_fabric_32_calibration: 97_full_cycle_output_traffic_exact
-  current_OOC: many32_checked_context_10ns_a
+  current_OOC: many32_router_ready_context_10ns_a
   main_seconds_qualified: false
 fixed_physical_time_sensitivity:
   kernel_period_ps: [5000, 8000]
@@ -292,7 +292,7 @@ fabric_payload_onehot_candidate:
   target_period_ns: 5
   clock_qualified_mhz: null
   protocol_and_clock_boundaries_changed: false
-  status: independent_cycle_and_fault_passed_synthesis_resource_negative_not_integrated
+  status: independent_cycle_and_fault_passed_synthesis_resource_negative_standalone_route_followup_active_not_integrated
   full_integration_gate: actual_resource_and_path_evidence_plus_cycle_equivalence
 
 router_ready_candidate:
@@ -310,7 +310,12 @@ router_ready_candidate:
   complete8_OOC: many8_router_ready_context_a
   complete8_model: many8_request_model_b
   source_parameters_binding: timing/router_ready8_binding_0400.json
-  status: complete8_97_36_Q40passed_routing_new32_F1_F0_calibration_and_synthesis_running
+  status: complete8_passed_both32_97_passed_synthesis_completed_impl_and_remaining_calibration_running
+  F1_RTL: many32_router_ready_a
+  F0_RTL: many32_f0_router_ready_a
+  F1_OOC: many32_router_ready_context_10ns_a
+  F0_OOC: many32_f0_router_ready_context_10ns_a
+  complete32_source_parameters_binding: timing/router_ready32_bindings_0416.json
   clock_qualified_mhz: null
   prior_complete32_calibration_inherited: false
 
@@ -328,3 +333,40 @@ checked_F0_congestion_strategy_candidate:
   qualified_clock_mhz: null
   original_failure_retained: true
   board_measured: false
+
+
+ports8_physical_candidate:
+  RTL: many32_p8_router_a
+  model: many32_p8_request_model_a
+  OOC: many32_p8_router_context_10ns_a
+  lanes: 32
+  physical_channels: 8
+  physical_mapping: line_mod_8
+  physical_tag_capacity_per_channel: 64
+  members_per_owner: 8192
+  changed_ids_per_owner: 8192
+  cache: F1
+  request_output_stage: 1
+  decision: analysis/ports8_candidate_decision_0556.json
+  scope_binding: timing/ports8_binding_0557.json
+  motivation: actual33x32central_routing_conflicts_and_full32default_congestion
+  tradeoff: four_times_less_aggregate_service_capacity_at_equal_per_channel_gap
+  calibration_inherited: false
+  status: fresh_RTL_model_and_OOC_running
+  clock_qualified_mhz: null
+  board_measured: false
+
+
+qualified_router_ready_tile_OOC:
+  RTL: many8_router_ready_a
+  OOC: many8_router_ready_context_a
+  lanes: 8
+  physical_channels: 8
+  tested_period_ns: 8
+  qualified_mhz: 125
+  setup_hold_pulse_width_ns: [1.141, 0.007, 3.458]
+  resource_counts: {LUT: 234392, FF: 155114, RAMB36: 368, RAMB18: 120, URAM: 0}
+  all_routable_nets_routed: 328548
+  source_parameters_and_97_plus_36_calibration_bound: true
+  scope: complete8_prototype_only_not32owner_P32_or_P8_kernel_or_board
+  report: timing/many8_router_ready_context_a/routed_sta_v2/qualification_review.json

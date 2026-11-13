@@ -1,0 +1,47 @@
+{
+  "utc": "2026-11-13T05:59:47.101357+00:00",
+  "all_pass": true,
+  "checks": [
+    {
+      "case": "P32 model cannot qualify P8 RTL/OOC",
+      "command": [
+        "/usr/bin/python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/bind_complete_candidate.py",
+        "ports8_wrong_model_must_not_exist_0600.json",
+        "--rtl",
+        "many32_p8_router_a",
+        "--model",
+        "many32_request_model_c",
+        "--calibration",
+        "router_ready_calibration",
+        "--ooc",
+        "many32_p8_router_context_10ns_a",
+        "--binding",
+        "timing/ports8_binding_0557.json",
+        "--work-audit",
+        "analysis/complete_work_many32_request_model_c_large_l60_g2.json",
+        "--native-binding",
+        "baselines/native_reuse/complete_model_outputs_2349.json"
+      ],
+      "returncode": 1,
+      "expected_rejection": "RuntimeError: model/RTL parameter mismatch: PHYS"
+    },
+    {
+      "case": "unsupported ports rejected before artifact creation",
+      "command": [
+        "/usr/bin/python3",
+        "accel/lookahead/fpga_sparse_stream_r2/sim/validate_many_candidate.py",
+        "invalid_ports_must_not_build_0600",
+        "many32_p8_request_model_a",
+        "test",
+        "--lanes",
+        "32",
+        "--ports",
+        "33"
+      ],
+      "returncode": 1,
+      "expected_rejection": "ValueError: implemented many-tile physical ports must be a power of two in 1..32"
+    }
+  ],
+  "actual_P8_binding_sha256": "4c22a5f83f83bd5a6df3c28ce001e7bc724b46c889a1fc90368164cc2a47f604"
+}
