@@ -5,6 +5,7 @@ changes a historical receipt, resets a branch, or stages unrelated changes.
 """
 from pathlib import Path
 import argparse,datetime,fcntl,hashlib,json,os,subprocess,sys,time
+from publication_guard import clean_entry,owned_exit
 root=Path(__file__).resolve().parents[4];r=root/'results/fpga_sparse_stream_r2_20261112';scripts=Path(__file__).resolve().parent
 ap=argparse.ArgumentParser();ap.add_argument('tag');ap.add_argument('predecessor');ap.add_argument('predecessor_verification');a=ap.parse_args()
 d=r/'supervision'/a.tag;d.mkdir(exist_ok=False);branch='accel/lookahead-sparse-stream-r2-20261112'
@@ -28,9 +29,8 @@ try:
  plan=json.loads((root/'accel/lookahead/fpga_sparse_stream_r2/config/p8_f0_recovery_plan.json').read_text());validate_recovery(plan['recovery_manifest'],plan)
  tag='checkpoint_'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'_recovered_native'
  observation_tag=a.tag+'_native_complete'
- # Check external dirt BEFORE generating our tracked pointer.
- assert subprocess.run(['git','diff','--quiet'],cwd=root).returncode==0,'preexisting tracked changes; preserve results'
- assert subprocess.run(['git','diff','--cached','--quiet'],cwd=root).returncode==0,'preexisting index changes; preserve results'
+ publish_lock=(r/'supervision/independent_branch_publish.lock').open('a');fcntl.flock(publish_lock.fileno(),fcntl.LOCK_EX)
+ clean_entry(root)
  record('clean_before_generation',{'HEAD':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'utc':utc()})
  execute('observe',[sys.executable,str(scripts/'observe_continuation.py'),observation_tag])
  owned=r/'continuation_82860ce/current_manifest.json';owned_sha=hashlib.sha256(owned.read_bytes()).hexdigest()
@@ -44,9 +44,7 @@ try:
  # Publish complete verified evidence in bounded packs. Refuse any user/index dirt.
  assert subprocess.check_output(['git','branch','--show-current'],cwd=root,text=True).strip()==branch
  assert subprocess.run(['git','merge-base','--is-ancestor','82860ced203bde54f1fa267446b3d0edc521a293','HEAD'],cwd=root).returncode==0
- changed=set(subprocess.check_output(['git','diff','--name-only'],cwd=root,text=True).splitlines())
- assert changed <= {str(owned.relative_to(root))},'unrelated tracked changes; preserve results'
- assert hashlib.sha256(owned.read_bytes()).hexdigest()==owned_sha,'owned pointer modified after generation'
+ owned_exit(root,{str(owned.relative_to(root)):owned_sha})
  pointer=json.loads(owned.read_text());obs=r/pointer['authoritative_observation']
  assert obs.name=='observation_'+observation_tag+'.json' and hashlib.sha256(obs.read_bytes()).hexdigest()==pointer['observation_sha256']
  assert subprocess.run(['git','diff','--cached','--quiet'],cwd=root).returncode==0,'index changed; preserve results'
