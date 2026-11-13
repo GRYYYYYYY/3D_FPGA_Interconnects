@@ -39,12 +39,12 @@
 | many32_reg_b，旧多写MSHR完整32核综合 | 1,575,155 | 848,380 | 1064 / 296 / 288 | −7.110/+0.025 | 超LUT容量，停止此固定候选布线 |
 | many32_c，旧ready完整32核综合 | 1,505,153 | 817,663 | 1665 / 446 / 288 | −6.091/+0.025 | 超LUT容量，停止此固定候选布线 |
 
-最新完整32核的实际综合使用10ns实现目标，不能混入上表的5ns列。两者均包含32 owners、8192成员/changed容量、32共享物理端口和真实同步上下文；当前仍在布线，综合setup为正不构成时钟资格。
+最新完整32核的实际综合使用10ns实现目标，不能混入上表的5ns列。两者均包含32 owners、8192成员/changed容量、32共享物理端口和真实同步上下文。F1仍在布线；F0于04:43正式因拥塞失败。综合setup为正不构成时钟资格。
 
 | 完整32核 | LUT | FF | BRAM36 / BRAM18 / URAM | 10ns综合setup / hold | 完整核频率 |
 |---|---:|---:|---|---|---|
 | many32_checked_context_10ns_a，F1 | 1,075,171 | 607,781 | 1064 / 328 / 288 | +4.590 / −0.080ns | 未取得 |
-| many32_f0_checked_context_10ns_a，F0 | 944,933 | 551,508 | 1064 / 296 / 288 | +4.590 / −0.080ns | 未取得 |
+| many32_f0_checked_context_10ns_a，F0 | 944,933 | 551,508 | 1064 / 296 / 288 | +4.590 / −0.080ns | 路由失败，无频率资格 |
 
 完整BNN/LSTM模型、97项完整用例、36组固定纳秒校准与四项Q40/容量边界已分别绑定至同一F1/F0模型和冻结RTL，见 `analysis/checked32_bound_0256.json`、`analysis/checked32_F0_bound_0328.json`。这些绑定仍输出null秒数，等待对应完整核的实际路由资格。
 
@@ -332,3 +332,15 @@ F0完整32布局诊断（独立DCP副本，不改正在运行的实现）显示S
 
 
 04:15 UTC：路由ready修复的完整8核97+36+两项Q40全部通过。实际综合235072LUT、154722FF、368RAMB36+120RAMB18；5ns setup−0.346/hold−0.080，算术数据路径仍最坏，未获得更高频率结论。完整8路由04:13:16启动；从已通过门槛启动新完整32F1/F0独立97+36+容量校准及10ns目标综合，分别04:14:37/35。原完整32实现与全部负结果保留。
+
+## 04:44 UTC：完整32路F0的实际路由负结果
+
+`many32_f0_checked_context_10ns_a`于04:43:13完成失败退出：`Route 35-3`全局拥塞等级7，timing congestion等级8，4,346,963个routing node overlaps。工具显示的0个unrouted/partially routed nets不能抵消这些非法重叠。运行状态为`route_design ERROR`，后续STA资格脚本正确拒绝继续，没有频率或模拟秒数。冻结错误DCP SHA256为`8402c3ca977a92ee24850814ef4dafd0d21982277ea84033815e480c218479c2`；完整日志绑定见`timing/many32_f0_checked_context_10ns_a/route_failure_0444.json`。独立会话正从副本导出只读诊断，原工程不重置。该负结果绑定旧checked F0结构及实际布局，不能扩展成其他架构的no-go。新ready链F1/F0候选继续独立验证；目前不声称它已解决整体拥塞。
+
+默认失败后启动了同一综合网表的独立`impl_spread_a`：本机2022.2确认的`Congestion_SSI_SpreadLogic_high`策略，实际`SSI_SpreadLogic_high`布局和`AlternateCLBRouting`路由。依据是已测SLR1 CLB99.73%及全局拥塞7，而不是任意频率扫描。04:47:52启动；保持10ns约束、同一synth_1及全部功能边界，原impl_1不重置。综合网表SHA256 `f7f0f31981650a9a758c4bc41936b8bc51c9ed05f73444be8f49a97b2e256885`与精确run属性记录于`routed_sta_spread_a/implementation_binding.json`。此物理候选尚在执行，不预设成功，也不转移给F1或新router RTL。
+
+04:55补充：新`many32_router_ready_a`完整97项RTL/独立模型校准全部通过，周期、输出、每数组流量、阶段和吞吐直方图一致，modelC可执行文件SHA256 `839e18598582680bc2c02a83751f5578501264fde82eecaa5372c8e8a9c73acf`。固定ns36和四项容量边界仍在执行，尚不提前发布完整native候选绑定。失败F0的错误DCP只读`route_status.rpt`显示1,249,397条routable nets中37条fully routed、1,249,360条unrouted；不能用路由过程中的临时计数声称完成。
+
+05:17状态：新router32 F1已通过97项和36组固定ns校准，四项容量边界继续；F0已通过原生小图、91fixtures和两组压力，4M地址用例继续。F0实际综合完成947,951LUT/551,507FF/1064RAMB36+296RAMB18+288URAM，10ns综合setup+4.590ns、hold−0.080ns；未赋予频率。
+
+完整模型新增有依据的gap单因素敏感性：保持modelC同一可执行文件、16-cycle基础延迟、32共享物理端口和原生40-sample不变，分别执行gap1与gap4的BNN/LSTM，共四个完整batch。已有gap2在该延迟下接近条件吞吐上限，因此该对照用于分离延迟与端口服务间隔；不是参数笛卡尔积、板测或任意频率扫描。当前正在执行，输出/工作/容量/ACK/native身份审计仍待终态。

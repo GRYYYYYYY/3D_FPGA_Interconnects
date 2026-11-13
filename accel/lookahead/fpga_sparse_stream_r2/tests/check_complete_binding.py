@@ -5,7 +5,10 @@ import json, subprocess, sys
 root = Path(__file__).resolve().parents[4]
 s = root / 'accel/lookahead/fpga_sparse_stream_r2'
 r = root / 'results/fpga_sparse_stream_r2_20261112'
-out = r / 'analysis' / 'binding_guard_tests_0104.json'
+tag = sys.argv[1] if len(sys.argv) > 1 else 'binding_guard_tests_0104'
+if not tag.replace('_', '').isalnum():
+    raise ValueError('local test tag required')
+out = r / 'analysis' / (tag + '.json')
 if out.exists():
     raise RuntimeError('append-only test receipt already exists')
 base = dict(rtl='many32_bank_tree_a', model='many32_request_model_c',
@@ -22,23 +25,31 @@ cases = [
     ('wrongnativebinding', dict(native_binding='baselines/native_reuse/legacy_uncorrected_counter_outputs_0059.json'),
      'native ALT output identity missing/different'),
     ('unitclock', dict(ooc='pair_checked_context_a'), 'no exact RTL/OOC binding'),
+    ('invalidtag', dict(sta_tag='../routed_sta_v2'), 'local routed_sta tag required'),
 ]
 records = []
 for name, changes, expected in cases:
     args = base | changes
-    cmd = [sys.executable, str(s / 'sim/bind_complete_candidate.py'), 'guard_rejected_' + name + '.json']
+    cmd = [sys.executable, str(s / 'sim/bind_complete_candidate.py'), tag + '_rejected_' + name + '.json']
     for key, value in args.items():
         cmd += ['--' + key.replace('_', '-'), value]
     result = subprocess.run(cmd, cwd=root, text=True, capture_output=True)
     passed = result.returncode != 0 and expected in result.stderr
     records.append(dict(case=name, command=cmd, returncode=result.returncode,
                         expected_error=expected, stderr=result.stderr, passed=passed))
-positive = json.loads((r / 'analysis/bank32_bound_0104.json').read_text())
+positive_path = r / 'analysis' / (tag + '_missing_clock.json')
+cmd = [sys.executable, str(s / 'sim/bind_complete_candidate.py'), positive_path.name,
+       '--sta-tag', 'routed_sta_unqualified_' + tag]
+for key, value in base.items():
+    cmd += ['--' + key.replace('_', '-'), value]
+subprocess.run(cmd, cwd=root, check=True)
+positive = json.loads(positive_path.read_text())
 null_clock = not positive['main_seconds_publishable'] and all(
     x['simulated_resident_seconds'] is None and x['memory_base_latency_ns'] is None
     for x in positive['rows'])
 passed = null_clock and all(x['passed'] for x in records)
 out.write_text(json.dumps(dict(all_pass=passed, missing_clock_keeps_seconds_null=null_clock,
+                               selected_missing_clock_binding=str(positive_path.relative_to(r)),
                                cases=records), indent=2) + '\n')
 print('COMPLETE_BINDING_GUARDS', passed, len(records))
 sys.exit(not passed)

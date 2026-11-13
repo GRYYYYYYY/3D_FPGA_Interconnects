@@ -6,7 +6,13 @@ root=Path(__file__).resolve().parents[4];r=root/'results/fpga_sparse_stream_r2_2
 # unchanged historical trace. The manifest explicitly binds the predecessor.
 previous=sys.argv[2] if len(sys.argv)>2 else None
 defer_running='--defer-running-batches' in sys.argv[3:]
+defer_rtl='--defer-running-rtl' in sys.argv[3:]
 running=[]
+running_rtl=[]
+if defer_rtl:
+ for receipt in (r/'rtl').glob('*_pipeline_receipt.json'):
+  state=json.loads(receipt.read_text())
+  if state.get('status')=='running':running_rtl.append(state['variant'])
 if defer_running:
  for receipt in (r/'model').glob('*/large*/*/receipt.json'):
   if json.loads(receipt.read_text()).get('status')=='running':running.append(receipt.parent)
@@ -24,6 +30,12 @@ for p in r.rglob('*'):
  # their status/progress now; freeze their full traces after terminal receipts.
  if any(parent==p.parent for parent in running) and p.name not in ['receipt.json','progress.json']:continue
  rel=p.relative_to(r)
+ # Large RTL traces are final only after their pipeline terminates. Keep
+ # source/build bindings and JSON status now; preserve completed raw traces
+ # in the next snapshot instead of repeatedly archiving growing prefixes.
+ if (len(rel.parts)>2 and rel.parts[0]=='rtl' and
+     any(rel.parts[1].startswith(v+'_') and rel.parts[1]!=v+'_build' for v in running_rtl)
+     and p.suffix in ['.csv','.bin','.log']):continue
  # XSim unit runners freeze their SV directly inside rtl/<run>, unlike
  # Verilator runs which use source/. Preserve those exact unit test versions
  # too, while continuing to exclude generated C++ and simulator binaries.
@@ -55,5 +67,5 @@ for p in sorted(set(files)):
   else:dest.write_bytes(raw)
   record['archive']=str(dest.relative_to(out))
  manifest.append(record)
-(out/'manifest.json').write_text(json.dumps({'scope':'checkpoint; raw evidence retained; active Vivado timing runs excluded until completed','predecessor':previous,'deferred_running_batches':[str(x.relative_to(r)) for x in running],'files':manifest,'source_base':'5651a34abb97939bee6402c5af585753ab07f64b'},indent=2)+'\n')
+(out/'manifest.json').write_text(json.dumps({'scope':'checkpoint; raw evidence retained; active Vivado timing runs excluded until completed','predecessor':previous,'deferred_running_batches':[str(x.relative_to(r)) for x in running],'deferred_running_rtl_variants':running_rtl,'files':manifest,'source_base':'5651a34abb97939bee6402c5af585753ab07f64b'},indent=2)+'\n')
 print('FROZEN',len(manifest),sum(x['bytes'] for x in manifest),'raw bytes',sum(p.stat().st_size for p in out.rglob('*') if p.is_file()),'archive bytes')

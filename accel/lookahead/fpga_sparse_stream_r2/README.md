@@ -23,6 +23,37 @@ external node-state backing, and a 64-job sequential controller. The tested
 large candidate is 32 lanes/32 ports, 8192 member and changed slots per owner.
 A complete 64-lane implementation is **not** provided or qualified.
 
+The functional flow is shown below. These arrows describe dependencies, not
+free transfers or measured rates. Every external-memory client shares the same
+finite physical fabric; its port count, IDs, arbitration and service gap are
+explicit model assumptions.
+
+```mermaid
+flowchart LR
+  jobs["Q=1 sequential job controller"] --> init["Bounded initialization + ACK fence"]
+  init --> bucket["Sparse bucket snapshot and valid POP"]
+  bucket --> fork["Immutable qid / epoch / node / pair fork"]
+  fork --> front["Prepared CSR and runtime cost lookup"]
+  fork --> meta["Tagged metadata reads"]
+  meta --> cells["Banked whole-pair min + seen"]
+  front --> router["Concurrent candidate routing"]
+  router --> owner["Finite owner cache / MSHR / dirty buffers"]
+  owner --> changes["Changed dedup + owner fence"]
+  changes --> commit["State / member / pending commit + ACK"]
+  commit --> bucket
+  bucket -->|original bucket closed| drain["Drain metadata and reduction; test targets"]
+  cells --> drain
+  drain -->|continue| bucket
+  drain -->|complete| output["Device output writes + all ACK"]
+  output --> jobs
+```
+
+The candidate and cell routers accept multiple inputs concurrently. The
+`parallel_router_ready_a` unit regression checks four 8/32-input configurations
+against the frozen previous RTL and an independent finite-queue scoreboard.
+The direct one-hot ready reduction preserves cycles; any frequency benefit
+requires the corresponding complete physical implementation and fresh binding.
+
 Reproduce the current 32-lane RTL and independent cycle model with new names:
 
 ```sh
@@ -92,7 +123,10 @@ qualifies the full kernel, and no context is a board shell.
 `inspect_live_runs.py` provides a read-only recovery view with process identity,
 progress, OOC handles and calibration records. `freeze_checkpoint.py NAME PREV
 --defer-running-batches` preserves completed evidence and active batch receipts;
-full active traces stay on the shared filesystem until completion.
+full active traces stay on the shared filesystem until completion. Add
+`--defer-running-rtl` to keep growing RTL pipeline traces there as well while
+freezing their JSON status and immutable source/build bindings. The manifest
+lists every deferred variant; its final traces require a later snapshot.
 `verify_snapshot.py NAME` checks all archived bytes including predecessors.
 
 The granular checkpoint and raw logs are in
@@ -102,7 +136,7 @@ scope and unresolved work. No FPGA speedup claim or board measurement is made.
 
 
 Archived evidence can be restored into a **new** destination with
-`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T0400 completed_address8_route_0231 completed_checked8_route_0245`.
+`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T0501 completed_address8_route_0231 completed_checked8_route_0245`.
 The main checkpoint recursively restores its predecessors; explicitly named
 OOC archives add their timing reports. Use the desired completed-stage archive
 from `evidence_snapshot` for other physical candidates. Every part, original
@@ -118,3 +152,13 @@ and source/build commands, not those external artifacts themselves.
 when hardware parameters (except proposal cache), full input/output identities,
 work counts and the memory service contract agree. It publishes cycle and
 traffic ratios, never an unqualified full-kernel frequency or FPGA/GPU speedup.
+
+For a separate physical strategy run using the same synthesis, pass its exact
+name to `prepare_routed_sta.py` as `--run=impl_spread_a` and use a new
+`--tag=routed_sta_spread_a`. The original implementation is never reset.
+`bind_complete_candidate.py --sta-tag routed_sta_spread_a` accepts only that
+reviewed report set; a missing or failed qualification leaves seconds null.
+`prepare_failed_route_diagnosis.py` copies only an exited failed run with a
+completed error-checkpoint marker and rechecks both SHA256 identities before
+emitting read-only reports. The default-route failure and its physical-strategy
+follow-up remain different results even when their RTL is identical.

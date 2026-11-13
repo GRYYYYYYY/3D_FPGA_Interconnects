@@ -7,12 +7,15 @@ timing exceptions or removes IO constraints. Qualification requires subsequent
 review of setup, hold, unconstrained paths, route status and methodology.
 """
 from pathlib import Path
-import json, sys
+import json, re, sys
 
 root = Path(__file__).resolve().parents[4]
 p = root / 'results/fpga_sparse_stream_r2_20261112/timing' / sys.argv[1]
-periods = [float(x) for x in sys.argv[2:] if not x.startswith('--tag=')] or [5.0, 8.0, 10.0]
+periods = [float(x) for x in sys.argv[2:] if not x.startswith(('--tag=', '--run='))] or [5.0, 8.0, 10.0]
 tag = next((x.split('=', 1)[1] for x in sys.argv[2:] if x.startswith('--tag=')), 'routed_sta')
+run = next((x.split('=', 1)[1] for x in sys.argv[2:] if x.startswith('--run=')), 'impl_1')
+if not re.fullmatch(r'[A-Za-z0-9_]+', run):
+    raise ValueError('local implementation run name required')
 if not tag.startswith('routed_sta') or '/' in tag:
     raise ValueError('local routed_sta tag required')
 binding = json.loads((p / 'source_binding.json').read_text())
@@ -21,10 +24,10 @@ if not binding.get('context_resource_overhead_included'):
 out = p / tag
 out.mkdir(exist_ok=False)
 commands = [
-    'wait_on_run impl_1',
-    'set r2_sta_run_status [get_property STATUS [get_runs impl_1]]',
+    f'wait_on_run {run}',
+    f'set r2_sta_run_status [get_property STATUS [get_runs {run}]]',
     'if {$r2_sta_run_status ne "route_design Complete!" && $r2_sta_run_status ne "route_design Complete, Failed Timing!"} {error "route did not complete: $r2_sta_run_status"}',
-    'open_run impl_1',
+    f'open_run {run}',
     'if {[get_property TOP [current_fileset]] ne {' + binding['top'] + '}} {error "wrong project/top"}',
     'report_route_status -file {' + str(out / 'route_status.rpt') + '}',
     'report_utilization -hierarchical -file {' + str(out / 'routed_utilization.rpt') + '}',
@@ -56,6 +59,7 @@ commands += ['close $r2_sta_fd', 'puts R2_ROUTED_STA_COMPLETE_PENDING_REVIEW']
 (out / 'run.tcl').write_text('\n'.join(commands) + '\n')
 (out / 'scope.json').write_text(json.dumps({
     'periods_ns': periods, 'same_actual_routed_netlist': True,
+    'implementation_run': run,
     'source_binding': str(p / 'source_binding.json'),
     'board_measured': False, 'timing_exceptions_added': False,
     'IO_constraints_removed': False, 'qualification': 'pending_report_review',

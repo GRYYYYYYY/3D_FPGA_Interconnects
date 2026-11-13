@@ -193,7 +193,7 @@
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "review copied full32 placement diagnostics and actual full32 routed STA; qualify only tested setup/hold/pulse period; bind clock to exact completed calibration/native40; final archive, preservation audit and independent branch push",
+  "next_action": "complete new router32 F1/F0 independent97+36+4 calibration and bind audited native40; review new32 synthesis then route; qualify only exact completed full-kernel routed STA; preserve pending old routes and all negative results; final archive/preservation audit/independent branch push",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -375,7 +375,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-13T04:18:16.083463+00:00",
+  "updated_utc": "2026-11-13T05:18:19.722190+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -418,7 +418,7 @@
     "local_version": "2022.2",
     "fallback": "plain report_methodology and timing reports; no unsupported JSON; no waiver"
   },
-  "checkpoint_commit": "8294e847f55cb64a66f89d0af5d85baf6a2d3524",
+  "checkpoint_commit": "0f3acbcc671c3a97a0198f1980d167fef5f6895d",
   "exact_hot_capacity": {
     "RTL": "many32_reg_b",
     "model": "many32_reg_model_c",
@@ -1266,9 +1266,9 @@
     "route_started_utc": "2026-11-13T00:11:25Z",
     "clock_qualified_mhz": null
   },
-  "verified_checkpoint_snapshot": "evidence_snapshot/checkpoint_20261113T0400",
-  "verified_checkpoint_files": 84907,
-  "verified_checkpoint_predecessor_count": 10,
+  "verified_checkpoint_snapshot": "evidence_snapshot/checkpoint_20261113T0501",
+  "verified_checkpoint_files": 88932,
+  "verified_checkpoint_predecessor_count": 13,
   "conditional_issue_screen": "analysis/issue_bound_0019.json",
   "branch_pushed": false,
   "latest_fully_calibrated_32_F0": "many32_f0_checked_a:97+36+4 all exact; tail-only recovery after preserved missing-model-argv failure",
@@ -1492,7 +1492,7 @@
     "evidence": "snapshot checkpoint_20261113T0130 exists, verify_0130.log pending. Next snapshot must use it as predecessor. Latest committed HEAD52d3c8faccc7d0af5f186e9db71f26d62bddd8f0; not pushed.",
     "push": "After completion/protection audit push independent branch in fastforward checkpoints336bb48f,fbd1cf5a,d46f5f17,52d3c8fa,later commits to avoid >2GB packs; never force or modify main."
   },
-  "verified_checkpoint_snapshot_count": 13,
+  "verified_checkpoint_snapshot_count": 14,
   "many32_f0_checked_synth": {
     "LUT": 944933,
     "FF": 551508,
@@ -1833,7 +1833,7 @@
     "archive": "evidence_snapshot/completed_placement_diagnosis_0349",
     "new_specific_fix": "parallel_router serial variable-index ir updates identified in16level cross-owner path; directonehot ready implemented and unit validation running"
   },
-  "checkpoint_verification_log": "supervision/verify_0400.log",
+  "checkpoint_verification_log": "supervision/verify_0501.log",
   "additional_fixed_time_calibration_10ns": {
     "reason": "current full32 implementation target10ns differs from existing5/8ns36-case calibration",
     "period_ns": 10,
@@ -1907,6 +1907,190 @@
     "complete32_F0_Vivado_session": "vivado-20261112-205847-e7d439e5",
     "complete32_F1_synth_start": "2026-11-13T04:14:37Z",
     "complete32_F0_synth_start": "2026-11-13T04:14:35Z",
-    "complete32_source_binding": "timing/router_ready32_bindings_0416.json"
+    "complete32_source_binding": "timing/router_ready32_bindings_0416.json",
+    "complete32_F1_97": "all_pass_full_cycles_outputs_traffic_histograms_phases",
+    "complete32_F1_model_executable_sha256": "839e18598582680bc2c02a83751f5578501264fde82eecaa5372c8e8a9c73acf",
+    "complete32_F1_remaining": "fourQ40/hot capacity boundaries still active; no native binding yet",
+    "additional_fixed_time_10ns": {
+      "F1_RTL": "many32_router_ready_a",
+      "F1_status": "running",
+      "F0_status": "pending_its_fresh97_gate",
+      "period_ps": 10000,
+      "cases_each": 18,
+      "tag": "fixed_time_10ns_0513",
+      "clock_qualified": false,
+      "scope": "explicit fixed-ns to synchronous-kernel-edge quantization; no CDC or board claim",
+      "F1_exec_handle": 81020
+    },
+    "complete32_F0_synthesis": {
+      "updated_utc": "2026-11-13T05:17:11.918754+00:00",
+      "classification": "actual_completed_synthesis_only_not_clock",
+      "LUT": 947951,
+      "FF": 551507,
+      "RAMB36": 1064,
+      "RAMB18": 296,
+      "URAM": 288,
+      "target_ns": 10,
+      "setup_ns": 4.59,
+      "hold_ns": -0.08,
+      "pulse_width_ns": 4.3,
+      "worst_setup": "front arithmetic parent_reg to pair_reg,26logic levels,5.255ns estimated data path",
+      "child_exit_utc": "2026-11-13T05:14:04Z",
+      "parent_wait_exit_code": 0,
+      "clock_qualified": false,
+      "resources_within_device_totals": true,
+      "routability_not_proven": true,
+      "fresh_full32_calibration_status": "native/91fixtures/pressure passed,4Maddress running;97+36+4 gate still incomplete",
+      "source_binding": "timing/router_ready32_bindings_0416.json",
+      "evidence_sha256": {
+        "source_binding.json": "53e3c80f2dbd7a69fb39dbeb2875336842671ac238caa6ed93295760a87485a8",
+        "project/many32_f0_router_ready_context_10ns_a.runs/synth_1/runme.log": "1360fce89645514110919f9b56a4cc83388a74f20f19834a77e5fd37ef6f6dc3",
+        "project/many32_f0_router_ready_context_10ns_a.runs/synth_1/synth_utilization.rpt": "ee5489f0f6f6bd597f41fda583a98c75820f68d7ed76ab45c8249b9f20627e71",
+        "project/many32_f0_router_ready_context_10ns_a.runs/synth_1/ram_utilization.rpt": "482f20984d0614a31e49f7e201d1fd5c1dda4c5f1c380fab4f576882cd63a948",
+        "project/many32_f0_router_ready_context_10ns_a.runs/synth_1/synth_timing.rpt": "a2717e323c74cc52c7c47bfc24d5392724d36b48502dc20e6ca1379b62c16fa3"
+      }
+    },
+    "complete32_F1_fixed_ns36": "all_pass",
+    "complete32_F0_synthesis_archive": "evidence_snapshot/completed_router32F0_synth_0519"
+  },
+  "active_physical_jobs": {
+    "many8_router_ready_context_a": {
+      "session": "vivado-20261112-161837-7d305dc5",
+      "last_observed_stage": "impl_1",
+      "STA_followup": "routed_sta_v2",
+      "recovery": "query session and existing run logs; do not reset/relaunch active work"
+    },
+    "many32_router_ready_context_10ns_a": {
+      "session": "vivado-20261112-183223-bc1f6643",
+      "last_observed_stage": "synth_1",
+      "STA_followup": null,
+      "recovery": "query session and existing run logs; do not reset/relaunch active work"
+    },
+    "many32_f0_router_ready_context_10ns_a": {
+      "session": "vivado-20261112-205847-e7d439e5",
+      "last_observed_stage": "synth_1",
+      "STA_followup": "routed_sta_v2",
+      "recovery": "query session and existing run logs; do not reset/relaunch active work",
+      "status": "synthesis_done_fresh97_completion_pending"
+    },
+    "many32_checked_context_10ns_a": {
+      "session": "vivado-20261112-164509-ef1e3de5",
+      "last_observed_stage": "impl_1",
+      "STA_followup": "routed_sta_v2",
+      "recovery": "query session and existing run logs; do not reset/relaunch active work"
+    },
+    "many32_f0_bank_context_a": {
+      "session": "vivado-20261112-180611-3c758959",
+      "last_observed_stage": "impl_1",
+      "STA_followup": "routed_sta_v2",
+      "recovery": "query session and existing run logs; do not reset/relaunch active work"
+    },
+    "many32_context_reduction_b": {
+      "session": "vivado-20261112-185211-8e7c9bec",
+      "last_observed_stage": "impl_1",
+      "STA_followup": "routed_sta_v2",
+      "recovery": "query session and existing run logs; do not reset/relaunch active work"
+    },
+    "central_reduction_a": {
+      "session": "vivado-20261112-191902-487477ac",
+      "last_observed_stage": "impl_1",
+      "STA_followup": "routed_sta",
+      "recovery": "query session and existing run logs; do not reset/relaunch active work"
+    },
+    "many32_bank_context_a": {
+      "session": "vivado-20261112-194208-cd9c35ec",
+      "last_observed_stage": "impl_1",
+      "STA_followup": "routed_sta_v2",
+      "recovery": "query session and existing run logs; do not reset/relaunch active work"
+    },
+    "many32_f0_checked_context_10ns_a": {
+      "session": "vivado-20261112-173934-eb0a0adf",
+      "implementation_run": "impl_spread_a",
+      "last_observed_stage": "impl_spread_a",
+      "STA_followup": "routed_sta_spread_a",
+      "strategy": "Congestion_SSI_SpreadLogic_high",
+      "recovery": "same project separate run already active; original impl_1 preserved failed; do not reset or relaunch"
+    }
+  },
+  "active_validation_jobs": [
+    {
+      "RTL": "many32_router_ready_a",
+      "model": "many32_request_model_c",
+      "exec_handle": 52972,
+      "log": "supervision/many32_router_ready_a.log",
+      "receipt": "rtl/many32_router_ready_a_pipeline_receipt.json",
+      "recovery": "check receipt and process identity; existing pipeline already runs97+36+4; do not rebuild same run name"
+    },
+    {
+      "RTL": "many32_f0_router_ready_a",
+      "model": "many32_request_f0_model_a",
+      "exec_handle": 86625,
+      "log": "supervision/many32_f0_router_ready_a.log",
+      "receipt": "rtl/many32_f0_router_ready_a_pipeline_receipt.json",
+      "recovery": "check receipt and process identity; existing pipeline already runs97+36+4; do not rebuild same run name"
+    }
+  ],
+  "finished_physical_jobs": {
+    "many32_f0_checked_context_10ns_a": {
+      "session": "vivado-20261112-173934-eb0a0adf",
+      "last_observed_stage": "impl_1",
+      "STA_followup": "routed_sta_v2",
+      "recovery": "query session and existing run logs; do not reset/relaunch active work",
+      "status": "failed",
+      "error": "Route35-3 global congestion level7",
+      "routing_node_overlaps": 4346963,
+      "run_status": "route_design ERROR",
+      "route_child_exit_utc": "2026-11-13T04:43:13Z",
+      "clock_qualified": false,
+      "read_only_diagnosis": "timing/many32_f0_checked_context_10ns_a/failed_route_diagnosis_0444",
+      "successor": "many32_f0_router_ready_context_10ns_a"
+    }
+  },
+  "failed_route_diagnosis": {
+    "variant": "many32_f0_checked_context_10ns_a",
+    "tag": "failed_route_diagnosis_0444",
+    "session": "vivado-20261112-171744-63335f93",
+    "status": "completed_reviewed_archived",
+    "archive": "evidence_snapshot/completed_failedroute_diag_0459",
+    "route_counts": {
+      "routable nets": 1249397,
+      "fully routed nets": 37,
+      "unrouted nets": 1249360,
+      "nets with routing errors": 0
+    },
+    "DRC": "RTSTAT-13 insufficient routing"
+  },
+  "targeted_native_gap_sensitivity": {
+    "status": "running",
+    "reason": "completed l16g2 uses about82percent of assumed gap-limited port capacity; isolate service-gap cost from latency without parameter Cartesian scan",
+    "model": "many32_request_model_c",
+    "exact_same_executable_sha256": "839e18598582680bc2c02a83751f5578501264fde82eecaa5372c8e8a9c73acf",
+    "latency_cycles": 16,
+    "service_gap_cycles": [
+      1,
+      4
+    ],
+    "baseline_gap_cycles": 2,
+    "new_runs": [
+      "model/many32_request_model_c/large_l16_g1",
+      "model/many32_request_model_c/large_l16_g4"
+    ],
+    "jobs_per_native_case": 40,
+    "cases": [
+      "bnn_export",
+      "lstm_s2"
+    ],
+    "required_next_checks": [
+      "terminal receipts",
+      "full work/ACK/capacity audit",
+      "native ALT output identity",
+      "exact RTL/OOC/model binding before seconds"
+    ],
+    "clock_qualified": false,
+    "board_measured": false,
+    "exec_handles": {
+      "gap1": 98442,
+      "gap4": 89340
+    }
   }
 }

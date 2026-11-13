@@ -15,7 +15,11 @@ for name in ['rtl', 'model', 'calibration', 'ooc', 'binding']:
     p.add_argument('--' + name, required=True)
 p.add_argument('--work-audit', action='append', required=True)
 p.add_argument('--native-binding', action='append', required=True)
+p.add_argument('--sta-tag', default='routed_sta_v2', help='exact independently reviewed physical run tag')
 a = p.parse_args()
+require_tag = re.fullmatch(r'routed_sta[A-Za-z0-9_]*', a.sta_tag)
+if not require_tag:
+    raise ValueError('local routed_sta tag required')
 out = r / 'analysis' / a.output
 if out.exists():
     raise RuntimeError('append-only output already exists')
@@ -81,7 +85,7 @@ require(all(x['passed'] and x['cycle_log_exact'] for x in boundary['results']), 
 
 qualified = False
 period = None
-qpath = 'timing/' + a.ooc + '/routed_sta_v2/qualification_review.json'
+qpath = 'timing/' + a.ooc + '/' + a.sta_tag + '/qualification_review.json'
 if (r / qpath).is_file():
     q = read(qpath)
     require(q['functional_calibration_97'] == cal_path and q['fixed_ns_calibration_36'] == fixed_path,
@@ -135,6 +139,7 @@ for f in a.work_audit:
                      'full_work_capacity_ACK_audit': f})
 result = {'updated_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
           'RTL': a.rtl, 'model': a.model, 'OOC': a.ooc, 'parameters': params,
+          'physical_qualification_tag': a.sta_tag,
           'complete97_fixed36_boundaries4_calibrated': True,
           'complete_kernel_clock_qualified': qualified, 'qualified_period_ns': period,
           'qualified_clock_mhz': 1000 / period if qualified else None,

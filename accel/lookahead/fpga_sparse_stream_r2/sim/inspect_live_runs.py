@@ -23,9 +23,13 @@ for receipt in sorted((r / 'model').glob('*/large*/*/receipt.json')):
         'recorded_status': x['status'], 'process_alive_and_executable_matches': live,
         'progress_is_not_performance_result': progress,
         'output_sha256': x.get('output_sha256')})
-for version, session in checkpoint['vivado_sessions'].items():
+jobs = checkpoint.get('active_physical_jobs')
+sessions = ({name: job['session'] for name, job in jobs.items()} if jobs is not None
+            else checkpoint['vivado_sessions'])
+for version, session in sessions.items():
     p = r / 'timing' / version
-    runs = list(p.glob('project/*.runs/impl_1/runme.log')) or list(p.glob('project/*.runs/synth_1/runme.log'))
+    run_name = jobs[version].get('implementation_run', 'impl_1') if jobs is not None else 'impl_1'
+    runs = list(p.glob('project/*.runs/' + run_name + '/runme.log')) or list(p.glob('project/*.runs/synth_1/runme.log'))
     for log in runs:
         with log.open('rb') as f:
             f.seek(max(0, log.stat().st_size - 32768))
