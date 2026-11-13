@@ -555,3 +555,6 @@ MCP实际确认四项完整候选流程仍执行：P32/F1 router-ready、P32/F0 
 进程级检查纠正了旧running状态：P8/F0验证与两个后续监督进程已不存在，退出原因尚未确定。记录中8个步骤通过，包含97项独立校准、36项fixed-time和Q40；8192热点RTL输出不完整，8193及4项边界校准未完成，额外10ns校准和六个新native40均未开始。需保留中断现场并恢复这些门禁，不能把旧running/waiting字段作为活跃进程或通过结果。四项Vivado流程独立运行，不受此监督中断影响。
 
 具体证据和未完成范围见 `supervision/push_scope_1645.json` 与 `MCP_push_status_1640.json`。原worktree、main及11份受保护指导/压缩文件重新核对不变。GitHub大历史采用独立分支的分批fast-forward推送；首次HTTPS RPC断开保留日志，未改写历史。
+
+
+17:28 UTC进程复查：实际仍在运行的是P32/F1 router-ready、P8/F1和P8/F0三项完整OOC。P32/F0 router-ready也已退出1，日志记录208,623处node overlap；旧checked32记录1,259,580处。两项均属非法路由负结果，完整审查和紧凑归档待追加，不赋予任何完整核频率。`checkpoint.json`已移除这两项过期active状态，同时将P8/F1全部八项模拟更新为通过，并明确标记P8/F0验证/监督中断及待恢复门禁；原始running回执保留作为中断现场。

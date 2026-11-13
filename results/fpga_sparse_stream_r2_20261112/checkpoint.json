@@ -433,7 +433,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-13T13:59:09.419835+00:00",
+  "updated_utc": "2026-11-13T17:28:18Z",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -2055,19 +2055,6 @@
       "recovery": "query session and existing run logs; do not reset/relaunch active work",
       "status": "implementation_active_fresh_calibration_and_native_binding_complete"
     },
-    "many32_f0_router_ready_context_10ns_a": {
-      "session": "vivado-20261112-205847-e7d439e5",
-      "last_observed_stage": "impl_1",
-      "STA_followup": "routed_sta_v2",
-      "recovery": "query session and existing run logs; do not reset/relaunch active work",
-      "status": "implementation_active_fresh_calibration_and_native_binding_complete"
-    },
-    "many32_checked_context_10ns_a": {
-      "session": "vivado-20261112-164509-ef1e3de5",
-      "last_observed_stage": "impl_1",
-      "STA_followup": "routed_sta_v2",
-      "recovery": "query session and existing run logs; do not reset/relaunch active work"
-    },
     "many32_p8_router_context_10ns_a": {
       "session": "vivado-20261112-191902-487477ac",
       "last_observed_stage": "impl_1",
@@ -2180,6 +2167,26 @@
       "recovery": "preserve negative result and original DCP; do not scan slower periods on illegal route; independent repaired candidates continue",
       "archive": "evidence_snapshot/completed_bank32_routes_1248",
       "archive_verified": true
+    },
+    "many32_checked_context_10ns_a": {
+      "session": "vivado-20261112-164509-ef1e3de5",
+      "last_observed_stage": "impl_1",
+      "STA_followup": "routed_sta_v2",
+      "recovery": "Do not relaunch. Preserve completed raw run and collect detailed rejection review/compact archive.",
+      "status": "completed_negative_illegal_route_pending_detailed_archival",
+      "parent_source_exit_code": 1,
+      "clock_qualified": false,
+      "terminal_MCP_evidence": "supervision/MCP_push_status_1728.json"
+    },
+    "many32_f0_router_ready_context_10ns_a": {
+      "session": "vivado-20261112-205847-e7d439e5",
+      "last_observed_stage": "impl_1",
+      "STA_followup": "routed_sta_v2",
+      "recovery": "Do not relaunch. Preserve completed raw run and collect detailed rejection review/compact archive.",
+      "status": "completed_negative_illegal_route_pending_detailed_archival",
+      "parent_source_exit_code": 1,
+      "clock_qualified": false,
+      "terminal_MCP_evidence": "supervision/MCP_push_status_1728.json"
     }
   },
   "failed_route_diagnosis": {
@@ -2293,7 +2300,7 @@
     "OOC": "many32_p8_router_context_10ns_a",
     "L": 32,
     "PHYS": 8,
-    "status": "fresh97_36_18_4_all_passed_eight_native40_runs_and_physical_implementation_active",
+    "status": "fresh_calibration_and_all_eight_native40_passed_physical_route_active",
     "model_build_handle": 34017,
     "RTL_pipeline_handle": 38837,
     "model_build_log": "supervision/p8_model_build_0557.log",
@@ -2403,7 +2410,7 @@
         "latency_cycles": 60,
         "gap_cycles": 2,
         "handle": 15506,
-        "status": "running",
+        "status": "passed_audited_bound",
         "log": "supervision/p8_l60g2_0807.log",
         "directory": "model/many32_p8_request_model_a/large_l60_g2"
       },
@@ -2411,7 +2418,7 @@
         "latency_cycles": 16,
         "gap_cycles": 2,
         "handle": 10162,
-        "status": "running",
+        "status": "passed_audited_bound",
         "log": "supervision/p8_l16g2_0807.log",
         "directory": "model/many32_p8_request_model_a/large_l16_g2"
       },
@@ -2419,7 +2426,7 @@
         "latency_cycles": 120,
         "gap_cycles": 2,
         "handle": 99451,
-        "status": "running",
+        "status": "passed_audited_bound",
         "log": "supervision/p8_l120g2_0807.log",
         "directory": "model/many32_p8_request_model_a/large_l120_g2"
       },
@@ -2427,7 +2434,7 @@
         "latency_cycles": 16,
         "gap_cycles": 1,
         "handle": 87809,
-        "status": "running",
+        "status": "passed_audited_bound",
         "log": "supervision/p8_l16g1_0807.log",
         "directory": "model/many32_p8_request_model_a/large_l16_g1"
       }
@@ -2572,7 +2579,8 @@
     "record": "supervision/p8_terminal_pipeline_0912.json",
     "scope": "existing P8 runs only; four independent terminal watchers execute work/native audits then exact source/calibration/OOC binding",
     "do_not_duplicate_audits_while_active": true,
-    "recovery": "Inspect pipeline record and exec handle first. Terminal output names: analysis/complete_work_many32_p8_request_model_a_<run>.json; baselines/native_reuse/p8_<run>_outputs_terminal.json; analysis/p8_<run>_bound_terminal.json. A failed follow-up requires reviewing its saved log, never overwriting output."
+    "recovery": "Inspect pipeline record and exec handle first. Terminal output names: analysis/complete_work_many32_p8_request_model_a_<run>.json; baselines/native_reuse/p8_<run>_outputs_terminal.json; analysis/p8_<run>_bound_terminal.json. A failed follow-up requires reviewing its saved log, never overwriting output.",
+    "status": "passed_all_four_pairs_audited_bound"
   },
   "snapshot_0909": {
     "freeze_complete": true,
@@ -2770,7 +2778,7 @@
       "REQUEST_STAGE": 1,
       "CACHE_ENABLE": 0
     },
-    "status": "actual_synthesis_review_passed_implementation_and_remaining_fresh_calibration_active",
+    "status": "RTL_validation_interrupted_physical_implementation_active",
     "model_build_handle": 31957,
     "model_build_log": "supervision/p8_f0_model_build_1255.log",
     "calibration_inherited": false,
@@ -2784,7 +2792,7 @@
     "additional_10ns_followup": {
       "exec_handle": 27722,
       "record": "supervision/p8_f0_fixed10ns_followup_1301.json",
-      "status": "waiting_existing_validation",
+      "status": "not_started_waiter_absent",
       "do_not_duplicate": true
     },
     "scope_binding": "timing/ports8_F0_binding_1310.json",
@@ -2806,7 +2814,7 @@
         "role": "service_gap_sensitivity"
       }
     ],
-    "native_plan_status": "gated_watcher_running_native_not_yet_launched",
+    "native_plan_status": "not_started_gate_watcher_absent",
     "completed_small_native": {
       "record": "rtl/many32_p8_f0_router_a_native_l60/summary.json",
       "all_pass": true,
@@ -2844,13 +2852,23 @@
       "plan_sha256": "bfaf7eab4269bf9bf9714e58ae2800922ef4de41c802eb7403bd817c5f25a412",
       "launcher_sha256": "791c9e803a0d5d32b33f5fa67f123ce4f39ffebb3f4088cdb59f871811bdd314",
       "guard_validation": "analysis/gated_native_plan_guard_1352.json",
-      "recovery": "Inspect existing watcher record and process first; do not relaunch. Requires own97+36+18+4 calibration, source/parameters and synthesis before three full BNN/LSTM40 pairs; then work/native/binding audits."
+      "recovery": "Inspect existing watcher record and process first; do not relaunch. Requires own97+36+18+4 calibration, source/parameters and synthesis before three full BNN/LSTM40 pairs; then work/native/binding audits.",
+      "process_present": false
     },
     "route_MCP_handoff_status": "returned_running_after300s; source continues in E, no second source",
     "fresh97_calibration": {
       "record": "model/many32_p8_f0_request_model_a/router_ready_calibration/calibration.json",
       "all_pass": true,
       "scope": "new P8F0 cycles/output/traffic; remaining fixed-time and capacity gates pending"
-    }
+    },
+    "recovery_required": "Preserve incomplete hot8192 RTL evidence; resume hot8192/8193, four boundary replays and fixed10ns18 before restarting native gate watcher with a new recovery record. Eight prior pipeline steps passed; stale running receipts are not liveness evidence."
+  },
+  "latest_runtime_verification": "supervision/MCP_push_status_1728.json",
+  "github_stage_delivery": {
+    "branch": "accel/lookahead-sparse-stream-r2-20261112",
+    "verified_through_commit": "8d022797f8c3501e35f88b93bb78df2dbe872530",
+    "verified_utc": "2026-11-13T17:51:28.156378+00:00",
+    "receipt": "supervision/push_direct_1708.json",
+    "scope": "stage checkpoint and archived evidence; research incomplete; newer six P8F1 raw trace sets and two new failed OOC report archives pending"
   }
 }
