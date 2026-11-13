@@ -92,7 +92,10 @@ BRAM. The RAM-port repair gives actual two-subbank synthesis of 6,040 LUTs,
 are byte-identical before/after this repair. Direct32-owner replication alone
 would require 2,272 BRAM36 equivalents versus2,016 available, before other modules;
 full replication is rejected. A different tag/data/URAM organization would require
-new implementation and verification. The 5ns unit OOC is tracked separately.
+new implementation and verification. The recovered 5ns unit OOC (Quick directive) completed normally and legally
+routed all10,167 nets. Routed resources are7,013 LUT/1,776 FF/66 RAMB36/10 RAMB18.
+Setup slack is−6.048ns, hold+0.025ns and pulse-width+1.958ns; timing fails and no
+frequency is qualified. These unit results do not qualify the complete kernel.
 
 Local same-host8-core CPU controls measured 3.81462→4.56544 seconds for BNN and
 3.70693→4.41971 seconds for LSTM (three timed reps after one warmup). These negative
@@ -102,14 +105,17 @@ H100-worker CPU baselines. New paired CUDA/CPU controls are submitted as
 
 The first unit MCP parent aborted with exit134 during launch; its child synthesis
 completed successfully. This is recorded as a tool/process failure, not an RTL
-functional failure. New RAM-repaired OOC uses local Vivado2022.2 batch mode.
+functional failure. Two local batch attempts also aborted in WebTalk/libudev host-information collection
+after routing. Recovery2 reused the saved placed DCP and the real system libudev
+preload found in stable existing Vivado sessions; it completed with final reports
+and a routed DCP. All failures are preserved separately from the timing failure.
 
 ## Outstanding
 
 Check the current manifest for actual liveness. Recovery tail calibration, the full-input finite-table profile, necessary budget
 analysis and RTL microprototype are complete. Six P8/F0 full batch cycle runs and
 the original P8/F0 routing are still running at this checkpoint. The new H100
-control job is queued. New micro OOC recovery is tracked separately. Per-opcode
+control job is queued. New micro OOC recovery is complete with a negative timing result. Per-opcode
 state-cache attribution for an integrated INF kernel and full-candidate cycle
 calibration have not been produced: the implemented organization fails the
 resource/traffic gates, so no full integration or full-candidate OOC is launched.
@@ -117,4 +123,8 @@ Full integration is conditional on the guide's technical gates; failures do not
 cancel independent authorized work. Final remote SHA verification follows archive
 verification and normal pushes to the independent branch.
 
-After the initial archive checkpoint is pushed, `finalize_recovered_native.py` can supervise the six already launched runs, recheck qualification, archive all terminal output/trace/audit evidence, and perform normal bounded pushes. It refuses dirty tracked/index state and never restarts experiments. Its append-only receipt directory identifies whether this finalizer was actually launched and what it completed.
+After checkpoint `e92b6bcdc0a10da2339d8510e7897944e28a493c` was remotely verified,
+`finalize_recovered_native.py` was launched (PID235736) to supervise the six already launched runs, recheck qualification, archive all terminal output/trace/audit evidence, and perform normal bounded pushes. It refuses dirty tracked/index state and never restarts experiments. Its append-only receipt directory is `supervision/finalize_recovered_native_2150`.
+A separate read-only H100 watcher (PID261003, `supervision/private_inf_gpu_watch`)
+will analyze all24 paired software cohorts after completion. Queue state and
+model progress are observations, not completed results.

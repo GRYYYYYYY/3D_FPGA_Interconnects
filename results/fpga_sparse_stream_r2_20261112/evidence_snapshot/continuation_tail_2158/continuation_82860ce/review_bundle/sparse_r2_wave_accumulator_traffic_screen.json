@@ -1,0 +1,182 @@
+{
+  "schema": "sparse_r2_wave_accumulator_traffic_screen_v1",
+  "review_commit": "82860ced203bde54f1fa267446b3d0edc521a293",
+  "count_source_commit": "5651a34abb97939bee6402c5af585753ab07f64b",
+  "source_bounds_file": "/workspace/scratch/e14071a74fd6/review_notes/sparse_r2_wave_accumulator_bounds.json",
+  "source_bounds_sha256": "021096759a643b785a4645ea3d05a9438d1c03674e0f82ae27151fef71042cb0",
+  "scope": "Read-only arithmetic using existing per-wave count logs. No new workload replay, RTL, simulation, OOC or measurements. Exact touched-line counts have NOT been measured. All total_touched_lines lower/upper fields are rigorous count bounds, not observed U4. Conditional known-traffic intervals are NOT total achieved traffic or performance predictions.",
+  "definitions": {
+    "T_w": "distinct touched nodes in wave w, exact existing CSV value",
+    "C4_w": "distinct changed 4-node/32B packed-pair lines in wave w, exact existing CSV value",
+    "U4_w": "distinct touched 4-node destination lines; UNKNOWN exact value",
+    "U2_w": "distinct touched 2-node/32B canonical-state lines; UNKNOWN exact value",
+    "C2_w": "distinct changed 2-node/32B canonical-state lines; UNKNOWN exact value",
+    "D_kept": "observed P32/F1 latency60 gap2 CSR row+edge, cell metadata, output, cost and job bytes",
+    "D_extra": "all remaining actual POP, pending/directory, initialization not already counted, tags/epochs, spill write/read/merge, and synchronization traffic; not zero by assumption"
+  },
+  "formulas": {
+    "U4_lb": "sum_w max(ceil(T_w/4), C4_w)",
+    "U4_ub": "sum_w min(T_w, ceil(N/4))",
+    "U2_lb": "sum_w max(ceil(T_w/2), C4_w)",
+    "U2_ub": "sum_w min(T_w, ceil(N/2))",
+    "C2_lb": "sum_w max(ceil(changed_nodes_w/2), C4_w)",
+    "C2_ub": "sum_w min(changed_nodes_w, 2*C4_w)",
+    "packed_known": "D_kept + 32*U4 + 32*sum(C4_w) + ceil(N/128)*128*8*40",
+    "state128_known": "D_kept + 32*U2 + 32*C2 + ceil(N/128)*128*16*40",
+    "total_actual": "D_known + D_extra",
+    "budget": "T_GPU * P * 32 * f_Hz / gap_cycles",
+    "edge_cycles_lb": "ceil(candidate_count/effective_lanes)",
+    "phase_cycles": "expansion + finite merge/apply/commit stages separated by wave barriers; do not replace with max(expansion,commit)",
+    "spill": "count actual 32B memory transactions for every spill write/read/merge pass including padding; 40B independent record = two32B transactions per direction,128B for one write+read"
+  },
+  "planning_conditions": {
+    "clock_Hz": 200000000,
+    "clock_qualified": false,
+    "physical_channels": 32,
+    "transaction_B": 32,
+    "gaps_cycles": [
+      1,
+      2
+    ],
+    "budget_is_optimistic_necessary_condition": true,
+    "omits_from_service_budget": [
+      "per-port imbalance",
+      "response latency",
+      "backpressure",
+      "ordering/dependencies",
+      "compute phases",
+      "control and drain"
+    ]
+  },
+  "cases": [
+    {
+      "case": "bnn_export",
+      "nodes": 4102608,
+      "waves": 2161,
+      "candidates": 1286937147,
+      "exact_touched_nodes": 335766497,
+      "exact_changed_lines4": 51973592,
+      "UNKNOWN_exact_total_touched_lines4": null,
+      "bounds_total_touched_lines4": [
+        84570620,
+        335766497
+      ],
+      "bounds_peak_touched_lines4": [
+        156917,
+        627667
+      ],
+      "gpu_variant": "compact prepared",
+      "gpu_seconds": 0.15179996944444446,
+      "packed64_traffic_screen": {
+        "assumptions": "Keep old CSR/metadata/output traffic; every touched 4node line reads one packed64bit old-label 32B line; each changed line writes once32B; no node-state RMW, initialization, spills, tags or other bookkeeping charged. This is an optimistic architecture-specific bound.",
+        "kept_bytes": 14043485440,
+        "old_label_read_lower_B": 2706259840,
+        "old_label_read_upper_B": 10744527904,
+        "changed_label_write_B": 1663154944,
+        "known_bytes_lower_B": 18412900224,
+        "known_bytes_upper_B": 26451168288,
+        "P32_gap1_200MHz_GPU_budget_B": 31088633742.222225,
+        "P32_gap2_200MHz_GPU_budget_B": 15544316871.111113
+      },
+      "state128_traffic_screen": {
+        "touched_state128_lines_lb": 167946296,
+        "touched_state128_lines_ub": 335766497,
+        "changed_state128_lines_lb": 53465459,
+        "changed_state128_lines_ub": 101227580,
+        "state128_read_B_lb": 5374281472,
+        "state128_read_B_ub": 10744527904,
+        "state128_commit_write_B_lb": 1710894688,
+        "state128_commit_write_B_ub": 3239282560,
+        "known_bytes_lb": 21128661600,
+        "known_bytes_ub": 28027295904,
+        "packed64_headroom_gap1_lb": 4637465454.222225,
+        "packed64_headroom_gap1_ub": 12675733518.222225,
+        "state128_headroom_gap1_lb": 3061337838.222225,
+        "state128_headroom_gap1_ub": 9959972142.222225,
+        "omitted_required_costs": "ADD all overflow write/read/merge passes, reset/epoch initialization, active POP/pending validation/clear services, bank/ID metadata, state writeACK barriers. Packed64 mirrored layout additionally requires canonical pending/state read/write reconciliation. No omitted cost is presumed free."
+      },
+      "explicit_initialization_screen": {
+        "nodes_padded_to_current32owner_init": 4102656,
+        "packed64_init_B": 1312849920,
+        "state128_init_B": 2625699840,
+        "packed64_known_plus_own_init_B_lb": 19725750144,
+        "packed64_known_plus_own_init_B_ub": 27764018208,
+        "state128_known_plus_own_init_B_lb": 23754361440,
+        "state128_known_plus_own_init_B_ub": 30652995744,
+        "state128_extra_budget_gap1_best_B": 7334272302.222225,
+        "state128_extra_budget_gap1_worst_B": 435637998.2222252,
+        "important": "Current initialization style counted. Packed64 old-label mirror is additional to any retained state128 backing and its init; it does not waive pending/POP/state traffic. Lazy epochs may change this only after separately modeled explicit metadata costs."
+      },
+      "conclusion": "P32gap1@hypothetical200MHz has possible traffic headroom only if full D_extra fits and busiest-port/compute gates pass; P32gap2 already fails known optimistic traffic lower bound under these unchanged traffic and init contracts. Not a global FPGA no-go."
+    },
+    {
+      "case": "lstm_s2",
+      "nodes": 4166724,
+      "waves": 2200,
+      "candidates": 1309512712,
+      "exact_touched_nodes": 342191810,
+      "exact_changed_lines4": 53038572,
+      "UNKNOWN_exact_total_touched_lines4": null,
+      "bounds_total_touched_lines4": [
+        86154863,
+        342191810
+      ],
+      "bounds_peak_touched_lines4": [
+        158139,
+        632554
+      ],
+      "gpu_variant": "basic prepared",
+      "gpu_seconds": 0.15988857844444446,
+      "packed64_traffic_screen": {
+        "assumptions": "Keep old CSR/metadata/output traffic; every touched 4node line reads one packed64bit old-label 32B line; each changed line writes once32B; no node-state RMW, initialization, spills, tags or other bookkeeping charged. This is an optimistic architecture-specific bound.",
+        "kept_bytes": 14386038496,
+        "old_label_read_lower_B": 2756955616,
+        "old_label_read_upper_B": 10950137920,
+        "changed_label_write_B": 1697234304,
+        "known_bytes_lower_B": 18840228416,
+        "known_bytes_upper_B": 27033410720,
+        "P32_gap1_200MHz_GPU_budget_B": 32745180865.422226,
+        "P32_gap2_200MHz_GPU_budget_B": 16372590432.711113
+      },
+      "state128_traffic_screen": {
+        "touched_state128_lines_lb": 171156982,
+        "touched_state128_lines_ub": 342191810,
+        "changed_state128_lines_lb": 54533854,
+        "changed_state128_lines_ub": 103150940,
+        "state128_read_B_lb": 5477023424,
+        "state128_read_B_ub": 10950137920,
+        "state128_commit_write_B_lb": 1745083328,
+        "state128_commit_write_B_ub": 3300830080,
+        "known_bytes_lb": 21608145248,
+        "known_bytes_ub": 28637006496,
+        "packed64_headroom_gap1_lb": 5711770145.422226,
+        "packed64_headroom_gap1_ub": 13904952449.422226,
+        "state128_headroom_gap1_lb": 4108174369.422226,
+        "state128_headroom_gap1_ub": 11137035617.422226,
+        "omitted_required_costs": "ADD all overflow write/read/merge passes, reset/epoch initialization, active POP/pending validation/clear services, bank/ID metadata, state writeACK barriers. Packed64 mirrored layout additionally requires canonical pending/state read/write reconciliation. No omitted cost is presumed free."
+      },
+      "explicit_initialization_screen": {
+        "nodes_padded_to_current32owner_init": 4166784,
+        "packed64_init_B": 1333370880,
+        "state128_init_B": 2666741760,
+        "packed64_known_plus_own_init_B_lb": 20173599296,
+        "packed64_known_plus_own_init_B_ub": 28366781600,
+        "state128_known_plus_own_init_B_lb": 24274887008,
+        "state128_known_plus_own_init_B_ub": 31303748256,
+        "state128_extra_budget_gap1_best_B": 8470293857.422226,
+        "state128_extra_budget_gap1_worst_B": 1441432609.422226,
+        "important": "Current initialization style counted. Packed64 old-label mirror is additional to any retained state128 backing and its init; it does not waive pending/POP/state traffic. Lazy epochs may change this only after separately modeled explicit metadata costs."
+      },
+      "conclusion": "P32gap1@hypothetical200MHz has possible traffic headroom only if full D_extra fits and busiest-port/compute gates pass; P32gap2 already fails known optimistic traffic lower bound under these unchanged traffic and init contracts. Not a global FPGA no-go."
+    }
+  ],
+  "minimum_profile_counters": [
+    "exact per-wave U4,U2,C4,C2 and per-owner/subbank distribution/peaks",
+    "accumulator occupancy, conflicts, spills, scratch peaks, actual bytes and merge passes",
+    "old_label_read_transactions_during_expansion must be zero",
+    "final compare/read/commit, state POP, pending, init and metadata transactions separately",
+    "candidate accepted/retired, same-line RAW, bank conflict, spill backpressure and phase cycles",
+    "per-physical-port requests, credits and queues"
+  ],
+  "candidate_status": "conditional_hypothesis_only; no RTL qualification; unchanged32II1<=200MHz edge work still fails regardless of memory savings"
+}

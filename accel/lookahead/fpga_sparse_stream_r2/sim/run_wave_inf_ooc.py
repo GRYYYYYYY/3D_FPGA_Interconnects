@@ -1,6 +1,6 @@
 """Vivado 2022.2 nonproject fallback after MCP parent process abort; new output only."""
 from pathlib import Path
-import datetime,hashlib,json,subprocess,sys
+import datetime,hashlib,json,subprocess,sys,os
 root=Path(__file__).resolve().parents[4];r=root/'results/fpga_sparse_stream_r2_20261112';tag=sys.argv[1];d=r/'timing'/tag;d.mkdir(exist_ok=False);(d/'source').mkdir()
 source=r/'accumulator/rtl_micro_ram_d/source/wave_inf_bank.sv';(d/'source/wave_inf_bank.sv').write_bytes(source.read_bytes())
 script='''set d [file dirname [info script]]
@@ -24,6 +24,7 @@ write_checkpoint [file join $d routed.dcp]
 '''
 (d/'run.tcl').write_text(script)
 cmd=['/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin/vivado','-mode','batch','-source',str(d/'run.tcl'),'-log',str(d/'vivado.log'),'-journal',str(d/'vivado.jou')]
-(d/'source_binding.json').write_text(json.dumps({'source_sha256':{'wave_inf_bank.sv':hashlib.sha256(source.read_bytes()).hexdigest()},'script_sha256':hashlib.sha256(script.encode()).hexdigest(),'command':cmd,'scope':'two subbanks only; OOC internal clock, not full kernel clock; no board'},indent=2)+'\n')
-with (d/'console.log').open('x') as log:rc=subprocess.run(cmd,cwd=d,stdout=log,stderr=subprocess.STDOUT).returncode
+(d/'source_binding.json').write_text(json.dumps({'source_sha256':{'wave_inf_bank.sv':hashlib.sha256(source.read_bytes()).hexdigest()},'script_sha256':hashlib.sha256(script.encode()).hexdigest(),'command':cmd,'LD_PRELOAD':'/usr/lib/x86_64-linux-gnu/libudev.so.1','scope':'two subbanks only; OOC internal clock, not full kernel clock; no board'},indent=2)+'\n')
+env=os.environ.copy();env['LD_PRELOAD']='/usr/lib/x86_64-linux-gnu/libudev.so.1'
+with (d/'console.log').open('x') as log:rc=subprocess.run(cmd,cwd=d,env=env,stdout=log,stderr=subprocess.STDOUT).returncode
 (d/'terminal.json').write_text(json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'returncode':rc,'board_measured':False},indent=2)+'\n');sys.exit(rc)

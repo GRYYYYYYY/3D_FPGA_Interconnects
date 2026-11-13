@@ -1,0 +1,261 @@
+{
+  "review_commit": "82860ced203bde54f1fa267446b3d0edc521a293",
+  "scope": "Derived necessary planning bounds; no new RTL, OOC, board, software or cycle-model experiments.",
+  "planning_frequency_mhz": 200.0,
+  "qualified_frequency_mhz": null,
+  "board_measured": false,
+  "cautions": [
+    "A necessary bound passing does not establish achievable performance.",
+    "Traffic budgets hold gap_cycles fixed; varying frequency here changes the assumed service rate. A fixed-nanosecond memory contract must be converted separately.",
+    "P32_l60_g2 traffic is a measured model outcome for that model, not a proof that a changed architecture or different memory contract has identical traffic.",
+    "MARK/CLEAR command savings are not proportional off-chip byte savings.",
+    "The exact number of all touched lines is unknown; interval endpoints are not measurements of that count.",
+    "New algorithmic transformations may improve software too; refresh targets when a software-applicable transformation changes work."
+  ],
+  "cases": [
+    {
+      "case": "bnn_export",
+      "gpu_target_seconds": 0.15179996944444446,
+      "gpu_variant": "compact prepared",
+      "candidate_count": 1286937147,
+      "planning_gpu_cycle_budget": 30359993.88888889,
+      "edge_only_min_cycles_32II1": 40216786,
+      "edge_only_required_frequency_MHz_32II1": 264.93276639603334,
+      "minimum_ideal_lanes_for_edge_only_strict_win": 43,
+      "observed_P32_l60_g2_cycles": 285126884,
+      "observed_internal_bytes": 75479038208,
+      "proposal_state_traffic_fraction": 0.8139419132329175,
+      "expansion_owner_miss_read_bytes": 31197976128,
+      "owner_hit_fraction": 0.14803285027874014,
+      "owner_merge_fraction": 0.09440353733141561,
+      "owner_miss_fraction": 0.7575636123898443,
+      "state_hit_fraction": 0.2896928362184825,
+      "derived_MARK_plus_CLEAR_logical_commands": 229339702,
+      "derived_MARK_plus_CLEAR_command_fraction": 0.5254353553400735,
+      "complete_node_to_changed_line_commit_read_saving_upper_bytes": 1671596672,
+      "traffic_budgets": [
+        {
+          "ports": 32,
+          "gap_cycles": 1,
+          "nominal_bytes_budget": 31088633742.222225,
+          "minimum_fraction_cut_from_observed_P32_l60_g2_traffic": 0.588115661244248,
+          "includes_latency_imbalance_dependencies_and_control": false
+        },
+        {
+          "ports": 32,
+          "gap_cycles": 2,
+          "nominal_bytes_budget": 15544316871.111113,
+          "minimum_fraction_cut_from_observed_P32_l60_g2_traffic": 0.794057830622124,
+          "includes_latency_imbalance_dependencies_and_control": false
+        },
+        {
+          "ports": 8,
+          "gap_cycles": 1,
+          "nominal_bytes_budget": 7772158435.555556,
+          "minimum_fraction_cut_from_observed_P32_l60_g2_traffic": 0.897028915311062,
+          "includes_latency_imbalance_dependencies_and_control": false
+        }
+      ],
+      "touched4_peak_count_bounds_not_measured_exact": [
+        156917,
+        627667
+      ],
+      "all_resident_capacity_32owners_x4096_ruled_out_by_aggregate_lower_bound": true
+    },
+    {
+      "case": "lstm_s2",
+      "gpu_target_seconds": 0.15988857844444446,
+      "gpu_variant": "basic prepared",
+      "candidate_count": 1309512712,
+      "planning_gpu_cycle_budget": 31977715.688888893,
+      "edge_only_min_cycles_32II1": 40922273,
+      "edge_only_required_frequency_MHz_32II1": 255.9424359646741,
+      "minimum_ideal_lanes_for_edge_only_strict_win": 41,
+      "observed_P32_l60_g2_cycles": 293652813,
+      "observed_internal_bytes": 77028523712,
+      "proposal_state_traffic_fraction": 0.8132375151082007,
+      "expansion_owner_miss_read_bytes": 31834313248,
+      "owner_hit_fraction": 0.14681387758838343,
+      "owner_merge_fraction": 0.09349720921227682,
+      "owner_miss_fraction": 0.7596889131993397,
+      "state_hit_fraction": 0.2897251953221613,
+      "derived_MARK_plus_CLEAR_logical_commands": 234134235,
+      "derived_MARK_plus_CLEAR_command_fraction": 0.5261270168630557,
+      "complete_node_to_changed_line_commit_read_saving_upper_bytes": 1699284256,
+      "traffic_budgets": [
+        {
+          "ports": 32,
+          "gap_cycles": 1,
+          "nominal_bytes_budget": 32745180865.422226,
+          "minimum_fraction_cut_from_observed_P32_l60_g2_traffic": 0.5748953856645058,
+          "includes_latency_imbalance_dependencies_and_control": false
+        },
+        {
+          "ports": 32,
+          "gap_cycles": 2,
+          "nominal_bytes_budget": 16372590432.711113,
+          "minimum_fraction_cut_from_observed_P32_l60_g2_traffic": 0.7874476928322529,
+          "includes_latency_imbalance_dependencies_and_control": false
+        },
+        {
+          "ports": 8,
+          "gap_cycles": 1,
+          "nominal_bytes_budget": 8186295216.3555565,
+          "minimum_fraction_cut_from_observed_P32_l60_g2_traffic": 0.8937238464161265,
+          "includes_latency_imbalance_dependencies_and_control": false
+        }
+      ],
+      "touched4_peak_count_bounds_not_measured_exact": [
+        158139,
+        632554
+      ],
+      "all_resident_capacity_32owners_x4096_ruled_out_by_aggregate_lower_bound": true
+    }
+  ],
+  "p8_F1_per_port_bounds": [
+    {
+      "case": "bnn_export",
+      "config": "large_l16_g1",
+      "model_resident_cycles": 359062210,
+      "total_internal_bytes": 76456715936,
+      "per_port_request_counts": [
+        298712448,
+        298702561,
+        298775870,
+        298273254,
+        298735171,
+        298791126,
+        298430400,
+        298851543
+      ],
+      "busiest_port_service_only_min_cycles": 298851543,
+      "clock_qualified": false
+    },
+    {
+      "case": "lstm_s2",
+      "config": "large_l16_g1",
+      "model_resident_cycles": 366543747,
+      "total_internal_bytes": 78047525376,
+      "per_port_request_counts": [
+        306336337,
+        304428795,
+        304169400,
+        304068439,
+        305724779,
+        304558369,
+        304777674,
+        304921375
+      ],
+      "busiest_port_service_only_min_cycles": 306336337,
+      "clock_qualified": false
+    },
+    {
+      "case": "bnn_export",
+      "config": "large_l16_g2",
+      "model_resident_cycles": 663819018,
+      "total_internal_bytes": 76635131456,
+      "per_port_request_counts": [
+        299404407,
+        299400054,
+        299471085,
+        298971558,
+        299430600,
+        299496648,
+        299127617,
+        299545889
+      ],
+      "busiest_port_service_only_min_cycles": 599091777,
+      "clock_qualified": false
+    },
+    {
+      "case": "lstm_s2",
+      "config": "large_l16_g2",
+      "model_resident_cycles": 677010218,
+      "total_internal_bytes": 78236175968,
+      "per_port_request_counts": [
+        307090260,
+        305173423,
+        304905206,
+        304788298,
+        306470797,
+        305274671,
+        305512967,
+        305664877
+      ],
+      "busiest_port_service_only_min_cycles": 614180519,
+      "clock_qualified": false
+    },
+    {
+      "case": "bnn_export",
+      "config": "large_l60_g2",
+      "model_resident_cycles": 666327502,
+      "total_internal_bytes": 76378585536,
+      "per_port_request_counts": [
+        298397855,
+        298395732,
+        298470284,
+        297965838,
+        298442804,
+        298486315,
+        298129353,
+        298542617
+      ],
+      "busiest_port_service_only_min_cycles": 597085233,
+      "clock_qualified": false
+    },
+    {
+      "case": "lstm_s2",
+      "config": "large_l60_g2",
+      "model_resident_cycles": 680256759,
+      "total_internal_bytes": 77980651392,
+      "per_port_request_counts": [
+        306072755,
+        304178376,
+        303906877,
+        303812035,
+        305458821,
+        304291393,
+        304513878,
+        304661221
+      ],
+      "busiest_port_service_only_min_cycles": 612145509,
+      "clock_qualified": false
+    },
+    {
+      "case": "bnn_export",
+      "config": "large_l120_g2",
+      "model_resident_cycles": 677080490,
+      "total_internal_bytes": 75951245216,
+      "per_port_request_counts": [
+        296742723,
+        296727087,
+        296798283,
+        296301037,
+        296759721,
+        296802340,
+        296472120,
+        296873102
+      ],
+      "busiest_port_service_only_min_cycles": 593746203,
+      "clock_qualified": false
+    },
+    {
+      "case": "lstm_s2",
+      "config": "large_l120_g2",
+      "model_resident_cycles": 692319268,
+      "total_internal_bytes": 77509200480,
+      "per_port_request_counts": [
+        304196919,
+        302348798,
+        302091154,
+        301979000,
+        303610258,
+        302436967,
+        302680778,
+        302818641
+      ],
+      "busiest_port_service_only_min_cycles": 608393837,
+      "clock_qualified": false
+    }
+  ]
+}
