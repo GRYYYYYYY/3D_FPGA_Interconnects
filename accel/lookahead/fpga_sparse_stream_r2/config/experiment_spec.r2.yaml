@@ -427,3 +427,22 @@ ports8_placed_diagnosis:
   maximum_congestion_level: 7
   final_routed_clock_qualified: false
   matched_P32_F1_comparison: analysis/ports8_vs32_placed_0843.json
+
+
+completed_gap4_sensitivity:
+  model: many32_request_model_c
+  RTL: many32_router_ready_a
+  jobs_each: 40
+  cases: [bnn_export, lstm_s2]
+  base_latency_cycles: 16
+  minimum_service_gap_cycles: 4
+  seed: 1729
+  same_executable_input_work_and_finite_topology: verified
+  work_capacity_ACK_and_native_output_audits: passed
+  resident_cycles_BNN_LSTM: [331787140, 337525148]
+  exact_source_and_fresh_RTL_calibration_binding: analysis/router32_gap4_bound_0907.json
+  all_completed_memory_scenarios: analysis/memory_sensitivity_P32_completed_0907.json
+  resident_comparison: analysis/resident_router32_0907.json
+  hypothetical_memory: true
+  qualified_full_kernel_clock: null
+  FPGA_board_measured: false

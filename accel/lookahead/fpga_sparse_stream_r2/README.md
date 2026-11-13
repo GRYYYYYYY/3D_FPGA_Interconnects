@@ -19,8 +19,12 @@ performs free sample initialization or intermediate output extraction.
 
 The current implementation is `rtl/many_tile.sv`: 8 or 32 lanes, five finite
 clients per owner through a tagged local uplink to shared physical ports,
-external node-state backing, and a 64-job sequential controller. The tested
-large candidate is 32 lanes/32 ports, 8192 member and changed slots per owner.
+external node-state backing, and a 64-job sequential controller. The completed
+large-model candidate is 32 lanes/32 ports, 8192 member and changed slots per
+owner. A second candidate retains those 32 owners and capacities but shares
+eight physical ports. Its independent RTL/model calibration has passed; its
+native full batches and routed implementation are still running. Neither
+complete 32-lane candidate has a qualified clock yet.
 A complete 64-lane implementation is **not** provided or qualified.
 
 The functional flow is shown below. These arrows describe dependencies, not
@@ -85,6 +89,28 @@ For F0 add `-GCACHE_ENABLE=0` and set the model cache flag to zero. F0 retains
 32 independent line transactions, 16 writes, finite FIFOs and write-ACK hazards;
 it is separately calibrated against F0 RTL. It does not inherit F1 timing.
 
+To reproduce the 32-owner/eight-port candidate, use new names and set both
+models to eight ports. The validation driver builds RTL, runs all 97 references,
+the 36 fixed-time cases and the four capacity/batch comparisons. The subsequent
+18 cases add the explicitly hypothetical 10 ns kernel period; none of these
+periods is assigned by simulation as an operating frequency.
+
+```sh
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/build_many_model.py replay32p8_model 32 8 8192 8192 1 1 1 1 1 1
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/validate_many_candidate.py replay32p8 replay32p8_model router_ready_calibration --lanes 32 --ports 8
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/sweep_fixed_time.py replay32p8 replay32p8_model --period-ps 10000 --tag fixed_time_10ns
+python3 accel/lookahead/fpga_sparse_stream_r2/sim/run_large_model.py replay32p8_model 60 2
+```
+
+Run each dependent command only after its predecessor succeeds. The last
+command executes complete BNN and LSTM 40-sample batches; it does not reuse
+P32 traffic or intermediate scheduling. For the physical wrapper,
+`gen_ooc_context.py many 32 8 8192 8192 1 1 1` generates
+`r2_many32_p8_context`. Its frozen RTL, parameters and reports must be bound to
+this candidate before assigning any clock. The independent
+`central_onehot_a` unit's 80 MHz qualification does not apply: this complete
+candidate retains the default fabric payload selector.
+
 Selected unit checks:
 
 ```sh
@@ -136,7 +162,7 @@ scope and unresolved work. No FPGA speedup claim or board measurement is made.
 
 
 Archived evidence can be restored into a **new** destination with
-`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T0808 completed_address8_route_0231 completed_checked8_route_0245`.
+`python3 accel/lookahead/fpga_sparse_stream_r2/sim/restore_snapshot.py /tmp/r2_evidence_restored checkpoint_20261113T0909 completed_address8_route_0231 completed_checked8_route_0245`.
 The main checkpoint recursively restores its predecessors; explicitly named
 OOC archives add their timing reports. Use the desired completed-stage archive
 from `evidence_snapshot` for other physical candidates. Every part, original
@@ -152,6 +178,14 @@ and source/build commands, not those external artifacts themselves.
 when hardware parameters (except proposal cache), full input/output identities,
 work counts and the memory service contract agree. It publishes cycle and
 traffic ratios, never an unqualified full-kernel frequency or FPGA/GPU speedup.
+
+`analyze_memory_sensitivity.py OUTPUT.json MODEL RUN [RUN ...]` compares two or
+more completed, independently audited runs of one executable. The first run is
+the reference. It rehashes actual workload/prepared/golden/output files, checks
+identical finite topology, seed and per-wave commit sets, and reports cycles,
+traffic by array, capacity peaks and phase counters. Latency and service gap
+remain explicit cycle-domain assumptions; seconds stay null. Use a new output
+name after additional complete audits become available.
 
 For a separate physical strategy run using the same synthesis, pass its exact
 name to `prepare_routed_sta.py` as `--run=impl_spread_a` and use a new

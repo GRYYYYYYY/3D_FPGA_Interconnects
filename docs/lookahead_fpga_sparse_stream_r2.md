@@ -6,7 +6,7 @@
 
 有效 POP 的 whole-pair 归约、原桶闭合后等待所有事件排空的结束规则、稀疏目录/工作列表、有限 owner/state 缓存、changed/commit 流水、共享物理通道、cost 一次加载和 Q=1 batch 控制均已有可运行实现。当前完整32路候选为32 owners、每owner 8192成员/changed容量、32个假设物理通道，每通道64个ID；另有保持32 owners、改为8共享物理通道的P8候选正在独立验证。尚未实现或验证64路完整核。 当前harness物理/发射掩码为32bit，central client ID为6bit；64个owner再加controller需要65个central clients，不能只改lane参数。构建入口已显式拒绝超出当前实现范围的配置，见 `analysis/topology_limit_guards_0137.json`；此限制不代表新互连实现不可行。
 
-最新P32候选是按真实布局路径修复的并行router ready归约。完整8路已通过97项、36组固定纳秒、两个Q40并取得本版本125MHz OOC资格。新32路F1现已通过97项逐周期/输出/流量/阶段核对、36组固定ns、18组10ns补充及4项Q40/热点容量边界；同一模型的三档延迟、两张图共六个native40完整batch已重新绑定，见`analysis/router32_bound_0627.json`；额外gap1两项完整batch也已通过审计并绑定，见`analysis/router32_gap1_bound_0725.json`。F0也已通过97+36+18+4，同一模型的BNN/LSTM两个native40 batch已经重新绑定，见`analysis/router32_F0_bound_0658.json`。对应完整32核综合已完成，实际布局布线仍在运行；所有完整32核时钟均为null。旧checked F0默认route拥塞失败和中央33×32单元非法路由的证据均已保存，同网表SSI策略继续执行。32-owner/8共享通道P8候选已通过独立97+36+18+4校准，八个真实完整40batch和物理实现正在运行。
+最新P32候选是按真实布局路径修复的并行router ready归约。完整8路已通过97项、36组固定纳秒、两个Q40并取得本版本125MHz OOC资格。新32路F1现已通过97项逐周期/输出/流量/阶段核对、36组固定ns、18组10ns补充及4项Q40/热点容量边界；同一模型的三档延迟、两张图共六个native40完整batch已重新绑定，见`analysis/router32_bound_0627.json`；额外gap1/gap4四项完整batch也已通过审计并绑定，见`analysis/router32_gap1_bound_0725.json`和`analysis/router32_gap4_bound_0907.json`。F0也已通过97+36+18+4，同一模型的BNN/LSTM两个native40 batch已经重新绑定，见`analysis/router32_F0_bound_0658.json`。对应完整32核综合已完成，实际布局布线仍在运行；所有完整32核时钟均为null。旧checked F0默认route拥塞失败和中央33×32单元非法路由的证据均已保存，同网表SSI策略继续执行。32-owner/8共享通道P8候选已通过独立97+36+18+4校准，八个真实完整40batch和物理实现正在运行。
 
 下表为已完成的真实小图RTL完整batch。统一60-cycle基础延迟、0至12周期随机扰动、最短2-cycle通道接收间隔；不是板测或已定频结果。`F1`为有限4-way×32-set×32B owner缓存，`F0`为保留有限并发与ACK的无合并服务；state backing、物理通道、batch边界与请求流水保持对应。
 
@@ -126,7 +126,7 @@ prepared_CSR_valid_POP_CPU完整包含每sample mutable初始化、cost复制、
 
 ## 尚未完成
 
-- P8独立BNN/LSTM完整40batch及延迟/带宽敏感性：已通过97+36+18+4全部重新校准，四组配置共8个完整batch正在执行。P32 gap4完整模型仍在执行。
+- P8独立BNN/LSTM完整40batch及延迟/带宽敏感性：已通过97+36+18+4全部重新校准，四组配置共8个完整batch正在执行。P32 gap4已完整通过审计并绑定。
 - 完整32路的routed OOC与setup/hold审查；address与checked完整8路均已通过125MHz，grant完整8路通过100MHz。已有冻结8路100/125MHz和state/pair单元200MHz不能转移给新完整32核。
 - 将已完成的全部F1/F0 native40结果绑定到最终合格的完整核版本；完整输出、逐wave工作/容量/ACK审计与native身份已通过。
 - 通过完整核OOC后，绑定其精确版本和频率，明确内存周期参数到纳秒的换算，再建立模拟秒数列；无板卡shell/实板结论。
@@ -453,3 +453,15 @@ P8另已通过97+36+18，正执行四项容量/完整batch边界。该配置后�
 P8只读placed DCP的源/副本SHA为`e9f21516f4afe65a9fed43d70ca344cc0eb3599b28986a96baa7375c56521f53`；10ns estimated setup+0.506、hold−0.268、pulse+4.300ns。1,294,651条可路由net中1,294,605尚未布线、46条显式gap，所以不是频率资格。最坏路径仍是跨bank候选路由ready链，10层逻辑、9.117ns估计数据路径、8.267ns估计布线（90.677%），数据三次跨SLR。
 
 实际placed资源912,018LUT/562,128FF、1064RAMB36+328RAMB18+288URAM；相对P32 F1少158,525LUT、46,062FF，RAM数量相同。源/参数检查确认27核心SV相同，只有PHYS32→8；同步上下文宽度变化也包括在资源内，不能将总差额当成单个模块纯成本。SLR0/1/2的CLB占用从97.47/99.96/98.75%变为82.85/99.71/96.93%，SLR2↔1、1↔0连线使用率从70.02/51.83%变为62.49/29.66%。最大拥塞等级仍7，热点转到候选router区域。`analysis/ports8_vs32_placed_0843.json`记录该限定比较；15文件只读归档完成。原H已进入实际路由，P8八个native40模型仍在运行；正setup估计不替代最终setup/hold、路由完整性和约束审查。
+
+
+## 09:08：P32 gap4完整batch与内存敏感性收尾
+
+基础延迟16cycle、最小接收间隔4cycle的BNN/LSTM全部40sample分别完成331,787,140/337,525,148cycle、76,367,574,304/77,956,147,712内部字节。与同模型、同输入、同seed的gap2相比，周期为1.841815/1.834186倍，流量为1.006306/1.006584倍；每wave提交集合、候选及changed总量不变，全部输出、容量和ACK审计通过。gap4平均发射3.878804/3.879749候选每周期，提交0.314090/0.314469节点每周期，分母包含全部resident工作。
+
+`analysis/memory_sensitivity_P32_completed_0907.json`现汇总五种内存条件、两张图共10个完整F1结果：16cycle下gap1/2/4，以及gap2下60/120cycle。分析器重算实际输入和输出SHA并要求同可执行文件、拓扑、seed和逐wave提交集合；它不改变模型，不赋予频率。此前八条完成结果已与旧gap1/gap2比较逐项核对。新结果绑定见`router32_gap4_bound_0907.json`，合并F0后的`resident_router32_0907`有12条架构模拟结果，全部FPGA秒数及软件/FPGA比值仍为null。
+
+固定本次逐通道流量和gap4合同的必要传输周期为298,888,633/306,165,213，仅用于该条件筛选；不得作为FPGA实际性能或其他结构的上限。八个P8完整batch及八个完整核物理实现仍在执行。原始终态trace将在后续增量快照归档，原80MHz one-hot单元资格不传递给完整核。
+
+
+09:28证据补记：`checkpoint_20261113T0909`新增56份原始文件，2,895,182,371原始字节、802,413,160归档字节；全链96,466文件/19快照SHA核验通过。gap4的完整commit/phase/traffic/output证据已包含，八个P8仍活动的batch明确延后。`protection_0919.json`再次确认原worktree、main及11个受保护文件不变。P8终态监督流程已启动，仅等待现有运行，再顺序执行完整工作、native身份及精确绑定；失败保留现场，不重复启动实验。

@@ -193,7 +193,7 @@
   "software_baselines_complete": true,
   "fpga_simulated_superiority_supported": false,
   "candidate_status": "in_progress",
-  "next_action": "Finish P32 four-boundary calibration and bind exact existing native40; complete P8 fresh calibration/OOC then matching native40; finish gap1/gap4 native audits; collect all active physical runs and exact full-kernel STA; final verified archives/protection audit/independent branch push.",
+  "next_action": "Finish eight active P8 native40 runs, audit complete work/ACK/capacity and native identity, bind exact P8 calibration; collect eight active complete-kernel physical runs and qualify actual STA only if legal; verify final raw archives/protected originals and push independent branch.",
   "semantics_scope": {
     "native_complete_batches": [
       "d3:8",
@@ -276,8 +276,8 @@
     "B central_onehot_a is finished, only unit80MHz at12.5ns qualified; all5/8/10ns setup failures preserved. 133files archive completed_central_onehot_route_0840 verified. B idle, no new source needed. Never transfer unit clock to complete32; defaultDATA_ONEHOT0 unchanged.",
     "A P8 readonly placement diagnosis finished and archived0843(15files), matched27core/P32F1 comparison passed; A idle. J P32F1 diagnosis archived0806, idle. No diagnostic source needs relaunching; original H route continues.",
     "Physical jobs in active_physical_jobs are authoritative. H runs P8 impl/parentSTA. D uses impl_spread_a/routed_sta_spread_a; original impl_1 failed and preserved. Other P32 routes continue.",
-    "P8 native40 handles15506(60g2),10162(16g2),99451(120g2),87809(16g1), each BNN/LSTM40, all running. P32gap4 handle89340 still running. For each terminal pair audit_complete_work.py capacities8192/8192, audit_model_native_reuse.py, then exact candidate binding; partial progress is not a result. Fresh P8 input checks recorded per run.",
-    "Main0808 snapshot VERIFIED96410files across18snapshots; next predecessor0808. New1220files contain793258651rawbytes/105704156archivebytes, including full P8 RTL calibration. Ten active native batches explicitly deferred and require final raw-evidence delta. Side completed_router_F1_placement_0806 VERIFIED15files.",
+    "P8 native handles15506(60g2),10162(16g2),99451(120g2),87809(16g1) remain active. Terminal supervisor63482 already waits all four pairs and runs audits/bindings; inspect supervision/p8_terminal_pipeline_0912.json before any manual audit. P32gap4 and audits58083 completed PASS, bindings/comparison0907 complete; do not repeat.",
+    "Snapshot0909 VERIFIED96466files across19snapshots; next predecessor0909. New56rawfiles contain2895182371rawbytes/802413160archivebytes including gap4 full trace. Eight active P8 batch traces remain explicitly deferred and need final raw deltas.",
     "Only exact complete32 routed setup/hold/pulse/constraints/fully-routed qualification can assign seconds. Unit/8lane clocks and synthesis/placement estimates cannot. Bind all native complete work and extra actual-period RTL calibration, explicitly convert cycle-memory parameters to ns. Preserve all failures and null seconds where unqualified.",
     "After remaining experiments finish, consolidate report, verify archives, recheck original protection, commit and push independent branch through bounded fast-forward checkpoints; never force or merge main. Branch has not yet been pushed."
   ],
@@ -375,7 +375,7 @@
     "luna_interface_available": false,
     "routine_checks": "existing live handles and progress/receipt files; no automatic competing recovery"
   },
-  "updated_utc": "2026-11-13T07:00:09.237291+00:00",
+  "updated_utc": "2026-11-13T09:28:58.969832+00:00",
   "bank8192_reg_resources": {
     "LUT": 14628,
     "FF": 8418,
@@ -1277,9 +1277,9 @@
     "route_started_utc": "2026-11-13T00:11:25Z",
     "clock_qualified_mhz": null
   },
-  "verified_checkpoint_snapshot": "checkpoint_20261113T0808",
-  "verified_checkpoint_files": 96410,
-  "verified_checkpoint_predecessor_count": 17,
+  "verified_checkpoint_snapshot": "checkpoint_20261113T0909",
+  "verified_checkpoint_files": 96466,
+  "verified_checkpoint_predecessor_count": 18,
   "conditional_issue_screen": "analysis/issue_bound_0019.json",
   "branch_pushed": false,
   "latest_fully_calibrated_32_F0": {
@@ -1516,7 +1516,7 @@
     "evidence": "snapshot checkpoint_20261113T0130 exists, verify_0130.log pending. Next snapshot must use it as predecessor. Latest committed HEAD52d3c8faccc7d0af5f186e9db71f26d62bddd8f0; not pushed.",
     "push": "After completion/protection audit push independent branch in fastforward checkpoints336bb48f,fbd1cf5a,d46f5f17,52d3c8fa,later commits to avoid >2GB packs; never force or modify main."
   },
-  "verified_checkpoint_snapshot_count": 18,
+  "verified_checkpoint_snapshot_count": 19,
   "many32_f0_checked_synth": {
     "LUT": 944933,
     "FF": 551508,
@@ -1857,7 +1857,7 @@
     "archive": "evidence_snapshot/completed_placement_diagnosis_0349",
     "new_specific_fix": "parallel_router serial variable-index ir updates identified in16level cross-owner path; directonehot ready implemented and unit validation running"
   },
-  "checkpoint_verification_log": "supervision/verify_0607.log",
+  "checkpoint_verification_log": "supervision/verify_0909.log",
   "additional_fixed_time_calibration_10ns": {
     "reason": "current full32 implementation target10ns differs from existing5/8ns36-case calibration",
     "period_ns": 10,
@@ -2058,16 +2058,7 @@
       "STA_followup": "routed_sta_v2"
     }
   },
-  "active_validation_jobs": [
-    {
-      "RTL": "many32_p8_router_a",
-      "model": "many32_p8_request_model_a",
-      "exec_handle": 38837,
-      "log": "supervision/many32_p8_router_a.log",
-      "receipt": "rtl/many32_p8_router_a_pipeline_receipt.json",
-      "recovery": "existing32lane8port pipeline active; do not rebuild same run name"
-    }
-  ],
+  "active_validation_jobs": [],
   "finished_physical_jobs": {
     "many32_f0_checked_context_10ns_a": {
       "session": "vivado-20261112-173934-eb0a0adf",
@@ -2128,7 +2119,7 @@
     "DRC": "RTSTAT-13 insufficient routing"
   },
   "targeted_native_gap_sensitivity": {
-    "status": "running",
+    "status": "completed_four_native40_work_capacity_ACK_and_native_identity_passed_exact_router_binding_clock_null",
     "reason": "completed l16g2 uses about82percent of assumed gap-limited port capacity; isolate service-gap cost from latency without parameter Cartesian scan",
     "model": "many32_request_model_c",
     "exact_same_executable_sha256": "839e18598582680bc2c02a83751f5578501264fde82eecaa5372c8e8a9c73acf",
@@ -2148,17 +2139,28 @@
       "lstm_s2"
     ],
     "required_next_checks": [
-      "terminal receipts",
-      "full work/ACK/capacity audit",
-      "native ALT output identity",
-      "exact RTL/OOC/model binding before seconds"
+      "exact full-kernel OOC clock qualification before seconds"
     ],
     "clock_qualified": false,
     "board_measured": false,
     "exec_handles": {
       "gap1": 98442,
       "gap4": 89340
-    }
+    },
+    "terminal_audit_followup": {
+      "exec_session": 58083,
+      "status": "completed_both_audits_exit0",
+      "work_audit": "analysis/complete_work_many32_request_model_c_large_l16_g4.json",
+      "native_binding": "baselines/native_reuse/gap4_outputs_0900.json",
+      "logs": [
+        "supervision/gap4_terminal_audit_0900_0.log",
+        "supervision/gap4_terminal_audit_0900_1.log"
+      ]
+    },
+    "bindings": [
+      "analysis/router32_gap1_bound_0725.json",
+      "analysis/router32_gap4_bound_0907.json"
+    ]
   },
   "payload_onehot_physical_followup": {
     "status": "completed_unit80MHz_qualified",
@@ -2370,8 +2372,8 @@
     "scope": "8lane only, no transfer to32owner P32/P8"
   },
   "resident_comparison_latest": {
-    "record": "analysis/resident_router32_0658.json",
-    "scope": "newrouter32 F1six/F0two full40 model rows and measured prepared CPU/basic/compact V2",
+    "record": "analysis/resident_router32_0907.json",
+    "scope": "newrouter32 ten F1 and two F0 native40 model rows plus measured prepared CPU/basic/compact V2",
     "complete_kernel_seconds_available": false,
     "FPGA_board_measurement": false
   },
@@ -2458,5 +2460,35 @@
     "verification_handle": 44082,
     "verification_log": "supervision/verify_0808.log"
   },
-  "latest_protection_audit": "protection_0826.json"
+  "latest_protection_audit": "protection_0919.json",
+  "latest_memory_sensitivity_summary": "analysis/memory_sensitivity_P32_completed_0907.json",
+  "gap4_complete_audit": {
+    "all_pass": true,
+    "resident_cycles_BNN_LSTM": [
+      331787140,
+      337525148
+    ],
+    "work": "analysis/complete_work_many32_request_model_c_large_l16_g4.json",
+    "native": "baselines/native_reuse/gap4_outputs_0900.json",
+    "binding": "analysis/router32_gap4_bound_0907.json",
+    "conditional_screen_only": "analysis/traffic_screen_router32_gap4_0907.json",
+    "qualified_clock": null
+  },
+  "active_native_followup": {
+    "exec_handle": 63482,
+    "record": "supervision/p8_terminal_pipeline_0912.json",
+    "scope": "existing P8 runs only; four independent terminal watchers execute work/native audits then exact source/calibration/OOC binding",
+    "do_not_duplicate_audits_while_active": true,
+    "recovery": "Inspect pipeline record and exec handle first. Terminal output names: analysis/complete_work_many32_p8_request_model_a_<run>.json; baselines/native_reuse/p8_<run>_outputs_terminal.json; analysis/p8_<run>_bound_terminal.json. A failed follow-up requires reviewing its saved log, never overwriting output."
+  },
+  "snapshot_0909": {
+    "freeze_complete": true,
+    "verification_status": "passed_96466_files_19_snapshots",
+    "verification_exec_handle": 42932,
+    "new_raw_files": 56,
+    "new_raw_bytes": 2895182371,
+    "archive_bytes": 802413160,
+    "deferred_native_batches": 8,
+    "scope": "includes complete gap4 raw trace; all active P8 native traces deferred"
+  }
 }
