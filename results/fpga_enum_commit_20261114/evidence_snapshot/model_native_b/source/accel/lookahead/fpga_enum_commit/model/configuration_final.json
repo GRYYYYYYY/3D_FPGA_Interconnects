@@ -1,0 +1,110 @@
+{
+  "status": "FROZEN_MODEL_NATIVE_B",
+  "code_binding": "results/fpga_enum_commit_20261114/model_native_b/binding.json",
+  "front": {
+    "groups": 8,
+    "fork_per_group": 16,
+    "header_per_group": 16,
+    "metadata_per_group": 16,
+    "ready_per_group": 16,
+    "lanes_per_group": 8,
+    "E_per_lane": 4,
+    "beat_slots_per_lane": 8,
+    "D": 1,
+    "pair_pipeline_per_lane": 2,
+    "candidate_router_fifo_per_bank": 16,
+    "fork_reservation_publication_per_group_cycle": 1,
+    "H_M_E_dispatch_per_group_cycle": 1,
+    "policy": "fork persistent groupRR skips full groups and advances successful reservation (including later stale); independent per-group persistent laneRR advances nonempty E only"
+  },
+  "backend": {
+    "subbanks": 64,
+    "sets": 1024,
+    "ways": 4,
+    "resident_enum_elastic_stages": 4,
+    "resident_enum_raw": 1,
+    "resident_enum_fragment_fifo": 16,
+    "resident_enum_enabled_II": 2,
+    "bitmap_query_holders": 1,
+    "scratch_expand_inflight": 1,
+    "scratch_finalize_inflight": 1,
+    "merge_fifo": 16,
+    "commit_fifo": 16,
+    "independent_fast_fifo": 0,
+    "pending_K": 8,
+    "reserved_retirement_slots": 32,
+    "PV_read_ports": 1,
+    "PV_write_ports": 1,
+    "transform_apply_per_cycle": 1,
+    "directory_append_per_bank_cycle": 1,
+    "spill_ids_per_bank": 2048,
+    "consumed_atomic_updates_per_bank_cycle": 1,
+    "bitmap_clear_cycles_per_wave": 256
+  },
+  "directory": {
+    "banks": 64,
+    "members_per_bank": 8192,
+    "members_total": 524288,
+    "buckets": 4096,
+    "head_tail_arrays_per_bank": 2,
+    "member_release_per_bank_cycle": 1,
+    "append_per_bank_cycle": 1,
+    "same_bucket_head_tail_forwarding": "behavioral conditional contract; new directory RTL not qualified"
+  },
+  "physical_memory": {
+    "ports": 32,
+    "bytes": 32,
+    "credit_per_port": 32,
+    "request_fifo": 64,
+    "physical_response_fifo": 4,
+    "request_enqueue_to_issue_min_cycles": 2,
+    "response_accept_to_client_min_cycles": 2,
+    "latency_ns": 80,
+    "gap_ns": 5,
+    "frequency_hz": 200000000,
+    "tag_release": "physical response accepted into finite response FIFO",
+    "ordering": "FIFO per physical port; optional jitter does not bypass earlier responses"
+  },
+  "sample_initialization": {
+    "explicit_sample_clear_edge": 1,
+    "PV_clear_cycles": 16384,
+    "output_clear_cycles": 4096,
+    "directory_freepool_init_cycles": 8192,
+    "accumulator_metadata_init_cycles": 1024,
+    "bitmap_clear_cycles": 256,
+    "canonical_write_requests": "ceil(nodes/4) every sample, all physical ACKs",
+    "overlap": "independent RAM initializations overlap canonical writes, maximum completion counted",
+    "arbiters_reset_on_sample_clear": true,
+    "last_sample_output_write_ACK_drained": true
+  },
+  "calibration": {
+    "resident_enum_control_raw_FIFO": "cycle-exact scan and fragment handshakes incl stall; shared enum_clock used in full model",
+    "full_frontend": false,
+    "full_scratch": false,
+    "full_canonical": false,
+    "full_top_routing": false,
+    "note": "primitive RTL replay receipts are not silently transferred to this different global schedule"
+  },
+  "model_only_arbitration": [
+    "Class priority rotates metadata/front/scratch/canonical each clock",
+    "metadata/header/edge/context iteration starts rotate with clock; final F attribution pairs freeze their priorities separately",
+    "H/meta return write quota uses logical id%64, edge id/8",
+    "FIFO future payload reservations in expand are conservative abstraction of accumulator pipeline; whole-chain cycle equivalence remains unqualified",
+    "global top return register route and directory head/tail/member banking need full RTL mapping"
+  ],
+  "qualification": {
+    "conditional_model": true,
+    "complete_kernel_clock_qualified": false,
+    "board_measured": false,
+    "fpga_seconds": null
+  },
+  "output_export": {
+    "BRAM_banks": 8,
+    "pairs_per_bank_cycle": 1,
+    "packed_beats_per_cycle": 2,
+    "packing_slots": 16,
+    "read_pack_latency_cycles": 2,
+    "sample_stride": "align32(ceil(cells/4)) physical32B lines",
+    "observable_output": "offchip output backing populated by acknowledged packed writes; complete output compared to frozen golden"
+  }
+}

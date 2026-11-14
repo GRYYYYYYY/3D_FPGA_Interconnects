@@ -1,0 +1,127 @@
+{
+  "scope": "necessary bounds only; new r/K assumptions must be checked against implemented protocol; no inherited old no-go",
+  "rows": {
+    "bnn_export": {
+      "profile_sha256": "45362ce4e591fefdd778a6bb1158946b3b937ec163d9e1bcbf96b611c65ff0b7",
+      "I": 41026080,
+      "N": 1286937147,
+      "U": 118725942,
+      "V": 51973592,
+      "W": 2161,
+      "target_seconds": "0.151799969444",
+      "variants": {
+        "r5_K1": {
+          "enum_cycles": "9264659.21875",
+          "context_cycles": "42674883.5",
+          "physical_port_cycles": "5350699",
+          "sum_cycles": "64065341.421875",
+          "lower_bound_seconds": "0.320326707109375",
+          "exceeds_target": true,
+          "hypothetical_until_RTL_protocol_verified": true
+        },
+        "r2_K1": {
+          "enum_cycles": "3705863.6875",
+          "context_cycles": "42674883.5",
+          "physical_port_cycles": "5350699",
+          "sum_cycles": "64065341.421875",
+          "lower_bound_seconds": "0.320326707109375",
+          "exceeds_target": true,
+          "hypothetical_until_RTL_protocol_verified": true
+        },
+        "r2_K4": {
+          "enum_cycles": "3705863.6875",
+          "context_cycles": "10668720.875",
+          "physical_port_cycles": "5350699",
+          "sum_cycles": "32059178.796875",
+          "lower_bound_seconds": "0.160295893984375",
+          "exceeds_target": true,
+          "hypothetical_until_RTL_protocol_verified": true
+        },
+        "r2_K8": {
+          "enum_cycles": "3705863.6875",
+          "context_cycles": "5334360.4375",
+          "physical_port_cycles": "5350699",
+          "sum_cycles": "26741156.921875",
+          "lower_bound_seconds": "0.133705784609375",
+          "exceeds_target": false,
+          "hypothetical_until_RTL_protocol_verified": true
+        },
+        "r1_K8": {
+          "enum_cycles": "1852931.84375",
+          "context_cycles": "5334360.4375",
+          "physical_port_cycles": "5350699",
+          "sum_cycles": "26741156.921875",
+          "lower_bound_seconds": "0.133705784609375",
+          "exceeds_target": false,
+          "hypothetical_until_RTL_protocol_verified": true
+        }
+      }
+    },
+    "lstm_s2": {
+      "profile_sha256": "71b2a1be20579c9a4a3527434222658a983e1d5af72c8ff85985aa5a5cd81a27",
+      "I": 41667240,
+      "N": 1309512712,
+      "U": 121154080,
+      "V": 53038572,
+      "W": 2200,
+      "target_seconds": "0.15949799988888888",
+      "variants": {
+        "r5_K1": {
+          "enum_cycles": "9454162.5",
+          "context_cycles": "43548163",
+          "physical_port_cycles": "5454400",
+          "sum_cycles": "65311400.375",
+          "lower_bound_seconds": "0.326557001875",
+          "exceeds_target": true,
+          "hypothetical_until_RTL_protocol_verified": true
+        },
+        "r2_K1": {
+          "enum_cycles": "3781665",
+          "context_cycles": "43548163",
+          "physical_port_cycles": "5454400",
+          "sum_cycles": "65311400.375",
+          "lower_bound_seconds": "0.326557001875",
+          "exceeds_target": true,
+          "hypothetical_until_RTL_protocol_verified": true
+        },
+        "r2_K4": {
+          "enum_cycles": "3781665",
+          "context_cycles": "10887040.75",
+          "physical_port_cycles": "5454400",
+          "sum_cycles": "32650278.125",
+          "lower_bound_seconds": "0.163251390625",
+          "exceeds_target": true,
+          "hypothetical_until_RTL_protocol_verified": true
+        },
+        "r2_K8": {
+          "enum_cycles": "3781665",
+          "context_cycles": "5443520.375",
+          "physical_port_cycles": "5454400",
+          "sum_cycles": "27217637.375",
+          "lower_bound_seconds": "0.136088186875",
+          "exceeds_target": false,
+          "hypothetical_until_RTL_protocol_verified": true
+        },
+        "r1_K8": {
+          "enum_cycles": "1890832.5",
+          "context_cycles": "5443520.375",
+          "physical_port_cycles": "5454400",
+          "sum_cycles": "27217637.375",
+          "lower_bound_seconds": "0.136088186875",
+          "exceeds_target": false,
+          "hypothetical_until_RTL_protocol_verified": true
+        }
+      }
+    }
+  },
+  "assumptions": [
+    "64 II1 pair lanes; 200MHz conditional",
+    "32 physical ports fixed80ns/5ns; hotspot final port distribution from semantic touched/changed line counts",
+    "same canonical reads/writes protocol; no new spill count inferred",
+    "initialization and finalization separated from wave compute by fences",
+    "other overlapping service constraints take max, not sum",
+    "no actual frontend, scratch, event, route or tail cost included"
+  ],
+  "fpga_seconds": null,
+  "board_measured": false
+}

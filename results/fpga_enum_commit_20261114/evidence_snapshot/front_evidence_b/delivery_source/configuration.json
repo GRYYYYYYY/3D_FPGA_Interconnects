@@ -1,0 +1,15 @@
+{
+  "base_commit": "1e312d6e4ffc5ea96f25c0b97931ad028e710584",
+  "final_policy": "eight_independent_groups",
+  "groups": 8,
+  "per_group": {"fork": 16, "H": 16, "M": 16, "ready": 16, "L": 8, "E": 32, "edge_slots": 64, "contexts_per_lane": 4, "slots_per_lane": 8, "D": 1},
+  "global": {"fork": 128, "H": 128, "M": 128, "ready": 128, "L": 64, "E": 256, "edge_slots": 512, "ports": 32, "credits_per_port": 32, "request_capacity_per_port": 64, "response_capacity_per_port": 4, "latency_ns": 80, "gap_ns": 5, "assumed_frequency_hz": 200000000, "output_banks": 8, "output_entries_per_bank": 4096, "output_entry_bits": 65},
+  "fork_assignment": "persistent group RR skips full groups; each successful reservation advances, <=8/cycle and <=1/group; F-local valid snapshots only, full POP may reserve stale then release",
+  "allocation": "FIRST_FREE or independent persistent lane RR; choose free context in selected group; advance only successful nonempty E allocation; zero degree completes without E even if all E occupied",
+  "actual_leaf": {"module": "frontend_group", "L": 8, "E": 32, "edge_slots": 64, "D": 1, "parent_accept_per_cycle": 1, "request_stage_entries": 1, "pair_stages": 2, "pair_II": 1, "tag_bits": 16, "slot_tag_bits": 8, "generation_bits": 8, "CSR_input_bits": 64, "supported_E_offset_bits": 32, "unsupported_upper_bits": "reject admission and sticky error", "request_address": "relative edge beat; EDGE_BASE=0 in calibration; physical-base adapter outside", "test_physical_ports": 1, "test_credit_contract": 32},
+  "leaf_excludes": ["POP/fork/H/metadata/output reducer", "full32port arbiter/base adapter/registered global return routing", "qid/epoch controller (leaf epoch annotation pruned)", "all64lane physical integration"],
+  "F_local_model_abstractions": ["valid POP source", "ideal candidate sink", "per-wave output-state reconstruction", "same-cycle response-buffer bypass", "inherited port FIFO accepts multiple logical enqueues/tick; physical issue remains1/port; full model uses1enqueue/port"],
+  "board_measured": false,
+  "fpga_seconds": null,
+  "full_kernel_clock_qualified": false
+}

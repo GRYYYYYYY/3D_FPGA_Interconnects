@@ -1,0 +1,8 @@
+create_project changeflag_probe {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/results/fpga_enum_commit_canonical_changeflag_probe_20261114/flag_project} -part xcu280-fsvh2892-2L-e
+add_files [list {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/accel/lookahead/fpga_sparse_stream_r2/rtl/pending17_service.sv} {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/results/fpga_enum_commit_canonical_changeflag_probe_20261114/probe_apply.sv}]
+add_files -fileset sim_1 {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/results/fpga_enum_commit_canonical_changeflag_probe_20261114/changeflag_tb.sv}
+set_property top changeflag_tb [get_filesets sim_1]
+set_property xsim.simulate.runtime 200us [get_filesets sim_1]
+update_compile_order -fileset sim_1
+launch_simulation
+close_sim

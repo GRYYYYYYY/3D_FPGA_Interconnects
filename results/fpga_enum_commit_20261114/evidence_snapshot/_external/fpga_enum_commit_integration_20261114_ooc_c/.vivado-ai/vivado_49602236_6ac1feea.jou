@@ -1,0 +1,42 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Sat Nov 14 09:46:43 2026
+# Process ID: 76706
+# Current directory: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/results/fpga_enum_commit_integration_20261114_ooc_c
+# Command line: vivado -mode tcl -log .vivado-ai/vivado_49602236_6ac1feea.log -journal .vivado-ai/vivado_49602236_6ac1feea.jou -notrace -source .vivado-ai/init_49602236_6ac1feea.tcl
+# Log file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/results/fpga_enum_commit_integration_20261114_ooc_c/.vivado-ai/vivado_49602236_6ac1feea.log
+# Journal file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/results/fpga_enum_commit_integration_20261114_ooc_c/.vivado-ai/vivado_49602236_6ac1feea.jou
+# Running On: fpgaacc2--72bfa719011c-3hfvuvkzdl, OS: Linux, CPU Frequency: 2165.357 MHz, CPU Physical cores: 32, Host memory: 1622731 MB
+#-----------------------------------------------------------
+source .vivado-ai/init_49602236_6ac1feea.tcl -notrace
+set_param -quiet messaging.defaultLimit 10000000
+puts "MCPPROBE:n29qa9z4yq19:[get_param messaging.defaultLimit]"
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:y4txlkfnrff5===}
+puts "VSCSTART" ; set exitCode [catch {source /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/accel/lookahead/fpga_enum_commit/integration/run_ooc_c.tcl} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:y4txlkfnrff5:$exitCode==="
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:1mrtd4o4vw3q===}
+puts "VSCSTART" ; set exitCode [catch {help phys_opt_design} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:1mrtd4o4vw3q:$exitCode==="
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:k8pmps3behq2===}
+puts "VSCSTART" ; set exitCode [catch {source /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/accel/lookahead/fpga_enum_commit/integration/run_postroute_fix.tcl} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:k8pmps3behq2:$exitCode==="
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:k71nuy31zh9y===}
+puts "VSCSTART" ; set exitCode [catch {puts [get_drc_violations RTSTAT-10*]; report_property [get_drc_violations RTSTAT-10*]; report_property [lindex [get_nets -hierarchical -filter {NAME =~ *previous_label*DOA0*}] 0]} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:k71nuy31zh9y:$exitCode==="
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:vfqz3qdc8qx5===}
+puts "VSCSTART" ; set exitCode [catch {set ec_nets [get_nets -of_objects [get_drc_violations RTSTAT-10*]]; puts "AFFECTED_NETS=[llength $ec_nets]"; foreach ec_n [lrange $ec_nets 0 2] {puts "NET=$ec_n"; puts "SEGMENTS=[get_nets -segments $ec_n]"; puts "PINS=[get_pins -leaf -of_objects [get_nets -segments $ec_n]]"; puts "PORTS=[get_ports -of_objects [get_nets -segments $ec_n]]"}} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:vfqz3qdc8qx5:$exitCode==="
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:qzjtw1ks38is===}
+puts "VSCSTART" ; set exitCode [catch {set ec_audit_out /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/results/fpga_enum_commit_integration_20261114_ooc_c/physopt_a; source /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/accel/lookahead/fpga_enum_commit/integration/classify_ooc_nets.tcl} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"
+send_msg_id {MCP 00-101} INFO "===MCP_CMD_END:qzjtw1ks38is:$exitCode==="
+set_param -quiet messaging.defaultLimit 10000000
+send_msg_id {MCP 00-100} INFO {===MCP_CMD_START:3yrelf8eahvf===}
+puts "VSCSTART" ; set exitCode [catch {exit} result] ; catch {flush stdout} ; catch {flush stderr} ; puts $result ; puts "VSCEND:$exitCode"

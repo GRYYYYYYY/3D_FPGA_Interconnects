@@ -1,0 +1,33 @@
+{
+  "scope": "read-only followup of held-PUB model correction before finalC freeze; no model edits or executions",
+  "time_utc": "2026-11-14T09:35:42.078866+00:00",
+  "sha256": {
+    "accel/lookahead/fpga_enum_commit/model/finite.hpp": "cb582aff21cc6803e14332a9ad64941693f39865ffa5491d9cc6cf7a28ee75be",
+    "accel/lookahead/fpga_enum_commit/canonical/ec_pending_k8.sv": "fc475d6eb42fb91797cfa8837741c6e0c98dbe09b69f310554a21c4a96e05cb0",
+    "accel/lookahead/fpga_enum_commit/integration/ec_backend_owner.sv": "bb441282376b7150d61f224da4a67121ee10d3c964fcc949e7ce314bd64b1ef5"
+  },
+  "review": "no blocking capacity/semantic bug found in revised canonical path",
+  "addressed": [
+    "one held publication bundle per bank",
+    "unchanged and stale completions cannot bypass held PUB",
+    "last directory event and completion separate edges",
+    "at most one completion per bank per cycle",
+    "replacement PUB consumer delayed one edge",
+    "released slot and whole word unavailable until next edge",
+    "explicit synchronous PV capture at accept+1",
+    "earliest local read admission accept+3",
+    "separate grant-based stage cursors"
+  ],
+  "remaining_qualification_limits": [
+    "request cursor/logical enqueue abstraction differs from registered local request selection",
+    "global shared FIFO/credit geometry not identical to local physical RTL",
+    "complete directory and global arbitration RAM timings remain uncalibrated"
+  ],
+  "full_model_cycle_qualified": false,
+  "same_edge_pub_refill_confirmation": {
+    "RTL": "ec_pending_k8.sv:120 if(!ov||ordy)",
+    "verdict": "same-edge refill after old completion allowed; newly filled result consumed no earlier than next edge",
+    "witness": "F bank0 RESULT_ENQUEUE57690 slot7 concurrent RETIRE57690 index365; RETIRE57691 index366",
+    "new_PV_eligibility": "PVwrite at C creates PUB only after edge; model EVENT due C+1 guards old-state selection"
+  }
+}

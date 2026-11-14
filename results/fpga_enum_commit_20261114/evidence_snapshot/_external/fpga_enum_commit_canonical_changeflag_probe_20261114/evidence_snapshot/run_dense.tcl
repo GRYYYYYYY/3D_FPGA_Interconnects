@@ -1,0 +1,8 @@
+create_project canonical_k8 {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/results/fpga_enum_commit_canonical_changeflag_probe_20261114/dense/project} -part xcu280-fsvh2892-2L-e
+add_files [list {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/accel/lookahead/fpga_sparse_stream_r2/rtl/pending17_service.sv} {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/results/fpga_enum_commit_canonical_changeflag_probe_20261114/ec_pending_k8.sv} {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/accel/lookahead/fpga_enum_commit/canonical/ec_tagged_port.sv} {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/accel/lookahead/fpga_enum_commit/canonical/ec_canonical_owner.sv}]
+add_files -fileset sim_1 {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_ENUM_COMMIT/results/fpga_enum_commit_canonical_changeflag_probe_20261114/dense/canonical_tb.sv}
+set_property top canonical_tb [get_filesets sim_1]
+set_property xsim.simulate.runtime 3ms [get_filesets sim_1]
+update_compile_order -fileset sim_1
+launch_simulation
+close_sim
