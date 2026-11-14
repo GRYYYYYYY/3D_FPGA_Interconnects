@@ -1,0 +1,66 @@
+{
+  "build_commands": [
+    [
+      "/usr/local/cuda/bin/nvcc",
+      "-O3",
+      "-std=c++17",
+      "--fmad=false",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/source",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/source/cuda_private_inf.cu",
+      "-o",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/gpu"
+    ],
+    [
+      "g++",
+      "-O3",
+      "-std=c++17",
+      "-fopenmp",
+      "-ffp-contract=off",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/source",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/source/cpu_private_inf.cpp",
+      "-o",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/cpu"
+    ],
+    [
+      "/usr/local/cuda/bin/nvcc",
+      "-O3",
+      "-std=c++17",
+      "--fmad=false",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/source",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/source/cuda_prepared_pop.cu",
+      "-o",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/gpu_control"
+    ],
+    [
+      "g++",
+      "-O3",
+      "-std=c++17",
+      "-fopenmp",
+      "-ffp-contract=off",
+      "-I/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/source",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/source/cpu_prepared_pop.cpp",
+      "-o",
+      "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SPARSE_STREAM_R2/results/fpga_sparse_stream_r2_20261112/software/private_inf_gpu_b/cpu_control"
+    ]
+  ],
+  "source_sha256": {
+    "cpu_private_inf.cpp": "1407ece8abbe0a382bee9e5fc7500ecf33a52aaee6ca09c41fc4ee3355275681",
+    "cpu_prepared_pop.cpp": "5b7c422820fe041bc3e1bc8f63aedc47840226176fc5ed3f243eb7ad63cdd306",
+    "backend.hpp": "418821b884bf137f48077f6ac9a45ad76bbd6ee0dad53ee8ea0f14e81526d627",
+    "cuda_private_inf.cu": "633169646a255f86bf149d7ada468e323b156e155f6dd35fdacebbb7e6a3ce8a",
+    "cuda_prepared_pop.cu": "fc38943e5d2e0bdec72799a5c49e956972bbb09479aeb9779f16c8709598312b",
+    "io.hpp": "de3ace5bf1192464f2973d718f2359e28430a9d44512b99838fbcef92b415e1a",
+    "compact61.hpp": "1cb2a279c6c23f6f11c2f92a4ffb50fe3ea70c4dc6d4e40ce8b26193c09d30de",
+    "workload.hpp": "8ddb7478883d85086a6245acd9a534da967eeb7a6670d357c27ce672f89c69b7",
+    "bucket61.hpp": "703b44618000754f5b60435768589fdbd85ce81de8cac307a8de38c7b12eda65",
+    "directory61.hpp": "d18c72ccaef39d9ca010413c5238d00a254ff4c5ac4d87a30c3bb12442460f66"
+  },
+  "scope": "RESIDENT_COMPLETE_BATCH_V2",
+  "historical_GPU_V2_preserved": true,
+  "binary_sha256": {
+    "gpu": "03a65791baad67973621ae5d504eadbcd9771dc7c9588f9189392c395bd222c3",
+    "cpu": "7356e4880760f3e16cb2c1d23065cdf671c1ead7c1a18031f0ef5b830e20c8d9",
+    "gpu_control": "61c3cf63c81d4f4eefc1f35e5fe6f688f400bf214acc51433ad4015db43e2807",
+    "cpu_control": "bac6a930cef43a933c52eb0a5e4a74a0ebdc60e55b8eb76beaffd520b00e2f1a"
+  }
+}
