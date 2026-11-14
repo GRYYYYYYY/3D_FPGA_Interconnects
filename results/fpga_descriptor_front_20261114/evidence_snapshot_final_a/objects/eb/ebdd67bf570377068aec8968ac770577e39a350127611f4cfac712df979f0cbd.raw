@@ -1,0 +1,69 @@
+#pragma once
+#include <array>
+#include <cstdint>
+#include <optional>
+#include <stdexcept>
+#include <algorithm>
+namespace dfservice {
+// Inputs/outputs are PRE-edge. tick() commits one rising edge, never bypasses.
+struct DirCommand {unsigned op=0,bucket=0,node=0,arg=0,ptr=8192;};
+struct DirResponse {unsigned op=0,status=0,bucket=0,node=0,arg=0,ptr=8192,next=8192;};
+struct DirectoryBank {
+ static constexpr unsigned CAP=8192,BUCKETS=4096,NIL=8192;
+ enum State{INIT,IDLE,READ,CAPTURE,LINK,ACK,DONE};
+ struct Heads{unsigned head=NIL,tail=NIL;};
+ struct Member{unsigned node=0,arg=0,next=NIL;};
+ std::array<Heads,BUCKETS> heads{};
+ std::array<Member,CAP> members{};
+ std::array<unsigned,CAP> free{};
+ std::array<uint64_t,64> bitmap{};
+ uint64_t upper=0;unsigned used=0,peak=0,init=0,state=INIT;
+ DirCommand cmd;DirResponse rsp;bool rv=false;
+ Heads hr;Member mr;unsigned fr=0;uint64_t br=0;unsigned group=0;
+ bool ready()const{return state==IDLE;}
+ bool initialized()const{return state!=INIT;}
+ const DirResponse* response()const{return rv?&rsp:nullptr;}
+ bool empty()const{return upper==0;}
+ static unsigned first(uint64_t x){return x?unsigned(__builtin_ctzll(x)):0;}
+ void tick(std::optional<DirCommand> input={},bool response_ready=false){
+  switch(state){
+  case INIT:
+   free[init]=init;if(init<BUCKETS)heads[init]={};if(init<64)bitmap[init]=0;
+   if(++init==CAP){state=IDLE;upper=used=0;}break;
+  case IDLE:
+   if(input){cmd=*input;cmd.bucket&=4095;rsp={};rsp.op=cmd.op;rsp.bucket=cmd.bucket;
+    group=cmd.op==3?first(upper):cmd.bucket/64;
+    if(cmd.op>3)throw std::runtime_error("DIRECTORY_OPCODE");
+    if((cmd.op==0&&used==CAP)||(cmd.op==2&&(cmd.ptr>=CAP||used==0))){rsp.status=2;rv=true;state=DONE;break;}
+    if(cmd.op==3&&!upper){rsp.status=1;rv=true;state=DONE;break;}
+    // Synchronous reads at this acceptance edge; READ consumes their outputs next edge.
+    if(cmd.op==0||cmd.op==1){hr=heads[cmd.bucket];br=bitmap[group];}
+    if(cmd.op==0)fr=free[CAP-1-used];
+    if(cmd.op==2)mr=members[cmd.ptr];
+    if(cmd.op==3)br=bitmap[group];
+    state=READ;
+   }break;
+  case READ:
+   if(cmd.op==3){rsp.bucket=group*64+first(br);rv=true;state=DONE;}
+   else state=CAPTURE;
+   break;
+  case CAPTURE:
+   if(cmd.op==0){members[fr]={cmd.node,cmd.arg,NIL};heads[cmd.bucket]={hr.head==NIL?fr:hr.head,fr};bitmap[group]=br|(uint64_t(1)<<(cmd.bucket%64));upper|=uint64_t(1)<<group;++used;peak=std::max(peak,used);rsp.ptr=fr;state=LINK;}
+   else if(cmd.op==1){heads[cmd.bucket]={};bitmap[group]=br&~(uint64_t(1)<<(cmd.bucket%64));if(!bitmap[group])upper&=~(uint64_t(1)<<group);rsp.ptr=hr.head;rv=true;state=DONE;}
+   else {free[CAP-used]=cmd.ptr;--used;rsp.ptr=cmd.ptr;rsp.node=mr.node;rsp.arg=mr.arg;rsp.next=mr.next;rv=true;state=DONE;}
+   break;
+  case LINK:if(hr.head!=NIL)members[hr.tail].next=fr;state=ACK;break;
+  case ACK:rv=true;state=DONE;break;
+  case DONE:if(response_ready){rv=false;state=IDLE;}break;
+  }
+ }
+};
+}
+namespace dfservice {
+struct MinimumTree {
+ std::array<unsigned,64> tree{};unsigned valid=0;
+ bool ready(bool rr)const{return !(valid&32)||rr;}
+ std::optional<unsigned> output()const{return valid&32?std::optional<unsigned>{tree[1]}:std::nullopt;}
+ void tick(const std::optional<std::array<unsigned,64>>&in,bool rr){if(!ready(rr))return;for(unsigned j=1;j<32;++j)tree[j]=std::min(tree[2*j],tree[2*j+1]);for(unsigned j=32;j<64;++j)tree[j]=in?std::min((*in)[(j-32)*2],(*in)[(j-32)*2+1]):4096;valid=((valid<<1)&63)|unsigned(in.has_value());}
+};
+}

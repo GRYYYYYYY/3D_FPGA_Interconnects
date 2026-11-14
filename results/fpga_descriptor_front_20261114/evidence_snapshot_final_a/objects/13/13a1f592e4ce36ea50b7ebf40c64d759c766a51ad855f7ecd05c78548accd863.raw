@@ -1,0 +1,47 @@
+{
+  "geometries": {
+    "F3": {
+      "groups": 16,
+      "lanes_per_group": 4,
+      "E_per_lane": 4,
+      "slots_per_lane": 8,
+      "token_D_ready_shared_entries_per_group": 8
+    },
+    "F1": {
+      "groups": 8,
+      "lanes_per_group": 8,
+      "E_per_lane": 4,
+      "slots_per_lane": 8,
+      "token_D_ready_shared_entries_per_group": 16
+    }
+  },
+  "address_unit": "32byte_line",
+  "EDGE_address": "configured64bit edge_base+30bitcursor (valid physicalbeat29bit, sentinel30thbit)",
+  "DESC_address": "configured64bit descriptor_base+node/(4for8B,2for16B)",
+  "core_request_holds": {
+    "DESC": 1,
+    "EDGE": 1
+  },
+  "core_response_width_each_cycle": {
+    "DESC": 1,
+    "EDGE": 1
+  },
+  "registered_context_each_depth1": [
+    "reserve_command",
+    "reserve_tokenACK",
+    "POP_result",
+    "DESC_request",
+    "EDGE_request",
+    "DESC_return",
+    "EDGE_return",
+    "target",
+    "candidate_each_lane"
+  ],
+  "arithmetic_stages": 6,
+  "minimum_operand_capture_to_consumer_edges": 6,
+  "same_edge_replacement": "elastic pipe/context holds only, not token/E/slot allocation",
+  "token_release": "one percycle afterboth recorded branchhandoffs, plus independent stalePOP release",
+  "outputbank_scope": "targetcapture includes physical payload and backpressure; shared8bank output service outside localDUT",
+  "complete_kernel_clock_qualified": false,
+  "board_measured": false
+}

@@ -1,0 +1,15 @@
+set root [file normalize [file join [file dirname [info script]] ../../../..]]
+set src $root/accel/lookahead/fpga_descriptor_front
+set out [pwd]
+create_project output $out/project -part xcu280-fsvh2892-2L-e -force
+set_property target_simulator XSim [current_project]
+add_files [list $src/services/df_rr_router.sv $src/output/df_output_bank.sv $src/output/df_output_service.sv $src/output/df_ack_collector.sv $src/output/df_output_context.sv]
+add_files -fileset sim_1 $src/output/tb_output.sv
+set_property top df_output_context [get_filesets sources_1]
+set_property top tb_output [get_filesets sim_1]
+set_property xsim.simulate.runtime 1000us [get_filesets sim_1]
+update_compile_order -fileset sources_1
+update_compile_order -fileset sim_1
+puts "OUTPUT_PREFLIGHT version=[version -short] part=[get_property PART [current_project]] simtop=[get_property TOP [get_filesets sim_1]] backend=[get_property target_simulator [current_project]]"
+launch_simulation -simset sim_1 -mode behavioral
+close_sim

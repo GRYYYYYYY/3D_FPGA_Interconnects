@@ -1,0 +1,40 @@
+{
+  "checkpoint": 7,
+  "utc": "2026-11-14T16:19:34.565826+00:00",
+  "status": "PASS_BOUNDED_EXPORT_REPAIR_AND_D_SMALL",
+  "findings_closed": [
+    "DF-R013",
+    "DF-R014"
+  ],
+  "closure_scope": "source integration + separately calibrated exporter and ACK collector primitives; combined RTL loop is being supplied by owner; not whole kernel equivalence",
+  "model": "model_d",
+  "frozen_binary_sha256": "651023422a3d036f6119f1a6d13d4aa70e02d79727b90ff611c7467bd886ef13",
+  "small_sample_runs": 160,
+  "frozen_source_files": 25,
+  "source_sha256": {
+    "output/ack_model.hpp": "8efc7af2ab3f88e08edd56398440f67dbc6e56fdf2f6280cc3e798d26a9ff203",
+    "output/df_ack_collector.sv": "81ae5bc7ad1de2d82258cc4aa3cda3c29455a48d99ec922011973fd8755de6f1",
+    "output/df_output_service.sv": "d2f0f10c95c0924819a6c589dd3074570c88baf03f791cfb23e3e2caf4043065",
+    "model/finite.hpp": "ef2d799b8023c2d421f00b528a6b8952a6f018d4a85db52693850372516f4eac"
+  },
+  "actual_D_minus_C_normal_cycles": {
+    "3": 80
+  },
+  "actual_D_ACK_peak": 2,
+  "actual_D_ACK_rejected_source_cycles": 52,
+  "actual_D_ACK_rejection_cases": 30,
+  "audit_artifacts": [
+    "output_boundary_ack_audit.json",
+    "model_d_small_audit.json",
+    "model_c_representative_audit.json",
+    "front_repair_h_receipt_audit.json"
+  ],
+  "qualifications_remaining": [
+    "combined output/export/collector RTL loop receipt",
+    "full representative/batch D receipts",
+    "full-chain accumulator timing calibration",
+    "whole-kernel fit/frequency if gates qualify",
+    "memory remains a stated contract; no board runtime"
+  ],
+  "reviewer_new_full_experiments": 0
+}

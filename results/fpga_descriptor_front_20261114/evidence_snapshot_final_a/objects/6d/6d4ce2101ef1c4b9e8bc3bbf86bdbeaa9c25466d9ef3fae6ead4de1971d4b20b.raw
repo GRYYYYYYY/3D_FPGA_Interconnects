@@ -1,0 +1,29 @@
+# Methodology disposition: preliminary LUTRAM context A
+
+Actual Vivado2022.2 routed5ns result: setup+0.079ns,hold-0.135ns
+(1248failing endpoints),pulse+1.8ns. This run is a local timing failure under
+unchanged input/output min0.1/max0.8ns budgets and uncertainty0.1ns.
+
+Exact timing-object audit classified all1248negative hold paths as input-interface
+paths; none is internal. The separately constrained register-to-register worst
+hold is+0.010ns. No clock, internal-endpoint, input/output-delay, combinational-loop
+or latch-loop checks are missing (all12check_timing categories0).
+
+Methodology has32SYNTH-5 warnings, all existing enumerator replacement arrays
+mapped to distributedRAM for timing. No TIMING rule violation is reported. These
+are reported mappings, not waivers. DRC has oneRTSTAT-10 aggregate; exact net/pin
+queries classify all1573affectednets as externaloutput-only, with no internal
+consumer omitted. OOC output stubs/board timing remain unqualified.
+
+This A context's FIFO2 payloads were also inferred as distributedRAM. That did
+not alter logical FIFO behavior but failed the intended explicitFF launch
+implementation. B sets RAM_STYLE=registers; allfour simulation suites prove
+identical pin traces and cycles. A is retained as an intermediate result, not
+relabelled as the finalFF implementation. No XDC was relaxed and no path waiver,
+false path or multicycle exception was introduced. The external-budget failure
+is not solved by adding arbitrary registers or changing min delay.
+
+Ross timing-methodology skill requires2026.1+ for its JSON path; actual installed
+2022.2 uses text report_methodology/check_timing and direct timing/net objects.
+SYNTH-5 is outside the skill's TIMING1–57 reference set; its actual instance list
+and mapping are retained in methodology.rpt.

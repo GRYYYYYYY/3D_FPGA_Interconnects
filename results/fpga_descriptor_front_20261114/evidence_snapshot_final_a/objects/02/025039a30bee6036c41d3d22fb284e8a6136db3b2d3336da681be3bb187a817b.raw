@@ -1,0 +1,28 @@
+{
+  "utc": "2026-11-14T15:45:43.743309+00:00",
+  "checkpoint": 1,
+  "source_sha256": "4289f195664c2d4656d56f0b88296bea39d44e023080f321b64c61dfe0fe17f0",
+  "findings": [
+    {
+      "id": "DF-R001",
+      "severity": "implementation bug",
+      "status": "sent owner; fix pending",
+      "file": "accel/lookahead/fpga_descriptor_front/front/df_edge_group.sv",
+      "detail": "29-bit nextbeat wraps at legal final beat0x1fffffff; after response inflight clears, nextbeat0 <= lastbeat allows invalid beat0 issue before final payload drain. Keep physical beat29 bits but use30-bit cursor or explicit exhausted state. Boundary directed test must stall after final return."
+    },
+    {
+      "id": "DF-R002",
+      "severity": "cross-interface qualification gap",
+      "status": "sent model/services/backend",
+      "detail": "Local backend owner client mapping can0/can1/scratch0/scratch1 differs from new global EDGE/control/canonical/scratch mapping. Model and top must explicitly replace local fabric at logical clients or charge both fabrics. Reusing same primitive geometry cannot transfer composition timing qualification."
+    },
+    {
+      "id": "DF-R003",
+      "severity": "contract alignment pending",
+      "status": "sent front",
+      "detail": "Draft EDGE selection is fixed-priority lane/context while guidance calls hierarchical RR. Establish intended policy explicitly and match actual RTL/model; pointers must advance only on accepted transfer."
+    }
+  ],
+  "qualification": "DRAFT_SOURCE_REVIEW_ONLY",
+  "experiments_started": false
+}

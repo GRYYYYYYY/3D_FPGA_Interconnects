@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# 
+# Vivado(TM)
+# runme.sh: a Vivado-generated Runs Script for UNIX
+# Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+# 
+
+if [ -z "$PATH" ]; then
+  PATH=/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vitis/2022.2/bin:/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/ids_lite/ISE/bin/lin64:/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin
+else
+  PATH=/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vitis/2022.2/bin:/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/ids_lite/ISE/bin/lin64:/inspire/hdd/global_user/guoruiyuan-253208540291/Xilinx/Vivado/2022.2/bin:$PATH
+fi
+export PATH
+
+if [ -z "$LD_LIBRARY_PATH" ]; then
+  LD_LIBRARY_PATH=
+else
+  LD_LIBRARY_PATH=:$LD_LIBRARY_PATH
+fi
+export LD_LIBRARY_PATH
+
+HD_PWD='/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_DESCRIPTOR_FRONT/results/fpga_descriptor_front_20261114/services_a/project/directory.runs/synth_1'
+cd "$HD_PWD"
+
+HD_LOG=runme.log
+/bin/touch $HD_LOG
+
+ISEStep="./ISEWrap.sh"
+EAStep()
+{
+     $ISEStep $HD_LOG "$@" >> $HD_LOG 2>&1
+     if [ $? -ne 0 ]
+     then
+         exit
+     fi
+}
+
+EAStep vivado -log df_directory_bank.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source df_directory_bank.tcl

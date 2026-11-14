@@ -1,0 +1,33 @@
+set root [file normalize [file join [file dirname [info script]] ../../../..]]
+set out $root/results/fpga_descriptor_front_20261114/$df_ooc
+file mkdir $out
+close_project
+create_project df_context $out/project -part xcu280-fsvh2892-2L-e
+add_files [glob $root/accel/lookahead/fpga_descriptor_front/front/df_*.sv]
+set_property top df_front_context [current_fileset]
+set_property generic L=4 [current_fileset]
+set fp [open $out/context.xdc w]
+puts $fp {create_clock -period 5.000 -name core_clk [get_ports clk]}
+puts $fp {set_input_delay -clock core_clk -min 0.100 [get_ports -filter {DIRECTION == IN && NAME != clk}]}
+puts $fp {set_input_delay -clock core_clk -max 0.800 [get_ports -filter {DIRECTION == IN && NAME != clk}]}
+puts $fp {set_output_delay -clock core_clk -min 0.100 [get_ports -filter {DIRECTION == OUT}]}
+puts $fp {set_output_delay -clock core_clk -max 0.800 [get_ports -filter {DIRECTION == OUT}]}
+close $fp
+add_files -fileset constrs_1 $out/context.xdc
+synth_design -top df_front_context -part xcu280-fsvh2892-2L-e -mode out_of_context -generic L=4
+write_checkpoint -force $out/synth.dcp
+report_utilization -hierarchical -file $out/synth_utilization.rpt
+opt_design
+place_design
+phys_opt_design
+route_design
+write_checkpoint -force $out/route.dcp
+report_timing_summary -delay_type min_max -check_timing_verbose -file $out/timing_summary.rpt
+report_timing -delay_type max -max_paths 20 -file $out/setup.rpt
+report_timing -delay_type min -max_paths 20 -file $out/hold.rpt
+report_utilization -hierarchical -file $out/utilization.rpt
+report_methodology -file $out/methodology.rpt
+report_route_status -file $out/route_status.rpt
+redirect -file $out/check_timing.rpt {check_timing -verbose}
+write_xdc -force $out/effective.xdc
+set f [open $out/completed.txt w];puts $f COMPLETE;close $f

@@ -1,0 +1,22 @@
+"""Compare matched actual complete samples, never extrapolate traces to batches."""
+from pathlib import Path
+import argparse,json,statistics
+
+def analyze(root):
+ root=Path(root);sel=json.loads((root/'source/accel/lookahead/fpga_descriptor_front/model/representatives.json').read_text())['selected'];out={'scope':'matched complete samples with identical service contract; no extrapolated 40-sample time','cases':{},'selected_main':None,'selected_main_by_case':{},'selection':'lowest summed cycles in each case and all matched representative samples; fixed arithmetic/E/beat counts, total physical resources differ','supplementary_candidate':None,'supplementary_reason':'Must inspect final full-batch critical waits; representative F3 expansion does not improve C0; publication dominates sampled final critical tails, not isolated K8 or merge1.'}
+ for case,qs in sel.items():
+  rows={}
+  for cfg in ['C0','F1','F2','F3']:
+   fs=[]
+   for q in qs:
+    rp=root/'runs'/cfg/case/f'receipt_{q}.json';r=json.loads(rp.read_text());assert r['returncode']==0 and r['output_exact'];fs.append(json.loads(Path(r['finite_path']).read_text()))
+   phases={k:sum(x['phase_cycles'][k] for x in fs) for k in fs[0]['phase_cycles']};critical=[sum(c['exclusive_histogram'][k] for x in fs for c in x['critical_final_bank_observers']) for k in range(8)]
+   token_slot_cycles=sum(sum(sum(i*n for i,n in enumerate(g['occupancy_histograms'][0])) for g in x['group_stats']) for x in fs);reservations=sum(x['pop_transactions'] for x in fs)
+   rows[cfg]={'token_slot_cycles':token_slot_cycles,'token_reservations':reservations,'mean_token_lifetime_cycles':token_slot_cycles/reservations,'samples':qs,'cycles':sum(x['cycles'] for x in fs),'phase_cycles':phases,'sample_cycles':{str(x['sample']):x['cycles'] for x in fs},'actual_spills':sum(x['spills'] for x in fs),'scratch_reads':sum(x['scratch_final_reads'] for x in fs),'actual_requests':sum(sum(map(sum,x['traffic'])) for x in fs),'critical_final_observer_exclusive':critical}
+  for cfg,row in rows.items():row['cycles_ratio_to_C0']=row['cycles']/rows['C0']['cycles'];row['gain_over_C0_percent']=(1-row['cycles_ratio_to_C0'])*100
+  best=min(rows,key=lambda cfg:rows[cfg]['cycles']);out['selected_main_by_case'][case]=best;out['cases'][case]=rows
+ winners=set(out['selected_main_by_case'].values());out['selected_main']=next(iter(winners)) if len(winners)==1 else None
+ (root/'representatives_comparison.json').write_text(json.dumps(out,indent=2)+'\n')
+ print(json.dumps({case:{cfg:{k:x[k] for k in ['cycles','gain_over_C0_percent']}for cfg,x in rows.items()} for case,rows in out['cases'].items()},indent=2));return out
+if __name__=='__main__':
+ p=argparse.ArgumentParser();p.add_argument('root');analyze(p.parse_args().root)

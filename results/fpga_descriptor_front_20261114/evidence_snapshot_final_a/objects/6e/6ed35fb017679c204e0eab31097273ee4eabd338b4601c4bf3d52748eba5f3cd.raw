@@ -1,0 +1,13 @@
+create_project payload [file join [pwd] project] -part xcu280-fsvh2892-2L-e
+add_files {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_DESCRIPTOR_FRONT/accel/lookahead/fpga_descriptor_front/services/df_fifo.sv}
+add_files {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_DESCRIPTOR_FRONT/accel/lookahead/fpga_descriptor_front/services/df_rr_router.sv}
+add_files {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_DESCRIPTOR_FRONT/accel/lookahead/fpga_descriptor_front/services/df_tagged_port.sv}
+add_files {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_DESCRIPTOR_FRONT/accel/lookahead/fpga_descriptor_front/services/df_memory_network.sv}
+add_files -fileset sim_1 {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_DESCRIPTOR_FRONT/results/fpga_descriptor_front_20261114/services_payload_d/tb_network_payload.sv}
+set_property top tb_network_payload [get_filesets sim_1]
+set_property xsim.simulate.runtime all [get_filesets sim_1]
+set_property -name xsim.simulate.xsim.more_options -value {-testplusarg VECTORS=/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_DESCRIPTOR_FRONT/results/fpga_descriptor_front_20261114/services_payload_d/network_payload.vec} -objects [get_filesets sim_1]
+update_compile_order -fileset sim_1
+launch_simulation
+close_sim
+exit

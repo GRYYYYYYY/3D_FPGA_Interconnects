@@ -1,0 +1,14 @@
+set root [file normalize [file join [file dirname [info script]] ../../../..]]
+set src [file join $root accel/lookahead/fpga_descriptor_front/services]
+set out [pwd]
+create_project directory [file join $out project] -part xcu280-fsvh2892-2L-e
+add_files [file join $src df_directory_bank.sv]
+add_files -fileset sim_1 [file join $src tb_directory.sv]
+set_property top df_directory_bank [get_filesets sources_1]
+set_property top tb_directory [get_filesets sim_1]
+set_property xsim.simulate.runtime all [get_filesets sim_1]
+set_property -name xsim.simulate.xsim.more_options -value "-testplusarg VECTORS=[file join $out directory.vec]" -objects [get_filesets sim_1]
+update_compile_order -fileset sources_1
+update_compile_order -fileset sim_1
+launch_simulation
+close_sim

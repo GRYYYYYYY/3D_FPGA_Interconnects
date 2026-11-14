@@ -1,0 +1,62 @@
+{
+  "failures": [
+    {
+      "attempt": "front_leaf_a",
+      "class": "testbench_compile",
+      "cause": "no whitespace before ? after hex literal, lexical wildcard/range error",
+      "resolution": "explicit ternary whitespace/parentheses"
+    },
+    {
+      "attempt": "front_leaf_b",
+      "class": "testbench_compile",
+      "cause": "first parenthesizing change still lacked whitespace",
+      "resolution": "explicit whitespace, C passed"
+    },
+    {
+      "attempt": "front_reject_a",
+      "class": "testbench_elaboration",
+      "cause": "runner supplied L generic absent on top",
+      "resolution": "declare fixed test top parameter, B passed"
+    },
+    {
+      "attempt": "calibrate_pair_initial",
+      "class": "verification_parser",
+      "cause": "tried to parse invalid-cycle X output as decimal",
+      "resolution": "check payload only when ov"
+    },
+    {
+      "attempt": "calibrate_leaf_initial",
+      "class": "verification_parser",
+      "cause": "whole packed word containing invalid-lane X discarded valid-lane bits",
+      "resolution": "normalize unused X bits, check valid lanes only; all supported outputs independently numeric checked"
+    },
+    {
+      "attempt": "front_leaf_final4_f/front_leaf_final8_f and native B/C",
+      "class": "test_agent_contract",
+      "cause": "half-edge scheduling made minimum response17cycles",
+      "resolution": "adjust due timestamp by1, finalG/nativeD measured minimum16cycles"
+    },
+    {
+      "attempt": "front_ooc_a",
+      "class": "physical_setup_failure",
+      "WNS_ns": -0.65,
+      "TNS_ns": -7.226,
+      "failing_endpoints": 57,
+      "cause": "pos/slot wide matching plus payload/cost lookup reaches inputlegality; othersslotstateCE",
+      "repair": "samecycle linkedslotindices and legality after registered operands; Hpintraces byteidentical,Croute inprogress"
+    },
+    {
+      "attempt": "front_ooc_a_report_tail",
+      "class": "script_compatibility",
+      "cause": "redirect command unsupported byVivado2022.2 after actualroute+DCP+timing+methodology reports",
+      "resolution": "read-only check_timing commandlog extraction+write_xdc+flatutil, no reroute; corrected later script"
+    }
+  ],
+  "rtl_review_fixes_before_simulation": [
+    "nextbeat29bit wrap atmaxlegaloffset ->30bit sentinel",
+    "blocked E/target selection could change afternewdecode ->stickyselectionholding",
+    "blockedoperand selection/tag.last couldchange ->heldctx/slot, lastindependentofready",
+    "added genuine64bitEDGEbase before final qualification"
+  ],
+  "no_historical_evidence_modified": true
+}

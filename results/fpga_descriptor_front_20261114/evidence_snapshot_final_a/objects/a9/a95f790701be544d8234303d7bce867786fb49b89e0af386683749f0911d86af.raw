@@ -1,0 +1,31 @@
+{
+  "scope": "arithmetic capacity counterexample under current jitter rule; not an observed full-model trace",
+  "physical_requests_per_cycle": 2,
+  "physical_ports": 32,
+  "requests": 256,
+  "response_rule": "issue_cycle + 16 + (prior_issues_on_port*17+port)%7",
+  "max_response_coincidence": 3,
+  "example_cycle": 34,
+  "responses": [
+    {
+      "line": 26,
+      "port": 26,
+      "physical_issue": 13,
+      "latency": 21
+    },
+    {
+      "line": 31,
+      "port": 31,
+      "physical_issue": 15,
+      "latency": 19
+    },
+    {
+      "line": 36,
+      "port": 4,
+      "physical_issue": 18,
+      "latency": 16
+    }
+  ],
+  "implication": "two ACK lanes need explicit selection/backpressure; request issue width alone does not bound response coincidence",
+  "no_model_experiment_launched": true
+}

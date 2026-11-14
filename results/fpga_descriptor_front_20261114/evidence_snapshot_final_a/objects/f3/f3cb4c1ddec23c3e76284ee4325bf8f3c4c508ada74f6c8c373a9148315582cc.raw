@@ -1,0 +1,45 @@
+# Final local frontend physical audit
+
+Actual Vivado2022.2 routed `df_front_context`, L4/C4/B8/T8, xcu280-fsvh2892-2L-e,
+5ns. Core and real one-entry launch/capture registers are included. External
+synchronous IO contract is min0.100/max0.800ns in all A/B/C attempts; these are
+stated boundary assumptions, not measured board IO. No clock or IO constraint was
+relaxed and no timing exception/waiver was introduced.
+
+C: setup WNS+0.255ns,TNS0,0 failing; hold WHS+0.019ns,THS0,0 failing;
+pulse WPWS+1.968ns,0 failing. All12 `check_timing` categories zero.
+`report_methodology` reports0violations. Explicit RTSTAT route DRC separately
+reports one RTSTAT-10 warning covering857nets. Actual-object audit classifies all
+857 as EXTERNAL_OUTPUT_ONLY, with zero internal sink pins. These are the OOC
+boundary nets after the actual capture registers and handshake endpoints; they
+are not qualified external interconnect. No warning was waived. All15,550 routable
+nets are fully routed, routing errors0. No negative max/min path found.
+
+The original known pos/slot path remains constrained: final worst pos->slot_state
+slack+1.991ns,7levels,2CARRY8,2.903ns data delay. The worst sequential-to-sequential
+path within actual FP32 lanes has+1.883ns slack. Worst path to any error register
+is descriptor-state->core error,+0.824ns. Global worst is slot_state->captured cost
+operand,+0.255ns,14levels/no CARRY8,4.727ns data (3.339ns routing,70.639%).
+
+A pre-absolute-EDGE attempt had WNS-0.650ns/57endpoints,hold+0.007ns.
+B includes true EDGE base and had WNS-0.335ns/6endpoints,hold+0.011ns.
+Both are retained. A/B script tails called unsupported Tcl `redirect` only after
+route DCP and primary reports had been saved. Read-only check_timing/write_xdc/
+flat-utilization completed without rerouting; original rc1 and recovery rc0 are
+separate receipts. C uses supported2022.2 text commands and returned0 directly.
+
+C repairs are actual RTL: legality checks registered operands in existing stage1;
+per-context linked indices into the SAME finite beat slots replace wide position/
+beat matching. Twelve complete interface traces are byte-identical to B-source
+functional results; no latency, II or data capacity change. Empty enqueue and
+one-/many-slot pop+enqueue corners are covered in independent cycle replay.
+
+C resource use:9247LUT(1278LUTRAM),8761FF,0BRAM/URAM/DSP. B used10251LUT and9452FF.
+RAM inference remains distributed LUTRAM for small descriptor/context/edgepayload/
+cost arrays, no hidden HLS/IP arithmetic. Sixteen copies give arithmetic bookkeeping
+147952LUT/140176FF/20448LUTRAM, excluding globalnetwork,sharedoutputRAM,POP,directory,
+backend and globalclock/routing. This is NOT a full-design fit or timing claim.
+
+Status: LOCAL_RTL_TIMING_QUALIFIED for this exact L4 context and boundary contract.
+L8 has functional/cycle evidence but no separate routed clock qualification.
+Complete kernel clock qualified=false; board_measured=false.

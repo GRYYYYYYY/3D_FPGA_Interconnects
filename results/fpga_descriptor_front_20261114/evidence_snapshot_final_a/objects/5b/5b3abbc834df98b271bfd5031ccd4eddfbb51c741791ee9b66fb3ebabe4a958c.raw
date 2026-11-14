@@ -1,0 +1,38 @@
+{
+  "utc": "2026-11-14T15:52:19.381501+00:00",
+  "checkpoint": 3,
+  "source_sha256": {
+    "accel/lookahead/fpga_descriptor_front/model/finite.hpp": "50286d37994087400e8ec361afefaa4ee92db6d5e653b2ebe4007a03e91be9ac",
+    "accel/lookahead/fpga_descriptor_front/model/transport_adapter.hpp": "f3a2187850c42008b8af94be8be2d41d4cb964d00378d52ed3908dd6f3dea219",
+    "accel/lookahead/fpga_descriptor_front/model/directory_adapter.hpp": "2337cbc6b71aabfa49a617922b7fd4d164c1363467976ac641899589f380388b"
+  },
+  "findings": [
+    {
+      "id": "DF-R005",
+      "status": "confirmed firstpass; owner fixing",
+      "detail": "Candidate router mutates lane FIFO heads inside destination loop, permitting more than one pop/source/cycle. Snapshot grants or used-source guard required."
+    },
+    {
+      "id": "DF-R006",
+      "status": "confirmed firstpass; owner fixing",
+      "detail": "FP pipeline readiness calculated after router pop can enqueue into formerly full source FIFO on same edge. Use pre-edge full flags. Audit C0 ready FIFO and all FIFO2 boundaries likewise."
+    },
+    {
+      "id": "DF-R007",
+      "status": "sent model; fix pending",
+      "detail": "Fused DESC response-to-handoff was C+1 while actual leaf raw-decode-selected-holder path handshakes earliest C+3. Held E/target choices and next-edge retirement also missing from first pass."
+    },
+    {
+      "id": "DF-R008",
+      "status": "sent model; exact contract pending",
+      "detail": "Actual frontend EDGE/DESC request holders precede shared source FIFO4. Direct push from model candidate selection skips holding capacity/latency. Define implemented replacement or instantiate exact holders."
+    },
+    {
+      "id": "DF-R009",
+      "status": "sent model; fix pending",
+      "detail": "Response callback clears parent inflight before same-cycle EDGE generation and expand scratch busy before same-cycle next admission. New eligibility must use pre-edge state/next-edge ready."
+    }
+  ],
+  "scope": "first runnable integration source review, before expensive freeze; files actively edited",
+  "experiments_started": false
+}

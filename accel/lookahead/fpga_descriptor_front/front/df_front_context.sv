@@ -1,0 +1,43 @@
+`timescale 1ns/1ps
+// Real one-entry elastic launch/capture context on every transaction boundary.
+// Adds one stage each direction; all storage/backpressure is explicit. External
+// configuration must remain stable from first reserve through complete drain.
+module df_front_context #(parameter L=4)(
+ input logic clk,reset,input logic av,output logic ar,output logic tv,input logic tr,output logic[15:0]at,
+ input logic pv,output logic pr,input logic[15:0]pt,input logic stale,input logic[31:0]pn,input logic[63:0]pp,input logic[15:0]epoch,
+ input logic format16,input logic[63:0]descriptor_base,edge_base,input logic[31:0]edge_count,input logic[15:0]cells,
+ input logic cfg_we,input logic[3:0]cfg_idx,input logic[63:0]cfg_cost,
+ output logic dv,input logic dr,output logic[63:0]da,output logic[15:0]dt,input logic drv,output logic drr,input logic[15:0]drt,input logic[255:0]drd,
+ output logic mv,input logic mr,output logic[63:0]ml,output logic[15:0]mt,input logic rv,output logic rr,input logic[15:0]rt,input logic[255:0]rd,
+ output logic yv,input logic yr,output logic[14:0]yc,output logic[63:0]yp,output logic[15:0]yt,
+ output wire[L-1:0]ov,input wire[L-1:0]or_,output wire[L*32-1:0]od,ot,output wire[L*64-1:0]op,
+ output logic error,idle,output logic[255:0]stats);
+ logic av0,ar0,avs,ars,ackr;logic[15:0]at0;logic unused;
+ logic pv0,pr0;logic[128:0]pop0;
+ logic fmt;logic[63:0]base_,edge_base_;logic[31:0]bound_;logic[15:0]cells_;logic cw;logic[3:0]ci;logic[63:0]cc;
+ logic dv0,dr0,drv0,drr0,mv0,mr0,rv0,rr0,yv0,yr0;logic[79:0]dq,eq;logic[271:0]ds,es;logic[94:0]target;
+ wire[L-1:0]ov0,or0;wire[L*32-1:0]od0,ot0;wire[L*64-1:0]op0;
+ logic err0,idle0;logic[31:0]counter[8];
+ df_slice #(.W(1)) reserve_launch(.clk,.reset,.iv(av),.ir(ar),.id(1'b1),.ov(avs),.or_(ars),.od(unused));
+ assign av0=avs&&ackr;assign ars=ar0&&ackr;
+ df_slice #(.W(16)) reserve_capture(.clk,.reset,.iv(av0&&ar0),.ir(ackr),.id(at0),.ov(tv),.or_(tr),.od(at));
+ df_slice #(.W(129)) pop_launch(.clk,.reset,.iv(pv),.ir(pr),.id({pt,stale,pn,pp,epoch}),.ov(pv0),.or_(pr0),.od(pop0));
+ df_slice #(.W(80)) desc_request_capture(.clk,.reset,.iv(dv0),.ir(dr0),.id(dq),.ov(dv),.or_(dr),.od({da,dt}));
+ df_slice #(.W(80)) edge_request_capture(.clk,.reset,.iv(mv0),.ir(mr0),.id(eq),.ov(mv),.or_(mr),.od({ml,mt}));
+ df_slice #(.W(272)) desc_return_launch(.clk,.reset,.iv(drv),.ir(drr),.id({drt,drd}),.ov(drv0),.or_(drr0),.od(ds));
+ df_slice #(.W(272)) edge_return_launch(.clk,.reset,.iv(rv),.ir(rr),.id({rt,rd}),.ov(rv0),.or_(rr0),.od(es));
+ df_slice #(.W(95)) target_capture(.clk,.reset,.iv(yv0),.ir(yr0),.id(target),.ov(yv),.or_(yr),.od({yc,yp,yt}));
+ for(genvar l=0;l<L;l=l+1)begin:candidates
+  df_slice #(.W(128)) capture(.clk,.reset,.iv(ov0[l]),.ir(or0[l]),.id({od0[l*32+:32],op0[l*64+:64],ot0[l*32+:32]}),.ov(ov[l]),.or_(or_[l]),.od({od[l*32+:32],op[l*64+:64],ot[l*32+:32]}));
+ end
+ df_front_group #(.L(L)) core(.clk,.reset,.av(av0),.ar(ar0),.at(at0),.pv(pv0),.pr(pr0),.pt(pop0[128:113]),.stale(pop0[112]),.pn(pop0[111:80]),.pp(pop0[79:16]),.epoch(pop0[15:0]),
+ .format16(fmt),.descriptor_base(base_),.edge_base(edge_base_),.edge_count(bound_),.cells(cells_),.cfg_we(cw),.cfg_idx(ci),.cfg_cost(cc),
+ .dv(dv0),.dr(dr0),.da(dq[79:16]),.dt(dq[15:0]),.drv(drv0),.drr(drr0),.drt(ds[271:256]),.drd(ds[255:0]),
+ .mv(mv0),.mr(mr0),.ml(eq[79:16]),.mt(eq[15:0]),.rv(rv0),.rr(rr0),.rt(es[271:256]),.rd(es[255:0]),
+ .yv(yv0),.yr(yr0),.yc(target[94:80]),.yp(target[79:16]),.yt(target[15:0]),.ov(ov0),.or_(or0),.od(od0),.op(op0),.ot(ot0),.error(err0),.idle(idle0),
+ .reserved(counter[0]),.retired(counter[1]),.desc_count(counter[2]),.target_count(counter[3]),.edge_parents(counter[4]),.edge_completed(counter[5]),.edge_emitted(counter[6]));
+ always_ff @(posedge clk)begin
+  fmt<=format16;base_<=descriptor_base;edge_base_<=edge_base;bound_<=edge_count;cells_<=cells;cw<=cfg_we;ci<=cfg_idx;cc<=cfg_cost;
+  if(reset)begin error<=0;idle<=0;stats<=0;end else begin error<=err0;idle<=idle0&&!avs&&!pv0&&!tv&&!dv&&!mv&&!drv0&&!rv0&&!yv&&!(|ov);for(integer i=0;i<7;i=i+1)stats[i*32+:32]<=counter[i];stats[255:224]<=0;end
+ end
+endmodule

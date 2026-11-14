@@ -1,0 +1,21 @@
+from pathlib import Path
+import json,hashlib
+R=Path('results/fpga_descriptor_front_20261114/front_sim_a');p=R/'project/df_front.sim/sim_1/behav/xsim/arith_cycles.txt'
+vec=[int(x,16) for x in (R/'arith.hex').read_text().split()];stage=[None]*6;accepted=retired=0;birth={};latencies=[];peak=0
+for raw in p.read_text().splitlines():
+ v=raw.split();c,iv,ir,idx,ov,ready=map(int,v[:6]);od=int(v[6]) if ov else 0;pair,tag=(int(v[7],16),int(v[8],16)) if ov else (0,0);bad=int(v[9]) if ov else 0;r=[False]*6;r[5]=stage[5] is None or ready
+ for i in range(4,-1,-1):r[i]=stage[i] is None or r[i+1]
+ assert ir==r[0] and ov==(stage[5] is not None),(c,ir,r,stage)
+ if ov:
+  expected=stage[5];x=vec[expected];assert od==expected and tag==(expected^0x1234) and bad==((x>>96)&1),(c,'tag/error')
+  if (x>>100)&1:assert pair==(((x>>64)&0xffffffff)*0x100000001),(c,'numeric')
+ if ov and ready:retired+=1;latencies.append(c-birth[stage[5]])
+ old=stage[:]
+ for i in range(5,0,-1):
+  if r[i]:stage[i]=old[i-1]
+ if r[0]:stage[0]=idx if iv else None
+ if iv and ir:accepted+=1;birth[idx]=c
+ peak=max(peak,sum(x is not None for x in stage))
+assert accepted==retired==4400
+result={'pass':True,'cycles_checked':c,'accepted':accepted,'retired':retired,'peak_occupied_stages':peak,'minimum_accept_to_consumer_edges':min(latencies),'maximum_accept_to_consumer_edges':max(latencies),'scope':'all six arithmetic ready/valid stages and exact output bits/tags/error, not full kernel','trace_sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+(R/'cycle_calibration.json').write_text(json.dumps(result,indent=2));print(result)

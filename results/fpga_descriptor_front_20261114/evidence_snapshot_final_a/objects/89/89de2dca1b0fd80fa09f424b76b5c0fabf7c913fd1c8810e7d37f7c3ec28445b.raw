@@ -1,0 +1,5 @@
+`timescale 1ns/1ps
+module tb_dest;
+logic[4:0]line;logic[1:0]cls;wire[6:0]dest=7'((line<<2)|cls);
+initial begin for(integer p=0;p<32;p=p+1)for(integer c=0;c<4;c=c+1)begin line=p;cls=c;#1;if(dest!=={line,cls})$fatal(1,"destination %d/%d expected%h actual%h",p,c,{line,cls},dest);end $display("TEST_PASS ALL32PORT4CLASS_DESTINATION");$finish;end
+endmodule

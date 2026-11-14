@@ -1,0 +1,197 @@
+{
+  "status": "FROZEN_FOR_D_VALIDATION",
+  "base": "ccec3da64b4c5be643809c2bdda94145c4bb8187",
+  "configurations": {
+    "C0": {
+      "fused": false,
+      "groups": 8,
+      "lanes_per_group": 8,
+      "H": 128,
+      "M": 128
+    },
+    "F1": {
+      "fused": true,
+      "groups": 8,
+      "lanes_per_group": 8,
+      "D": 128
+    },
+    "F2": {
+      "fused": false,
+      "groups": 16,
+      "lanes_per_group": 4,
+      "H": 128,
+      "M": 128
+    },
+    "F3": {
+      "fused": true,
+      "groups": 16,
+      "lanes_per_group": 4,
+      "D": 128
+    }
+  },
+  "common": {
+    "lanes": 64,
+    "E_per_lane": 4,
+    "beat_slots_per_lane": 8,
+    "D1": true,
+    "fork_total": 128,
+    "ready_total": 128,
+    "global_POP_admission_per_cycle": 8,
+    "group_EDGE_request_return_per_cycle": 1,
+    "group_ROW_DESC_request_return_per_cycle": 1,
+    "group_META_request_return_per_cycle": 1,
+    "physical_ports": 32,
+    "beat_bytes": 32,
+    "credits_per_port": 32,
+    "latency_ns": 80,
+    "issue_interval_ns": 5,
+    "conditional_frequency_hz": 200000000
+  },
+  "source_mapping": {
+    "0..15": "EDGE group",
+    "16..31": "ROW/DESC group",
+    "32..47": "META group",
+    "48..111": "canonical bank",
+    "112..175": "scratch bank",
+    "176..207": "INIT/output/cost physical-port source"
+  },
+  "classes": [
+    "EDGE",
+    "ROW/DESC/META/INIT/output/cost",
+    "canonical",
+    "scratch"
+  ],
+  "network": {
+    "local_source_holding_register": {
+      "front_ROW_DESC_META_EDGE": 1,
+      "canonical": 1,
+      "scratch_INIT_output_cost": 0
+    },
+    "source_FIFO": 4,
+    "registered_RR_port_class_holding": 1,
+    "physical_client_FIFOs": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "physical_request_register": 1,
+    "tag_allocation": "physical request register fill; preedge free tags",
+    "physical_request_slice": 2,
+    "physical_response_slice": 2,
+    "physical_return_FIFO": 4,
+    "client_return_register": 1,
+    "registered_RR_source_return": 1,
+    "tag_release": "physical port acceptance from responseFIFO2 into returnFIFO4; no sameedge reuse"
+  },
+  "front_context": {
+    "reserve_command": 1,
+    "reserve_token_ack": 1,
+    "POP": 1,
+    "DESC_request": 1,
+    "EDGE_request": 1,
+    "DESC_return": 1,
+    "EDGE_return": 1,
+    "target": 1,
+    "candidate_per_lane": 1,
+    "type": "elastic oneentry registered; replacement allowed on old downstreamhandshake",
+    "ROW_request_return_aliases_DESC_for_C0_F2": true,
+    "META_request_return_for_C0_F2": 1
+  },
+  "front_leaf": {
+    "descriptor_decode": "response R,decode R+1,heldselection R+2,handoff earliestR+3",
+    "token_release": "both branch handshakes recorded, one retirement/group/cycle, nextedge reuse",
+    "FP32_elastic_stages": 6,
+    "FP32_operand_capture_to_consumer_edges": 6,
+    "E_slot_release": "immutable operand capture; no sameedge reuse",
+    "group_ready_capacity": "128/groups",
+    "EDGE_request_arbitration": "laneRR, lowesteligiblecontext/lane; pointer advances on heldrequestcapture"
+  },
+  "candidate_router": {
+    "per_lane_FIFO": 4,
+    "registered_RR_holding_per_bank": 1,
+    "bank_FIFO": 16,
+    "backend_candidate_context_FIFO": 2,
+    "max_accept_per_lane_cycle": 1,
+    "max_emit_per_bank_cycle": 1
+  },
+  "directory": {
+    "banks": 64,
+    "members_per_bank": 8192,
+    "buckets": 4096,
+    "primitive": "services/directory_model.hpp exact synchronous serialized FSM",
+    "init_cycles": 8192,
+    "append_response_earliest": 5,
+    "take_release_response_earliest": 3,
+    "min_response_earliest": 2,
+    "registered_global_min_tree": 6,
+    "member_holding_per_bank": 1,
+    "member_capture_to_POP_eligible": 1,
+    "publication_waits": "actual append response, then deferred upstream ACK",
+    "global_min_collector": "actual services::MinimumCollector; start C commands C+1; last response R tree capture R+1 consume R+7"
+  },
+  "backend": {
+    "op_input_FIFO_per_bank": 2,
+    "pending_per_bank": 8,
+    "sets_per_bank": 1024,
+    "ways": 4,
+    "enum_enabled_II": 2,
+    "expand_scratch_inflight": 1,
+    "final_merge_inflight": 1,
+    "commit_FIFO": 16,
+    "merge_FIFO": 16,
+    "PV_read_write_per_bank_cycle": [
+      1,
+      1
+    ],
+    "directory_result_context": "held capture,actualconsume,nextedgeACK,nextedgecapture",
+    "local_to_global_boundary": "global network replaces frozen local port at logical CAN/SCR clients; no second port cascade; local fourclient cycle evidence not transferred wholesale"
+  },
+  "output": {
+    "banks": 8,
+    "updates_per_bank_cycle": 1,
+    "export_beats_per_cycle": 2,
+    "packing_FIFO": 16,
+    "packing_cycles": 2,
+    "completion": "all actual physical write ACKs",
+    "primitive": "output/output_model.hpp Service",
+    "group_input_contexts": "reuse front target_context; no duplicated register",
+    "RR_per_bank_holding": 1,
+    "synchronous_bank_pipeline_positions": 3,
+    "RAM_read_to_compare_to_write_event_to_handshake": "C,C+1,C+2,C+3",
+    "same_cell_forwarding": "s1 newest then last actual RAM write",
+    "init_actual_writes_per_bank": 4096,
+    "recorded_count": "actual completed event handshake",
+    "ACK_collector": "output/ack_model.hpp actual32inputRR->twoelasticheldoutputs; networksourceReady onaccept only",
+    "ACK_max_retire_per_cycle": 2,
+    "ACK_hold_entries": 2,
+    "ACK_accept_to_exporter_consume_min_cycles": 1,
+    "export_start_accept_to_first_read": 1,
+    "export_start_accept_to_first_logical_write": 3,
+    "last_ACK_to_registered_done": 1
+  },
+  "same_edge": {
+    "FIFO_full_pop_and_push": "rejectpush based on preedgefull",
+    "holding_register_consume_replace": true,
+    "E_beat_token_reuse": false,
+    "canonical_word_slot_reuse": false
+  },
+  "qualification": {
+    "complete_kernel_clock_qualified": false,
+    "board_measured": false,
+    "estimated_seconds_at_qualified_clock": null,
+    "board_measured_seconds": null
+  },
+  "controller": {
+    "expand_status_capture": 1,
+    "flush_launch": 1,
+    "final_done_capture": 1
+  },
+  "causal_counters": {
+    "fixed_observer": "lane0 in expand, bank0 in finalize; exclusive priority labels documented in model README; not sum bank retries",
+    "critical_tail": "for each wave choose bank whose actual last-busy/drain cycle is latest, retain its exclusive histogram; diagnostic not a counterfactual proof",
+    "emit_population": "number of actual lane operand captures each observed cycle, histogram0..64",
+    "occupancy": "pergroup fork,H/D,M,ready,E,beat histograms at all step edges; initialized/export direct loops separately charged",
+    "waves": "actual group requests/returns and perkind/physicalport issue deltas per wave"
+  }
+}

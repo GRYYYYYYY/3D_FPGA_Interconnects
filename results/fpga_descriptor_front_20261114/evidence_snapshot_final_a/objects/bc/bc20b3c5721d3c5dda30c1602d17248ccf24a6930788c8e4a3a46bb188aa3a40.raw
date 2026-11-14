@@ -1,0 +1,8 @@
+set out [file normalize ../services_memory_synth]
+report_utilization -file $out/utilization.rpt
+report_utilization -hierarchical -file $out/utilization_hierarchical.rpt
+write_checkpoint -force $out/synth.dcp
+set f [open $out/tool_terminal.txt w]
+puts $f "FULL_NETWORK_SYNTHESIS_COMPLETED version=[version -short] top=df_memory_network_full sources=208 physical_ports=32 classes=4"
+puts $f "RESOURCE_ONLY_NO_CLOCK_CONSTRAINT_NO_ROUTED_TIMING_QUALIFICATION"
+close $f

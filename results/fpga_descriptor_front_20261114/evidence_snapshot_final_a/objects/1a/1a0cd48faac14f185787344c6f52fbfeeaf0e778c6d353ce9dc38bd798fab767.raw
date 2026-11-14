@@ -1,0 +1,18 @@
+{
+  "stage": "actual synthesis; not post-integration placement or fit",
+  "top": {"LUT": 17072, "FF": 19173, "RAMB36": 12, "RAMB18": 4, "URAM": 16},
+  "subtract_if_replaced_by_common_network_once": {
+    "core.fabric": {"LUT": 3800, "FF": 6058},
+    "request_FIFO2": {"LUT": 150, "FF": 570},
+    "response_FIFO2": {"LUT": 166, "FF": 527}
+  },
+  "remaining_two_banks_bookkeeping": {"LUT": 12956, "FF": 12018, "BRAM36_equivalent": 14, "URAM": 16},
+  "remaining_root_FF_breakdown": {
+    "captured_status_and_counters_including_overflow": 627,
+    "config_node_count_clear_flush_reset": 36,
+    "done_and_fabric_idle": 3,
+    "total": 666
+  },
+  "potential_duplicate_local_fabric_capture_FF": 142,
+  "caveat": "142 FF capture four fabric counters, two credit counters, error and idle; if common fabric already captures these, keeping them is a conservative bookkeeping overcount. node_count32 launch may also be shared or replicated by actual top routing. Candidate/op/directory/result contexts remain. This subtraction is not synthesized global integration and cannot claim exact final resources or fit."
+}

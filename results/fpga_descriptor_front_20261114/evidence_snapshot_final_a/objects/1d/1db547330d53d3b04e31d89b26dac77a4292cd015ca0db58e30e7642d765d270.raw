@@ -1,0 +1,60 @@
+# Final FF parent context timing and methodology
+
+Actual Vivado2022.2 route completed with code0 in933.613s. The unchanged local
+contract is clock5ns/uncertainty0.1ns/input-output max0.8/min0.1ns. No false paths,
+multicycle exceptions or waivers were added. The final verdict is
+ROUTED_LOCAL_TIMING_FAIL because the outer OOC input contract still fails hold.
+
+## Actual measured paths
+
+| Scope | Setup slack | Hold slack | Pulse slack |
+|---|---:|---:|---:|
+| Entire local OOC including external budgets | +0.005ns | -0.080ns | +1.800ns |
+| Real register/RAM sequential paths inside parent context | +0.005ns | +0.011ns | +1.800ns clock check |
+
+All2450negative hold paths start at outer input ports and terminate in the new
+candidate/op/physical-response launchFFs or configuration/resetFFs. There are
+zero negative paths ending inside frozen `core/`, and zero internal negative
+hold paths. The raw full endpoint classification is retained. This is a real
+internal-path result, not a whole-interface or complete-kernel200MHz claim.
+No WNS reciprocal is used to invent a different qualified frequency.
+
+Worst internal setup: `core/banks[1].new_backend.pending/state_reg[6][3]/C`
+to `core/banks[1].new_backend.pending/new_pvs_reg_r1_0_7_42_55/RAMC_D1/I`,
+14logic levels including2CARRY8,4.795ns data path (3.498ns routing,72.949%).
+The5ps margin is small and gives no full-placement margin guarantee.
+
+## Register implementation and resources
+
+Final context-storage object audit finds3653FDRE+4FDSE and zero RAM/SRL objects.
+The mandatory FIFO2 RAM_STYLE=registers repair therefore produced real launch
+registers. Allfour recompiled simulation suites have byte-identical traces and
+cycles to their passing pre-repair versions. Added buffers remain depth2 and
+publication ACK remains deferred until after real downstream consumption.
+
+Actual route:16834LUT (5264memory),19184FF,12RAMB36+4RAMB18 (=14BRAM36eq),
+16URAM,0DSP. PV retains4URAM/bank and accumulator payload4URAM/bank.
+The current two-bank design contains one local four-client physical port;
+`routed_composition_ledger.json` separates it and both physicalFIFO2s so the
+full common network can be counted once. Arithmetic subtraction is not a
+synthesized global composition or a full-fit claim.
+
+## Constraint and methodology coverage
+
+All12check_timing categories are0: clocks, pulse coverage, internal endpoints,
+input/output delays, generated/multiple clocks and combinational/latch loops.
+32SYNTH-5 warnings are existing enumerator replacement arrays mapped to LUTRAM;
+the exact instance list is retained. No TIMING rule violation is reported.
+SYNTH-5 is outside the Ross TIMING1–57 reference set, so its actual mapping is
+reported rather than waived. DRC has oneRTSTAT-10 aggregate affecting1572nets;
+actual net/pin audit finds all1572 are external-output-only, with zero missing
+internal consumers. Their external stubs/board paths are not qualified.
+
+Ross methodology JSON commands require2026.1+; installed2022.2 uses text reports
+and direct timing/net objects. Only process-local existing systemlibudev preload
+was used to avoid the already observed2022.2 host-info crash; no tool binary,
+global configuration, clock or I/O budget was changed. Both A and B actually
+completed normally; the preliminary LUTRAM-A result and source remain archived.
+
+No further context layers or I/O-min relaxation were attempted. Full common
+request/return-network composition and full-kernel timing remain separate work.
