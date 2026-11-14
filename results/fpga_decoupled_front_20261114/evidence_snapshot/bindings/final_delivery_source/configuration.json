@@ -1,0 +1,13 @@
+{
+  "name": "decoupled_front_200MHz_retained_enum5",
+  "base_commit": "059ec4cc7c7c3793398016c0713c29a0e0c6d46a",
+  "scope": "frontend-only A/B/C model and retained-backend necessary bound; no complete hardware qualification",
+  "memory": {"ports": 32, "beat_bytes": 32, "credits_per_port": 32, "request_fifo_per_port": 64, "response_fifo_per_port": 4, "latency_ns": 80, "issue_gap_ns": 5, "assumed_frequency_hz": 200000000, "port": "physical_line & 31", "credit_release": "physical response accepted into finite return FIFO", "client_slot_release": "last descriptor sector consumed"},
+  "frontend": {"H": 128, "E": 256, "L": 64, "M": 128, "ready_fifo": 128, "fork_fifo": 128, "edge_slots": 512, "slots_per_lane": 8, "pair_pipeline_entries_per_lane": 2, "pair_II": 1, "target_event_capacity_reserved": 128, "target_event_implementation": "stage-1 model holds completion in its M context until output accepts; separate FIFO reserved but unused", "output_banks": 8, "output_entries_per_bank": 4096, "output_bits_per_entry": 65},
+  "variants": {"A": {"D": 1, "metadata_dependency": "row completion then the same metadata read; edge waits for response, not output update"}, "B": {"D": 1, "metadata_dependency": "independent fork consumer"}, "C": {"D": 2, "metadata_dependency": "independent fork consumer"}},
+  "retained_backend": {"subbanks": 64, "pending_K": 8, "scratch_commands_per_subbank": 1, "accumulator_sets_per_subbank": 1024, "ways": 4, "sectors_per_line": 4, "enumeration_min_interval_cycles": 5, "spill_ids_per_subbank": 2048, "MAX_N": 4194304, "canonical_init_each_sample": true, "global_wave_fence": true, "implemented_in_stage1": false},
+  "model_limits": ["Valid immutable POP input boundary; pending/seed/commit are outside stage 1", "Finite response FIFO can bypass in the accepting cycle; no new registered-route RTL calibration", "Ideal candidate sink; router/accumulator/scratch/finalize excluded from local cycles", "Per-wave target state and cost table resident; output initialization/export timing excluded from local cycles", "Lane/context selection is behavioral arbitration, not resource/timing-qualified RTL", "No cache, shared beat merging, D4, altered enumeration, or speculative canonical update"],
+  "complete_kernel_clock_qualified": false,
+  "fpga_seconds": null,
+  "board_measured": false
+}
