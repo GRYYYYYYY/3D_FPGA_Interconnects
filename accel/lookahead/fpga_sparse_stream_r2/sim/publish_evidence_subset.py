@@ -11,7 +11,7 @@ def publish(tag,roots,scope,receipt_dir):
   files=[base] if base.is_file() else sorted(base.rglob('*'))
   for p in files:
    if not p.is_file() or any(x in p.parts for x in ['build','.git']):continue
-   if p.suffix not in {'.json','.jsonl','.csv','.log','.stderr','.bin','.sv','.tcl','.xdc','.rpt','.py','.cpp','.hpp','.md','.yaml','.txt'}:continue
+   if p.suffix not in {'.json','.jsonl','.csv','.log','.stderr','.bin','.sv','.tcl','.xdc','.rpt','.py','.cpp','.cu','.hpp','.md','.yaml','.txt'}:continue
    if p.name in ['native_input.bin','workload.bin','prepared.bin','representative_wave.bin']:continue
    raw=p.read_bytes();dest=out/p.relative_to(R);dest.parent.mkdir(parents=True,exist_ok=True);compressed=len(raw)>16384
    if compressed:dest=dest.with_name(dest.name+'.gz')

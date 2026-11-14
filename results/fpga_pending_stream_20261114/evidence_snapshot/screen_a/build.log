@@ -1,0 +1,7 @@
+/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_INF_PENDING_STREAM/accel/lookahead/fpga_pending_stream/screen.cpp: In member function ‘void Screen::wake_blocked()’:
+/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_INF_PENDING_STREAM/accel/lookahead/fpga_pending_stream/screen.cpp:67:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   67 |   if(blocked_armed||blocked.empty())return;blocked_armed=true;later(std::max(now+1,stall_tokens_until),[this]{blocked_armed=false;auto [b,i,start]=blocked.front();blocked.pop_front();banks[b].token_stall+=now-start;retire(b,i);wake_blocked();});
+      |   ^~
+/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_INF_PENDING_STREAM/accel/lookahead/fpga_pending_stream/screen.cpp:67:44: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   67 |   if(blocked_armed||blocked.empty())return;blocked_armed=true;later(std::max(now+1,stall_tokens_until),[this]{blocked_armed=false;auto [b,i,start]=blocked.front();blocked.pop_front();banks[b].token_stall+=now-start;retire(b,i);wake_blocked();});
+      |                                            ^~~~~~~~~~~~~

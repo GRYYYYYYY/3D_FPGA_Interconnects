@@ -143,3 +143,12 @@ and software terminal audits/archive/push remain pending their actual completion
 Their finalizers preserve failures and use independent append-only receipts.
 `fpga_seconds=null` and `board_measured=false` throughout; the historical partial
 0.143656/0.145130s values remain partial arithmetic budgets only.
+
+## Current terminal entry: 2026-11-14
+
+The old GPU chain (254 successful receipts) and all six P8/F0 native batches are
+terminal in fixed evidence base `a64c934956be6514a27f66fd1a46f09ef4a2fab9`.
+The earlier queued/running section is a historical snapshot, not current state.
+The independent pending-stream followup and its initial-frontend necessary-bound
+no-go are documented in [lookahead_fpga_pending_stream.md](lookahead_fpga_pending_stream.md).
+The new work does not rerun or supersede the old measurements.
