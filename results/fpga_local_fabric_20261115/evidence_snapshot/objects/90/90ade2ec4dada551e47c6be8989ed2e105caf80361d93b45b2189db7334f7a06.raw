@@ -1,0 +1,10 @@
+set_param general.maxThreads 8
+cd {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_LOCAL_FABRIC/results/fpga_local_fabric_20261115/network_synth_a}
+read_verilog -sv [glob source/*.sv]
+read_xdc clock.xdc
+synth_design -top lf_network -part xcu280-fsvh2892-2L-e -mode out_of_context
+report_utilization -file utilization.rpt
+report_utilization -hierarchical -file hierarchy.rpt
+report_timing_summary -delay_type min_max -check_timing_verbose -file timing_synth.rpt
+write_checkpoint synth.dcp
+set f [open terminal.txt w];puts $f SYNTH_COMPLETE;close $f

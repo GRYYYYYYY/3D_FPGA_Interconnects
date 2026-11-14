@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Sat Nov 14 22:47:07 2026
+# Process ID: 1614757
+# Current directory: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_LOCAL_FABRIC/results/fpga_local_fabric_20261115/append_intervals_a
+# Command line: xsim -mode tcl -source {xsim.dir/snapshot/xsim_script.tcl}
+# Log file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_LOCAL_FABRIC/results/fpga_local_fabric_20261115/append_intervals_a/xsim.log
+# Journal file: /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_LOCAL_FABRIC/results/fpga_local_fabric_20261115/append_intervals_a/xsim.jou
+# Running On: fpgaacc2--72bfa719011c-3hfvuvkzdl, OS: Linux, CPU Frequency: 2100.000 MHz, CPU Physical cores: 32, Host memory: 1622731 MB
+#-----------------------------------------------------------
+source xsim.dir/snapshot/xsim_script.tcl
+# xsim {snapshot} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+APPEND_INTERVAL_PASS mode=2 accepts128 ACK128 II=2 retire_interval=2
+APPEND_INTERVAL_PASS mode=0 accepts128 ACK128 II=6 retire_interval=6
+APPEND_INTERVAL_PASS mode=1 accepts128 ACK128 II=8 retire_interval=8
+TEST_PASS APPEND old_leaf_II6 reconstructed_old_wrapper_II8 new_actual_RAM_II2
+$finish called at time : 46095 ns : File "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_LOCAL_FABRIC/results/fpga_local_fabric_20261115/append_intervals_a/source/tb_append_intervals.sv" Line 39
+## quit
+INFO: [Common 17-206] Exiting xsim at Sat Nov 14 22:47:11 2026...

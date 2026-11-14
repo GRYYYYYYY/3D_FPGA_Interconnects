@@ -1,0 +1,22 @@
+close_project
+set_param general.maxThreads 8
+cd {/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_LOCAL_FABRIC/results/fpga_local_fabric_20261115/backend_ooc_b}
+read_verilog -sv [glob source/*.sv]
+read_xdc context.xdc
+synth_design -top lf_backend_context -part xcu280-fsvh2892-2L-e -mode out_of_context
+report_utilization -file synth_utilization.rpt
+report_utilization -hierarchical -file synth_hierarchy.rpt
+write_checkpoint synth.dcp
+opt_design
+place_design
+phys_opt_design
+route_design
+write_checkpoint route.dcp
+report_timing_summary -delay_type min_max -check_timing_verbose -file timing_summary.rpt
+report_timing -delay_type max -max_paths 20 -file setup.rpt
+report_timing -delay_type min -max_paths 20 -file hold.rpt
+report_utilization -file utilization.rpt
+report_methodology -file methodology.rpt
+report_route_status -file route_status.rpt
+write_xdc effective.xdc
+set f [open terminal.txt w];puts $f COMPLETE;close $f

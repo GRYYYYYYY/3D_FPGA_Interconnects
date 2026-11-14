@@ -1,0 +1,79 @@
+`timescale 1ns/1ps
+module tb_directory;
+ reg clk=0;always #2.5 clk=~clk;reg reset=1,cv=0,rr=0;
+ wire cr,rv,initialized,drained,ram_visible;reg[1:0]cop=0;reg[11:0]cbucket=0;reg[31:0]cnode=0,carg=0;reg[13:0]cptr=8192;
+ wire[1:0]rop,rstatus;wire[11:0]rbucket;wire[31:0]rnode,rarg;wire[13:0]rptr,rnext,used,peak,visible_ptr;wire[63:0]upper;
+ lf_directory dut(.*);
+ integer cycle=0,accepted=0,acked=0,last_accept=-1,ii2=0,last_visible=-1,fd;
+ integer head[4096],tail[4096],next_node[8192],append_bucket[8192];reg allocated[8192];reg visible[8192];
+ integer ptr_value,next_value,node_value,bucket_value,status_value,round_,n;
+ function automatic integer bucket_for(input integer i);
+  case(i%7)0,1,3:bucket_for=0;2:bucket_for=1;4:bucket_for=64;5:bucket_for=4095;default:bucket_for=63;endcase
+ endfunction
+ always @(posedge clk)if(!reset)begin
+  cycle=cycle+1;if(cycle>200000)$fatal(1,"WATCHDOG");
+  if(ram_visible)begin
+   if(visible[visible_ptr])$fatal(1,"DUPLICATE_VISIBLE");visible[visible_ptr]=1;
+   $fdisplay(fd,"%0d,ram_visible,%0d,0",cycle,visible_ptr);
+  end
+  if(cv&&cr&&cop==0)begin
+   if(last_accept>=0&&cycle-last_accept==2)ii2=ii2+1;
+   if(last_accept>=0&&cycle-last_accept<2)$fatal(1,"SINGLE_WRITE_PORT_OVERBOOKED");last_accept=cycle;
+   append_bucket[accepted]=cbucket;next_node[accepted]=-1;
+   if(tail[cbucket]>=0)next_node[tail[cbucket]]=accepted;else head[cbucket]=accepted;
+   tail[cbucket]=accepted;accepted=accepted+1;
+   $fdisplay(fd,"%0d,append_accept,%0d,%0d",cycle,cnode,cbucket);
+  end
+  if(rv&&rr&&rop==0)begin
+   if(rstatus!=0||rptr>=8192||allocated[rptr]||!visible[rptr]||rbucket!=append_bucket[acked])$fatal(1,"APPEND_ACK before RAM or wrong identity ptr=%0d",rptr);
+   allocated[rptr]=1;acked=acked+1;$fdisplay(fd,"%0d,append_ack,%0d,%0d",cycle,rptr,rbucket);
+  end
+ end
+ task automatic control(input[1:0]op,input[11:0]bucket,input[13:0]ptr);
+  begin
+   @(negedge clk);cv=1;cop=op;cbucket=bucket;cptr=ptr;rr=0;
+   @(posedge clk);while(!cr)@(posedge clk);
+   @(negedge clk);cv=0;
+   while(!rv)@(negedge clk);
+   if(rop!=op||rstatus>1)$fatal(1,"CONTROL_RESPONSE");
+   ptr_value=rptr;next_value=rnext;node_value=rnode;bucket_value=rbucket;status_value=rstatus;
+   if(op==2)begin
+    if(!allocated[rptr]||rarg!=(32'hbeef0000|rnode))$fatal(1,"PAYLOAD_OR_DOUBLE_FREE");
+    allocated[rptr]=0;visible[rptr]=0;
+   end
+   rr=1;@(negedge clk);rr=0;
+  end
+ endtask
+ initial begin
+  fd=$fopen("directory_trace.csv","w");$fdisplay(fd,"cycle,event,node_or_ptr,bucket");
+  for(integer i=0;i<4096;i=i+1)begin head[i]=-1;tail[i]=-1;end
+  for(integer i=0;i<8192;i=i+1)begin allocated[i]=0;visible[i]=0;end
+  repeat(5)@(negedge clk);reset=0;while(!initialized)@(negedge clk);
+  for(round_=0;round_<2;round_=round_+1)begin
+   accepted=0;acked=0;last_accept=-1;
+   for(integer i=0;i<4096;i=i+1)begin head[i]=-1;tail[i]=-1;end
+   while(accepted<8192||acked<8192)begin
+    cv=accepted<8192;cop=0;cnode=accepted;carg=32'hbeef0000|accepted;cbucket=bucket_for(accepted);
+    rr=cycle%61<39;
+    @(negedge clk);
+   end
+   cv=0;rr=1;while(!drained)@(negedge clk);
+   if(used!=8192||peak!=8192)$fatal(1,"RESERVATION_COUNT");
+   // At full member capacity APPEND is not accepted, even with empty ACK FIFO.
+   cop=0;#1;if(cr)$fatal(1,"FULL_MEMBER_ACCEPT");
+   for(integer bucket=0;bucket<4096;bucket=bucket+1)if(head[bucket]>=0)begin
+    control(3,0,8192);if(bucket_value!=bucket)$fatal(1,"MIN expected=%0d got=%0d",bucket,bucket_value);
+    control(1,bucket,8192);n=head[bucket];
+    while(ptr_value!=8192)begin
+     control(2,0,ptr_value);
+     if(node_value!=n)$fatal(1,"CHAIN_ORDER got=%0d expected=%0d",node_value,n);
+     n=next_node[n];ptr_value=next_value;
+    end
+    if(n!=-1)$fatal(1,"CHAIN_EARLY_END");
+   end
+   control(3,0,8192);if(status_value!=1||used!=0||upper!=0)$fatal(1,"DRAIN");
+  end
+  if(ii2<1000)$fatal(1,"II2_NOT_EXERCISED");
+  $fclose(fd);$display("TEST_PASS directory append=16384 full_free_reuse=2 II2_pairs=%0d cycles=%0d",ii2,cycle);$finish;
+ end
+endmodule

@@ -1,0 +1,129 @@
+{
+  "all28_exact": true,
+  "rows": [
+    {
+      "case": "bnn_export",
+      "configuration": "L0",
+      "samples": 4,
+      "cycles": 7310933,
+      "phases": {
+        "init": 128424,
+        "pop_expand": 4915960,
+        "finalize": 2250425,
+        "export": 12664,
+        "other": 3460
+      },
+      "relative_to_L0": 1.0,
+      "relative_to_L1": 1.0003166124817835
+    },
+    {
+      "case": "bnn_export",
+      "configuration": "FS",
+      "samples": 4,
+      "cycles": 9259951,
+      "phases": {
+        "init": 128424,
+        "pop_expand": 6865220,
+        "finalize": 2250183,
+        "export": 12664,
+        "other": 3460
+      },
+      "relative_to_L0": 1.2665895036926202,
+      "relative_to_L1": 1.2669905217387853
+    },
+    {
+      "case": "bnn_export",
+      "configuration": "L1",
+      "samples": 4,
+      "cycles": 7308619,
+      "phases": {
+        "init": 128424,
+        "pop_expand": 4912758,
+        "finalize": 2251313,
+        "export": 12664,
+        "other": 3460
+      },
+      "relative_to_L0": 0.9996834877299519,
+      "relative_to_L1": 1.0
+    },
+    {
+      "case": "bnn_export",
+      "configuration": "L2",
+      "samples": 4,
+      "cycles": 6611954,
+      "phases": {
+        "init": 128424,
+        "pop_expand": 4949055,
+        "finalize": 1517508,
+        "export": 12664,
+        "other": 4303
+      },
+      "relative_to_L0": 0.9043926404468485,
+      "relative_to_L1": 0.9046789824452471
+    },
+    {
+      "case": "lstm_s2",
+      "configuration": "L0",
+      "samples": 3,
+      "cycles": 5542918,
+      "phases": {
+        "init": 97821,
+        "pop_expand": 3743805,
+        "finalize": 1689129,
+        "export": 9669,
+        "other": 2494
+      },
+      "relative_to_L0": 1.0,
+      "relative_to_L1": 1.0004075326766126
+    },
+    {
+      "case": "lstm_s2",
+      "configuration": "FS",
+      "samples": 3,
+      "cycles": 7036046,
+      "phases": {
+        "init": 97821,
+        "pop_expand": 5235940,
+        "finalize": 1690122,
+        "export": 9669,
+        "other": 2494
+      },
+      "relative_to_L0": 1.2693758053068798,
+      "relative_to_L1": 1.2698931174264438
+    },
+    {
+      "case": "lstm_s2",
+      "configuration": "L1",
+      "samples": 3,
+      "cycles": 5540660,
+      "phases": {
+        "init": 97821,
+        "pop_expand": 3741228,
+        "finalize": 1689448,
+        "export": 9669,
+        "other": 2494
+      },
+      "relative_to_L0": 0.9995926333386134,
+      "relative_to_L1": 1.0
+    },
+    {
+      "case": "lstm_s2",
+      "configuration": "L2",
+      "samples": 3,
+      "cycles": 5014153,
+      "phases": {
+        "init": 97821,
+        "pop_expand": 3769475,
+        "finalize": 1134089,
+        "export": 9669,
+        "other": 3099
+      },
+      "relative_to_L0": 0.9046052999521191,
+      "relative_to_L1": 0.9049739561712864
+    }
+  ],
+  "front_conclusion": "Decoupling removes most shared F3 lifecycle loss; only 0.032% BNN /0.041% LSTM total-cycle improvement vs F2 on fixed representatives, not a substantial standalone acceleration.",
+  "publication_conclusion": "L2 reduces total by about9.5% and finalize by about32.6%; fullbatch remains subject to actual resource gate.",
+  "capacity_extension_selected": false,
+  "capacity_reason": "D full frequently coincides with ready/E full; per-group T full with D space is not proof of a sole downstream-free critical bottleneck. Measured totals remain far from strong resident GPU and area margin is tight; do not inflate two pools from global full counters."
+}
