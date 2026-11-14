@@ -1,0 +1,97 @@
+{
+  "reviewed_commit": "5af99087a9d7055d468cc5269326d985b911919d",
+  "observed_at_UTC": "2026-11-13T21:54:37.511012+00:00",
+  "observed_at_Asia_Shanghai": "2026-11-14 05:54:37 +08:00",
+  "scope": "Read-only fixed-commit review; no new experiments or server job actions",
+  "urgent_defects": [
+    {
+      "path": "accel/lookahead/fpga_sparse_stream_r2/sim/gpu_private_inf_worker.py",
+      "lines": [
+        4,
+        20
+      ],
+      "issue": "Fresh source dir contains only prepared-pop control sources, but first build requests missing private-INF sources. All four files include bucket61.hpp, while only -I source is supplied and no headers are copied.",
+      "needed_inputs": [
+        "cuda_private_inf.cu",
+        "cpu_private_inf.cpp",
+        "cuda_prepared_pop.cu",
+        "cpu_prepared_pop.cpp",
+        "bucket61.hpp",
+        "compact61.hpp",
+        "directory61.hpp",
+        "io.hpp",
+        "backend.hpp",
+        "workload.hpp"
+      ],
+      "safe_next": "Check actual queued/running job source SHA and existing status first; repair/freeze all inputs and preflight. Do not overwrite an already-started cohort; use new run tag and new parameterized watcher if resubmission needed."
+    },
+    {
+      "path": "accel/lookahead/fpga_sparse_stream_r2/sim/finalize_recovered_native.py",
+      "lines": [
+        31,
+        41,
+        42,
+        50
+      ],
+      "issue": "Own observe step rewrites tracked current_manifest before git diff --quiet, so own generated dirty file normally causes finalizer refusal before staging.",
+      "safe_next": "Check unrelated tracked/index dirt before own writes; thereafter allow exact generated-file whitelist and explicitly stage it. Do not use git add -A or erase user diffs. Already-running Python needs a new finalizer/tail publication instance; do not restart six models."
+    }
+  ],
+  "original_ooc": [
+    {
+      "candidate": "checked P32/F1",
+      "status": "terminal illegal route",
+      "setup_ns": -14.927,
+      "hold_ns": -0.075
+    },
+    {
+      "candidate": "router P32/F1",
+      "status": "terminal illegal route",
+      "setup_ns": -8.722,
+      "hold_ns": -0.104
+    },
+    {
+      "candidate": "router P32/F0",
+      "status": "terminal illegal route",
+      "setup_ns": -7.891,
+      "hold_ns": -0.103
+    },
+    {
+      "candidate": "router P8/F1",
+      "status": "terminal illegal route",
+      "setup_ns": -9.099,
+      "hold_ns": -0.104
+    },
+    {
+      "candidate": "router P8/F0",
+      "status": "running at snapshot only",
+      "live_query_required": true
+    }
+  ],
+  "native_F0": "Recovered exact-candidate calibration passed; six complete models already launched under p8_f0_recovered_native_2110b, should continue and not be duplicated",
+  "watcher_scope_gaps": [
+    "native finalizer observes/archives six native models; it does not await original P8/F0 OOC",
+    "GPU watcher analyzes completed software; it does not itself archive/push",
+    "if GPU finishes after native finalizer, a separate archive/publication tail is still required",
+    "GPU watcher hardcodes old job ID and private_inf_gpu_a; preserve its receipts on retargeting"
+  ],
+  "software": {
+    "cohorts": 24,
+    "cohort_definition": "four native inputs × (INF basic GPU, INF compact GPU, INF CPU, control basic GPU, control compact GPU, control CPU)",
+    "processes_per_cohort": 3,
+    "reps_per_process": 4,
+    "warmups_per_process": 1,
+    "timed_samples_per_cohort": 9,
+    "native_processes": 72,
+    "fixture_processes": 182,
+    "expected_total_process_receipts": 254,
+    "boundary": "RESIDENT_COMPLETE_BATCH_V2, host preparation/allocation/H2D outside; initialization and complete wave loop including host launch/poll gaps inside; output D2H and differential check after timed region",
+    "semantics": "Same ALT wave-start parent/whole-pair min semantics; INF initializes private proposal to INF and resets each completed wave. GPU still scans all nodes for commit; CPU touched list includes nodes not improved relative to old labels.",
+    "analyzer_budget": "min(stronger historical prepared-POP target, best four new CUDA means) is conservative planning target; do not present cross-cohort min as a paired speedup.",
+    "statistics": "Existing analyzer pools nine measurements; report three process means for paired comparisons and avoid treating all nine repetitions as independent processes.",
+    "historical_targets_s": {
+      "bnn_export": 0.151799969444,
+      "lstm_s2": 0.159888578444
+    }
+  }
+}

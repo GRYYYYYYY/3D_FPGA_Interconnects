@@ -1,0 +1,103 @@
+{
+  "review_commit": "5af99087a9d7055d468cc5269326d985b911919d",
+  "scope": "Read-only RTL/report review. No new synthesis, RTL, simulation or remote-job actions.",
+  "rtl_path": "accel/lookahead/fpga_sparse_stream_r2/rtl/wave_inf_bank.sv",
+  "timing_path": "results/fpga_sparse_stream_r2_20261112/evidence_snapshot/completed_micro_ooc_continuation2155/timing/wave_inf_micro_ram_d_5ns_recovery2/routed_timing.rpt.gz",
+  "actual_two_subbank_ooc": {
+    "part": "xcu280-fsvh2892-2L-e",
+    "directive": "Quick",
+    "clock_period_ns": 5,
+    "route_legal": true,
+    "routable_nets": 10167,
+    "fully_routed_nets": 10167,
+    "wns_ns": -6.048,
+    "whs_ns": 0.025,
+    "pulse_slack_ns": 1.958,
+    "setup_failing_endpoints": 4601,
+    "setup_TNS_ns": -14902.158,
+    "unconstrained_input_delay_ports": 198,
+    "unconstrained_output_delay_ports": 846,
+    "resources": {
+      "LUT": 7013,
+      "FF": 1776,
+      "RAMB36": 66,
+      "RAMB18": 10,
+      "URAM": 0
+    }
+  },
+  "worst_path": {
+    "source": "banks[1].bank/last_way_reg[0]/C",
+    "destination": "banks[1].bank/mem1_reg_bram_6/DINADIN[3]",
+    "data_delay_ns": 10.754,
+    "logic_ns": 1.574,
+    "route_ns": 9.18,
+    "route_fraction": 0.85364,
+    "logic_levels": 17,
+    "components": {
+      "CARRY8": 5,
+      "LUT2": 1,
+      "LUT3": 2,
+      "LUT4": 1,
+      "LUT6": 8
+    },
+    "selected_fanouts": [
+      121,
+      507,
+      104,
+      72
+    ],
+    "interpretation": "wide forwarded-way selection -> tag/hit -> sector/pair compare -> RAM writeback; no FP32 addition in this module"
+  },
+  "current_mapping": {
+    "sets_per_subbank": 1024,
+    "ways": 4,
+    "entry_bits": 292,
+    "data_bits_per_entry": 256,
+    "tag_mask_bits": 36,
+    "slots_per_subbank": 4096,
+    "parallel_way_reads_per_candidate": 4,
+    "read_data_width_before_way_selection_bits": 1168,
+    "BRAM36eq_per_subbank": 35.5,
+    "BRAM36eq_64_subbanks": 2272,
+    "device_BRAM36": 2016
+  },
+  "proposed_mapping_not_implemented": {
+    "preserve_sets_ways_capacity": true,
+    "payload": "4096 slots x four64bit sectors; 4 URAM4Kx72 per subbank, address={way,set}",
+    "tags": "full32bit line tag plus4bit sector-valid mask perway in BRAM; initially preservefulltag toavoidunproven truncation",
+    "raw_resource_organization": {
+      "subbanks": 64,
+      "payload_URAM": 256,
+      "full_tag_mask_BRAM36": 256,
+      "occupied_list_BRAM36eq": 96,
+      "sum_BRAM36eq": 352,
+      "excludes": [
+        "victim/scoreboard/FIFO/flags",
+        "spill/final-state/front-end/router",
+        "other whole-kernel memory",
+        "placement and routing overhead"
+      ]
+    },
+    "pipeline": [
+      "registered tag read and reservation lookup",
+      "way choice and slot reservation; acquire fragment credit before eviction",
+      "selected-slot/sector URAM read",
+      "whole-pair min with complete in-flight RAW forwarding",
+      "registered payload/tag/mask writeback and retirement"
+    ],
+    "hazards": [
+      "metadata 1R1W must not be silently doubled by early reservation+late commit",
+      "same set competing misses and same line allocation",
+      "same slot/sector RAW across all new pipeline stages",
+      "evict payload still in flight",
+      "finite eviction/flush credits and backpressure",
+      "sample/wave drain and stale entries"
+    ],
+    "clock_qualified": false,
+    "II1_qualified": false
+  },
+  "primary_reference_urls": [
+    "https://docs.amd.com/r/en-US/ug573-ultrascale-memory-resources/UltraRAM-Summary",
+    "https://docs.amd.com/r/en-US/ug573-ultrascale-memory-resources/Dual-Port-SRAM-Array-Operations"
+  ]
+}
