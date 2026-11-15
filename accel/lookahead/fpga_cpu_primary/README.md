@@ -44,3 +44,64 @@ results, STRICT and golden data remain unchanged. `experiment_config.json`
 retains the initial declaration (also bound by model compilations). Updated
 qualification is separate in raw `qualification_progress.json`; source existence
 and a launched run do not establish fit or timing. Main report: `docs/lookahead_fpga_cpu_primary_closure.md`.
+
+
+## Selected source and replay
+
+The selected candidate is now the31-source wordmux closure in
+`delivery/sources.json`. Its full RTL52-sample/11-rejection results and explicit
+reuse of160 complete model_g samples are bound by
+`model_calibration_g_wordmux_a/calibration_reuse_contract.json` under the raw
+result root. The previous e core failed actual post-opt capacity at1,351,028
+LUTs; current f synthesis is in progress. Neither result supplies a qualified
+full-core frequency yet. See the closure report for current qualification.
+
+From the repository root, with the retained raw fixtures available, these
+commands use **new, nonexistent output directories**:
+
+```sh
+python3 accel/lookahead/fpga_cpu_primary/rtl/run_candidate_wordmux.py \
+  results/fpga_cpu_primary_20261115/replay_local_NEW
+python3 accel/lookahead/fpga_cpu_primary/fixtures/run_full_core.py \
+  results/fpga_cpu_primary_20261115/fixtures_a \
+  results/fpga_cpu_primary_20261115/replay_full_NEW \
+  --frozen results/fpga_cpu_primary_20261115/full_synth_f_wordmux/source \
+  --sources-list accel/lookahead/fpga_cpu_primary/delivery/sources.json
+python3 accel/lookahead/fpga_cpu_primary/fixtures/run_full_core.py \
+  results/fpga_cpu_primary_20261115/fixtures_a \
+  results/fpga_cpu_primary_20261115/replay_conservative_NEW \
+  --frozen results/fpga_cpu_primary_20261115/full_synth_f_wordmux/source \
+  --sources-list accel/lookahead/fpga_cpu_primary/delivery/sources.json \
+  --latency-ns 160 --issue-ns 10 --skip-negatives --skip-stress
+```
+
+The second command runs32 positive samples plus11 rejects; the third runs20
+positive samples and reuses rejection coverage from the second. Each run
+freezes source hashes, exact tool commands, service parameters, outputs and
+traces. `fixtures_wordmux_a/commands.json` and
+`fixtures_wordmux_conservative_a/commands.json` retain the commands actually
+executed for the reported results. The local miter is separate from the full
+core and does not grant area or timing qualification.
+
+`delivery/archive.py --verify` checks the compressed evidence and source
+bindings. To inspect raw evidence elsewhere, use `--restore` with an entirely
+new destination; restored source/fixture paths in the replay commands must
+then point to that destination. Vendor projects and DCPs are retained in the
+original workspace and represented by digests, not included as Git binaries.
+Large original inputs and software executables follow their explicit retained
+path/hash receipts; a restored evidence archive does not manufacture them.
+
+For a new complete-core OOC project, `delivery/prepare_eda.py NEW_OUTPUT_DIR`
+freezes the current closure and emits `setup.tcl`, `clock.xdc` and a synthesis
+report script. In Vivado2022.2 Tcl, source that new setup, run
+`launch_runs synth_1 -jobs 8`, then `wait_on_run synth_1`, and collect the actual
+reports. The selected run additionally records census/constraints/path reports
+in its source-bound collector. Resource review precedes implementation;
+`full_synth_e_restructured/post_opt` retains the actual standard opt-only
+script, reports and failure, including the reset-BUFG timing limitation.
+Do not reset or relaunch a retained active project as a replay shortcut.
+
+The model runner and service conversion are documented in `model/README.md`.
+Its selected full-batch receipts already exist and are explicitly reused; a
+new physical frequency requires new nanosecond-to-cycle calibration and full
+executions, not dividing the existing cycles by another frequency.

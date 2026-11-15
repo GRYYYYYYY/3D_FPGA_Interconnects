@@ -87,6 +87,25 @@ batch” as “all deployment transfer and validation costs included.” FPGA ou
 ACK drain is core completion; no unmeasured board readback or launch cost is
 invented. No board-measured FPGA value is supplied by this reuse index.
 
+The separate new host-postprocessing cohort is complete; it is not part of the
+historical reuse index. Its [delivery receipt](../results/fpga_cpu_primary_20261115/postprocess_final_g_a/delivery.json)
+has SHA-256 `f5b5a073f9057f1be901edef378f23b8a1135c491754c595d15eb21bcd422719`.
+CPU0 on the Xeon Gold6530 server ran BNN40 then LSTM40, each in three independent
+processes with one warmup and three formal repeats. Complete-output conversion
+means are1.561172/1.537052ms, with sample SDs of the three process means
+0.055318/0.106717ms. All outputs match the actual selected g outputs. Input is
+explicitly layout replay, not captured DMA. The timer covers swap32 within each
+cost pair and removal of tail/stride padding from prefaulted buffers, with no
+cache flush. Output allocation means0.011404/0.013816ms and first-touch means
+8.745916/8.388458ms are separately recorded. File loading, validation, file output,
+native map assembly and DMA are outside the conversion timer. The quiet-window
+record documents suspended experiment work, not exclusive use of the machine.
+This host-only observation neither measures board readback nor completes E2.
+Packed CPU/CUDA conversion also occurs outside resident, so the cost must not be
+added only to FPGA in a resident comparison. Reuse after a device-frequency
+change requires unchanged actual output hashes, dimensions, layout, conversion
+code and host boundary, with the original host environment retained.
+
 The new CPU-thread scan and preparation measurements are owned by the new
 software results. Historical Xeon 8462Y+ prepared-CPU and Xeon 6530 packed-CPU
 cohorts remain separate; their cross-host differences cannot establish a pure

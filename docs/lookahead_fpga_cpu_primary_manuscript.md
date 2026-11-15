@@ -65,6 +65,20 @@ absolute times into service cycles and rerunning the model. Until full-core
 resource/timing and model calibration are complete, no simulated FPGA speedup
 number is claimed in this draft.
 
+We separately measured complete-batch host output conversion on CPU0 of the
+Xeon Gold6530 server. Three independent processes per case each ran one warmup
+and three formal repeats; means were1.561172ms for BNN40 and1.537052ms for LSTM40,
+with sample SDs of the three process means0.055318ms and0.106717ms. All repeated
+outputs were byte-exact. This experiment replayed the physical layout from the
+actual selected g outputs; it did not capture board DMA. The conversion timer
+covers cost-pair word reordering and tail/stride removal using preallocated,
+prefaulted buffers without cache flushing. Allocation and first touch were timed
+separately; file I/O, validation, native map assembly and transfers were excluded.
+The [bound postprocessing receipt](../results/fpga_cpu_primary_20261115/postprocess_final_g_a/delivery.json)
+retains all repetitions and quiet-window observations. Packed CPU/CUDA output
+conversion also lies outside resident, so this cost is not charged only to FPGA.
+No board-readback or complete production E2 time is established by this cohort.
+
 Resident completion, one-build construction E2 and the complete VPR Process
 are distinct outcomes. Required preparation, transfers and postprocessing must
 be included in E2 on the actual timeline, without counting already-included

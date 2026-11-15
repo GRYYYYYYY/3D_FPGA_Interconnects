@@ -9,7 +9,7 @@ module cp_candidate_network(input logic clk,reset,output wire idle,
   // node is high32; bank=2*((node/4)&31)+(((node/4)>>5)&1).
   assign dest[i*6+:6]={qd[i*96+64+2+:5],qd[i*96+64+7]};
  end
- df_rr_router #(.INPUTS(64),.OUTPUTS(64),.WIDTH(96)) route(.clk,.reset,.iv(qv),.ir(qr),.dest(dest),.idata(qd),.ov(gv),.ordy(gr),.odata(gd));
+ cp_candidate_wordmux_router route(.clk,.reset,.iv(qv),.ir(qr),.dest(dest),.idata(qd),.ov(gv),.ordy(gr),.odata(gd));
  for(genvar i=0;i<64;i=i+1)begin:bank
   df_fifo #(.WIDTH(96),.DEPTH(16)) fifo(.clk,.reset,.iv(gv[i]),.ir(gr[i]),.idata(gd[i*96+:96]),.ov(rv[i]),.ordy(rr[i]),.odata(rd[i*96+:96]));
  end

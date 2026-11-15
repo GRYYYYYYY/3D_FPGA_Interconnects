@@ -3,15 +3,20 @@
 Status: implementation and verification in progress. This file is updated as
 terminal evidence arrives; it is not a claim of completed FPGA acceleration.
 
-The selected RTL is the bounded dispatcher revision frozen in
-`full_synth_e_restructured`. Six local comparison/regression runs passed,
-including every external output and lifecycle register over1236 protocol
-edges. The revised complete-core52-sample/11-rejection suite also passed;
-output bytes, total cycles,19 phases,3772 phase intervals and72917 requests and
-returns match model_g exactly. `model_calibration_g_restructured_a/calibration_reuse_contract.json`
-explicitly joins the new30-source RTL with the existing160 model_g outputs,
-so the detailed functional/calibration tables below now apply to this revision.
-Default5ns full-core synthesis is active; area and routed clock remain unknown.
+The selected RTL is the candidate payload-wordmux revision frozen as31 sources
+in `full_synth_f_wordmux`. Its three-seed local comparison passed49,693 edges.
+The complete52-sample/11-rejection suite also passed: full outputs, total
+cycles,19 phase totals,3772 intervals and72917 requests/returns match model_g
+exactly. `model_calibration_g_wordmux_a/calibration_reuse_contract.json` binds
+this source to the reverified160 existing model samples without rerunning them.
+Default5ns full-core synthesis started at19:41:48UTC on2026-11-15; fit and clock
+remain unqualified.
+
+The preceding dispatcher revision e completed synthesis and standard opt_design.
+It still required1,351,028 LUTs (103.63%),47,348 above U280 capacity, and did not
+enter placement/route. Its actual resource, unplaced timing and OOC reset-buffer
+warning are preserved below. That result motivated the single bounded wordmux
+followup; no area or timing saving is assumed for the new expression.
 
 The independent branch starts at `3c7f96e6037030949b729240977c2ced373843c6` and
 changes the goal to `CPU_PRIMARY_GPU_COMPARATOR`. GPU may remain faster. Full
@@ -84,11 +89,11 @@ All complete host-format output hashes equal the frozen goldens. Eleven invalid
 configurations are rejected without issuing a physical request. Stress adds
 0..16cycles deterministic return jitter and allows requests for14 out of each
 19cycles; these are test conditions, separate from the predeclared conservative
-memory sensitivity point. All30 DUT source hashes match the synthesis freeze.
+memory sensitivity point. All31 selected DUT source hashes match the f synthesis freeze.
 Full-capacity16K-cycle PV initialization is charged on every sample; it accounts
 for83.32%/73.11% of the small graphs, so their elapsed cycles are not scaled to
-large workloads. `fixtures_full_b/summary.json` and its complete event/phase/
-request-kind traces bind the functional result. Model calibration at this test service point is complete with the declared
+large workloads. `fixtures_wordmux_source_a/verification.json` and both wordmux run directories
+bind the selected functional result and complete event/phase/request-kind traces. Model calibration at this test service point is complete with the declared
 limits below.
 
 
@@ -110,7 +115,7 @@ request schedule (cycle, source, kind, line, localID and generation).
 | d4 conservative160ns/10ns | 12 | 282252 | 0 |
 
 The five source-bound comparisons are in `model_comparison_g`. All use the
-5ns test clock and the same30-file repaired DUT closure. These are observed
+5ns test clock and the same31-file selected DUT closure. These are observed
 exact matches on the declared test suite, not a formal equivalence proof for
 all graphs. Full-core routed-clock qualification remains separate.
 
@@ -160,13 +165,31 @@ per-port request/return conservation and full outputs are preserved in
 
 ## Resource and clock qualification
 
-The initial full-core source closure is30 files. Actual full-core synthesis is
-running at5ns. The earlier1,254,466-LUT module sum is a historical planning
-estimate, not this core's measured fit. Full-core resources, unconnected-output
-classification, mapped memories, blackboxes and trimming will be audited from
-the actual run. No complete-core clock is qualified yet.
+The preceding e full-core source closure is30 files. Its actual5ns synthesis
+completed on2026-11-15 at18:22:03UTC. The earlier1,254,466-LUT module sum is a
+historical planning estimate, not the measured fit. That e run requires
+1,353,922 CLB LUTs (1,065,866 logic +288,056 memory), exceeding1,303,680 by
+50,242 (3.85%). It uses749,255 FF,1,148 BRAM36 equivalents,640 URAM and0 DSP.
+Synthesis DRC reports one UTLZ-1 over-utilization error. Standard opt_design
+subsequently completed successfully with1,351,028 LUTs (1,063,228 logic +
+287,800 memory),748,683 FF, unchanged1,148 BRAM36 equivalents/640 URAM and
+0 DSP. It remains47,348 LUTs over capacity. No DRC severity waiver is applied;
+placement is not launched for this over-capacity mapping.
 
-The running first synthesis has now reported `Synth8-326`, automatically
+The worst emitted unplaced setup path has slack -5.000ns, data delay9.796ns
+and42 logic levels, from bank0 completion payload to bank23 completion FSM CE.
+Its7.804ns routing component is an unplaced estimate. Worst reported hold
+is -0.091ns from external cfg_job_index to jobs RAM address. These results
+are neither routed timing nor an achieved frequency. The e synthesis DCP
+SHA-256 is876b7fdd3342c540335311f91c5fe180e018c1f984c26a988f2a1aa0757c61ac.
+
+Baseline d used -no_timing_driven while e uses default timing-driven synthesis.
+Both the dispatcher and synthesis option differ; their area delta is not a
+controlled same-flow estimate of rewrite savings. No complete-core clock is
+qualified yet. The following earlier-run history is retained for provenance;
+b/c and the old standalone dispatcher are now cancelled as superseded.
+
+The original b synthesis reported `Synth8-326`, automatically
 breaking a combinational loop through output `write_v[1]`. The source chain is
 strict-prefix second-valid → admin valid-gated request metadata → adapter
 kind/address legality → network ready → first-write ready → second-valid.
@@ -174,7 +197,8 @@ This inferred timing exception is not accepted as closure. A bounded integration
 repair separates stable export metadata from second-valid; only the actual
 request-valid remains valid-gated. Capacity/credits/service latency remain
 unchanged in the completed full native regression below.
-The original synthesis stays running to retain actual resource evidence.
+The original synthesis was retained during diagnosis, then cancelled as
+superseded after the selected dispatcher revision passed complete validation.
 The repair is now frozen in `full_synth_c/source`. `fixtures_full_b` passed all32
 full samples and11 rejection checks: complete outputs, every accepted-event
 trace, all phase/kind/sample counts and absolute simulation finish times are
@@ -183,15 +207,16 @@ independently verifies this identity and reuses the completed model_f runs;
 its observed calibration differences remain retained in that prior contract.
 The model_g contract now supersedes it for current calibration. Only
 `cp_admin.sv` changed in the30-file DUT closure. Actual repaired full synthesis
-started in `full_synth_c` at5ns after the regression passed; the original `b`
-continues as retained diagnostic evidence. No repaired loop-free synthesis or
-routed-clock claim is made before its terminal report.
+started in `full_synth_c` at5ns after the regression passed. Both b and c were
+later cancelled as superseded; neither supplied a completed default-mapping
+baseline. Selected e has now completed without an8-326 message; its unplaced
+result still does not qualify a routed clock.
 
 An additional narrow `dispatch_synth_a` diagnostic exposes all runtime ports of
-the unchanged production POP dispatcher. Its source matches both complete-core
-freezes. This new controller had standalone functional tests but no completed
-resource/path report. The diagnostic preserves the full-core runs and cannot
-qualify their clock or area. Unlike the integrated core, it exposes all six
+the unchanged production POP dispatcher. Its source matched the original b/c complete-core
+freezes. This controller had standalone functional tests but no completed
+resource/path report. The diagnostic was later cancelled as superseded and
+supplies no completed clock or area result. Unlike the integrated core, it exposes all six
 statistics counters. Vivado2022.2 excluded the diagnostic's original bulk I/O
 delay commands because they selected more than10,000 objects; the5ns internal
 clock remains applied. A separate chunked post-synthesis constraint file is
@@ -214,9 +239,9 @@ core cycles. A matching completed source/service point is reused; a changed
 point requires new calibrated full-batch execution. Old cycles are not divided
 by a newly chosen frequency. Board time remains null.
 
-While full synthesis is running, the coordinator has also authorized the
-current repaired candidate's complete BNN40/LSTM40 run at the initial200MHz
-target as a conditional functional/capacity baseline. This exception to the
+While synthesis was running, the coordinator authorized the repaired
+candidate's complete BNN40/LSTM40 run at the initial200MHz target as a
+conditional functional/capacity baseline. This exception to the
 runner's coordinator gate does not qualify that frequency or establish final
 selection. Its explicit decision receipt retains this distinction. If the
 selected routed frequency differs, the corresponding full batches will be
@@ -311,11 +336,44 @@ checked in `descriptor/convert.cpp`: backing-write time covers descriptor writes
 not all converter I/O, and the stage rows are not a replacement for process
 wall time. Independent identity/decode checks are research validation; format
 admission and actual image construction remain required for this representation.
-File persistence depends on the deployed input path. Device transfer, invocation
-and required host postprocessing have no board measurement here. No transfer
-bandwidth is invented, and no resident advantage is promoted to an E2/Process
-advantage. The separate native E2/Process table and ALT/STRICT qualification
-remain in the companion evidence report.
+File persistence depends on the deployed input path. Device transfer and invocation
+have no board measurement here. No transfer bandwidth is invented, and no resident
+advantage is promoted to an E2/Process advantage. The separate native E2/Process
+table and ALT/STRICT qualification remain in the companion evidence report.
+
+Required host output layout conversion has now been measured separately on the
+Xeon Gold6530 server. The selected complete g outputs, bound to the revised RTL
+calibration/reuse contract, supply8,028,160/8,172,160 valid bytes. The input is
+explicitly **layout replay from actual completed outputs, not captured DMA**.
+The decoder swaps the two32-bit words of each64-bit cost pair and removes
+sample-tail/stride padding; every repeated decoded output is byte-exact.
+
+| Complete-batch host stage, milliseconds | BNN40 | LSTM40 |
+|---|---:|---:|
+| Conversion: mean of three process means | 1.561172 | 1.537052 |
+| Conversion: sample SD of three process means | 0.055318 | 0.106717 |
+| Output allocation: mean, separately timed | 0.011404 | 0.013816 |
+| Output first touch: mean, separately timed | 8.745916 | 8.388458 |
+
+Both cases ran sequentially on CPU0 (socket0/core0), each with three independently
+launched processes, one warmup and three formal repeats per process. The three
+process means are the statistical units. Conversion uses preallocated, prefaulted
+buffers and repeated no-flush cache state; it is not a cold post-DMA measurement.
+Input file loading, output allocation/first touch, comparison/SHA and file output
+are outside the conversion timer. Native map assembly, transfers and complete
+production E2 remain unmeasured by this cohort. The coordinator suspended EDA,
+DCP loading and archive work during measurement; quiet-window observations retain
+the idle MCP/Vivado sessions and do not claim an exclusive machine.
+
+The [postprocessing report](../results/fpga_cpu_primary_20261115/postprocess_final_g_a/REPORT.md)
+and [delivery receipt](../results/fpga_cpu_primary_20261115/postprocess_final_g_a/delivery.json)
+retain all process records and source/output bindings; the receipt SHA-256 is
+`f5b5a073f9057f1be901edef378f23b8a1135c491754c595d15eb21bcd422719`.
+Packed CPU and CUDA also perform output conversion outside their resident timers;
+this host cost must not be charged only to FPGA in a resident comparison. A later
+device frequency may reuse this host observation only with unchanged complete
+output hashes, dimensions, physical layout, conversion code and host boundary,
+retaining the measured host environment. It supplies no FPGA clock qualification.
 
 ## Provisional claim ledger
 
@@ -323,8 +381,8 @@ remain in the companion evidence report.
 |---|---|
 | Optimized CPU thread selection on current allocation | measured, complete |
 | Whole-pair ALT CPU outputs equal frozen golden | exact full batches |
-| Runtime connected production L1 source/function | 32 complete executions and11 rejection checks passed |
-| Complete-core resources fit U280 | baseline no-timing-driven synthesis over capacity; revised e mapping pending |
+| Runtime connected production L1 source/function | 52 complete executions and11 rejection checks passed |
+| Complete-core resources fit U280 | e post-opt103.63%; selected f synthesis in progress |
 | Complete-core routed clock | unqualified |
 | RTL/finite-model calibration at200MHz test service | 52 complete cases with exact phase/request schedules |
 | Complete model_g outputs at assumed200MHz | both scenarios,160 samples verified |
@@ -341,7 +399,8 @@ will be appended only when those steps complete.
 The MCP webserver status adapter reports an invalid recursion string with
 Vivado2022.2; that metadata is not used as job status. Direct Tcl proxy
 `get_property STATUS/PROGRESS [get_runs synth_1]` and the source-bound child
-process/run log supply the authoritative state. The existing job is retained.
+process/run log supply the authoritative state. Actual implementation status is read from the selected project and its bound
+child process. No duplicate job is launched based on the broken status adapter.
 
 After default full-core synthesis spent multiple hours in timing optimization
 without a completed resource table, `full_synth_d_no_timing` adds one bounded
@@ -392,8 +451,9 @@ dispatcher runs were explicitly cancelled as superseded. Their original Linux
 birth identities were checked, pre-signal logs frozen, and targeted pidfd SIGTERM
 used; all signalled processes exited. These cancellations are neither completed
 mapping results nor measured synthesis failures. Each isolated run retains a
-`cancelled_superseded_a` decision, log snapshot and terminal receipt. Only e
-continues. No historical branch job or artifact was modified.
+`cancelled_superseded_a` decision, log snapshot and terminal receipt. The e synthesis/report collection and standard post-opt implementation
+stage have since completed; e remains over capacity. No historical branch job
+or artifact was modified.
 
 The read-only `delivery/audit_route.py REPORT_DIR --out NEW_JSON` collects
 source-bound resource, setup/hold/pulse, routing, clock, constraint and diagnostic
@@ -407,3 +467,31 @@ still-live physical work at snapshot time. Earlier source/calibration and
 in-flight checkpoints remain preserved. The compressed archive is a point-in-
 time snapshot; actual resource/route results and any necessary changed-frequency
 batches will be added in the same independent branch.
+
+The actual post-opt footprint authorizes one further bounded resource revision
+recorded in `candidate_wordmux_a/decision.json`. It preserves64 lanes,64 banks,
+all FIFO/hold capacities and the original balanced key arbitration, changing
+only96-bit payload-tree selection into three32-bit array reads using the same
+6-bit selected index. The historical shared router remains untouched. Local
+comparison, complete RTL/model calibration and actual synthesis are required;
+there is no predicted area or timing saving. G8, a second arbitration rewrite,
+L2 and device migration are not implemented as parallel followup candidates.
+
+Post-opt input DCP metadata explicitly retains OutOfContext=1 and
+DisableAutoIOBuffers=1. Default optimization inserted
+`dispatch/core_reset_BUFG_inst` for a high-fanout reset/enable net; it is not
+the core-clock source. Timing38-242 reports missing HD.CLK_SRC on external
+reset during post-opt timing estimation. This limitation is retained, without
+assigning a fictitious reset clock source or waiving it. The over-capacity e
+mapping is not a routed or timing-qualified result.
+
+The selected wordmux revision has now passed all required integration comparisons.
+Only the candidate-network instance changed and one dedicated router source was
+added;29 preceding DUT sources, including the top, are unchanged. The output
+service continues to use the protected shared router, so the complete closure
+contains31 files. Both full test runs are byte/event/cycle-identical to the
+preceding dispatcher revision; the new reuse contract SHA-256 is
+`790e70b51c751b3ee2cfd6701d5621f061dc19a298eadc0bc24b344f21e51190`.
+The local test is a known-valid behavioral comparison, not arbitrary-X or
+formal equivalence. This checkpoint starts actual f synthesis and does not
+claim complete-core physical closure.

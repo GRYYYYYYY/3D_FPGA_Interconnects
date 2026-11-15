@@ -302,3 +302,29 @@ process identity/completion, calibration and physical service audits. Their30
 DUT hashes exactly equal `full_synth_e_restructured`; no DUT was edited by the
 fixture workflow, and no old experiment or result was restarted or overwritten.
 This is still5ns conditional functional evidence, not achieved-clock proof.
+
+The wordmux candidate has31 DUT source files: `cp_candidate_wordmux_router.sv`
+is added and `cp_candidate_network.sv` selects it. `df_rr_router.sv` remains
+required by the output service. The fixture runner now validates a nonempty,
+unique explicit source closure and records its actual source count rather than
+assuming30 files. This changes source-list handling only; no production DUT
+parameter or interface is reduced. `fixtures_wordmux_source_a` freezes the
+current31-file closure, verified against both the parent's integration manifest
+and `full_synth_f_wordmux/binding.json`; its `eda_source_match.json` records that
+exact match. New result directories are `fixtures_wordmux_a` and
+`fixtures_wordmux_conservative_a`; old evidence remains untouched.
+
+Wordmux full integration is now terminal PASS:
+`fixtures_wordmux_source_a/verification.json` records52 complete native samples
+(base20, stress12, conservative20) and11 configuration rejections. Both new
+`comparison_previous.json` reports are IDENTICAL against their restructured
+predecessors, including every output byte/beat, full accepted event trace,
+19-phase/sample/kind CSV and absolute simulation finish time. Totals remain
+157312/268916/276758 base/stress cycles and162025/282252 conservative cycles.
+Physical service audits observe16-cycle baseline ACKs (stress16..37),32-cycle
+conservative ACKs, and minimum issue gaps1/2 respectively. Each run retains
+source/service binding, process identity/completion, terminal, summary and
+calibration. All31 DUT source hashes match `full_synth_f_wordmux` exactly.
+The fixture agent changed no DUT or old results and made no commits; the source
+list count accommodation is verification infrastructure only. Achieved clock
+qualification remains null and is owned by the parent EDA workflow.
