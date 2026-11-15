@@ -53,8 +53,19 @@ module cp_admin(
   if(phase==3)begin
    if(line0[63:32]==0)write_r[0]=cr[p0];
    if(line1[63:32]==0&&(!write_v[0]||p1!=p0))write_r[1]=cr[p1];
-   if(write_v[0]&&line0[63:32]==0)begin cv[p0]=1;ck[p0*4+:4]=9;cl[p0*32+:32]=line0[31:0];cid[p0*32+:32]=line0[31:0];cd[p0*256+:256]=write_data[255:0];end
-   if(write_v[1]&&line1[63:32]==0&&(!write_v[0]||p1!=p0))begin cv[p1]=1;ck[p1*4+:4]=9;cl[p1*32+:32]=line1[31:0];cid[p1*32+:32]=line1[31:0];cd[p1*256+:256]=write_data[511:256];end
+   // Metadata must not depend on write_v[1]: the strict-prefix producer
+   // derives it from write_r[0], while network cr qualifies kind/owner.
+   // Only cv depends on lane1 valid; no ready -> metadata -> ready loop.
+   for(integer p=0;p<32;p=p+1)begin
+    ck[p*4+:4]=9;cl[p*32+:32]=p;
+    if(write_v[0]&&p==p0)begin
+     cl[p*32+:32]=line0[31:0];cid[p*32+:32]=line0[31:0];cd[p*256+:256]=write_data[255:0];
+    end else if(p==p1)begin
+     cl[p*32+:32]=line1[31:0];cid[p*32+:32]=line1[31:0];cd[p*256+:256]=write_data[511:256];
+    end
+    cv[p]=(write_v[0]&&line0[63:32]==0&&p==p0)||
+          (write_v[1]&&line1[63:32]==0&&p==p1&&(!write_v[0]||p1!=p0));
+   end
   end
  end
  always_ff @(posedge clk)begin

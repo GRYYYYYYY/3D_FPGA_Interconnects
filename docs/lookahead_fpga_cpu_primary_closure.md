@@ -119,6 +119,26 @@ estimate, not this core's measured fit. Full-core resources, unconnected-output
 classification, mapped memories, blackboxes and trimming will be audited from
 the actual run. No complete-core clock is qualified yet.
 
+The running first synthesis has now reported `Synth8-326`, automatically
+breaking a combinational loop through output `write_v[1]`. The source chain is
+strict-prefix second-valid → admin valid-gated request metadata → adapter
+kind/address legality → network ready → first-write ready → second-valid.
+This inferred timing exception is not accepted as closure. A bounded integration
+repair separates stable export metadata from second-valid; only the actual
+request-valid remains valid-gated. Capacity/credits/service latency are intended
+to remain unchanged, but the revised source requires full native revalidation.
+The original synthesis stays running to retain actual resource evidence.
+The repair is now frozen in `full_synth_c/source`. `fixtures_full_b` passed all32
+full samples and11 rejection checks: complete outputs, every accepted-event
+trace, all phase/kind/sample counts and absolute simulation finish times are
+identical to `full_a`. The newly bound `model_calibration_f_admin_c` contract
+independently verifies this identity and reuses the completed model_f runs;
+its observed calibration differences remain those tabulated above. Only
+`cp_admin.sv` changed in the30-file DUT closure. Actual repaired full synthesis
+started in `full_synth_c` at5ns after the regression passed; the original `b`
+continues as retained diagnostic evidence. No repaired loop-free synthesis or
+routed-clock claim is made before its terminal report.
+
 The OOC scope excludes shell, PCIe and HBM controller. Input/output min/max
 boundary delays are0.1/0.8ns with0.1ns clock uncertainty. No real path is declared
 false to manufacture timing closure. Vivado2022.2 project flow uses the actual
@@ -132,6 +152,40 @@ Predeclared service scenarios are80ns latency/5ns issue interval and a diagnosti
 case. Once a full-core frequency is selected, nanoseconds convert by ceiling
 to core cycles and the model is rerun. Old cycles are not divided by a newly
 chosen frequency. Board time remains null.
+
+## Resident memory and one-build E2 scope
+
+The selected40-job layouts occupy address spans2,885,563,488/2,930,877,536
+bytes for BNN/LSTM, within nominal8GiB backing. Required fused descriptor
+inputs are1,312,849,920/1,333,370,880bytes and prepared edges are
+153,371,104/155,940,112bytes. The reserved old-META address gap is not an
+additional loaded input. These checks apply to these two layouts; independent
+maximum nodes/jobs/cells are not asserted to fit8GiB in every combination.
+`resident_memory_span.json` binds the address arithmetic to the prior admission.
+
+Required construction is not assumed free. The unchanged converter already has
+one isolated, source/input/output-bound observation per case, reused through
+`software_a/historical_audit.json`:
+
+| Historical converter stage, seconds | BNN40 | LSTM40 |
+|---|---:|---:|
+| Native load and eligible graph preparation | 1.472225010 | 1.468351236 |
+| Format/range/target admission | 0.432226943 | 0.445848315 |
+| Descriptor image construction | 0.639816268 | 0.647709184 |
+| Descriptor backing writes | 0.221518203 | 0.236807465 |
+| Independent prepared-edge identity check | 0.120627044 | 0.122630682 |
+| Independent descriptor decode check | 0.496897985 | 0.505485695 |
+
+These are single observations, not a new three-process cohort. Timers were
+checked in `descriptor/convert.cpp`: backing-write time covers descriptor writes,
+not all converter I/O, and the stage rows are not a replacement for process
+wall time. Independent identity/decode checks are research validation; format
+admission and actual image construction remain required for this representation.
+File persistence depends on the deployed input path. Device transfer, invocation
+and required host postprocessing have no board measurement here. No transfer
+bandwidth is invented, and no resident advantage is promoted to an E2/Process
+advantage. The separate native E2/Process table and ALT/STRICT qualification
+remain in the companion evidence report.
 
 ## Provisional claim ledger
 

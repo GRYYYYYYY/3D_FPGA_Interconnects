@@ -216,3 +216,25 @@ Clock/plusargs changes affect only the TB and driver, never the30-file DUT.
 The old `fixtures_full_a` results remain immutable. Frequency-parameterized
 harness changes have Python/CLI and `xvlog` syntax checks only; no new behavioral
 or timing result exists until authorized reruns at the selected clock complete.
+
+`compare_full.py OLD_RUN NEW_RUN` audits a semantics-preserving source repair at
+the same clock/service: every actual output beat/binary, sample/phase/kind CSV,
+complete accepted transaction/retirement/completion trace, and absolute
+simulation finish time must match. It writes only the new run's
+`comparison_full_a.json`. `--allow-partial` compares completed cases only and
+labels its output separately; it is not a final full-regression verdict.
+The absolute-time check specifically covers the default5ns clock-driver change.
+For intentional frequency/service changes use calibration and qualification,
+rather than expecting cycle/time identity with the old run.
+
+`fixtures_full_b` reruns all32 samples and11 rejections after the frozen
+`full_synth_c` admin combinational-loop repair. All30 DUT files match that
+snapshot; the only DUT change from the previous snapshot is `cp_admin.sv`
+(SHA256 `007bbb62dc914cb7a40e11eae0b943aef65b756fd0688d41d6996082538f313c`).
+`summary.json` is PASS and `comparison_full_a.json` is IDENTICAL for all14 test
+invocations: every output, complete event trace, cycle/phase/kind CSV and
+absolute simulated finish time matches `full_a`. This also validates the
+parameterized TB's default5000ps/16/1 behavior. `process_identity.json` and
+`process_completion.json` preserve the experiment's start identity and terminal
+receipt. The original `full_a` proof files remain unchanged. This repair
+regression still does not establish an achieved5ns hardware clock.

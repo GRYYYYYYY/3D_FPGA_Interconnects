@@ -8,8 +8,9 @@ Large immutable workload inputs remain at hash-bound existing paths in
 - `sources.py` resolves the actual30-file production RTL closure.
 - `prepare_eda.py OUT --period 5` creates a new source freeze, real project,
  5ns clock/boundary constraints and synthesis report script. Existing source
- freezes are rejected rather than overwritten. The actual started run is
- `full_synth_b`; the first setup attempt is retained as aborted.
+ freezes are rejected rather than overwritten. The selected repaired run is
+ `full_synth_c`; original `full_synth_b` is retained with its detected export
+ metadata/ready timing loop, and the first setup attempt is retained as aborted.
 - Use Vivado2022.2 Tcl-mode MCP. The project setup uses the supported explicit
  `set_property -name {...MORE OPTIONS} -value {-mode out_of_context}` syntax.
  Launch synth_1, wait for it, and collect full utilization/hierarchy/timing/DRC
@@ -34,6 +35,12 @@ Large immutable workload inputs remain at hash-bound existing paths in
 The complete-core replay entry is `../fixtures/run_full_core.py`. The selected
 finite model entry is `../model/run.py`. They freeze their compile closure,
 commands, tool/compiler, binary/input/output identities and terminal receipts.
+`fixtures_full_b` repeats all32 full samples and11 rejects after the admin repair;
+its full traces, cycles and outputs equal `fixtures_full_a`.
+`model_calibration_f_admin_c` binds that source to the existing model_f evidence.
+`final_model_summary.py MODEL_DIRECTORY... --output NEW_JSON` independently
+checks complete40-sample outputs, phase sums, actual memory-cycle conversion
+and measured CPU/GPU provenance. It does not award hardware qualification.
 Model full40 runs require `--full-authorized` after the coordinator selects the
 final candidate/frequency; this is an orchestration guard, not a request for
 additional user permission. They are already authorized by the task.
