@@ -11,7 +11,9 @@ def excluded(p):
  rel=p.relative_to(RAW)
  return any(x in {'project','xsim.dir','.Xil','.vivado-ai','__pycache__'} or x.startswith('.check') for x in rel.parts) or p.suffix in {'.wdb','.pb','.str','.jou','.dcp','.rtd','.sdb'}
 def main():
- ap=argparse.ArgumentParser();g=ap.add_mutually_exclusive_group();g.add_argument('--verify',action='store_true');g.add_argument('--restore',type=Path,help='new empty destination for the raw CPU_PRIMARY subtree');a=ap.parse_args()
+ ap=argparse.ArgumentParser();g=ap.add_mutually_exclusive_group();g.add_argument('--verify',action='store_true');g.add_argument('--restore',type=Path,help='new empty destination for the raw CPU_PRIMARY subtree');ap.add_argument('--in-flight-dir',action='append',default=[],type=Path,help='raw subtree whose unfinished vendor checkpoints must not be hashed');a=ap.parse_args()
+ inflight=[(ROOT/p).resolve() for p in a.in_flight_dir]
+ for p in inflight:p.relative_to(RAW.resolve())
  if a.restore:
   target=a.restore.resolve();target.mkdir(parents=True,exist_ok=False)
   m=json.loads((DEST/'manifest.json').read_text())
@@ -34,7 +36,9 @@ def main():
   if not p.is_file() or p.is_symlink():continue
   if excluded(p):
    # Large regenerated vendor trees are not represented as complete captured evidence.
-   if p.suffix=='.dcp':omitted.append({'path':str(p.relative_to(ROOT)),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes()),'reason':'regenerable vendor checkpoint; retained in raw workspace, not Git artifact'})
+   if p.suffix=='.dcp' and any(d==p.resolve().parent or d in p.resolve().parents for d in inflight):
+    omitted.append({'path':str(p.relative_to(ROOT)),'bytes_observed':p.stat().st_size,'sha256':None,'reason':'explicit in-flight subtree; checkpoint may still be written, no terminal digest claimed'})
+   elif p.suffix=='.dcp':omitted.append({'path':str(p.relative_to(ROOT)),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes()),'reason':'regenerable vendor checkpoint; retained in raw workspace, not Git artifact'})
    continue
   b=p.read_bytes();h=sha(b);obj=DEST/'objects'/h[:2]/(h+'.gz');obj.parent.mkdir(exist_ok=True,parents=True)
   if not obj.exists():obj.write_bytes(gzip.compress(b,compresslevel=6,mtime=0))
@@ -45,6 +49,6 @@ def main():
   if p.suffix in {'.py','.cpp','.hpp','.h','.sv','.md','.json','.tcl','.xdc'}:sources[str(p.relative_to(ROOT))]=sha(p.read_bytes())
  for p in sorted((ROOT/'docs').glob('*cpu_primary*')):sources[str(p.relative_to(ROOT))]=sha(p.read_bytes())
  guide=ROOT/'docs/CODEX_FPGA_CPU_PRIMARY_AFTER_3C7F96E.md';sources[str(guide.relative_to(ROOT))]=sha(guide.read_bytes())
- m={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'base':'3c7f96e6037030949b729240977c2ced373843c6','raw_root':str(RAW),'files':records,'source_binding':sources,'excluded_regenerable_checkpoints':omitted,'vendor_tree_exclusions':['project','xsim.dir','.Xil','.vivado-ai','*.wdb','*.pb'],'scope':'new raw evidence plus explicit source/output/reference bindings; prior archives linked by hashes, no historical mutation'}
+ m={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'base':'3c7f96e6037030949b729240977c2ced373843c6','raw_root':str(RAW),'files':records,'source_binding':sources,'excluded_regenerable_checkpoints':omitted,'in_flight_subtrees':[str(p.relative_to(ROOT)) for p in inflight],'vendor_tree_exclusions':['project','xsim.dir','.Xil','.vivado-ai','*.wdb','*.pb'],'scope':'new raw evidence plus explicit source/output/reference bindings; prior archives linked by hashes, no historical mutation'}
  (DEST/'manifest.json').write_text(json.dumps(m,indent=2)+'\n');print('ARCHIVED',len(records),'records',len(sources),'source files')
 if __name__=='__main__':main()

@@ -1,5 +1,7 @@
 # CPU-primary complete L1 core
 
+[Current completed results, conclusions and in-flight experiment (2026-11-15)](../../../docs/lookahead_fpga_cpu_primary_progress_20261115.md).
+
 This independent candidate starts at `3c7f96e6037030949b729240977c2ced373843c6`.
 The research goal is `CPU_PRIMARY_GPU_COMPARATOR`; a GPU win is **not** an entry
 condition. GPU evidence is retained. No board measurements are claimed.
@@ -105,3 +107,9 @@ The model runner and service conversion are documented in `model/README.md`.
 Its selected full-batch receipts already exist and are explicitly reused; a
 new physical frequency requires new nanosecond-to-cycle calibration and full
 executions, not dividing the existing cycles by another frequency.
+
+For a progress snapshot while a vendor run is active, pass
+`--in-flight-dir results/fpga_cpu_primary_20261115/full_synth_f_wordmux`
+to `delivery/archive.py`. It explicitly omits terminal checkpoint digests in
+that subtree; completed test/log snapshots remain archived. An in-flight DCP
+must not be interpreted as a verified final checkpoint.
