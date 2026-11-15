@@ -82,7 +82,10 @@ No board-readback or complete production E2 time is established by this cohort.
 Resident completion, one-build construction E2 and the complete VPR Process
 are distinct outcomes. Required preparation, transfers and postprocessing must
 be included in E2 on the actual timeline, without counting already-included
-control twice. Research-only golden verification is not automatically charged
+control twice. The selected CPU reads the same packed descriptor and edge
+images, so their required construction is common preparation for these
+representations, not an FPGA-only cost. Only actual net additional steps can
+consume the conditional resident margin. Research-only golden verification is not automatically charged
 as production work. ALT exact-output agreement supports the retained native
 import/QoR scope; it does not establish bitwise equivalence to STRICT.
 

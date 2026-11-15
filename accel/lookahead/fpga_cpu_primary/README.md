@@ -55,7 +55,8 @@ The selected candidate is now the31-source wordmux closure in
 reuse of160 complete model_g samples are bound by
 `model_calibration_g_wordmux_a/calibration_reuse_contract.json` under the raw
 result root. The previous e core failed actual post-opt capacity at1,351,028
-LUTs; current f synthesis is in progress. Neither result supplies a qualified
+LUTs; current f synthesis completed at1,244,096 LUTs (95.43%). Its terminal
+reports and source binding are audited; standard opt-only is running. Neither result supplies a qualified
 full-core frequency yet. See the closure report for current qualification.
 
 From the repository root, with the retained raw fixtures available, these

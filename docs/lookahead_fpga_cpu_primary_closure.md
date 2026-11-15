@@ -11,14 +11,20 @@ The complete52-sample/11-rejection suite also passed: full outputs, total
 cycles,19 phase totals,3772 intervals and72917 requests/returns match model_g
 exactly. `model_calibration_g_wordmux_a/calibration_reuse_contract.json` binds
 this source to the reverified160 existing model samples without rerunning them.
-Default5ns full-core synthesis started at19:41:48UTC on2026-11-15; fit and clock
-remain unqualified.
+Default5ns full-core synthesis completed at21:03:34UTC on2026-11-15.
+Its actual global footprint is1,244,096 LUTs (95.43%),749,617 FF,1,148 BRAM36
+equivalents,640 URAM and0 DSP. It is below the bare-device LUT capacity by
+59,584. Terminal source/diagnostic collection is complete. Standard opt-only started
+at23:08:21UTC with independently verified clock connectivity; physical fit and
+routed clock remain unqualified.
 
 The preceding dispatcher revision e completed synthesis and standard opt_design.
 It still required1,351,028 LUTs (103.63%),47,348 above U280 capacity, and did not
 enter placement/route. Its actual resource, unplaced timing and OOC reset-buffer
 warning are preserved below. That result motivated the single bounded wordmux
-followup; no area or timing saving is assumed for the new expression.
+followup. The f synthesis result is109,826 LUTs below e under the same
+tool/part/constraint/synthesis options. That is a measured total-core mapping
+difference, not a guaranteed timing improvement or a hierarchy-level attribution.
 
 The independent branch starts at `3c7f96e6037030949b729240977c2ced373843c6` and
 changes the goal to `CPU_PRIMARY_GPU_COMPARATOR`. GPU may remain faster. Full
@@ -166,6 +172,53 @@ per-port request/return conservation and full outputs are preserved in
 `model_full_c_200_base/verification/delivery.json`.
 
 ## Resource and clock qualification
+
+The selected f synthesis has31 matching frozen/current sources and actual
+1,244,096 LUTs (956,040 logic +288,056 memory),749,617 FF,1,148 BRAM36
+equivalents,640 URAM and0 DSP. The original run ended at21:03:34UTC;
+its child PID/start identity is no longer present, and the project reports
+`synth_design Complete!`/100%. It was never reset or relaunched. The stable
+687,584,098-byte terminal DCP SHA-256 is
+`3f2fb57724e3859c0c6ec501c69fa6b54189ebe1a9f363df23dff097fb805989`.
+The31-file binding SHA-256 is
+`87f2d59e5b2ed7b3ed49a035afdaab6f8db0ce26cb86d0f3a4a9f0a00ae1d6f1`.
+Terminal reports and review are in `full_synth_f_wordmux/final_synthesis_review`.
+
+Under the same synthesis flow as e, f reduces the global LUT count by109,826.
+The rebuilt candidate hierarchy changes from249,583 to139,455 LUTs, including
+a lane-FIFO scope decrease of167,130 and route scope increase of57,067. These
+are mapped hierarchy accounting changes, including surrounding mux logic;
+they do not mean that actual FIFO capacity changed. Summing child/self scopes
+is not equivalent to the adjusted global physical LUT count.
+
+Pure-synthesis, unplaced f timing is WNS−6.173ns, WHS−0.091ns and WPWS1.8ns.
+The worst emitted setup path goes from bank29 completion payload cookie bit283
+to the dispatcher error register:11.055ns data delay,48 logic levels, of which
+8.607ns is estimated routing. Three of the20 emitted max paths are external
+configuration-to-state-enable paths. DRC has zero violations; this does not
+qualify a clock. The synthesis netlist had no internal BUFG/MMCM/PLL and lacked
+`HD.CLK_SRC` on `clk`. All1,238,201 sequential clock pins, the `core_clock`
+associated set, and the direct leaf clock-pin set of the `clk` net were compared
+by complete sorted names and are identical, not merely equal in count.
+
+The new implementation-only hook checks this actual connectivity, then declares
+external OOC core-clock source `BUFGCE_X0Y144` on `clk`. It keeps5ns period,
+original I/O delays and uncertainty, and adds no reset clock, timing exception,
+boundary constant or severity waiver. Control BUFGs are classified by their
+actual output loads separately; `IS_CLOCK` matches are clock-like pins, not a
+proof that every matched pin is sequential. Post-opt must recheck actual
+`clk` context. The existing e constraint already declared this core-clock
+source; e's later reset-BUFG warning remains a separate historical finding.
+The frozen new hook passed a40.212s read-only test on f. Two slower auxiliary
+clock queries were interrupted and retained as tool-query diagnostics; the
+synthesis and implementation runs were not interrupted by those actions.
+
+Raw synthesis has8,658 WARNING messages, no ERROR/CRITICAL WARNING, no latches
+and no `Synth8-326`. Manual source review retains142 unresolved anonymous
+constant warnings. A bounded optimized-netlist alias lookup found none of
+those aliases; absence is not evidence of dead statistics, padding or harmless
+removal. No waiver or universal formal-equivalence claim is made. Actual
+post-opt and placed/routed reports remain required for physical qualification.
 
 The preceding e full-core source closure is30 files. Its actual5ns synthesis
 completed on2026-11-15 at18:22:03UTC. The earlier1,254,466-LUT module sum is a
@@ -343,6 +396,19 @@ have no board measurement here. No transfer bandwidth is invented, and no reside
 advantage is promoted to an E2/Process advantage. The separate native E2/Process
 table and ALT/STRICT qualification remain in the companion evidence report.
 
+The selected64-worker CPU also reads the same `descriptors.bin` and `edges.bin`
+from its conversion directory and decodes that packed descriptor during the
+resident solve (`software/cpu.cpp`). The approximately0.64s descriptor
+construction observation is therefore common preparation for this CPU/FPGA
+representation, not an FPGA-only charge. In a nonoverlap diagnostic with truly
+common costs cancelled, net additional FPGA nonresident work must fit within
+the current conditional margins: base186.839/204.738ms or conservative
+23.982/39.519ms for BNN/LSTM. These are budgets at assumed200MHz, not measured
+E2 benefits or guarantees at a different frequency. Transfers, overlap and
+representation-specific differences need their own declared timeline.
+`continuation_model_readiness_a` binds this review to actual CPU commands,
+source and input receipts.
+
 Required host output layout conversion has now been measured separately on the
 Xeon Gold6530 server. The selected complete g outputs, bound to the revised RTL
 calibration/reuse contract, supply8,028,160/8,172,160 valid bytes. The input is
@@ -384,7 +450,7 @@ retaining the measured host environment. It supplies no FPGA clock qualification
 | Optimized CPU thread selection on current allocation | measured, complete |
 | Whole-pair ALT CPU outputs equal frozen golden | exact full batches |
 | Runtime connected production L1 source/function | 52 complete executions and11 rejection checks passed |
-| Complete-core resources fit U280 | e post-opt103.63%; selected f synthesis in progress |
+| Complete-core resources fit U280 | f synthesis95.43%; post-opt and physical implementation pending; e post-opt103.63% retained |
 | Complete-core routed clock | unqualified |
 | RTL/finite-model calibration at200MHz test service | 52 complete cases with exact phase/request schedules |
 | Complete model_g outputs at assumed200MHz | both scenarios,160 samples verified |
