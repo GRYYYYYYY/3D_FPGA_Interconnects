@@ -83,6 +83,20 @@ def source_proofs(src):
   out[name]={'file':str(p),'sha256':sha(p),'all_patterns_present':all(x['matches']for x in matches),'evidence':matches}
  return out
 
+def parse_utilization(text):
+ resources={}
+ lut_notes=[{'line':i,'text':l}for i,l in enumerate(text.splitlines(),1)if 'LUT combining'in l or 'Final LUT count'in l]
+ for i,line in enumerate(text.splitlines(),1):
+  cols=[x.strip()for x in line.split('|')[1:-1]]
+  label=cols[0].rstrip('*').rstrip()if cols else''
+  # Global resource rows have six cells; later per-SLR tables must not replace them.
+  if len(cols)==6 and label in ['CLB LUTs','CLB Registers','Block RAM Tile','URAM','DSPs','LUT as Logic','LUT as Memory'] and label not in resources:
+   resources[label]={'fields':cols[1:],'report_line':line,'line':i,'raw_label':cols[0]}
+   if label=='CLB LUTs':
+    resources[label]['report_footnotes']=lut_notes
+    resources[label]['footnote_interpretation']='Reported LUT count is adjusted for LUT combining; opt_design/physical optimization may reduce the count. This is not a routed count or timing/fit qualification.'if lut_notes else None
+ return resources
+
 def main():
  ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('run',type=Path);a=ap.parse_args();run=a.run.resolve();log=run/'project/cp_full.runs/synth_1/runme.log';text=log.read_text(errors='replace');lines=text.splitlines();src=run/'source'
  binding=json.loads((run/'binding.json').read_text());bindings=[]
@@ -101,12 +115,8 @@ def main():
   entries.append({'index':len(entries)+1,'log_line':i,'severity':severity,'id':mid,'message':msg,'source':str(file)if file else None,'line':ln,'source_context':snippet,'category':cat})
  groups=collections.defaultdict(list)
  for e in entries:groups[(e['id'],e['category'])].append(e)
- resources={};p=run/'utilization.rpt'
- if p.exists():
-  for line in p.read_text().splitlines():
-   fields=[x.strip()for x in line.split('|')]
-   if len(fields)>=7 and fields[1]in ['CLB LUTs','CLB Registers','Block RAM Tile','URAM','DSPs','LUT as Logic','LUT as Memory']:
-    resources[fields[1]]={'fields':fields[2:-1],'report_line':line}
+ p=run/'utilization.rpt'
+ resources=parse_utilization(p.read_text())if p.exists()else{}
  reports={name:{'present':(run/name).exists(),'sha256':sha(run/name)if(run/name).exists()else None}for name in ['utilization.rpt','hierarchy.rpt','synth_timing.rpt','synth_drc.rpt','blackboxes.txt','full_synth.dcp']}
  blackboxes=(run/'blackboxes.txt').read_text().strip().split()if reports['blackboxes.txt']['present']else None
  hierarchy=[]

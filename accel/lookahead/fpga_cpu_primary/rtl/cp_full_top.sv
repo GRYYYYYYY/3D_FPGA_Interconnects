@@ -68,7 +68,7 @@ module cp_full_top(
  wire [15:0] av,ar,tv,tr,pv,pr,stale;wire [255:0] at,pt;wire [511:0] pn;wire [1023:0] pp;
  wire dispatch_ready,pops_done,dispatch_error;wire [7:0] pop_outstanding;
  wire [31:0] take_count,release_count,pop_admitted,pop_returned,pop_delivered,stale_delivered;
- cp_pop_dispatch dispatch(.clk,.reset(core_reset),.wave_start(state==WAVE_START),.bucket,.wave_ready(dispatch_ready),.pops_done,.error(dispatch_error),
+ cp_pop_dispatch_restructured dispatch(.clk,.reset(core_reset),.wave_start(state==WAVE_START),.bucket,.wave_ready(dispatch_ready),.pops_done,.error(dispatch_error),
   .ctrl_valid(dc_valid),.ctrl_ready(dc_ready),.ctrl_op(dc_op),.ctrl_bucket(dc_bucket),.ctrl_ptr(dc_ptr),
   .ctrl_rsp_valid(dr_valid),.ctrl_rsp_ready(dr_ready),.ctrl_rsp_op(br_op),.ctrl_rsp_status(br_status),.ctrl_rsp_bucket(br_bucket),.ctrl_rsp_node(br_node),.ctrl_rsp_arg(br_arg),.ctrl_rsp_ptr(br_ptr),.ctrl_rsp_next(br_next),
   .av,.ar,.tv,.tr,.at,.pv,.pr,.pt,.stale,.pn,.pp,

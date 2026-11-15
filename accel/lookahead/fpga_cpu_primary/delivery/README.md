@@ -9,7 +9,11 @@ Large immutable workload inputs remain at hash-bound existing paths in
 - `prepare_eda.py OUT --period 5` creates a new source freeze, real project,
  5ns clock/boundary constraints and synthesis report script. Existing source
  freezes are rejected rather than overwritten. The selected repaired run is
- `full_synth_c`; original `full_synth_b` is retained with its detected export
+ `full_synth_e_restructured`, with the locally compared dispatcher rewrite;
+ its complete-core RTL and actual resource/clock qualification are pending.
+ `full_synth_c` remains the preceding admin-repaired source; `full_synth_d_no_timing`
+ is its completed resource/path diagnostic (over capacity, unplaced timing
+ failed). Original `full_synth_b` is retained with its detected export
  metadata/ready timing loop, and the first setup attempt is retained as aborted.
 - Use Vivado2022.2 Tcl-mode MCP. The project setup uses the supported explicit
  `set_property -name {...MORE OPTIONS} -value {-mode out_of_context}` syntax.

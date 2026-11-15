@@ -3,6 +3,16 @@
 Status: implementation and verification in progress. This file is updated as
 terminal evidence arrives; it is not a claim of completed FPGA acceleration.
 
+The selected RTL is the bounded dispatcher revision frozen in
+`full_synth_e_restructured`. Six local comparison/regression runs passed,
+including every external output and lifecycle register over1236 protocol
+edges. The revised complete-core52-sample/11-rejection suite also passed;
+output bytes, total cycles,19 phases,3772 phase intervals and72917 requests and
+returns match model_g exactly. `model_calibration_g_restructured_a/calibration_reuse_contract.json`
+explicitly joins the new30-source RTL with the existing160 model_g outputs,
+so the detailed functional/calibration tables below now apply to this revision.
+Default5ns full-core synthesis is active; area and routed clock remain unknown.
+
 The independent branch starts at `3c7f96e6037030949b729240977c2ced373843c6` and
 changes the goal to `CPU_PRIMARY_GPU_COMPARATOR`. GPU may remain faster. Full
 L1 implementation proceeds without the old GPU-win gate. Historical no-go
@@ -314,7 +324,7 @@ remain in the companion evidence report.
 | Optimized CPU thread selection on current allocation | measured, complete |
 | Whole-pair ALT CPU outputs equal frozen golden | exact full batches |
 | Runtime connected production L1 source/function | 32 complete executions and11 rejection checks passed |
-| Complete-core resources fit U280 | pending actual synthesis |
+| Complete-core resources fit U280 | baseline no-timing-driven synthesis over capacity; revised e mapping pending |
 | Complete-core routed clock | unqualified |
 | RTL/finite-model calibration at200MHz test service | 52 complete cases with exact phase/request schedules |
 | Complete model_g outputs at assumed200MHz | both scenarios,160 samples verified |
@@ -332,6 +342,64 @@ The MCP webserver status adapter reports an invalid recursion string with
 Vivado2022.2; that metadata is not used as job status. Direct Tcl proxy
 `get_property STATUS/PROGRESS [get_runs synth_1]` and the source-bound child
 process/run log supply the authoritative state. The existing job is retained.
+
+After default full-core synthesis spent multiple hours in timing optimization
+without a completed resource table, `full_synth_d_no_timing` adds one bounded
+tool-flow diagnostic using installed2022.2 `-no_timing_driven`. Its30 DUT hashes
+and5ns XDC bytes exactly match `full_synth_c`; prior runs were preserved during diagnosis.
+The option disables timing-driven synthesis, not constraints or real paths.
+Any resulting area applies to this mapping option, not a bound on the default
+runs, and cannot qualify a clock without complete implementation reports.
+The decision, installed command help, generated command and process identity
+are retained in that isolated result directory.
+
+The no-timing-driven full-core run completed successfully on 2026-11-15 at
+15:50:57 UTC. Its actual synthesized utilization is 1,870,861 CLB LUT
+(1,582,805 logic + 288,056 memory), 749,284 FF, 1,148 BRAM36 equivalents, 640 URAM
+and 32 DSP. Against 1,303,680 available LUTs, this mapping exceeds capacity by
+567,181 LUTs (43.51%). The tool-adjusted LUT count includes LUT combining;
+post-synthesis opt_design/physical optimization may change it. This is a
+synthesis-stage resource result, not a routed count or a bound on a different
+mapping. `full_synth_d_no_timing/terminal.json` and
+`terminal_cp_full_top_utilization_synth.rpt` retain the exact evidence.
+The rebuilt hierarchy reports 278,419 LUTs in dispatch and 354,002 in bank
+completion rows. These rows do not isolate FIFO cost: actual worst-path cells
+include `completion/bad_result...` logic between dispatcher registers. Immediate
+child/self LUT rows sum 16,384 above the global count, so the global report
+remains authoritative and these rows must not be treated as independent area
+blocks. The worst reported unplaced setup path starts at
+`dispatch/result_rr_reg[0][1]/C` and ends at `dispatch/error_reg/D`: slack
+-273.469 ns, data path 278.351 ns, 1,103 logic levels, with 16 DSP segments in
+the return/error dependency chain. This is not routed timing or an Fmax.
+
+`dispatcher_restructure_decision_a.json` and `dispatcher_path_confirmation_a.json`
+authorize one isolated dispatcher revision: equivalent rank-based grants,
+independent return-group selection/error aggregation and static unpacked response
+buses with bounded bank indices. Pre-edge capacity, identities, ledger rejection
+without fallback, and all handshakes must remain unchanged. Six bounded local
+XSim runs have now passed, including original-versus-revised output/lifecycle
+comparisons,8192 assignment patterns,640 return patterns and the no-fallback
+rejection case. These are reset-reachable/defined-payload simulation checks,
+not exhaustive formal or arbitrary-X equivalence. The variant is selected for
+integration validation. The new full-core52-sample/11-rejection calibration
+subsequently passed with no model change or empirical correction. All160
+complete model samples and source/binary/output bindings were reverified for
+explicit reuse. Physical results remain necessary before qualification;
+no predicted saving, hardware clock or CPU speedup is claimed from the rewrite.
+
+After this complete integration check, the preceding default b/c and standalone
+dispatcher runs were explicitly cancelled as superseded. Their original Linux
+birth identities were checked, pre-signal logs frozen, and targeted pidfd SIGTERM
+used; all signalled processes exited. These cancellations are neither completed
+mapping results nor measured synthesis failures. Each isolated run retains a
+`cancelled_superseded_a` decision, log snapshot and terminal receipt. Only e
+continues. No historical branch job or artifact was modified.
+
+The read-only `delivery/audit_route.py REPORT_DIR --out NEW_JSON` collects
+source-bound resource, setup/hold/pulse, routing, clock, constraint and diagnostic
+evidence after reports exist. It always requires manual qualification; missing
+fields remain unknown. Its `route_audit_dev_a` historical/synthetic parser checks
+are software validation only, not new complete-core implementation evidence.
 
 This source/evidence checkpoint is not final completion.
 `checkpoint_full_g_batches.json` records completed model_g batches and the

@@ -46,6 +46,7 @@ def run_modes(skip_negatives=False,skip_stress=False):
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('fixtures',type=Path);ap.add_argument('out',type=Path)
  ap.add_argument('--frozen',type=Path,help='selected frozen30-file DUT directory; copied and hashed, never modified')
+ ap.add_argument('--sources-list',type=Path,help='explicit30-file source closure JSON; default delivery/sources.json')
  ap.add_argument('--max-cycles',type=int,default=2000000)
  ap.add_argument('--period-ns',type=positive_decimal,default=Decimal('5'))
  ap.add_argument('--latency-ns',type=positive_decimal,default=Decimal('80'))
@@ -64,14 +65,15 @@ def main():
  if a.frozen:a.frozen=a.frozen.resolve()
  a.out.mkdir(parents=True,exist_ok=False);source=a.out/'source';source.mkdir();commands=[];rows=[]
  dump(a.out/'service_config.json',service)
- closure=json.loads((S.parent/'delivery/sources.json').read_text());bindings={}
+ closure_path=(a.sources_list or S.parent/'delivery/sources.json').resolve();closure=json.loads(closure_path.read_text());assert len(closure)==30 and len(set(closure))==30
+ shutil.copyfile(closure_path,a.out/'sources.json');bindings={}
  for n in ['run_full_core.py','analyze_full.py']:shutil.copyfile(S/n,a.out/n)
  dump(a.out/'driver_binding.json',{n:sha(a.out/n)for n in ['run_full_core.py','analyze_full.py']})
  for n in closure:
   p=(a.frozen/Path(n).name)if a.frozen else ROOT/n
   dest=source/Path(n).name;assert not dest.exists(),n;shutil.copyfile(p,dest);bindings[n]=sha(dest)
  for n in ['cp_sparse_memory.sv','tb_full_core.sv']:shutil.copyfile(S/n,source/n);bindings[str((S/n).relative_to(ROOT))]=sha(source/n)
- dump(a.out/'binding.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source':bindings,'fixture_manifest_sha256':sha(a.fixtures/'manifest.json'),'full_production_parameters':True,'banks':64,'lanes':64,'backend':'XSim2022.2','simulation':'behavioral','clock_period_ns':service['clock_period_ns'],'clock_is_timing_proof':False,'max_cycles':a.max_cycles,'service':service,'selected_tests':modes,'frozen_source_directory':str(a.frozen)if a.frozen else None})
+ dump(a.out/'binding.json',{'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source':bindings,'fixture_manifest_sha256':sha(a.fixtures/'manifest.json'),'full_production_parameters':True,'banks':64,'lanes':64,'backend':'XSim2022.2','simulation':'behavioral','clock_period_ns':service['clock_period_ns'],'clock_is_timing_proof':False,'max_cycles':a.max_cycles,'service':service,'selected_tests':modes,'frozen_source_directory':str(a.frozen)if a.frozen else None,'source_closure_sha256':sha(a.out/'sources.json')})
  env=dict(os.environ,LD_PRELOAD='/lib/x86_64-linux-gnu/libudev.so.1')
  def execute(cmd,log):
   commands.append({'argv':cmd,'cwd':str(a.out),'log':str(log),'start_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()});dump(a.out/'commands.json',commands);print('RUN',log,flush=True)

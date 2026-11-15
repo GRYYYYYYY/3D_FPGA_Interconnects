@@ -20,7 +20,7 @@ def closure():
         # Module names are exact identifiers; traversing references to known modules
         # avoids confusing function calls, typedefs and generate constructs.
         for name in mods:
-            if name!=m and re.search(r'\b'+re.escape(name)+r'\s*(?:#\s*\(|\w+\s*\()',t):visit(name)
+            if name!=m and re.search(r'\b'+re.escape(name)+r'\b\s*(?:#\s*\(|\w+\s*\()',t):visit(name)
     visit('cp_full_top')
     assert not missing,missing
     return sorted({str(p.relative_to(ROOT)) for p in found.values()})

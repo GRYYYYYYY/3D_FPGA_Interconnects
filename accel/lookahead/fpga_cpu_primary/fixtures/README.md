@@ -275,3 +275,30 @@ one context-idle register visibility edge in this tail, consistent with the
 reported model FLUSH21539 discrepancy. It does not assign every other model
 error to that cause. No model or DUT is changed. `probe_analysis.json` contains
 source-bound measurements and distinguishes this inference from measured values.
+
+`run_full_core.py --sources-list FILE` now accepts an explicit30-file closure,
+which it copies into each run's `sources.json` and hashes. Use the closure that
+matches `--frozen`, particularly when replaying historical runs after the
+selected dispatcher changes; the live delivery list may refer to a different
+module. The restructured dispatcher run uses
+`fixtures_restructured_source_a/sources.json`, whose30 source hashes exactly
+match `full_synth_e_restructured/binding.json`. Only the dispatcher file and
+the complete top's dispatcher module reference differ from the previous DUT.
+`compare_full.py --report-name comparison_previous.json` records explicit old
+and new run paths, along with removed/added source names, for those comparisons.
+
+The selected `cp_pop_dispatch_restructured` integration is now fully verified:
+`fixtures_restructured_source_a/verification.json` records terminal PASS for
+52 native samples (base20, stress12, conservative20) plus11 configuration
+rejections. `fixtures_restructured_a/comparison_previous.json` is IDENTICAL
+against `fixtures_full_b` for all14 invocations;
+`fixtures_restructured_conservative_a/comparison_previous.json` is IDENTICAL
+against `fixtures_conservative_a` for both complete batches. Every actual
+output, complete transaction/retirement/completion trace,19-phase/sample/kind
+CSV and absolute simulation finish time is unchanged. Measured cycles remain
+157312/268916/276758 for base d3/base d4/stress d4 and162025/282252 for the two
+conservative batches. Each run retains terminal, source/service bindings,
+process identity/completion, calibration and physical service audits. Their30
+DUT hashes exactly equal `full_synth_e_restructured`; no DUT was edited by the
+fixture workflow, and no old experiment or result was restarted or overwritten.
+This is still5ns conditional functional evidence, not achieved-clock proof.

@@ -7,12 +7,13 @@ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def key(r):return r['case'],r['negative'],r['stress']
 def directory(root,r):return root/(r['case']+'_'+r['negative']+('_stress'if r['stress'] else''))
 def main():
- p=argparse.ArgumentParser();p.add_argument('old',type=Path);p.add_argument('new',type=Path);p.add_argument('--allow-partial',action='store_true');a=p.parse_args();oldterm=json.loads((a.old/'terminal.json').read_text());assert oldterm['status']=='PASS'
+ p=argparse.ArgumentParser();p.add_argument('old',type=Path);p.add_argument('new',type=Path);p.add_argument('--allow-partial',action='store_true');p.add_argument('--report-name',default='comparison_full_a.json');a=p.parse_args();assert Path(a.report_name).name==a.report_name;oldterm=json.loads((a.old/'terminal.json').read_text());assert oldterm['status']=='PASS'
  name='progress.json'if a.allow_partial else'terminal.json';newdoc=json.loads((a.new/name).read_text());newrows=newdoc if a.allow_partial else newdoc['results'];oldrows={key(r):r for r in oldterm['results']}
  if not a.allow_partial:assert newdoc['status']=='PASS'and set(key(r)for r in newrows)==set(oldrows)
  ob=json.loads((a.old/'binding.json').read_text());nb=json.loads((a.new/'binding.json').read_text());assert ob['fixture_manifest_sha256']==nb['fixture_manifest_sha256'];changed=[]
  for n,v in ob['source'].items():
   if v!=nb['source'].get(n):changed.append({'file':n,'old':v,'new':nb['source'].get(n)})
+ for n in sorted(set(nb['source'])-set(ob['source'])):changed.append({'file':n,'old':None,'new':nb['source'][n]})
  result=[];differences=[]
  for r in newrows:
   assert r['pass']and key(r)in oldrows;od=directory(a.old,r);nd=directory(a.new,r)
@@ -33,6 +34,6 @@ def main():
   if not time_equal:differences.append({'case':r['case'],'negative':r['negative'],'stress':r['stress'],'file':'absolute_simulation_finish_time'})
   result.append({'case':r['case'],'negative':r['negative'],'stress':r['stress'],'old_finish_ps':ot.group(1),'new_finish_ps':nt.group(1),'finish_time_equal':time_equal,'files':entries})
  status=('PARTIAL_IDENTICAL'if a.allow_partial else'IDENTICAL')if not differences else'DIFFERENT'
- out={'status':status,'scope':'complete native outputs, exact cycle/phase/kind CSVs and accepted logical/physical/retirement/completion event traces; absolute simulated finish time','old_binding_sha256':sha(a.old/'binding.json'),'new_binding_sha256':sha(a.new/'binding.json'),'source_changes':changed,'cases_compared':len(result),'results':result,'differences':differences}
- (a.new/('comparison_partial.json'if a.allow_partial else'comparison_full_a.json')).write_text(json.dumps(out,indent=2)+'\n');print(status,len(result),'cases',differences);assert not differences
+ out={'status':status,'old_run':str(a.old.resolve()),'new_run':str(a.new.resolve()),'scope':'complete native outputs, exact cycle/phase/kind CSVs and accepted logical/physical/retirement/completion event traces; absolute simulated finish time','old_binding_sha256':sha(a.old/'binding.json'),'new_binding_sha256':sha(a.new/'binding.json'),'source_changes':changed,'cases_compared':len(result),'results':result,'differences':differences}
+ (a.new/('comparison_partial.json'if a.allow_partial else a.report_name)).write_text(json.dumps(out,indent=2)+'\n');print(status,len(result),'cases',differences);assert not differences
 if __name__=='__main__':main()
