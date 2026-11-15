@@ -1,0 +1,84 @@
+{
+  "research_goal": "CPU_PRIMARY_GPU_COMPARATOR",
+  "requires_gpu_win": false,
+  "base": "3c7f96e6037030949b729240977c2ced373843c6",
+  "tool": "Vivado2022.2",
+  "part": "xcu280-fsvh2892-2L-e",
+  "candidate": "L1 full connected core",
+  "initial_clock_period_ns": 5,
+  "physical_ports": 32,
+  "physical_lanes": 64,
+  "groups": 16,
+  "T": 128,
+  "D": 128,
+  "ready": 128,
+  "target": 128,
+  "E": 256,
+  "beat": 512,
+  "K_per_bank": 8,
+  "banks": 64,
+  "directory_members_per_bank": 8192,
+  "memory_scenarios": [
+    {
+      "name": "base",
+      "latency_ns": 80,
+      "issue_interval_ns": 5
+    },
+    {
+      "name": "conservative_diagnostic",
+      "latency_ns": 160,
+      "issue_interval_ns": 10
+    }
+  ],
+  "memory_service_evidence_type": "declared_simulation_assumption",
+  "core_scope": "complete_core_ooc_excluding_platform_shell_PCIe_and_HBM_controller",
+  "timing_boundary": "RESIDENT_COMPLETE_BATCH_V2 including sample state initialization,cost loads,all waves,canonical/directory retirement,output writes and ACK drain; host input preparation and full readback separate",
+  "inputs": {
+    "native_d3_w8": {
+      "workload": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d3_w8/workload.bin",
+      "workload_sha256": "50b8cedc8f36d23bdcedee4bd861e72d4b025bd46b3b02e977adf0baeceecc9b",
+      "golden": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/results/fpga_sim_restart_20261111T231000Z/replay/native_d3_w8_F1.bin",
+      "golden_sha256": "02884f8cb4ec3ee2031ab3131d637f596586cf2fa73555f83da686aa94178f51",
+      "jobs": 8,
+      "cells": 18,
+      "baseline_profile_sha256": "cc1e598d9077a521bac4ed5da0037b7d255104547a28fac32c1fb98b5f5ad07c"
+    },
+    "native_d4_w8": {
+      "workload": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_round3_20261108T141500Z/native_d4_w8/workload.bin",
+      "workload_sha256": "d28970a7ec641324d17e9371b8d29bb9e51230836076c98fb5d79573dad56678",
+      "golden": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/results/fpga_sim_restart_20261111T231000Z/replay/native_d4_w8_F1.bin",
+      "golden_sha256": "41a34eaadbe7fd1d70cf86963506366e4633f9b47d9c9c6394a8255af02b5692",
+      "jobs": 12,
+      "cells": 32,
+      "baseline_profile_sha256": "e4cca95cc9d3738fcd97fd4e6b87347a498c9e0918ede8870373353e9a8836ba"
+    },
+    "bnn_export": {
+      "workload": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects/results/lookahead_accel_20261108T125500Z/bnn_export/workload.bin",
+      "workload_sha256": "71e0a23a52a335992523a032b3228d09c1d9cbfc73579cb03a71313a68f43bee",
+      "golden": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/results/fpga_sim_restart_20261111T231000Z/replay/bnn_export_F1.bin",
+      "golden_sha256": "a8ca4003a3b015145635a3f776bb62a3aec1ec2121a1fbfc8712d2a2dc1c8c3f",
+      "jobs": 40,
+      "cells": 25088,
+      "baseline_profile_sha256": "45362ce4e591fefdd778a6bb1158946b3b937ec163d9e1bcbf96b611c65ff0b7"
+    },
+    "lstm_s2": {
+      "workload": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/worker/lstm_s2_alt_cpu_qualification/native_input.bin",
+      "workload_sha256": "a0d5ff6c568dad262ae73918c67916440d59a5906e0abe80aca4d6e5f8e3daa1",
+      "golden": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_SIM_RESTART_R62/results/fpga_sim_restart_20261111T231000Z/replay/lstm_s2_F1.bin",
+      "golden_sha256": "6b2acd7718d880075d653b3b83f1fa3abb5161f6f346ed39c3aa1285160a95cf",
+      "jobs": 40,
+      "cells": 25538,
+      "baseline_profile_sha256": "71b2a1be20579c9a4a3527434222658a983e1d5af72c8ff85985aa5a5cd81a27"
+    }
+  },
+  "board_measured": false,
+  "full_core_functional_verified": false,
+  "full_core_fit_verified": false,
+  "full_core_routed_clock_verified": false,
+  "rtl_model_calibrated": false,
+  "full_batch_outputs_verified": false,
+  "qualified_clock_mhz": null,
+  "fpga_assumed_frequency_seconds": null,
+  "fpga_resident_estimated_seconds": null,
+  "cpu_primary_goal_met_in_simulated_scope": false
+}

@@ -1,0 +1,56 @@
+{
+  "utc": "2026-11-15T08:00:59.342600+00:00",
+  "tool": "Vivado XSim2022.2",
+  "environment": {
+    "LD_PRELOAD": "/lib/x86_64-linux-gnu/libudev.so.1"
+  },
+  "tests": [
+    {
+      "directory": "evidence/protocol",
+      "testbench": "tb_pop_dispatch.sv",
+      "status": "PASS",
+      "result": [
+        "TEST_PASS POP_DISPATCH waves=3 takes=192 releases=508 POPs=508 genwraps=121 max_admit=8 peak_outstanding=128 cycles=1236"
+      ],
+      "source_sha256": {
+        "cp_pop_dispatch.sv": "b1f566c826593388b06d73c3733446a3918bc449db98fb5f5264b2287e0bade4",
+        "tb_pop_dispatch.sv": "c96d284b628ac642ac573e767d2b07a786155ca3de4467a64daca5e535e56a2a"
+      },
+      "logs_sha256": {
+        "compile_final.log": "f6b41fdd1c57eee588ed43dba2df440dd6fe9ddb75224964ac86ec2329ac86b9",
+        "elaborate.log": "49d4ec5a69fb5a92d7a7b492072045f10ba3c2b85bbc80c835a80078b62fe17b",
+        "simulate.log": "243309cf712839011368e9de6370981e624a026a486c270182e53e679733d56f"
+      },
+      "commands": [
+        "xvlog --sv ../cp_pop_dispatch.sv ../tb_pop_dispatch.sv",
+        "xelab tb_pop_dispatch -s dispatch_test --timescale 1ns/1ps",
+        "xsim dispatch_test -tclbatch run.tcl"
+      ],
+      "original_execution_directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_CPU_PRIMARY/accel/lookahead/fpga_cpu_primary/dispatch/.check_a"
+    },
+    {
+      "directory": "evidence/rejection",
+      "testbench": "tb_dispatch_reject.sv",
+      "status": "PASS",
+      "result": [
+        "TEST_PASS DISPATCH_REJECT pointer8193 full20bit_unowned_cookie"
+      ],
+      "source_sha256": {
+        "cp_pop_dispatch.sv": "b1f566c826593388b06d73c3733446a3918bc449db98fb5f5264b2287e0bade4",
+        "tb_dispatch_reject.sv": "91058b9674e3704a3802021a78406d008a4221c792fc86187b2fb03cf0329421"
+      },
+      "logs_sha256": {
+        "compile.log": "38c38cc1092d9e3c91b30173d2095e42600efcc37026cc88ce3cf064dd3ab22b",
+        "elaborate.log": "b76b248f104e39441ee749876f3b51621b0046834477690a60e32894ba28fc7e",
+        "simulate.log": "377e18fdbc2889c7c176965157179cdbbeafd4f8bf96a7179edc81f4152456e4"
+      },
+      "commands": [
+        "xvlog --sv ../cp_pop_dispatch.sv ../tb_dispatch_reject.sv",
+        "xelab tb_dispatch_reject -s reject_test -mt 2 --timescale 1ns/1ps",
+        "xsim reject_test -tclbatch run.tcl"
+      ],
+      "original_execution_directory": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_CPU_PRIMARY/accel/lookahead/fpga_cpu_primary/dispatch/.check_reject"
+    }
+  ],
+  "scope": "standalone protocol RTL, finite TB endpoints; not complete native algorithm/clock qualification"
+}
