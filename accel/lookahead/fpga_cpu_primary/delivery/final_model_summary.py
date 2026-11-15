@@ -102,11 +102,29 @@ def memory_contract(options, config):
     latency, gap = (Decimal(str(scenario[k])) for k in ['latency_ns', 'issue_interval_ns'])
     check(all(x.is_finite() and x > 0 for x in [latency, gap]), 'invalid memory nanoseconds')
     cycles = lambda ns: int((ns * mhz / Decimal(1000)).to_integral_value(rounding=ROUND_CEILING))
+    latency_cycles, issue_cycles = cycles(latency), cycles(gap)
+    latency_implemented_ns = Decimal(latency_cycles) * 1000 / mhz
+    issue_implemented_ns = Decimal(issue_cycles) * 1000 / mhz
+    ports, beat_bytes = config['physical_ports'], 32
+    requests_per_second = mhz * 1000000 / issue_cycles
+    bytes_per_second = requests_per_second * beat_bytes
     return {'frequency_mhz': float(mhz), 'scenario': scenario['name'],
             'latency_ns': float(latency), 'issue_interval_ns': float(gap),
-            'latency_cycles': cycles(latency), 'issue_cycles': cycles(gap),
+            'latency_cycles': latency_cycles, 'issue_cycles': issue_cycles,
+            'latency_implemented_ns': float(latency_implemented_ns),
+            'issue_implemented_ns': float(issue_implemented_ns),
             'conversion': 'ceil(ns * MHz / 1000); checked against every actual sample',
-            'physical_ports': config['physical_ports'], 'beat_bytes': 32, 'credits_per_port': 32,
+            'physical_ports': ports, 'beat_bytes': beat_bytes, 'credits_per_port': 32,
+            'issue_service_ceiling': {
+                'evidence_type': 'ideal_contract_offer_upper_bound_not_measured_HBM',
+                'basis': 'one nominal 32-byte transaction per port per implemented issue interval; GB/s uses 10^9 bytes',
+                'per_port_requests_per_second': float(requests_per_second),
+                'all_ports_requests_per_second': float(requests_per_second * ports),
+                'per_port_bytes_per_second': float(bytes_per_second),
+                'all_ports_bytes_per_second': float(bytes_per_second * ports),
+                'per_port_GB_per_second': float(bytes_per_second / 1000000000),
+                'all_ports_GB_per_second': float(bytes_per_second * ports / 1000000000),
+                'limitations': 'Issue-spacing ceiling only, assuming every port has ready traffic and no credit, queue, response, arbitration or jitter stalls. Reads and writes share this issue budget. Nominal transaction bytes exclude protocol overhead; this is neither measured HBM bandwidth nor effective random-RMW/useful-output throughput, which may require multiple transactions.'},
             'jitter': options['jitter'], 'evidence_type': 'declared_simulation_assumption'}
 
 
@@ -115,6 +133,30 @@ def coverage(case, inp, rows):
     ids = [x['sample'] for x in rows]
     check(all(integer(q) for q in ids) and sorted(ids) == list(range(40)),
           f'NOT_FULL40: {case} requires exactly one receipt for each sample 0..39; got {ids}')
+
+
+def frequency_telemetry(raw_hz, mhz):
+    """Validate only the known defaultfloat(6) loss; never infer run MHz."""
+    expected_hz = mhz * 1e6
+    check(type(raw_hz) in (int, float) and math.isfinite(raw_hz) and raw_hz > 0,
+          'invalid raw finite frequency')
+    check(math.isfinite(expected_hz) and expected_hz > 0, 'invalid bound frequency')
+    serialized_hz = float(format(expected_hz, '.6g'))
+    exponent = Decimal(str(expected_hz)).adjusted()
+    half_quantum = float(Decimal('0.5').scaleb(exponent - 5))
+    tolerance = half_quantum + 2 * math.ulp(expected_hz)
+    error = abs(raw_hz - expected_hz)
+    # This is stricter than accepting arbitrary nearby numbers: the telemetry
+    # must be exact or precisely the expected six-significant-digit rendering.
+    check(raw_hz in (expected_hz, serialized_hz) and error <= tolerance,
+          'actual finite frequency mismatch beyond known six-digit serialization')
+    return {'raw_frequency_hz': raw_hz, 'bound_frequency_hz': expected_hz,
+            'expected_six_significant_digit_frequency_hz': serialized_hz,
+            'absolute_error_hz': error, 'absolute_tolerance_hz': tolerance,
+            'nominal_half_quantum_hz': half_quantum,
+            'accepted_as': 'exact' if raw_hz == expected_hz else 'known_six_significant_digit_serialization',
+            'reason': 'Frozen model finite.hpp emits frequency_hz with defaultfloat precision6 before setting precision15 for conditional_predicted_seconds. Only this field receives a serialization allowance; bound/command MHz, reported seconds and ceil service cycles retain their existing checks.',
+            'acceptance_rule': 'raw equals bound Hz or its six-significant-digit rendering, within half the last retained decimal unit plus two binary64 ULPs'}
 
 
 def sample(audit, directory, case, q, row, binding, inp, contract, golden):
@@ -148,7 +190,8 @@ def sample(audit, directory, case, q, row, binding, inp, contract, golden):
     check(all(integer(v) for v in finite['phase_cycles'].values()) and sum(finite['phase_cycles'].values()) == total, 'legacy phase sum')
     check(phases['latency_cycles'] == contract['latency_cycles'] and phases['gap_cycles'] == contract['issue_cycles'], 'ceil memory cycle mismatch')
     check(phases['memory_cycle_offset'] == row['memory_cycle_offset'], 'memory edge offset')
-    check(finite['frequency_hz'] == contract['frequency_mhz'] * 1e6 and finite['latency_ns'] == contract['latency_ns'] and finite['gap_ns'] == contract['issue_interval_ns'], 'actual finite service mismatch')
+    frequency_telemetry(finite['frequency_hz'], contract['frequency_mhz'])
+    check(finite['latency_ns'] == contract['latency_ns'] and finite['gap_ns'] == contract['issue_interval_ns'], 'actual finite service mismatch')
     seconds = total / (contract['frequency_mhz'] * 1e6)
     check(math.isclose(finite['conditional_predicted_seconds'], seconds, rel_tol=1e-10, abs_tol=1e-12), 'finite seconds mismatch')
     check(phases['pop_admitted'] == phases['pop_returned'] == phases['pop_delivered'] == finite['pop_transactions'], 'POP drain conservation')
@@ -156,6 +199,74 @@ def sample(audit, directory, case, q, row, binding, inp, contract, golden):
     check(len(finite['port_stats']) == 32 and all(p['issued'] == p['returned'] for p in finite['port_stats']), 'physical request drain')
     check(all(integer(finite[k]) for k in COUNTS), 'invalid event count')
     return data, finite, phases
+
+
+class ResourceObservations:
+    """Sum actual counters; retain per-endpoint occupancy maxima and provenance."""
+    def __init__(self):
+        self.traffic = {}
+        self.ports = [{'port': p, 'counter_sums': {}, 'peaks': {}} for p in range(32)]
+        self.banks = [{'bank': b, 'counter_sums': {}, 'peaks': {}, 'fifo_peaks': []}
+                      for b in range(64)]
+        self.batch_peaks = {}
+        self.samples = 0
+
+    @staticmethod
+    def peak(dest, key, value, q):
+        check(integer(value), 'invalid resource peak')
+        if key not in dest or value > dest[key]['value']:
+            dest[key] = {'value': value, 'first_sample_reaching_maximum': q}
+
+    def add(self, q, finite, core):
+        check(len(finite['port_stats']) == 32 and len(finite['bank_stats']) == 64
+              and len(finite['directory_bank_peaks']) == 64, 'resource endpoint counts')
+        names, rows = finite['memory_kind_names'], finite['traffic']
+        check(len(names) == len(set(names)) == len(rows), 'resource traffic kinds')
+        check(not self.traffic or set(names) == set(self.traffic), 'changed traffic kinds')
+        for kind, row in zip(names, rows):
+            check(len(row) == 32 and all(integer(x) for x in row), 'resource traffic ports')
+            old = self.traffic.setdefault(kind, [0] * 32)
+            self.traffic[kind] = [a + b for a, b in zip(old, row)]
+        for p, stat in enumerate(finite['port_stats']):
+            dest = self.ports[p]
+            check(sum(row[p] for row in rows) == stat['issued'] == stat['returned'],
+                  'per-port traffic/issued/returned conservation')
+            for key, value in stat.items():
+                check(integer(value), 'invalid port observation')
+                if key.endswith('_peak'):
+                    self.peak(dest['peaks'], key, value, q)
+                else:
+                    dest['counter_sums'][key] = dest['counter_sums'].get(key, 0) + value
+        for b, stat in enumerate(finite['bank_stats']):
+            dest = self.banks[b]
+            for key, value in stat.items():
+                if key == 'fifo_peaks':
+                    check(not dest['fifo_peaks'] or len(dest['fifo_peaks']) == len(value), 'bank FIFO vector length')
+                    if not dest['fifo_peaks']:
+                        dest['fifo_peaks'] = [{} for _ in value]
+                    for k, count in enumerate(value):
+                        self.peak(dest['fifo_peaks'][k], 'occupancy', count, q)
+                elif key == 'last_retire':
+                    # This timestamp restarts with each sample; never sum it.
+                    self.peak(dest['peaks'], 'last_retire_sample_relative_cycle', value, q)
+                elif key.endswith('_peak'):
+                    self.peak(dest['peaks'], key, value, q)
+                else:
+                    check(integer(value), 'invalid bank observation')
+                    dest['counter_sums'][key] = dest['counter_sums'].get(key, 0) + value
+            self.peak(dest['peaks'], 'directory_members', finite['directory_bank_peaks'][b], q)
+        for key in ['output_ACK_peak_per_cycle', 'directory_peak', 'descriptor_slots_peak', 'ready_peak']:
+            self.peak(self.batch_peaks, key, finite[key], q)
+        self.peak(self.batch_peaks, 'pop_command_hold_peak', core['pop_command_hold_peak'], q)
+        for k, value in enumerate(finite['fork_H_E_M_slots_peak']):
+            self.peak(self.batch_peaks, f'fork_H_E_M_slots_peak_index_{k}', value, q)
+        self.samples += 1
+
+    def report(self):
+        return {'samples': self.samples, 'traffic_by_kind_and_port': self.traffic,
+                'physical_ports': self.ports, 'canonical_banks': self.banks,
+                'batch_peaks': self.batch_peaks,
+                'aggregation_scope': 'Counters sum serial sample observations at the same physical endpoint. Peaks are maxima across samples, with the first sample reaching each maximum; they are never summed. FIFO/fork vector indices preserve raw finite.json order. last_retire is a sample-relative cycle, not an additive duration. Stall/occupancy counters may overlap across endpoints/services and are not removable batch wall time.'}
 
 
 def model(audit, directory):
@@ -192,9 +303,11 @@ def model(audit, directory):
         check({p.name for p in (directory / case).glob('receipt_*.json')} == expected_receipts, 'unexpected/missing receipt file')
         check({p.name for p in (directory / case).glob('sample_*') if p.is_dir()} == {f'sample_{q}' for q in range(40)}, 'unexpected/missing sample directory')
         phase_sum = [0] * len(PHASES)
+        resources = ResourceObservations()
         legacy_sum, counts, traffic = collections.Counter(), collections.Counter(), collections.Counter()
         joined = hashlib.sha256()
         cycles = []
+        frequency_observations = []
         offset = options['memory_offset'] if options['memory_offset'] is not None else (42 if options['jitter'] else 0)
         for q, row in enumerate(rows):
             data, finite, core = sample(audit, directory, case, q, row, binding, inp, contract, golden)
@@ -203,6 +316,8 @@ def model(audit, directory):
                 offset += row['cycles']
             joined.update(data)
             cycles.append(finite['cycles'])
+            frequency_observations.append({'sample': q, **frequency_telemetry(finite['frequency_hz'], contract['frequency_mhz'])})
+            resources.add(q, finite, core)
             phase_sum = [a+b for a, b in zip(phase_sum, core['phase_cycles'])]
             legacy_sum.update(finite['phase_cycles'])
             counts.update({k: finite[k] for k in COUNTS})
@@ -218,11 +333,12 @@ def model(audit, directory):
         results[case] = {'complete_batch': True, 'samples': 40, 'sample_ids': list(range(40)),
                          'input': inp, 'full_output_sha256': joined.hexdigest(), 'full_output_bytes': len(golden),
                          'total_cycles': total, 'sample_cycles': cycles,
+                         'frequency_serialization_checks': frequency_observations,
                          'fpga_assumed_frequency_seconds': secs,
                          'core_phase_cycles': dict(zip(PHASES, phase_sum)),
                          'core_phase_seconds_at_assumed_frequency': {k: v/(contract['frequency_mhz']*1e6) for k,v in zip(PHASES,phase_sum)},
                          'legacy_phase_cycles': dict(legacy_sum), 'counts': dict(counts),
-                         'requests_by_kind': dict(traffic)}
+                         'requests_by_kind': dict(traffic), 'resource_observations': resources.report()}
     return {'directory': str(directory), 'binding_sha256': audit.digest(directory / 'binding.json'),
             'terminal_sha256': audit.digest(directory / 'terminal.json'), 'binary_sha256': binding['binary_sha256'],
             'source_sha256': binding['source_sha256'], 'memory_contract': contract, 'cases': results}

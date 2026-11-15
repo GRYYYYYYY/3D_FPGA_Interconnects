@@ -238,3 +238,40 @@ parameterized TB's default5000ps/16/1 behavior. `process_identity.json` and
 `process_completion.json` preserve the experiment's start identity and terminal
 receipt. The original `full_a` proof files remain unchanged. This repair
 regression still does not establish an achieved5ns hardware clock.
+
+`fixtures_conservative_a` is terminal PASS for both complete native graphs at
+conditional5ns and the predeclared160ns latency/10ns issue contract (32/2 core
+cycles), using exactly the same30 DUT +2 TB source hashes as `fixtures_full_b`.
+It deliberately skips stress and configuration negatives, reusing their prior
+proof. d3 completes in162025 cycles (+4713, +2.996% vs baseline), d4 in282252
+(+13336, +4.959%); all output bytes and waves/parents/candidates/commits/retire/
+event/physical-traffic counts match the baseline.
+
+`audit_service.py NEW_RUN --baseline BASE_RUN` audits actual physical handshakes
+and writes `service_audit.json` only in NEW_RUN. This run observed exactly32
+cycles for every one of4192/21511 physical ACKs and minimum issue gap2 on both
+graphs. The audit includes per-sample cycle and phase deltas, counter deltas,
+output hashes and source bindings. Per-case `calibration.json` retains the
+complete logical service distributions (minimum ordinary/EDGE/DESC41/50/51
+cycles). `process_completion.json` records terminal hashes and process identity.
+These are behavioral cycles under explicit simulated memory assumptions;
+5ns is not a qualified complete-core hardware clock.
+
+`fixtures_drain_probe_a` adds only `drain_probe.svh` observation logic to a copy
+of the already-passing TB. `run_drain_probe.py` freezes the30 unchanged c DUT
+sources, the unpatched TB and the exact patch, then runs the complete conservative
+d3 batch. All8 samples pass; complete outputs, event traces, cycle/phase/kind
+CSVs and absolute finish time are identical to the original conservative run.
+Three CSVs sample q2 relative21520..21545 at each posedge **before NBA updates**:
+all global drain gates/T-D live summaries and detailed front10/front11 state.
+
+`analyze_drain_probe.py` validates all26 rows and the registered-idle recurrence.
+Measured sequence: front10 DESC input21531, launch21532, D empty/idle0 high21537,
+registered idle high21538; front11 corresponding cycles21532/21533/21538/21539.
+At21538 all T/D slots are free and every other EXPAND drain condition is true,
+but registered front_idle[11] is still0. At21539 that final bit becomes1 and the
+complete guard becomes true; FLUSH is visible at21540. This directly confirms
+one context-idle register visibility edge in this tail, consistent with the
+reported model FLUSH21539 discrepancy. It does not assign every other model
+error to that cause. No model or DUT is changed. `probe_analysis.json` contains
+source-bound measurements and distinguishes this inference from measured values.

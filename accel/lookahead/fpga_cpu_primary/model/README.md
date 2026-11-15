@@ -1,5 +1,27 @@
 # CPU-primary finite L1 model
 
+Current revision g explicitly registers the complete frontend pre-edge idle
+predicate before the EXPAND barrier can observe it. The RTL drain probe found
+front_idle[11] to be the sole blocker at conservative d3 q2 cycle21538 after
+all raw frontend state was empty. g reproduces that registered visibility;
+it does not add a constant cycle to each wave. The snapshot covers T/D,
+ready/target storage, edge contexts/beat slots/FP activity and all actual
+frontend reserve/pop/request/return/target/candidate slices. Reset clears the
+register; LOAD samples the empty frontend and INIT creates no frontend work.
+
+The source-bound contract at
+`results/fpga_cpu_primary_20261115/model_calibration_g/` verifies52 complete
+native samples:20 base,12 continuous-clock stress and20 conservative-memory.
+All outputs,19 phase counters, request/retirement counts and72917 logical
+requests match RTL exactly including cycle/source/kind/line/id/generation.
+This is finite observed calibration, not a universal graph error bound or
+formal equivalence. Old f snapshots and its complete80-sample conditional
+results are preserved. Actual frequency qualification remains separate.
+
+When request tracing is enabled, `frontend_idle_preedge` diagnostic events
+encode the visible mask in `kind` and the next sampled mask in `line`; these
+are not memory requests. Existing request comparisons filter event names.
+
 This is a derived, separate model of the production64-lane/16-group core.
 Historical LF sources and receipts remain unchanged. The new default is L1
 only: independent T128/D128/ready128/target128, E256, beat512, K8 per bank,
@@ -59,9 +81,12 @@ source closure matches. It does not reuse samples across changed parameters.
 
 Default scenarios come from `experiment_config.json`: base80ns/5ns and
 conservative_diagnostic160ns/10ns. Full40 cases require the explicit
-`--full-authorized` switch and coordinator frequency selection. No full40 run
-has been launched by this subtask. Actual achieved MHz remains a separate
-qualification field, initially null.
+`--full-authorized` switch and coordinator selection. The coordinator has
+separately authorized base and conservative g full batches at the current
+conditional200MHz target, recorded in each run's decision.json. This does not
+qualify that frequency; a different eventual selected MHz requires a real
+rerun under re-discretized nanosecond service, not rescaling these cycles.
+Actual achieved MHz remains a separate qualification field, initially null.
 
 `test_transport.cpp` independently checks nonintegral cycle conversion, issue
 spacing, response latency, stress issue windows, full32-bit identity/generation,

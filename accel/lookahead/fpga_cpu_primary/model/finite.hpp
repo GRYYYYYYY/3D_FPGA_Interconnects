@@ -89,6 +89,10 @@ struct Model {
  std::array<std::optional<PopDelivery>,16> dispatch_pop_hold{};
  std::array<unsigned,16>result_rr{};
  T pop_admitted=0,pop_returned=0,pop_delivered=0;unsigned pop_hold_peak=0;
+ // lf_front_context registers its complete pre-edge idle expression. Reset
+ // clears the visible register; raw empty pools are not immediately visible
+ // to cp_full_top's EXPAND barrier.
+ unsigned frontend_idle_visible=0,edge_emit_pulse=0;
  void set_phase(CorePhase p){if(core_phase!=p){phase_trace<<unsigned(core_phase)<<','<<phase_begin<<','<<t<<','<<t-phase_begin<<','<<wave<<'\n';phase_trace.flush();phase_begin=t;core_phase=p;}}
  void advance_edge(){++core_phase_cycles[core_phase];++t;++rotor;}
 
@@ -119,6 +123,31 @@ std::array<Header,128>headers;std::array<Meta,128>metas;std::array<Fifo<Ready,8>
  }
  bool request(unsigned kind,unsigned id,unsigned gen,T line){unsigned source=source_of(kind,id,line);if(source>=112)return transport.push(source,{kind,id,gen,0,line,0,t,source});if(local_request_hold[source]){++logical_request_stalls[source];return false;}local_request_hold[source]=Request{kind,id,gen,0,line,t+1,t,source};return true;}
  bool memory_empty()const{if(!output_ack_collector.idle())return false;for(auto&h:local_request_hold)if(h)return false;for(auto&h:front_request_context)if(h)return false;for(auto&h:front_return_context)if(h)return false;return transport.idle();}
+ unsigned frontend_idle_preedge()const{
+  unsigned mask=0;
+  for(unsigned gr=0;gr<groups;++gr){
+   // Context reserve launch/capture and POP launch are distinct from the
+   // dispatcher's upstream holds. Only actual frontend-owned slices go here.
+   bool idle=!front_reserve_launch[gr]&&!front_reserve_capture[gr]&&!pop_context[gr]
+    &&ready[gr].empty()&&target_pending[gr].empty()&&!target_context[gr]
+    &&!(edge_emit_pulse&(1u<<gr));
+   for(unsigned i=gr*group_slots;i<(gr+1)*group_slots;++i)
+    idle=idle&&!tokens[i].state&&!drecords[i].state;
+   for(unsigned source:{gr,16+gr})
+    idle=idle&&!local_request_hold[source]&&!front_request_context[source]&&!front_return_context[source];
+   for(unsigned lane=gr*lanes;lane<(gr+1)*lanes;++lane){
+    idle=idle&&!pipe_valid[lane]&&!front_candidate_context[lane];
+    for(unsigned c=lane*4;c<(lane+1)*4;++c)idle=idle&&!desc[c].live;
+    for(unsigned s=lane*8;s<(lane+1)*8;++s)idle=idle&&!slots[s].state;
+   }
+   // Operand holds are covered by live edge contexts/slots. Completed-pulse
+   // is a subset of emitted-pulse for nonempty parents; zero-degree parents
+   // bypass edge_service in this L1 frontend. Do not register downstream
+   // candidate-network or output-bank idle a second time.
+   if(idle)mask|=1u<<gr;
+  }
+  return mask;
+ }
  bool canon_empty()const{for(auto&bk:*banks)if(bk.txmask||!bk.op_input.empty())return false;return true;}
  unsigned reserve_token(){
   if(pop_admissions==8)return NIL;
@@ -428,16 +457,21 @@ std::array<Header,128>headers;std::array<Meta,128>metas;std::array<Fifo<Ready,8>
     if(phase==2&&(bk.txmask||!bk.op_input.empty()||bk.enum_index!=bk.used||bk.resident_pending||!bk.final_scan||bk.scan!=bk.nspill||bk.scratch_state||bk.enum_valid||!bk.enum_raw.empty()||!bk.fragment.empty()||bk.query_valid||!bk.atom.empty()||!bk.merge.empty()||!bk.commit.empty()||bk.last_retire==t))wave_bank_lastbusy[bi]=t;
    }}
  }
- void step(){if(getenv("EC_DEBUG")&&t%100000==0){std::cerr<<"DEBUG t="<<t<<" phase="<<phase<<" token="<<Tlive<<" reserved="<<reserved_tokens<<" H="<<Hlive<<" E="<<Elive<<" M="<<Mlive<<" P="<<Plive<<" dir="<<directory.used<<" parents="<<stats.parents<<" cand="<<stats.candidates;for(unsigned bi=0;bi<64;++bi)if(pop_head[bi]!=NIL)std::cerr<<" pophead"<<bi<<"="<<pop_head[bi];for(unsigned gi=0;gi<groups;++gi)if(!ready[gi].empty())std::cerr<<" ready"<<gi<<"="<<ready[gi].n;for(unsigned bi=0;bi<64;++bi){auto&bk=b(bi);if(bk.txmask||bk.used||bk.scratch_state||!bk.candidate.empty())std::cerr<<" bank"<<bi<<" tx="<<bk.txmask<<" used="<<bk.used<<" enum="<<bk.enum_index<<" rp="<<bk.resident_pending<<" can="<<bk.candidate.n<<" frag="<<bk.fragment.n<<" enum_pipe="<<bk.enum_valid<<" query="<<bk.query_valid<<" merge="<<bk.merge.n<<" commit="<<bk.commit.n<<" scratch="<<bk.scratch_state;};std::cerr<<std::endl;}check(t<watchdog,"CYCLE_WATCHDOG");T observed_emit0=stats.lane_emit[0],observed_retire0=b(0).retired,candidates_before=stats.candidates;dispatch_results();memory_begin();
+ void step(){const unsigned idle_next=frontend_idle_preedge();const auto emitted_pre=stats.lane_emit;if(event_trace.is_open()&&idle_next!=frontend_idle_visible)trace("frontend_idle_preedge",0,frontend_idle_visible,idle_next);if(getenv("EC_DEBUG")&&t%100000==0){std::cerr<<"DEBUG t="<<t<<" phase="<<phase<<" token="<<Tlive<<" reserved="<<reserved_tokens<<" H="<<Hlive<<" E="<<Elive<<" M="<<Mlive<<" P="<<Plive<<" dir="<<directory.used<<" parents="<<stats.parents<<" cand="<<stats.candidates;for(unsigned bi=0;bi<64;++bi)if(pop_head[bi]!=NIL)std::cerr<<" pophead"<<bi<<"="<<pop_head[bi];for(unsigned gi=0;gi<groups;++gi)if(!ready[gi].empty())std::cerr<<" ready"<<gi<<"="<<ready[gi].n;for(unsigned bi=0;bi<64;++bi){auto&bk=b(bi);if(bk.txmask||bk.used||bk.scratch_state||!bk.candidate.empty())std::cerr<<" bank"<<bi<<" tx="<<bk.txmask<<" used="<<bk.used<<" enum="<<bk.enum_index<<" rp="<<bk.resident_pending<<" can="<<bk.candidate.n<<" frag="<<bk.fragment.n<<" enum_pipe="<<bk.enum_valid<<" query="<<bk.query_valid<<" merge="<<bk.merge.n<<" commit="<<bk.commit.n<<" scratch="<<bk.scratch_state;};std::cerr<<std::endl;}check(t<watchdog,"CYCLE_WATCHDOG");T observed_emit0=stats.lane_emit[0],observed_retire0=b(0).retired,candidates_before=stats.candidates;dispatch_results();memory_begin();
   // Rotate service-class priority; no extra physical enqueue ports are invented.
   unsigned order=rotor%4;for(unsigned k=0;k<4;++k){switch((order+k)%4){case 0:metadata();break;case 1:front();break;case 2:scratch_expand();final_backend();break;case 3:canonical();break;}}
-  candidate_context();accumulator();dispatch_pop();admit_tx();observe(observed_emit0,observed_retire0,candidates_before);memory_end();advance_edge();
+  candidate_context();accumulator();dispatch_pop();admit_tx();observe(observed_emit0,observed_retire0,candidates_before);memory_end();
+  edge_emit_pulse=0;for(unsigned lane=0;lane<64;++lane)if(stats.lane_emit[lane]!=emitted_pre[lane])edge_emit_pulse|=1u<<(lane/lanes);
+  frontend_idle_visible=idle_next;advance_edge();
  }
- bool expansion_done(){if(!directory.pops_empty())return false;for(auto&h:dispatch_pop_hold)if(h)return false;for(auto&h:pop_command_hold)if(h)return false;if(!canon_empty()||reserved_tokens||Hlive||Elive)return false;for(auto&x:tokens)if(x.state==2&&!x.graph)return false;for(auto&q:ready)if(!q.empty())return false;if(Plive)return false;for(auto&h:front_candidate_context)if(h)return false;for(auto&q:candidate_source)if(!q.empty())return false;for(auto&h:candidate_hold)if(h)return false;for(auto&bk:*banks){if(!bk.candidate.empty()||!bk.candidate_input.empty()||!bk.fragment.empty()||bk.scratch_state)return false;if(bk.accumulator_tail>t)return false;}return true;}
+ bool expansion_done(){if(frontend_idle_visible!=((1u<<groups)-1))return false;if(!directory.pops_empty())return false;for(auto&h:dispatch_pop_hold)if(h)return false;for(auto&h:pop_command_hold)if(h)return false;if(!canon_empty()||reserved_tokens||Hlive||Elive)return false;for(auto&x:tokens)if(x.state==2&&!x.graph)return false;for(auto&q:ready)if(!q.empty())return false;if(Plive)return false;for(auto&h:front_candidate_context)if(h)return false;for(auto&q:candidate_source)if(!q.empty())return false;for(auto&h:candidate_hold)if(h)return false;for(auto&bk:*banks){if(!bk.candidate.empty()||!bk.candidate_input.empty()||!bk.fragment.empty()||bk.scratch_state)return false;if(bk.accumulator_tail>t)return false;}return true;}
  bool final_done(){if(!canon_empty()||!directory.idle())return false;for(auto&bk:*banks)if(!bk.enum_done||bk.scratch_end_state!=2||bk.enum_index!=bk.used||bk.resident_pending||!bk.final_scan||bk.scan!=bk.nspill||bk.scratch_state||(bk.enum_valid||!bk.enum_raw.empty())||!bk.fragment.empty()||bk.query_valid||!bk.atom.empty()||!bk.merge.empty()||!bk.commit.empty())return false;return true;}
  bool meta_done()const{if(decoupled)for(auto&d:drecords)if(d.state&&!d.meta)return false;if(Mlive||!output_service.idle())return false;for(auto&h:target_context)if(h)return false;for(auto&x:tokens)if(x.state&&(!x.meta||x.state==1))return false;return true;}
  void initialize(){
-  sample_start=t;set_phase(SRST);advance_edge();set_phase(LOAD);step();
+  sample_start=t;frontend_idle_visible=0;edge_emit_pulse=0;set_phase(SRST);advance_edge();set_phase(LOAD);step();
+  // LOAD updates the idle register from reset-empty frontend state. The
+  // direct INIT memory loop cannot allocate T/D/E or any frontend slice,
+  // so that register remains valid until ordinary step() resumes.
   // The real reset initializes PV WORD_BITS14, directory8192 and output4096
   // concurrently. No initialization is deleted for zero-target samples.
   set_phase(INIT_PHASE);T minimum=sample_start+16385;std::array<unsigned,32>next{};for(unsigned p=0;p<32;++p)next[p]=p;

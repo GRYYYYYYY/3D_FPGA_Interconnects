@@ -77,25 +77,32 @@ configurations are rejected without issuing a physical request. Stress adds
 memory sensitivity point. All30 DUT source hashes match the synthesis freeze.
 Full-capacity16K-cycle PV initialization is charged on every sample; it accounts
 for83.32%/73.11% of the small graphs, so their elapsed cycles are not scaled to
-large workloads. `fixtures_full_a/summary.json` and its complete event/phase/
+large workloads. `fixtures_full_b/summary.json` and its complete event/phase/
 request-kind traces bind the functional result. Model calibration at this test service point is complete with the declared
 limits below.
 
 
 ## RTL/finite-model calibration
 
-The selected model snapshot is model_f, binary
-`ad3130af70ef362a6cc731b0c6990ce93e974272350be3beba10ff043e7304ec`.
-All32 complete outputs, all12 request-kind totals and parent/candidate/commit/
-publication/retirement counts match the independent full-core RTL.19/32 complete
-logical request schedules match in every cycle, source, kind, line, localID and
-generation. Every signed phase difference is retained, including cancellation.
+The selected model snapshot is now model_g, binary
+`4ef2084643c48ad2937689ca02e9573bd342799f68555acf9bb1516f6cbce598`.
+All52 complete small-graph executions match the full production RTL in every
+output byte, all19 core-phase counts, total cycles, all12 request-kind totals,
+parent/candidate/commit/publication/retirement counts and the complete logical
+request schedule (cycle, source, kind, line, localID and generation).
 
-| Comparison | Max cycle difference/sample | Max total relative difference | Max relative difference excluding INIT |
+| Complete RTL/model comparison | Samples | Total cycles, both | Maximum sample cycle difference |
 |---|---:|---:|---:|
-| d3 base | 1 | 0.004601% | 0.018681% |
-| d4 base | 13 | 0.057899% | 0.214203% |
-| d4 stress | 18 | 0.068329% | 0.180741% |
+| d3 base | 8 | 157312 | 0 |
+| d4 base | 12 | 268916 | 0 |
+| d4 deterministic backpressure/jitter | 12 | 276758 | 0 |
+| d3 conservative160ns/10ns | 8 | 162025 | 0 |
+| d4 conservative160ns/10ns | 12 | 282252 | 0 |
+
+The five source-bound comparisons are in `model_comparison_g`. All use the
+5ns test clock and the same30-file repaired DUT closure. These are observed
+exact matches on the declared test suite, not a formal equivalence proof for
+all graphs. Full-core routed-clock qualification remains separate.
 
 Corrections implemented actual omitted services: controlFIFO2, bounded POP
 holds/capture, real ACK timing, per-port initialization, serialized cost loads,
@@ -103,13 +110,35 @@ finite enum/scratch finish, direct internal commit and wave/export edges.
 The selected reset/member-release semantics follow RTL, even though an earlier
 version had a smaller net error. No empirical multiplier is applied.
 
-The remaining model abstraction evaluates service classes in rotating order
-with due-edge guards, rather than taking one immutable pre-edge snapshot for
-every RTL process. Equal-edge grants can differ; with a periodic external gate,
-a prior sample difference can shift later service phase. These observed small-
-graph differences are not asserted as universal BNN/LSTM error bounds. The
-calibration contract binds exact sources, full RTL traces, output and counters.
-A changed complete RTL or selected service/frequency point requires revalidation.
+The model still evaluates service classes in rotating order with explicit
+due-edge guards. It now samples the complete frontend-idle expression before
+any service-class mutation and publishes it through the actual registered
+visibility stage. Reset clears this register; LOAD/INIT preserve the real
+settling semantics. Backend, network and output idle retain their own timing.
+No unconditional extra cycle per wave is added. A changed DUT or selected
+service/frequency point requires corresponding revalidation.
+
+The conservative-service audit has since isolated a concrete missing visibility
+stage in model_f. A source-matched diagnostic RTL probe shows that, for d3 q2
+wave8, all transactions and top-level drain conditions are ready at relative
+cycle21538 except the registered frontend-idle bit11. That bit becomes visible
+at21539; the testbench observes FLUSH at21540. Model_f observed FLUSH at21539.
+This changes the subsequent free-running bank rotor and can change source/tag
+allocation even when request-address multisets and outputs agree. This is a
+measured register-visibility omission, not merely an unexplained small error.
+The explicit model_g repair removes every previously observed phase/request
+residual in the52-case suite. Model_f's earlier maxima of1/13/18 cycles for
+base d3/base d4/stress d4 and its19/32 exact schedules remain in the historical
+receipts. They are not carried forward as current model error or attributed
+solely to an unavoidable service-order approximation.
+
+Model_f also completed the full80 large samples while this audit was in
+progress. BNN40/LSTM40 outputs match every golden byte and their original
+complete hashes. Cycles are102,563,265/104,150,798, or0.512816325/0.520753990s
+at an assumed200MHz. These are explicitly **pre-repair conditional results**,
+not final calibrated or implemented-frequency FPGA times. Their19-phase sums,
+per-port request/return conservation and full outputs are preserved in
+`model_full_c_200_base/verification/delivery.json`.
 
 ## Resource and clock qualification
 
@@ -125,19 +154,32 @@ strict-prefix second-valid → admin valid-gated request metadata → adapter
 kind/address legality → network ready → first-write ready → second-valid.
 This inferred timing exception is not accepted as closure. A bounded integration
 repair separates stable export metadata from second-valid; only the actual
-request-valid remains valid-gated. Capacity/credits/service latency are intended
-to remain unchanged, but the revised source requires full native revalidation.
+request-valid remains valid-gated. Capacity/credits/service latency remain
+unchanged in the completed full native regression below.
 The original synthesis stays running to retain actual resource evidence.
 The repair is now frozen in `full_synth_c/source`. `fixtures_full_b` passed all32
 full samples and11 rejection checks: complete outputs, every accepted-event
 trace, all phase/kind/sample counts and absolute simulation finish times are
 identical to `full_a`. The newly bound `model_calibration_f_admin_c` contract
 independently verifies this identity and reuses the completed model_f runs;
-its observed calibration differences remain those tabulated above. Only
+its observed calibration differences remain retained in that prior contract.
+The model_g contract now supersedes it for current calibration. Only
 `cp_admin.sv` changed in the30-file DUT closure. Actual repaired full synthesis
 started in `full_synth_c` at5ns after the regression passed; the original `b`
 continues as retained diagnostic evidence. No repaired loop-free synthesis or
 routed-clock claim is made before its terminal report.
+
+An additional narrow `dispatch_synth_a` diagnostic exposes all runtime ports of
+the unchanged production POP dispatcher. Its source matches both complete-core
+freezes. This new controller had standalone functional tests but no completed
+resource/path report. The diagnostic preserves the full-core runs and cannot
+qualify their clock or area. Unlike the integrated core, it exposes all six
+statistics counters. Vivado2022.2 excluded the diagnostic's original bulk I/O
+delay commands because they selected more than10,000 objects; the5ns internal
+clock remains applied. A separate chunked post-synthesis constraint file is
+prepared for path/coverage analysis. Synthesis ran without the excluded I/O
+delays, which is an explicit diagnostic limitation. Neither complete-core log
+contains that object-limit warning.
 
 The OOC scope excludes shell, PCIe and HBM controller. Input/output min/max
 boundary delays are0.1/0.8ns with0.1ns clock uncertainty. No real path is declared
@@ -152,6 +194,15 @@ Predeclared service scenarios are80ns latency/5ns issue interval and a diagnosti
 case. Once a full-core frequency is selected, nanoseconds convert by ceiling
 to core cycles and the model is rerun. Old cycles are not divided by a newly
 chosen frequency. Board time remains null.
+
+While full synthesis is running, the coordinator has also authorized the
+current repaired candidate's complete BNN40/LSTM40 run at the initial200MHz
+target as a conditional functional/capacity baseline. This exception to the
+runner's coordinator gate does not qualify that frequency or establish final
+selection. Its explicit decision receipt retains this distinction. If the
+selected routed frequency differs, the corresponding full batches will be
+rerun with newly derived memory service cycles. The predeclared conservative
+service point is being checked on the same complete native RTL structure.
 
 ## Resident memory and one-build E2 scope
 
@@ -196,7 +247,7 @@ remain in the companion evidence report.
 | Runtime connected production L1 source/function | 32 complete executions and11 rejection checks passed |
 | Complete-core resources fit U280 | pending actual synthesis |
 | Complete-core routed clock | unqualified |
-| RTL/finite-model calibration at200MHz test service | 32 cases verified with explicit residual differences |
+| RTL/finite-model calibration at200MHz test service | 52 complete cases with exact phase/request schedules |
 | Final-frequency complete-batch FPGA time | pending |
 | CPU-primary acceleration in simulated scope | not yet established |
 | GPU universally unbeatable by FPGA | neither required nor claimed |

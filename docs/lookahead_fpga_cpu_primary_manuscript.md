@@ -42,9 +42,15 @@ retroactively claiming an execution-time hash.
 
 Full-capacity RTL has completed two distinct native graphs with exact complete
 output comparison (all8 and all12 samples); the complete congestion and11 range-rejection
-checks also pass. Quantitative model calibration covers32 complete executions
-with exact outputs/request-kind/retirement counts and explicit residual
-scheduling differences (maximum18cycles in these fixtures). The first graph uses
+checks also pass. Quantitative model calibration covers52 complete executions
+across baseline service, deterministic backpressure/jitter and conservative
+service. Outputs, all19 phase counts, total cycles, request-kind/retirement
+counts and the complete request cycle/source/kind/address/identity schedules
+match RTL exactly in these tests. A targeted RTL probe identified a missing
+registered frontend-idle visibility stage in the earlier model; the corrected
+model includes that register rather than fitting a cycle correction. The
+observed exact matches are not a universal formal equivalence claim.
+The first graph uses
 157,312cycles and42waves; the second uses268,916cycles and106waves. The core
 issues4,192 and21,511 physical transactions respectively, all acknowledged.
 These small workloads validate the production structure; they are not scaled
