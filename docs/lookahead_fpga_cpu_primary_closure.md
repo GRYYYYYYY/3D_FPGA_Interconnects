@@ -104,6 +104,14 @@ The five source-bound comparisons are in `model_comparison_g`. All use the
 exact matches on the declared test suite, not a formal equivalence proof for
 all graphs. Full-core routed-clock qualification remains separate.
 
+A separate read-only audit also verifies all3,772 ordered phase intervals
+across402 waves and all72,917 logical return cycles/source/kind/ID/generation
+tuples, including matched-request addresses. It uses each RTL sample's actual
+start/end and removes only the52 recorded zero-length model-constructor IDLE
+intervals. No replay or fitted offset is used. RTL return traces do not contain
+payload/address fields; payload equality is not falsely claimed from that trace.
+See `model_calibration_g_phase_return_a/terminal.json`.
+
 Corrections implemented actual omitted services: controlFIFO2, bounded POP
 holds/capture, real ACK timing, per-port initialization, serialized cost loads,
 finite enum/scratch finish, direct internal commit and wave/export edges.
@@ -191,9 +199,10 @@ arguments for `-mode out_of_context`; failed setup attempts are retained.
 
 Predeclared service scenarios are80ns latency/5ns issue interval and a diagnostic
 160ns/10ns scenario. Both are assumptions, not measured HBM or guaranteed worst
-case. Once a full-core frequency is selected, nanoseconds convert by ceiling
-to core cycles and the model is rerun. Old cycles are not divided by a newly
-chosen frequency. Board time remains null.
+case. At the selected full-core frequency, nanoseconds convert by ceiling to
+core cycles. A matching completed source/service point is reused; a changed
+point requires new calibrated full-batch execution. Old cycles are not divided
+by a newly chosen frequency. Board time remains null.
 
 While full synthesis is running, the coordinator has also authorized the
 current repaired candidate's complete BNN40/LSTM40 run at the initial200MHz
@@ -202,7 +211,67 @@ runner's coordinator gate does not qualify that frequency or establish final
 selection. Its explicit decision receipt retains this distinction. If the
 selected routed frequency differs, the corresponding full batches will be
 rerun with newly derived memory service cycles. The predeclared conservative
-service point is being checked on the same complete native RTL structure.
+service point has passed the same complete native RTL/model calibration.
+
+Both model_g full scenarios have now completed, with160 independently checked
+sample outputs, identical full ALT hashes, phase sums, per-port request/return
+conservation and finite pool/queue/bank/spill/tag capacity checks. The selected
+full-core clock remains unqualified; the following results are **conditional
+predictions at an assumed200MHz**, with declared memory service:
+
+| Case / service | Full cycles | Conditional seconds | Measured CPU mean / model | Model / measured GPU mean |
+|---|---:|---:|---:|---:|
+| BNN40 base80ns/5ns | 102557024 | 0.512785120 | 1.364361 | 3.378032 |
+| BNN40 conservative160ns/10ns | 135128351 | 0.675641755 | 1.035496 | 4.450869 |
+| LSTM40 base80ns/5ns | 104154414 | 0.520772070 | 1.393143 | 3.265070 |
+| LSTM40 conservative160ns/10ns | 137198248 | 0.685991240 | 1.057608 | 4.300939 |
+
+GPU remains faster. BNN conservative does not show a robust CPU advantage:
+its prediction exceeds the fastest observed CPU process mean0.668920613333s,
+although it is below the three-process mean0.699624213444s. LSTM conservative
+is below all three observed process means, but a three-process observed range
+is not a statistical bound or a guarantee for unmeasured memory behavior.
+The deterministic model is not assigned artificial noise. CPU dispersion and
+memory-service sensitivity are reported separately.
+
+At200MHz the two contracts implement16/1 and32/2 latency/issue cycles. Their
+ideal32-byte issue ceilings are204.8 and102.4GB/s across32 ports, shared by
+reads and writes. Those ceilings are not measured effective random-RMW HBM
+service. `full_g_200_two_scenario_summary_a` binds complete19-phase tables,
+12x32 traffic, endpoint peaks, software process statistics and903 audited files.
+The paired full runs are actual finite executions, not scaled historical cycles.
+
+## Conditional mechanism diagnosis
+
+The complete model_g base runs locate the main time in expansion:
+
+| Metric at assumed200MHz | BNN40 | LSTM40 |
+|---|---:|---:|
+| Candidate / EXPAND cycle | 16.276978 | 16.297042 |
+| Fraction of64-lane ideal candidate peak | 25.4328% | 25.4641% |
+| EXPAND share of all core cycles | 77.0936% | 77.1477% |
+| FINALIZE share | 20.9475% | 20.8916% |
+| All other mutually exclusive phases | 1.9590% | 1.9606% |
+
+The retained CUDA implementation exposes sample parallelism across the actual
+batch; the FPGA core processes samples sequentially through finite POP,
+frontend, transport and publication services. Phase durations and observed
+throughput support a configuration-specific explanation. Overlapping stall
+counters do not identify additive, independently removable losses.
+
+For the fixed candidate count and64 II1 lanes at assumed200MHz, edge-work-only
+bounds are100.541965/102.305681ms, both below the retained GPU means. Thus edge
+work alone cannot prove a GPU advantage. A different, explicitly conditional
+diagnostic holds every current non-EXPAND phase duration fixed and retains the
+current FSM's lack of cross-phase overlap. Those fixed durations are
+117.460765/119.008145ms; adding ideal edge service yields218.002730/221.313826ms.
+This says that improving only expansion cannot catch the GPU under those
+fixed assumptions. It says nothing universal about changing publication,
+batch parallelism, lanes, frequency, memory or architecture, and is not a gate
+on complete-core implementation. No POP lower bound or overlapping stall
+count is added. `full_g_200_fixed_stage_diagnostic_a` preserves the calculation
+and raw phase/candidate bindings. A changed frequency requires renewed finite
+service discretization and execution before updating this diagnostic.
 
 ## Resident memory and one-build E2 scope
 
@@ -248,7 +317,8 @@ remain in the companion evidence report.
 | Complete-core resources fit U280 | pending actual synthesis |
 | Complete-core routed clock | unqualified |
 | RTL/finite-model calibration at200MHz test service | 52 complete cases with exact phase/request schedules |
-| Final-frequency complete-batch FPGA time | pending |
+| Complete model_g outputs at assumed200MHz | both scenarios,160 samples verified |
+| Final-frequency complete-batch FPGA time | pending complete-core routed clock |
 | CPU-primary acceleration in simulated scope | not yet established |
 | GPU universally unbeatable by FPGA | neither required nor claimed |
 | Board-measured FPGA/E2 speedup | not measured |
@@ -263,7 +333,9 @@ Vivado2022.2; that metadata is not used as job status. Direct Tcl proxy
 `get_property STATUS/PROGRESS [get_runs synth_1]` and the source-bound child
 process/run log supply the authoritative state. The existing job is retained.
 
-This source/evidence checkpoint is not final completion. `checkpoint_stage.json`
-records the still-live full synthesis and pending physical/full-batch stages.
-The compressed archive is a point-in-time snapshot; subsequent terminal results
-will be added in the same independent branch.
+This source/evidence checkpoint is not final completion.
+`checkpoint_full_g_batches.json` records completed model_g batches and the
+still-live physical work at snapshot time. Earlier source/calibration and
+in-flight checkpoints remain preserved. The compressed archive is a point-in-
+time snapshot; actual resource/route results and any necessary changed-frequency
+batches will be added in the same independent branch.
