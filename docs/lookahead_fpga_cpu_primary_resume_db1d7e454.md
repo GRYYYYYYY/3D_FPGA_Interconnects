@@ -355,3 +355,19 @@ all/internal setup/hold, clock/connectivity, congestion, DCP and complete warnin
 classification. Only after qualified routed frequency perform ns-memory-aware
 calibration/full BNN40/LSTM40 conversion and CPU64 comparison. Current formal
 FPGA time/frequency/speedup remain unavailable;200MHz model values stay conditional.
+
+### h physical progress at2026-11-16 22:22UTC
+
+Input DCP open and actual-clock/connectivity both completed0; the latter again
+confirms1237261all/core/direct clock pins and reset BUFG99097loads/0clockloads.
+`place_design` began22:11:42UTC. Placer initialization completed and global
+placement/floorplanning is active; no placed checkpoint or route result yet.
+`placement_floorplanning_a` retains the partial log/receipt and context hashes.
+
+A read-only observer started22:18:09UTC, PID1602804/start_ticks177505615,
+same boot. `monitor.py` writes`monitor_snapshots.jsonl` every60seconds; it
+never invokes EDA, resets, kills or relaunches anything, and exits when the
+replay terminal receipt appears or the bound Vivado process identity disappears.
+Do not start another observer over its exclusive output files. Confirm its
+birth identity and existing log before resuming supervision. The observer's
+terminal receipt is not a substitute for final MCP/run/DCP/report auditing.
