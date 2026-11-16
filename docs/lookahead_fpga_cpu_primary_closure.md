@@ -1,6 +1,6 @@
 # CPU-primary L1 complete-core closure
 
-Latest timestamped checkpoint: [2026-11-15 completed and in-flight experiments](lookahead_fpga_cpu_primary_progress_20261115.md). It records the 21:00:20 UTC observation separately from terminal qualification.
+Earlier frozen checkpoint: [2026-11-15 completed and in-flight experiments](lookahead_fpga_cpu_primary_progress_20261115.md). It records the 21:00:20 UTC observation separately from the subsequent qualification evidence in this report.
 
 Status: implementation and verification in progress. This file is updated as
 terminal evidence arrives; it is not a claim of completed FPGA acceleration.
@@ -319,6 +319,17 @@ routed frequency. The observation is frozen in `physical_a/route_sll_demand_a`.
 Read-only reviews of a registered boundary context and installed SSI placement
 directives are feasibility checks, not selected revisions or launched candidates.
 The current run is allowed to reach its actual terminal result first.
+
+After Phase3.2, Route35-447 reports that congestion prevents all nets from
+being routed and that the router will prioritize connectivity over timing
+optimization. The original child subsequently entered Phase3.3 Update Timing;
+this remains an active attempt, not a terminal route failure. The partial log
+and observation are retained in `physical_a/route_congestion_priority_a`.
+The run directory still contains an old `.vivado.end.rst` dated
+2026-11-15T23:52:00.891512Z, earlier than the physical launch at23:54:12Z.
+That file belongs to the preceding opt-only wrapper and cannot certify this
+route's completion. Use the actual project/run status, birth-matched process,
+current-stage markers and terminal reports together; do not reset this run.
 
 Route35-198 exposes a separate OOC interface limitation: external signal ports
 lack HD.PARTPIN_LOCS, so their partial routes and input/output timing are not
