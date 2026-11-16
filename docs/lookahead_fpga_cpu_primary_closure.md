@@ -19,9 +19,10 @@ has produced1,241,143 LUTs (95.20%),749,073 FF and unchanged BRAM/URAM/DSP
 counts. Opt-only terminal reports and DCP are verified. Full-core placement, physical
 optimization and route were launched at23:54:12UTC from that DCP. Placement
 completed, with1,233,715 LUTs (94.63%) and749,174 FF in the actual post-place
-report. BRAM/URAM/DSP counts remain unchanged. Post-place timing collection
-and subsequent physical optimization/routing are still pending; routed clock
-and complete physical closure remain unqualified.
+report. BRAM/URAM/DSP counts remain unchanged. Post-place report collection
+is complete. Standard physical optimization completed without changing cells
+or improving WNS; actual routing is running. Routed clock and complete physical
+closure remain unqualified, including the external interface context gap below.
 
 The preceding dispatcher revision e completed synthesis and standard opt_design.
 It still required1,351,028 LUTs (103.63%),47,348 above U280 capacity, and did not
@@ -273,11 +274,51 @@ SLR1 LUT occupation is98.24%. Actual post-place SLL usage is21,816/23,040
 These boundary totals include both directions and differ from the earlier
 placer estimate. The report shows no TX/RX SLL registers used. `Place46-14`
 warns that the design is highly congested and may have difficulty routing.
-The internal post-placement timing estimate is WNS−20.657ns/TNS−4,535,293.207ns;
-this is neither a routed timing report nor a qualified frequency. The frozen
-post-place report hook is still computing timing. A separate idle session is
-reserved for read-only congestion reporting from the completed placed DCP;
-the active implementation and frozen hooks are unchanged.
+The internal post-placement timing estimate was WNS−20.657ns/TNS−4,535,293.207ns.
+The completed formal report has WNS−20.657ns/TNS−4,518,861.000ns,
+WHS−3.474ns/THS−1,298,322.375ns and WPWS1.800ns. Neither is routed timing
+or a qualified frequency. All twelve check_timing categories are zero, but
+DRC has one RTSTAT-13 Critical Warning: insufficient routing prevents the
+routing-status checks from running. Methodology has1,024 SYNTH-5,1,000
+TIMING-15 and1,000 TIMING-16 occurrences. These are retained without waivers.
+The worst reported setup path is output_service rd_ptr to state CE,29 levels,
+24.837ns data delay including22.998ns estimated interconnect;15 of20 setup
+paths instead target admin/cost_word, whose worst path is only0.146ns better.
+The worst hold path starts at external sd[4126], not an internal register.
+
+Actual reset BUFGCE placement is X0Y143; the declared external core clock source
+X0Y144 remains unused by the design. These distinct locations are in
+`post_place/buffer_locations.txt`. The placed DCP SHA256 is
+`95391ea0a0d2954f3273e711c82c1889014128e1147357adcdeb66eebb96beaa`.
+The independent post-place audit covers65 reference hashes,31 source files
+and11 hook bindings. Its record distinguishes inherited structural census from
+new post-place measurements. Standard phys_opt then reported zero changed
+cells/nets and zero WNS/TNS gain. Its completed DCP SHA256 is
+`c0367c8c41a0b9328da553de712af5da7124fbfab79c4b85f2aaeb19128ccbf9`.
+Actual route_design is now running. A separate reused session completed a
+read-only congestion report from the placed DCP with return code0. No active
+hook was modified. The report contains60 windows: four directions, three
+congestion types and levels3–7; all12 direction/type combinations reach level7.
+Its hierarchy crossing rows report fabric12,477 nets, candidates6,700 and
+dispatch3,976; these are net counts, not SLL occupation, and hierarchy rows
+must not be summed with their descendants. Window cell percentages identify
+physical concentration, not a causal attribution or total resource fraction.
+See `physical_a/congestion_review_a/terminal.json` and `analysis_a` for the
+report, input DCP binding, execution transcript and parsed rows.
+
+Route35-198 exposes a separate OOC interface limitation: external signal ports
+lack HD.PARTPIN_LOCS, so their partial routes and input/output timing are not
+accurate. The observation includes all8,192 sd bits; its9,097 warning lines
+are a captured prefix, not a terminal warning census. Existing max/min I/O
+delays and zero unconstrained endpoints do not resolve this gap. A future
+internal register-path result under the specified clock-source assumption
+must not be called complete interface Fmax or board timing. Physical boundary
+connections and their launch/capture budgets need a documented context;
+arbitrary coordinates are not platform evidence. See
+`physical_a/ooc_boundary_review_a` and `post_place_path_review_a`. UG9052022.2
+context guidance previously consulted is limited to7-series; it is not an
+UltraScale+ complete-flow qualification. The actual tool properties, warnings,
+and source-bound reports remain the evidence for this run.
 
 The preceding e full-core source closure is30 files. Its actual5ns synthesis
 completed on2026-11-15 at18:22:03UTC. The earlier1,254,466-LUT module sum is a

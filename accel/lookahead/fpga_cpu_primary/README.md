@@ -60,8 +60,10 @@ synthesis reports/source binding are audited; actual standard-opt resources are
 1,241,143 LUTs (95.20%) with terminal reports/checkpoint verified. Full-core
 place/phys-opt/route resumed from that checkpoint at23:54:12UTC. Actual placement
 completed at1,233,715 LUTs (94.63%) and749,174 FF, with high-congestion warnings.
-Post-place timing reports and subsequent routing remain pending. No qualified
-full-core frequency is available yet. See the closure report for current qualification.
+Post-place timing fails setup/hold; standard phys_opt completed with zero WNS
+gain. Actual routing is running. External OOC ports also lack physical boundary
+locations, limiting interface timing accuracy. No qualified full-core frequency
+is available yet. See the closure report for current qualification.
 
 From the repository root, with the retained raw fixtures available, these
 commands use **new, nonexistent output directories**:
