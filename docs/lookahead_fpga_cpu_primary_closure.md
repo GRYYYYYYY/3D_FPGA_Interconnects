@@ -322,9 +322,11 @@ The current run is allowed to reach its actual terminal result first.
 
 After Phase3.2, Route35-447 reports that congestion prevents all nets from
 being routed and that the router will prioritize connectivity over timing
-optimization. The original child subsequently entered Phase3.3 Update Timing;
-this remains an active attempt, not a terminal route failure. The partial log
-and observation are retained in `physical_a/route_congestion_priority_a`.
+optimization. The original child subsequently completed the Phase3.3 and3.4
+timing-update steps and entered Phase3.5 Update Timing. This remains an active
+attempt, not a terminal route failure. The partial logs and observations are
+retained in `physical_a/route_congestion_priority_a` and
+`physical_a/route_phase3_5_observation_a`.
 The run directory still contains an old `.vivado.end.rst` dated
 2026-11-15T23:52:00.891512Z, earlier than the physical launch at23:54:12Z.
 That file belongs to the preceding opt-only wrapper and cannot certify this
