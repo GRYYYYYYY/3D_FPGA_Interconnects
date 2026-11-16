@@ -35,6 +35,9 @@ betweenSLR1/2 and20,527/23,040 betweenSLR0/1. CLB-site occupancy remains
 completed: WNS−15.487ns and WHS−3.530ns still fail the5ns target. Default
 phys_opt completed with zero cell changes and zero timing gain. Its DCP was
 saved successfully; default route began at14:14:28UTC and remains active.
+Initial router SLL demand is97.98% onSLR1/2 and106.02% onSLR0/1, with
+localized over-capacity columns on both boundaries. These are routing estimates,
+not final SLL allocation or a route terminal result.
 This is not legal-route or frequency qualification.
 Routed clock and complete physical closure remain unqualified, including the
 external interface context gap below.
@@ -475,6 +478,20 @@ optimization DCP has SHA256
 `physopt_terminal_a` records successful stage/checkpoint completion, unchanged
 process birth and the same replay's route start at14:14:28UTC. Route is active;
 the overall flow has no terminal result or qualified frequency yet.
+
+At initial Global Routing/SLL Assignment, actual router estimates are
+22,575/23,040(97.98%) onSLR1/2 and24,426/23,040(106.02%) onSLR0/1.
+The corresponding original f estimates were26,153 and23,852: SSI decreases
+one boundary by3,578 and increases the other by574. With1,440SLLs per column,
+7columns onSLR1/2 and9onSLR0/1 exceed capacity; peak demands are2,287(159%)
+and2,866(199%). Route35-3311 remains. At least1,801CLBs have high pin use
+(original1,953), and Route35-41 retains the large-hold warning. These estimates
+are distinct from the placed85.45%/89.09% SLL usage above. The intermediate
+Route35-416 WNS−15.073ns/WHS−2.489ns is not a qualified frequency.
+Initializer zero overlaps coexist with1,873,320unrouted/partially routed nets;
+they are not terminal success or failure. `route_sll_demand_a` binds the raw
+partial log, repeated per-column tables and unchanged process identity.
+No additional strategy, RTL architecture or model point has been launched.
 
 The original f fixed post-route hook lacked separate all-path setup/hold and
 blackbox reports and was skipped on route error. Its additional collection is

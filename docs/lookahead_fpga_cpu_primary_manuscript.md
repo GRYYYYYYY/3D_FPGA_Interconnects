@@ -14,6 +14,9 @@ but CLB sites remain99.92% occupied and the high-congestion warning persists.
 Completed post-place reports give WNS−15.487ns/WHS−3.530ns at5ns; setup and
 hold remain unclosed. Default phys_opt made zero cell changes and no timing
 improvement; default routing is now in progress.
+Initial router estimates still exceed total SLL capacity onSLR0/1(106.02%)
+and show localized over-capacity columns on both boundaries; route terminal
+legality and frequency remain unknown.
 Existing200MHz model
 predictions remain conditional; the physical OOC interface-context limitation
 also remains unresolved. These observations do not establish a universal FPGA
