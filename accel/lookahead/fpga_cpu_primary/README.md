@@ -58,8 +58,10 @@ result root. The previous e core failed actual post-opt capacity at1,351,028
 LUTs; current f synthesis completed at1,244,096 LUTs (95.43%). Its terminal
 synthesis reports/source binding are audited; actual standard-opt resources are
 1,241,143 LUTs (95.20%) with terminal reports/checkpoint verified. Full-core
-place/phys-opt/route resumed from that checkpoint at23:54:12UTC. Neither result supplies a qualified
-full-core frequency yet. See the closure report for current qualification.
+place/phys-opt/route resumed from that checkpoint at23:54:12UTC. Actual placement
+completed at1,233,715 LUTs (94.63%) and749,174 FF, with high-congestion warnings.
+Post-place timing reports and subsequent routing remain pending. No qualified
+full-core frequency is available yet. See the closure report for current qualification.
 
 From the repository root, with the retained raw fixtures available, these
 commands use **new, nonexistent output directories**:

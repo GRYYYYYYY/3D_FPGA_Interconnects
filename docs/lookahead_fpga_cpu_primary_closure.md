@@ -17,8 +17,11 @@ equivalents,640 URAM and0 DSP. It is below the bare-device LUT capacity by
 59,584. Terminal synthesis source/diagnostic collection is complete. Standard opt
 has produced1,241,143 LUTs (95.20%),749,073 FF and unchanged BRAM/URAM/DSP
 counts. Opt-only terminal reports and DCP are verified. Full-core placement, physical
-optimization and route were launched at23:54:12UTC from that DCP. Physical fit
-and routed clock remain unqualified.
+optimization and route were launched at23:54:12UTC from that DCP. Placement
+completed, with1,233,715 LUTs (94.63%) and749,174 FF in the actual post-place
+report. BRAM/URAM/DSP counts remain unchanged. Post-place timing collection
+and subsequent physical optimization/routing are still pending; routed clock
+and complete physical closure remain unqualified.
 
 The preceding dispatcher revision e completed synthesis and standard opt_design.
 It still required1,351,028 LUTs (103.63%),47,348 above U280 capacity, and did not
@@ -252,16 +255,29 @@ clock-context evidence supports the actual physical verification launched after
 all opt terminal reports and checkpoint were collected; it does not qualify
 200MHz, route completion or board deployment.
 
-The actual f placer has passed clock/macro initialization and entered global,
-partition-driven placement. At the2026-11-16 observation in
+The actual f placer completed placement on2026-11-16. At the earlier observation in
 `physical_a/placement_observation_a`, it reports21,589 of23,040 SLLs required
-across SLR1→SLR2 (93.70%, `Place30-356`). Vivado describes the current crossing
+across the SLR1/SLR2 boundary (93.70%, `Place30-356`). Vivado describes that crossing
 as routable but warns of possible performance impact. This is a real physical
 connectivity warning, not an observed routing failure or a routed frequency.
 The placement/route job remains active; no revision has been selected from
 this warning alone. The live log is cumulative: its retained opt prefix is
 byte-identical to the terminal opt snapshot; this observation captures only
 the new physical continuation block.
+
+The subsequent `post_place/utilization.rpt` reports1,233,715 LUTs
+(946,587 logic+287,128 memory),749,174 FF,1,148 BRAM36 equivalents,640 URAM,
+0 DSP and1 BUFGCE. SLR0/1/2 CLB site occupation is99.86/99.99/99.95%;
+SLR1 LUT occupation is98.24%. Actual post-place SLL usage is21,816/23,040
+(94.69%) across SLR1/SLR2 and19,723/23,040 (85.60%) across SLR0/SLR1.
+These boundary totals include both directions and differ from the earlier
+placer estimate. The report shows no TX/RX SLL registers used. `Place46-14`
+warns that the design is highly congested and may have difficulty routing.
+The internal post-placement timing estimate is WNS−20.657ns/TNS−4,535,293.207ns;
+this is neither a routed timing report nor a qualified frequency. The frozen
+post-place report hook is still computing timing. A separate idle session is
+reserved for read-only congestion reporting from the completed placed DCP;
+the active implementation and frozen hooks are unchanged.
 
 The preceding e full-core source closure is30 files. Its actual5ns synthesis
 completed on2026-11-15 at18:22:03UTC. The earlier1,254,466-LUT module sum is a
