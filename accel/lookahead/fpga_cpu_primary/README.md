@@ -74,7 +74,9 @@ remain99.92% occupied and high-congestion warnings persist.
 Initial router SLL demand is97.98%/106.02%, with localized columns
 above capacity on both boundaries; these differ from placed utilization and
 are not a terminal result. External OOC ports still lack physical boundary
-locations, limiting interface timing accuracy. No qualified full-core frequency
+locations. Route35-447 now prioritizes connectivity over timing due to
+congestion; the command is still active. Missing boundary context continues
+to limit interface timing accuracy. No qualified full-core frequency
 is available yet. `delivery/ssi_replay.tcl` records the single followup flow;
 see the closure report and raw `full_impl_f_ssi_spreadslls_a` for bindings/status.
 

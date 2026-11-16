@@ -17,6 +17,8 @@ improvement; default routing is now in progress.
 Initial router estimates still exceed total SLL capacity onSLR0/1(106.02%)
 and show localized over-capacity columns on both boundaries; route terminal
 legality and frequency remain unknown.
+The active router has switched to prioritizing connectivity over timing
+because of congestion; this is not yet a terminal route result.
 Existing200MHz model
 predictions remain conditional; the physical OOC interface-context limitation
 also remains unresolved. These observations do not establish a universal FPGA

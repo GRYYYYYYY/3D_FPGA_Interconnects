@@ -38,6 +38,9 @@ saved successfully; default route began at14:14:28UTC and remains active.
 Initial router SLL demand is97.98% onSLR1/2 and106.02% onSLR0/1, with
 localized over-capacity columns on both boundaries. These are routing estimates,
 not final SLL allocation or a route terminal result.
+After Phase3.2, Route35-447 reports congestion preventing completion of all
+nets and gives connectivity priority over timing. The command remains active;
+this warning is not itself a terminal failure.
 This is not legal-route or frequency qualification.
 Routed clock and complete physical closure remain unqualified, including the
 external interface context gap below.
@@ -492,6 +495,12 @@ Initializer zero overlaps coexist with1,873,320unrouted/partially routed nets;
 they are not terminal success or failure. `route_sll_demand_a` binds the raw
 partial log, repeated per-column tables and unchanged process identity.
 No additional strategy, RTL architecture or model point has been launched.
+Following the next completed timing update, Route35-447 explicitly states that
+congestion prevents routing all nets and that the router prioritizes successful
+connectivity over timing optimization. `route_congestion_priority_a` binds this
+actual message and the unchanged live process. There is still no route command
+return; the selected replay continues to its true terminal without an early
+failure/success claim or a parallel followup.
 
 The original f fixed post-route hook lacked separate all-path setup/hold and
 blackbox reports and was skipped on route error. Its additional collection is
