@@ -4,6 +4,15 @@ This is a separate draft. It does not modify the original manuscript. The
 implementation and physical-closure results below remain provisional until
 the closure report's qualification ledger is finalized.
 
+The original f complete-core implementation fits the device's global LUT count
+at1,233,715 LUTs,749,174 FF,1,148 BRAM36 equivalents and640 URAM, but routing
+failed with level7 global congestion and5,809,714 node overlaps. It therefore
+provides no qualified frequency or FPGA-versus-CPU timing result. One same-source,
+same5ns `SSI_SpreadSLLs` implementation is in progress. Existing200MHz model
+predictions remain conditional; the physical OOC interface-context limitation
+also remains unresolved. These observations do not establish a universal FPGA
+no-go and do not alter the retained historical evidence.
+
 We evaluate a finite FPGA core against an optimized CPU implementation of the
 same ALT whole-pair FP32 lookahead contract. A retained H100 implementation is
 a strong comparator; surpassing the GPU is not a condition for studying CPU

@@ -21,8 +21,14 @@ optimization and route were launched at23:54:12UTC from that DCP. Placement
 completed, with1,233,715 LUTs (94.63%) and749,174 FF in the actual post-place
 report. BRAM/URAM/DSP counts remain unchanged. Post-place report collection
 is complete. Standard physical optimization completed without changing cells
-or improving WNS; actual routing is running. Routed clock and complete physical
-closure remain unqualified, including the external interface context gap below.
+or improving WNS. The original routing attempt terminated with Route35-3 global
+congestion level7 on2026-11-16 at07:50:23UTC. Its error checkpoint reports the
+same1,233,715 LUTs and749,174 FF, with unchanged BRAM/URAM/DSP counts, but
+5,809,714 node overlaps make routing illegal despite a zero failed-net summary.
+One independent SSI_SpreadSLLs implementation from the same unplaced post-opt
+DCP started at10:53:05UTC; original synthesis/opt/physical results are preserved.
+Routed clock and complete physical closure remain unqualified, including the
+external interface context gap below.
 
 The preceding dispatcher revision e completed synthesis and standard opt_design.
 It still required1,351,028 LUTs (103.63%),47,348 above U280 capacity, and did not
@@ -318,13 +324,14 @@ TNS−3,843,878.163ns, WHS−2.452ns and THS−861,714.827ns; none is a final
 routed frequency. The observation is frozen in `physical_a/route_sll_demand_a`.
 Read-only reviews of a registered boundary context and installed SSI placement
 directives are feasibility checks, not selected revisions or launched candidates.
-The current run is allowed to reach its actual terminal result first.
+The original run was allowed to reach its actual terminal result before a
+single implementation-strategy followup was selected.
 
 After Phase3.2, Route35-447 reports that congestion prevents all nets from
 being routed and that the router will prioritize connectivity over timing
 optimization. The original child subsequently completed the Phase3.3,3.4 and3.5
-timing-update steps and entered Phase3.6 Update Timing. This remains an active
-attempt, not a terminal route failure. The partial logs and observations are
+timing-update steps and entered Phase3.6 Update Timing. Those observations were
+active-run snapshots, not terminal route results. The partial logs are
 retained in `physical_a/route_congestion_priority_a` and
 `physical_a/route_phase3_5_observation_a` and
 `physical_a/route_phase3_6_observation_a`. The latter also preserves the preceding
@@ -336,6 +343,44 @@ The run directory still contains an old `.vivado.end.rst` dated
 That file belongs to the preceding opt-only wrapper and cannot certify this
 route's completion. Use the actual project/run status, birth-matched process,
 current-stage markers and terminal reports together; do not reset this run.
+
+The original route subsequently failed after Phase3.6: Route35-3 reports level7
+global congestion; the terminal router summary contains5,809,714 node overlaps
+while failed/unrouted/partially-routed net counts are zero. The zeros do not waive
+overlapping routes. Global vertical/horizontal utilization is47.833%/48.2712%,
+while the reported local North/East congestion peaks are102.337%/111.459%.
+The original child exited at07:50:23UTC; the actual project reports
+`route_design ERROR`, with current route/vivado error markers. Error DCP size is
+628,605,511bytes, SHA256
+`9706b2cae8ee7f48b7bb9c033e548d947c18bac362f3eba931a362e625947c35`.
+`physical_a/route_terminal_a` preserves terminal logs, generated Tcl, markers
+and the checkpoint binding. `final_synthesis_review/route_error_review_a`
+classifies9,105 physical WARNING lines and2 ERROR lines; the tool's intermediate
+one-error summary precedes the final Common17-39. All9,097 Route35-198 port
+warnings remain unresolved interface-context limitations. The364,207 tight
+setup/hold pins are represented by a truncated10,000-pin file, not a complete list.
+
+Terminal error-checkpoint resource reports have now been generated in
+`physical_a/route_terminal_collection_a/reports_b`; timing and other collection
+steps are in progress. Their `Design State: Routed` header does not establish
+legal routing or timing closure. The first collector attempt stopped before
+report generation because Vivado2022.2 uses Tcl8.5.14 without `try/finally`.
+The original script and empty output are preserved; `collect_v2.tcl` uses
+validated `catch` cleanup semantics and a new output directory. This was a
+report-script compatibility error, not a synthesis or implementation rerun.
+
+The selected single followup is `full_impl_f_ssi_spreadslls_a`: same verified
+unplaced opt DCP,31 unchanged sources,U280,5ns,8 threads and explicit ultrathreads,
+with `place_design -directive SSI_SpreadSLLs -ultrathreads`, default phys_opt and
+default route. Actual local congestion, SLL demand and repeated SLR crossings
+on the placed critical paths motivate this placement change; no benefit is
+assumed. Nearly100% CLB-site occupancy may leave insufficient redistribution
+space. It neither repairs hold by definition nor supplies a physical OOC port
+context. No RTL/lane/device candidate runs in parallel. The new non-project
+flow uses a reused idle candidate-worktree interpreter, separate `run_a`
+outputs, process-birth/command receipts and frozen scripts. It is not a reset
+or relaunch of the original f project. Stage/checkpoint/report errors are
+recorded separately; no model or CPU/GPU rerun is triggered at this point.
 
 Terminal report collection also needs separate all-path setup/hold reports and
 an explicit blackbox census, which are absent from the frozen post-route hook.

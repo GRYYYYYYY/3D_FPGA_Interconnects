@@ -61,9 +61,14 @@ synthesis reports/source binding are audited; actual standard-opt resources are
 place/phys-opt/route resumed from that checkpoint at23:54:12UTC. Actual placement
 completed at1,233,715 LUTs (94.63%) and749,174 FF, with high-congestion warnings.
 Post-place timing fails setup/hold; standard phys_opt completed with zero WNS
-gain. Actual routing is running. External OOC ports also lack physical boundary
+gain. Original f routing failed with level7 global congestion and5,809,714 node
+overlaps. Its error DCP confirms the same global resources; a `Routed` report
+header does not waive those conflicts. One independent `SSI_SpreadSLLs`
+implementation from the same opt DCP is now running, with unchanged RTL,5ns,
+8 threads and ultrathreads. External OOC ports still lack physical boundary
 locations, limiting interface timing accuracy. No qualified full-core frequency
-is available yet. See the closure report for current qualification.
+is available yet. `delivery/ssi_replay.tcl` records the single followup flow;
+see the closure report and raw `full_impl_f_ssi_spreadslls_a` for bindings/status.
 
 From the repository root, with the retained raw fixtures available, these
 commands use **new, nonexistent output directories**:
