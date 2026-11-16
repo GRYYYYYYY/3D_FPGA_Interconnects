@@ -180,8 +180,33 @@ resource or timing result is available yet. `prepare_eda.py --sources-list`
 supports the isolated alternative closure; its default discovery was verified
 to still resolve the original f closure.
 
-The SSI session PID2502597 is separately still collecting its21error-report
-groups. Its actual error DCP and completed resource reports remain bound to f.
+At h launch, SSI session PID2502597 was separately collecting its21error-report
+groups. That collection has now completed; the terminal update below supersedes
+the active-collection status. Its actual error DCP and reports remain bound to f.
 Current qualification fields now refer only to h; previous f and SSI records
 are retained in explicit historical sections and immutable pre-transition
 snapshots. A completed synthesis alone will not qualify fit or frequency.
+
+## SSI terminal delivery at19:44:55UTC
+
+The original SSI command is now idle, return1 from route failure. All21report
+groups returned0; checkpoint writing succeeded. Do not restart SSI or invoke
+its collector again. `full_impl_f_ssi_spreadslls_a/terminal_audit_a` contains
+the complete replay log, receipts, stable DCP rehash,31source bindings,
+30report-artifact hashes, parsed audit and manual review. There are no missing
+audit fields. Main closure report now includes actual terminal resources,
+timing, routing legality, clock/control-buffer separation and warning classes.
+
+The full failure review does not qualify a clock. h remains the only active
+candidate and its existing synth_1 must be supervised, not relaunched. At
+19:47UTC it is in Timing Optimization, PID1914551/start_ticks176389453.
+The new `synthesis_collection_a/collect.tcl` and `impl_context_connected_a`
+under h are prepared but have NOT run. After actual synthesis completion,
+verify project/run/status and DCP/source hashes, run the report collection,
+review full resources/warnings, then standard opt-only. The cloned hooks use
+real clock connectivity and only the external core clock context. Physical
+implementation still requires the actual post-opt resource/clock gate.
+
+The latest pushed code/calibration snapshot before this terminal audit is
+`eca17e1f39342477050eb7471cde6498127ee46a`, remote SHA verified. Later evidence
+will be archived/pushed separately; large local DCP binaries are not in Git.

@@ -493,7 +493,7 @@ optimization DCP has SHA256
 `e55c6ff18e9791c3119bcbfce474479f9195fd93e7976cd6d56ebb4af5da21e2`.
 `physopt_terminal_a` records successful stage/checkpoint completion, unchanged
 process birth and the same replay's route start at14:14:28UTC. Route later
-returned1 at18:42:24UTC; error-DCP saving completed and automatic report collection remains active.
+returned1 at18:42:24UTC; error-DCP saving and all21terminal report groups completed with0failures at19:44:55UTC.
 There is no qualified frequency.
 
 At initial Global Routing/SLL Assignment, actual router estimates are
@@ -508,7 +508,7 @@ Route35-416 WNS−15.073ns/WHS−2.489ns is not a qualified frequency.
 Initializer zero overlaps coexist with1,873,320unrouted/partially routed nets;
 they are not terminal success or failure. `route_sll_demand_a` binds the raw
 partial log, repeated per-column tables and unchanged process identity.
-No additional strategy, RTL architecture or model point has been launched.
+At that intermediate observation, no additional strategy, RTL architecture or model point had been launched. The later h followup is recorded below.
 Following the next completed timing update, Route35-447 explicitly states that
 congestion prevents routing all nets and that the router prioritizes successful
 connectivity over timing optimization. `route_congestion_priority_a` binds this
@@ -519,8 +519,8 @@ failed/unrouted/partial nets; the overlaps still make the trial illegal. Global
 vertical/horizontal use is48.105%/46.5161%; local south/east peaks are
 104.861%/108.021%. There are330,257 tight setup/hold pins, with only10,000
 retained in the list. The route return code is1 after16,076,514ms; error DCP
-saving completed and21-group collection remains active. `route_failure_observed_a` preserves
-the initial failure observation separately from the forthcoming terminal audit.
+saving and21-group collection completed successfully. `route_failure_observed_a` preserves
+the initial failure observation separately from the completed `terminal_audit_a` review.
 One minimal return-payload wordmux revision is selected in
 `dispatch_return_wordmux_a/decision.json`. It is implemented in an isolated
 alternate source and passed the existing local protocol/selector/lifecycle
@@ -528,6 +528,20 @@ regressions and full52/11 calibration. New h full-core synthesis is running.
 See the continuation report
 for its separate31-source configuration. No new-source global resource or
 timing gain is claimed.
+
+SSI terminal audit now has zero missing fields and retains the actual failure.
+Error-state resources remainLUT1,232,534 (LUTRAM286,232+SRL896),FF749,226,
+BRAM1,148,URAM640,DSP0,BUFG2. WNS/TNS are−15.487/−3,098,668.250ns;
+WHS/THS are−3.530/−1,410,972.500ns. Serialized/error-state routing has
+1,873,322routable nets,2fully routed and1,873,320unrouted, distinct from the
+router trial overlap count. All12check_timing counts are0, but RTSTAT13=1
+and methodology3024remain. The all/core/direct clock name sets match at
+1,237,554pins; both BUFGs drive0clock loads (control loads99,140and5,346).
+The error DCP SHA256 is0bd512a2622439528b1802a398530385473c85bb6c5ac4cf5858ffc47316568f.
+Complete logs,11message-ID classifications, all/internal paths,30report artifacts,
+source/DCP hashes and congestion windows are in`terminal_audit_a`. No routed
+frequency or formal FPGA-vs-CPU speedup is available. The h synthesis remains
+in progress; this terminal failure belongs to the unchanged f source.
 
 The original f fixed post-route hook lacked separate all-path setup/hold and
 blackbox reports and was skipped on route error. Its additional collection is
