@@ -15,8 +15,10 @@ unchanged g160 model evidence is explicitly reused. Its complete-core synthesis
 started at19:12:06UTC on2026-11-16 and completed its child run at20:44:25UTC.
 Actual synthesis uses1,223,270LUT(93.83%),749,607FF,1,148BRAM36-equivalent,
 640URAM and0DSP. This saves20,826LUT versus f synthesis. The full report
-collector completed0 and actual-clock preflight passed. Standard opt-only is
-running from21:11:59UTC; physical placement/routing remain pending.
+collector completed0 and actual-clock preflight passed. Standard opt-only finished
+at21:55:09UTC with1,220,068LUT(93.59%),748,933FF and unchanged BRAM/URAM/DSP.
+Its actual resource/clock/DCP audit is complete. The same SSI strategy for this
+single h RTL revision launched once at21:58:41UTC; opening its verified opt DCP.
 No h routed timing is available.
 See the continuation report for source bindings and live-run recovery.
 
@@ -529,7 +531,7 @@ the initial failure observation separately from the completed `terminal_audit_a`
 One minimal return-payload wordmux revision is selected in
 `dispatch_return_wordmux_a/decision.json`. It is implemented in an isolated
 alternate source and passed the existing local protocol/selector/lifecycle
-regressions and full52/11 calibration. New h full-core synthesis/report collection and clock preflight are complete; standard opt-only is running.
+regressions and full52/11 calibration. New h full-core synthesis/report collection and clock preflight are complete; standard opt-only is complete and h SSI physical replay is running.
 See the continuation report
 for its separate31-source configuration. Measured h global synthesis LUT reduction is20,826. No timing or routed gain is claimed.
 
@@ -544,7 +546,7 @@ and methodology3024remain. The all/core/direct clock name sets match at
 The error DCP SHA256 is0bd512a2622439528b1802a398530385473c85bb6c5ac4cf5858ffc47316568f.
 Complete logs,11message-ID classifications, all/internal paths,30report artifacts,
 source/DCP hashes and congestion windows are in`terminal_audit_a`. No routed
-frequency or formal FPGA-vs-CPU speedup is available. The h synthesis/report review is complete and standard opt-only is in progress;
+frequency or formal FPGA-vs-CPU speedup is available. The h synthesis/report review is complete and h SSI physical replay is in progress;
 this SSI terminal failure belongs to the unchanged f source.
 
 The original f fixed post-route hook lacked separate all-path setup/hold and
@@ -803,7 +805,7 @@ retaining the measured host environment. It supplies no FPGA clock qualification
 | Optimized CPU thread selection on current allocation | measured, complete |
 | Whole-pair ALT CPU outputs equal frozen golden | exact full batches |
 | Runtime connected production L1 source/function | 52 complete executions and11 rejection checks passed |
-| Complete-core resources fit U280 | h actual synthesis93.83% LUT; full-report/clock review complete, standard opt running and physical placement pending, so fit unqualified; prior f both routes failed; e opt103.63% retained |
+| Complete-core resources fit U280 | h synth93.83%/post-opt93.59% LUT; full-report/clock/DCP review complete, SSI physical replay active, so fit unqualified; prior f both routes failed; e opt103.63% retained |
 | Complete-core routed clock | unqualified |
 | RTL/finite-model calibration at200MHz test service | 52 complete cases with exact phase/request schedules |
 | Complete model_g outputs at assumed200MHz | both scenarios,160 samples verified |

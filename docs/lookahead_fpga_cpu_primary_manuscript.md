@@ -14,12 +14,12 @@ but CLB sites remain99.92% occupied and the high-congestion warning persists.
 Completed post-place reports give WNS−15.487ns/WHS−3.530ns at5ns; setup and
 hold remain unclosed. Default phys_opt made zero cell changes and no timing
 improvement; subsequent routing failed with Route35-3 global congestion7 and
-5,795,346 node overlaps. Error-checkpoint saving completed; full terminal collection remains active.
+5,795,346 node overlaps. Error-checkpoint saving and all21terminal report groups completed; failure audit is complete.
 Initial router estimates still exceed total SLL capacity onSLR0/1(106.02%)
 and show localized over-capacity columns on both boundaries; route terminal
 legality failed and frequency remains unqualified.
 The router prioritized connectivity over timing because of congestion, then
-returned1. The subsequent report collection must still be audited.
+returned1. The complete terminal audit preserves the failure, including the error DCP and all/internal paths.
 Existing200MHz model
 predictions remain conditional; the physical OOC interface-context limitation
 also remains unresolved. These observations do not establish a universal FPGA
@@ -31,8 +31,10 @@ The unchanged finite g model and160full samples are explicitly reused. Its
 complete-core synthesis completed with1,223,270LUT(93.83%),20,826fewer than f,
 749,607FF,1,148BRAM36-equivalent,640URAM and0DSP. Dispatch hierarchy uses
 80,254LUT versus99,304previously. The full synthesis report and actual clock
-preflight are complete; standard opt-only is running. Unplaced WNS−5.098ns
-andWHS−0.091ns are not qualified timing. No routed frequency or formal CPU
+preflight are complete. Standard opt-only completed with1,220,068LUT(93.59%)
+and748,933FF, saving3,202LUT and674FF from synthesis; BRAM/URAM/DSP remain
+unchanged. Post-opt WNS−5.106ns andWHS−0.091ns are unplaced estimates. A
+full-core h SSI replay from the verified new DCP started21:58:41UTC onNov16. No routed frequency or formal CPU
 acceleration is established by this synthesis resource reduction.
 
 We evaluate a finite FPGA core against an optimized CPU implementation of the

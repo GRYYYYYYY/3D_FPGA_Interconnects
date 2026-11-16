@@ -5,6 +5,9 @@ on the existing `accel/lookahead-cpu-primary-closure-20261115` worktree.
 The 2026-11-16 publication snapshot remains frozen. New observations below are
 timestamped; they are not a claim of an achieved FPGA speedup.
 
+Current recovery point: **h SSI replay started2026-11-16 21:58:41UTC**;
+see the final section. Earlier timestamped observations below are historical.
+
 ## Verified continuation at 2026-11-16 18:04:24 UTC
 
 The existing SSI route is active. Phase3.5 Update Timing completed, and Phase3.6
@@ -294,3 +297,61 @@ Next: collect actual opt terminal, DCP, global/hierarchy resource delta and
 clock/control-buffer classification. If those pass the resource/context gate,
 continue this single h candidate to full physical implementation. Preserve the
 original f and SSI terminal failures and all protected histories.
+
+## h standard opt complete; h SSI replay active at21:58:41UTC
+
+The original opt-only child235989/start177108880 exited at21:55:09UTC.
+The already-issued parent wait returned0. Actual project query at21:56:09UTC
+reports synth complete, impl`Not started place_design`,40%,NEEDS_REFRESH0:
+this is the terminal opt-only state, not a failed or active placement. All
+init/opt/wrapper end markers are present. Do not relaunch or reset that run.
+`full_synth_h_return_wordmux/opt_terminal_a` retains actual tool results,
+process terminal, generated Tcl, log, markers and complete report review.
+
+| Resource | h pre-opt | h post-opt | Change |
+|---|---:|---:|---:|
+| LUT |1223270|1220068|−3202|
+| LUT logic |935214|932268|−2946|
+| LUTRAM |286776|286776|0|
+| SRL |1280|1024|−256|
+| FF |749607|748933|−674|
+| BRAM36-equivalent |1148|1148|0|
+| URAM |640|640|0|
+| DSP |0|0|0|
+| BUFGCE |0|1|+1|
+
+Post-opt all/core/direct clock pin name sets are identical at1,237,261.
+The sole BUFG is`dispatch/core_reset_BUFG_inst`:99,097loads,0clock pins.
+Only real clk retains external OOC sourceBUFGCE_X0Y144. The run has two empty-
+blackbox-query warnings and oneTiming38-242 for reset's upstream OOC context;
+all are classified, none waived. No fake clock context was assigned to reset.
+DRC0;12check_timing checks0;methodology2024(SYNTH5=1024,TIMING16=1000).
+Unplaced WNS−5.106/TNS−48,440.133ns,WHS−0.091/THS−13,166.243ns.
+64banks/16fronts/32ports and9681nonconstant-driven outputs survive;0blackboxes.
+These observations are not formal equivalence or routed timing qualification.
+The138unproven generated synthesis aliases remain explicit.
+
+Actual new opt DCP:402149724bytes, SHA256
+`832f257f83d47575d9ea4bfb448b19f49be489ce93d18938a0a1b4f29ab0e3d5`.
+The new physical root is`full_impl_h_ssi_spreadslls_a`; frozen replay binds
+this h DCP, not the old f hash. Its frozen clock/census helpers and report
+collector are bound by`freeze.json`;`launch.tcl` is the exact entry point.
+The strategy is unchanged SSI_SpreadSLLs/ultrathreads,8threads,default phys_opt
+and route,5ns target. This tests the one h RTL revision without adding candidates.
+
+The existing idle h MCP session was reused after closing its completed project:
+`vivado-20261115-113226-a1b5e8eb`,PID1165972,start_ticks164991348,
+boot2c285022-7829-4b21-84d8-176f6732a754. h replay began21:58:41UTC and is
+opening the verified input checkpoint. It is **non-project**: no new project run
+or child PID. The parent log is`dispatch_synth_a/.vivado-ai/
+vivado_42346525_14d7ac8e.log`, h-only byte offset4219527. Actual working/output
+directory is`full_impl_h_ssi_spreadslls_a/run_a`. Use its receipt and the
+parent birth identity; do not infer the active candidate from the old log folder.
+Do not re-source the launch script while active. The replay saves each stage
+DCP and collects terminal failure evidence on error. Preserve old f/SSI history.
+
+Next: supervise this existing h replay, collect real placed/route resources and
+all/internal setup/hold, clock/connectivity, congestion, DCP and complete warning
+classification. Only after qualified routed frequency perform ns-memory-aware
+calibration/full BNN40/LSTM40 conversion and CPU64 comparison. Current formal
+FPGA time/frequency/speedup remain unavailable;200MHz model values stay conditional.
