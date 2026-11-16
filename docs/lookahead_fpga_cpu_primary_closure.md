@@ -252,6 +252,17 @@ clock-context evidence supports the actual physical verification launched after
 all opt terminal reports and checkpoint were collected; it does not qualify
 200MHz, route completion or board deployment.
 
+The actual f placer has passed clock/macro initialization and entered global,
+partition-driven placement. At the2026-11-16 observation in
+`physical_a/placement_observation_a`, it reports21,589 of23,040 SLLs required
+across SLR1→SLR2 (93.70%, `Place30-356`). Vivado describes the current crossing
+as routable but warns of possible performance impact. This is a real physical
+connectivity warning, not an observed routing failure or a routed frequency.
+The placement/route job remains active; no revision has been selected from
+this warning alone. The live log is cumulative: its retained opt prefix is
+byte-identical to the terminal opt snapshot; this observation captures only
+the new physical continuation block.
+
 The preceding e full-core source closure is30 files. Its actual5ns synthesis
 completed on2026-11-15 at18:22:03UTC. The earlier1,254,466-LUT module sum is a
 historical planning estimate, not the measured fit. That e run requires
