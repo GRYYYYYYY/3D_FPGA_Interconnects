@@ -38,13 +38,16 @@ betweenSLR1/2 and20,527/23,040 betweenSLR0/1. CLB-site occupancy remains
 99.92% and Place46-14 still reports high congestion. All post-place reports
 completed: WNS−15.487ns and WHS−3.530ns still fail the5ns target. Default
 phys_opt completed with zero cell changes and zero timing gain. Its DCP was
-saved successfully; default route began at14:14:28UTC and remains active.
+saved successfully; default route began at14:14:28UTC and returned1 at
+18:42:24UTC with Route35-3 global congestion level7 and5,795,346 trial node
+overlaps. Error checkpoint saving completed; full terminal report collection remains active.
 Initial router SLL demand is97.98% onSLR1/2 and106.02% onSLR0/1, with
 localized over-capacity columns on both boundaries. These are routing estimates,
 not final SLL allocation or a route terminal result.
 After Phase3.2, Route35-447 reports congestion preventing completion of all
-nets and gives connectivity priority over timing. The command remains active;
-this warning is not itself a terminal failure.
+nets and gives connectivity priority over timing. That earlier warning was
+not itself terminal; the subsequent Route35-3 and command return1 now establish
+the route failure.
 This is not legal-route or frequency qualification.
 Routed clock and complete physical closure remain unqualified, including the
 external interface context gap below.
@@ -483,8 +486,9 @@ TNS representation is not an optimization gain. The621,424,927byte physical-
 optimization DCP has SHA256
 `e55c6ff18e9791c3119bcbfce474479f9195fd93e7976cd6d56ebb4af5da21e2`.
 `physopt_terminal_a` records successful stage/checkpoint completion, unchanged
-process birth and the same replay's route start at14:14:28UTC. Route is active;
-the overall flow has no terminal result or qualified frequency yet.
+process birth and the same replay's route start at14:14:28UTC. Route later
+returned1 at18:42:24UTC; automatic error-DCP/report collection is still pending.
+There is no qualified frequency.
 
 At initial Global Routing/SLL Assignment, actual router estimates are
 22,575/23,040(97.98%) onSLR1/2 and24,426/23,040(106.02%) onSLR0/1.
@@ -502,9 +506,17 @@ No additional strategy, RTL architecture or model point has been launched.
 Following the next completed timing update, Route35-447 explicitly states that
 congestion prevents routing all nets and that the router prioritizes successful
 connectivity over timing optimization. `route_congestion_priority_a` binds this
-actual message and the unchanged live process. There is still no route command
-return; the selected replay continues to its true terminal without an early
-failure/success claim or a parallel followup.
+actual message and the unchanged live process at that observation. After
+Phase3.6, the SSI command failed with Route35-3 global congestion7. Trial
+routing reports5,795,346 overlaps (14,368 fewer than default f), with zero
+failed/unrouted/partial nets; the overlaps still make the trial illegal. Global
+vertical/horizontal use is48.105%/46.5161%; local south/east peaks are
+104.861%/108.021%. There are330,257 tight setup/hold pins, with only10,000
+retained in the list. The route return code is1 after16,076,514ms; error DCP
+and21-group collection remain pending. `route_failure_observed_a` preserves
+the initial failure observation separately from the forthcoming terminal audit.
+One minimal return-payload wordmux revision is selected in
+`dispatch_return_wordmux_a/decision.json`; it is not yet implemented or tested.
 
 The original f fixed post-route hook lacked separate all-path setup/hold and
 blackbox reports and was skipped on route error. Its additional collection is
@@ -762,7 +774,7 @@ retaining the measured host environment. It supplies no FPGA clock qualification
 | Optimized CPU thread selection on current allocation | measured, complete |
 | Whole-pair ALT CPU outputs equal frozen golden | exact full batches |
 | Runtime connected production L1 source/function | 52 complete executions and11 rejection checks passed |
-| Complete-core resources fit U280 | f actual post-opt95.20%; physical implementation pending; e post-opt103.63% retained |
+| Complete-core resources fit U280 | f actual post-opt95.20%, SSI placed94.54%; both default and SSI routing failed; e post-opt103.63% retained |
 | Complete-core routed clock | unqualified |
 | RTL/finite-model calibration at200MHz test service | 52 complete cases with exact phase/request schedules |
 | Complete model_g outputs at assumed200MHz | both scenarios,160 samples verified |

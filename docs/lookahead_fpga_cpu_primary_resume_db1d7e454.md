@@ -28,6 +28,17 @@ SSI-only log starts at byte45235. Launch identity, frozen scripts and receipt
 are under `full_impl_f_ssi_spreadslls_a`; new immutable resume evidence is under
 `continuation_after_db1d7e454_a` in the same raw results root.
 
+## Subsequent route failure at 2026-11-16 18:42:24 UTC
+
+Phase3.6 completed, then Route35-3 reported global congestion7. The command
+returned1 after16,076,514ms. Its trial summary has5,795,346 node overlaps and
+zero failed nets, which does not establish legal routing. South/east local
+congestion peaks are104.861%/108.021%. The existing replay is saving the error
+DCP and will collect all21 report groups; those terminal artifacts remain
+pending. One minimal return-payload wordmux revision is selected, not yet implemented
+or tested. Initial failure evidence is
+preserved under `full_impl_f_ssi_spreadslls_a/route_failure_observed_a`.
+
 ## Actual full-core resource comparison
 
 | Stage | LUT | Logic LUT | LUTRAM | SRL | FF | BRAM36 equivalent | URAM | DSP | BUFGCE |
@@ -53,7 +64,7 @@ no local-module estimates or nonadditive hierarchy sums enter this table.
 | Complete core globally fits bare U280 resource counts | Supported at opt and placement; platform shell excluded |
 | Original default f implementation routed legally | False: terminal global congestion and node overlaps |
 | SSI placement and default phys_opt completed | Verified; phys_opt gave no cell or timing improvement |
-| SSI routing completed | Pending actual terminal; active Phase3.6 at snapshot |
+| SSI routing completed | Command returned1: global congestion7, illegal trial overlaps; terminal report collection pending |
 | Qualified complete-core routed frequency | Unavailable |
 | Frequency-qualified BNN40/LSTM40 time and CPU speedup | Unavailable; no formal conversion allowed yet |
 | Existing52 RTL calibrations and160 model samples | Verified at the unchanged source/service point;200MHz remains conditional |

@@ -70,14 +70,16 @@ implementation from the same opt DCP is now running, with unchanged RTL,5ns,
 8 threads and ultrathreads. Its placement completed at1,232,534LUT/749,226FF,
 with unchanged BRAM/URAM/DSP and2BUFGCE. Post-place reports completed with
 WNS−15.487ns/WHS−3.530ns. Default phys_opt completed with zero cell changes
-and zero timing gain; default route began at14:14:28UTC and is running.
+and zero timing gain; default route began at14:14:28UTC and returned1 at
+18:42:24UTC with Route35-3 congestion7 and5,795,346 trial overlaps. Error DCP
+saving completed; full terminal report collection remains active.
 Placed SLL usage shifts to85.45%/89.09% on the two boundaries, but CLB sites
 remain99.92% occupied and high-congestion warnings persist.
 Initial router SLL demand is97.98%/106.02%, with localized columns
 above capacity on both boundaries; these differ from placed utilization and
 are not a terminal result. External OOC ports still lack physical boundary
 locations. Route35-447 now prioritizes connectivity over timing due to
-congestion; the command is still active. Missing boundary context continues
+congestion; the subsequent command has now failed. Missing boundary context continues
 to limit interface timing accuracy. No qualified full-core frequency
 is available yet. `delivery/ssi_replay.tcl` records the single followup flow;
 see the closure report and raw `full_impl_f_ssi_spreadslls_a` for bindings/status.

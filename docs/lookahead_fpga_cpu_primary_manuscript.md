@@ -13,12 +13,13 @@ and749,226FF, with unchanged BRAM/URAM/DSP. Its SLL boundary use is85.45%/89.09%
 but CLB sites remain99.92% occupied and the high-congestion warning persists.
 Completed post-place reports give WNS−15.487ns/WHS−3.530ns at5ns; setup and
 hold remain unclosed. Default phys_opt made zero cell changes and no timing
-improvement; default routing is now in progress.
+improvement; subsequent routing failed with Route35-3 global congestion7 and
+5,795,346 node overlaps. Error-checkpoint saving completed; full terminal collection remains active.
 Initial router estimates still exceed total SLL capacity onSLR0/1(106.02%)
 and show localized over-capacity columns on both boundaries; route terminal
-legality and frequency remain unknown.
-The active router has switched to prioritizing connectivity over timing
-because of congestion; this is not yet a terminal route result.
+legality failed and frequency remains unqualified.
+The router prioritized connectivity over timing because of congestion, then
+returned1. The subsequent report collection must still be audited.
 Existing200MHz model
 predictions remain conditional; the physical OOC interface-context limitation
 also remains unresolved. These observations do not establish a universal FPGA
