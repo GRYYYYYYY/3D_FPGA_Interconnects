@@ -306,6 +306,20 @@ physical concentration, not a causal attribution or total resource fraction.
 See `physical_a/congestion_review_a/terminal.json` and `analysis_a` for the
 report, input DCP binding, execution transcript and parsed rows.
 
+The original route run subsequently reports estimated SLL demand26,153/23,040
+(113.51%) across SLR1/SLR2 and23,852/23,040 (103.52%) across SLR0/SLR1;
+its highest local column is209%. These router demand estimates are distinct
+from the actual placed SLL counts above. Route35-3311 warns that a suitable
+crossing solution might not be found. Route35-41 reports unusually high hold
+violations and Route35-445 identifies at least1,953 high-pin-utilization CLBs.
+SLL assignment and the logged global-routing step have returned, while the
+full route remains running. The intermediate timing values are WNS−19.926ns,
+TNS−3,843,878.163ns, WHS−2.452ns and THS−861,714.827ns; none is a final
+routed frequency. The observation is frozen in `physical_a/route_sll_demand_a`.
+Read-only reviews of a registered boundary context and installed SSI placement
+directives are feasibility checks, not selected revisions or launched candidates.
+The current run is allowed to reach its actual terminal result first.
+
 Route35-198 exposes a separate OOC interface limitation: external signal ports
 lack HD.PARTPIN_LOCS, so their partial routes and input/output timing are not
 accurate. The observation includes all8,192 sd bits; its9,097 warning lines
