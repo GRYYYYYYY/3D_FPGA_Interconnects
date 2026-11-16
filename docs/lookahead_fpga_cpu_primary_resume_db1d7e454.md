@@ -210,3 +210,87 @@ implementation still requires the actual post-opt resource/clock gate.
 The latest pushed code/calibration snapshot before this terminal audit is
 `eca17e1f39342477050eb7471cde6498127ee46a`, remote SHA verified. Later evidence
 will be archived/pushed separately; large local DCP binaries are not in Git.
+
+## h synthesis terminal and active collector,20:59UTC
+
+The h synthesis child1914551 exited normally at20:44:25UTC. Parent
+`wait_on_run synth_1` completed0 at20:44:37UTC. Live Tcl confirms the h project,
+U280/cp_full_top, synth_design Complete!/100%, NEEDS_REFRESH0 and impl_1 Not
+started. All31current/frozen source hashes match. Terminal DCP is681,084,349bytes,
+SHA256`700ef698aa190e59140650c34a9cb2fcb2dbccfe069dec9504786becca9e76a8`.
+The child terminal has8654warnings,0critical warnings and0errors.
+
+Actual full-core synthesis resources:
+
+| Resource | f | h | h−f |
+|---|---:|---:|---:|
+| Global LUT |1,244,096|1,223,270|−20,826|
+| Logic LUT |956,040|935,214|−20,826|
+| LUTRAM |286,776|286,776|0|
+| SRL |1,280|1,280|0|
+| FF |749,617|749,607|−10|
+| BRAM36-equivalent |1,148|1,148|0|
+| URAM |640|640|0|
+| DSP |0|0|0|
+| BUFGCE |0|0|0|
+
+Dispatch hierarchy LUT99,304→80,254 andFF15,221→15,185. Other hierarchy rows
+also shift during mapping; hierarchy LUTs are not an additive global budget.
+No physical fit/frequency is inferred from this synthesis reduction.
+
+The existing MCP session`vivado-20261115-113226-a1b5e8eb`, parent1165972/
+start_ticks164991348, is executing the already prepared `synthesis_collection_a/
+collect.tcl`. Do NOT repeat it or send another Tcl command while busy. The
+function-call wait handed off after300s; the command continues in Vivado.
+`collection_live_identity.json` binds its live log at byte offset3641653.
+At20:59UTC global/hierarchy reports are complete and timing_summary is active.
+
+Current warning review rechecks all8654diagnostics. Of499entries needing manual
+source interpretation,361have documented source explanations and138generated
+constant aliases remain unproven (2lane,4edge,123output,9admin). Nothing is waived;
+old142-alias identities are not copied onto this new netlist. A packaged CSV
+helper had a seven-column/six-column schema mismatch; its unchanged parser output
+is retained and a documented six-column input adapter yields8654correctly grouped
+warnings. This auxiliary issue does not alter RTL, logs or EDA execution.
+
+When collector is terminal, verify all reports/DCP/census and finalize the warning
+report. Then use the prepared h standard opt-only hooks after the actual source/
+resource gate. No opt or physical run has yet launched. Previous f/SSI failures
+and protected references remain unchanged.
+
+## h full synthesis review complete; standard opt-only active
+
+The full synthesis collector completed0. Its terminal audit is
+`full_synth_h_return_wordmux/synthesis_collection_a/terminal_review.json`.
+Actual64banks/16fronts/32ports survive;9681outputs have nonconstant primitive
+drivers,0zero-driver outputs,0blackboxes. DRC0,all12check_timing counts0.
+Methodology2024 = SYNTH5(1024)+TIMING16(1000). At5ns, unplaced WNS−5.098ns,
+TNS−48,686.059ns,WHS−0.091ns,THS−10,814.053ns. This is not routed frequency.
+All8654warnings are covered once in the report with CSV serial references;
+303actual source locations are retained. The138unproven generated aliases
+remain explicit. Portable report copies are outside the excluded vendor tree.
+
+Before implementation, the read-only h clock query returned0: all/core/direct
+name sets equal at1,238,191clock pins,0clock-capable buffers, external source
+siteBUFGCE_X0Y144available. No synthetic core clock was assigned to reset/enable.
+`pre_impl_clock_review_a` retains actual outputs. `opt_only_gate.json` binds the
+source/resource/clock review and full synthesized DCP; it is not timing signoff.
+
+Standard opt-only launched once at2026-11-16 21:11:59UTC in the same h project,
+run`impl_1`, stop step`opt_design`. Actual childPID235989/start_ticks177108880,
+boot`2c285022-7829-4b21-84d8-176f6732a754`; parent session remains
+`vivado-20261115-113226-a1b5e8eb`,PID1165972/start_ticks164991348.
+`impl_context_connected_a/launch_identity.json` and `launch_tool_result.json`
+bind the launch. `wait_on_run impl_1` has been issued once. Do not reset or
+relaunch. Current child log is`project/cp_full.runs/impl_1/runme.log` under h.
+
+The init hook rechecks actual clk topology and applies the declared external
+OOC core source only to clk. Post-opt hook separately inventories actual buffers
+and clock loads. Hooks are external to Vivado utils_1 (Runs36-537); their exact
+scripts/hashes are explicitly archived by this delivery flow. The warning does
+not mean a hook is missing. No physical placement/route has started for h.
+
+Next: collect actual opt terminal, DCP, global/hierarchy resource delta and
+clock/control-buffer classification. If those pass the resource/context gate,
+continue this single h candidate to full physical implementation. Preserve the
+original f and SSI terminal failures and all protected histories.

@@ -56,7 +56,10 @@ Current h followup: the isolated `dispatch/return_wordmux/sources.json` closure
 changes only dispatcher return-payload selection. Local and new52-native/11-
 rejection full-core calibration passed; unchanged g160 evidence is reused via
 `model_calibration_h_return_wordmux_a`. Full synthesis h started once at
-2026-11-16 19:12:06UTC. Its resource/timing result is unknown. The default source
+2026-11-16 19:12:06UTC and completed its child run at20:44:25UTC. Actual
+synthesis uses1,223,270LUT(93.83%),749,607FF,1,148BRAM36-equivalent,640URAM,
+0DSP;20,826fewer LUTs than f. Full report/clock review completed; standard
+opt-only started at21:11:59UTC. Physical timing remains pending. The default source
 closure below remains f for reproducibility. See the
 [continuation and recovery report](../../../docs/lookahead_fpga_cpu_primary_resume_db1d7e454.md).
 

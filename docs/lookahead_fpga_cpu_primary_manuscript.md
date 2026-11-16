@@ -28,8 +28,12 @@ no-go and do not alter the retained historical evidence.
 A single isolated return-payload wordmux revision h subsequently passed local
 protocol/state checks and new52-native/11-rejection full-core calibration.
 The unchanged finite g model and160full samples are explicitly reused. Its
-complete-core synthesis is now running; no actual h resource reduction, routed
-frequency or CPU acceleration is claimed before those measurements.
+complete-core synthesis completed with1,223,270LUT(93.83%),20,826fewer than f,
+749,607FF,1,148BRAM36-equivalent,640URAM and0DSP. Dispatch hierarchy uses
+80,254LUT versus99,304previously. The full synthesis report and actual clock
+preflight are complete; standard opt-only is running. Unplaced WNS−5.098ns
+andWHS−0.091ns are not qualified timing. No routed frequency or formal CPU
+acceleration is established by this synthesis resource reduction.
 
 We evaluate a finite FPGA core against an optimized CPU implementation of the
 same ALT whole-pair FP32 lookahead contract. A retained H100 implementation is
