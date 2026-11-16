@@ -9,7 +9,13 @@ Earlier frozen checkpoint: [2026-11-15 completed and in-flight experiments](look
 Status: implementation and verification in progress. This file is updated as
 terminal evidence arrives; it is not a claim of completed FPGA acceleration.
 
-The selected RTL is the candidate payload-wordmux revision frozen as31 sources
+The current single followup h changes only dispatcher return-payload selection.
+It passed local checks and new52-native/11-rejection full-core calibration;
+unchanged g160 model evidence is explicitly reused. Its complete-core synthesis
+started at19:12:06UTC on2026-11-16 and has no terminal resources or timing yet.
+See the continuation report for source bindings and live-run recovery.
+
+The last physically evaluated RTL is the f candidate payload-wordmux revision frozen as31 sources
 in `full_synth_f_wordmux`. Its three-seed local comparison passed49,693 edges.
 The complete52-sample/11-rejection suite also passed: full outputs, total
 cycles,19 phase totals,3772 intervals and72917 requests/returns match model_g
@@ -487,7 +493,7 @@ optimization DCP has SHA256
 `e55c6ff18e9791c3119bcbfce474479f9195fd93e7976cd6d56ebb4af5da21e2`.
 `physopt_terminal_a` records successful stage/checkpoint completion, unchanged
 process birth and the same replay's route start at14:14:28UTC. Route later
-returned1 at18:42:24UTC; automatic error-DCP/report collection is still pending.
+returned1 at18:42:24UTC; error-DCP saving completed and automatic report collection remains active.
 There is no qualified frequency.
 
 At initial Global Routing/SLL Assignment, actual router estimates are
@@ -513,10 +519,15 @@ failed/unrouted/partial nets; the overlaps still make the trial illegal. Global
 vertical/horizontal use is48.105%/46.5161%; local south/east peaks are
 104.861%/108.021%. There are330,257 tight setup/hold pins, with only10,000
 retained in the list. The route return code is1 after16,076,514ms; error DCP
-and21-group collection remain pending. `route_failure_observed_a` preserves
+saving completed and21-group collection remains active. `route_failure_observed_a` preserves
 the initial failure observation separately from the forthcoming terminal audit.
 One minimal return-payload wordmux revision is selected in
-`dispatch_return_wordmux_a/decision.json`; it is not yet implemented or tested.
+`dispatch_return_wordmux_a/decision.json`. It is implemented in an isolated
+alternate source and passed the existing local protocol/selector/lifecycle
+regressions and full52/11 calibration. New h full-core synthesis is running.
+See the continuation report
+for its separate31-source configuration. No new-source global resource or
+timing gain is claimed.
 
 The original f fixed post-route hook lacked separate all-path setup/hold and
 blackbox reports and was skipped on route error. Its additional collection is
@@ -774,7 +785,7 @@ retaining the measured host environment. It supplies no FPGA clock qualification
 | Optimized CPU thread selection on current allocation | measured, complete |
 | Whole-pair ALT CPU outputs equal frozen golden | exact full batches |
 | Runtime connected production L1 source/function | 52 complete executions and11 rejection checks passed |
-| Complete-core resources fit U280 | f actual post-opt95.20%, SSI placed94.54%; both default and SSI routing failed; e post-opt103.63% retained |
+| Complete-core resources fit U280 | h synthesis in progress, resources unknown; prior f opt95.20%/SSI placed94.54% but both routes failed; e opt103.63% retained |
 | Complete-core routed clock | unqualified |
 | RTL/finite-model calibration at200MHz test service | 52 complete cases with exact phase/request schedules |
 | Complete model_g outputs at assumed200MHz | both scenarios,160 samples verified |

@@ -33,10 +33,9 @@ are under `full_impl_f_ssi_spreadslls_a`; new immutable resume evidence is under
 Phase3.6 completed, then Route35-3 reported global congestion7. The command
 returned1 after16,076,514ms. Its trial summary has5,795,346 node overlaps and
 zero failed nets, which does not establish legal routing. South/east local
-congestion peaks are104.861%/108.021%. The existing replay is saving the error
-DCP and will collect all21 report groups; those terminal artifacts remain
-pending. One minimal return-payload wordmux revision is selected, not yet implemented
-or tested. Initial failure evidence is
+congestion peaks are104.861%/108.021%. The existing replay subsequently saved the error
+DCP and began collecting all21 report groups. The minimal revision and
+collection progress are recorded in the later status section below. Initial failure evidence is
 preserved under `full_impl_f_ssi_spreadslls_a/route_failure_observed_a`.
 
 ## Actual full-core resource comparison
@@ -108,3 +107,81 @@ no local-module estimates or nonadditive hierarchy sums enter this table.
 The existing [main report](lookahead_fpga_cpu_primary_closure.md) retains CPU,
 GPU, complete output and phase evidence. No unchanged CPU/GPU benchmark was
 rerun during continuation.
+
+## Single minimal revision: status at 2026-11-16 19:02 UTC
+
+The failure evidence and decision were committed and pushed as9547aa799 before
+the RTL change. Error DCP saving returned0 at18:45:34UTC; its627,280,835bytes
+have SHA256`0bd512a2622439528b1802a398530385473c85bb6c5ac4cf5858ffc47316568f`.
+The actual error-state utilization and hierarchy reports have completed and
+match the SSI placed global resources and98,661-LUT dispatcher count. The
+remaining21-group collection, including timing, remains active in the original
+session. No error-state timing value is inferred from the placed report.
+
+`dispatch/return_wordmux/cp_pop_dispatch_restructured.sv` is an isolated
+alternate source with SHA256
+`2651ce650dfaf8d62d09d4bc015a79f47a784ba9a6e7a54d06b0cdbc9aae0d74`.
+Its only change replaces the repeated masked-OR116-bit return payload with an
+indexed word selection using the existing one-hot winner. No new register,
+stage, lane, capacity, clock or memory assumption is introduced. The sequential
+RTL is byte-identical, and all other30 DUT files match f. The original f file
+and default source closure remain unchanged; the new explicit31-file closure
+is used by the candidate configuration `full_synth_h_return_wordmux`.
+
+All existing local protocol/rejection/selector/lifecycle regressions pass on
+the new source. Evidence includes1236 output/state comparison edges,3waves,
+508POPs,121generation wraps,8192assignment cases,640return cases and the
+directed no-fallback case. These checks use the same original reference that
+validated f; they are bounded behavioral evidence, not direct formal f
+equivalence, arbitrary-X equivalence or timing qualification.
+
+New complete-core RTL runs `fixtures_return_wordmux_a` and
+`fixtures_return_wordmux_conservative_a` are active, with separate saved process
+identities. Both first complete8-sample native batches passed; the12-sample
+batches are running. The full plan covers52native executions and11configuration
+rejects, including deterministic jitter/backpressure. New-source synthesis
+has not started. The g model and its full160 outputs may be reused only after
+the new calibration audit passes; no new reuse verdict or CPU speedup is yet
+granted to this candidate at that observation.
+
+## Calibration complete and h synthesis launched at 19:12:06 UTC
+
+All52native executions and11reject cases completed successfully. Full binary
+outputs and accepted event/cycle/phase traces match f exactly. The independent
+g-model audit also verifies all19phase totals,3772ordered phase intervals and
+72917requests/returns with zero cycle correction. Base native totals are
+157312/268916cycles, stress276758; conservative totals are162025/282252.
+Measured RTL service gaps/latencies are1/16cycles for base and2/32cycles for
+conservative, at the unchanged5ns **simulation** period. The stress case
+retains its explicit jitter/backpressure.
+
+The new reuse contract is
+`model_calibration_h_return_wordmux_a/calibration_reuse_contract.json`, SHA256
+`2b1b4cca0d651e4b5e1f35a622e067ecb8bd47470f6966d690727d68e2584987`.
+It binds the new31-DUT source to the unchanged g model and reverified160full
+model samples. Those model batches, CPU benchmarks and GPU benchmarks were
+not rerun. Conditional200MHz predictions remain conditional; there is no
+qualified actual h frequency or formal FPGA time conversion.
+
+Actual h synthesis was launched once at2026-11-16 19:12:06UTC after calibration.
+The project is `full_synth_h_return_wordmux/project/cp_full.xpr`, run`synth_1`.
+Its child PID is1914551, start_ticks176389453, with the same recorded boot ID.
+Parent MCP session`vivado-20261115-113226-a1b5e8eb` reuses the idle diagnostic
+interpreter PID1165972/start_ticks164991348 after closing its read-only old
+error-DCP project. No original f/SSI synthesis or implementation was restarted.
+The actual project verifies all31source hashes, U280,8threads, default synthesis
+strategy, rebuilt hierarchy and identical f clock XDC. Vivado12-7122 explicitly
+reports no incremental reference checkpoint and use of the standard flow.
+
+`wait_on_run synth_1` was issued once. Recover through the existing session and
+`full_synth_h_return_wordmux/launch_identity.json`, its actual generated run log
+and markers; do not launch the run again. Synthesis has not completed, so no h
+resource or timing result is available yet. `prepare_eda.py --sources-list`
+supports the isolated alternative closure; its default discovery was verified
+to still resolve the original f closure.
+
+The SSI session PID2502597 is separately still collecting its21error-report
+groups. Its actual error DCP and completed resource reports remain bound to f.
+Current qualification fields now refer only to h; previous f and SSI records
+are retained in explicit historical sections and immutable pre-transition
+snapshots. A completed synthesis alone will not qualify fit or frequency.

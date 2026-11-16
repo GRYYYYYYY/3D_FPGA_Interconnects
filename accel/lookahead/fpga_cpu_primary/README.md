@@ -52,7 +52,15 @@ and a launched run do not establish fit or timing. Main report: `docs/lookahead_
 
 ## Selected source and replay
 
-The selected candidate is now the31-source wordmux closure in
+Current h followup: the isolated `dispatch/return_wordmux/sources.json` closure
+changes only dispatcher return-payload selection. Local and new52-native/11-
+rejection full-core calibration passed; unchanged g160 evidence is reused via
+`model_calibration_h_return_wordmux_a`. Full synthesis h started once at
+2026-11-16 19:12:06UTC. Its resource/timing result is unknown. The default source
+closure below remains f for reproducibility. See the
+[continuation and recovery report](../../../docs/lookahead_fpga_cpu_primary_resume_db1d7e454.md).
+
+The preceding f candidate is the31-source wordmux closure in
 `delivery/sources.json`. Its full RTL52-sample/11-rejection results and explicit
 reuse of160 complete model_g samples are bound by
 `model_calibration_g_wordmux_a/calibration_reuse_contract.json` under the raw

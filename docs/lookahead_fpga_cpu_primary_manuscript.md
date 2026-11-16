@@ -25,6 +25,12 @@ predictions remain conditional; the physical OOC interface-context limitation
 also remains unresolved. These observations do not establish a universal FPGA
 no-go and do not alter the retained historical evidence.
 
+A single isolated return-payload wordmux revision h subsequently passed local
+protocol/state checks and new52-native/11-rejection full-core calibration.
+The unchanged finite g model and160full samples are explicitly reused. Its
+complete-core synthesis is now running; no actual h resource reduction, routed
+frequency or CPU acceleration is claimed before those measurements.
+
 We evaluate a finite FPGA core against an optimized CPU implementation of the
 same ALT whole-pair FP32 lookahead contract. A retained H100 implementation is
 a strong comparator; surpassing the GPU is not a condition for studying CPU

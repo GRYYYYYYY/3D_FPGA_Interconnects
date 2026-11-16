@@ -4,13 +4,22 @@ import argparse,json,hashlib,datetime
 from pathlib import Path
 from sources import ROOT,closure
 p=argparse.ArgumentParser();p.add_argument('out');p.add_argument('--period',type=float,default=5)
+p.add_argument('--sources-list',type=Path,help='Explicit alternate full-core closure; default source discovery is unchanged')
 p.add_argument('--no-timing-driven',action='store_true',help='Resource diagnostic only: disable timing-driven synthesis; retain XDC and require actual route qualification separately')
 a=p.parse_args()
+files=json.loads(a.sources_list.read_text()) if a.sources_list else closure()
+assert isinstance(files,list) and files and all(isinstance(f,str) and f.endswith('.sv') for f in files)
+assert len(files)==len(set(files))==len({Path(f).name for f in files})
+for f in files:
+    path=(ROOT/f).resolve();path.relative_to(ROOT);assert path.is_file(),f
 out=Path(a.out).resolve();out.mkdir(parents=True,exist_ok=True);src=out/'source';src.mkdir(exist_ok=False)
-files=closure();binding={}
+binding={}
 for f in files:
     b=(ROOT/f).read_bytes();(src/Path(f).name).write_bytes(b);binding[f]=hashlib.sha256(b).hexdigest()
 (out/'binding.json').write_text(json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source':binding,'top':'cp_full_top','part':'xcu280-fsvh2892-2L-e','period_ns':a.period,'scope':'full_core_OOC_without_platform_shell','requires_gpu_win':False,'timing_driven_synthesis':not a.no_timing_driven},indent=2)+'\n')
+if a.sources_list:
+    (out/'sources.json').write_bytes(a.sources_list.read_bytes())
+    (out/'explicit_closure.json').write_text(json.dumps({'source_list':str(a.sources_list.resolve()),'sha256':hashlib.sha256(a.sources_list.read_bytes()).hexdigest(),'source_count':len(files)},indent=2)+'\n')
 (out/'clock.xdc').write_text(f'''create_clock -name core_clock -period {a.period:.6f} [get_ports clk]
 set_clock_uncertainty 0.100 [get_clocks core_clock]
 set_input_delay -clock core_clock -max 0.800 [get_ports -filter {{DIRECTION == IN && NAME != clk}}]
