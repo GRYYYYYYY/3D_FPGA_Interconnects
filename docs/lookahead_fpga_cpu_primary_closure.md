@@ -322,16 +322,31 @@ The current run is allowed to reach its actual terminal result first.
 
 After Phase3.2, Route35-447 reports that congestion prevents all nets from
 being routed and that the router will prioritize connectivity over timing
-optimization. The original child subsequently completed the Phase3.3 and3.4
-timing-update steps and entered Phase3.5 Update Timing. This remains an active
+optimization. The original child subsequently completed the Phase3.3,3.4 and3.5
+timing-update steps and entered Phase3.6 Update Timing. This remains an active
 attempt, not a terminal route failure. The partial logs and observations are
 retained in `physical_a/route_congestion_priority_a` and
-`physical_a/route_phase3_5_observation_a`.
+`physical_a/route_phase3_5_observation_a` and
+`physical_a/route_phase3_6_observation_a`. The latter also preserves the preceding
+mutable status JSON files before correcting their stale nested placement-stage
+fields and earlier synthesis PID; current status now consistently names the
+actual f synthesis and active route. No original run or historical report changed.
 The run directory still contains an old `.vivado.end.rst` dated
 2026-11-15T23:52:00.891512Z, earlier than the physical launch at23:54:12Z.
 That file belongs to the preceding opt-only wrapper and cannot certify this
 route's completion. Use the actual project/run status, birth-matched process,
 current-stage markers and terminal reports together; do not reset this run.
+
+Terminal report collection also needs separate all-path setup/hold reports and
+an explicit blackbox census, which are absent from the frozen post-route hook.
+The audit must map the hook's actual filenames and allow the completed DCP size;
+its default64MiB bound otherwise leaves the checkpoint unread. Separate internal
+register-to-register reports can supplement diagnosis but cannot replace all-path
+reports or qualify the external interface. If route or its hook fails, the flow
+only attempts an error DCP. Once that file and the process are terminal, collect
+missing reports in a new directory from the actual error DCP; never source the
+fixed-output hook over earlier reports. These are collection requirements, not
+executed additional EDA or evidence of route completion.
 
 Route35-198 exposes a separate OOC interface limitation: external signal ports
 lack HD.PARTPIN_LOCS, so their partial routes and input/output timing are not
