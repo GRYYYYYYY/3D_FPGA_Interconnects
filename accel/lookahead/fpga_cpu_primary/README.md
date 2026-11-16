@@ -56,7 +56,9 @@ reuse of160 complete model_g samples are bound by
 `model_calibration_g_wordmux_a/calibration_reuse_contract.json` under the raw
 result root. The previous e core failed actual post-opt capacity at1,351,028
 LUTs; current f synthesis completed at1,244,096 LUTs (95.43%). Its terminal
-reports and source binding are audited; standard opt-only is running. Neither result supplies a qualified
+synthesis reports/source binding are audited; actual standard-opt resources are
+1,241,143 LUTs (95.20%) with terminal reports/checkpoint verified. Full-core
+place/phys-opt/route resumed from that checkpoint at23:54:12UTC. Neither result supplies a qualified
 full-core frequency yet. See the closure report for current qualification.
 
 From the repository root, with the retained raw fixtures available, these

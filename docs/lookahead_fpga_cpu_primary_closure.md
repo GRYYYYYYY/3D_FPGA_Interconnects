@@ -14,9 +14,11 @@ this source to the reverified160 existing model samples without rerunning them.
 Default5ns full-core synthesis completed at21:03:34UTC on2026-11-15.
 Its actual global footprint is1,244,096 LUTs (95.43%),749,617 FF,1,148 BRAM36
 equivalents,640 URAM and0 DSP. It is below the bare-device LUT capacity by
-59,584. Terminal source/diagnostic collection is complete. Standard opt-only started
-at23:08:21UTC with independently verified clock connectivity; physical fit and
-routed clock remain unqualified.
+59,584. Terminal synthesis source/diagnostic collection is complete. Standard opt
+has produced1,241,143 LUTs (95.20%),749,073 FF and unchanged BRAM/URAM/DSP
+counts. Opt-only terminal reports and DCP are verified. Full-core placement, physical
+optimization and route were launched at23:54:12UTC from that DCP. Physical fit
+and routed clock remain unqualified.
 
 The preceding dispatcher revision e completed synthesis and standard opt_design.
 It still required1,351,028 LUTs (103.63%),47,348 above U280 capacity, and did not
@@ -219,6 +221,36 @@ constant warnings. A bounded optimized-netlist alias lookup found none of
 those aliases; absence is not evidence of dead statistics, padding or harmless
 removal. No waiver or universal formal-equivalence claim is made. Actual
 post-opt and placed/routed reports remain required for physical qualification.
+
+Standard f opt_design completed its optimization body in509 seconds. Its
+actual global report uses1,241,143 LUTs (953,343 logic +287,800 memory),749,073
+FF,1,148 BRAM36 equivalents,640 URAM,0 DSP and1 BUFGCE. LUT headroom is62,537;
+this is95.20% of bare U280 capacity, not a placement/routing guarantee. The
+post-opt unplaced WNS is−6.165ns, WHS−0.091ns and WPWS1.8ns, with the same
+48-level bank29 completion-to-dispatcher-error worst setup path. The complete
+opt-only run ended at23:51:48UTC. Its402,895,145-byte DCP SHA-256 is
+`3781ee752bae928c4993e5f148247f9b118b85f97d20f452e861c00cb4779ada`.
+Both end markers and the original child exit are verified. The project stopped
+normally at `Not started place_design`/40%. Global and vendor DRC both report
+zero violations; coverage checks report no missing clocks/delays or loops.
+The same implementation resumed at23:54:12UTC. Its generated script opens
+this opt DCP directly, then runs place, physical optimization and route; it
+does not rerun synthesis, initialization or opt. See `physical_gate.json`,
+`post_opt_terminal_a/terminal.json` and `physical_a/process_birth.json` under
+`full_synth_f_wordmux`.
+
+All1,237,401 post-opt sequential clock-pin names still exactly equal both the
+`core_clock` associated set and the direct `clk` leaf set. Core `HD.CLK_SRC`
+remains `BUFGCE_X0Y144`. The optimizer added only
+`dispatch/core_reset_BUFG_inst`:99,093 input loads and zero clock-like loads,
+with I from `dispatch/core_reset`, CE tied high, and O driving control paths.
+The remaining `Timing38-242` names external reset, not the core `clk`.
+Twenty max and20 min paths through this buffer are explicitly reported;
+their worst slacks are+0.866ns and+1.390ns respectively, still unplaced.
+The warning is retained without an invented reset clock or waiver. This
+clock-context evidence supports the actual physical verification launched after
+all opt terminal reports and checkpoint were collected; it does not qualify
+200MHz, route completion or board deployment.
 
 The preceding e full-core source closure is30 files. Its actual5ns synthesis
 completed on2026-11-15 at18:22:03UTC. The earlier1,254,466-LUT module sum is a
@@ -450,7 +482,7 @@ retaining the measured host environment. It supplies no FPGA clock qualification
 | Optimized CPU thread selection on current allocation | measured, complete |
 | Whole-pair ALT CPU outputs equal frozen golden | exact full batches |
 | Runtime connected production L1 source/function | 52 complete executions and11 rejection checks passed |
-| Complete-core resources fit U280 | f synthesis95.43%; post-opt and physical implementation pending; e post-opt103.63% retained |
+| Complete-core resources fit U280 | f actual post-opt95.20%; physical implementation pending; e post-opt103.63% retained |
 | Complete-core routed clock | unqualified |
 | RTL/finite-model calibration at200MHz test service | 52 complete cases with exact phase/request schedules |
 | Complete model_g outputs at assumed200MHz | both scenarios,160 samples verified |
