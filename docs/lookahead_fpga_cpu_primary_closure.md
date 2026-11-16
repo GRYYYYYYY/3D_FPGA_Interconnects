@@ -27,6 +27,13 @@ same1,233,715 LUTs and749,174 FF, with unchanged BRAM/URAM/DSP counts, but
 5,809,714 node overlaps make routing illegal despite a zero failed-net summary.
 One independent SSI_SpreadSLLs implementation from the same unplaced post-opt
 DCP started at10:53:05UTC; original synthesis/opt/physical results are preserved.
+Its placement and checkpoint completed successfully at13:12:30/13:17:00UTC.
+Actual SSI placement uses1,232,534 LUTs (94.54%),749,226 FF and2BUFGCE,
+with unchanged BRAM/URAM/DSP. SLL boundary usage is now19,688/23,040
+betweenSLR1/2 and20,527/23,040 betweenSLR0/1. CLB-site occupancy remains
+99.92% and Place46-14 still reports high congestion. Post-place resource
+reports are complete; the remaining timing/report hook is running before
+default phys_opt and route. This is not legal-route or frequency qualification.
 Routed clock and complete physical closure remain unqualified, including the
 external interface context gap below.
 
@@ -406,24 +413,52 @@ or relaunch of the original f project. Stage/checkpoint/report errors are
 recorded separately; no model or CPU/GPU rerun is triggered at this point.
 The same opt DCP opened successfully and the pre-placement clock audit retained
 1,237,401 matching all/core/directclk pin names, with the reset/control BUFG
-separate. Actual SSI placement began at11:06:56UTC and entered Partition Driven
-Placement; the log explicitly confirms ultrathreads with a maximum of8CPUs.
+separate. Actual SSI placement began at11:06:56UTC, completed with return0
+after7,534.264seconds, and saved the627,721,662byte placed DCP with SHA256
+`95450bee2b17aa7a383372b2fb6f0e7f03fb95feb5cdc1ee17700064a4c8bb43`.
+The log explicitly confirms ultrathreads with a maximum of8CPUs.
+`placement_terminal_a` binds this completed stage and its partial flow log;
+`placement_resources_a` binds both completed utilization commands.
 
-Terminal report collection also needs separate all-path setup/hold reports and
-an explicit blackbox census, which are absent from the frozen post-route hook.
-The audit must map the hook's actual filenames and allow the completed DCP size;
-its default64MiB bound otherwise leaves the checkpoint unread. Separate internal
-register-to-register reports can supplement diagnosis but cannot replace all-path
-reports or qualify the external interface. If route or its hook fails, the flow
-only attempts an error DCP. Once that file and the process are terminal, collect
-missing reports in a new directory from the actual error DCP; never source the
-fixed-output hook over earlier reports. These are collection requirements, not
-executed additional EDA or evidence of route completion.
+| Placed quantity | Original f default | SSI_SpreadSLLs |
+|---|---:|---:|
+| LUTs | 1,233,715 | 1,232,534 |
+| FFs | 749,174 | 749,226 |
+| BRAM36eq / URAM / DSP | 1,148 / 640 / 0 | 1,148 / 640 / 0 |
+| BUFGCE cells | 1 | 2 |
+| SLL betweenSLR1/2 | 21,816 / 23,040 | 19,688 / 23,040 |
+| SLL betweenSLR0/1 | 19,723 / 23,040 | 20,527 / 23,040 |
+
+The larger boundary count decreases, but SLR0/1 usage increases. All reported
+TX/RX SLL-register usage remains zero. CLB sites occupy162,833/162,960(99.92%),
+withSLR0/1/2 at99.98/99.91/99.87%; global LUT headroom does not provide an
+equivalent amount of freely redistributable CLB space. The placed hierarchy's
+top count agrees with global utilization. Immediate child LUT sums exceed
+top by17,526(SSI) and17,743(original); both reports explicitly warn about
+cross-hierarchy LUT combining, so those sums are not physical budgets.
+The placer inserted an additional BUFG on
+`fronts[1].front/core/edges/lanes[0].pair_unit/reset_0` for5,346 loads.
+It is a control-net observation, not evidence of an internal core-clock BUFG;
+terminal connectivity must still verify it. The intermediate WNS−16.965ns
+estimate is not final placed timing or Fmax. The post-place timing hook is
+still running; no new RTL/model batch has been triggered.
+
+The original f fixed post-route hook lacked separate all-path setup/hold and
+blackbox reports and was skipped on route error. Its additional collection is
+now complete as recorded above. The new SSI replay instead saves each completed
+stage DCP before reporting, and automatically attempts an error DCP plus the
+same21-group collector on an EDA failure. A successful route likewise receives
+that full collector. Audit mappings must use actual filenames and a size bound
+large enough for the completed DCP. Separate internal register paths supplement
+diagnosis; they cannot replace all-path timing or qualify external interfaces.
+Any missing report is collected in a new directory without overwriting prior
+evidence. No SSI terminal route result exists at this capture.
 
 Route35-198 exposes a separate OOC interface limitation: external signal ports
 lack HD.PARTPIN_LOCS, so their partial routes and input/output timing are not
 accurate. The observation includes all8,192 sd bits; its9,097 warning lines
-are a captured prefix, not a terminal warning census. Existing max/min I/O
+were first recorded in a prefix and later confirmed by the original run's
+complete terminal census. Existing max/min I/O
 delays and zero unconstrained endpoints do not resolve this gap. A future
 internal register-path result under the specified clock-source assumption
 must not be called complete interface Fmax or board timing. Physical boundary

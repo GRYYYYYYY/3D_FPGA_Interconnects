@@ -8,7 +8,11 @@ The original f complete-core implementation fits the device's global LUT count
 at1,233,715 LUTs,749,174 FF,1,148 BRAM36 equivalents and640 URAM, but routing
 failed with level7 global congestion and5,809,714 node overlaps. It therefore
 provides no qualified frequency or FPGA-versus-CPU timing result. One same-source,
-same5ns `SSI_SpreadSLLs` implementation is in progress. Existing200MHz model
+same5ns `SSI_SpreadSLLs` implementation has completed placement at1,232,534LUTs
+and749,226FF, with unchanged BRAM/URAM/DSP. Its SLL boundary use is85.45%/89.09%,
+but CLB sites remain99.92% occupied and the high-congestion warning persists.
+Post-place timing/report collection is in progress before phys_opt/route.
+Existing200MHz model
 predictions remain conditional; the physical OOC interface-context limitation
 also remains unresolved. These observations do not establish a universal FPGA
 no-go and do not alter the retained historical evidence.

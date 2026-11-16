@@ -65,7 +65,11 @@ gain. Original f routing failed with level7 global congestion and5,809,714 node
 overlaps. Its error DCP confirms the same global resources; a `Routed` report
 header does not waive those conflicts. One independent `SSI_SpreadSLLs`
 implementation from the same opt DCP is now running, with unchanged RTL,5ns,
-8 threads and ultrathreads. External OOC ports still lack physical boundary
+8 threads and ultrathreads. Its placement completed at1,232,534LUT/749,226FF,
+with unchanged BRAM/URAM/DSP and2BUFGCE; remaining post-place reports are
+running before phys_opt/route. SLL usage shifts to85.45%/89.09% on the two
+boundaries, but CLB sites remain99.92% occupied and high-congestion warnings
+persist. External OOC ports still lack physical boundary
 locations, limiting interface timing accuracy. No qualified full-core frequency
 is available yet. `delivery/ssi_replay.tcl` records the single followup flow;
 see the closure report and raw `full_impl_f_ssi_spreadslls_a` for bindings/status.
