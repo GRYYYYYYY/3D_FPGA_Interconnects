@@ -1,5 +1,7 @@
 # CPU-primary L1 complete-core closure
 
+Current continuation: [resume identity, resource comparison and claim ledger](lookahead_fpga_cpu_primary_resume_db1d7e454.md).
+
 Latest publication snapshot: [2026-11-16 completed results and active SSI route](lookahead_fpga_cpu_primary_progress_20261116.md).
 
 Earlier frozen checkpoint: [2026-11-15 completed and in-flight experiments](lookahead_fpga_cpu_primary_progress_20261115.md). It records the 21:00:20 UTC observation separately from the subsequent qualification evidence in this report.
