@@ -11,7 +11,9 @@ provides no qualified frequency or FPGA-versus-CPU timing result. One same-sourc
 same5ns `SSI_SpreadSLLs` implementation has completed placement at1,232,534LUTs
 and749,226FF, with unchanged BRAM/URAM/DSP. Its SLL boundary use is85.45%/89.09%,
 but CLB sites remain99.92% occupied and the high-congestion warning persists.
-Post-place timing/report collection is in progress before phys_opt/route.
+Completed post-place reports give WNS−15.487ns/WHS−3.530ns at5ns; setup and
+hold remain unclosed. Default phys_opt made zero cell changes and no timing
+improvement; default routing is now in progress.
 Existing200MHz model
 predictions remain conditional; the physical OOC interface-context limitation
 also remains unresolved. These observations do not establish a universal FPGA

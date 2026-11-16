@@ -66,8 +66,10 @@ overlaps. Its error DCP confirms the same global resources; a `Routed` report
 header does not waive those conflicts. One independent `SSI_SpreadSLLs`
 implementation from the same opt DCP is now running, with unchanged RTL,5ns,
 8 threads and ultrathreads. Its placement completed at1,232,534LUT/749,226FF,
-with unchanged BRAM/URAM/DSP and2BUFGCE; remaining post-place reports are
-running before phys_opt/route. SLL usage shifts to85.45%/89.09% on the two
+with unchanged BRAM/URAM/DSP and2BUFGCE. Post-place reports completed with
+WNS−15.487ns/WHS−3.530ns. Default phys_opt completed with zero cell changes
+and zero timing gain; default route began at14:14:28UTC and is running.
+SLL usage shifts to85.45%/89.09% on the two
 boundaries, but CLB sites remain99.92% occupied and high-congestion warnings
 persist. External OOC ports still lack physical boundary
 locations, limiting interface timing accuracy. No qualified full-core frequency

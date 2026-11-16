@@ -31,9 +31,11 @@ Its placement and checkpoint completed successfully at13:12:30/13:17:00UTC.
 Actual SSI placement uses1,232,534 LUTs (94.54%),749,226 FF and2BUFGCE,
 with unchanged BRAM/URAM/DSP. SLL boundary usage is now19,688/23,040
 betweenSLR1/2 and20,527/23,040 betweenSLR0/1. CLB-site occupancy remains
-99.92% and Place46-14 still reports high congestion. Post-place resource
-reports are complete; the remaining timing/report hook is running before
-default phys_opt and route. This is not legal-route or frequency qualification.
+99.92% and Place46-14 still reports high congestion. All post-place reports
+completed: WNS−15.487ns and WHS−3.530ns still fail the5ns target. Default
+phys_opt completed with zero cell changes and zero timing gain. Its DCP was
+saved successfully; default route began at14:14:28UTC and remains active.
+This is not legal-route or frequency qualification.
 Routed clock and complete physical closure remain unqualified, including the
 external interface context gap below.
 
@@ -439,9 +441,40 @@ cross-hierarchy LUT combining, so those sums are not physical budgets.
 The placer inserted an additional BUFG on
 `fronts[1].front/core/edges/lanes[0].pair_unit/reset_0` for5,346 loads.
 It is a control-net observation, not evidence of an internal core-clock BUFG;
-terminal connectivity must still verify it. The intermediate WNS−16.965ns
-estimate is not final placed timing or Fmax. The post-place timing hook is
-still running; no new RTL/model batch has been triggered.
+terminal connectivity must still verify its clock-like load census. Completed
+buffer-location reporting places this new buffer atX0Y50 and the dispatch
+control buffer atX0Y143. Core HD.CLK_SRC remainsX0Y144 and that site is unused.
+
+The complete post-place hook returned0 after2,864.320seconds, followed by
+default phys_opt at14:04:44UTC. Final placed timing is WNS−15.487ns,
+TNS−3,100,014.250ns, WHS−3.530ns and THS−1,411,285.125ns. Setup fails
+1,252,439/4,357,929 endpoints; hold fails1,769,558/4,357,929. WPWS is1.8ns
+with zero pulse failures. All12coverage checks are zero, DRC retainsRTSTAT-13,
+and methodology reports3,024=1,024SYNTH-5+1,000TIMING-15+1,000TIMING-16.
+The actual clock remains5ns and the exception report explicitly finds no valid
+timing exceptions. None of these placed results is Fmax or legal routing.
+
+Worst placed setup now starts atbank14 completion payload[251] and ends at
+`dispatch/error_reg_rep__1/D`:44logic levels,3SLR crossings(0→1→2→1),
+19.854ns data delay with2.354ns logic and17.500ns estimated routing.
+Frozen297-bit packing identifies this bit as `rstatus[3]`, not cookie.
+Mapped points include return_group[7].lo[14] and ledger_bad before error
+reduction. The source-supported interpretation is status eligibility feeding
+return selection and live-ledger checks; it is not formal gate equivalence or
+an exhaustive attribution. Worst placed hold begins at externalsd[4895].
+Its OOC limitation does not establish that all hold failures are external.
+`post_place_path_review_a` binds the paths and4inspected source files;
+`post_place_complete_a` binds all10completed reports and rechecks all31selected
+live/frozen RTL hashes. No new RTL/model batch or architecture candidate has
+been triggered. Default phys_opt returned0 in387.387seconds, adding/removing/
+optimizing zero cells/nets and reporting zero WNS/TNS gain. Its log retains
+WNS−15.487ns/TNS−3,100,014.292ns; the small difference from the formal placed
+TNS representation is not an optimization gain. The621,424,927byte physical-
+optimization DCP has SHA256
+`e55c6ff18e9791c3119bcbfce474479f9195fd93e7976cd6d56ebb4af5da21e2`.
+`physopt_terminal_a` records successful stage/checkpoint completion, unchanged
+process birth and the same replay's route start at14:14:28UTC. Route is active;
+the overall flow has no terminal result or qualified frequency yet.
 
 The original f fixed post-route hook lacked separate all-path setup/hold and
 blackbox reports and was skipped on route error. Its additional collection is
