@@ -1,6 +1,8 @@
 # CPU-primary complete L1 core
 
-[Current completed results, conclusions and in-flight experiment (2026-11-15)](../../../docs/lookahead_fpga_cpu_primary_progress_20261115.md).
+[Latest completed results, conclusions and in-flight experiment (2026-11-16)](../../../docs/lookahead_fpga_cpu_primary_progress_20261116.md).
+
+[Earlier frozen snapshot (2026-11-15)](../../../docs/lookahead_fpga_cpu_primary_progress_20261115.md).
 
 This independent candidate starts at `3c7f96e6037030949b729240977c2ced373843c6`.
 The research goal is `CPU_PRIMARY_GPU_COMPARATOR`; a GPU win is **not** an entry
