@@ -360,14 +360,37 @@ one-error summary precedes the final Common17-39. All9,097 Route35-198 port
 warnings remain unresolved interface-context limitations. The364,207 tight
 setup/hold pins are represented by a truncated10,000-pin file, not a complete list.
 
-Terminal error-checkpoint resource reports have now been generated in
-`physical_a/route_terminal_collection_a/reports_b`; timing and other collection
-steps are in progress. Their `Design State: Routed` header does not establish
-legal routing or timing closure. The first collector attempt stopped before
+All21 terminal error-checkpoint report groups completed at11:51:45UTC in
+`physical_a/route_terminal_collection_a/reports_b`. The complete audit has no
+missing inputs but explicitly fails route/setup/hold qualification. The actual
+error DCP contains1,873,147 unrouted nets and only1fullyrouted net; this differs
+from the failed router trial's zero-failed-net/5,809,714-overlap summary. Neither
+observation qualifies routing. Their `Design State: Routed` header does not
+establish legal connectivity or timing closure. The first collector attempt stopped before
 report generation because Vivado2022.2 uses Tcl8.5.14 without `try/finally`.
 The original script and empty output are preserved; `collect_v2.tcl` uses
 validated `catch` cleanup semantics and a new output directory. This was a
 report-script compatibility error, not a synthesis or implementation rerun.
+
+The error-checkpoint timing summary is WNS−20.657ns,TNS−4,516,795.500ns,
+WHS−3.474ns,THS−1,298,054.875ns,WPWS1.8ns; setup/hold failing endpoints are
+1,655,418/1,666,069. Separate internal-register reports still fail setup−20.657ns
+and hold−0.446ns. The latter is fabric request-hold to a port queue; the larger
+all-path hold violation is an external response input. Paths retain unset nets,
+so no Fmax is derived. RTSTAT-13 reports insufficient routing and says routed-net
+DRC checks were not run. Methodology counts are1024SYNTH-5,1000TIMING-15 and
+1000TIMING-16. The actual exception report says no valid timing exceptions.
+Fresh census confirms64banks,16frontends,32ports,9681 output bits with actual
+drivers and zero blackboxes; this is not formal netlist equivalence.
+
+Fresh failed-route clock evidence has1,237,502 matching all/core/directclk pin
+names. The reset/control BUFG atX0Y143 has99,099 loads and zero clock-like loads;
+the external core HD.CLK_SRC remainsX0Y144, with no cell occupying that site.
+Report generation produced4Vivado12-4439 critical performance warnings for
+large internal-path object sets,1Timing38-242 reset-context warning and1Vivado
+12-180 empty-blackbox-query warning. These are separate from original physical
+run messages. `final_synthesis_review/route_error_complete_a` binds all completed
+reports and preserves the scoped failure without claiming a frequency.
 
 The selected single followup is `full_impl_f_ssi_spreadslls_a`: same verified
 unplaced opt DCP,31 unchanged sources,U280,5ns,8 threads and explicit ultrathreads,
@@ -381,6 +404,10 @@ flow uses a reused idle candidate-worktree interpreter, separate `run_a`
 outputs, process-birth/command receipts and frozen scripts. It is not a reset
 or relaunch of the original f project. Stage/checkpoint/report errors are
 recorded separately; no model or CPU/GPU rerun is triggered at this point.
+The same opt DCP opened successfully and the pre-placement clock audit retained
+1,237,401 matching all/core/directclk pin names, with the reset/control BUFG
+separate. Actual SSI placement began at11:06:56UTC and entered Partition Driven
+Placement; the log explicitly confirms ultrathreads with a maximum of8CPUs.
 
 Terminal report collection also needs separate all-path setup/hold reports and
 an explicit blackbox census, which are absent from the frozen post-route hook.
