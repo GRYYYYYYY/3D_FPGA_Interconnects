@@ -20,7 +20,7 @@ Table~\ref{tab:waves} recomputes complete per-sample profiles. Shift 20 reduces 
 \begin{table*}[t]\centering\caption{Native lookahead construction E2 seconds and directly paired speedups for the same runs as Table~\ref{tab:matchedproc}; mean $\pm$ sample SD, $n=3$.}\label{tab:matchede2}
 \begin{tabular}{lrrrrrr}\toprule Workload & Stock (s) & Pipeline (s) & ALT CUDA (s) & S/P & P/C & S/C\\\midrule
 \tableinput{tables/matched_e2.tex}\bottomrule\end{tabular}\end{table*}
-CUDA/Pipeline E2 ratios are \GemmNewPipeBuild\ for GEMM and \BnnNewPipeBuild\ for BNN (Tables~\ref{tab:matchedproc}--\ref{tab:matchede2}). Their Process ratios, \GemmNewPipeProc\ and \BnnNewPipeProc, are smaller because Process retains loading, initialization, routing and checking. Ratios use matched rounds, never historical denominators. These implementation comparisons are not a complete two-factor ablation.
+ALT CUDA achieves E2 speedups of \GemmNewPipeBuild\ for GEMM and \BnnNewPipeBuild\ for BNN over Pipeline (Tables~\ref{tab:matchedproc}--\ref{tab:matchede2}). The corresponding Process speedups, \GemmNewPipeProc\ and \BnnNewPipeProc, are smaller because Process retains loading, initialization, routing and checking. Ratios use matched rounds, never historical denominators. These implementation comparisons are not a complete two-factor ablation.
 
 \subsection{Native LSTM: Five Matched Configurations}
 \begin{table}[t]\centering\caption{Historical LSTM native seconds, mean $\pm$ sample SD ($n=3$); five arms on its own rotated eight-core/H100 cohort.}\label{tab:lstm}

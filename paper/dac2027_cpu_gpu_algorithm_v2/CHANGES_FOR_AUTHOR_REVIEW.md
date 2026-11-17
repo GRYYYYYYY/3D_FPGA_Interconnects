@@ -1,0 +1,9 @@
+# Author-review narrative revision
+
+The base manuscript is frozen V2 commit `b0587c7e310073d04b1ba1e85e26a40ae0212389`.
+
+The abstract now reports native lookahead construction (E2) and complete-process speedups over eight-core Pipeline for matched GEMM and BNN. It uses the original paired means and sample SDs. Introduction paragraph four gives both comparisons against Pipeline and the full implementation's Process speedups over Stock on the same runs. It identifies the historical LSTM comparison separately. The earlier GEMM 1.638× result appears in the historical CPU results paragraph. Section V-C names ALT CUDA as the faster configuration and Pipeline as the baseline.
+
+Table III supplies the paired Process means (1.102× and 1.098× over Pipeline, 1.921× and 1.957× over Stock), and Table IV supplies the E2 means (3.643× and 3.197× over Pipeline). The calculations, tables, algorithms, experimental inputs and qualification records are the V2 versions.
+
+The rebuilt manuscript has six body pages and one reference page. All 13 citations resolve. The anonymous source package rebuilds independently with identical extracted PDF text. The changed passages on pages 1 and 5 passed visual inspection. The technical checks are in `review/checks.json`. Author approval and submission remain pending.
