@@ -1,6 +1,6 @@
 # h single-target migration — implementation in progress
 
-This report includes the **completed synthesis/opt audit**, not terminal physical qualification.
+As of **2026-11-17 19:16 UTC**, synthesis, opt and placement are complete; **phys_opt is running and route has not started**. This is not terminal physical qualification.
 Experiment `H_SAME_RTL_SINGLE_PART_MIGRATION_V1` starts from hardware review
 `706feba1cbefcf828d998560440c488cd081ba07` in independent branch
 `accel/lookahead-h-device-migration-20261117`. No paper is modified.
@@ -36,7 +36,7 @@ collection bounds path reports to20. No result-driven target/strategy search.
 
 | Qualification layer | Current state |
 |---|---|
-| Legal complete routing | Not yet established; placement running |
+| Legal complete routing | Not yet established; phys_opt running |
 | All-required core OOC timing | Not yet established; no qualified frequency |
 | Conditional model performance | Pending physical qualification |
 | Actual board/platform performance | Not measured; seconds and speedup null |
@@ -197,3 +197,17 @@ skew are not naturally reported yet. They remain explicitly pending the
 terminal collector/supplementary serial read-only audit. No commands were
 submitted to the busy Vivado. Immutable evidence is in
 `accel/lookahead/fpga_device_migration/placement_audit_20261117/`.
+
+## Requested GitHub progress publication — 2026-11-17 19:16 UTC
+
+All completed work remains in this independent branch. The new immutable
+`accel/lookahead/fpga_device_migration/progress_snapshot_20261117T191651Z/` captures the current
+stage receipts, monitoring history, budget, process identities, publisher
+heartbeat, qualifications, full log prefix through capture, prior remote
+verification receipts, and three complete-checkpoint identities. Its manifest
+records each file length/SHA256. Vendor DCP binaries remain on the server.
+
+Physical optimization is still active; route and terminal path/clock/SLR
+qualification are pending. The captured estimate is-18.347ns,
+not a terminal result. No implementation input, observer/publisher, budget,
+main branch or manuscript is changed by this publication.
