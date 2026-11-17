@@ -1,0 +1,23 @@
+\section{Problem and Related Work}
+\subsection{Layer-Aware Samples and Native Costs}
+For routing-resource graph $G=(V,E)$, PathFinder-style negotiation resolves contention~\cite{pathfinder}; VPR combines accumulated costs with lookahead estimates~\cite{vtr8,vtr9}. Sampled wire maps retain representative costs by displacement~\cite{diversity}. A layered cell is
+\begin{equation}
+F[\ell_s,\ell_t,c,s,\Delta x,\Delta y]=(d,q),
+\end{equation}
+where source/target layers, channel and segment types identify the slice, and $(d,q)$ is its associated delay/congestion pair. Group $g=(\ell_s,s,c)$ contains ordered sample starts. Each sample may reach every layer. Native interpolation fills unoccupied cells; source/OPIN preprocessing and derived minima add work.
+
+Our two-layer graphs include logic, DSP, memory and vertical wires/switches~\cite{third_dimension,multidie}. The qualified LSTM CUDA route uses 23,217 distinct CHANZ nodes. Indexed costs are not physical delay calibration.
+
+\subsection{Parallelism and Prior Algorithms}
+Let sample work be $t_{g,j}$, $W_g=\sum_jt_{g,j}$ and $W=\sum_gW_g$. Ideal group-local and global search times with $P$ workers obey
+\begin{align}
+T_{\rm group}&\geq\sum_g\max\{W_g/P,\max_jt_{g,j}\},\\
+T_{\rm global}&\geq\max\{W/P,\max_{g,j}t_{g,j}\}.
+\end{align}
+These are ideal task-width bounds, not measured utilization.
+
+MultiQueue routing includes deterministic, serially equivalent Dijkstra/A* variants as well as a relaxed directed variant~\cite{multiqueue}. These are connection-search results, not the source-relative recording/reduction contract of a lookahead builder. Multi-die lookahead combines intra-die estimates with die-crossing penalties~\cite{multidie}; it improves the heuristic itself.
+
+Delta-stepping and GPU SSSP already trade priority precision for parallel work~\cite{delta,gpu_sssp}. SPLAG combines a coarse priority queue and vertex cache for power-law SSSP~\cite{splag}. We specialize this established space to source-relative table recording, whole delay/congestion representatives and native consumption. oneTBB supplies existing execution mechanisms~\cite{tbb}; C1 identifies their safe dependency boundary.
+
+Compatible cached tables avoid construction altogether. Compatibility depends on graph, costs, context and build identities, not necessarily the netlist. Sparse-sampling \texttt{compressed\_map} is a close alternative~\cite{vproptions}. Section~\ref{sec:applicability} distinguishes current documentation from the locked binary's actual two-layer applicability.

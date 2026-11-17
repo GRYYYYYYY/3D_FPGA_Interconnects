@@ -1,0 +1,7 @@
+\subsection{Actual Full-Core Physical Status}
+\input{tables/implementation}
+The complete connected XCU280 core excludes the board shell, PCIe and memory controller. Standard optimization removes 3,202 LUTs and 674 FFs. Post-opt LUT use is 93.59\%: 932,268 logic LUTs, 286,776 LUTRAM and 1,024 SRLs. Placement uses 1,212,828 LUTs (925,700 logic, 286,232 LUTRAM, 896 SRL), but occupies 99.86\% of CLB sites. All 64 banks, 16 frontends, 32 ports and 9,681 nonconstant output bits remain, with no black boxes.
+
+The predecessor fails default and SSI routing with approximately 5.8 million trial-routing overlaps. Its SSI failure checkpoint has setup WNS $-15.487$ ns and hold WHS $-3.530$ ns; the worst reported setup path crosses three SLR boundaries from bank completion payload to dispatcher error state. This motivates the single return-word selection change, not greater parallelism. Failure-checkpoint slack is not an achieved period.
+
+In the read-only November 17 snapshot, placement, post-place reports and physical optimization have completed; routing is in progress. No qualified full-core frequency is established. The 5 ns constraint is a target. Post-opt sequential clock pins connect to the core clock; reset BUFG has zero clock loads. Placement buffers require connectivity classification; methodology/reset warnings and unproven constant aliases remain qualification obligations. FPGA execution time and CPU/FPGA speedup at an achieved frequency are consequently unavailable. The model above is neither board measurement nor a physical success claim.

@@ -1,0 +1,61 @@
+\section{Source-Context-Preserving Dependency Decoupling}
+\subsection{A Common Native Task Boundary}
+The common boundary is logical: the builder enumerates source RR identity, source-relative cells, layer/type context and indexed costs. STRICT traverses the native read-only RRGraphView; ALT exports graph connectivity and recording metadata into CSR or a backend-specific representation. Each backend returns sample cost pairs to the outer builder. The host retains group commit, interpolation and source/OPIN/minimum work. The shared logical interface does not imply shared selection semantics.
+
+Source identity is essential. Consider starts at $x=0$ and $x=5$ reaching a pin at $x=6$ with delays 1 and 2. They populate displacement buckets 6 and 1. A multi-source search retaining only the cheaper pin label loses the second contribution. We therefore preserve separate logical samples, including their coordinate contexts.
+
+\input{sections/contracts_figure}
+
+\subsection{STRICT: Private Floods, Ordered Reduction}
+Workers own reset-per-sample visited costs, expanded bits, queues and outputs; graph/cost data are shared read-only. Native X/Y/Z filtering, layer slices, bounding boxes and edge/cost operations remain unchanged.
+
+The native smallest-entry rule replaces a populated cell only for a strictly smaller delay. Congestion belongs to the winning delay; it must not be minimized independently. The retained directed reduction check inserts $(1,3)$ then $(1,9)$ and detects a wrong last-tie choice: strict-delay insertion must retain $(1,3)$. Independent coordinate minima can also synthesize a pair never produced by a path. These are explanatory counterexamples, not weakened timing baselines. For finite occupied representatives, the winning sample is the earliest minimum-delay sample in native enumeration order:
+\begin{equation}
+j^*(u)=\arg\min_{j\,\mathrm{occupied}}(d_{g,j}(u),j).
+\end{equation}
+Implementation uses the native insertion and occupancy predicates, including missing-state behavior, rather than generic tuple sorting.
+
+\begin{proposition}
+If native sample selection and within-flood visitation are unchanged, valid recorded delays are finite, and final commits/interpolation follow native order, private sample execution followed by original-order strict-delay reduction yields the native wire-cost table.
+\end{proposition}
+\noindent\emph{Proof.} Each private flood produces the same per-cell representative as its native flood. Serial execution concatenates the visitation sequences in sample order. Original-order reduction selects the minimum delay and retains the earliest associated congestion on ties. Occupancy agrees cell by cell; identical commits and interpolation preserve that agreement. Task completion order does not enter the argument. $\square$
+
+The proposition excludes changed heap ties, exceptional-value reassociation and altered recording contexts; it concerns wire maps, not routing trajectories.
+
+Group executes samples concurrently but waits at each group boundary. Pipeline exposes all groups through a bounded stream with parallel search and original-order reduction; reusable private workspaces avoid repeated allocation. Flat is an independent globally flattened parallel-loop control, not VPR's separate flat-routing option. Interpolation within a slice retains native order.
+
+\subsection{ALT: Whole-Pair FP32 Bucket Waves}
+ALT\_BUCKET\_FP32\_V1 is a separate contract. Admitted costs and accumulated candidates must be positive normal FP32 values or positive zero (negative zero and subnormals are rejected); unsupported numerics or capacity failures return an error without publishing a partial map. Admission includes $N<2^{23}$. Labels initialize to infinity except source $(0,0)$; missing cells retain their missing state.
+
+For labels $a,b$, strict improvement means
+\begin{equation}
+a\prec b\iff a_d<b_d\ \lor\ (a_d=b_d\land a_q<b_q).
+\end{equation}
+The entire pair is selected. For nonnegative finite floats, CUDA packs the delay bits above congestion bits in a 64-bit word, allowing an unsigned atomic minimum to select one actual pair. It never combines a delay from one path with congestion from another. FP32 additions use round-to-nearest with contraction disabled in the matched implementations.
+
+Scheduling uses $B(d)=\mathrm{bits}_{32}(d)\gg s$. We fix $s=20$ for the native experiments. Shift coarsens scheduling buckets, not stored delays: labels and returned costs remain FP32. Shift zero uses exact FP32 delay keys, still with ALT tie semantics.
+
+A wave selects the smallest pending bucket, filters stale notifications and takes the current labels as its snapshot. All eligible outgoing edges generate proposals from that snapshot. Per-destination proposals begin from the existing label and reduce whole pairs; labels are committed only after expansion completes. Strictly improved destinations are published to their new bucket, including reinsertion into the current bucket. Pending deduplication avoids losing same-bucket notifications; old notifications are filtered on extraction. Closure occurs only when no pending work remains in the selected bucket. Target cells are recorded after closure, using whole-pair selection, and completion is tested then.
+
+\begin{algorithm}[t]\caption{ALT wave contract (one logical sample)}\label{alg:alt}
+\begin{algorithmic}[1]
+\State Reset labels, pending state and outputs; publish source
+\While{pending work exists and target cells incomplete}
+\State Select minimum pending bucket $b$; filter stale members
+\State Read wave-start labels; generate eligible proposals
+\State Reduce each destination by whole-pair $\prec$
+\State Commit strict improvements; publish or deduplicate
+\If{bucket $b$ has no remaining work}
+\State Record closed target cells; test target completion
+\EndIf
+\EndWhile
+\State Return complete output or explicit failure
+\end{algorithmic}\end{algorithm}
+
+CPU uses a sparse directory and per-wave proposals; CUDA uses dense directory scans, parallel expansion, atomic proposals and launch barriers. Reset, synchronization and output handoff are charged. Finite iteration/work/capacity guards return failure rather than a partial successful map. Exhaustion or target completion after closure terminates the search. Whole-pair selection preserves association but does not prove a global lexicographic FP32 shortest-path theorem: rounding can erase an earlier delay difference. Table~\ref{tab:guarantees} summarizes the guarantees.
+
+\begin{table}[t]\centering\caption{Semantic obligations and limits.}\label{tab:guarantees}
+\begin{tabular}{lp{5.7cm}}\toprule Contract & Guarantee / boundary\\\midrule
+STRICT & Native wire-map equality under unchanged samples, visitation, finite occupied delays and original-order reduction/interpolation.\\
+ALT & Whole-pair wave rule and source-relative recording; native equality and universal QoR are not promised.\\
+Finite ALT & Executed-case RTL/model agreement under declared service; physical timing and board memory are separate.\\\bottomrule\end{tabular}\end{table}

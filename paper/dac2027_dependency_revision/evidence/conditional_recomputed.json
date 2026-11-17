@@ -1,0 +1,134 @@
+[
+  {
+    "case": "bnn_export",
+    "service": {
+      "frequency_mhz": 200.0,
+      "scenario": "base",
+      "latency_ns": 80.0,
+      "issue_interval_ns": 5.0,
+      "latency_cycles": 16,
+      "issue_cycles": 1,
+      "latency_implemented_ns": 80.0,
+      "issue_implemented_ns": 5.0,
+      "conversion": "ceil(ns * MHz / 1000); checked against every actual sample",
+      "physical_ports": 32,
+      "beat_bytes": 32,
+      "credits_per_port": 32,
+      "issue_service_ceiling": {
+        "evidence_type": "ideal_contract_offer_upper_bound_not_measured_HBM",
+        "basis": "one nominal 32-byte transaction per port per implemented issue interval; GB/s uses 10^9 bytes",
+        "per_port_requests_per_second": 200000000.0,
+        "all_ports_requests_per_second": 6400000000.0,
+        "per_port_bytes_per_second": 6400000000.0,
+        "all_ports_bytes_per_second": 204800000000.0,
+        "per_port_GB_per_second": 6.4,
+        "all_ports_GB_per_second": 204.8,
+        "limitations": "Issue-spacing ceiling only, assuming every port has ready traffic and no credit, queue, response, arbitration or jitter stalls. Reads and writes share this issue budget. Nominal transaction bytes exclude protocol overhead; this is neither measured HBM bandwidth nor effective random-RMW/useful-output throughput, which may require multiple transactions."
+      },
+      "jitter": false,
+      "evidence_type": "declared_simulation_assumption"
+    },
+    "cycles": 102557024,
+    "conditional_seconds": 0.51278512,
+    "achieved_frequency": false
+  },
+  {
+    "case": "lstm_s2",
+    "service": {
+      "frequency_mhz": 200.0,
+      "scenario": "base",
+      "latency_ns": 80.0,
+      "issue_interval_ns": 5.0,
+      "latency_cycles": 16,
+      "issue_cycles": 1,
+      "latency_implemented_ns": 80.0,
+      "issue_implemented_ns": 5.0,
+      "conversion": "ceil(ns * MHz / 1000); checked against every actual sample",
+      "physical_ports": 32,
+      "beat_bytes": 32,
+      "credits_per_port": 32,
+      "issue_service_ceiling": {
+        "evidence_type": "ideal_contract_offer_upper_bound_not_measured_HBM",
+        "basis": "one nominal 32-byte transaction per port per implemented issue interval; GB/s uses 10^9 bytes",
+        "per_port_requests_per_second": 200000000.0,
+        "all_ports_requests_per_second": 6400000000.0,
+        "per_port_bytes_per_second": 6400000000.0,
+        "all_ports_bytes_per_second": 204800000000.0,
+        "per_port_GB_per_second": 6.4,
+        "all_ports_GB_per_second": 204.8,
+        "limitations": "Issue-spacing ceiling only, assuming every port has ready traffic and no credit, queue, response, arbitration or jitter stalls. Reads and writes share this issue budget. Nominal transaction bytes exclude protocol overhead; this is neither measured HBM bandwidth nor effective random-RMW/useful-output throughput, which may require multiple transactions."
+      },
+      "jitter": false,
+      "evidence_type": "declared_simulation_assumption"
+    },
+    "cycles": 104154414,
+    "conditional_seconds": 0.52077207,
+    "achieved_frequency": false
+  },
+  {
+    "case": "bnn_export",
+    "service": {
+      "frequency_mhz": 200.0,
+      "scenario": "conservative_diagnostic",
+      "latency_ns": 160.0,
+      "issue_interval_ns": 10.0,
+      "latency_cycles": 32,
+      "issue_cycles": 2,
+      "latency_implemented_ns": 160.0,
+      "issue_implemented_ns": 10.0,
+      "conversion": "ceil(ns * MHz / 1000); checked against every actual sample",
+      "physical_ports": 32,
+      "beat_bytes": 32,
+      "credits_per_port": 32,
+      "issue_service_ceiling": {
+        "evidence_type": "ideal_contract_offer_upper_bound_not_measured_HBM",
+        "basis": "one nominal 32-byte transaction per port per implemented issue interval; GB/s uses 10^9 bytes",
+        "per_port_requests_per_second": 100000000.0,
+        "all_ports_requests_per_second": 3200000000.0,
+        "per_port_bytes_per_second": 3200000000.0,
+        "all_ports_bytes_per_second": 102400000000.0,
+        "per_port_GB_per_second": 3.2,
+        "all_ports_GB_per_second": 102.4,
+        "limitations": "Issue-spacing ceiling only, assuming every port has ready traffic and no credit, queue, response, arbitration or jitter stalls. Reads and writes share this issue budget. Nominal transaction bytes exclude protocol overhead; this is neither measured HBM bandwidth nor effective random-RMW/useful-output throughput, which may require multiple transactions."
+      },
+      "jitter": false,
+      "evidence_type": "declared_simulation_assumption"
+    },
+    "cycles": 135128351,
+    "conditional_seconds": 0.675641755,
+    "achieved_frequency": false
+  },
+  {
+    "case": "lstm_s2",
+    "service": {
+      "frequency_mhz": 200.0,
+      "scenario": "conservative_diagnostic",
+      "latency_ns": 160.0,
+      "issue_interval_ns": 10.0,
+      "latency_cycles": 32,
+      "issue_cycles": 2,
+      "latency_implemented_ns": 160.0,
+      "issue_implemented_ns": 10.0,
+      "conversion": "ceil(ns * MHz / 1000); checked against every actual sample",
+      "physical_ports": 32,
+      "beat_bytes": 32,
+      "credits_per_port": 32,
+      "issue_service_ceiling": {
+        "evidence_type": "ideal_contract_offer_upper_bound_not_measured_HBM",
+        "basis": "one nominal 32-byte transaction per port per implemented issue interval; GB/s uses 10^9 bytes",
+        "per_port_requests_per_second": 100000000.0,
+        "all_ports_requests_per_second": 3200000000.0,
+        "per_port_bytes_per_second": 3200000000.0,
+        "all_ports_bytes_per_second": 102400000000.0,
+        "per_port_GB_per_second": 3.2,
+        "all_ports_GB_per_second": 102.4,
+        "limitations": "Issue-spacing ceiling only, assuming every port has ready traffic and no credit, queue, response, arbitration or jitter stalls. Reads and writes share this issue budget. Nominal transaction bytes exclude protocol overhead; this is neither measured HBM bandwidth nor effective random-RMW/useful-output throughput, which may require multiple transactions."
+      },
+      "jitter": false,
+      "evidence_type": "declared_simulation_assumption"
+    },
+    "cycles": 137198248,
+    "conditional_seconds": 0.68599124,
+    "achieved_frequency": false
+  }
+]

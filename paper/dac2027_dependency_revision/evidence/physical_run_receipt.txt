@@ -1,0 +1,15 @@
+CONFIG TOOL 2022.2 TCL 8.5.14 INPUT_DCP /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_CPU_PRIMARY/results/fpga_cpu_primary_20261115/full_synth_h_return_wordmux/project/cp_full.runs/impl_1/cp_full_top_opt.dcp INPUT_SHA256 832f257f83d47575d9ea4bfb448b19f49be489ce93d18938a0a1b4f29ab0e3d5 DIRECTIVE SSI_SpreadSLLs ULTRATHREADS 1 THREADS 8 PERIOD_NS 5
+SCOPE Independent non-project implementation from terminal unplaced h opt DCP. Original project/run is never reset or changed. No synthesis, opt_design, incremental reuse, source or constraint changes.
+QUALIFICATION Route command completion is not timing, legal-routing, interface or board qualification. Reports retain all port paths and OOC limitations.
+SCRIPT_INPUT /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_CPU_PRIMARY/results/fpga_cpu_primary_20261115/full_impl_h_ssi_spreadslls_a/frozen/collector.tcl SHA256 ceff6851d95ea491bfbf8ad2e0b497fd3151f75e6ad687b865ac21d21b86b751
+SCRIPT_INPUT /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_CPU_PRIMARY/results/fpga_cpu_primary_20261115/full_impl_h_ssi_spreadslls_a/frozen/clock_context.tcl SHA256 6858e626eb1403476aecb0fe3deb7ba7561e3eeaf7240b8859d1aeb5906df045
+SCRIPT_INPUT /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_CPU_PRIMARY/results/fpga_cpu_primary_20261115/full_impl_h_ssi_spreadslls_a/frozen/post_place.tcl SHA256 16920fa65d26414d1b5342aa3f5ff1c545e29854f6701fd3649666af5859716d
+BEGIN REQUIRED open_input UTC 2026-11-16T21:58:41Z SCRIPT {uplevel 1 {open_checkpoint $input_dcp}}
+END REQUIRED open_input RETURN_CODE 0 ELAPSED_MS 665799 RESULT checkpoint_cp_full_top_opt OPTIONS {-code 0 -level 0}
+BEGIN REQUIRED input_clock_connectivity UTC 2026-11-16T22:09:47Z SCRIPT {uplevel 1 {cp_clock_context_connected [file join $out pre_context] 0}}
+END REQUIRED input_clock_connectivity RETURN_CODE 0 ELAPSED_MS 114824 RESULT /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_CPU_PRIMARY/results/fpga_cpu_primary_20261115/full_impl_h_ssi_spreadslls_a/run_a/pre_context/actual_constraints.xdc OPTIONS {-code 0 -level 0}
+BEGIN EDA place_design UTC 2026-11-16T22:11:42Z SCRIPT {place_design -directive SSI_SpreadSLLs -ultrathreads}
+END EDA place_design RETURN_CODE 0 ELAPSED_MS 8437521 RESULT {} OPTIONS {-code 0 -level 0}
+BEGIN REQUIRED place_design_checkpoint UTC 2026-11-17T00:32:19Z SCRIPT {uplevel 1 {write_checkpoint $checkpoint_path}}
+END REQUIRED place_design_checkpoint RETURN_CODE 0 ELAPSED_MS 284961 RESULT /inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_CPU_PRIMARY/results/fpga_cpu_primary_20261115/full_impl_h_ssi_spreadslls_a/run_a/cp_full_top_placed.dcp OPTIONS {-code 0 -level 0}
+BEGIN REPORT post_place UTC 2026-11-17T00:37:04Z SCRIPT {source -notrace $post_place_script}
