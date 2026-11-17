@@ -1,6 +1,6 @@
 # h single-target migration — implementation in progress
 
-This is an **initial frozen snapshot**, not terminal physical qualification.
+This report includes the **completed synthesis/opt audit**, not terminal physical qualification.
 Experiment `H_SAME_RTL_SINGLE_PART_MIGRATION_V1` starts from hardware review
 `706feba1cbefcf828d998560440c488cd081ba07` in independent branch
 `accel/lookahead-h-device-migration-20261117`. No paper is modified.
@@ -36,7 +36,7 @@ collection bounds path reports to20. No result-driven target/strategy search.
 
 | Qualification layer | Current state |
 |---|---|
-| Legal complete routing | Not yet established; synthesis running |
+| Legal complete routing | Not yet established; placement running |
 | All-required core OOC timing | Not yet established; no qualified frequency |
 | Conditional model performance | Pending physical qualification |
 | Actual board/platform performance | Not measured; seconds and speedup null |
@@ -76,3 +76,36 @@ Main, previous hardware and all paper refs/trees and original tracked diffs
 are protected; guidance files have byte hashes. Full terminal resource/timing
 comparison and verified remote terminal SHA will replace this running summary
 only after actual completion or explicit budget-stop audit.
+
+## Completed-stage audit at 2026-11-17 14:00 UTC
+
+Full synthesis completed12:55:35UTC and standard opt13:15:35UTC. Placement
+started13:23:12UTC and remains in partition-driven global placement. The
+original budget and single target/chain are unchanged.
+
+| Stage | LUT | LUTRAM | SRL | FF | BRAM36 eq. | URAM |
+|---|---:|---:|---:|---:|---:|---:|
+| New XCU250 synthesis | 1223270 | 286776 | 1280 | 749607 | 1148 | 640 |
+| New XCU250 standard opt | 1220068 | 286776 | 1024 | 748933 | 1148 | 640 |
+
+These values exactly match original h at the corresponding stage. They are
+not area savings caused by migration. LUTRAM/SRL are included in total LUTs.
+Both stages have0latches and0blackboxes. Synthesized primitive totals and
+all9681output-driver census records match h. This corroborates unchanged
+structure, not formal equivalence. Actual DCP metadata confirms the new part,
+cp_full_top and OOC mode; both full hashes/lengths were independently verified.
+The opt DCP embeds5ns,0.1ns uncertainty,0.1/0.8ns I/O delays and new HD.CLK_SRC.
+All1238191sequential clock pins belong to core_clock and connect directly toclk.
+
+The placer estimates20586/23040SLLs onSLR1→SLR2; this is a congestion risk,
+not evidence of completed routing. No qualified frequency or model time follows.
+
+Independent read-only audit and immutable stage reports are in
+`accel/lookahead/fpga_device_migration/stage_audit_20261117/`. The frozen
+capacity gate's supplemental rows incorrectly record zero LUTRAM/SRL from
+unplaced SLR tables when their top-level Available field is blank. Original
+utilization reports and this independent header-aware audit preserve the true
+286776LUTRAM and1280/1024SRL counts. Main capacity gates are unaffected; no
+frozen EDA inputs or running procedure was changed. New repeated diagnostics
+are capped at100, unlike old logs: warning counts are not comparable incidence
+reductions. No new Synth diagnostic IDs were observed in available text.
