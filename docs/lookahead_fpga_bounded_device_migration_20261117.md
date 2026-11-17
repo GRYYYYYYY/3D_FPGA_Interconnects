@@ -129,3 +129,25 @@ this transition. The original budget.json PID field is initial provenance;
 the current supervisor_identity.json and heartbeat identify the live observer.
 Process identity, scope rejection and group exit checks passed. Final physical
 qualification and terminal publication remain pending.
+
+## Placement return and additional terminal audit requirements
+
+The original place_design command returned successfully at2026-11-17
+15:43:45UTC (0critical warnings/0errors in its final command summary).
+Its frozen flow then began checkpoint/report collection. Independent
+phys_opt_design and route_design had not started at the15:45UTC observation.
+This is placement completion only, not a legal route or a qualified period.
+
+The user's additional requirements are recorded in
+`accel/lookahead/fpga_device_migration/supplemental_audit_requirements.json`
+and passed to the existing sole terminal publisher. They require stage return
+status; worst setup/hold endpoints, internal/boundary classification, logic/net
+delay, levels, fanout, SLR crossings and clock skew; global/per-SLR resources,
+CLB/SLICEM occupancy and congestion. Read natural reports first. Missing fields
+may be collected serially from the same completed checkpoint after the original
+worker terminates, within the original budget; never submit to the busy session.
+
+No observer/publisher replacement or EDA input/budget change accompanies this
+update. Single6.25ns STA remains gated on legally complete routing and failed
+5ns setup. The paper cutoff is separate; no frozen manuscript or submission
+date changes. The−23.420ns estimate is neither a final failure nor a frequency.

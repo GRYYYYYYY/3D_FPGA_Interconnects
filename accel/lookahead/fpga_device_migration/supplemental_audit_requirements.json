@@ -1,0 +1,67 @@
+{
+  "utc_epoch": 1794930337.5899415,
+  "run_id": "migration_a",
+  "target_part": "xcu250-figd2104-2L-e",
+  "scope": "Supplementary read-only stage/terminal audit; no implementation input changes",
+  "stage_returns": [
+    "place_design",
+    "phys_opt_design",
+    "route_design"
+  ],
+  "path_scopes": [
+    "worst overall setup",
+    "worst overall hold",
+    "worst internal register setup",
+    "worst internal register hold",
+    "worst boundary setup",
+    "worst boundary hold"
+  ],
+  "path_fields": [
+    "startpoint",
+    "endpoint",
+    "internal_or_boundary_class",
+    "data_path_delay_ns",
+    "logic_delay_ns",
+    "net_delay_ns",
+    "logic_levels",
+    "per_net_fanout_and_max",
+    "launch_SLR",
+    "capture_SLR",
+    "traversed_SLRs_and_crossing_count_if_obtainable",
+    "source_clock_delay_ns",
+    "destination_clock_delay_ns",
+    "clock_pessimism_removal_ns",
+    "clock_skew_ns",
+    "slack_ns",
+    "routed_or_estimated_delay"
+  ],
+  "resource_scopes": [
+    "complete core",
+    "SLR0",
+    "SLR1",
+    "SLR2",
+    "SLR3"
+  ],
+  "resource_fields": [
+    "LUT total",
+    "LUT logic",
+    "LUTRAM",
+    "SRL",
+    "FF",
+    "BRAM36 equivalent",
+    "URAM",
+    "DSP",
+    "CLB occupancy",
+    "SLICEM occupancy",
+    "SLL demand",
+    "congestion magnitude and locations"
+  ],
+  "rules": [
+    "Read naturally produced complete reports and checkpoint hash receipts first. Never issue commands into busy original Vivado.",
+    "Only after original EDA worker reaches terminal, missing report fields may be collected from the SAME complete checkpoint using one serial read-only reporting process/session, explicitly budgeted and identified. No P&R replay.",
+    "Mark missing fields unavailable; do not infer SLR from unrelated hierarchical names, confuse endpoint SLR distance with actual traversed net crossings, or sum fanouts as one fanout.",
+    "Preserve estimated vs routed timing distinction and report each stage return separately.",
+    "Single 6.25ns STA only when legal fully routed DCP exists, 5ns setup fails, and original compute budget remains. Same delays/uncertainty; no P&R or additional frequency search.",
+    "Use existing observer2340438/publisher1181978. Paper cutoff is independent; frozen paper unchanged."
+  ]
+}
