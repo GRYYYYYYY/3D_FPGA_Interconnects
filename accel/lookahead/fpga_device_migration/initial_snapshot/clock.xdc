@@ -1,0 +1,6 @@
+create_clock -name core_clock -period 5.000000 [get_ports clk]
+set_clock_uncertainty 0.100 [get_clocks core_clock]
+set_input_delay -clock core_clock -max 0.800 [get_ports -filter {DIRECTION == IN && NAME != clk}]
+set_input_delay -clock core_clock -min 0.100 [get_ports -filter {DIRECTION == IN && NAME != clk}]
+set_output_delay -clock core_clock -max 0.800 [get_ports -filter {DIRECTION == OUT}]
+set_output_delay -clock core_clock -min 0.100 [get_ports -filter {DIRECTION == OUT}]
