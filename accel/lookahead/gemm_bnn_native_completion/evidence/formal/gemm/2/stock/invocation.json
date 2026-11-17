@@ -1,0 +1,96 @@
+{
+  "case": "gemm",
+  "arm": "stock",
+  "label": "2",
+  "formal": true,
+  "cohort_id": "job-69d00d65-9971-4cf1-9876-58b8e9049460-worker-0_post_V1_a",
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "binary_sha256": "37cc22c8b1b5d9d378e25379e85afcb7e56b5f1f6f72e3e9186e5e107ed5ce62",
+  "input_bindings": {
+    "architecture": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+      "sha256": "b19507fc7eeb0f87208a8565fe09b6313aafd1d6006b057c1e284ae2c549ef60",
+      "bytes": 33159
+    },
+    "circuit": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/gemm_layer.blif",
+      "sha256": "351572ff1d5af340fcf517cdb74c4320eef6cef74a7672d0ff56cc0909f5b37c",
+      "bytes": 149474058
+    },
+    "packed_netlist": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_gemm_layer_seed1/packed.net",
+      "sha256": "eb1413e75520ffe505f2cf8a28d45ba75f06f3ff6ef3009e4777a0ec5e1119c0",
+      "bytes": 656364026
+    },
+    "placement": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_gemm_layer_seed1/fixed.place",
+      "sha256": "7fc3d3c5fa8f23f622a968d9865fc986c2e231913e7dc42df6cef56fb68e6b28",
+      "bytes": 3553530
+    },
+    "rr_graph": {
+      "path": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_gemm_layer_seed1/rr_graph.xml",
+      "sha256": "621b23a188c8dbe4319d8a42d9ce340797d6402093404ab79b719f5ea5323950",
+      "bytes": 7391823052
+    }
+  },
+  "library_sha256": null,
+  "environment": {
+    "VPR_HYBRID_LOOKAHEAD_TASKS": "0",
+    "VPR_HYBRID_LOOKAHEAD_PARALLEL": "0"
+  },
+  "start_utc": "2026-11-17T21:56:51.969341+00:00",
+  "command": [
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/artifacts/bin/baseline/vpr",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/configs/architectures/koios_native3d_n6_f16_d1_v3.xml",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/benchmarks/downloads/beyond_flatland/gemm_layer.blif",
+    "--route_chan_width",
+    "100",
+    "--device_width",
+    "0",
+    "--target_utilization",
+    "0.6",
+    "--seed",
+    "1",
+    "--num_workers",
+    "8",
+    "--router_algorithm",
+    "parallel",
+    "--flat_routing",
+    "off",
+    "--check_route",
+    "full",
+    "--net_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_GEMM_BNN_V2/results/gemm_bnn_native_completion_20261117/gpu_matched_a/formal/gemm/2/stock/packed.net",
+    "--place_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_GEMM_BNN_V2/results/gemm_bnn_native_completion_20261117/gpu_matched_a/formal/gemm/2/stock/fixed.place",
+    "--route_file",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_GEMM_BNN_V2/results/gemm_bnn_native_completion_20261117/gpu_matched_a/formal/gemm/2/stock/routed.route",
+    "--read_rr_graph",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_routing/results/runs/koios_gemm_layer_seed1/rr_graph.xml",
+    "--timing_report_npaths",
+    "10",
+    "--analysis",
+    "--route",
+    "--routing_failure_predictor",
+    "off",
+    "--max_router_iterations",
+    "200",
+    "--congested_routing_iteration_threshold",
+    "0.25",
+    "--router_lookahead",
+    "map",
+    "--write_router_lookahead",
+    "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_GEMM_BNN_V2/results/gemm_bnn_native_completion_20261117/gpu_matched_a/formal/gemm/2/stock/wire_map.bin",
+    "--generate_rr_node_overuse_report",
+    "off"
+  ]
+}

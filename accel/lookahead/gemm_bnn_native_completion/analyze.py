@@ -70,6 +70,7 @@ def main():
   assert x['cohort_id']==env['hostname']+'_post_V1_a'
   assert 'R61_CAPTURE' not in x['environment'] and 'R61_VERIFY_CPU' not in x['environment']
   assert not x['resource_before']['gpu_processes'].strip() and not x['resource_after']['gpu_processes'].strip()
+  assert all(x[k]['gpu'].split(',')[1].strip()==env['gpu_uuid'] for k in ['resource_before','resource_after'])
   d=r/'formal'/x['case']/str(x['repeat'])/x['arm']
   if x['qualified']:
    assert sha(d/'wire_map.bin')==x['map_sha256'] and sha(d/'routed.route')==x['route_sha256']
@@ -97,6 +98,7 @@ def main():
   if status['status']!='COMPLETE':excluded.append(dict(case=case,status=status,reason='No complete qualified n=3 matched cohort; times remain diagnostics'));continue
   assert all(read(r/'receipts'/f'{case}_qualification_gate.json').values())
   fr=[x for x in formal if x['case']==case];assert len(fr)==9 and all(x['qualification_map_equal'] and x['paired_qor_passed'] for x in fr)
+  assert [(x['repeat'],x['arm']) for x in fr]==[(rep,arm) for rep,order in enumerate(plan['orders']) for arm in order]
   for scope in ['Process_wall_s','E2_s']:summary.append(table(case,env['hostname'],fr,scope))
  old=read(a.historical);lstm=[]
  for x in old['formal_rows']:

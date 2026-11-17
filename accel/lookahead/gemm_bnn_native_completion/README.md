@@ -66,3 +66,17 @@ only source, small manifests, original logs and reviewable measurements are
 published. Never rerun `prepare.py` or a worker into an existing run directory.
 The FPGA resume policy remains the separate pause branch's `RESUME.md` and
 requires new user authorization plus process identity/budget checks.
+
+## Completed bounded matrix
+
+The worker completed all 18 formal processes, eight qualification processes and
+26 separate FULL/STA readbacks without retries or exclusions. The platform is
+`job_succeeded`; see `receipts/platform_final.json`. Both exact original cases
+passed admission, complete ALT CPU/CUDA output checks and native-route gates.
+`tables/results.json` and the technical report in
+`docs/lookahead_gemm_bnn_native_completion_20261117.md` contain paired statistics
+and limitations. Total device memory peak was not measured; source-derived
+buffer payloads are explicitly distinguished from a measured peak.
+
+All scheduled solver work is finished. The FPGA remains paused. Final paper
+publication and remote SHA verification are bound by the publication receipt.
