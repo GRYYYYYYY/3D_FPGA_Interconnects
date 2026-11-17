@@ -1,0 +1,11 @@
+# FPGA is paused; recovery is NOT authorized by this software task
+
+The computation group 1144478 (worker birth ticks 182228714, Vivado 1144514 birth ticks 182228751) was stopped using SIGSTOP on 2026-11-17. Validate the exact boot ID, start ticks, PGID, session, command and cwd against verification.json and before.json before any future action. Do not act on a stale PID. All live members and threads must remain T; three samples showed unchanged CPU ticks. The group retains about 20 GiB RSS and may retain licenses/files. SIGSTOP created no checkpoint.
+
+The unique pause observer holds BOTH original supervisor.lock and publisher.lock; it never launches EDA, sends budget signals, resumes the group, or invokes a final auditor. Its loaded code hash and current identity are in raw pause_observer_identity.json and its minute heartbeat in pause_heartbeat.json. Original supervisors were identity-checked and terminated individually; no EDA process was terminated. Original budget and frozen inputs were preserved. After the original deadline state becomes PAUSED_BY_USER_BUDGET_DECISION_REQUIRED.
+
+Only after a new explicit user instruction: verify all identities and host/license/container continuity; inspect all current members and checkpoints; agree how the original expired or remaining budget will be handled; coordinate exactly one replacement observer/publisher under the existing locks; then and only then use an identity-revalidated group SIGCONT. Do not restart old automatic-cutoff controllers without an agreed budget policy. If identities are missing or changed, report actual process death and last complete DCP; do not restart Vivado or reload a DCP automatically.
+
+Last complete checkpoint: place.dcp, 1046182493 bytes, SHA256 9000c97d4f40506eeb4a7f5dc4127f814136cfdf84713512c4c0b4ee0cb25fa7. phys_opt had started; route had not started. This is not a physical terminal result.
+
+Implementation note: the apply command completed and wrote verification.json, then its final console summary raised AttributeError because the local variable p had been reused for checkpoint paths. This did not affect signals, locks, snapshots, verification or the separately running observer. Do not rerun apply. The running source is retained unchanged to preserve its loaded-code identity.
