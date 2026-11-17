@@ -29,7 +29,7 @@ for cohort,case,w in sorted(set((r['cohort'],r['case'],r['workers']) for r in ro
  stats.append(q)
 write(E/'causal_statistics.json',stats)
 with (E/'causal_runs.csv').open('w') as f:
- w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
+ w=csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator="\n");w.writeheader();w.writerows(rows)
 lines=[]
 for q in stats:
  vals=[q['case'].replace('_',r'\_').replace('dla\_like.medium','DLA'),str(q['workers'])]+[f"${q[a]['mean']:.2f}\\pm{q[a]['sd']:.2f}$" for a in ['per_group','flat','pipeline']]
