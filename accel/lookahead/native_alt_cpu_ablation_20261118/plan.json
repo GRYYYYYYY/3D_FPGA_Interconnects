@@ -1,0 +1,40 @@
+{
+  "order": [
+    "gemm",
+    "bnn_if_budget"
+  ],
+  "arms": [
+    "pipeline",
+    "alt_cpu",
+    "alt_cuda"
+  ],
+  "rotations": [
+    [
+      "pipeline",
+      "alt_cpu",
+      "alt_cuda"
+    ],
+    [
+      "alt_cpu",
+      "alt_cuda",
+      "pipeline"
+    ],
+    [
+      "alt_cuda",
+      "pipeline",
+      "alt_cpu"
+    ]
+  ],
+  "contexts": 8,
+  "shift": 20,
+  "input": "full historical seed1 cases, 40 samples",
+  "cohort": "single H100 80GB, 8 distinct physical cores in one NUMA domain, quota >=8",
+  "baseline": "same-repeat new Pipeline for +5% CPD/WL and new performance ratios",
+  "qual": "three fresh pre-formal qualifications; compare full ALT captures and maps against fixed original digests",
+  "formal": "fresh original native VPR; no capture or verification; zero overuse, FULL/STA, digest-stable own route",
+  "time": "E2 and Process as frozen in 30bc113; independent readback sequential, outside both",
+  "ratio": "mean and sample SD of 3 within-repeat time ratios; no ratios for incomplete or failed cases",
+  "BNN_admission": "after GEMM: use prior BNN 12 main plus readback durations scaled by observed GEMM elapsed relative to corresponding historical arms, 20% margin plus 120s",
+  "retry": "at most one documented orchestration recovery within original budget; no timing-based retries",
+  "automatic_FPGA_actions": false
+}

@@ -1,0 +1,116 @@
+\section{Two Levels of Dependency Decoupling}
+\input{sections/contracts_figure}
+\subsection{C1: Private Samples and Ordered Consumption}
+C1 separates source-context identity from execution order (Fig.~\ref{fig:contracts}). The STRICT Pipeline enumerates jobs in native order, exposes a bounded stream across all groups, and uses reusable worker-private queues, visited costs and expanded bits. Each sample resets its workspace and executes the native flood with unchanged geometry, edge eligibility and arithmetic. Its result is retained until the ordered consumer can merge it. The graph and indexed costs are shared read-only. No worker mutates another sample's labels or the group accumulator.
+
+\begin{algorithm}[t]
+\caption{C1: bounded STRICT sample execution}\label{alg:c1}
+\begin{algorithmic}[1]
+\State Enumerate groups and native sample starts into $\mathcal J$
+\State Preserve each job's source, group and ordinal
+\State Initialize group maps $A_g$; set token limit $K=\min(J,2P)$
+\State Create thread-local reusable native search workspaces
+\Statex \textit{Run these three stages as one bounded pipeline:}
+\State \textbf{Ordered producer:} issue next job $a$ while a token is free
+\State \textbf{Parallel worker:} reset private workspace $S_p$
+\State \hspace{1em}$R_a\gets\mathrm{NativeFlood}(G,s_a,\phi_a,S_p)$
+\State \hspace{1em}retain $(a,R_a)$ until its ordered consumption
+\State \textbf{Ordered consumer:} for every cell $u$, perform
+\State \hspace{1em}$A_{g(a)}[u]\gets A_{g(a)}[u]\oplus R_a[u]$
+\State \hspace{1em}release sample result and its token
+\State After join, write groups and interpolate in native order
+\State Return wire table to remaining native outer computation
+\end{algorithmic}
+\end{algorithm}
+
+The token bound follows the active CPU parallelism limit $P$ (at least one token when jobs exist). Searches from later groups can overlap earlier ones, while serial-in-order consumption preserves tie decisions. Flat is an independent global parallel-loop control: it retains all $J$ sample maps until the join and then reduces in original order. Group instead joins within every group. These are construction schedulers, not VPR's separate flat-routing option.
+
+\begin{proposition}
+If sample selection/context, within-flood visitation and arithmetic are unchanged, occupied recorded delays are finite, and native occupancy, commit and interpolation rules are preserved, private STRICT sample execution followed by original-order strict-delay reduction yields the native wire table.
+\end{proposition}
+\noindent\emph{Proof.} Each private flood produces the same per-cell representative as its native execution. For an occupied cell, ordered reduction selects the least delay and retains its earliest sample on equal delay:
+\begin{equation}
+ a^*(g,u)=\arg\min_{a:g(a)=g,\ R_a[u]\ne\bot}(R_a[u].d,a).
+\end{equation}
+The implementation uses the native missing-state predicate and insertion, not a generic tuple sort. Occupancy and associated congestion therefore agree cell by cell. Identical group writes and interpolation preserve this agreement. Completion order never enters the reduction. $\square$
+
+Changing heap ties, exceptional-value handling or recording geometry violates the premises. The proposition is about wire maps, not route trajectories. ALT below changes the sample engine and does not inherit this proof.
+
+\subsection{C1 Work, Width and Storage}
+Let $t_a$ include sample reset, traversal and recording, and $W_g=\sum_{a:g(a)=g}t_a$. Ignoring launch, merge and interference, ideal search schedules obey
+\begin{align}
+ T_{\rm group}&\geq\sum_g\max\{W_g/P,\max_{a:g(a)=g}t_a\},\\
+ T_{\rm global}&\geq\max\{\textstyle\sum_a t_a/P,\max_a t_a\}.
+\end{align}
+These are lower bounds, not speedup guarantees: an early slow sample can delay ordered consumption and occupy tokens. If $S(N)$ is native private workspace size including its queue, storage beyond the shared graph is $O(P S(N)+KC+|\mathcal G|C+J)$ for Pipeline; Flat replaces $KC$ by $JC$. This exposes the resource tradeoff of retaining independent results. Dense sample-to-group reduction performs $O(JC)$ cell visits; enumeration, group writes and interpolation add their own work. We do not assume a universal $O(M\log N)$ flood cost: actual queue traffic, termination and reset work depend on the native engine and graph.
+
+\subsection{C2: Whole-Pair FP32 Waves}
+ALT\_BUCKET\_FP32\_V1 makes the inner ordering rule explicit. A node label $L[v]=(d,q)$ is compared lexicographically:
+\begin{equation}
+ a\prec b\ \Longleftrightarrow\ a_d<b_d\ \lor\ (a_d=b_d\land a_q<b_q).
+\end{equation}
+Both coordinates of a winning proposal come from the same predecessor label plus the destination's indexed cost. This preserves pair association, but differs from native strict-delay ties. Initially $L[s_a]=(0,0)$ and other labels use an internal infinity sentinel. Output cells begin missing. The target count is the number of distinct mapped IPIN cells for that sample, not the number of target nodes.
+
+The scheduling key is $B(d)=\mathrm{bits}_{32}(d)\gg h$. Native timings use $h=20$; $h=0$ is a diagnostic exact-delay-key control. Coarsening this key changes which labels are processed together, without quantizing their stored FP32 delays. Costs and generated candidates must be positive normal FP32 or positive zero: negative values, negative zero, subnormals, NaNs and infinities are rejected as numeric inputs/results. Infinity is only internal unreached state. CPU uses round-to-nearest with contraction/fast-math disabled; CUDA explicitly uses round-to-nearest addition. The admission pass checks inter-cluster non-SINK node costs and expansion checks each accumulated pair.
+
+\begin{algorithm}[t]
+\caption{C2: one logical ALT sample (native wave rule)}\label{alg:c2}
+\begin{algorithmic}[1]
+\State Reset labels, pending keys, closed-set flags and cell output
+\State Count distinct target cells; if zero, return missing output
+\State Publish $s_a$ with label $(0,0)$ and key 0
+\While{pending work exists}
+\State $b\gets$ minimum pending key; extract its members
+\State Discard stale members whose current pending key is not $b$
+\State Clear valid members' pending keys; add them to closed set
+\State Freeze committed labels $L$ for this wave
+\State Initialize touched-node proposals $Q[v]\gets L[v]$
+\For{each active $u$ and its adjacency in stored order}
+\State Apply native eligibility; skip or stop at SINK as specified
+\State $z\gets\mathrm{RN}_{32}(L[u]+w(v))$; reject invalid numerics
+\State $Q[v]\gets\min_{\prec}(Q[v],z)$ as a whole pair
+\EndFor
+\State After expansion, commit every strict $Q[v]\prec L[v]$
+\State Publish its new key, deduplicating current notifications
+\If{minimum remaining key differs from $b$, or none remains}
+\State Reduce closed IPIN labels into their mapped output cells
+\State Clear closed set; stop if all target cells are recorded
+\EndIf
+\State Fail explicitly if the execution/capacity guard is exceeded
+\EndWhile
+\State Return output with missing unreachable cells; no partial success on error
+\end{algorithmic}
+\end{algorithm}
+
+A coarse bucket can contain a later improvement to a node already expanded. Therefore processing it once and permanently marking it visited is wrong for this execution rule. Clearing the active pending key permits re-publication into the same bucket. CPU keeps historical directory entries, rejects stale keys and suppresses duplicate current keys. CUDA stores one current pending key per node, replacing a migrated key directly. A bucket closes only after no current pending key remains at $b$; the closed set accumulates expanded nodes until that boundary. IPIN output reduction then selects whole pairs and tests target completion. Queue exhaustion also terminates with unreachable cells missing.
+
+Expansion reads wave-start labels and writes a distinct proposal array; commit follows all expansion. Without that boundary, a newly written label could propagate further within the same wave depending on thread timing. In CUDA, proposals persist as running minima rather than being reset each wave: after commit they equal the committed labels, which provides the same starting value for the next expansion. This is the measured dense implementation, not a later online reduction variant. Pair preservation is not a universal lexicographic FP32 shortest-path theorem: rounding can collapse previously different delays, altering which congestion tie would have survived.
+
+\subsection{CPU/GPU Mapping and Costs}
+ALT CPU receives the full job list through the live native interface. An OpenMP dynamic loop assigns independent samples to private scratch arrays with a sparse ordered map of pending buckets. It does not call the STRICT TBB Pipeline. CUDA allocates all $J$ samples together: grid dimension $y$ identifies the sample, while $x$ and 256-thread blocks identify nodes. Each active node thread loops over its own adjacency. Candidate edges are not each assigned a separate thread.
+
+For admitted nonnegative floats the unsigned key
+\begin{equation}
+ H(d,q)=(\mathrm{uint64}(\mathrm{bits}_{32}(d))\ll32)
+          \mathbin{|}\mathrm{bits}_{32}(q)
+\end{equation}
+orders complete pairs. CUDA uses a 64-bit atomic minimum on each destination proposal; collisions select one actual candidate pair. Separate expansion, commit/minimum-scan, confirmation and advance kernels provide wave boundaries. The commit scan reduces pending keys within each block before one atomic minimum per block; confirmation records IPIN pairs only at closure. Advance scans output occupancy per sample. A host completion-count copy waits each batch round, followed by device synchronization and full output readback/unpacking. The contexts field configures CPU workers; it does not measure CUDA occupancy.
+
+Let $A_{a,k}$ be active nodes, $E_{a,k}$ actually inspected adjacency entries (including rejected edges), $U_{a,k}$ touched destinations and $D_{a,k}$ directory operations in wave $k$. CPU work includes initialization $O(J(N+C))$, $\sum_{a,k}(|A_{a,k}|+|E_{a,k}|+|U_{a,k}|)$, stale-entry filtering, closed-set recording and ordered-directory costs $O(\sum_{a,k}D_{a,k}\log(1+B_{a,k}))$, where $B_{a,k}$ is the number of live directory buckets. Repeated waves can inspect an edge many times. GPU work additionally includes dense scans over allocated $JN$ slots each batch round and closure output scans; for $W$ rounds a useful accounting is
+\begin{equation}
+ O\!\left(J(N+C)+WJN+\sum_{a,k}|E_{a,k}|+\sum_a H_a C\right),
+\end{equation}
+where $H_a$ counts closure occupancy scans. Atomic contention, launches and host waits affect elapsed time beyond this work count. Neither formula assumes a single visit per edge.
+
+For the original CUDA representation, arrays require $25JN+8JC$ bytes for labels/proposals, pending, closed flags, mapping and output, plus $8(N+1)+16N+8M$ for CSR/nodes/edges and cost/job metadata. Admission estimates the complete allocation and requires it to fit within 80\% of free device memory; allocation/API errors remain failures. Native ABI shape checks and finite wave/time guards further bound execution. The full 9,595,752-node GEMM graph and all 40 samples pass the live ABI checks and independent output and route qualification.
+
+The host exports current graph/costs and per-sample geometry, calls exactly one chosen backend, then merges returned samples in original order and completes native writes/interpolation. Graph conversion, allocation, transfer, synchronization and output handoff are charged to native E2. Table~\ref{tab:configs} distinguishes executable choices from the two mechanisms. Stock$\to$Pipeline$\to$ALT CUDA is an implementation comparison; it is not a serial two-solver flow or a complete $2\times2$ causal ablation.
+
+\begin{table}[t]\centering
+\caption{Execution choices at the common logical boundary.}\label{tab:configs}
+\begin{tabular}{lp{2.35cm}p{3.60cm}}\toprule
+Configuration & Across samples & Within sample / guarantee\\\midrule
+STRICT CPU & Group, Flat or bounded Pipeline & Native flood; conditional wire-map equality\\
+ALT CPU & Global dynamic jobs & FP32 waves; separate numeric/QoR qualification\\
+ALT CUDA & Full sample batch & Node threads and atomic pairs; ALT CPU output qualification\\\bottomrule
+\end{tabular}\end{table}

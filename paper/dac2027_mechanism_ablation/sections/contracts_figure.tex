@@ -1,0 +1,30 @@
+\begin{figure}[t]\centering
+\begin{tikzpicture}[x=0.96cm,y=0.82cm,>=Stealth,font=\footnotesize,
+  tile/.style={draw,rounded corners=1pt,inner sep=3pt,align=center}]
+\node[anchor=west,font=\bfseries\footnotesize] at (0,0) {A \quad Exposing samples across groups};
+\node[anchor=east] at (1.65,-1) {Group join};
+\node[anchor=east] at (1.65,-2) {Global stream};
+\foreach \y in {-1,-2}{
+  \draw[fill=blue!15] (1.8,\y+.35) rectangle (4.2,\y+.70) node[midway] {$A_1$};
+  \draw[fill=blue!15] (1.8,\y-.10) rectangle (2.9,\y+.25) node[midway] {$A_2$};
+}
+\draw[dashed] (2.9,-1.10) rectangle (4.2,-.75) node[midway] {idle};
+\draw[densely dashed] (4.28,-1.22)--(4.28,-.20);
+\draw[fill=orange!22] (4.35,-.65) rectangle (5.55,-.30) node[midway] {$B_1$};
+\draw[fill=orange!22] (2.95,-2.10) rectangle (4.15,-1.75) node[midway] {$B_1$};
+\draw[->] (5.7,-1.1)--(6.8,-1.1) node[midway,above] {time};
+\node[anchor=west] at (.05,-2.65) {Private results retain source, group and ordinal.};
+\node[anchor=west] at (.05,-3.18) {Consume $A_1,A_2,B_1$ in native order, then fill.};
+\draw[gray] (0,-3.55)--(7.7,-3.55);
+\node[anchor=west,font=\bfseries\footnotesize] at (0,-4.05) {B \quad Within one ALT sample and selected bucket};
+\node[tile] (start) at (.85,-5.45) {Wave-start\\labels};
+\node[tile] (p1) at (3.1,-4.95) {pair $(d_1,q_1)$};
+\node[tile] (p2) at (3.1,-5.95) {pair $(d_2,q_2)$};
+\node[tile] (commit) at (5.85,-5.45) {Reduce whole pair\\commit improvement};
+\draw[->](start)--(p1);\draw[->](start)--(p2);
+\draw[->](p1)--(commit);\draw[->](p2)--(commit);
+\draw[->] (commit.south) -- (5.85,-6.88) -- node[below]{same bucket pending: next wave} (.85,-6.88) -- (start.south);
+\node[anchor=west] at (.05,-8.0) {No pending entry in bucket $\Rightarrow$ close and record targets.};
+\end{tikzpicture}
+\caption{Execution dependencies. (A) Illustrative two-worker schedules for groups $A,B$. An idle worker may start $B_1$ while $A_1$ runs. (B) ALT candidates for a destination share a wave snapshot. Committed improvements can reopen the same bucket. Each sample uses one selected search engine.}\label{fig:contracts}
+\end{figure}
