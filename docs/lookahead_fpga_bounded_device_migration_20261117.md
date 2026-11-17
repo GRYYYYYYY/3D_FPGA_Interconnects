@@ -151,3 +151,49 @@ No observer/publisher replacement or EDA input/budget change accompanies this
 update. Single6.25ns STA remains gated on legally complete routing and failed
 5ns setup. The paper cutoff is separate; no frozen manuscript or submission
 date changes. The−23.420ns estimate is neither a final failure nor a frequency.
+
+## Natural placement audit, 2026-11-17 16:40 UTC
+
+The complete placement DCP has been independently SHA256/length/metadata
+verified:1046182493bytes, SHA256
+`9000c97d4f40506eeb4a7f5dc4127f814136cfdf84713512c4c0b4ee0cb25fa7`.
+Actual part/top/OOC match the frozen new target. No checkpoint was reopened in
+Vivado or used to launch implementation. Independent phys_opt_design began
+15:55:19UTC and remains active; route_design has not started.
+
+Global placed resources:1214168LUT(927040logic+286232LUTRAM+896SRL),
+749118FF,1148BRAM36equivalent,640URAM,0DSP,0latches,0blackboxes.
+CLB occupancy183007/216000(84.73%); reported CLBM usage84394.
+
+| SLR | LUT | FF | BRAM36 eq. | URAM | CLB used (%) | CLBM used (%) |
+|---|---:|---:|---:|---:|---:|---:|
+| 0 | 356335 | 262765 | 510 | 300 | 53669 (99.39%) | 24641 (99.68%) |
+| 1 | 397813 | 199962 | 94 | 20 | 53973 (99.95%) | 24701 (99.92%) |
+| 2 | 353338 | 204793 | 374 | 220 | 53603 (99.26%) | 24568 (99.39%) |
+| 3 | 106682 | 81598 | 170 | 100 | 21762 (40.30%) | 10484 (42.41%) |
+
+All per-SLR totals reconcile to the global report. CLBM is the report's direct
+label; independent SLICEM-site census remains a terminal audit item. Full LUTRAM,
+SRL and logic breakdowns are retained in the machine-readable audit/report.
+Local density is high despite global70.26%LUT utilization. No strategy or
+floorplan change follows. Reported SLR3/2,2/1,1/0connectivity is respectively
+8802,20789,16393out of23040(38.20%,90.23%,71.15%). These are placement
+accounting values, not completed routed crossings.
+
+The DCP's naturally generated QoR JSON records estimated WNS−18.525ns and
+TNS−6250817.000ns. Global congestion levels inN/E/S/W order are6/5/5/7;
+long7/6/7/6; short7/7/6/7. Tile percentages and hold slacks are blank, not zero.
+The earlier−23.420ns value is an intermediate estimate. Neither establishes
+qualified frequency or terminal timing failure.
+
+Stage DRC reports one RTSTAT-13 insufficient-routing critical warning because
+routing has not yet run. It is not route_design failure. A reset HD.CLK_SRC
+Timing38-242warning occurs in phys_opt and was also observed in original h
+logs; actual clock/control-buffer loads and skew must still be audited. No
+reset clock constraint, timing exception or I/O delay change is made.
+
+Worst setup/hold endpoints, logic/net delay, levels, fanout, SLR traversal and
+skew are not naturally reported yet. They remain explicitly pending the
+terminal collector/supplementary serial read-only audit. No commands were
+submitted to the busy Vivado. Immutable evidence is in
+`accel/lookahead/fpga_device_migration/placement_audit_20261117/`.
