@@ -1,0 +1,20 @@
+\section{Problem and Parallelism Boundary}
+\subsection{Layer-Aware Construction}
+Let $G=(V,E)$ be the directed routing-resource graph (RRG), with $N=|V|$ nodes and $M=|E|$ edges. Nodes carry resource type, layer, geometry and an indexed delay/congestion cost $w(v)=(d_v,q_v)$. The graph contains planar and cross-layer channels as well as logic, memory and DSP connectivity~\cite{third_dimension,multidie}. PathFinder-style negotiation resolves contention~\cite{pathfinder}; VPR consumes lookahead costs during routing~\cite{vtr8,vtr9}. We accelerate construction of the sampled wire table~\cite{diversity}, not negotiated routing itself.
+
+A group $g=(\ell_s,\sigma,\tau)$ fixes source layer, segment type and channel type. Its ordered samples are source RR nodes $s_{g,j}$ with their native recording contexts. Flattening the native group/sample enumeration gives $J$ jobs indexed by $a$. A job retains its group $g(a)$, ordinal and source $s_a$. Each search can reach all target layers; the target layer is not a separate search. Its recording function $\phi_a(v)$ maps an eligible IPIN to the source-relative cell $u=(\ell_t,\Delta x,\Delta y)$, or to $\bot$ when native geometric filtering excludes it. For a grid of width $X$, height $Y$ and $L$ layers, the dense result domain contains $C=LXY$ cells per sample.
+
+The per-sample result $R_a[u]$ is an occupied pair $(d,q)$ or a missing entry. Delay and congestion are associated representatives produced together by a search; they are not two independently optimized coordinates. Native strict-delay insertion $\oplus$ replaces a missing cell, or replaces an occupied pair only when the incoming delay is smaller. Thus, for each group,
+\begin{equation}
+ A_g[u]=\mathop{\bigoplus}_{a:g(a)=g}^{\text{native order}}R_a[u],\qquad
+ F=\mathcal I\bigl(\mathcal C(\{A_g\})\bigr).
+\end{equation}
+Here $\mathcal C$ denotes the ordered native group writes and $\mathcal I$ their prescribed interpolation schedule, including missing-cell scan order. This notation represents the actual interleaving of writes and fills, not permission to commute them. The resulting table is indexed by $(\ell_s,\ell_t,\tau,\sigma,\Delta x,\Delta y)$. Source/OPIN preprocessing and derived minima remain in the native outer computation.
+
+\subsection{Necessary Dependencies and Removable Barriers}
+Source identity, eligibility, associated pairs and order-sensitive ties define the output. For starts at $x=0$ and $x=5$ reaching an IPIN at $x=6$ with delays 1 and 2, the contributions occupy displacement cells 6 and 1. A multi-source search retaining only the cheaper label at that IPIN loses the second contribution. Separately, inserting $(1,3)$ then $(1,9)$ must retain $(1,3)$ under native strict-delay reduction. Selecting delay and congestion independently could invent a pair no path produced.
+
+In contrast, a search reads the shared graph/costs and its own source context, not another sample's mutable labels. Requiring all searches in group $g$ to finish before exposing group $g+1$ is therefore an execution barrier. Fine-grained priority extraction within a search is another constraint, but changing it also changes representative selection; it requires a separate semantic contract.
+
+\subsection{Relation to Prior Parallelism}
+MultiQueue routing controls priority relaxation in connection searches~\cite{multiqueue}; multi-die lookahead improves heuristic treatment of die crossings~\cite{multidie}. Neither directly supplies the sample-recording and ordered reduction boundary above. Delta-stepping and GPU SSSP establish bucket/frontier execution as a way to trade ordering overhead for parallel work~\cite{delta,gpu_sssp}. Our specialization retains source-relative cells, coupled cost representatives, closure and native consumption. oneTBB supplies execution primitives~\cite{tbb}; C1 concerns which dependencies those primitives may safely remove. Compatible caches and sparse-sampling \texttt{compressed\_map}~\cite{vproptions} address avoided work; our methods execute the retained samples. Section~\ref{sec:applicability} states their applicability boundaries.

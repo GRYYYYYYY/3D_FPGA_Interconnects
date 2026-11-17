@@ -1,0 +1,49 @@
+\section{Results and System Interpretation}
+\subsection{STRICT Cross-Sample Parallelism}
+On eight-core GEMM, STRICT Pipeline reduces construction from 149.56 to 20.95 seconds and achieves $1.638\pm0.005\times$ paired Process speedup over Stock; Group takes 37.88 seconds. Construction is about 45\% of Stock Process. Matched Group/Flat/Pipeline controls isolate C1 from other Stock repairs.
+
+\begin{figure}[t]\centering\input{figures/causal}
+\caption{Construction means and sample SD, three processes per arm/point. Same-cohort Group/Flat/Pipeline controls on BNN (left) and DLA (right); capped routing tails do not establish full-route legality. Error bars are small at this scale.}\label{fig:causal}\end{figure}
+
+In Fig.~\ref{fig:causal}, ten groups of four samples limit group-local concurrency. At eight cores, BNN Group/Flat/Pipeline take $17.41\pm0.33$, $9.32\pm0.15$ and $9.36\pm0.11$ s. Flat and Pipeline independently remove barriers and are nearly equal: the benefit comes from decoupling groups, not a particular Pipeline primitive. At sixteen cores Flat/Pipeline take 5.51/5.39 s, against Group's 17.68 s. DLA shows the same mechanism (34.82/19.55/18.99 s at eight cores). Separate 2D controls also benefit: eight-core BNN-2D takes 7.75/4.23/4.16 s. These are not equal-sized 2D/3D pairs, so layer count is not a causal explanation of time differences.
+
+\subsection{Wave Scheduling: Concurrency Versus Work}
+\begin{table}[t]\centering\caption{Matched BNN40 original-representation profiles; diagnostic operation counts, not native E2 timing.}\label{tab:waves}
+\begin{tabular}{lrr}\toprule Metric & Shift 0 & Shift 20\\\midrule
+\tableinput{tables/waves.tex}\bottomrule\end{tabular}\end{table}
+Table~\ref{tab:waves} recomputes complete per-sample profiles. Shift 20 reduces summed waves by $9.112\times$ and maximum per-sample waves (the corresponding batch rounds) by $10.627\times$, while increasing eligible edge work only $0.3504\%$. Edge-work-weighted frontier grows $6.6484\times$. This exposes more work per synchronization opportunity; it is neither an occupancy measurement nor proof that launches explain all runtime. Labels remain FP32 and shift-0/20 complete CPU/CUDA outputs agree under ALT. Instrumented profile times are excluded from native statistics. Semantic fixture checks include eight random cases with native congestion differences, motivating separate semantic/QoR qualification.
+
+\subsection{Native LSTM: Optimized CPU and Matched ALT}
+\begin{table}[t]\centering\caption{LSTM native seconds, mean $\pm$ sample SD ($n=3$); one rotated cohort, eight CPU cores and one H100.}\label{tab:lstm}
+\begin{tabular}{lrr}\toprule Method & E2 & Process\\\midrule
+\tableinput{tables/lstm.tex}
+\bottomrule\end{tabular}\end{table}
+
+CUDA obtains \LstmPipeBuild\ E2 and \LstmPipeProc\ Process acceleration against Pipeline; against Flat, \LstmFlatBuild\ and \LstmFlatProc; against matched ALT CPU, \LstmAltCpuBuild\ and \LstmAltCpuProc.  ALT CPU is close to Pipeline: changed search semantics alone do not explain GPU acceleration.
+
+Against Stock, the same matched CUDA rows give \LstmStockBuild\ E2 and \LstmStockProc\ Process speedups. The smaller Process gain reflects remaining loading, initialization, routing and checking. Ratios are computed within each cohort and are not multiplied across workloads.
+
+\subsection{Semantics, QoR and Size Dependence}
+\begin{table}[t]\centering\caption{LSTM qualification objects. Map-word differences are against Flat.}\label{tab:qor}
+\begin{tabular}{lr}\toprule Object / metric & Observation\\\midrule
+\tableinput{tables/qor.tex}
+\bottomrule\end{tabular}\end{table}
+
+ALT CPU/CUDA agree on complete samples and maps, but have different route SHAs; each independently passes readback. ALT changes 23,111 congestion words against Flat with no delay or missing-state changes (Table~\ref{tab:qor}). Native strict-delay ties and ALT whole-pair improvement remain different contracts.
+
+\begin{table}[t]\centering\caption{BNN/small-input Flat/ALT CUDA paired speedup, mean $\pm$ sample SD ($n=3$). Separate worker from LSTM.}\label{tab:legacy}
+\begin{tabular}{lrr}\toprule Case & E2 speedup & Process speedup\\\midrule
+\tableinput{tables/legacy.tex}
+\bottomrule\end{tabular}\end{table}
+
+BNN supplies another large native result against Flat; Pipeline supplements from another worker cannot create a matched BNN Pipeline/CUDA comparison.
+
+The s38417 slowdown is retained: device initialization, scans and launches can outweigh a small build. ALT CPU helps construction, while Stock is fastest for full Process in this cohort. No automatic size selector or all-size benefit is established.
+
+\subsection{Closest Alternative and Cache Applicability}\label{sec:applicability}
+The locked executable exposes \texttt{compressed\_map} and map read/write options. Its embedded assertion and compute source explicitly require one layer; audited BNN/LSTM graphs have two. This is a static domain exclusion, not a measured failed 3D run or infinite runtime. The compressed reader and binary writer are also unimplemented (CSV export is separate). This establishes no performance superiority over supported compressed-map configurations. Separable is also exposed by locked-binary help, but was not qualified or timed here.
+
+For ordinary map caching, 36 retained formal reuse records have legal routing and independent FULL/STA checks on fixed inputs. They establish valid cache hits, separate from fresh construction. No unobserved cross-design reuse is amortized.
+
+\subsection{Why Resident Time Is a Different Question}
+A separate packed software cohort measures complete-batch resident execution, excluding host preparation and full readback. On a dual Xeon Gold 6530 allocation with 64 physical cores and a 55-CPU-time quota, 64 workers give the lowest means among tested 8/32/64-worker settings; 40 samples allow at most 40 concurrent solves. Three independent process means, each from three retained repetitions after one warmup, are $0.699624\pm0.026647$ s for BNN40 and $0.725510\pm0.021287$ s for LSTM40. Retained H100 resident means are 0.151800/0.159498 s, including initialization, launches/control and completion synchronization. The BNN GPU record lacks an execution-time executable digest. These separate representations, resources and timer boundaries do not strengthen the native eight-core E2/Process speedups; they show why a kernel or resident figure cannot replace system timing.

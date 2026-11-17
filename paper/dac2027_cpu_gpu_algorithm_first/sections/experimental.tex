@@ -1,0 +1,19 @@
+\section{Experimental Method and Evidence}
+\subsection{Frozen Inputs, Cohorts and Resources}
+The retained corpus separates legal full-flow runs from construction-only observations; capped route tails do not establish legality. GEMM and scaling cohorts are separate. Scheduling controls and native ALT use distinct, separately bound RRGs.
+
+The BNN/small-input native cohort measures BNN and s38417 with Stock, Flat, ALT CPU and original ALT CUDA. A separate cohort measures LSTM seed2 with those arms plus Pipeline. LSTM was not used in preceding ALT tuning and was frozen before its own qualification/timing; it was not preselected before all ALT development.
+
+LSTM is a same-family tuning holdout, previously used in the CPU study. It shares BNN's architecture but differs in netlist, placement and RRG. LSTM has 4,166,724 nodes and 40,142,314 edges; BNN has 4,102,608 nodes and 39,480,616 edges. Both use two layers, width120 and 40 samples, not independent architectures.
+
+The baseline is VTR commit \texttt{0b912334fdd8}, release build with assertion level 2. Native ALT uses a Xeon Gold 6530 with eight distinct physical cores in one NUMA node and one H100 80GB, executing solvers sequentially. Shared instances are not exclusive. The LSTM cohort rotates arm order across three processes. Hosts/phases are not pooled.
+
+\subsection{Timing and Statistical Policy}
+E1 is sample service; the CUDA wrapper ends E1 before final ABI output copy. E2 is native \texttt{MapLookahead::compute}: conversion, preparation/service, output handoff, group merge, interpolation, source/OPIN and derived minima. Process adds RR XML loading, initialization, routing, checking/STA and uniform serialization. Independent route readback is outside Process; pre-generated RRG, packing and placement are excluded. Caches are not flushed.
+
+For paired repeat $r$, $s_r=T_{c,r}/T_{a,r}$. We report mean and sample SD of these ratios and of raw seconds ($n=3$). SD is variability, not a confidence interval; repeats are processes, not designs or seeds. Stock E2 has 0.01-second precision; other E2 timers are high resolution. Profiles are outside formal timing.
+
+\subsection{Qualification and Attribution}
+STRICT checks native wire-map bytes under its proposition. ALT separately checks complete CPU/CUDA sample pairs and maps, then each candidate route through independent original-VPR FULL/STA readback with unchanged route SHA, zero overuse, and CPD/wirelength within $+5\%$ of control. LSTM uses both Flat and Stock controls.
+
+Retained bounding-box notification repairs can change routing trajectories despite identical wire maps; a unique complete cause is not established. Stock ratios therefore describe the implementation combination. Shared-repair Flat/Pipeline/ALT comparisons better isolate construction.
