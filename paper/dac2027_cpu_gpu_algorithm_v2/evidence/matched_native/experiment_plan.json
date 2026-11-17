@@ -1,0 +1,122 @@
+{
+  "task": "CPU_GPU_PAPER_FIRST_GEMM_BNN_V2",
+  "created_utc": "2026-11-17T20:07:20.620193+00:00",
+  "V1_commit": "4d0c4e88c1823ae554d6b4a891b53875b438cdec",
+  "run": "/inspire/hdd/global_user/guoruiyuan-253208540291/FPGA_routing_acceleration/3D_FPGA_Interconnects_GEMM_BNN_V2/results/gemm_bnn_native_completion_20261117/gpu_matched_a",
+  "case_order": [
+    "bnn",
+    "gemm"
+  ],
+  "metadata_order": [
+    "gemm",
+    "bnn"
+  ],
+  "representation": "original",
+  "mode": "ALT_BUCKET_FP32_V1",
+  "shift": 20,
+  "formal_repeats": 3,
+  "arms": [
+    "stock",
+    "pipeline",
+    "alt_cuda"
+  ],
+  "orders": [
+    [
+      "stock",
+      "pipeline",
+      "alt_cuda"
+    ],
+    [
+      "pipeline",
+      "alt_cuda",
+      "stock"
+    ],
+    [
+      "alt_cuda",
+      "stock",
+      "pipeline"
+    ]
+  ],
+  "formal_process_target": 18,
+  "timeout_seconds": {
+    "gemm": 900,
+    "bnn": 600
+  },
+  "timeout_basis": "GEMM exact historical cohort frozen timeout900s, observed Stock about330s; BNN prior native600s. Fixed before new runs.",
+  "qualification": [
+    "stock",
+    "pipeline",
+    "alt_cpu",
+    "alt_cuda"
+  ],
+  "qor_max_fraction": 0.05,
+  "resources": {
+    "memory_policy": {
+      "requested": "MPOL_BIND",
+      "node": 0,
+      "syscall_rc": 0,
+      "errno": 0,
+      "effective": "inherited MPOL_BIND"
+    },
+    "hostname": "job-69d00d65-9971-4cf1-9876-58b8e9049460-worker-0",
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "numa_node": 0,
+    "cpu_max": "1000000 100000\n",
+    "memory_max": "214748364800\n",
+    "cpuset": "0-127\n",
+    "boot_id": "13b8f365-3f60-48b5-8234-f11f89b2fe18",
+    "lscpu": "Architecture:                         x86_64\nCPU op-mode(s):                       32-bit, 64-bit\nAddress sizes:                        46 bits physical, 57 bits virtual\nByte Order:                           Little Endian\nCPU(s):                               128\nOn-line CPU(s) list:                  0-127\nVendor ID:                            GenuineIntel\nModel name:                           Intel(R) Xeon(R) Platinum 8462Y+\nCPU family:                           6\nModel:                                143\nThread(s) per core:                   2\nCore(s) per socket:                   32\nSocket(s):                            2\nStepping:                             8\nCPU(s) scaling MHz:                   88%\nCPU max MHz:                          4100.0000\nCPU min MHz:                          800.0000\nBogoMIPS:                             5600.00\nFlags:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cat_l2 cdp_l3 invpcid_single intel_ppin cdp_l2 ssbd mba ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb intel_pt avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local split_lock_detect avx_vnni avx512_bf16 wbnoinvd dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke waitpkg avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg tme avx512_vpopcntdq la57 rdpid bus_lock_detect cldemote movdiri movdir64b enqcmd fsrm md_clear serialize tsxldtrk pconfig arch_lbr amx_bf16 avx512_fp16 amx_tile amx_int8 flush_l1d arch_capabilities\nL1d cache:                            3 MiB (64 instances)\nL1i cache:                            2 MiB (64 instances)\nL2 cache:                             128 MiB (64 instances)\nL3 cache:                             120 MiB (2 instances)\nNUMA node(s):                         2\nNUMA node0 CPU(s):                    0-31,64-95\nNUMA node1 CPU(s):                    32-63,96-127\nVulnerability Gather data sampling:   Not affected\nVulnerability Itlb multihit:          Not affected\nVulnerability L1tf:                   Not affected\nVulnerability Mds:                    Not affected\nVulnerability Meltdown:               Not affected\nVulnerability Mmio stale data:        Not affected\nVulnerability Reg file data sampling: Not affected\nVulnerability Retbleed:               Not affected\nVulnerability Spec rstack overflow:   Not affected\nVulnerability Spec store bypass:      Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:             Mitigation; Retpolines; IBPB conditional; IBRS_FW; STIBP conditional; RSB filling; PBRSB-eIBRS SW sequence; BHI Retpoline\nVulnerability Srbds:                  Not affected\nVulnerability Tsx async abort:        Not affected\n",
+    "gpu_uuid": "GPU-5b68cf93-fadc-0517-0a0f-010db79b27ab",
+    "gpu_inventory": [
+      "0, GPU-5b68cf93-fadc-0517-0a0f-010db79b27ab, NVIDIA H100 80GB HBM3, 81559, 81090"
+    ],
+    "cuda": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Jan_15_19:20:09_PST_2025\nCuda compilation tools, release 12.8, V12.8.61\nBuild cuda_12.8.r12.8/compiler.35404655_0\n",
+    "snapshot": {
+      "utc": "2026-11-17T20:16:16.877649+00:00",
+      "cpu_stat": "usage_usec 11292465\nuser_usec 8602072\nsystem_usec 2690393\nnr_periods 131\nnr_throttled 0\nthrottled_usec 0\n",
+      "memory_current": "18931712\n",
+      "gpu": "0, GPU-5b68cf93-fadc-0517-0a0f-010db79b27ab, NVIDIA H100 80GB HBM3, 81559, 81090, 0\n",
+      "gpu_processes": ""
+    }
+  },
+  "formal_allowed": true,
+  "formal_block_reason": null,
+  "independent_readback_outside_Process": true,
+  "FPGA_auto_resume_allowed": false,
+  "retries": 0,
+  "source_manifest_sha256": "00a494dcdbac81a850872abc43bb2d0f1b4b6a79a2c62a51d1319c1a6105e865",
+  "input_manifest_sha256": "b5d9eeb13cf83ef623b110a1f6e425e41ba32f82a39f46f2d2eddc083c66fa5d",
+  "formal_resource_contract_frozen": true,
+  "source_code_binding": {
+    "files": {
+      "runner.py": "43de8cc84297108050fd5f6d9b31850cd8c05d01681e5ccd586fbb83c3d0f9c4",
+      "gpu_worker.py": "136b8cd39a8856407814560db459c8d0df05eaf9f1d8fc07b6c09891f08bdf3e",
+      "experiment_plan.json": "151dccef681a9e4c6a9a4712ea13732fd35acb7a36c104e32e9885a19c8c2b1d",
+      "input_manifest.json": "b5d9eeb13cf83ef623b110a1f6e425e41ba32f82a39f46f2d2eddc083c66fa5d",
+      "source_binding.json": "00a494dcdbac81a850872abc43bb2d0f1b4b6a79a2c62a51d1319c1a6105e865",
+      "runtime.json": "b5b00c573f3b60ac2102f0546895e420f952069f40563fd8f1ccda43e378d2eb",
+      "metadata/gemm.json": "489ea908b2ecdf8b80d9cc2d848a6b4b53c1237c2f19d62a93f4e1c036c8cd00",
+      "metadata/bnn.json": "fd57a7e5f92c4729c98c7cdff4e3068456b267ea2ea766630064f70e6547ad27",
+      "../../../scripts/scaling_common.py": "9aa5e1b9ec07a3b4bd834406f6d678832fa1b3a14a0a50ce685db366eef27bf4",
+      "../../../scripts/report_native_joint.py": "d1146098b613eec5092b5fb7ea7cb3420f595535db54a918308ed4f742896aa8",
+      "../../../scripts/prepare.py": "a54ac5211aecc5d68bfc13ad92082e55139666707be9855af79cec3529343113"
+    },
+    "V1_commit": "4d0c4e88c1823ae554d6b4a891b53875b438cdec",
+    "formal_process_target": 18,
+    "selection_fixed_before_new_native_solver": true
+  },
+  "qualification_case_order": [
+    "bnn",
+    "gemm"
+  ],
+  "original_index_rule": "actual live ABI unsigned32 with signed cell index; historical offline STRICT N<2^23 not silently imposed on live ALT; code unchanged"
+}
