@@ -1,0 +1,19 @@
+\section{Problem and Related Work}
+\subsection{Layer-Aware Samples and Native Costs}
+For routing-resource graph $G=(V,E)$, PathFinder-style negotiation resolves contention~\cite{pathfinder}; VPR combines accumulated costs with lookahead estimates~\cite{vtr8,vtr9}. Sampled wire maps retain representative costs by displacement~\cite{diversity}. A layered cell is
+\begin{equation}
+F[\ell_s,\ell_t,c,s,\Delta x,\Delta y]=(d,q),
+\end{equation}
+where source/target layers, channel and segment types identify the slice, and $(d,q)$ is its associated delay/congestion pair. Group $g=(\ell_s,s,c)$ contains ordered sample starts. Each sample may reach every layer. Native interpolation fills unoccupied cells; source/OPIN preprocessing and derived minima add work.
+
+Our graphs have two active layers with logic, DSP, memory and explicit vertical wires/switches, using existing VTR 3D/multi-die modeling~\cite{third_dimension,multidie}. The qualified LSTM CUDA route uses 23,217 distinct CHANZ nodes. We retain indexed costs; this is not physical delay calibration or placement-delay refinement.
+
+\subsection{Parallelism and Prior Algorithms}
+Let sample work be $t_{g,j}$, $W_g=\sum_jt_{g,j}$ and $W=\sum_gW_g$. Ideal group-local and global search times with $P$ workers obey
+\begin{align}
+T_{\rm group}&\geq\sum_g\max\{W_g/P,\max_jt_{g,j}\},\\
+T_{\rm global}&\geq\max\{W/P,\max_{g,j}t_{g,j}\}.
+\end{align}
+Ten groups of four equal samples need ten group-local waves at eight or sixteen workers, versus five or three global waves. This illustrates task width, not measured utilization; reset, memory and reduction add costs.
+
+MultiQueue parallelizes connection search using relaxed priority ordering~\cite{multiqueue}; STRICT preserves each construction flood's visitation. ALT does not inherit connection-search equivalence results. Delta-stepping and GPU SSSP already use buckets, frontier expansion and work reorganization~\cite{delta,gpu_sssp}. ALT's distinction is its native layer/source interface, whole delay/congestion selection, FP32 keys, same-bucket closure and target-cell completion, not a new general SSSP bound. Similarly, oneTBB supplies existing execution mechanisms~\cite{tbb}; STRICT establishes their safe dependency boundary.

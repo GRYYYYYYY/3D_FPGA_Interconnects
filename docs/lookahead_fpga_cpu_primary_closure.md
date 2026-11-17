@@ -1,8 +1,10 @@
 # CPU-primary L1 complete-core closure
 
+Current paper/physical snapshot: [complete frozen manuscript and h placement](lookahead_fpga_cpu_primary_paper_freeze_20261117.md). Latest user policy: h failure does not automatically launch another architecture; new FPGA success-claim cutoff is2026-11-18 01:00UTC.
+
 Current continuation: [resume identity, resource comparison and claim ledger](lookahead_fpga_cpu_primary_resume_db1d7e454.md).
 
-Latest publication snapshot: [2026-11-17 completed results and active h SSI detail placement](lookahead_fpga_cpu_primary_progress_20261117.md).
+Earlier frozen snapshot: [2026-11-17 completed results and active h SSI detail placement](lookahead_fpga_cpu_primary_progress_20261117.md).
 
 Earlier frozen publication: [2026-11-16 original f SSI in-flight snapshot](lookahead_fpga_cpu_primary_progress_20261116.md).
 
@@ -21,12 +23,13 @@ collector completed0 and actual-clock preflight passed. Standard opt-only finish
 at21:55:09UTC with1,220,068LUT(93.59%),748,933FF and unchanged BRAM/URAM/DSP.
 Its actual resource/clock/DCP audit is complete. The same SSI strategy for this
 single h RTL revision launched once at21:58:41UTC. Input DCP/clock checks
-completed0; global placement completed and detail placement Phase3.6 is active
-at2026-11-17 00:00:59UTC. No h placed DCP or route start exists at that snapshot.
-No h routed timing is available.
+completed0; placement completed0 at2026-11-17 00:32:19UTC and its633431008-byte
+DCP is saved. Actual placement uses1,212,828LUT/749,091FF with99.86%CLB-site
+occupancy. Post-place reports are active at00:44:15UTC; no route start or
+qualified h routed frequency exists at that snapshot.
 See the continuation report for source bindings and live-run recovery.
 
-The last physically evaluated RTL is the f candidate payload-wordmux revision frozen as31 sources
+The preceding physically evaluated RTL is the f candidate payload-wordmux revision frozen as31 sources
 in `full_synth_f_wordmux`. Its three-seed local comparison passed49,693 edges.
 The complete52-sample/11-rejection suite also passed: full outputs, total
 cycles,19 phase totals,3772 intervals and72917 requests/returns match model_g

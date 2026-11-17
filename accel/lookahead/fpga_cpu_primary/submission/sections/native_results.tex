@@ -1,0 +1,33 @@
+\section{Results and System Interpretation}
+\subsection{STRICT Cross-Sample Parallelism}
+On eight-core GEMM, STRICT Pipeline reduces construction from 149.56 to 20.95 seconds and obtains $1.638\pm0.005\times$ paired Process speedup versus Stock. Group reaches 37.88 seconds but retains group barriers. The separate construction-only BNN/DLA cohort has ten groups of four samples. At sixteen cores, Pipeline's own single-core speedups are 11.932/12.167; matched Group/Pipeline ratios are 3.126/3.124. Capped-routing observations do not establish legal full routes. An independent Flat control confirms that removing group barriers, rather than the Pipeline primitive alone, supplies the concurrency benefit. Pipeline is not universally fastest: allocation, launch and ordered buffering impose overhead.
+
+\subsection{Native LSTM: Optimized CPU and Matched ALT}
+\begin{table}[t]\centering\caption{LSTM native seconds, mean $\pm$ sample SD ($n=3$); one rotated R6.2 cohort, eight CPU cores and one H100.}\label{tab:lstm}
+\begin{tabular}{lrr}\toprule Method & E2 & Process\\\midrule
+\tableinput{tables/lstm.tex}
+\bottomrule\end{tabular}\end{table}
+
+CUDA obtains \LstmPipeBuild\ E2 and \LstmPipeProc\ Process acceleration against Pipeline; against Flat, \LstmFlatBuild\ and \LstmFlatProc; against matched ALT CPU, \LstmAltCpuBuild\ and \LstmAltCpuProc. The last SD retains extra precision rather than rounding observed variability to zero. ALT CPU is close to Pipeline: changed search semantics alone do not explain GPU acceleration.
+
+Stock/CUDA ratios of \LstmStockBuild\ and \LstmStockProc\ include the entire implementation combination. The smaller Process gain against Pipeline is the relevant system result: loading, initialization, routing and checking remain after construction is accelerated.
+
+\subsection{Semantics, QoR and Size Dependence}
+\begin{table}[t]\centering\caption{LSTM qualification objects. Map-word differences are against Flat.}\label{tab:qor}
+\begin{tabular}{lr}\toprule Object / metric & Observation\\\midrule
+\tableinput{tables/qor.tex}
+\bottomrule\end{tabular}\end{table}
+
+ALT CPU/CUDA agree on complete samples and maps, but have different route SHAs; each independently passes readback. ALT changes 23,111 congestion words against Flat with no delay or missing-state changes (Table~\ref{tab:qor}). Native strict-delay ties and ALT whole-pair improvement remain different contracts. Equal delay words and measured QoR do not establish identical intermediate labels or traversal histories.
+
+\begin{table}[t]\centering\caption{R6.1 Flat/ALT CUDA paired speedup, mean $\pm$ sample SD ($n=3$). This worker is separate from R6.2.}\label{tab:legacy}
+\begin{tabular}{lrr}\toprule Case & E2 speedup & Process speedup\\\midrule
+\tableinput{tables/legacy.tex}
+\bottomrule\end{tabular}\end{table}
+
+BNN supports another large native result against its measured Flat control. R6.2 Pipeline supplements on another worker do not supply a missing same-block BNN Pipeline/CUDA pairing. Matching repeat numbers across phases cannot create one.
+
+The s38417 slowdown is retained: device initialization, scans and launches can outweigh a small build. ALT CPU helps construction, while Stock is fastest for full Process in this cohort. This motivates size-aware selection, not a claimed automatic selector. Three repeats and same-family cases do not establish all-size or cross-architecture generality.
+
+\subsection{Timing Boundaries}
+One non-formal BNN profile measures E2=3.142660 s, conversion=1.435082 s, preparation=0.787266 s and E1=0.365164 s. H2D=0.118766 s is inside preparation, not additive. This profile is not pooled with formal repeats or multiplied into the LSTM headline. The separate FPGA resident study does not replace native E2/Process.

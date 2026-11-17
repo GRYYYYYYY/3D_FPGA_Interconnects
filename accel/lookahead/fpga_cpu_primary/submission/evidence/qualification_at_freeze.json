@@ -1,0 +1,1109 @@
+{
+  "research_goal": "CPU_PRIMARY_GPU_COMPARATOR",
+  "requires_gpu_win": false,
+  "base": "3c7f96e6037030949b729240977c2ced373843c6",
+  "tool": "Vivado2022.2",
+  "part": "xcu280-fsvh2892-2L-e",
+  "candidate": "h_dispatch_return_wordmux",
+  "initial_clock_period_ns": 5,
+  "physical_ports": 32,
+  "physical_lanes": 64,
+  "groups": 16,
+  "T": 128,
+  "D": 128,
+  "ready": 128,
+  "target": 128,
+  "E": 256,
+  "beat": 512,
+  "K_per_bank": 8,
+  "banks": 64,
+  "directory_members_per_bank": 8192,
+  "memory_scenarios": [
+    {
+      "name": "base",
+      "latency_ns": 80,
+      "issue_interval_ns": 5
+    },
+    {
+      "name": "conservative_diagnostic",
+      "latency_ns": 160,
+      "issue_interval_ns": 10
+    }
+  ],
+  "memory_service_evidence_type": "declared_simulation_assumption",
+  "core_scope": "complete_core_ooc_excluding_platform_shell_PCIe_and_HBM_controller",
+  "timing_boundary": "RESIDENT_COMPLETE_BATCH_V2 including sample state initialization,cost loads,all waves,canonical/directory retirement,output writes and ACK drain; host input preparation and full readback separate",
+  "board_measured": false,
+  "full_core_functional_verified": true,
+  "full_core_fit_verified": false,
+  "full_core_routed_clock_verified": false,
+  "rtl_model_calibrated": true,
+  "full_batch_outputs_verified": true,
+  "qualified_clock_mhz": null,
+  "fpga_assumed_frequency_seconds": {
+    "base": {
+      "bnn_export": 0.51278512,
+      "lstm_s2": 0.52077207
+    },
+    "conservative_diagnostic": {
+      "bnn_export": 0.675641755,
+      "lstm_s2": 0.68599124
+    }
+  },
+  "fpga_resident_estimated_seconds": null,
+  "cpu_primary_goal_met_in_simulated_scope": false,
+  "status": "H_STANDARD_OPT_COMPLETE_SSI_DETAIL_PLACEMENT_RUNNING",
+  "utc": "2026-11-17T00:00:59.586634+00:00",
+  "full_core_functional_receipt": "fixtures_return_wordmux_a/summary.json",
+  "full_core_functional_receipt_sha256": "3f2ef8743145c08bce6e24de887e4c0bf6d025885149cc7ded3b168a28a7af59",
+  "synthesis_run": "full_synth_h_return_wordmux/project/cp_full.runs/synth_1",
+  "cpu_baseline_receipt": "software_a/delivery.json",
+  "cpu_resident_means_seconds": {
+    "bnn_export": 0.6996242134444445,
+    "lstm_s2": 0.725510098
+  },
+  "gpu_resident_means_seconds": {
+    "bnn_export": 0.15179996944444446,
+    "lstm_s2": 0.15949799988888888
+  },
+  "notes": [
+    "Original full_synth_b is diagnostic with inferred loop exception; no clock qualification.",
+    "Only cp_admin changed in c DUT; full RTL32+11 and conservative20 passed.",
+    "Model_g explicitly fixes registered frontend idle visibility; all52 calibration schedules/phase counts exact.",
+    "Selected model_g base and conservative full80 each independently output/capacity/phase/conservation verified; frequency remains an assumption until complete-core route qualification.",
+    "Revised30-source full-core52+11 all pass; g full160 reuse explicitly source-bound. Old b/c/standalone cancellations are supersession, not measured mapping failures. e actual fit/clock pending.",
+    "e complete default synthesis success but footprint3.85% over LUT capacity; source-bound physical optimization pending. Host conversion measured in quiet interval, layout replay not DMA/E2.",
+    "Current wordmux integration has local3seed/49693edge PASS; full31-source RTL/model_g reuse pending. Prior e52+11/g160 and post-opt failure are preserved, not relabeled current.",
+    "Selected31-source wordmux passes52 full RTL samples and11 rejects, explicit g160 reuse contract/phase return audit; full-core fit and frequency remain unqualified."
+  ],
+  "rtl_model_calibration_scope": "New h31-DUT full52 native executions and11rejects; exact outputs/cycles/19phases/3772intervals/72917request-return events versus unchanged g.160 full-model samples reused, not rerun.5ns remains simulation assumption, not physical qualification.",
+  "rtl_model_calibration_receipt": "model_calibration_h_return_wordmux_a/calibration_reuse_contract.json",
+  "rtl_model_calibration_sha256": "2b1b4cca0d651e4b5e1f35a622e067ecb8bd47470f6966d690727d68e2584987",
+  "calibrated_service_frequency_mhz": 200,
+  "calibration_is_formal_cycle_equivalence": false,
+  "observed_max_absolute_cycle_delta": 0,
+  "observed_max_non_init_relative_delta": 0,
+  "prior_qualified_functional_source": "full_synth_b/source; fixtures_full_a/summary.json",
+  "calibration_reassessment": {
+    "status": "RESOLVED_EXPLICIT_IDLE_REGISTER_MODEL_G_EXACT52",
+    "scenario": "200MHz conservative_diagnostic 160ns/10ns",
+    "observation": "native d3 q2 wave8 model FLUSH21539 vs RTL21540; prior502 logical requests match; next wave free-running bank rotor changes source allocation",
+    "scope": "Confirmed by source-matched nonintrusive RTL probe; explicit pre-edge idle register implemented and52 complete cases revalidated exactly",
+    "probe": "fixtures_drain_probe_a/native_d3_w8_none/drain_probe_global.csv",
+    "observed": "relative21538 all drain predicates ready except registered front_idle[11];21539 guard1;21540 FLUSH",
+    "utc": "2026-11-15T11:30:09.642653+00:00"
+  },
+  "model_binary_sha256": "4ef2084643c48ad2937689ca02e9573bd342799f68555acf9bb1516f6cbce598",
+  "prior_model_f_evidence": {
+    "calibration": "model_calibration_f_admin_c/calibration_contract.json",
+    "full80": "model_full_c_200_base/verification/delivery.json",
+    "summary": "full_c_200_base_pre_front_idle_summary_a/summary.json"
+  },
+  "assumed_clock_mhz": 200,
+  "full_batch_receipts": {
+    "base": {
+      "path": "model_full_g_200_base/verification/delivery.json",
+      "sha256": "3dcef7cce7b75dd2b744a417f29cb43e0728892d2d63d6bc0a57af154b763162"
+    },
+    "conservative_diagnostic": {
+      "path": "model_full_g_200_conservative/verification/delivery.json",
+      "sha256": "ddb0db6b3217ecc13ff6e0fb2e3a23821da62af49e1ed94fa5932f5158b9017e"
+    }
+  },
+  "actual_mapping_diagnostic": {
+    "run": "full_synth_d_no_timing",
+    "terminal": "full_synth_d_no_timing/terminal.json",
+    "utilization": "full_synth_d_no_timing/terminal_cp_full_top_utilization_synth.rpt",
+    "same_DUT_as": "full_synth_c",
+    "synthesis_option": "-no_timing_driven",
+    "CLB_LUT": 1870861,
+    "available_CLB_LUT": 1303680,
+    "overage": 567181,
+    "FF": 749284,
+    "BRAM36_equivalent": 1148,
+    "URAM": 640,
+    "DSP": 32,
+    "stage": "synthesized, not post-opt/place/route",
+    "fit_verified": false,
+    "clock_verified": false,
+    "default_mapping_status": "prior b/c cancelled superseded after revised full RTL validation; no default baseline terminal resource result"
+  },
+  "previous_source_qualification_snapshot": "qualification_before_wordmux_a.json",
+  "host_postprocess_delivery": "postprocess_final_g_a/delivery.json",
+  "host_postprocess_delivery_sha256": "f5b5a073f9057f1be901edef378f23b8a1135c491754c595d15eb21bcd422719",
+  "next_revision": null,
+  "synthesis_status": "COMPLETE_REVIEWED",
+  "previous_synthesized_resources": {
+    "run": "full_synth_e_restructured",
+    "CLB_LUT": 1353922,
+    "logic": 1065866,
+    "memory": 288056,
+    "FF": 749255,
+    "BRAM36_equivalent": 1148,
+    "URAM": 640,
+    "DSP": 0,
+    "capacity_LUT": 1303680,
+    "overage_LUT": 50242,
+    "stage": "synthesis; post-opt and physical placement pending"
+  },
+  "previous_post_opt_resources": {
+    "LUT": 1351028,
+    "logic": 1063228,
+    "memory": 287800,
+    "FF": 748683,
+    "BRAM36eq": 1148,
+    "URAM": 640,
+    "DSP": 0,
+    "overage": 47348,
+    "stage": "opt_design completed; report hook active; not placed/routed"
+  },
+  "prior_source_model_reuse_contract": "model_calibration_g_wordmux_a/calibration_reuse_contract.json",
+  "source_count": 31,
+  "previous_synthesis_audit": "full_synth_e_restructured/final_synthesis_review/final_audit.json",
+  "previous_synthesis_timing_unplaced": {
+    "WNS_ns": -5.0,
+    "WHS_ns": -0.091,
+    "WPWS_ns": 1.8,
+    "qualified_clock": false,
+    "DRC_UTLZ_1_errors": 1
+  },
+  "notes_scope": "Notes and prior_f/previous_ssi fields are historical. Current selected fields refer only to h; unknown h resources and timing remain null.",
+  "previous_physical_implementation": {
+    "run": "full_synth_f_wordmux/project/cp_full.runs/impl_1",
+    "stage": "TERMINAL_ROUTE_DESIGN_ERROR",
+    "pid": 2219946,
+    "source_synth_run": "full_synth_f_wordmux/project/cp_full.runs/synth_1",
+    "placement_launched": true,
+    "route_launched": true,
+    "start_ticks": 169442069,
+    "boot_id": "2c285022-7829-4b21-84d8-176f6732a754",
+    "launch_utc": "2026-11-15T23:54:12Z",
+    "route_requested": true,
+    "process_birth": "full_synth_f_wordmux/physical_a/process_birth.json",
+    "terminal_opt_receipt": "full_synth_f_wordmux/post_opt_terminal_a/terminal.json",
+    "physical_gate": "full_synth_f_wordmux/physical_gate.json",
+    "observed_physical_risk": {
+      "id": "Place30-356",
+      "crossing": "SLR1 to SLR2",
+      "required": 21589,
+      "available": 23040,
+      "percent": 93.70225694444444,
+      "tool_statement": "currently routable; performance may be impacted by high connectivity utilization",
+      "scope": "historical placement estimate, not current route-demand or terminal-connectivity result"
+    },
+    "observation": "full_synth_f_wordmux/physical_a/route_phase3_6_observation_a/observation.json",
+    "latest_stage_observation_utc": "2026-11-16T07:07:32.159202+00:00",
+    "route_begin_utc": "2026-11-16T03:15:13.340967Z",
+    "terminal": "full_synth_f_wordmux/physical_a/route_terminal_a/terminal.json"
+  },
+  "original_f_route_failure": {
+    "error": "Route35-3",
+    "global_congestion_level": 7,
+    "node_overlaps": 5809714,
+    "summary_failed_nets": 0,
+    "qualified_frequency_mhz": null,
+    "terminal": "full_synth_f_wordmux/physical_a/route_terminal_a/terminal.json",
+    "serialized_error_DCP_unrouted_nets": 1873147,
+    "serialized_error_DCP_fully_routed_nets": 1,
+    "complete_audit": "full_synth_f_wordmux/final_synthesis_review/route_error_complete_a/manifest.json"
+  },
+  "candidate_revision_progress": "dispatch_return_wordmux_a/progress.json",
+  "prior_f_evidence": {
+    "selected_source_freeze": "full_synth_f_wordmux/source",
+    "selected_revision": "candidate_wordmux_a/decision.json",
+    "selected_synthesized_resources": {
+      "run": "full_synth_f_wordmux",
+      "CLB_LUT": 1244096,
+      "logic": 956040,
+      "memory": 288056,
+      "FF": 749617,
+      "BRAM36_equivalent": 1148,
+      "URAM": 640,
+      "DSP": 0,
+      "capacity_LUT": 1303680,
+      "headroom_LUT": 59584,
+      "stage": "terminal original f synthesis; standard opt and default placement complete; original default route failed; SSI followup separately recorded"
+    },
+    "selected_synthesis_audit": "full_synth_f_wordmux/final_synthesis_review/final_audit.json",
+    "selected_synthesis_timing_unplaced": {
+      "WNS_ns": -6.173,
+      "WHS_ns": -0.091,
+      "WPWS_ns": 1.8,
+      "qualified_clock": false,
+      "DRC_errors": 0,
+      "scope": "pure synthesized netlist with clk HD.CLK_SRC missing; not placed or routed"
+    },
+    "selected_post_opt_resources": {
+      "LUT": 1241143,
+      "logic": 953343,
+      "memory": 287800,
+      "FF": 749073,
+      "BRAM36eq": 1148,
+      "URAM": 640,
+      "DSP": 0,
+      "BUFGCE": 1,
+      "LUT_capacity": 1303680,
+      "LUT_headroom": 62537,
+      "stage": "terminal standard opt-only; source/DCP/report bindings verified"
+    },
+    "selected_post_opt_timing_unplaced": {
+      "WNS_ns": -6.165,
+      "WHS_ns": -0.091,
+      "WPWS_ns": 1.8,
+      "qualified_clock": false
+    },
+    "selected_placed_resources": {
+      "LUT": 1233715,
+      "logic": 946587,
+      "memory": 287128,
+      "FF": 749174,
+      "BRAM36eq": 1148,
+      "URAM": 640,
+      "DSP": 0,
+      "BUFGCE": 1,
+      "LUT_capacity": 1303680,
+      "stage": "terminal original f default placement; subsequent default route failed; SSI placement resources separately recorded",
+      "report": "full_synth_f_wordmux/post_place/utilization.rpt"
+    },
+    "selected_post_place_timing_unrouted": {
+      "WNS_ns": -20.657,
+      "TNS_ns": -4518861.0,
+      "WHS_ns": -3.474,
+      "THS_ns": -1298322.375,
+      "WPWS_ns": 1.8,
+      "setup_failing_endpoints": 1657692,
+      "hold_failing_endpoints": 1666481,
+      "DRC": "RTSTAT-13 Critical Warning insufficient routing; route-related DRC not all run",
+      "methodology": {
+        "SYNTH-5": 1024,
+        "TIMING-15": 1000,
+        "TIMING-16": 1000
+      },
+      "check_timing_all12_zero": true,
+      "qualified_clock": false
+    },
+    "selected_physopt_terminal": "full_synth_f_wordmux/physical_a/physopt_terminal_a/terminal.json",
+    "selected_implementation_revision": "full_impl_f_ssi_spreadslls_a/decision.json",
+    "selected_route_error_resources": {
+      "LUT": 1233715,
+      "logic": 946587,
+      "memory": 287128,
+      "FF": 749174,
+      "BRAM36eq": 1148,
+      "URAM": 640,
+      "DSP": 0,
+      "BUFGCE": 1,
+      "report": "full_synth_f_wordmux/physical_a/route_terminal_collection_a/reports_b/utilization.rpt",
+      "report_command_complete": true,
+      "collection_complete": true,
+      "report_header_Routed_not_legal_route": true
+    },
+    "selected_route_error_timing": {
+      "WNS_ns": -20.657,
+      "TNS_ns": -4516795.5,
+      "setup_failing_endpoints": 1655418,
+      "setup_total_endpoints": 4357783,
+      "WHS_ns": -3.474,
+      "THS_ns": -1298054.875,
+      "hold_failing_endpoints": 1666069,
+      "hold_total_endpoints": 4357783,
+      "WPWS_ns": 1.8,
+      "TPWS_ns": 0,
+      "pulse_failing_endpoints": 0,
+      "pulse_total_endpoints": 1237502,
+      "evidence": {
+        "line": 146,
+        "text": "     -20.657  -4516795.500                1655418              4357783        -3.474  -1298054.875                1666069              4357783         1.800         0.000                       0               1237502  "
+      },
+      "unconstrained_paths_requested": true,
+      "tool_says_constraints_met": false,
+      "qualified_clock": false,
+      "scope": "invalid routing error checkpoint; no Fmax"
+    },
+    "clock_review": {
+      "session": "vivado-20261115-135006-f83e6b28",
+      "read_only_query": "full_synth_f_wordmux/impl_context_connected_a/synth_connectivity_test",
+      "all_clock_pins": 1238201,
+      "all_core_direct_name_sets_equal": true,
+      "synthesis_internal_clock_capable_buffers": 0,
+      "implementation_external_core_clock_assumption": "HD.CLK_SRC BUFGCE_X0Y144 on clk only",
+      "implementation_hook": "full_synth_f_wordmux/impl_context_connected_a/freeze.json",
+      "inefficient_auxiliary_queries_interrupted": [
+        "full_synth_f_wordmux/clock_query_interruption_a/result.json",
+        "full_synth_f_wordmux/clock_query_interruption_b/result.json"
+      ],
+      "synthesis_reset_or_relaunch": false,
+      "post_opt_all_core_direct_pins": 1237401,
+      "post_opt_all_core_direct_name_sets_equal": true,
+      "post_opt_core_HD_CLK_SRC": "BUFGCE_X0Y144",
+      "control_buffer": "dispatch/core_reset_BUFG_inst",
+      "control_buffer_leaf_input_loads": 99093,
+      "control_buffer_clock_like_loads": 0,
+      "remaining_warning": "Timing38-242 names reset; retained separately from core clk context",
+      "review": "full_synth_f_wordmux/clock_context_review_a/post_opt_review_a.json",
+      "post_place_control_buffer_LOC": "BUFGCE_X0Y143",
+      "post_place_core_HD_CLK_SRC": "BUFGCE_X0Y144",
+      "post_place_core_HD_site_used": false
+    },
+    "placement_warnings": [
+      "Place30-356 SLR1->2 SLL 21589/23040 (93.7023%)",
+      "Place46-14 highly congested; may have difficulty routing"
+    ],
+    "placed_checkpoint_binding": "full_synth_f_wordmux/physical_a/congestion_review_a/input_binding.json",
+    "route_sll_observation": "full_synth_f_wordmux/physical_a/route_sll_demand_a/observation.json",
+    "route_congestion_priority_observation": "full_synth_f_wordmux/physical_a/route_congestion_priority_a/observation.json",
+    "latest_physical_observation": "full_synth_f_wordmux/physical_a/route_terminal_a/terminal.json",
+    "metadata_correction_receipt": "full_synth_f_wordmux/physical_a/route_phase3_6_observation_a/observation.json",
+    "failed_route_clock_context": {
+      "all_core_direct_clock_pins": 1237502,
+      "all_names_equal": true,
+      "reset_control_BUFG": "dispatch/core_reset_BUFG_inst",
+      "reset_loads": 99099,
+      "reset_clock_like_loads": 0,
+      "reset_LOC": "BUFGCE_X0Y143",
+      "core_HD_CLK_SRC": "BUFGCE_X0Y144",
+      "core_HD_site_used": false
+    }
+  },
+  "prior_f_qualification_snapshot": "qualification_before_return_wordmux_a.json",
+  "previous_ssi_implementation": {
+    "kind": "independent_non_project_replay",
+    "run": "full_impl_f_ssi_spreadslls_a/run_a",
+    "session": "vivado-20261115-093812-64020b62",
+    "pid": 2502597,
+    "start_ticks": 164305949,
+    "boot_id": "2c285022-7829-4b21-84d8-176f6732a754",
+    "flow_launch_utc": "2026-11-16T10:53:05Z",
+    "stage": "ROUTE_FAILED_TERMINAL_AUDIT_COMPLETE",
+    "placement_started": true,
+    "route_started": true,
+    "directive": "SSI_SpreadSLLs",
+    "threads": 8,
+    "ultrathreads": true,
+    "period_ns": 5,
+    "RTL_unchanged": true,
+    "source_synth_run": "full_synth_f_wordmux/project/cp_full.runs/synth_1",
+    "input_DCP_sha256": "3781ee752bae928c4993e5f148247f9b118b85f97d20f452e861c00cb4779ada",
+    "identity": "full_impl_f_ssi_spreadslls_a/launch_identity.json",
+    "receipt": "full_impl_f_ssi_spreadslls_a/run_a/run_receipt.txt",
+    "placement_begin_utc": "2026-11-16T11:06:56Z",
+    "latest_observation": "results/fpga_cpu_primary_20261115/full_impl_f_ssi_spreadslls_a/route_failure_observed_a/observation.json",
+    "placement_complete": true,
+    "placement_return_code": 0,
+    "placed_checkpoint": "results/fpga_cpu_primary_20261115/full_impl_f_ssi_spreadslls_a/run_a/cp_full_top_placed.dcp",
+    "post_place_reports_complete": true,
+    "post_place_hook_return_code": 0,
+    "physopt_begin_utc": "2026-11-16T14:04:44Z",
+    "route_begin_utc": "2026-11-16T14:14:28Z",
+    "physopt_complete": true,
+    "physopt_return_code": 0,
+    "route_error_observed": true,
+    "route_return_code": 1,
+    "error_checkpoint_binding": "full_impl_f_ssi_spreadslls_a/error_checkpoint_saved_a/binding.json",
+    "collection_complete_utc": "2026-11-16T19:44:55Z",
+    "report_groups": 21,
+    "report_failures": 0,
+    "terminal_audit": "results/fpga_cpu_primary_20261115/full_impl_f_ssi_spreadslls_a/terminal_audit_a/audit.json",
+    "terminal_review": "results/fpga_cpu_primary_20261115/full_impl_f_ssi_spreadslls_a/terminal_audit_a/manual_review.json",
+    "resources": {
+      "CLB LUTs": {
+        "used": 1232534,
+        "available": 1303680,
+        "percent": 94.54
+      },
+      "LUT as Logic": {
+        "used": 945406,
+        "available": 1303680,
+        "percent": 72.52
+      },
+      "LUT as Memory": {
+        "used": 287128,
+        "available": 600960,
+        "percent": 47.78
+      },
+      "LUT as Distributed RAM": {
+        "used": 286232,
+        "available": null,
+        "percent": null
+      },
+      "LUT as Shift Register": {
+        "used": 896,
+        "available": null,
+        "percent": null
+      },
+      "CLB Registers": {
+        "used": 749226,
+        "available": 2607360,
+        "percent": 28.74
+      },
+      "Register as Flip Flop": {
+        "used": 749226,
+        "available": 2607360,
+        "percent": 28.74
+      },
+      "Register as Latch": {
+        "used": 0,
+        "available": 2607360,
+        "percent": 0
+      },
+      "CARRY8": {
+        "used": 15698,
+        "available": 162960,
+        "percent": 9.63
+      },
+      "F7 Muxes": {
+        "used": 73684,
+        "available": 651840,
+        "percent": 11.3
+      },
+      "F8 Muxes": {
+        "used": 31603,
+        "available": 325920,
+        "percent": 9.7
+      },
+      "F9 Muxes": {
+        "used": 0,
+        "available": 162960,
+        "percent": 0
+      },
+      "CLB": {
+        "used": 162833,
+        "available": 162960,
+        "percent": 99.92
+      },
+      "CLBL": {
+        "used": 87760,
+        "available": null,
+        "percent": null
+      },
+      "CLBM": {
+        "used": 75073,
+        "available": null,
+        "percent": null
+      },
+      "using O5 output only": {
+        "used": 3293,
+        "available": null,
+        "percent": null
+      },
+      "using O6 output only": {
+        "used": 751979,
+        "available": null,
+        "percent": null
+      },
+      "using O5 and O6": {
+        "used": 190134,
+        "available": null,
+        "percent": null
+      },
+      "Register driven from within the CLB": {
+        "used": 409298,
+        "available": null,
+        "percent": null
+      },
+      "Register driven from outside the CLB": {
+        "used": 339928,
+        "available": null,
+        "percent": null
+      },
+      "LUT in front of the register is unused": {
+        "used": 26255,
+        "available": null,
+        "percent": null
+      },
+      "LUT in front of the register is used": {
+        "used": 313673,
+        "available": null,
+        "percent": null
+      },
+      "Unique Control Sets": {
+        "used": 18774,
+        "available": 325920,
+        "percent": 5.76
+      },
+      "Block RAM Tile": {
+        "used": 1148,
+        "available": 2016,
+        "percent": 56.94
+      },
+      "RAMB36/FIFO": {
+        "used": 1016,
+        "available": 2016,
+        "percent": 50.4
+      },
+      "RAMB36E2 only": {
+        "used": 1016,
+        "available": null,
+        "percent": null
+      },
+      "RAMB18": {
+        "used": 264,
+        "available": 4032,
+        "percent": 6.55
+      },
+      "RAMB18E2 only": {
+        "used": 264,
+        "available": null,
+        "percent": null
+      },
+      "URAM": {
+        "used": 640,
+        "available": 960,
+        "percent": 66.67
+      },
+      "DSPs": {
+        "used": 0,
+        "available": 9024,
+        "percent": 0
+      },
+      "Bonded IOB": {
+        "used": 0,
+        "available": 624,
+        "percent": 0
+      },
+      "HPIOB_M": {
+        "used": 0,
+        "available": 288,
+        "percent": 0
+      },
+      "HPIOB_S": {
+        "used": 0,
+        "available": 288,
+        "percent": 0
+      },
+      "HPIOB_SNGL": {
+        "used": 0,
+        "available": 48,
+        "percent": 0
+      },
+      "HPIOBDIFFINBUF": {
+        "used": 0,
+        "available": 288,
+        "percent": 0
+      },
+      "HPIOBDIFFOUTBUF": {
+        "used": 0,
+        "available": 288,
+        "percent": 0
+      },
+      "BITSLICE_CONTROL": {
+        "used": 0,
+        "available": 96,
+        "percent": 0
+      },
+      "BITSLICE_RX_TX": {
+        "used": 0,
+        "available": 3744,
+        "percent": 0
+      },
+      "BITSLICE_TX": {
+        "used": 0,
+        "available": 96,
+        "percent": 0
+      },
+      "RIU_OR": {
+        "used": 0,
+        "available": 48,
+        "percent": 0
+      },
+      "GLOBAL CLOCK BUFFERs": {
+        "used": 2,
+        "available": 1008,
+        "percent": 0.2
+      },
+      "BUFGCE": {
+        "used": 2,
+        "available": 288,
+        "percent": 0.69
+      },
+      "BUFGCE_DIV": {
+        "used": 0,
+        "available": 48,
+        "percent": 0
+      },
+      "BUFG_GT": {
+        "used": 0,
+        "available": 576,
+        "percent": 0
+      },
+      "BUFGCTRL": {
+        "used": 0,
+        "available": 96,
+        "percent": 0
+      },
+      "PLL": {
+        "used": 0,
+        "available": 24,
+        "percent": 0
+      },
+      "MMCM": {
+        "used": 0,
+        "available": 12,
+        "percent": 0
+      },
+      "CMACE4": {
+        "used": 0,
+        "available": 8,
+        "percent": 0
+      },
+      "GTYE4_CHANNEL": {
+        "used": 0,
+        "available": 24,
+        "percent": 0
+      },
+      "GTYE4_COMMON": {
+        "used": 0,
+        "available": 6,
+        "percent": 0
+      },
+      "HBM_REF_CLK": {
+        "used": 0,
+        "available": 2,
+        "percent": 0
+      },
+      "HBM_SNGLBLI_INTF_APB": {
+        "used": 0,
+        "available": 32,
+        "percent": 0
+      },
+      "HBM_SNGLBLI_INTF_AXI": {
+        "used": 0,
+        "available": 32,
+        "percent": 0
+      },
+      "ILKNE4": {
+        "used": 0,
+        "available": 4,
+        "percent": 0
+      },
+      "OBUFDS_GTE4": {
+        "used": 0,
+        "available": 12,
+        "percent": 0
+      },
+      "OBUFDS_GTE4_ADV": {
+        "used": 0,
+        "available": 12,
+        "percent": 0
+      },
+      "PCIE40E4": {
+        "used": 0,
+        "available": 2,
+        "percent": 0
+      },
+      "PCIE4CE4": {
+        "used": 0,
+        "available": 4,
+        "percent": 0
+      },
+      "SYSMONE4": {
+        "used": 0,
+        "available": 3,
+        "percent": 0
+      },
+      "BSCANE2": {
+        "used": 0,
+        "available": 12,
+        "percent": 0
+      },
+      "DNA_PORTE2": {
+        "used": 0,
+        "available": 3,
+        "percent": 0
+      },
+      "EFUSE_USR": {
+        "used": 0,
+        "available": 3,
+        "percent": 0
+      },
+      "FRAME_ECCE4": {
+        "used": 0,
+        "available": 3,
+        "percent": 0
+      },
+      "ICAPE3": {
+        "used": 0,
+        "available": 6,
+        "percent": 0
+      },
+      "MASTER_JTAG": {
+        "used": 0,
+        "available": 3,
+        "percent": 0
+      },
+      "STARTUPE3": {
+        "used": 0,
+        "available": 3,
+        "percent": 0
+      }
+    },
+    "timing": {
+      "WNS_ns": -15.487,
+      "TNS_ns": -3098668.25,
+      "setup_failing_endpoints": 1250825,
+      "setup_total_endpoints": 4357929,
+      "WHS_ns": -3.53,
+      "THS_ns": -1410972.5,
+      "hold_failing_endpoints": 1769462,
+      "hold_total_endpoints": 4357929,
+      "WPWS_ns": 1.8,
+      "TPWS_ns": 0,
+      "pulse_failing_endpoints": 0,
+      "pulse_total_endpoints": 1237554,
+      "evidence": {
+        "line": 146,
+        "text": "     -15.487  -3098668.250                1250825              4357929        -3.530  -1410972.500                1769462              4357929         1.800         0.000                       0               1237554  "
+      },
+      "unconstrained_paths_requested": true,
+      "tool_says_constraints_met": false
+    },
+    "routed_frequency_mhz": null
+  },
+  "previous_ssi_evidence": {
+    "ssi_placed_resources": {
+      "LUT": 1232534,
+      "logic": 945406,
+      "memory": 287128,
+      "FF": 749226,
+      "BRAM36eq": 1148,
+      "URAM": 640,
+      "DSP": 0,
+      "BUFGCE": 2,
+      "report": "results/fpga_cpu_primary_20261115/full_impl_f_ssi_spreadslls_a/run_a/post_place/utilization.rpt",
+      "review": "results/fpga_cpu_primary_20261115/full_impl_f_ssi_spreadslls_a/placement_resources_a/observation.json",
+      "stage": "terminal SSI placement/report resource footprint; physopt completed with zero cell changes; route active"
+    },
+    "ssi_post_place_timing_unrouted": {
+      "WNS_ns": -15.487,
+      "TNS_ns": -3100014.25,
+      "setup_failing_endpoints": 1252439,
+      "setup_total_endpoints": 4357929,
+      "WHS_ns": -3.53,
+      "THS_ns": -1411285.125,
+      "hold_failing_endpoints": 1769558,
+      "hold_total_endpoints": 4357929,
+      "WPWS_ns": 1.8,
+      "TPWS_ns": 0,
+      "pulse_failing_endpoints": 0,
+      "pulse_total_endpoints": 1237554,
+      "evidence": {
+        "line": 145,
+        "text": "     -15.487  -3100014.250                1252439              4357929        -3.530  -1411285.125                1769558              4357929         1.800         0.000                       0               1237554  "
+      },
+      "unconstrained_paths_requested": true,
+      "tool_says_constraints_met": false,
+      "qualified_clock": false,
+      "review": "results/fpga_cpu_primary_20261115/full_impl_f_ssi_spreadslls_a/post_place_complete_a/review.json"
+    },
+    "ssi_post_place_buffer_context": {
+      "core_HD_CLK_SRC": "BUFGCE_X0Y144",
+      "core_HD_site_used": false,
+      "control_LOC": [
+        "BUFGCE_X0Y143",
+        "BUFGCE_X0Y50"
+      ],
+      "full_clock_pin_census_pending": true
+    },
+    "ssi_physopt_terminal": "results/fpga_cpu_primary_20261115/full_impl_f_ssi_spreadslls_a/physopt_terminal_a/terminal.json",
+    "ssi_route_sll_observation": "results/fpga_cpu_primary_20261115/full_impl_f_ssi_spreadslls_a/route_sll_demand_a/observation.json",
+    "ssi_route_congestion_priority_observation": "results/fpga_cpu_primary_20261115/full_impl_f_ssi_spreadslls_a/route_congestion_priority_a/observation.json"
+  },
+  "selected_revision": "dispatch_return_wordmux_a/decision.json",
+  "selected_source_freeze": "full_synth_h_return_wordmux/source",
+  "selected_synthesized_resources": {
+    "CLB LUTs": {
+      "used": 1223270,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 1303680,
+      "util_percent": 93.83,
+      "line": 39,
+      "text": "| CLB LUTs*                  | 1223270 |     0 |          0 |   1303680 | 93.83 |",
+      "raw_label": "CLB LUTs*",
+      "report_footnotes": [
+        {
+          "line": 52,
+          "text": "* Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count."
+        },
+        {
+          "line": 53,
+          "text": "Warning! LUT value is adjusted to account for LUT combining."
+        }
+      ],
+      "footnote_interpretation": "Reported LUT count is adjusted for LUT combining; opt_design/physical optimization may reduce the count. This is not a routed count or timing/fit qualification."
+    },
+    "LUT as Logic": {
+      "used": 935214,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 1303680,
+      "util_percent": 71.74,
+      "line": 40,
+      "text": "|   LUT as Logic             |  935214 |     0 |          0 |   1303680 | 71.74 |",
+      "raw_label": "LUT as Logic"
+    },
+    "LUT as Memory": {
+      "used": 288056,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 600960,
+      "util_percent": 47.93,
+      "line": 41,
+      "text": "|   LUT as Memory            |  288056 |     0 |          0 |    600960 | 47.93 |",
+      "raw_label": "LUT as Memory"
+    },
+    "CLB Registers": {
+      "used": 749607,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 2607360,
+      "util_percent": 28.75,
+      "line": 44,
+      "text": "| CLB Registers              |  749607 |     0 |          0 |   2607360 | 28.75 |",
+      "raw_label": "CLB Registers"
+    },
+    "Block RAM Tile": {
+      "used": 1148,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 2016,
+      "util_percent": 56.94,
+      "line": 81,
+      "text": "| Block RAM Tile    | 1148 |     0 |          0 |      2016 | 56.94 |",
+      "raw_label": "Block RAM Tile"
+    },
+    "URAM": {
+      "used": 640,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 960,
+      "util_percent": 66.67,
+      "line": 86,
+      "text": "| URAM              |  640 |     0 |          0 |       960 | 66.67 |",
+      "raw_label": "URAM"
+    },
+    "DSPs": {
+      "used": 0,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 9024,
+      "util_percent": 0,
+      "line": 97,
+      "text": "| DSPs      |    0 |     0 |          0 |      9024 |  0.00 |",
+      "raw_label": "DSPs"
+    },
+    "BUFGCE": {
+      "used": 0,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 288,
+      "util_percent": 0,
+      "line": 118,
+      "text": "|   BUFGCE             |    0 |     0 |          0 |       288 |  0.00 |",
+      "raw_label": "BUFGCE"
+    },
+    "BUFGCE_DIV": {
+      "used": 0,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 48,
+      "util_percent": 0,
+      "line": 119,
+      "text": "|   BUFGCE_DIV         |    0 |     0 |          0 |        48 |  0.00 |",
+      "raw_label": "BUFGCE_DIV"
+    },
+    "BUFGCTRL": {
+      "used": 0,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 96,
+      "util_percent": 0,
+      "line": 121,
+      "text": "|   BUFGCTRL*          |    0 |     0 |          0 |        96 |  0.00 |",
+      "raw_label": "BUFGCTRL*"
+    }
+  },
+  "selected_synthesis_audit": "full_synth_h_return_wordmux/synthesis_collection_a/terminal_review.json",
+  "selected_synthesis_timing_unplaced": {
+    "WNS_ns": -5.098,
+    "TNS_ns": -48686.059,
+    "setup_failing_endpoints": 74450,
+    "setup_total_endpoints": 4359342,
+    "WHS_ns": -0.091,
+    "THS_ns": -10814.053,
+    "hold_failing_endpoints": 708710,
+    "hold_total_endpoints": 4359342,
+    "WPWS_ns": 1.8,
+    "TPWS_ns": 0,
+    "pulse_failing_endpoints": 0,
+    "pulse_total_endpoints": 1238191,
+    "evidence": {
+      "line": 140,
+      "text": "     -5.098   -48686.059                  74450              4359342       -0.091   -10814.053                 708710              4359342        1.800        0.000                       0               1238191  "
+    },
+    "unconstrained_paths_requested": true,
+    "tool_says_constraints_met": false
+  },
+  "selected_post_opt_resources": {
+    "CLB LUTs": {
+      "used": 1220068,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 1303680,
+      "util_percent": 93.59,
+      "line": 39,
+      "text": "| CLB LUTs*                  | 1220068 |     0 |          0 |   1303680 | 93.59 |",
+      "raw_label": "CLB LUTs*",
+      "report_footnotes": [
+        {
+          "line": 52,
+          "text": "* Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count."
+        },
+        {
+          "line": 53,
+          "text": "Warning! LUT value is adjusted to account for LUT combining."
+        }
+      ],
+      "footnote_interpretation": "Reported LUT count is adjusted for LUT combining; opt_design/physical optimization may reduce the count. This is not a routed count or timing/fit qualification."
+    },
+    "LUT as Logic": {
+      "used": 932268,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 1303680,
+      "util_percent": 71.51,
+      "line": 40,
+      "text": "|   LUT as Logic             |  932268 |     0 |          0 |   1303680 | 71.51 |",
+      "raw_label": "LUT as Logic"
+    },
+    "LUT as Memory": {
+      "used": 287800,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 600960,
+      "util_percent": 47.89,
+      "line": 41,
+      "text": "|   LUT as Memory            |  287800 |     0 |          0 |    600960 | 47.89 |",
+      "raw_label": "LUT as Memory"
+    },
+    "CLB Registers": {
+      "used": 748933,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 2607360,
+      "util_percent": 28.72,
+      "line": 44,
+      "text": "| CLB Registers              |  748933 |     0 |          0 |   2607360 | 28.72 |",
+      "raw_label": "CLB Registers"
+    },
+    "Block RAM Tile": {
+      "used": 1148,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 2016,
+      "util_percent": 56.94,
+      "line": 81,
+      "text": "| Block RAM Tile    | 1148 |     0 |          0 |      2016 | 56.94 |",
+      "raw_label": "Block RAM Tile"
+    },
+    "URAM": {
+      "used": 640,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 960,
+      "util_percent": 66.67,
+      "line": 86,
+      "text": "| URAM              |  640 |     0 |          0 |       960 | 66.67 |",
+      "raw_label": "URAM"
+    },
+    "DSPs": {
+      "used": 0,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 9024,
+      "util_percent": 0,
+      "line": 97,
+      "text": "| DSPs      |    0 |     0 |          0 |      9024 |  0.00 |",
+      "raw_label": "DSPs"
+    },
+    "BUFGCE": {
+      "used": 1,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 288,
+      "util_percent": 0.35,
+      "line": 118,
+      "text": "|   BUFGCE             |    1 |     0 |          0 |       288 |  0.35 |",
+      "raw_label": "BUFGCE"
+    },
+    "BUFGCE_DIV": {
+      "used": 0,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 48,
+      "util_percent": 0,
+      "line": 119,
+      "text": "|   BUFGCE_DIV         |    0 |     0 |          0 |        48 |  0.00 |",
+      "raw_label": "BUFGCE_DIV"
+    },
+    "BUFGCTRL": {
+      "used": 0,
+      "fixed": 0,
+      "prohibited": 0,
+      "available": 96,
+      "util_percent": 0,
+      "line": 121,
+      "text": "|   BUFGCTRL*          |    0 |     0 |          0 |        96 |  0.00 |",
+      "raw_label": "BUFGCTRL*"
+    }
+  },
+  "selected_post_opt_timing_unplaced": {
+    "WNS_ns": -5.106,
+    "TNS_ns": -48440.133,
+    "setup_failing_endpoints": 72802,
+    "setup_total_endpoints": 4357324,
+    "WHS_ns": -0.091,
+    "THS_ns": -13166.243,
+    "hold_failing_endpoints": 795571,
+    "hold_total_endpoints": 4357324,
+    "WPWS_ns": 1.8,
+    "TPWS_ns": 0,
+    "pulse_failing_endpoints": 0,
+    "pulse_total_endpoints": 1237261,
+    "evidence": {
+      "line": 145,
+      "text": "     -5.106   -48440.133                  72802              4357324       -0.091   -13166.243                 795571              4357324        1.800        0.000                       0               1237261  "
+    },
+    "unconstrained_paths_requested": true,
+    "tool_says_constraints_met": false
+  },
+  "selected_placed_resources": null,
+  "selected_post_place_timing_unrouted": null,
+  "selected_route_error_resources": null,
+  "selected_route_error_timing": null,
+  "selected_implementation_revision": "h_SSI_SpreadSLLs_ultrathreads",
+  "implementation": {
+    "source": "h_dispatch_return_wordmux",
+    "stage": "SSI_DETAIL_PLACEMENT_RUNNING",
+    "non_project": true,
+    "original_f_and_SSI_preserved": true,
+    "source_project": "full_synth_h_return_wordmux/project/cp_full.xpr",
+    "source_run": "impl_1 standard opt-only terminal; Not started place_design;40%;NEEDS_REFRESH0",
+    "input_DCP": {
+      "path": "results/fpga_cpu_primary_20261115/full_synth_h_return_wordmux/project/cp_full.runs/impl_1/cp_full_top_opt.dcp",
+      "bytes": 402149724,
+      "mtime_ns": 1794866070967487378,
+      "sha256": "832f257f83d47575d9ea4bfb448b19f49be489ce93d18938a0a1b4f29ab0e3d5",
+      "stable_during_read": true
+    },
+    "run_directory": "full_impl_h_ssi_spreadslls_a/run_a",
+    "identity": "full_impl_h_ssi_spreadslls_a/launch_identity.json",
+    "session": "vivado-20261115-113226-a1b5e8eb",
+    "pid": 1165972,
+    "start_ticks": 164991348,
+    "launch_utc": "2026-11-16T21:58:41Z",
+    "qualified_clock_mhz": null,
+    "place_started_utc": "2026-11-16T22:11:42Z"
+  },
+  "selected_post_opt_audit": "full_synth_h_return_wordmux/opt_terminal_a/terminal_review.json"
+}

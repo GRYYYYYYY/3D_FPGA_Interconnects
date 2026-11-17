@@ -1,6 +1,10 @@
 # CPU-primary complete L1 core
 
-[Latest completed results, conclusions and in-flight experiment (2026-11-16)](../../../docs/lookahead_fpga_cpu_primary_progress_20261116.md).
+[Complete frozen submission and current h implementation](submission/README.md).
+
+[Paper/physical progress 2026-11-17](../../../docs/lookahead_fpga_cpu_primary_paper_freeze_20261117.md).
+
+[Earlier completed results and in-flight snapshot (2026-11-16)](../../../docs/lookahead_fpga_cpu_primary_progress_20261116.md).
 
 [Earlier frozen snapshot (2026-11-15)](../../../docs/lookahead_fpga_cpu_primary_progress_20261115.md).
 
@@ -61,9 +65,10 @@ synthesis uses1,223,270LUT(93.83%),749,607FF,1,148BRAM36-equivalent,640URAM,
 0DSP;20,826fewer LUTs than f. Full report/clock review completed; standard
 opt-only completed at21:55:09UTC with1,220,068LUT/748,933FF and unchanged
 BRAM/URAM/DSP. The new h SSI replay began21:58:41UTC from its verified opt DCP;
-global placement has completed and detail placementPhase3.6 is active at
-2026-11-17 00:00:59UTC. Physical timing remains pending. See the
-[latest frozen progress snapshot](../../../docs/lookahead_fpga_cpu_primary_progress_20261117.md). The default source
+placement returned0 at2026-11-17 00:32:19UTC; placed DCP is saved and
+post-place reports are active. The placed core uses1,212,828LUT/749,091FF;
+full-core routed frequency remains unqualified. See the
+[paper freeze and current placement snapshot](../../../docs/lookahead_fpga_cpu_primary_paper_freeze_20261117.md). The default source
 closure below remains f for reproducibility. See the
 [continuation and recovery report](../../../docs/lookahead_fpga_cpu_primary_resume_db1d7e454.md).
 

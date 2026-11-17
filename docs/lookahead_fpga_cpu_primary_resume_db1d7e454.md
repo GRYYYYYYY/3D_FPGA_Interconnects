@@ -5,8 +5,8 @@ on the existing `accel/lookahead-cpu-primary-closure-20261115` worktree.
 The 2026-11-16 publication snapshot remains frozen. New observations below are
 timestamped; they are not a claim of an achieved FPGA speedup.
 
-Current recovery point: **h SSI replay started2026-11-16 21:58:41UTC**;
-see the final section. Earlier timestamped observations below are historical.
+Current recovery point: **h place complete, post-place reports active; full manuscript frozen**.
+See [paper freeze and recovery policy](lookahead_fpga_cpu_primary_paper_freeze_20261117.md) and the final section. Earlier timestamped observations below are historical.
 
 ## Verified continuation at 2026-11-16 18:04:24 UTC
 
@@ -384,3 +384,11 @@ Old f default/SSI failures, new h functional/synth/opt results and all CPU/GPU/m
 reuse evidence are distinguished in this snapshot. Formal clock/FPGA time/CPU
 speedup remain unavailable. The user requested a publication update, not an EDA
 restart; continue supervising the existing task after publication.
+
+## Paper freeze and h placement at2026-11-17 00:44UTC
+
+The latest user instruction supersedes any earlier automatic next-architecture policy.
+[Complete manuscript, immutable scientific inputs, checks and current h evidence](lookahead_fpga_cpu_primary_paper_freeze_20261117.md) are ready for author review.
+h place returned0 and the placed checkpoint is saved; original PID1165972/start164991348 is active in post-place reports. Do not relaunch.
+A failed h is preserved without an automatic new architecture; the manuscript is already complete without a hardware success claim.
+New FPGA success-claim deadline:2026-11-18 01:00UTC/09:00Beijing. No qualified frequency or formal FPGA/CPU ratio yet.

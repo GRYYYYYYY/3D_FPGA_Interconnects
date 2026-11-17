@@ -1,0 +1,33 @@
+\section{Resident Performance Under Explicit Assumptions}
+\subsection{A Separate Optimized Software Cohort}
+Resident completion includes state initialization, cost loads, all waves, canonical/directory retirement, output writes and acknowledgment drain. Host preparation and full readback are separate. This boundary differs from native E2 and Process. We reuse an affinity/NUMA-bound packed CPU implementation on dual Xeon Gold 6530 processors, testing 8, 32 and 64 workers. The 64-worker setting minimizes mean resident time on both full 40-sample workloads. The allocation exposes 64 physical cores with a 55-CPU-time quota; 40 samples allow at most 40 simultaneous solves. This is the strongest measured CPU in this allocation, not a claim about every CPU implementation.
+
+Three independent processes each execute one warmup and three formal repetitions. Table~\ref{tab:resident} reports the mean and sample SD of the three process means, not nine independent trials. The retained H100 implementation exposes sample parallelism and actual 64-bit atomic whole-pair minima; its resident interval includes initialization, launch/control, completion reads and final synchronization. Full output transfer and research comparison are outside resident. The older BNN GPU receipt lacks a contemporaneous executable digest; retained source/build records and the current executable digest are not misrepresented as an execution-time hash.
+
+\begin{table}[t]\centering
+\caption{Complete-batch resident software time (seconds). CPU dispersion is over three independent process means. This cohort is separate from native eight-core E2/Process.}\label{tab:resident}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrr}\toprule & BNN40 & LSTM40\\\midrule
+CPU (64 workers) & $0.699624\pm0.026647$ & $0.725510\pm0.021287$\\
+Retained H100 mean & 0.151800 & 0.159498\\
+\bottomrule\end{tabular}
+\end{table}
+
+\subsection{Finite Model: Assumed Frequency and Memory}
+We evaluate a \emph{hypothetical 200 MHz core} with declared 32-byte memory service. Baseline latency/issue interval is 80/5 ns; a conservative sensitivity scenario uses 160/10 ns. These correspond to 16/1 and 32/2 cycles at the assumed frequency. Reads and writes share the 32 physical ports; finite queues, credits, return identity and blocking remain active. The ideal issue ceilings of 204.8 and 102.4 GB/s are not measured random-RMW HBM throughput, and the conservative scenario is not a worst-case guarantee.
+
+\begin{table}[t]\centering
+\caption{Complete finite-model results at \emph{assumed 200 MHz}; neither routed-frequency performance nor board measurement.}\label{tab:model}
+\begin{tabular}{llrr}\toprule Case & Latency/issue & Cycles & Model s\\\midrule
+BNN40 & 80/5 ns & 102,557,024 & 0.512785\\
+LSTM40 & 80/5 ns & 104,154,414 & 0.520772\\
+BNN40 & 160/10 ns & 135,128,351 & 0.675642\\
+LSTM40 & 160/10 ns & 137,198,248 & 0.685991\\
+\bottomrule\end{tabular}
+\end{table}
+
+These deterministic predictions have no invented sampling error bars. Baseline expansion consumes 77.09/77.15\% of BNN/LSTM cycles and finalization 20.95/20.89\%; all other mutually exclusive phases account for the remainder. Candidate throughput is approximately 16.28/16.30 per expansion cycle, about 25.4\% of the 64-lane ideal. Finite scheduling, transport and publication, together with sequential FPGA sample execution, explain why lane count alone is insufficient. Overlapping stall counters cannot be added as independently removable time.
+
+The conservative BNN prediction exceeds the fastest measured CPU process mean, 0.668921 s, despite lying below its three-process mean. Thus even the hypothetical-frequency result does not establish a robust CPU advantage. The GPU remains faster in both assumed scenarios; beating it is not a qualification requirement. Frequency changes alter service discretization and scheduling: $T=C(f,\text{service},\text{structure})/f$, with absolute nanoseconds rounded up to cycles. Dividing old cycles by a new frequency is invalid when that binding changes.
+
+Resident predictions are not native E2 estimates. Required packed-descriptor construction is shared by the selected CPU and FPGA representations. Host output-layout conversion was measured separately at 1.561/1.537 ms on preallocated, prefaulted buffers; it is not board DMA and excludes transfers and native map assembly. Such costs cannot be charged only to FPGA or combined with unrelated native timing cohorts to fabricate an end-to-end speedup.

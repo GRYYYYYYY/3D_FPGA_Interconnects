@@ -1,0 +1,10 @@
+\section{Introduction}
+Three-dimensional FPGA exploration requires CAD tools that handle layer-dependent connectivity at practical cost. LaZagna supports 3D architecture generation and Escaping Flatland improves stacked-fabric placement~\cite{lazagna,flatland}. Changes to a graph or cost model can require rebuilding timing-driven routing lookahead. Multicore routing alone does not remove sequential construction.
+
+Our locked VPR builder floods representative starts sequentially. On eight-core GEMM, construction consumes about 45\% of the fixed-input process: 149.56 seconds versus 30.64 for routing. Starts share read-only graph/cost data, but groups often have only four samples. Group barriers limit concurrency beyond four workers. Search-internal parallelism offers another opportunity while changing tied delay/congestion selection.
+
+We separate these opportunities through execution contracts. STRICT preserves visitation and original-order reduction while scheduling across groups. ALT uses FP32 whole-pair bucket waves at the same native interface. CPU/CUDA agreement under ALT does not imply STRICT equivalence. A finite FPGA mapping exposes additional capacity, ownership, publication, memory and physical-connectivity obligations.
+
+We contribute (1) a layer-aware STRICT decomposition and scoped wire-map equivalence argument; (2) a separate ALT contract with native CPU/GPU measurements, output/route qualification and size-dependent counterexamples; and (3) a finite FPGA architecture with RTL/model calibration and physical evidence separating conditional predictions from achieved performance. Bucketing, atomics and task libraries are established mechanisms; our contribution is their native integration and validation.
+
+The GPU headline compares with optimized CPU Pipeline: \LstmPipeBuild\ construction and \LstmPipeProc\ Process acceleration on LSTM. FPGA uses a separate 64-worker resident CPU cohort. Neither a kernel ratio nor an assumed clock replaces measured system performance.
