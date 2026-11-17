@@ -13,3 +13,7 @@
 7. 独立匿名源码包只含实际排版依赖，原路径/账号/内部报告不进入包；增加本轮可复算脚本、验证报告和作者审核项。
 
 本轮没有制造新 formal solver/GPU/RTL 性能结果。新证据是只读重算和有界兼容性预检。
+
+## 作者终审增量：相对 bffa5626ac7e984f3018b5e9be9f4b95ac18541b
+
+仅两类文字编辑：摘要明确使用 achieves … speedup over the eight-thread CPU Pipeline baseline，保持 3.207/1.094、construction/complete-process 与 native LSTM same-family tuning holdout；正文移除无独立配额、未新增 solver/EDA/shift sweep、未升级 VTR 等修稿执行说明，保留补证文档中的执行事实。实际实验条件、适用性及限制不变。更新 PDF/匿名源码包/编译检查；不改原冻结回执，不开展新研究实验。h 身份核验和后续监督另行记录。

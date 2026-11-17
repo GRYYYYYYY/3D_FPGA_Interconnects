@@ -9,11 +9,11 @@ barrier. We decouple dependencies at two granularities: STRICT      source-relat
 schedules private samples across groups with native-order re-
 duction; ALT separately deﬁnes whole-pair FP32 waves within         and native integration. Caching and sparse sampling can avoid
 searches. Matched scheduling and wave-work controls identify        or reduce construction [7]; we parallelize the retained searches.
-the exposed concurrency. On an eight-core native LSTM same-            Our insight separates logical sample identity from execution
-family tuning holdout, CUDA improves construction by 3.207          order. STRICT schedules private samples across groups and
-times and complete-process time by 1.094 times against opti-
+the exposed concurrency. On a native LSTM same-family tuning           Our insight separates logical sample identity from execution
+holdout, CUDA achieves a 3.207× construction speedup and a          order. STRICT schedules private samples across groups and
+1.094× complete-process speedup over the eight-thread CPU
                                                                     reduces in native order under explicit equivalence condi-
-mized CPU Pipeline. Small-input slowdowns and representative-
+Pipeline baseline. Small-input slowdowns and representative-
 cost differences delimit these beneﬁts. A ﬁnite FPGA mapping        tions. ALT separately deﬁnes FP32 whole-pair waves within
 supplies RTL/model validation and conditional memory-service        searches. Both integrate through logical sample/context bound-
 predictions; qualiﬁed full-core frequency and FPGA superiority      aries; a ﬁnite FPGA mapping investigates ownership and
@@ -176,61 +176,74 @@ Samples execute sequentially at the batch controller. Runtime      executed-case
 inputs supply source identities and target counts, never ex-       functional equivalence. Small-graph cycles are not extrapo-
 pected answers. Admission checks at most 222 nodes, 32,768         lated by graph size.
        V. E XPERIMENTAL M ETHOD AND E VIDENCE                                                               Group          Flat         Pipeline
-
-A. Frozen Inputs, Cohorts and Resources                                                  40                                40
-
-   We reuse completed solver experiments and add a bounded                               30                                30
+                                                                                         40                                40
+A. Frozen Inputs, Cohorts and Resources
+                                                                                         30                                30
 
 
 
 
                                                                              Build (s)
-compatibility preﬂight; no new performance solver or EDA job                             20                                20
-is launched. The retained corpus separates legal full-ﬂow runs                           10                                10
-from construction-only observations; capped route tails do not
-                                                                                          0                                 0
-establish legality. GEMM and scaling cohorts are separate.                                    8                    16              8                    16
-Scheduling controls and native ALT use distinct, separately                                       Physical cores                       Physical cores
+   The retained corpus separates legal full-ﬂow runs from
+                                                                                         20                                20
+construction-only observations; capped route tails do not es-
+tablish legality. GEMM and scaling cohorts are separate.                                 10                                10
+Scheduling controls and native ALT use distinct, separately                               0                                 0
+                                                                                              8                    16              8                    16
 bound RRGs.
-   The BNN/small-input native cohort measures BNN and               Fig. 2. Construction means and sample SD, three processes per arm/point.
-s38417 with Stock, Flat, ALT CPU and original ALT CUDA.             Same-cohort Group/Flat/Pipeline controls on BNN (left) and DLA (right);
-                                                                    capped routing tails do not establish full-route legality. Error bars are small
-A separate cohort measures LSTM seed2 with those arms               at this scale.
-plus Pipeline. LSTM was not used in preceding ALT tuning
-and was frozen before its own qualiﬁcation/timing; it was not                                   TABLE II
-preselected before all ALT development.                              M ATCHED BNN40 ORIGINAL - REPRESENTATION PROFILES ; DIAGNOSTIC
-                                                                               OPERATION COUNTS , NOT NATIVE E2 TIMING .
-   LSTM is a same-family tuning holdout, previously used in
-the CPU study. It shares BNN’s architecture but differs in
-                                                                          Metric                                                  Shift 0           Shift 20
+                                                                                                  Physical cores                       Physical cores
+   The BNN/small-input native cohort measures BNN and
+s38417 with Stock, Flat, ALT CPU and original ALT CUDA.
+                                                                    Fig. 2. Construction means and sample SD, three processes per arm/point.
+A separate cohort measures LSTM seed2 with those arms               Same-cohort Group/Flat/Pipeline controls on BNN (left) and DLA (right);
+plus Pipeline. LSTM was not used in preceding ALT tuning            capped routing tails do not establish full-route legality. Error bars are small
+and was frozen before its own qualiﬁcation/timing; it was not       at this scale.
+preselected before all ALT development.
+                                                                                                TABLE II
+   LSTM is a same-family tuning holdout, previously used in          M ATCHED BNN40 ORIGINAL - REPRESENTATION PROFILES ; DIAGNOSTIC
+the CPU study. It shares BNN’s architecture but differs in                     OPERATION COUNTS , NOT NATIVE E2 TIMING .
 netlist, placement and RRG. LSTM has 4,166,724 nodes and
-                                                                          Total sample waves                                   19,691                2,161
-40,142,314 edges; BNN has 4,102,608 nodes and 39,480,616                  Maximum per-sample waves                                627                   59
-edges. Both use two layers, width120 and 40 samples, not                  Eligible edge proposals                       1,282,443,890        1,286,937,147
-independent architectures.                                                Edge-weighted frontier                               16,061              106,780
-   The baseline is VTR commit 0b912334fdd8, release
+40,142,314 edges; BNN has 4,102,608 nodes and 39,480,616                  Metric                                                  Shift 0           Shift 20
+edges. Both use two layers, width120 and 40 samples, not                  Total sample waves                                   19,691                2,161
+independent architectures.                                                Maximum per-sample waves                                627                   59
+                                                                          Eligible edge proposals                       1,282,443,890        1,286,937,147
+   The baseline is VTR commit 0b912334fdd8, release                       Edge-weighted frontier                               16,061              106,780
 build with assertion level 2. Native ALT uses a Xeon Gold
-6530 with eight distinct physical cores in one NUMA node                     VI. R ESULTS AND S YSTEM I NTERPRETATION
-and one H100 80GB, executing solvers sequentially. Shared           A. STRICT Cross-Sample Parallelism
+6530 with eight distinct physical cores in one NUMA node
+and one H100 80GB, executing solvers sequentially. Shared                    VI. R ESULTS AND S YSTEM I NTERPRETATION
 instances are not exclusive. The LSTM cohort rotates arm
+order across three processes. Hosts/phases are not pooled.          A. STRICT Cross-Sample Parallelism
                                                                        On eight-core GEMM, STRICT Pipeline reduces construc-
-order across three processes. Hosts/phases are not pooled.
-                                                                    tion from 149.56 to 20.95 seconds and achieves 1.638 ±
-B. Timing and Statistical Policy                                    0.005× paired Process speedup over Stock; Group takes 37.88
-   E1     is    sample    service;     the   CUDA       wrapper     seconds. Construction is about 45% of Stock Process. Existing
-ends E1 before ﬁnal ABI output copy. E2 is                          sixteen-core GEMM full-ﬂow records do not form a matched
-native        MapLookahead::compute:                 conversion,    native CUDA cohort. Matched Group/Flat/Pipeline controls
-preparation/service,    output     handoff,     group     merge,    isolate C1 from other Stock repairs.
-interpolation, source/OPIN and derived minima. Process                 In Fig. 2, ten groups of four samples limit group-local
-adds RR XML loading, initialization, routing, checking/STA          concurrency. At eight cores, BNN Group/Flat/Pipeline take
-and uniform serialization. Independent route readback is            17.41 ± 0.33, 9.32 ± 0.15 and 9.36 ± 0.11 s. Flat and Pipeline
-outside Process; pre-generated RRG, packing and placement           independently remove barriers and are nearly equal: the beneﬁt
-are excluded. Caches are not ﬂushed.                                comes from decoupling groups, not a particular Pipeline
-   For paired repeat r, sr = Tc,r /Ta,r . We report mean and        primitive. At sixteen cores Flat/Pipeline take 5.51/5.39 s,
-sample SD of these ratios and of raw seconds (n = 3). SD is         against Group’s 17.68 s. DLA shows the same mechanism
-variability, not a conﬁdence interval; repeats are processes, not   (34.82/19.55/18.99 s at eight cores). Separate 2D controls also
-designs or seeds. Stock E2 has 0.01-second precision; other E2      beneﬁt: eight-core BNN-2D takes 7.75/4.23/4.16 s. These are
-timers are high resolution. Proﬁles are outside formal timing.      not equal-sized 2D/3D pairs, so layer count is not a causal
+B. Timing and Statistical Policy                                    tion from 149.56 to 20.95 seconds and achieves 1.638 ±
+                                                                    0.005× paired Process speedup over Stock; Group takes 37.88
+   E1     is    sample    service;     the   CUDA       wrapper
+                                                                    seconds. Construction is about 45% of Stock Process. Existing
+ends E1 before ﬁnal ABI output copy. E2 is
+                                                                    sixteen-core GEMM full-ﬂow records do not form a matched
+native        MapLookahead::compute:                 conversion,
+                                                                    native CUDA cohort. Matched Group/Flat/Pipeline controls
+preparation/service,    output     handoff,     group     merge,
+                                                                    isolate C1 from other Stock repairs.
+interpolation, source/OPIN and derived minima. Process
+                                                                       In Fig. 2, ten groups of four samples limit group-local
+adds RR XML loading, initialization, routing, checking/STA
+                                                                    concurrency. At eight cores, BNN Group/Flat/Pipeline take
+and uniform serialization. Independent route readback is
+                                                                    17.41 ± 0.33, 9.32 ± 0.15 and 9.36 ± 0.11 s. Flat and Pipeline
+outside Process; pre-generated RRG, packing and placement
+                                                                    independently remove barriers and are nearly equal: the beneﬁt
+are excluded. Caches are not ﬂushed.
+                                                                    comes from decoupling groups, not a particular Pipeline
+   For paired repeat r, sr = Tc,r /Ta,r . We report mean and
+                                                                    primitive. At sixteen cores Flat/Pipeline take 5.51/5.39 s,
+sample SD of these ratios and of raw seconds (n = 3). SD is
+                                                                    against Group’s 17.68 s. DLA shows the same mechanism
+variability, not a conﬁdence interval; repeats are processes, not
+                                                                    (34.82/19.55/18.99 s at eight cores). Separate 2D controls also
+designs or seeds. Stock E2 has 0.01-second precision; other E2
+                                                                    beneﬁt: eight-core BNN-2D takes 7.75/4.23/4.16 s. These are
+timers are high resolution. Proﬁles are outside formal timing.
+                                                                    not equal-sized 2D/3D pairs, so layer count is not a causal
                                                                     explanation of time differences.
 C. Qualiﬁcation and Attribution
   STRICT checks native wire-map bytes under its proposition.        B. Wave Scheduling: Concurrency Versus Work
@@ -270,75 +283,72 @@ LSTM QUALIFICATION OBJECTS . M AP - WORD DIFFERENCES ARE AGAINST
     Independent FULL/STA; zero overuse                            Pass
     CPD: all ﬁve arms (ns)                                    11.7483
                                                                          reader and binary writer are also unimplemented (CSV export
-    Wirelength: Stock / Flat                    1,713,833 / 1,714,423    is separate). We do not upgrade VTR and infer no performance
-    Wirelength: ALT CPU / CUDA                  1,712,223 / 1,712,223    superiority over supported compressed-map conﬁgurations.
-                                                                         Separable is also exposed by locked-binary help, but was not
-                                                                         qualiﬁed or timed here.
+    Wirelength: Stock / Flat                    1,713,833 / 1,714,423    is separate). This establishes no performance superiority over
+    Wirelength: ALT CPU / CUDA                  1,712,223 / 1,712,223    supported compressed-map conﬁgurations. Separable is also
+                                                                         exposed by locked-binary help, but was not qualiﬁed or timed
+                                                                         here.
 cases with native congestion differences, motivating separate               For ordinary map caching, 36 retained formal reuse records
 semantic/QoR qualiﬁcation.                                               have legal routing and independent FULL/STA checks on ﬁxed
                                                                          inputs. They establish valid cache hits, separate from fresh
 C. Native LSTM: Optimized CPU and Matched ALT
                                                                          construction. No unobserved cross-design reuse is amortized.
-   CUDA obtains 3.207 ± 0.147× E2 and 1.094 ± 0.010×                     No independent CPU quota was available for new formal
-Process acceleration against Pipeline; against Flat, 3.208 ±             timing; existing complete proﬁles avoid another shift sweep.
-0.165× and 1.092 ± 0.007×; against matched ALT CPU,
-3.167 ± 0.071× and 1.088 ± 0.000122×. ALT CPU is close to                      VII. C ONDITIONAL R ESIDENT AND P HYSICAL
-Pipeline: changed search semantics alone do not explain GPU                                   E VALUATION
-acceleration.                                                            A. A Separate Optimized Software Cohort
-   The smaller Process gain reﬂects remaining loading, initial-
-ization, routing and checking.                                              Resident completion includes state initialization, cost loads,
-                                                                         all waves, canonical/directory retirement, output writes and
-D. Semantics, QoR and Size Dependence                                    acknowledgment drain. Host preparation and full readback are
-   ALT CPU/CUDA agree on complete samples and maps,                      separate. This boundary differs from native E2 and Process.
-but have different route SHAs; each independently passes                 We reuse an afﬁnity/NUMA-bound packed CPU implementa-
-readback. ALT changes 23,111 congestion words against Flat               tion on dual Xeon Gold 6530 processors, testing 8, 32 and
-with no delay or missing-state changes (Table IV). Native                64 workers. The 64-worker setting minimizes mean resident
-strict-delay ties and ALT whole-pair improvement remain                  time on both full 40-sample workloads. The allocation has 64
-different contracts.                                                     physical cores and a 55-CPU-time quota; 40 samples permit
-   BNN supplies another large native result against Flat;                at most 40 concurrent solves. This is the strongest measured
-Pipeline supplements from another worker cannot create a                 CPU here.
-matched BNN Pipeline/CUDA comparison.                                       Three independent processes each execute one warmup
-   The s38417 slowdown is retained: device initialization,               and three formal repetitions. Table VI reports the mean and
-scans and launches can outweigh a small build. ALT CPU                   sample SD of the three process means, not nine independent
-helps construction, while Stock is fastest for full Process in           trials. H100 resident includes initialization, launches/control,
-this cohort. No automatic size selector or all-size beneﬁt is            completion reads and synchronization; full output transfer
-established.                                                             and research comparison are outside. The BNN GPU receipt
-                                                                         lacks an execution-time executable digest; its source/build
-E. Closest Alternative and Cache Applicability                           provenance is a documented limitation.
-  The locked executable exposes compressed_map and
-map read/write options. Its embedded assertion and com-                  B. Finite Model: Assumed Frequency and Memory
-pute source explicitly require one layer; audited BNN/LSTM                 We evaluate a hypothetical 200 MHz core with declared
-graphs have two. This is a static domain exclusion, not a                32-byte memory service. Baseline latency/issue interval is
-                            TABLE VII                              banks, 16 frontends, 32 ports and 9,681 nonconstant output
-  C OMPLETE FINITE - MODEL RESULTS AT assumed 200 MHz; NEITHER     bits remain, with no black boxes.
+   CUDA obtains 3.207 ± 0.147× E2 and 1.094 ± 0.010×
+Process acceleration against Pipeline; against Flat, 3.208 ±                   VII. C ONDITIONAL R ESIDENT AND P HYSICAL
+0.165× and 1.092 ± 0.007×; against matched ALT CPU,                                           E VALUATION
+3.167 ± 0.071× and 1.088 ± 0.000122×. ALT CPU is close to                A. A Separate Optimized Software Cohort
+Pipeline: changed search semantics alone do not explain GPU
+acceleration.                                                               Resident completion includes state initialization, cost loads,
+   The smaller Process gain reﬂects remaining loading, initial-          all waves, canonical/directory retirement, output writes and
+ization, routing and checking.                                           acknowledgment drain. Host preparation and full readback are
+                                                                         separate. This boundary differs from native E2 and Process.
+D. Semantics, QoR and Size Dependence                                    We reuse an afﬁnity/NUMA-bound packed CPU implementa-
+   ALT CPU/CUDA agree on complete samples and maps,                      tion on dual Xeon Gold 6530 processors, testing 8, 32 and
+but have different route SHAs; each independently passes                 64 workers. The 64-worker setting minimizes mean resident
+readback. ALT changes 23,111 congestion words against Flat               time on both full 40-sample workloads. The allocation has 64
+with no delay or missing-state changes (Table IV). Native                physical cores and a 55-CPU-time quota; 40 samples permit
+strict-delay ties and ALT whole-pair improvement remain                  at most 40 concurrent solves. This is the strongest measured
+different contracts.                                                     CPU here.
+   BNN supplies another large native result against Flat;                   Three independent processes each execute one warmup
+Pipeline supplements from another worker cannot create a                 and three formal repetitions. Table VI reports the mean and
+matched BNN Pipeline/CUDA comparison.                                    sample SD of the three process means, not nine independent
+   The s38417 slowdown is retained: device initialization,               trials. H100 resident includes initialization, launches/control,
+scans and launches can outweigh a small build. ALT CPU                   completion reads and synchronization; full output transfer
+helps construction, while Stock is fastest for full Process in           and research comparison are outside. The BNN GPU receipt
+this cohort. No automatic size selector or all-size beneﬁt is            lacks an execution-time executable digest; its source/build
+established.                                                             provenance is a documented limitation.
+
+E. Closest Alternative and Cache Applicability                           B. Finite Model: Assumed Frequency and Memory
+  The locked executable exposes compressed_map and                         We evaluate a hypothetical 200 MHz core with declared
+map read/write options. Its embedded assertion and com-                  32-byte memory service. Baseline latency/issue interval is
+pute source explicitly require one layer; audited BNN/LSTM               80/5 ns; a conservative sensitivity scenario uses 160/10 ns.
+graphs have two. This is a static domain exclusion, not a                These correspond to 16/1 and 32/2 cycles at the assumed
+                            TABLE VII                                 The predecessor fails default and SSI routing with ap-
+  C OMPLETE FINITE - MODEL RESULTS AT assumed 200 MHz; NEITHER     proximately 5.8 million trial-routing overlaps. Its SSI failure
   ROUTED - FREQUENCY PERFORMANCE NOR BOARD MEASUREMENT.
-                                                                      The predecessor fails default and SSI routing with ap-
-         Case         Latency/issue         Cycles    Model s      proximately 5.8 million trial-routing overlaps. Its SSI failure
                                                                    checkpoint has setup WNS −15.487 ns and hold WHS −3.530
+         Case         Latency/issue         Cycles    Model s      ns; the worst reported setup path crosses three SLR boundaries
+                                                                   from bank completion payload to dispatcher error state. This
          BNN40        80/5 ns          102,557,024   0.512785
-         LSTM40       80/5 ns          104,154,414   0.520772      ns; the worst reported setup path crosses three SLR boundaries
-         BNN40        160/10 ns        135,128,351   0.675642      from bank completion payload to dispatcher error state. This
-         LSTM40       160/10 ns        137,198,248   0.685991      motivates the single return-word selection change, not greater
-                                                                   parallelism. Failure-checkpoint slack is not an achieved period.
-                           TABLE VIII                                 In the read-only November 17 snapshot, placement, post-
-ACTUAL FULL - CORE RESOURCES ON XCU280, V IVADO 2022.2. FAILED     place reports and physical optimization have completed; rout-
+         LSTM40       80/5 ns          104,154,414   0.520772      motivates the single return-word selection change, not greater
+         BNN40        160/10 ns        135,128,351   0.675642      parallelism. Failure-checkpoint slack is not an achieved period.
+         LSTM40       160/10 ns        137,198,248   0.685991         In the read-only November 17 snapshot, placement, post-
+                                                                   place reports and physical optimization have completed; rout-
+                           TABLE VIII                              ing is in progress. No qualiﬁed full-core frequency is estab-
+ACTUAL FULL - CORE RESOURCES ON XCU280, V IVADO 2022.2. FAILED     lished. The 5 ns constraint is a target. Post-opt sequential clock
 ROUTING ROWS ARE ERROR - CHECKPOINT RESOURCES , NOT COMPLETED
-                                                                   ing is in progress. No qualiﬁed full-core frequency is estab-
-ROUTES . BRAM IS IN 36-K B EQUIVALENTS ; ALL ROWS USE 640 URAM
-                         AND ZERO DSP.                             lished. The 5 ns constraint is a target. Post-opt sequential clock
                                                                    pins connect to the core clock; reset BUFG has zero clock
-      Stage                             LUT          FF   BRAM     loads. Placement buffers require connectivity classiﬁcation;
-      Final RTL synthesis           1,223,270   749,607    1,148   methodology/reset warnings and unproven constant aliases
-      Final RTL standard opt        1,220,068   748,933    1,148   remain qualiﬁcation obligations. FPGA execution time and
+ROUTES . BRAM IS IN 36-K B EQUIVALENTS ; ALL ROWS USE 640 URAM
+                         AND ZERO DSP.                             loads. Placement buffers require connectivity classiﬁcation;
+                                                                   methodology/reset warnings and unproven constant aliases
+      Stage                             LUT          FF   BRAM     remain qualiﬁcation obligations. FPGA execution time and
+      Final RTL synthesis           1,223,270   749,607    1,148   CPU/FPGA speedup at an achieved frequency are conse-
+      Final RTL standard opt        1,220,068   748,933    1,148   quently unavailable. The model above is neither board mea-
       Final RTL placement           1,212,828   749,091    1,148
       Prior default route failure   1,233,715   749,174    1,148
-                                                                   CPU/FPGA speedup at an achieved frequency are conse-
-      Prior SSI route failure       1,232,534   749,226    1,148   quently unavailable. The model above is neither board mea-
                                                                    surement nor a physical success claim.
+      Prior SSI route failure       1,232,534   749,226    1,148
                                                                                   VIII. S COPE AND L IMITATIONS
-80/5 ns; a conservative sensitivity scenario uses 160/10 ns.
                                                                       STRICT equality requires the stated order/numeric con-
-These correspond to 16/1 and 32/2 cycles at the assumed
                                                                    ditions; ALT qualiﬁcation covers tested routes, not arbi-
 frequency. Reads and writes share the 32 physical ports; ﬁnite
                                                                    trary graphs or a universal QoR bound. Same-family LSTM
@@ -374,12 +384,14 @@ board DMA; unrelated native cohorts cannot supply an end-             OpenAI Cod
 to-end FPGA speedup.                                               tifact scripts, prior RTL/model development and experiments.
                                                                    Authors are responsible for veriﬁcation and submission.
 C. Actual Full-Core Physical Status
-  The complete connected XCU280 core excludes the board
+   The complete connected XCU280 core excludes the board
 shell, PCIe and memory controller. Standard optimization re-
 moves 3,202 LUTs and 674 FFs. Post-opt LUT use is 93.59%:
 932,268 logic LUTs, 286,776 LUTRAM and 1,024 SRLs.
 Placement uses 1,212,828 LUTs (925,700 logic, 286,232 LU-
 TRAM, 896 SRL), but occupies 99.86% of CLB sites. All 64
+banks, 16 frontends, 32 ports and 9,681 nonconstant output
+bits remain, with no black boxes.
                                R EFERENCES
  [1] I. Youssef, H. Yang, and C. Hao, “LaZagna: An open-source framework
      for ﬂexible 3D FPGA architectural exploration,” in IEEE/ACM

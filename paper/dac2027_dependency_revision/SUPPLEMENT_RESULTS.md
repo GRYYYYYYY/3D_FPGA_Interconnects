@@ -15,3 +15,7 @@ P0 已落实：从 63 条 component_formal 原始记录复算 7 组 Group/Flat/P
 停止扩展：最重要适用性缺口已补，全部可选新 solver/GPU/RTL 实验均未启动。继续研究不作为修订稿交付条件。
 
 Separable 补充核查：锁定 help 确实列出此模式；当前源码具有 layer 索引和 CHANZ 维度，不把它误报为 compressed_map 的单层限制。其 read/write 明确未实现。当前源码与该二进制的逐文件对应未被证实，且本轮未做其两层 native 资格或正式计时，因此不作支持正确性/性能结论，不启动移植或新矩阵。
+
+## 作者终审有限编辑（以 bffa5626 为基准）
+
+本轮仅修改摘要的 speedup/baseline 措辞，并将正文中的修稿执行说明保留在本文档：没有新增 performance solver/EDA；没有独立 CPU 配额，因此没有新增 formal timing；旧完整 profile 足够，因此没有新增 shift 扫描；没有升级或移植 VTR。实际线程/NUMA/共享主机条件、计时边界和研究限制留在正文。没有重跑 CPU/GPU/模型/RTL 实验。重编译中的 recompute.py 仅核算归档数据，不启动实验。h 监督另行进行，论文结项不代表 h 收尾完成。
