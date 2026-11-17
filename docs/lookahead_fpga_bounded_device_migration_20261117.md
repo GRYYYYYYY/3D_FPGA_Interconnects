@@ -109,3 +109,23 @@ utilization reports and this independent header-aware audit preserve the true
 frozen EDA inputs or running procedure was changed. New repeated diagnostics
 are capped at100, unlike old logs: warning counts are not comparable incidence
 reductions. No new Synth diagnostic IDs were observed in available text.
+
+## Observer recovery at 2026-11-17 15:30 UTC
+
+Detailed placement has completed; the same place_design command remains in
+post-placement optimization. Its current estimated WNS−23.420ns signals timing
+risk, not a routed result or an Fmax. No frequency claim or retry follows.
+
+The observer was improved to sample all process-group members and their CPU/RSS,
+and to require the whole group to exit before recording worker termination.
+Only the old observer PID1017775 was stopped after checking its full birth
+identity; the replacement PID2340438 resumed under the same lock and original
+budget. Worker1144478 and Vivado1144514 were preserved. EDA source, flow,
+constraints, target, directives and checkpoints were not changed or restarted.
+Publisher entry1181978 remains the sole final auditor/publisher.
+
+`accel/lookahead/fpga_device_migration/supervision_recovery_20261117/` records
+this transition. The original budget.json PID field is initial provenance;
+the current supervisor_identity.json and heartbeat identify the live observer.
+Process identity, scope rejection and group exit checks passed. Final physical
+qualification and terminal publication remain pending.
