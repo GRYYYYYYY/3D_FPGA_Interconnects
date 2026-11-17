@@ -371,3 +371,16 @@ replay terminal receipt appears or the bound Vivado process identity disappears.
 Do not start another observer over its exclusive output files. Confirm its
 birth identity and existing log before resuming supervision. The observer's
 terminal receipt is not a substitute for final MCP/run/DCP/report auditing.
+
+## User-requested publication at2026-11-17 00:00:59UTC
+
+See [the new frozen completed/in-flight summary](lookahead_fpga_cpu_primary_progress_20261117.md).
+`github_progress_snapshot_20261117_a` binds the actual MCP running/queue0 state,
+parentPID1165972/start164991348/sameboot, partial replay log, receipt and monitor
+records. Global placement completed; current detail placement isPhase3.6 Small
+Shape DP, after splitSLRCrossingNets. No place terminal/placed DCP/route start yet.
+The existing h replay remains active; do not re-source launch.tcl or reset runs.
+Old f default/SSI failures, new h functional/synth/opt results and all CPU/GPU/model
+reuse evidence are distinguished in this snapshot. Formal clock/FPGA time/CPU
+speedup remain unavailable. The user requested a publication update, not an EDA
+restart; continue supervising the existing task after publication.

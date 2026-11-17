@@ -61,7 +61,9 @@ synthesis uses1,223,270LUT(93.83%),749,607FF,1,148BRAM36-equivalent,640URAM,
 0DSP;20,826fewer LUTs than f. Full report/clock review completed; standard
 opt-only completed at21:55:09UTC with1,220,068LUT/748,933FF and unchanged
 BRAM/URAM/DSP. The new h SSI replay began21:58:41UTC from its verified opt DCP;
-physical timing remains pending. The default source
+global placement has completed and detail placementPhase3.6 is active at
+2026-11-17 00:00:59UTC. Physical timing remains pending. See the
+[latest frozen progress snapshot](../../../docs/lookahead_fpga_cpu_primary_progress_20261117.md). The default source
 closure below remains f for reproducibility. See the
 [continuation and recovery report](../../../docs/lookahead_fpga_cpu_primary_resume_db1d7e454.md).
 

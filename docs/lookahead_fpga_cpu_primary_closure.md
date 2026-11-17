@@ -2,7 +2,9 @@
 
 Current continuation: [resume identity, resource comparison and claim ledger](lookahead_fpga_cpu_primary_resume_db1d7e454.md).
 
-Latest publication snapshot: [2026-11-16 completed results and active SSI route](lookahead_fpga_cpu_primary_progress_20261116.md).
+Latest publication snapshot: [2026-11-17 completed results and active h SSI detail placement](lookahead_fpga_cpu_primary_progress_20261117.md).
+
+Earlier frozen publication: [2026-11-16 original f SSI in-flight snapshot](lookahead_fpga_cpu_primary_progress_20261116.md).
 
 Earlier frozen checkpoint: [2026-11-15 completed and in-flight experiments](lookahead_fpga_cpu_primary_progress_20261115.md). It records the 21:00:20 UTC observation separately from the subsequent qualification evidence in this report.
 
@@ -18,7 +20,9 @@ Actual synthesis uses1,223,270LUT(93.83%),749,607FF,1,148BRAM36-equivalent,
 collector completed0 and actual-clock preflight passed. Standard opt-only finished
 at21:55:09UTC with1,220,068LUT(93.59%),748,933FF and unchanged BRAM/URAM/DSP.
 Its actual resource/clock/DCP audit is complete. The same SSI strategy for this
-single h RTL revision launched once at21:58:41UTC; opening its verified opt DCP.
+single h RTL revision launched once at21:58:41UTC. Input DCP/clock checks
+completed0; global placement completed and detail placement Phase3.6 is active
+at2026-11-17 00:00:59UTC. No h placed DCP or route start exists at that snapshot.
 No h routed timing is available.
 See the continuation report for source bindings and live-run recovery.
 
