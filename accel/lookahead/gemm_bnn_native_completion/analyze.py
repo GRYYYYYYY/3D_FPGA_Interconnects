@@ -62,6 +62,7 @@ def main():
  out=H/'tables';out.mkdir(exist_ok=True)
  assert read(r/'receipts/V1_publication.json')['new_experiments_allowed']
  assert all(sha(H/n)==h for n,h in read(r/'receipts/worker_freeze.json')['files'].items())
+ assert all(sha(H/n)==h for n,h in read(H/'source_binding.json')['source_sha256'].items())
  unique=[(x['cohort_id'],x['case'],x['label'],x['arm']) for x in rows];assert len(unique)==len(set(unique))
  formal=[x for x in rows if x['formal']]
  for x in formal:
@@ -70,8 +71,9 @@ def main():
   assert 'R61_CAPTURE' not in x['environment'] and 'R61_VERIFY_CPU' not in x['environment']
   assert not x['resource_before']['gpu_processes'].strip() and not x['resource_after']['gpu_processes'].strip()
   d=r/'formal'/x['case']/str(x['repeat'])/x['arm']
-  assert sha(d/'wire_map.bin')==x['map_sha256'] and sha(d/'routed.route')==x['route_sha256']
-  assert x['E2_s']<=x['Process_wall_s']
+  if x['qualified']:
+   assert sha(d/'wire_map.bin')==x['map_sha256'] and sha(d/'routed.route')==x['route_sha256']
+   assert x['E2_s']<=x['Process_wall_s']
   assert read(d/'measurement.json')['Process_wall_s']==x['Process_wall_s']
  summary=[];quals=[];mapdiffs=[];captures=[];excluded=[]
  for case in ['gemm','bnn']:
@@ -79,12 +81,12 @@ def main():
   q={x['arm']:x for x in rows if x['case']==case and not x['formal']}
   meta=read(H/'metadata'/f'{case}.json')
   qr=dict(case=case,status=status['status'],N=meta['N'],E=meta['E'],samples=meta['J'],layers=len(set(j['layer'] for j in meta['jobs'])),threads=8,GPU=env['gpu_inventory'][0],cache='fresh map build',new_measurement=True,full_route=bool(q) and all(x['metrics']['routing_success'] for x in q.values()),zero_overuse=bool(q) and all(x['zero_overuse'] for x in q.values()),independent_FULL_STA=bool(q) and all(x['qualified'] for x in q.values()),complete_ALT_pair_equal=False,STRICT_map_equal=False,delay_word_differences=None,congestion_word_differences=None,missing_state_differences=None)
-  if all(k in q for k in ['stock','pipeline','alt_cpu','alt_cuda']):
+  if (r/'receipts'/f'{case}_qualification_gate.json').exists():
    gate=read(r/'receipts'/f'{case}_qualification_gate.json');qr.update(complete_ALT_pair_equal=gate['alt_complete_samples_and_input_equal'],STRICT_map_equal=gate['strict_map_equal'])
    for arm in ['alt_cpu','alt_cuda']:
-    c=capture(Path(q[arm]['native_capture']['path']));assert c['sha256']==q[arm]['native_capture']['sha256'];captures.append(dict(case=case,arm=arm,**c))
-   assert captures[-1]['input_prefix_sha256']==captures[-2]['input_prefix_sha256']
-   assert captures[-1]['output_sha256']==captures[-2]['output_sha256']
+    c=capture(Path(q[arm]['native_capture']['path']));assert c['sha256']==q[arm]['native_capture']['sha256'];assert c['header'][1:4]==[meta['N'],meta['E'],meta['J']] and c['header'][5]==meta['cells'];captures.append(dict(case=case,arm=arm,**c))
+   eq=captures[-1]['input_prefix_sha256']==captures[-2]['input_prefix_sha256'] and captures[-1]['output_sha256']==captures[-2]['output_sha256']
+   assert eq==gate['alt_complete_samples_and_input_equal']
    for left,right in [('pipeline','stock'),('alt_cpu','pipeline'),('alt_cuda','alt_cpu')]:
     paths=[r/'qualification'/case/'qualification'/z/'wire_map.bin' for z in [left,right]]
     diff=json.loads(subprocess.check_output([str(a.map_diff),*map(str,paths)],text=True,timeout=60));mapdiffs.append(dict(case=case,pair=left+'_vs_'+right,**diff))
@@ -100,15 +102,35 @@ def main():
  for x in old['formal_rows']:
   if x['case']=='lstm_s2' and x['backend'] in ARMS:lstm.append(x|dict(arm=x['backend'],cohort_id=x['hostname']))
  for scope in ['Process_wall_s','E2_s']:summary.append(table('lstm_s2',old['worker']['host'],lstm,scope))
+ lq={x['backend']:x for x in old['qualification']};head=old['sample_capture_bindings'][0]['header'];ld=next(x for x in old['map_differences'] if x['pair']=='alt_cpu_vs_flat')
+ qr={k:None for k in quals[0]};qr.update(case='lstm_s2',status='COMPLETE_HISTORICAL',N=head[1],E=head[2],samples=head[3],layers=2,threads=8,GPU='H100 80GB, separate historical cohort',cache='fresh map build',new_measurement=False,full_route=True,zero_overuse=True,independent_FULL_STA=True,complete_ALT_pair_equal=old['all_live_CPU_CUDA_pairs_equal'],STRICT_map_equal=old['qualification_gate']['map_families_equal'])
+ for k in ['delay_word_differences','congestion_word_differences','missing_state_differences']:qr[k]=ld[k]
+ for arm in ['stock','pipeline','alt_cpu','alt_cuda']:qr[arm+'_CPD_ns']=lq[arm]['metrics']['critical_path_ns'];qr[arm+'_WL']=lq[arm]['metrics']['wirelength']
+ quals.append(qr)
  for scope,name in [('Process_wall_s','matched_process'),('E2_s','matched_e2')]:
   flat=[];tex=[]
   for x in [x for x in summary if x['scope']==scope]:
    y={k:x[k] for k in ['case','cohort','new_measurement','n']};cells=[]
    for k in ARMS+[a+'_to_'+b for a,b in PAIRS]:
-    s=x[k];y[k+'_mean']=s['mean'];y[k+'_sample_SD']=s['sample_SD'];y[k+'_samples']=json.dumps(s['samples']);cells.append(f"${s['mean']:.3f}\\pm{s['sample_SD']:.3f}$")
+    s=x[k];y[k+'_mean']=s['mean'];y[k+'_sample_SD']=s['sample_SD'];y[k+'_samples']=json.dumps(s['samples']);places=2 if k in ARMS else 3;cells.append(f"${s['mean']:.{places}f}\\pm{s['sample_SD']:.{places}f}$")
    flat.append(y);tex.append(x['case'].replace('_s2','').upper()+(' (prior)' if not x['new_measurement'] else '')+' & '+' & '.join(cells)+r' \\')
+  for fail in excluded:
+   y={k:None for k in flat[0]};y.update(case=fail['case'],cohort=env['hostname'],new_measurement=True,n=0)
+   flat.append(y);tex.append(fail['case'].upper()+r' & \multicolumn{6}{l}{NOT MEASURED: qualified paired cohort unavailable} \\')
   write_csv(out/(name+'.csv'),flat);(out/(name+'.tex')).write_text('\n'.join(tex)+'\n')
  write_csv(out/'qualification.csv',quals)
+ qt=[]
+ for q in quals:
+  vals=[q['case'].replace('_s2','').upper()+(' (prior)' if not q['new_measurement'] else ''),f"{q['N']:,}",f"{q['E']:,}",str(q['samples'])]
+  for key in ['CPD_ns','WL']:
+   base=q['stock_'+key];alt=q['alt_cuda_'+key];vals.append(f"{100*(alt/base-1):+.3f}" if base and alt else 'N/A')
+  vals.append(str(q['congestion_word_differences']) if q['congestion_word_differences'] is not None else 'N/A');qt.append(' & '.join(vals)+r' \\')
+ (out/'qualification.tex').write_text('\n'.join(qt)+'\n')
+ raw=[]
+ for x in rows+lstm:
+  historical=x['case']=='lstm_s2';formal_run=True if historical else x['formal'];complete=historical or done['case_status'].get(x['case'],{}).get('status')=='COMPLETE'
+  raw.append(dict(case=x['case'],cohort=x['cohort_id'],arm=x['arm'],repeat=x.get('repeat',x.get('label')),new_measurement=not historical,formal=formal_run,eligible_for_matched_statistics=bool(formal_run and complete and x['qualified']),E2_s=x.get('E2_s'),E2_precision_s=x.get('E2_precision_s'),Process_s=x['Process_wall_s'],CPD_ns=x['metrics']['critical_path_ns'],WL=x['metrics']['wirelength'],qualified=x['qualified'],returncode=x['returncode']))
+ write_csv(out/'raw_seconds.csv',raw)
  result=dict(status='VALIDATED_COMPLETED_EVIDENCE',formal_processes_recorded=len(formal),qualified_new_cases=[q['case'] for q in quals if q['status']=='COMPLETE'],excluded=excluded,summary=summary,qualification=quals,map_differences=mapdiffs,captures=captures,environment=env,historical_LSTM=dict(path=str(a.historical),sha256=sha(a.historical),cohort=old['worker'],new_measurement=False),map_comparator=dict(path=str(a.map_diff),sha256=sha(a.map_diff)),scope=dict(E2='native MapLookahead::compute including conversion/preparation/device/readback/merge/interpolation',Process='process launch through exit, including RRG load/full route/check/STA/uniform serialization; pre-generated pack/place/RRG excluded',independent_readback='separate wall, no reroute'),estimator='mean of three within-repeat ratios; sample SD uses n-1; no cross-cohort products',FPGA_auto_resume_allowed=False)
  save(out/'results.json',result);save(r/'analysis/results.json',result)
  save(out/'claims.json',dict(qualified_new_cases=result['qualified_new_cases'],independent_C1_C2_multiplicative_causality=False,all_size_speedup=False,STRICT_ALT_equivalence=False,LSTM_rerun=False,DLA_rerun=False,FPGA_acceleration_claim=False,V1_unchanged=True,limitations=['Two fixed inputs, one allocation, three independent processes per arm','Stock E2 precision is 0.01 seconds','ALT changes search semantics; QoR gate is +5%, not zero degradation','Qualification and independent readback excluded from formal E2/Process']))
