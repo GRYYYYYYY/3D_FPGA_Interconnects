@@ -70,3 +70,15 @@ V2 is a separate descendant of V1. Qualified new tables/interpretation and empir
 - Independent paper branch `paper/dac2027-cpu-gpu-matched-v2-20261117`, directory `paper/dac2027_cpu_gpu_algorithm_v2/`.
 
 Software completion does not mark FPGA physical completion. No automatic next research stage is scheduled.
+
+## Published successor and final state
+
+V2 was frozen and published at full remote commit
+`b0587c7e310073d04b1ba1e85e26a40ae0212389`. It binds completed experiment
+evidence commit `30bc11372b173165c0b7bf2574b21c8fddaa8eff`. Both full remote
+SHAs were verified; final publication details and both versions' artifact
+hashes are in `accel/lookahead/gemm_bnn_native_completion/receipts/final_publication.json`.
+The V1 ZIP is also mirrored byte-for-byte under `releases/V1/` for convenient
+remote download; its already delivered original is unchanged.
+All software work is complete, with FPGA still paused, author approval false
+and no external submission or next research stage.
