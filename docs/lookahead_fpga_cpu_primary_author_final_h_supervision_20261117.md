@@ -1,4 +1,12 @@
-# Author-final paper closed; h supervision remains open
+# Author-final paper closed; h terminal collected and audited
+
+Terminal update: h route failed; the original collector completed all21groups
+and saved the error DCP at2026-11-17 07:05:09UTC. MCP reports idle/code1/queue0.
+The original observer recorded terminal07:05:38UTC and exited normally; it was
+not killed or restarted. Current Codex conversation performed final audit and
+publication. See [terminal audit, claim ledger and recovery index](lookahead_fpga_cpu_primary_h_terminal_20261117.md).
+The initial live snapshot below is preserved as history. No new EDA or research
+round is scheduled, and the author-final paper remains unchanged.
 
 Paper branch `paper/dac2027-dependency-revision-20261117` has verified remote SHA
 `c8933bac394a1c177725bec6d9a0ccb6af3437a6`. This is the requested two-edit
@@ -7,7 +15,7 @@ It retains six content pages plus one reference page, the same performance
 numbers/boundaries/holdout, and an independently rebuilt anonymous source ZIP.
 No further paper edits or research experiments are scheduled by this task.
 
-## Actual h state and ownership (2026-11-17 03:02:07 UTC)
+## Historical h state and ownership (2026-11-17 03:02:07 UTC)
 
 h is NOT terminal. Last actual log phase is `Phase 3.2 Update Timing`;
 log last written 02:33:51 UTC. Latest observed heartbeat was03:01:24UTC.
@@ -35,7 +43,7 @@ Verified snapshot and flow hashes:
 `accel/lookahead/fpga_cpu_primary/author_final_h_supervision_20261117/`.
 These are independent new observations, not changes to the frozen paper or h inputs.
 
-## Resume the same chain, never launch again
+## Historical in-flight recovery procedure, superseded by terminal audit
 
 Workspace: existing `3D_FPGA_Interconnects_CPU_PRIMARY`, branch
 `accel/lookahead-cpu-primary-closure-20261115`.

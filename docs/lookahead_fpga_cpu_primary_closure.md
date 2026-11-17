@@ -1,6 +1,12 @@
 # CPU-primary L1 complete-core closure
 
-Current paper/physical snapshot: [complete frozen manuscript and h placement](lookahead_fpga_cpu_primary_paper_freeze_20261117.md). Latest user policy: h failure does not automatically launch another architecture; new FPGA success-claim cutoff is2026-11-18 01:00UTC.
+Current terminal result: [h failure audit and evidence index](lookahead_fpga_cpu_primary_h_terminal_20261117.md).
+h route failed; its error DCP and all21report groups completed collection at
+2026-11-17 07:05:09UTC. No qualified frequency or achieved FPGA/CPU speedup
+exists. No new architecture or EDA is authorized. The author-final paper is
+separately complete at`c8933bac394a1c177725bec6d9a0ccb6af3437a6`.
+
+Earlier frozen paper/physical snapshot: [complete frozen manuscript and h placement](lookahead_fpga_cpu_primary_paper_freeze_20261117.md). The internal paper cutoff did not cancel h terminal collection.
 
 Current continuation: [resume identity, resource comparison and claim ledger](lookahead_fpga_cpu_primary_resume_db1d7e454.md).
 
@@ -10,8 +16,9 @@ Earlier frozen publication: [2026-11-16 original f SSI in-flight snapshot](looka
 
 Earlier frozen checkpoint: [2026-11-15 completed and in-flight experiments](lookahead_fpga_cpu_primary_progress_20261115.md). It records the 21:00:20 UTC observation separately from the subsequent qualification evidence in this report.
 
-Status: implementation and verification in progress. This file is updated as
-terminal evidence arrives; it is not a claim of completed FPGA acceleration.
+The following timestamped narrative preserves earlier implementation progress;
+the linked h terminal audit above supersedes its in-flight status. It is not a
+claim of completed FPGA acceleration.
 
 The current single followup h changes only dispatcher return-payload selection.
 It passed local checks and new52-native/11-rejection full-core calibration;

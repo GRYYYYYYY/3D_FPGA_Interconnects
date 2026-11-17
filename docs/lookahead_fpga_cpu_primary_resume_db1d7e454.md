@@ -5,8 +5,11 @@ on the existing `accel/lookahead-cpu-primary-closure-20261115` worktree.
 The 2026-11-16 publication snapshot remains frozen. New observations below are
 timestamped; they are not a claim of an achieved FPGA speedup.
 
-Current recovery point: **h place complete, post-place reports active; full manuscript frozen**.
-See [paper freeze and recovery policy](lookahead_fpga_cpu_primary_paper_freeze_20261117.md) and the final section. Earlier timestamped observations below are historical.
+Current recovery point: **h route failed; error DCP and21terminal report groups collected; author-final paper complete**.
+See [h terminal audit and current claim ledger](lookahead_fpga_cpu_primary_h_terminal_20261117.md).
+The existing observer recorded terminal07:05:38UTC and exited normally. No EDA
+or monitor restart is needed. All timestamped observations and earlier recovery
+instructions below are historical; they do not authorize another architecture.
 
 ## Verified continuation at 2026-11-16 18:04:24 UTC
 
@@ -58,7 +61,7 @@ register-as-latch counts are zero. The source-bound comparison JSON under
 `resource_comparison_after_db1d7e454_a` identifies each actual full-core report;
 no local-module estimates or nonadditive hierarchy sums enter this table.
 
-## Current claim ledger
+## Historical f claim ledger at that observation
 
 | Claim | Status and scope |
 |---|---|
