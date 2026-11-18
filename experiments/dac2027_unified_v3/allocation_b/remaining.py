@@ -3,12 +3,52 @@ import ctypes
 import fcntl
 import os
 from pathlib import Path
+import shutil
 import signal
 import socket
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import worker
+
+
+def verify_original_stock(run):
+    # A separate, untimed qualification with the original executable checks whether
+    # this worker also sees a downstream routing failure without the E2 wrapper.
+    directory = run/'diagnostic/lstm_original_stock'
+    if (directory/'record.json').is_file():
+        return
+    directory.mkdir(parents=True, exist_ok=False)
+    original = worker.bins['stock']
+    assert worker.digest(original['path']) == original['sha256']
+    timed_directory = run/'qualification/lstm/0/stock'
+    invocation = worker.read(timed_directory/'invocation.json')
+    args = invocation['command'].copy()
+    args[0] = original['path']
+    for flag in ('--net_file','--place_file','--route_file','--write_router_lookahead'):
+        index = args.index(flag) + 1
+        assert Path(args[index]).parent == timed_directory
+        args[index] = str(directory/Path(args[index]).name)
+    inputs = worker.cases['lstm']['inputs']
+    for role, name in [('packed_netlist','packed.net'),('placement','fixed.place')]:
+        shutil.copyfile(inputs[role]['path'], directory/name)
+    for item in inputs.values():
+        with open(item['path'],'rb') as stream:
+            while stream.read(8 << 20):
+                pass
+    env = worker.environment('stock',directory,False)
+    diagnostic = dict(case='lstm',arm='stock',phase='untimed_diagnostic',host=socket.gethostname(),
+                      command=args,source_binary=original, before=worker.snapshot(),
+                      purpose='Uninstrumented downstream route and native map qualification')
+    worker.save(directory/'invocation.json',diagnostic)
+    result, _ = worker.execute(args,directory,env)
+    diagnostic.update(result, after=worker.snapshot())
+    for key, filename in [('route_sha256','routed.route'),('map_sha256','wire_map.bin')]:
+        path=directory/filename
+        diagnostic[key] = worker.digest(path) if path.is_file() else None
+    diagnostic['matches_archived_map'] = diagnostic['map_sha256'] == worker.gold['lstm']['strict']
+    worker.save(directory/'record.json',diagnostic)
+    worker.readback(directory)
 
 
 def complete():
@@ -52,6 +92,7 @@ def complete():
             d = record.parent
             if not (d/'readback/record.json').is_file():
                 worker.readback(d)
+        verify_original_stock(run)
         note['finished'] = worker.utc().isoformat()
         note['formal_records'] = len(list((run/'formal/lstm').glob('*/*/record.json')))
         worker.save(run/'lstm_continuation.json', note)
