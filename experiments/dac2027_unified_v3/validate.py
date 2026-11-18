@@ -36,6 +36,8 @@ for p in (run/'formal').glob('*/*/*/record.json'):
         assert cb[cb.index(flag)+1]==value
     assert '--route' in cb and '--analysis' in cb and not {'--place','--pack','--read_router_lookahead'}&set(cb)
     if r['arm'].startswith('alt_'):assert 'VPR_LA_BACKEND' in r['environment']
+if finished and allocation=='c':
+    assert set(records)=={('lstm',arm,repeat) for arm in full+controls for repeat in range(3)}
 status={}
 for c in cases:
     gate_path = run/'qualification'/c/'gate.json'

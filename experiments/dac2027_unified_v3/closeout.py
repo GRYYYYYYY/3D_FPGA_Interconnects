@@ -51,8 +51,9 @@ assert diff.is_file()
 if diff.is_file():
     changes={}
     for case in ('gemm','bnn','lstm'):
-        d=run/'qualification'/case/'0'
-        if (d/'alt_cpu/wire_map.bin').exists():
+        phase='formal' if allocation=='c' else 'qualification'
+        d=run/phase/case/'0'
+        if all((d/arm/'wire_map.bin').is_file() for arm in ('pipeline','alt_cpu')):
             changes[case]=json.loads(subprocess.check_output([diff,d/'pipeline/wire_map.bin',d/'alt_cpu/wire_map.bin'],text=True))
     (audit/'map_differences.json').write_text(json.dumps(changes,indent=2)+'\n')
 if (run/'finished.json').exists(): shutil.copyfile(run/'finished.json',audit/'finished.json')
