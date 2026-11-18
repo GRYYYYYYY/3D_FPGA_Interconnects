@@ -1,14 +1,15 @@
-# Primary evaluation render review
+# Seven-page visual review
 
-The six inspected page images correspond to PDF SHA256 `04e67a33404b188b621142bd684f5207d3c26cfa750edf70fac3a676308604e4`. The clean build has the same digest.
+Reviewed the seven final PDF page renders at a long-edge resolution of 1100 pixels. The PDF is US Letter with an anonymous byline. Fonts are embedded and the clean rebuild has zero unresolved references and zero overfull boxes.
 
-| Page | Visual findings |
+| Page | Visual check |
 |---|---|
-| 1 | The byline and abstract identify the two primary workloads. All percentages in the GEMM figure are legible. |
-| 2 | The dependency diagrams, 12-line STRICT algorithm and proposition fit the columns. |
-| 3 | All 20 lines of the whole-pair wave algorithm and the FP32 conditions are visible. |
-| 4 | The methodology identifies all six configurations and three repeats per primary workload and labels LSTM auxiliary. |
-| 5 | The topology caption distinguishes the primary workloads and LSTM. Results describe the complete two-workload matrix and the LSTM route-tree failure. |
-| 6 | The timing, paired-ratio and QoR tables align within their margins. All 13 references fit. |
+| 1 | Title and anonymous byline clear the two columns. The abstract names all three workloads. Figure 1 has two separately labelled bars, 82.96% and 45.18%, with both denominators in the caption. |
+| 2 | Figure 2 separates cross-group issue from a single ALT wave. Arrows and tile labels remain distinct. Algorithm 1 fits its column, including the numbered merge and return lines. The proposition states its assumptions on this page. |
+| 3 | The proof continues into the first column. Equations (2)–(5) and the twenty lines of Algorithm 2 are visible. The same-bucket loop, closure and shift definitions survive the column breaks. |
+| 4 | Equations (6) and (7) fit with their tags. Methodology describes both workers, binding, launch-to-exit scope, sample SD and fixed-seed interpretation. No clipped code names or formulas. |
+| 5 | Table I spans both columns. Its node, edge and CHANZ counts align. Tables II and III fit the left column with distinct headers for timing scope and shift. Batch service and native timing are distinguished in the captions and text. |
+| 6 | Tables IV and V span the text width with E2/Process subcolumns under all three workload names. Units, signed uncertainty, dashes and numerator/denominator order are legible. The main text records the unresolved qualification failure alongside the successful formal LSTM results. |
+| 7 | Table VI shows CPD and WL changes, signs and the common upper limit. References continue from page 6 in two columns. The final reference and URL fit inside the right margin. |
 
-The pages show no cropped rows, overlapping labels or unresolved references. The font and archive hashes are in rebuild.json.
+The rendered images are review/page-1.png through review/page-7.png. The freeze manifest binds them and the reviewed PDF by SHA256.

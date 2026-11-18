@@ -1,17 +1,19 @@
-# V3 internal author review
+# DAC 2027 V3 · author final review
 
-**Primary evaluation.** GEMM and BNN each completed all six configurations with three matched repeats on one Xeon Platinum 8462Y+/H100 worker. The 36 formal invocations comprise 24 full processes and 12 construction controls. The original plan included 18 additional LSTM runs. LSTM reached auxiliary qualification. V2 and the complete fallback at 2f43d7147904ec498bd944af127c2c4a463a8b63 remain available for the author's submission decision.
+The seven-page anonymous manuscript integrates three measured workloads. The paper branch descends from 7050936c06dcfc3a19af5593168dc795e1202b20, the verified HEAD of the preceding V3 primary paper. Its predecessor d999a250f8e9358b264c713095a050b8f8467819 and the complete fallback at 2f43d7147904ec498bd944af127c2c4a463a8b63 remain archived. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
 
-## Claims and supporting records
+| Workload | Frozen allocation | Formal runs | Stock/ALT CUDA E2 | Stock/ALT CUDA Process |
+|---|---|---:|---:|---:|
+| GEMM | B | 18 | 20.033 ± 0.237 | 1.795 ± 0.012 |
+| BNN | B | 18 | 19.966 ± 0.375 | 1.879 ± 0.022 |
+| LSTM | C | 18 | 28.057 ± 0.896 | 2.282 ± 0.050 |
 
-- The timed worker used eight physical cores on NUMA 0, a ten-CPU quota and 200 GiB. All formal intervals are disjoint. The worker, GPU, preflight and binary bindings, raw nanosecond records, sample SDs and ratios are archived on experiment/dac2027-unified-v3-20261118 at 671a31e1c9fd18d2242a5c32c4d53ac5f50ec992, under experiments/dac2027_unified_v3/allocation_b/audit.
-- All 36 raw timing rows were checked against the original processes. All 20 mean/SD time rows and 26 mean/SD paired-ratio rows were independently recomputed. The three repeats per cell describe process variation for a fixed input and seed.
-- In GEMM and BNN order, Stock/ALT CUDA construction ratios are 20.03 and 19.97. Corresponding Process ratios are 1.80 and 1.88. Figure 1 uses the new GEMM records. Mean Stock E2 was 140.18 s out of 300.61 s, a 46.63% share. The archive reconciles the older 82.96% two-stage subtotal with the 45.18% historical Process denominator.
-- The three original XML files all have two layers. All 40 contexts were retained per case. Stock and STRICT maps agreed on all three workloads. ALT CPU/CUDA captures and maps agreed on each workload, with changed congestion representatives relative to STRICT.
-- LSTM Stock wrote the expected wire map, then faulted in native parallel route-tree construction when the predecessor edge was invalid. Historical Stock completed the same inputs. The origin of the invalid predecessor remains open. The three LSTM candidate routes passed independent checks and lack a matched Stock CPD/WL reference.
-- All 47 emitted routes passed independent FULL/STA. The 44 scored invocations met the same +5% CPD/WL thresholds with zero overuse. The original worker performed 45 readbacks. The last two GEMM readbacks ran on the editing host after termination. Their elapsed times are excluded from performance comparisons.
-- Inspire automatically recycled allocation B at 16:43:50 UTC under the workspace utilization rules. The current GPU rule specifies three hours and a threshold of 40%. Reservation A is archived at 37d0193538344f0117317eb76d9be530e91f0a66. [Investigation and source receipts](review/ALLOCATION_B_AND_LSTM_STOCK.md)
+Each workload has four full-process arms and two E2-only controls, each with three fresh processes. The two workers share the CPU/GPU model and resource configuration. The full-process time includes routing and all launch-to-exit overhead. A speedup is the mean of three within-workload paired ratios. Each SD describes variation at one fixed input and seed. The paper covers two-layer graphs.
 
-## Build and review
+All 54 formal routes passed independent FULL/STA, zero-overuse checks and Stock-relative CPD/WL thresholds. Including the qualification invocations gives 65 unique emitted routes and 62 scored passes. A separate original-binary diagnostic also passed. The earlier LSTM Stock fault remains in the qualification record. FPGA migration was observed passively in PAUSED_BY_USER_BUDGET_DECISION_REQUIRED state during integration.
 
-The anonymous source ZIP rebuilds the PDF byte for byte in a clean directory with TeX Live 2026. The page images and page-by-page review are under review/. All fonts are embedded. The manuscript has no unresolved references or overfull boxes. The experiment heartbeat at closeout records PAUSED_BY_USER_BUDGET_DECISION_REQUIRED for the FPGA migration. Author approval and external submission remain pending.
+- [Manuscript](main.pdf) and [anonymous source](anonymous_source.zip)
+- [Raw seconds](review/raw_seconds.csv), [time statistics](review/seconds.csv) and [paired ratios](review/paired.csv)
+- [Distinct route counts](review/route_counts.csv) and [invocation-level QoR](review/routes.csv)
+- [Claim–evidence ledger](review/CLAIM_EVIDENCE.md), [E1 scope audit](review/E1_AUDIT.md) and [LSTM fault investigation](review/ALLOCATION_B_AND_LSTM_STOCK.md)
+- [Page-by-page visual review](review/VISUAL_REVIEW.md), [clean-directory rebuild](review/rebuild.json), [freeze manifest](paper_freeze.json) and [checksums](SHA256SUMS)

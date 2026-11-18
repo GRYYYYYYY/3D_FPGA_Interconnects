@@ -38,6 +38,7 @@ with tempfile.TemporaryDirectory() as tmp:
                  pages=int(re.search(r'Pages:\s+(\d+)',info)[1]),clean_text_identical=True,embedded_fonts=True,
                  overfull_boxes=0,unresolved_references=0,sha256_pdf=sha(here/'main.pdf'),
                  sha256_clean_pdf=sha(clean/'main.pdf'),sha256_zip=sha(archive),files={p.relative_to(here).as_posix():sha(p) for p in files})
+    assert receipt['pages'] == 7
     assert receipt['sha256_pdf']==receipt['sha256_clean_pdf']
     (review/'rebuild.json').write_text(json.dumps(receipt,indent=2)+'\n')
     (review/'fonts.txt').write_text(fonts)
