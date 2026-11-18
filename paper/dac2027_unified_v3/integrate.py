@@ -34,8 +34,9 @@ def val(c,a,b,m):return float(paired[c,a,b,m]['mean'])
 def series(a,b,m):return ', '.join(fmt(val(c,a,b,m)) for c in cases)
 def avg(rs,k):return statistics.mean(float(r[k]) for r in rs)
 def group(c,a='pipeline',b='alt_cuda'):return [r for r in amd if r['case']==c and r['source']==a and r['candidate']==b]
-def table(title,key,lines):
-    return r'\begin{table*}[t]\centering\caption{'+title+r'}\label{'+key+r'}\begin{tabular}{lrrrrrr}\toprule'+ '\n'+r' & \multicolumn{2}{c}{GEMM} & \multicolumn{2}{c}{BNN} & \multicolumn{2}{c}{LSTM}\\'+ '\n'+r' & E2 & Process & E2 & Process & E2 & Process\\\midrule'+'\n'+box(lines)+r'\bottomrule\end{tabular}\end{table*}'
+def table(title,key,lines,metrics=("E2", "Process")):
+    header=" & ".join(["", *(list(metrics)*len(cases))])
+    return r'\begin{table*}[t]\centering\caption{'+title+r'}\label{'+key+r'}\begin{tabular}{lrrrrrr}\toprule'+ '\n'+r' & \multicolumn{2}{c}{GEMM} & \multicolumn{2}{c}{BNN} & \multicolumn{2}{c}{LSTM}\\'+ '\n'+header+r'\\\midrule'+'\n'+box(lines)+r'\bottomrule\end{tabular}\end{table*}'
 times=[[names[a]]+[pm(seconds[c,a,m]) if (c,a,m) in seconds else '---' for c in cases for m in ('E2','Process')] for a in arms]
 tex('tables/unified_times.tex',table('Native seconds, mean and sample SD of three fresh processes. Group and Flat are construction controls. Each full invocation supplies both observations.','tab:time',times))
 contrasts=[('group','flat'),('group','pipeline'),('flat','pipeline'),('stock','pipeline'),('pipeline','alt_cuda'),('stock','alt_cuda'),('alt_cpu','alt_cuda')]
@@ -67,7 +68,7 @@ part=r'''\subsection{Matched Native Construction and Process}
 part+='Stock/Pipeline construction speedups were '+series('stock','pipeline','E2')+' for GEMM, BNN and LSTM, respectively (Tables~\\ref{tab:time} and~\\ref{tab:ratios}). The corresponding Process ratios were '+series('stock','pipeline','Process')+'. '
 part+='Across the same workloads, eliminating Pipeline construction while holding each repeat\'s remainder fixed gives mean upper bounds of '+', '.join(fmt(avg(group(c),'zero_E2')) for c in cases)+'. Substituting measured CUDA construction predicts '+', '.join(fmt(avg(group(c),'replace_E2')) for c in cases)+', versus observed Pipeline/CUDA ratios of '+series('pipeline','alt_cuda','Process')+'.\n'
 part+=r'\subsection{Backend Comparison: ALT CPU versus ALT CUDA}'+'\n'
-part+='With the ALT rule fixed, the CUDA backend gives E2 speedups of '+series('alt_cpu','alt_cuda','E2')+'. End-to-end ratios fall to '+series('alt_cpu','alt_cuda','Process')+'. Both measurements charge conversion and output handoff. Process additionally includes RR loading, routing and the native checks.\n'
+part+='With the ALT rule fixed, the CUDA backend gives E2 speedups of '+series('alt_cpu','alt_cuda','E2')+'. The corresponding Process ratios are '+series('alt_cpu','alt_cuda','Process')+'. Both measurements charge conversion and output handoff. Process additionally includes RR loading, routing and the native checks.\n'
 results=results[:start]+part+results[end:]
 results=results.replace('Matched E2 measurements determine whether this storage bound costs construction time.',
                         'Group/Pipeline construction ratios were '+series('group','pipeline','E2')+' on GEMM, BNN and LSTM, respectively. Flat/Pipeline ratios were '+series('flat','pipeline','E2')+' (Table~\\ref{tab:ratios}).')
@@ -80,15 +81,27 @@ qpassed=sum(r['stock_gate']=='True' and r['independent_FULL_STA']=='True' and r[
 results=results[:n]+'Stock and STRICT wire-map digests matched on all three cases. Each ALT CPU/CUDA pair passed complete sample-output and wire-map comparison. Against STRICT, ALT changed '+', '.join(clause)+' congestion words on GEMM, BNN and LSTM, respectively. '
 if all(d['delay_word_differences']==d['missing_state_differences']==0 for d in maps.values()):results+='Delay words and missing masks agreed. '
 results+=f'{qpassed} of {len(qor)} routed invocations passed the Stock-relative QoR gate, independent FULL/STA and zero-overuse checks. '
-for c in cases:
-    rs=[r for r in qor if r['case']==c and r['arm']!='stock' and r['phase']=='formal']
-    results+=label(c)+' had maximum signed CPD/WL changes of '+f"{max(float(r['CPD_delta_pct']) for r in rs):+.2f}\\% / {max(float(r['WL_delta_pct']) for r in rs):+.2f}\\%. "
+# Keep the greatest signed deviation for each metric; either can fail the one-sided gate.
+qor_lines=[]
+for arm in arms[1:]:
+    cells=[names[arm]]
+    for case in cases:
+        observed=[row for row in qor if row['case']==case and row['arm']==arm and row['phase']=='formal']
+        assert len(observed)==3
+        cells.extend(f"{max(float(r[metric]) for r in observed):+.2f}" for metric in ('CPD_delta_pct','WL_delta_pct'))
+    qor_lines.append(cells)
+qor_table=table(
+    r'Maximum signed CPD and WL changes (\%) relative to repeat-matched Stock. Each column takes its maximum over three formal routes. The common upper limit is $+5\%$.',
+    'tab:qor',qor_lines,metrics=('CPD','WL')
+)
+tex('tables/unified_qor.tex',qor_table)
+results+=r'Table~\ref{tab:qor} reports the greatest Stock-relative change for each candidate and workload. '+'\n'+r'\input{tables/unified_qor}'+'\n'
 failed = [r for r in qor if r['stock_gate']!='True' or r['independent_FULL_STA']!='True' or r['overuse']!='0']
 if failed:
     from collections import Counter
     failures=Counter((r['case'],r['arm']) for r in failed)
     results+='Failed qualifications by workload and configuration include '+', '.join(f"{c.upper()} {names[a]} ({n})" for (c,a),n in sorted(failures.items()))+'. '
-results+='The archive identifies each route by its original SHA256. Repeats quantify process variation on one allocation. Graph family, layer count, seed coverage and dense GPU memory requirements limit generalization. Compatible lookahead caches can remove construction entirely.\n'
+results+='The raw records retain CPD, wirelength, overuse, FULL/STA and the complete wire-map digest for each invocation. The archive identifies each route by its original SHA256. Repeats quantify process variation on one allocation. Graph family, layer count, seed coverage and dense GPU memory requirements limit generalization. Compatible lookahead caches can remove construction entirely.\n'
 tex('sections/native_results.tex',results)
 intro=draft('sections/introduction.tex')
 intro+=r'\input{figures/motivation}'+'\n'
