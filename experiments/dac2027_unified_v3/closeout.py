@@ -3,11 +3,22 @@ import csv, hashlib, json, shutil, statistics, subprocess, zipfile
 from pathlib import Path
 here=Path(__file__).resolve().parent
 from cohort import run
-from cohort import audit
+from cohort import allocation, audit
 read=lambda p:json.loads(p.read_text())
 def writer(name,rows,fields):
     with (audit/name).open('w') as f:
         w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
+
+# The reservation command enters this script after the original serial worker exits.
+# The editing host can rebuild reports without launching any workload.
+if allocation == 'b' and (run/'finished.json').exists():
+    import socket
+    environment = read(run/'environment.json')
+    continuation = run/'lstm_continuation.json'
+    if (socket.gethostname() == environment['host']
+            and 'lstm' not in read(run/'finished.json')['eligible']
+            and not (continuation.exists() and read(continuation).get('finished'))):
+        subprocess.run(['python3', here/'allocation_b/remaining.py'], check=True)
 
 subprocess.run(['python3',here/'summarize.py'],check=True)
 paths=list((run/'formal').glob('*/*/*/record.json'))

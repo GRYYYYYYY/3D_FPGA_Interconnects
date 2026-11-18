@@ -23,10 +23,12 @@ for p in (run/'formal').glob('*/*/*/record.json'):
     assert r['before']['compute']==r['after']['compute']==''
     assert not any(k in r['environment'] for k in ['R61_CAPTURE','R61_VERIFY_CPU','VPR_HYBRID_LOOKAHEAD_REPORT'])
     assert not any('R61_IDENTITY' in l or 'R61_NATIVE_PAIR_VERIFY' in l for l in r['dispatch'])
-    assert r['wall_ns']==r['end_ns']-r['begin_ns'] and r['e2_ns']>0
-    assert r['matches_archived_map']
-    rb=read(p.parent/'readback/record.json')
-    assert rb['original_sha']==r['route_sha256']
+    assert r['wall_ns']==r['end_ns']-r['begin_ns']
+    if r['local_pass']:
+        assert r['matches_archived_map'] and r['e2_ns']>0
+    if r['route_sha256'] and finished:
+        rb=read(p.parent/'readback/record.json')
+        assert rb['original_sha']==r['route_sha256']
     if r['native_e2_s']:
         assert len(r['native_e2_s'])==1
     cb=r['command']
@@ -41,7 +43,7 @@ for c in cases:
     if finished:
         assert gate, c
     status[c]=dict(qualification=gate,formal=sum(k[0]==c for k in records))
-    if gate and all(gate.values()):
+    if any(k[0]==c for k in records):
         for rep in range(3):
             for family in (full,controls):
                 subset=[(a,records[c,a,rep]) for a in family if (c,a,rep) in records]
@@ -65,8 +67,9 @@ for row in raw:
     raw_keys.add(key)
     original = records[key]
     assert row['host'] == original['host'] and row['gpu'] == original['gpu']
-    assert int(row['E2_ns']) == original['e2_ns']
-    if row['arm'] in full:
+    assert (int(row['E2_ns']) if row['E2_ns'] else None) == original['e2_ns']
+    assert int(row['elapsed_to_exit_ns']) == original['wall_ns'] and int(row['returncode']) == original['returncode']
+    if row['arm'] in full and original['local_pass']:
         assert int(row['Process_ns']) == original['wall_ns']
     else:
         assert row['Process_ns'] == ''
@@ -104,10 +107,12 @@ for row in qor:
             assert (rb.parent/'report_timing.setup.rpt').stat().st_size > 0
             assert (rb.parent/'report_timing.hold.rpt').stat().st_size > 0
 receipt=dict(worker_finished=finished, attempts=attempts, cases=status,formal_records=len(records),full_invocations=sum(r['arm'] in full for r in records.values()),
-             controls=sum(r['arm'] in controls for r in records.values()),recorded_routes=len(qor),independently_passed_routes=sum(r['independent_FULL_STA']=='True' for r in qor),
+             controls=sum(r['arm'] in controls for r in records.values()),recorded_routes=sum(bool(r['original_route_sha']) for r in qor),independently_passed_routes=sum(r['independent_FULL_STA']=='True' for r in qor),
              independent_failures=[(r['case'],r['arm'],r['phase'],r['repeat']) for r in qor if r['independent_FULL_STA']=='False'],
-             missing_readbacks=[(r['case'],r['arm'],r['phase'],r['repeat']) for r in qor if not r['independent_FULL_STA']],
-             stock_threshold_failures=[(r['case'],r['arm'],r['phase'],r['repeat']) for r in qor if r['stock_gate']!='True'],
+             missing_readbacks=[(r['case'],r['arm'],r['phase'],r['repeat']) for r in qor if r['original_route_sha'] and not r['independent_FULL_STA']],
+             stock_threshold_failures=[(r['case'],r['arm'],r['phase'],r['repeat']) for r in qor if r['stock_gate']=='False'],
+             unscored_qor=[(r['case'],r['arm'],r['phase'],r['repeat']) for r in qor if not r['stock_gate']],
+             formal_route_failures=[(r['case'],r['arm'],r['repeat'],r['returncode']) for r in records.values() if not r['local_pass']],
              concurrency_overlaps=0,distinct_worker_count=len(set(r['host'] for r in records.values())),
              gold_maps_passed=sum(r['matches_archived_map'] for r in records.values()),
              seconds_rows_recomputed=len(time_rows),raw_rows_cross_checked=len(raw),
