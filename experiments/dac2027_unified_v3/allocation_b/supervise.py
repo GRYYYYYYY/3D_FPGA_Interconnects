@@ -107,12 +107,16 @@ def build_manuscript(exp_sha, verification):
         f"# Measured V3 render\n\nThe clean rebuild produced {receipt['pages']} pages. "
         "The page PNGs correspond to the measured manuscript. Individual visual inspection of this version is pending.\n")
     (paper / 'AUTHOR_REVIEW.md').write_text(
-        f"# Measured V3 for author review\n\nAll 54 formal invocations were recorded on worker B. "
+        f"# Measured V3 for author review\n\nAll 54 planned formal invocations were attempted on worker B. "
+        f"Of these, {len(verification['formal_route_failures'])} failed local route qualification. "
+        "Only metrics with three valid observations receive a mean and sample SD. "
+        "The LSTM Stock qualification failure and every formal failure remain in the archive. "
         f"The evidence commit is `{exp_sha}`. All {verification['speedup_rows_recomputed']} comparison rows "
         "were recomputed from matched native processes.\n\n"
         f"Independent checks passed for {verification['independently_passed_routes']} of "
         f"{verification['recorded_routes']} routes. The number outside the common Stock-relative "
         f"CPD/WL threshold was {len(verification['stock_threshold_failures'])}. "
+        f"The number without a valid Stock comparison was {len(verification['unscored_qor'])}. "
         "Individual observations, failures and original digests are archived alongside the raw process records.\n\n"
         "The anonymous PDF reproduced byte for byte in a clean directory. Page-by-page visual review and author approval "
         "are pending. The previous complete fallback is 2f43d7147904ec498bd944af127c2c4a463a8b63.\n")
@@ -123,7 +127,22 @@ def build_manuscript(exp_sha, verification):
 
 def main():
     with (run / 'observer.lock').open('a') as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        finish_existing = sys.argv[1:] == ['--finish-existing']
+        fcntl.flock(lock, fcntl.LOCK_EX if finish_existing else fcntl.LOCK_EX | fcntl.LOCK_NB)
+        published = run/'publication.json'
+        if finish_existing:
+            # The original observer owns polling and evidence publication until it
+            # releases this lock. Only then can the measured-paper stage run.
+            if not published.is_file():
+                return
+            result = json.loads(published.read_text())
+            if result.get('paper_sha') or not (audit/'verification.json').is_file():
+                return
+            verification = json.loads((audit/'verification.json').read_text())
+            if verification['formal_records'] == 54:
+                result['paper_sha'] = build_manuscript(result['experiment_sha'], verification)
+                save(published, result)
+            return
         observe()
         with (audit / 'coverage.csv').open() as stream:
             coverage = list(csv.DictReader(stream))
@@ -132,7 +151,7 @@ def main():
                           'Archive reservation B timing, readbacks, qualification and paired statistics')
         result = {'experiment_sha': exp_sha, 'complete_matrix': complete}
         save(run / 'publication.json', result)
-        if complete and (audit / 'verification.json').exists():
+        if len(coverage) == 18 and all(int(row['recorded']) == 3 for row in coverage) and (audit / 'verification.json').exists():
             verification = json.loads((audit / 'verification.json').read_text())
             result['paper_sha'] = build_manuscript(exp_sha, verification)
             save(run / 'publication.json', result)
