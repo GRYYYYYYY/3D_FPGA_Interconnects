@@ -1,11 +1,16 @@
 \section{Experimental Methodology}
 \subsection{Workloads and Unified Experimental Setup}
 GEMM (seed 1, width 100), BNN (seed 1, width 120) and LSTM (seed 2, width 120) each use their original architecture, BLIF, packed netlist, placement and complete RR XML. Each workload retains all 40 sampled source contexts. GEMM and BNN ran on one worker. LSTM ran on a second worker with the same hardware model and resource configuration. Each workload completed all configurations on its own worker. Both workers used an Intel Xeon Platinum 8462Y+, one NVIDIA H100 80GB, a ten-CPU quota and 200 GiB of memory. Host code ran on eight physical cores (0--7) on NUMA node 0 with memory bound to that node. CPU governors used performance mode. The GPU retained adaptive clocks and a 700 W power limit. The baseline is VTR revision \texttt{0b912334fdd8}, built in Release mode with assertion level 2. The compiler was GCC 13.3 and the CUDA toolkit was 12.8.
-\begin{table*}[t]\centering\caption{Original routing-resource graphs. Local edges lie within one layer. Spanning edges touch resources whose combined extent covers both layers. Each graph has two layers and 40 samples.}\label{tab:rr}
-\begin{tabular}{lrrrrr}\toprule Case & Nodes & Edges & Local edges & Spanning edges & CHANZ nodes\\\midrule
-GEMM & 9,595,752 & 84,213,916 & 72,453,916 & 11,760,000 & 185,856\\
-BNN & 4,102,608 & 39,480,616 & 34,749,352 & 4,731,264 & 75,264\\
-LSTM & 4,166,724 & 40,142,314 & 35,325,418 & 4,816,896 & 76,614\\\bottomrule\end{tabular}\end{table*}
+\begin{table}[t]\centering\caption{Original routing-resource graphs. Local edges lie within one layer. Spanning edges touch resources whose combined extent covers both layers. Each graph has two layers and 40 samples.}\label{tab:rr}
+\begin{tabular}{@{}lrrr@{}}\toprule
+Resource count & GEMM & BNN & LSTM\\\midrule
+Nodes & 9,595,752 & 4,102,608 & 4,166,724\\
+Edges & 84,213,916 & 39,480,616 & 40,142,314\\
+Local edges & 72,453,916 & 34,749,352 & 35,325,418\\
+Spanning edges & 11,760,000 & 4,731,264 & 4,816,896\\
+CHANZ nodes & 185,856 & 75,264 & 76,614\\
+\bottomrule\end{tabular}
+\end{table}
 \subsection{Timing Metrics and Measurement Protocol}
 \constructiontime{} measures the complete \texttt{MapLookahead::compute} call with a monotonic timer. It includes graph conversion, preparation, service, output handoff, group merge, interpolation, source/OPIN processing and derived minima. \processtime{} runs from native process launch to exit. It includes RR XML loading, initialization, construction, timing-driven routing, checking, STA and serialization. Packing, placement, RR graph generation, input preparation and independent route readback fall outside this interval. The same full invocation supplies both observations in nanoseconds. The original internal timers provide independent scope checks.
 

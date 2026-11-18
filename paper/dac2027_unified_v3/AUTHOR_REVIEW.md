@@ -1,6 +1,6 @@
 # DAC 2027 V3 · author final review
 
-The seven-page anonymous manuscript integrates three measured workloads. This figure revision descends from the frozen terminology revision f8798abacb4b31a8b0252557d59a6792a3de1d03. Figures 3 and 4 replace its two performance tables. Each speedup arrow runs from the numerator configuration to the denominator configuration. The body ends on page six and the references occupy page seven. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
+The seven-page anonymous manuscript integrates three measured workloads. This single-column Table I revision builds on the figure revision at 67e309bc25b5a031d639d43e970ec02a4f1383ba, which descends from the frozen terminology revision f8798abacb4b31a8b0252557d59a6792a3de1d03. Figures 3 and 4 replace its two performance tables. Each speedup arrow runs from the numerator configuration to the denominator configuration. The body ends on page six and the references occupy page seven. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
 
 | Workload | Frozen allocation | Formal runs | Stock/ALT CUDA Lookahead Construction Speedup | Stock/ALT CUDA End-to-End Process Speedup |
 |---|---|---:|---:|---:|
