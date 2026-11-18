@@ -1,15 +1,13 @@
 """Verify cohort integrity without running VPR."""
-from collections import Counter
 from pathlib import Path
 import csv,hashlib,json,statistics
 here=Path(__file__).resolve().parent
-from cohort import audit
+from cohort import audit, run
 cases=('gemm','bnn','lstm')
 full=('stock','pipeline','alt_cpu','alt_cuda')
 controls=('group','flat')
 def read(p):return json.loads(p.read_text())
 def rows(p):return list(csv.DictReader((audit/p).open()))
-from cohort import run
 finished = (run/'finished.json').is_file()
 if not finished:
     stopped = read(audit/'allocation_stop.json')
@@ -50,11 +48,39 @@ for c in cases:
                 order=[a for a,r in sorted(subset,key=lambda x:x[1]['begin_ns'])]
                 off=rep%len(family);expected=family[off:]+family[:off]
                 assert order==list(expected[:len(order)])
+def verify_three(row, values):
+    assert len(values) == int(row['n']) == 3
+    for i, value in enumerate(values):
+        assert abs(float(row[f'r{i}']) - value) < 1e-12
+    assert abs(float(row['mean']) - statistics.mean(values)) < 1e-12
+    assert abs(float(row['sd']) - statistics.stdev(values)) < 1e-12
+
+
+raw = rows('raw_timing.csv')
+assert len(raw) == len(records)
+raw_keys = set()
+for row in raw:
+    key = (row['case'], row['arm'], int(row['repeat']))
+    assert key not in raw_keys
+    raw_keys.add(key)
+    original = records[key]
+    assert row['host'] == original['host'] and row['gpu'] == original['gpu']
+    assert int(row['E2_ns']) == original['e2_ns']
+    if row['arm'] in full:
+        assert int(row['Process_ns']) == original['wall_ns']
+    else:
+        assert row['Process_ns'] == ''
+
+time_rows = rows('seconds.csv')
+for row in time_rows:
+    field = {'E2': 'e2_ns', 'Process': 'wall_ns'}[row['metric']]
+    values = [records[row['case'], row['arm'], i][field] / 1e9 for i in range(3)]
+    verify_three(row, values)
 for row in rows('paired.csv'):
     c,a,b=row['case'],row['numerator'],row['denominator']
     m='e2_ns' if row['metric']=='E2' else 'wall_ns'
     ratios=[records[c,a,i][m]/records[c,b,i][m] for i in range(3)]
-    assert abs(float(row['mean'])-statistics.mean(ratios))<1e-12 and abs(float(row['sd'])-statistics.stdev(ratios))<1e-12
+    verify_three(row, ratios)
 intervals=sorted((r['begin_ns'],r['end_ns']) for r in records.values())
 assert all(b<=c for (_,b),(c,_) in zip(intervals,intervals[1:]))
 qor=rows('qor.csv')
@@ -84,5 +110,8 @@ receipt=dict(worker_finished=finished, attempts=attempts, cases=status,formal_re
              stock_threshold_failures=[(r['case'],r['arm'],r['phase'],r['repeat']) for r in qor if r['stock_gate']!='True'],
              concurrency_overlaps=0,distinct_worker_count=len(set(r['host'] for r in records.values())),
              gold_maps_passed=sum(r['matches_archived_map'] for r in records.values()),
+             seconds_rows_recomputed=len(time_rows),raw_rows_cross_checked=len(raw),
              speedup_rows_recomputed=len(rows('paired.csv')),archive_sha256=hashlib.sha256((audit/'native_process_records.zip').read_bytes()).hexdigest())
-(audit/'verification.json').write_text(json.dumps(receipt,indent=2)+'\n')
+pending = audit/'verification.tmp'
+pending.write_text(json.dumps(receipt,indent=2)+'\n')
+pending.replace(audit/'verification.json')
