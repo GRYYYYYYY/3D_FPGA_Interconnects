@@ -22,3 +22,5 @@ V1 publication preceded all new runs; V1 commit is
 The final publication receipt is appended to the experiment branch after V2
 push; this earlier immutable evidence commit remains the paper's data source.
 Author approval and external submission are false. FPGA auto-resume is false.
+
+The successor manuscript uses P0 commit 8a7f97603a826862c2e633f054d5fe903d5246a8 and independent P1 evidence commit caeb94c70dea0cef680bc3db683267a0e77098f6. See accel/lookahead/native_alt_cpu_ablation_20261118/results/ at the latter commit.

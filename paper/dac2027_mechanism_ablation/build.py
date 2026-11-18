@@ -49,7 +49,7 @@ def main():
  ap=argparse.ArgumentParser();ap.add_argument('--tectonic',default='tectonic');ap.add_argument('--bundle');a=ap.parse_args()
  compiler=shutil.which(a.tectonic);assert compiler,'Pass --tectonic /path/to/tectonic'
  texcmd=[compiler]+(['-b',a.bundle] if a.bundle else [])
- report=run(['python3','recompute.py'])+run(['python3','recompute_matched.py'])+run(['python3','recompute_mechanism.py']);(HERE/'review/recompute.txt').write_text(report)
+ report=run(['python3','recompute.py'])+run(['python3','recompute_matched.py'])+run(['python3','recompute_mechanism.py'])+run(['python3','recompute_engine_table.py']);(HERE/'review/recompute.txt').write_text(report)
  old=json.loads((HERE/'evidence/prior_submission_hashes.json').read_text())
  for f,h in old.items():assert digest(ROOT/f)==h,'Protected old submission changed: '+f
  refs={k:run(['git','rev-parse',k],ROOT).strip() for k in ['main','accel/lookahead-cpu-primary-closure-20261115']}

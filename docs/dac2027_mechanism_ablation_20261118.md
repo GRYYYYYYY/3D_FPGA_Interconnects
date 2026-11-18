@@ -78,3 +78,7 @@ bnn | 3 | pipeline | 19.5316 | 102.6110 | 67.1197 | 11.0943 | 1538209 | 19 | 0.0
 bnn | 3 | alt_cpu | 19.2065 | 102.3137 | 66.5207 | 11.0943 | 1537866 | 19 | 0.0000 | -0.0223
 
 The raw CSV also includes the qualification processes, map/route digests and per-run pass flags. Each accepted ALT map and capture matched its predeclared identity. The archive index binds original small records, review copies and large worker artifacts. The complete unmodified raw files remain on shared storage.
+
+## Final technical delivery
+
+The worker finished at 2026-11-18T01:30:47.122898+00:00 UTC, 116.91 minutes after first admission. The platform reports job_succeeded and zero allocated nodes. The six-page body and one-page bibliography were rebuilt, checked for anonymity and citations, and inspected page by page. The anonymous ZIP rebuilt independently with identical extracted PDF text. Final PDF SHA256 123c96c29fcc9d82318a1179a1decf6cf5704b548298a1900742ad53683ab644. Final ZIP SHA256 ff3f16eebb64ea1329b951ef8aa438c80fd4dcfc06be0a69e0a9ee3562d37040. The paper binds evidence commit caeb94c70dea0cef680bc3db683267a0e77098f6. The final read-only FPGA snapshot records 159 stopped threads, the original controller locks, matching manager birth identity and original budget digest. The software work is complete. Author approval and submission are pending.

@@ -5,7 +5,7 @@ On the prior eight-core GEMM cohort, STRICT Pipeline reduces construction from 1
 \begin{figure}[t]\centering\input{figures/causal}
 \caption{Construction means and sample SD, three processes per arm/point. Same-cohort Group/Flat/Pipeline controls on BNN (left) and DLA (right); capped routing tails do not establish full-route legality. Error bars are small at this scale.}\label{fig:causal}\end{figure}
 
-In Fig.~\ref{fig:causal}, ten groups of four samples limit group-local concurrency. At eight cores, BNN Group/Flat/Pipeline take $17.41\pm0.33$, $9.32\pm0.15$ and $9.36\pm0.11$ s. Flat and Pipeline independently remove barriers and are nearly equal: the benefit comes from decoupling groups, not a particular Pipeline primitive. At sixteen cores Flat/Pipeline take 5.51/5.39 s, against Group's 17.68 s. DLA shows the same mechanism (34.82/19.55/18.99 s at eight cores). Separate 2D controls also benefit: eight-core BNN-2D takes 7.75/4.23/4.16 s. These are not equal-sized 2D/3D pairs, so layer count is not a causal explanation of time differences.
+With ten groups of four samples, Group limits concurrency to four searches. At eight cores, BNN Group/Flat/Pipeline take $17.41\pm0.33$, $9.32\pm0.15$ and $9.36\pm0.11$ s (Fig.~\ref{fig:causal}). At sixteen cores the times are 17.68/5.51/5.39 s. DLA shows the same pattern (34.82/19.55/18.99 s at eight cores). Both global schedulers benefit from exposing work across groups. Separate eight-core BNN-2D controls take 7.75/4.23/4.16 s on a different graph.
 
 \subsection{Wave Scheduling: Concurrency Versus Work}
 \begin{table}[t]\centering\caption{Historical BNN40 bucket comparison. Work profiles and warm complete-batch seconds on eight physical cores and one H100.}\label{tab:waves}
@@ -24,19 +24,27 @@ Service includes reset, search, closure and materializing outputs, including GPU
 \tableinput{tables/matched_e2.tex}\bottomrule\end{tabular}\end{table*}
 ALT CUDA achieves E2 speedups of \GemmNewPipeBuild\ for GEMM and \BnnNewPipeBuild\ for BNN over Pipeline (Tables~\ref{tab:matchedproc}--\ref{tab:matchede2}). E2 accounts for \EstimateGemmShare\ and \EstimateBnnShare\ of mean Pipeline Process time. Holding the mean remainder fixed, eliminating E2 would give \EstimateGemmZero\ and \EstimateBnnZero\ Process speedups. Substituting mean CUDA E2 instead gives \EstimateGemmReplaced\ for each workload. Actual paired Process speedups are \GemmNewPipeProc\ and \BnnNewPipeProc; other stages can also change.
 
+
+\subsection{Matched Native Engine and Backend Comparison}
+\begin{table}[t]\centering
+\caption{Independent eight-core/H100 cohort. Directly paired speedups ($n=3$, mean $\pm$ sample SD). P: Pipeline, A: ALT CPU, C: ALT CUDA.}\label{tab:engines}
+\begin{tabular}{@{}lrrr@{}}\toprule Case and scope & P/A & A/C & P/C\\\midrule
+\tableinput{tables/engine_ratios.tex}\bottomrule\end{tabular}\end{table}
+Changing the CPU engine and scheduler together yields Process ratios near one (Table~\ref{tab:engines}), including $0.973\pm0.074$ on GEMM. Holding the ALT rule fixed, CUDA speeds construction by $4.690\times$ on GEMM and $4.331\times$ on BNN. The corresponding Process speedups are $1.146\times$ and $1.162\times$.
+
 \subsection{Native LSTM: Five Matched Configurations}
 \begin{table}[t]\centering\caption{Historical LSTM native seconds, mean $\pm$ sample SD ($n=3$); five arms on its own rotated eight-core/H100 cohort.}\label{tab:lstm}
 \begin{tabular}{lrr}\toprule Method & E2 & Process\\\midrule
 \tableinput{tables/lstm.tex}\bottomrule\end{tabular}\end{table}
-CUDA obtains \LstmPipeBuild\ E2 and \LstmPipeProc\ Process acceleration against Pipeline; against Flat, \LstmFlatBuild\ and \LstmFlatProc; against matched ALT CPU, \LstmAltCpuBuild\ and \LstmAltCpuProc. ALT CPU is close to Pipeline: changed search semantics alone do not explain GPU acceleration. 
+On historical LSTM, CUDA achieves \LstmPipeBuild\ E2 and \LstmPipeProc\ Process speedups over Pipeline. Against matched ALT CPU the speedups are \LstmAltCpuBuild\ and \LstmAltCpuProc. Table~\ref{tab:lstm} includes the full five-arm comparison.
 
 \subsection{Semantics, QoR and Size Dependence}
 \begin{table}[t]\centering\caption{Native qualification: nodes/edges in millions; CPD/WL changes (\%) against Stock; $\Delta q$ counts final-map congestion-word changes against STRICT. All cases have two layers and 40 samples; LSTM is historical.}\label{tab:qor}
 \begin{tabular}{lrrrrr}\toprule Case & $N/10^6$ & $M/10^6$ & CPD & WL & $\Delta q$\\\midrule
 \tableinput{tables/qualification_compact.tex}\bottomrule\end{tabular}\end{table}
-Complete ALT CPU/CUDA samples and maps agree on each input. Stock/Pipeline maps also agree, while ALT changes congestion representatives: 50,789 GEMM, 24,434 BNN and 23,111 LSTM words, with zero delay or missing-state differences. Native strict-delay ties and ALT whole-pair improvement remain distinct contracts. Each route independently passes FULL/STA with unchanged own route SHA and zero overuse; equivalent maps do not require identical route SHAs. Every new formal run passes the $+5\%$ CPD/WL gate against both paired controls; this is not a universal zero-loss guarantee.
+Complete ALT CPU/CUDA samples and maps agree. Stock/Pipeline maps also agree. ALT changes only congestion representatives (Table~\ref{tab:qor}), with zero delay or missing-state differences. Each route passes independent FULL/STA with zero overuse and preserves its own SHA. All native runs meet their respective CPD/WL gates.
 
-The separate historical BNN Flat/CUDA cohort gives $3.274\pm0.222\times$ E2 and $1.091\pm0.011\times$ Process ratios; it supplies no denominator for the new Pipeline comparison. Its s38417 negative case remains $0.274\pm0.032\times$ E2 and $0.912\pm0.016\times$ Process. Device initialization, scans and launches can outweigh a small build. ALT CPU improves construction there, but Stock is fastest for Process; no automatic size selector or all-size benefit is established.
+On the historical BNN cohort, CUDA achieves $3.274\pm0.222\times$ E2 and $1.091\pm0.011\times$ Process speedups over Flat. On small s38417 the corresponding ratios fall to $0.274\pm0.032\times$ and $0.912\pm0.016\times$. Initialization, scans and launches can outweigh search savings.
 
 \subsection{Closest Alternative and Cache Applicability}\label{sec:applicability}
-The locked executable exposes \texttt{compressed\_map}, whose embedded assertion and compute source require one layer; the evaluated native graphs have two. This is a static domain exclusion, not a timed failure or superiority claim over supported configurations. Separable is exposed but not qualified or timed here. For ordinary map caching, 36 historical fixed-input reuse records have legal routing and independent FULL/STA checks. They establish valid cache hits, separate from fresh construction; no unobserved cross-design reuse is amortized.
+The locked \texttt{compressed\_map} requires one layer, excluding these two-layer graphs. Separable remains unmeasured. Ordinary caching supports valid reuse: 36 fixed-input cache hits passed independent FULL/STA. Our timings cover fresh construction.
