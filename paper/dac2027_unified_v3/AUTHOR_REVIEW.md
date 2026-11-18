@@ -19,3 +19,7 @@ The paper now reports BNN qualification and the original graph-loader diagnostic
 The anonymous ZIP includes the algorithm2e, ifoddpage and relsize packages. A fresh directory rebuilt the six-page PDF byte for byte using TeX Live 2026. See the page review and the rebuild receipt in `review/`. The paper remains an internal draft pending unified measurements. The complete fallback at `2f43d7147904ec498bd944af127c2c4a463a8b63` remains available.
 
 The independent GEMM Stock readback also passed. All five completed routes reproduced their recorded CPD and wirelength. The experiment archive and verification receipt are pinned at `37d0193538344f0117317eb76d9be530e91f0a66` on `experiment/dac2027-unified-v3-20261118`.
+
+## Fresh reservation B
+
+The full matrix was launched again on one new allocation, job `job-689b8169-b778-4c53-85e2-794f910f020e`. Its worker passed hardware preflight and started BNN Stock qualification at 13:42 UTC on 18 November. The evidence for this allocation is written under `experiments/dac2027_unified_v3/allocation_b` on the experimental branch. This PDF still describes the evidence available before reservation B.
