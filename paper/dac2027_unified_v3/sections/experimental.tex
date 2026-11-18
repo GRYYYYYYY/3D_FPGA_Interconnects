@@ -1,0 +1,25 @@
+\section{Experimental Methodology}
+\subsection{Workloads and Unified Experimental Setup}
+Each case uses a frozen architecture, BLIF, packed netlist, placement and complete RR XML. GEMM uses seed 1 and width 100, BNN seed 1 and width 120, and LSTM seed 2 and width 120. Each retains all 40 sample contexts. The reserved worker has a Xeon Platinum 8462Y+, one H100 80GB, a ten-CPU quota and 200 GiB of memory. Eight distinct physical cores on NUMA node 0 execute the host code with memory bound to that node. The native baseline is VTR revision \texttt{0b912334fdd8}, built in Release mode with assertion level 2.
+\begin{table*}[t]\centering\caption{Complete input XML. Local edges have both endpoints confined to one common layer. Spanning edges touch resources whose combined extent covers both layers. Each graph has two layers and 40 samples.}\label{tab:rr}
+\begin{tabular}{lrrrrr}\toprule Case & Nodes & Edges & Local edges & Spanning edges & CHANZ nodes\\\midrule
+GEMM & 9,595,752 & 84,213,916 & 72,453,916 & 11,760,000 & 185,856\\
+BNN & 4,102,608 & 39,480,616 & 34,749,352 & 4,731,264 & 75,264\\
+LSTM & 4,166,724 & 40,142,314 & 35,325,418 & 4,816,896 & 76,614\\\bottomrule\end{tabular}\end{table*}
+\subsection{Timing Metrics and Measurement Protocol}
+A common monotonic timer encloses the body of \texttt{MapLookahead::compute}. E2 includes graph conversion, preparation, service, output handoff, group merge, interpolation, source/OPIN processing and derived minima. Process starts at native launch and ends after exit. It includes RR XML loading, initialization, construction, timing-driven routing, checking, STA and serialization. Input preparation and independent route readback occur separately. Each full run produces both times.
+
+The design uses three fresh processes per arm in rotated order with fixed affinity, one selected GPU, and a common warm-input policy. Capture, profiling and online CPU reference checks are disabled for timing. For time $t_{m,r}$ in repeat $r$, each comparison uses the three ratios $t_{i,r}/t_{j,r}$. Means and sample standard deviations describe process variation for a fixed workload and seed.
+\subsection{Correctness and QoR Qualification}
+Qualification compares Stock and STRICT wire-map bytes and checks complete ALT CPU/CUDA sample outputs before ordered consumption. ALT can change congestion representatives. For each routed candidate we preserve the original route digest and use independent native readback, FULL checking and STA. Passing requires zero overused nodes and both critical path delay (CPD) and wirelength (WL) at most 105\% of the corresponding Stock values. This threshold applies to every workload.
+\subsection{Experimental Configurations}
+\begin{table}[t]\centering
+\caption{Native configurations and the formal scope recorded per fresh process.}\label{tab:configs}
+\begin{tabular}{lll}\toprule Choice & Sample or search schedule & Scope\\\midrule
+M0 Stock & Native baseline & E2, Process\\
+M1 Group & Join after each group & E2\\
+M2 Flat & Retain every sample until merge & E2\\
+M3 Pipeline & Bounded ordered STRICT tokens & E2, Process\\
+M4 ALT CPU & Whole-pair waves on CPU & E2, Process\\
+M5 ALT CUDA & Whole-pair waves on GPU & E2, Process\\\bottomrule\end{tabular}\end{table}
+C1 compares M1, M2 and M3. C2 compares M4 and M5 under the same rule. M0, M3 and M5 measure integrated implementations. The design reuses M3 construction from its full run in C1.
