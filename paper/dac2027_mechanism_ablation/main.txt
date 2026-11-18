@@ -118,12 +118,12 @@ may safely remove. Compatible caches and sparse-sampling             until the c
 compressed_map [7] address avoided work; our methods                 After the join, native group writes and ﬁlls follow Section II.
 execute the retained samples. Section V-G states their appli-        Flat retains all J results for its ordered reduction; Group joins
 cability boundaries.                                                 after each group.
-   Proposition 1: If sample selection/context, within-ﬂood visi-     Algorithm 2: Whole-pair FP32 waves (C2)
-tation and arithmetic are unchanged, occupied recorded delays          Input : G, source sa , cell map ϕa , targets Ta , key B
-are ﬁnite, and native occupancy, commit and interpolation              Output: Sample map Ra
-rules are preserved, private STRICT sample execution fol-          1 Ra [·] ← ⊥, L[·] ← (+∞, +∞)
-lowed by original-order strict-delay reduction yields the native   2 if Ta = ∅ then return Ra
-wire table.                                                        3 π[·] ← ⊥, D, H ← ∅, L[sa ] ← (0, 0)
+   Proposition 1: If sample selection/context, within-ﬂood           Algorithm 2: Whole-pair FP32 waves (C2)
+visitation and arithmetic are unchanged, occupied recorded             Input : G, source sa , cell map ϕa , targets Ta , key B
+delays are ﬁnite, and native occupancy, commit and interpo-            Output: Sample map Ra
+lation rules are preserved, private STRICT sample execution        1 Ra [·] ← ⊥, L[·] ← (+∞, +∞)
+followed by original-order strict-delay reduction yields the       2 if Ta = ∅ then return Ra
+native wire table.                                                 3 π[·] ← ⊥, D, H ← ∅, L[sa ] ← (0, 0)
 Proof. Each private ﬂood produces the same per-cell repre-         4 Publish(D, π, sa , 0)
 sentative as its native execution. For an occupied cell, ordered   5 while D ̸= ∅ do
 reduction selects the least delay and retains its earliest sample   6     b ← min keys(D), X ← Pop(D, b)
@@ -364,10 +364,9 @@ I NDEPENDENT EIGHT- CORE /H100 COHORT. D IRECTLY PAIRED SPEEDUPS               N
                                                                             mapping of the same ALT rule gives 1.146× and 1.162× over
                                                                             ALT CPU. The small-input slowdown bounds applicability.
 
-G. Closest Alternative and Cache Applicability                                                 C ONTENT G ENERATED BY AI
-                                                                               OpenAI Codex (GPT-6) assisted manuscript text, ﬁgures,
-   The locked compressed_map requires one layer, exclud-                    artifact scripts and experimental analysis. Authors are respon-
-ing these two-layer graphs. Separable remains unmeasured.                   sible for veriﬁcation and submission.
+G. Closest Alternative and Cache Applicability
+   The locked compressed_map requires one layer, exclud-
+ing these two-layer graphs. Separable remains unmeasured.
 Ordinary caching supports valid reuse: 36 ﬁxed-input cache
 hits passed independent FULL/STA. Our timings cover fresh
 construction.

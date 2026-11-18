@@ -1,5 +1,5 @@
-# Symbolic pseudocode revision
+# Manuscript formatting review
 
-Reviewed Algorithms 1 and 2 on pages 2 and 3 of PDF `58a13b55561d83ab88ab7a65be89b16db161c9f758362a1b9f094276860fc2f0`. Each algorithm fits a single column. The input and output labels, numbered assignments, stage and loop guides, and closing rules are legible. Both coordinates of the C2 proposal and the complete same-bucket closure condition fit on their respective lines. The explanations of ordered consumption and wave publication appear in the surrounding text.
+Reviewed PDF `e1e7e2126315aaeaf49b2de73f0476ee0b8bf2ab03d7665220519b1a0564f543`. On page 3, the Proposition 1 and Proof. labels use the embedded bold italic face, confirmed from PDF font mappings and rendered text. The AI-generated-content section has been removed from the manuscript and anonymous source package. Page 6 ends with the conclusion. The manuscript has six body pages and one reference page.
 
-The clean archive build reproduces the rendered text. Page 7 contains the references. The build checks and font inventory are recorded alongside this review.
+The clean archive build reproduces the rendered text. Embedded-font, anonymity, citation and overflow checks pass in review/checks.json.

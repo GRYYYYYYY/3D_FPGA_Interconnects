@@ -8,7 +8,7 @@ Technical validation is not author approval. No external submission or portal mo
 - Accept small n=3 process samples, shared-host limitations, same-family LSTM holdout, historical/new cohort separation and the s38417 negative case.
 - Check the historical warm-batch timing boundary and median-of-medians estimator against the separately measured native scopes.
 - Check all title/registration, authorship/conflict/disclosure, permissions and DAC format requirements in the submission portal before submission.
-- Review all seven rendered pages and AI disclosure. Confirm no identifying self-reference was overlooked.
+- Review all seven rendered pages. Confirm no identifying self-reference was overlooked.
 
 Author approved: false. Externally submitted: false. FPGA resume authorized: false.
 
