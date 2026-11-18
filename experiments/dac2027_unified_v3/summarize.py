@@ -6,7 +6,7 @@ from cohort import run
 from cohort import allocation, audit
 def write(name,fields,rows):
     with (audit/name).open('w') as f:
-        w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
+        w=csv.DictWriter(f,fieldnames=fields,lineterminator="\n");w.writeheader();w.writerows(rows)
 def read(p): return json.loads(p.read_text())
 full=['stock','pipeline','alt_cpu','alt_cuda']
 arms=full+['group','flat']

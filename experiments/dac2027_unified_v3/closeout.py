@@ -7,7 +7,7 @@ from cohort import allocation, audit
 read=lambda p:json.loads(p.read_text())
 def writer(name,rows,fields):
     with (audit/name).open('w') as f:
-        w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
+        w=csv.DictWriter(f,fieldnames=fields,lineterminator="\n");w.writeheader();w.writerows(rows)
 
 # The reservation command enters this script after the original serial worker exits.
 # The editing host can rebuild reports without launching any workload.
