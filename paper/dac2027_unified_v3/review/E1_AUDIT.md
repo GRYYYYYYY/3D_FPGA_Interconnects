@@ -1,13 +1,14 @@
-# Timing-scope audit
+# Timing terminology audit
 
-The predecessor methodology defines E1 as sample service. On CUDA the timer stops before the final ABI output copy. Its endpoints differ from complete construction and complete native Process. The archived timer has no independent claim in this version.
+**Frozen comparison point** is 1ebcba19cc8513240c1a1d25b400a896e3f57214. The anonymous ZIP and extracted PDF were checked for the standalone historical identifiers E1 and E2. Neither occurs in either artifact. The frozen CSV column names and archival diagnostics retain their original spelling.
 
-| Material checked | Finding and disposition |
+| Manuscript term | Boundary or estimator |
 |---|---|
-| Prior V2 and mechanism manuscript | The E1 definition occurs in sections/experimental.tex. Keep the original manuscripts and component timers in their frozen archives. |
-| V3 parent at 7050936c | No E1 metric in the active manuscript, figures, tables, or macros. |
-| Final main.tex, included sections, figures, tables, bibliography, macros, vendored class/style files and anonymous build instructions | Standalone case-insensitive E1 search of all ZIP members returned zero matches. Extracted PDF text also returned zero. No column, plotted value, equation or speedup uses local service as a proxy for E2. |
-| Review CSVs and supplements | The raw and summary time CSVs use E2 and Process. Controls supply E2 alone. This audit deliberately preserves the historical term. No supplemental speedup uses it. |
-| BNN40 mechanism profile and timing | Table III retains the independent name **warm complete-batch service**. This timer includes output materialization, CUDA synchronization and readback, and excludes loading, preparation and verification. It uses the median of three process medians over three warm batches each. Work counters come from separate profiling. |
+| Lookahead Construction Time | Complete MapLookahead::compute call timed with the common monotonic timer. Includes conversion, preparation, service, output handoff, group merge, interpolation, source/OPIN processing and derived minima. The frozen formal records encode this interval as E2_ns. |
+| End-to-End Process Time | Native process launch to exit, including RR XML loading, initialization, construction, routing, checking, STA and serialization. Packing, placement, RR graph generation, input preparation and independent route readback fall outside the interval. The frozen full-process records encode it as Process_ns. |
+| Lookahead Construction Speedup and End-to-End Process Speedup | For the named interval, divide the numerator configuration's time by the denominator configuration's time within each repeat. Report mean and sample SD across the three matched ratios per workload. |
+| Warm Complete-Batch Service | Separate BNN40 shift 0/20 diagnostic, including reset, search, closure and output materialization with CUDA synchronization and readback. Loading, preparation and verification are excluded. The statistic is the median of three process medians over three warm batches each. |
 
-The exact key at shift 0 and the coarser key at shift 20 schedule unquantized FP32 labels. Frozen service medians at shifts 0/20 were 7.304300/7.065945 s on eight CPU cores and 2.830303/0.314170 s on CUDA. Their scope and estimator stay local to Table III. [Frozen BNN40 profile, process medians and source bindings](https://github.com/GRYYYYYYY/3D_FPGA_Interconnects/blob/2f43d7147904ec498bd944af127c2c4a463a8b63/paper/dac2027_mechanism_ablation/evidence/r6_bnn40.json)
+The historical E1 service diagnostic on CUDA stopped before the final ABI output copy. Its records remain in the frozen experiment archive. Group and Flat in the formal matrix measure the complete construction call.
+
+Checked the five review CSVs byte for byte against the frozen paper. The bodies of the absolute-time, paired-speedup and QoR tables match the frozen LaTeX rows exactly. Compared numerical tokens throughout the manuscript sections, tables and figures. The only numerical source changes came from table layout commands. The two speedup definitions, figure denominators, within-workload statistics, and all reported seconds and ratios retain their frozen values.

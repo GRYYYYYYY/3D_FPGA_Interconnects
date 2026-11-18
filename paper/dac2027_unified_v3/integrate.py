@@ -151,13 +151,15 @@ for c in cases:
 write_csv('route_counts.csv',summary)
 
 def table(filename, caption, label, headers, body):
-    lines=[r'\begin{table*}[t]\centering\small\setlength{\tabcolsep}{4pt}',r'\caption{'+caption+r'}\label{tab:'+label+'}',
+    env = 'table' if label == 'qor' else 'table*'
+    style = r'\footnotesize\setlength{\tabcolsep}{2pt}' if label == 'qor' else r'\small\setlength{\tabcolsep}{4pt}'
+    lines=[r'\begin{'+env+'}[t]\\centering'+style,r'\caption{'+caption+r'}\label{tab:'+label+'}',
            r'\begin{tabular}{lrrrrrr}\toprule',
            ' & '+r' & '.join(r'\multicolumn{2}{c}{'+c.upper()+'}' for c in cases)+r'\\',
            ' & '+' & '.join(headers*3)+r'\\\midrule']
     for label, cells in body:
         lines.append(' & '.join([label]+cells)+r'\\')
-    lines.append(r'\bottomrule\end{tabular}\end{table*}')
+    lines.append(r'\bottomrule\end{tabular}\end{'+env+'}')
     (ROOT/'tables'/filename).write_text('\n'.join(lines)+'\n')
 
 def cell(row, precision):
@@ -166,11 +168,13 @@ def cell(row, precision):
 times={(r['arm'],r['case'],r['metric']):r for r in seconds}
 pairs={(r['numerator'],r['denominator'],r['case'],r['metric']):r for r in ratios}
 metrics=['E2','Process']
-table('unified_times.tex','Native time in seconds. Each cell gives the mean and sample SD of three fresh processes. Group and Flat supply construction controls. Each other invocation supplies both observations.','time',metrics,
+time_headers = [r'\shortstack{Lookahead\\Construction Time}', r'\shortstack{End-to-End\\Process Time}']
+speedup_headers = [r'\shortstack{Lookahead\\Construction\\Speedup}', r'\shortstack{End-to-End\\Process\\Speedup}']
+table('unified_times.tex','Time in seconds. Each cell gives the mean and sample SD of three fresh processes. Group and Flat supply construction controls. Each other invocation supplies both observations.','time',time_headers,
       [(n,[cell(times.get((a,c,m)),2) for c in cases for m in metrics]) for a,n in names.items()])
 comparisons=[('group','flat'),('group','pipeline'),('flat','pipeline'),('stock','pipeline'),('pipeline','alt_cpu'),
              ('pipeline','alt_cuda'),('alt_cpu','alt_cuda'),('stock','alt_cuda')]
-table('unified_ratios.tex','Paired speedup ($\\times$). Each entry is the mean and sample SD of three first-arm/second-arm ratios within one workload. Dashes mark construction-only comparisons.','ratios',metrics,
+table('unified_ratios.tex','Paired speedup ($\\times$). Each entry is the mean and sample SD of three first-arm/second-arm ratios within one workload. Dashes mark construction-only comparisons.','ratios',speedup_headers,
       [(names[a]+' / '+names[b],[cell(pairs.get((a,b,c,m)),3) for c in cases for m in metrics]) for a,b in comparisons])
 table('unified_qor.tex','Largest signed change (\\%) against repeat-matched Stock among three formal routes per candidate. The common upper bound for each metric is $+5\\%$.','qor',['CPD','WL'],
       [(n,[f"{max(r[field] for r in routes if r['workload']==c and r['phase']=='formal' and r['arm']==a):+.3f}"
