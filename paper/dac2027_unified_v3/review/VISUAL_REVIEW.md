@@ -1,14 +1,14 @@
-# V3 internal draft render review
+# Measured subset render review
 
-Reviewed the six rasterized pages of PDF SHA256 `51509dab770ba2065bcdef64d64cf696fcef91ba8a0301dd3ef916095bf1105b`. The final qualification edits affected pages 4 and 5. Both were inspected again after rebuilding.
+The six inspected page images correspond to PDF SHA256 `270615fabdacbb77524b089635f18c4791fae55fcdadc933bfea80d723b18d1c`. The clean build and the archived PDF have the same digest.
 
-| Page | Layout and content checked |
+| Page | Visual findings |
 |---|---|
-| 1 | The anonymous byline and pending-measurements notice appear beneath the title. The abstract describes the two mechanisms, and the source-relative reduction fits the right column. |
-| 2 | Both panels and the same-bucket return arrow fit the schematic. The pipeline pseudocode, proposition and proof remain readable. |
-| 3 | The FP32 wave pseudocode and cost equations fit their columns. All 20 lines of Algorithm 2 are visible. |
-| 4 | The auxiliary GEMM qualification is identified. The two-column methodology covers timing boundaries, the common QoR threshold and the six arms. Section V-C states that all 54 formal timings are missing. |
-| 5 | The topology table spans both columns. The six-arm and BNN wave tables fit the left column. Both historical subtotal bars have legible labels and a caption identifying their populations. The right column reports BNN qualification and the limits on generalization. |
-| 6 | All 13 bibliography entries fit in the left column with a clear bottom margin. |
+| 1 | The title page marks the partial measured cohort. The four proportions in the fixed-input GEMM figure are legible, including the 8.9% routing segment. Its caption identifies the stage times and the Process denominator. |
+| 2 | Both dependency diagrams fit the right column above the 12-line STRICT algorithm. The proposition and proof continue below without colliding with the figure or equation. |
+| 3 | All 20 lines of the whole-pair wave algorithm, the branch structure and the input/output labels fit the right column. The numerical conditions and both width bounds are visible. |
+| 4 | Equations 6 and 7 stay inside the column margins. The resource specification and timing protocol lead into the correctness gate and mechanism results. |
+| 5 | The three-case topology table spans both columns. The configuration and BNN profile tables are legible. Results state that LSTM has no formal timing and distinguish its missing Stock route from the three independently checked routes. |
+| 6 | The GEMM/BNN timing and ratio tables span the page with aligned mean/SD columns. Group and Flat Process cells show dashes. The QoR table retains three decimal places for signed deviations. All 13 references fit below or alongside the last table. |
 
-The render has no visible clipping or collisions. The clean-build receipt records embedded fonts, resolved references and identical PDF bytes.
+The inspected render shows no cropped rows, overlapping labels or unresolved references. The anonymous ZIP hash and font details are in rebuild.json and fonts.txt.

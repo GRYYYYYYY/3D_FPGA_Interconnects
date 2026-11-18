@@ -1,25 +1,17 @@
 # V3 internal author review
 
-Status is pending unified measurements. The PDF and anonymous archive are an internal draft. Author approval and external submission remain pending.
+**Measured subset.** The six-page draft uses 36 formal invocations from one Xeon Platinum 8462Y+/H100 allocation. GEMM and BNN each completed the six configurations, three repeats per configuration. The counts are 24 full processes and 12 construction controls. LSTM has four qualification attempts and zero formal invocations. All 18 planned LSTM timing observations are missing. The title page identifies the partial cohort. V2 and the complete fallback at 2f43d7147904ec498bd944af127c2c4a463a8b63 remain available for the author's submission decision.
 
-The paper starts from the verified symbolic-algorithms HEAD c119b77d8f25dd16a704b153e902a1f0e4e89b5f, which descends from the complete fallback 2f43d7147904ec498bd944af127c2c4a463a8b63. The separate experiment worktree is on experiment/dac2027-unified-v3-20261118. Its audit directory holds the resource receipt, protocol, frozen input bindings, exact topology and historical denominator reconciliation.
+## Claims and supporting records
 
-The primary matrix comprises 36 full invocations and 18 E2 controls on the same worker. The paper includes the original BNN wave-count profile and the three XML audits. Integrated speedups, Amdahl predictions and formal route QoR await V3 timing runs. No historical absolute time is presented as a V3 observation. The primary route gates use repeat-matched Stock on all cases.
+- The timed worker used eight physical cores on NUMA 0, a ten-CPU quota and 200 GiB. All formal intervals are disjoint. The worker, GPU, preflight and binary bindings, raw nanosecond records, sample SDs and ratios are archived on experiment/dac2027-unified-v3-20261118 at 671a31e1c9fd18d2242a5c32c4d53ac5f50ec992, under experiments/dac2027_unified_v3/allocation_b/audit.
+- All 36 raw timing rows were checked against the original processes. All 20 mean/SD time rows and 26 mean/SD paired-ratio rows were independently recomputed. The three repeats per cell describe process variation for a fixed input and seed.
+- In GEMM and BNN order, Stock/ALT CUDA construction ratios are 20.03 and 19.97. Corresponding Process ratios are 1.80 and 1.88. Figure 1 uses the new GEMM records. Mean Stock E2 was 140.18 s out of 300.61 s, a 46.63% share. The archive reconciles the older 82.96% two-stage subtotal with the 45.18% historical Process denominator.
+- The three original XML files all have two layers. All 40 contexts were retained per case. Stock and STRICT maps agreed on all three workloads. ALT CPU/CUDA captures and maps agreed on each workload, with changed congestion representatives relative to STRICT.
+- The LSTM Stock qualification wrote the expected wire map and exited with signal 11 during routing. Its formal repeats and proposed original-binary diagnostic had not run when the reservation stopped. The cause remains open. The three LSTM candidate routes passed independent checks. They lack a matched Stock CPD/WL reference. LSTM contributes no measured speedup.
+- All 47 emitted routes passed independent FULL/STA. The 44 scored invocations met the same +5% CPD/WL thresholds with zero overuse. The original worker performed 45 readbacks. The last two GEMM readbacks ran on the editing host after termination. Their elapsed times are excluded from performance comparisons.
+- Inspire recorded job_stopped at 16:43:50 UTC. Container events identify termination without naming the initiating actor. Reservation A remains separately archived at 37d0193538344f0117317eb76d9be530e91f0a66. Its times do not enter this cohort.
 
-The paper source applies the same conditional STRICT proposition and the same ALT rule to CPU and CUDA. The graphs have two layers. The discussion of recursive architecture exploration is motivation. Timed Process covers fixed-input routing.
+## Build and review
 
-See review/rebuild.json and review/VISUAL_REVIEW.md for this draft.
-
-## Interrupted worker and draft qualification
-
-Inspire returned `job_stopped` for the only reserved worker at 13:21:45 UTC on 18 November 2026. The 24-hour job limit had not expired. The stop events identify container termination without specifying its initiator. BNN completed all four qualification arms. GEMM completed Stock and started Pipeline. LSTM and both mechanism controls have no new observations. The experiment archive preserves the incomplete invocation and per-arm coverage. All primary timing cells are empty. There are no V3 paired speedups or numerical Amdahl estimates.
-
-The paper now reports BNN qualification and the original graph-loader diagnostics. Four BNN routes pass independent FULL/STA with zero original overuse. CPU and CUDA agree on complete ALT captures and final maps. The BNN ALT map differs from STRICT at 24,434 congestion words. Independent readback was performed on the editing host after the reservation ended. The figure explaining historical GEMM denominators is labeled as such.
-
-The anonymous ZIP includes the algorithm2e, ifoddpage and relsize packages. A fresh directory rebuilt the six-page PDF byte for byte using TeX Live 2026. See the page review and the rebuild receipt in `review/`. The paper remains an internal draft pending unified measurements. The complete fallback at `2f43d7147904ec498bd944af127c2c4a463a8b63` remains available.
-
-The independent GEMM Stock readback also passed. All five completed routes reproduced their recorded CPD and wirelength. The experiment archive and verification receipt are pinned at `37d0193538344f0117317eb76d9be530e91f0a66` on `experiment/dac2027-unified-v3-20261118`.
-
-## Fresh reservation B
-
-The full matrix was launched again on one new allocation, job `job-689b8169-b778-4c53-85e2-794f910f020e`. Its worker passed hardware preflight and started BNN Stock qualification at 13:42 UTC on 18 November. The evidence for this allocation is written under `experiments/dac2027_unified_v3/allocation_b` on the experimental branch. This PDF still describes the evidence available before reservation B.
+The anonymous source ZIP rebuilds the PDF byte for byte in a clean directory with TeX Live 2026. The page images and page-by-page review are under review/. All fonts are embedded. The manuscript has no unresolved references or overfull boxes. The experiment heartbeat at closeout records PAUSED_BY_USER_BUDGET_DECISION_REQUIRED for the FPGA migration. Author approval and external submission remain pending.
