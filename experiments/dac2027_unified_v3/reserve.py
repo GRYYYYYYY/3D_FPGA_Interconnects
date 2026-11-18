@@ -3,7 +3,7 @@ import ctypes, datetime, json, os, platform, shutil, socket, subprocess, time
 from pathlib import Path
 
 here = Path(__file__).resolve().parent
-run = here/'run'
+from cohort import run
 run.mkdir(exist_ok=False)
 def read(path): return Path(path).read_text().strip()
 def query(*args): return subprocess.check_output(args,text=True).strip()

@@ -1,0 +1,5 @@
+# Fresh reservation B
+
+Reservation B starts every workload and repeat anew. Reservation A is archived at commit 37d0193538344f0117317eb76d9be530e91f0a66. B writes its records under allocation_b/run and its reports under allocation_b/audit. All inputs, executables, thresholds, warm-input policy and timing boundaries use the frozen protocol in the parent directory. The worker verifies the bindings before launching VPR.
+
+The service limit is 24 hours. The absolute protocol deadline remains 2026-11-19 13:00 UTC. One worker executes qualification, the 36 full invocations, the 18 controls and independent native readback sequentially. The submission command generates the statistical tables and verifies the cohort after readback. From the parent directory, set V3_ALLOCATION=b when reproducing closeout or validation.

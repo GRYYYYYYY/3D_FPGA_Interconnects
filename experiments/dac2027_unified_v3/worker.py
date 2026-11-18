@@ -7,7 +7,7 @@ sys.path.insert(0,str(repo/'scripts'))
 from scaling_common import metrics, vpr_command
 from report_native_joint import log_evidence
 prior=repo/'accel/lookahead/gemm_bnn_native_completion'
-run=here/'run'
+from cohort import run
 def read(p): return json.loads(p.read_text())
 def save(p,data):
     tmp=p.with_suffix('.tmp')

@@ -2,8 +2,8 @@
 import csv, hashlib, json, shutil, statistics, subprocess, zipfile
 from pathlib import Path
 here=Path(__file__).resolve().parent
-run=here/'run'
-audit=here/'audit'
+from cohort import run
+from cohort import audit
 read=lambda p:json.loads(p.read_text())
 def writer(name,rows,fields):
     with (audit/name).open('w') as f:

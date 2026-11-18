@@ -3,13 +3,13 @@ from collections import Counter
 from pathlib import Path
 import csv,hashlib,json,statistics
 here=Path(__file__).resolve().parent
-audit=here/'audit'
+from cohort import audit
 cases=('gemm','bnn','lstm')
 full=('stock','pipeline','alt_cpu','alt_cuda')
 controls=('group','flat')
 def read(p):return json.loads(p.read_text())
 def rows(p):return list(csv.DictReader((audit/p).open()))
-run=here/'run'
+from cohort import run
 finished = (run/'finished.json').is_file()
 if not finished:
     stopped = read(audit/'allocation_stop.json')

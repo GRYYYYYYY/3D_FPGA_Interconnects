@@ -2,8 +2,8 @@
 import csv, json, statistics, sys
 from pathlib import Path
 here=Path(__file__).resolve().parent
-run=here/'run'
-audit=here/'audit'
+from cohort import run
+from cohort import audit
 def write(name,fields,rows):
     with (audit/name).open('w') as f:
         w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
