@@ -16,7 +16,7 @@ CHANZ nodes & 185,856 & 75,264 & 76,614\\
 
 Formal runs execute serially, with three fresh processes per arm in rotated order with fixed affinity, one selected GPU, and a common warm-input policy. Before launch the harness pre-reads the complete input files. Each process constructs a fresh map. Capture, profiling and online CPU reference checks are disabled for timing. For \constructionspeedup{} and \processspeedup{}, divide the corresponding times $t_{i,r}/t_{j,r}$ within repeat $r$. We report the mean and sample SD of three times or three paired ratios per workload, keeping allocations separate. Repeats measure process variation at one seed.
 \subsection{Correctness and QoR Qualification}
-Qualification compares Stock and STRICT wire-map bytes and checks complete ALT CPU/CUDA sample outputs before ordered consumption. ALT can change congestion representatives. For each routed candidate we preserve the original route digest and use independent native readback, FULL checking and STA. Passing requires zero overused nodes and both critical path delay (CPD) and wirelength (WL) at most 105\% of the corresponding Stock values. We use the same threshold for all workloads. A formal route uses the Stock reference from the same repeat. A qualification route uses Stock from the same qualification cohort when available.
+Qualification compares Stock and STRICT wire-map bytes and checks complete ALT CPU and ALT GPU sample outputs before ordered consumption. ALT can change congestion representatives. For each routed candidate we preserve the original route digest and use independent native readback, FULL checking and STA. Passing requires zero overused nodes and both critical path delay (CPD) and wirelength (WL) at most 105\% of the corresponding Stock values. We use the same threshold for all workloads. A formal route uses the Stock reference from the same repeat. A qualification route uses Stock from the same qualification cohort when available.
 \subsection{Experimental Configurations}
 \begin{table}[t]\centering
 \caption{Group and Flat record \constructiontime{}. Each other configuration records both \constructiontime{} and \processtime{}.}\label{tab:configs}
@@ -26,5 +26,5 @@ M1 Group & Join after each group\\
 M2 Flat & Retain every sample until merge\\
 M3 Pipeline & Bounded ordered STRICT tokens\\
 M4 ALT CPU & Whole-pair waves on CPU\\
-M5 ALT CUDA & Whole-pair waves on GPU\\\bottomrule\end{tabular}\end{table}
+M5 ALT GPU & Whole-pair waves on GPU\\\bottomrule\end{tabular}\end{table}
 Table~\ref{tab:configs} gives the six configurations. C1 compares M1, M2 and M3. C2 compares M4 and M5 under the same rule. M0, M3 and M5 measure integrated implementations. The design reuses M3 construction from its full run in C1.

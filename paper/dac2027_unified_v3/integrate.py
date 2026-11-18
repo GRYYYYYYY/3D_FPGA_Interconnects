@@ -19,7 +19,7 @@ C = '11c3911bbe54332fb5d32198511ce1ae1775f9b4'
 BASE = 'experiments/dac2027_unified_v3'
 cases = ['gemm', 'bnn', 'lstm']
 names = dict(stock='Stock', group='Group', flat='Flat', pipeline='STRICT Pipeline',
-             alt_cpu='ALT CPU', alt_cuda='ALT CUDA')
+             alt_cpu='ALT CPU', alt_cuda='ALT GPU')
 
 
 def blob(commit, name):

@@ -1,8 +1,8 @@
 # DAC 2027 V3 · author final review
 
-The seven-page anonymous manuscript integrates three measured workloads. This single-column Table I revision builds on the figure revision at 67e309bc25b5a031d639d43e970ec02a4f1383ba, which descends from the frozen terminology revision f8798abacb4b31a8b0252557d59a6792a3de1d03. Figures 3 and 4 replace its two performance tables. Each speedup arrow runs from the numerator configuration to the denominator configuration. The body ends on page six and the references occupy page seven. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
+The seven-page anonymous manuscript integrates three measured workloads. This revision names the measured backends ALT CPU and ALT GPU. The archived arm identifier for the CUDA implementation on the H100 is alt_cuda. The body ends on page six and the references occupy page seven. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
 
-| Workload | Frozen allocation | Formal runs | Stock/ALT CUDA Lookahead Construction Speedup | Stock/ALT CUDA End-to-End Process Speedup |
+| Workload | Frozen allocation | Formal runs | Stock/ALT GPU Lookahead Construction Speedup | Stock/ALT GPU End-to-End Process Speedup |
 |---|---|---:|---:|---:|
 | GEMM | B | 18 | 20.033 ± 0.237 | 1.795 ± 0.012 |
 | BNN | B | 18 | 19.966 ± 0.375 | 1.879 ± 0.022 |

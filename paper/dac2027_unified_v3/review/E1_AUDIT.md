@@ -7,7 +7,7 @@
 | Lookahead Construction Time | Complete MapLookahead::compute call timed with the common monotonic timer. Includes conversion, preparation, service, output handoff, group merge, interpolation, source/OPIN processing and derived minima. The frozen formal records encode this interval as E2_ns. |
 | End-to-End Process Time | Native process launch to exit, including RR XML loading, initialization, construction, routing, checking, STA and serialization. Packing, placement, RR graph generation, input preparation and independent route readback fall outside the interval. The frozen full-process records encode it as Process_ns. |
 | Lookahead Construction Speedup and End-to-End Process Speedup | For the named interval, divide the numerator configuration's time by the denominator configuration's time within each repeat. Report mean and sample SD across the three matched ratios per workload. |
-| Warm Complete-Batch Service | Separate BNN40 shift 0/20 diagnostic, including reset, search, closure and output materialization with CUDA synchronization and readback. Loading, preparation and verification are excluded. The statistic is the median of three process medians over three warm batches each. |
+| Warm Complete-Batch Service | Separate BNN40 shift 0/20 diagnostic, including reset, search, closure and output materialization with device synchronization and readback. Loading, preparation and verification are excluded. The statistic is the median of three process medians over three warm batches each. |
 
 The historical E1 service diagnostic on CUDA stopped before the final ABI output copy. Its records remain in the frozen experiment archive. Group and Flat in the formal matrix measure the complete construction call.
 
