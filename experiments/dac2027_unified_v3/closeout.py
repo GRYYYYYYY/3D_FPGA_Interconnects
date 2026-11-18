@@ -32,7 +32,7 @@ writer('amdahl.csv',pred,'case source candidate repeat share zero_E2 replace_E2 
 # Include small original logs, independent STA records and exact commands in the Git archive.
 with zipfile.ZipFile(audit/'native_process_records.zip','w',zipfile.ZIP_DEFLATED) as z:
     for p in sorted(run.rglob('*')):
-        if p.is_file() and (p.suffix=='.json' or p.name=='process.log'):
+        if p.is_file() and (p.suffix=='.json' or p.name=='process.log' or p.match('report*timing*.rpt')):
             z.write(p,p.relative_to(run))
 # Derive map differences from decoded output of a frozen schema, outside all timing.
 diff=here.parents[2]/'3D_FPGA_Interconnects_R6_2/results/lookahead_r6_2_20261109T191213Z/native_map_diff6'
