@@ -20,28 +20,31 @@ verification=json.loads((audit/'verification.json').read_text())
 assert verification['worker_finished'] and verification['distinct_worker_count']==1
 assert verification['full_invocations']==36 and verification['controls']==18
 assert verification['concurrency_overlaps']==0
-assert all(all(verification['cases'][c]['qualification'].values()) for c in cases)
+for c in cases:
+    gate = verification['cases'][c]['qualification']
+    assert all(gate[k] for k in ('strict_map', 'alt_map', 'complete_capture', 'cpu_verify'))
 coverage=rows('coverage.csv')
-assert len(coverage)==18 and all(int(r['passed'])==3 for r in coverage)
+assert len(coverage)==18 and all(int(r['recorded'])==3 for r in coverage)
 qor=rows('qor.csv')
-assert len(qor)==66 and all(r['independent_FULL_STA'] in ('True','False') for r in qor)
+assert len(qor)==66 and all(r['independent_FULL_STA'] in ('True','False') for r in qor if r['original_route_sha'])
 seq=rows('raw_timing.csv');assert len(seq)==54
 seconds={(r['case'],r['arm'],r['metric']):r for r in rows('seconds.csv')}
 paired={(r['case'],r['numerator'],r['denominator'],r['metric']):r for r in rows('paired.csv')}
 stages=rows('process_stages.csv');amd=rows('amdahl.csv')
 maps=json.loads((audit/'map_differences.json').read_text())
 def val(c,a,b,m):return float(paired[c,a,b,m]['mean'])
-def series(a,b,m):return ', '.join(fmt(val(c,a,b,m)) for c in cases)
+def series(a,b,m):
+    return ', '.join(fmt(val(c,a,b,m)) if (c,a,b,m) in paired else 'unavailable' for c in cases)
 def avg(rs,k):return statistics.mean(float(r[k]) for r in rs)
 def group(c,a='pipeline',b='alt_cuda'):return [r for r in amd if r['case']==c and r['source']==a and r['candidate']==b]
 def table(title,key,lines,metrics=("E2", "Process")):
     header=" & ".join(["", *(list(metrics)*len(cases))])
     return r'\begin{table*}[t]\centering\caption{'+title+r'}\label{'+key+r'}\begin{tabular}{lrrrrrr}\toprule'+ '\n'+r' & \multicolumn{2}{c}{GEMM} & \multicolumn{2}{c}{BNN} & \multicolumn{2}{c}{LSTM}\\'+ '\n'+header+r'\\\midrule'+'\n'+box(lines)+r'\bottomrule\end{tabular}\end{table*}'
 times=[[names[a]]+[pm(seconds[c,a,m]) if (c,a,m) in seconds else '---' for c in cases for m in ('E2','Process')] for a in arms]
-tex('tables/unified_times.tex',table('Native seconds, mean and sample SD of three fresh processes. Group and Flat are construction controls. Each full invocation supplies both observations.','tab:time',times))
+tex('tables/unified_times.tex',table('Native seconds, mean and sample SD of three fresh processes. Group and Flat are construction controls. Each successful full invocation supplies both observations. Dashes indicate an unmeasured scope or fewer than three valid observations.','tab:time',times))
 contrasts=[('group','flat'),('group','pipeline'),('flat','pipeline'),('stock','pipeline'),('pipeline','alt_cuda'),('stock','alt_cuda'),('alt_cpu','alt_cuda')]
 ratios=[[names[a]+' / '+names[b]]+[pm(paired[c,a,b,m]) if (c,a,b,m) in paired else '---' for c in cases for m in ('E2','Process')] for a,b in contrasts]
-tex('tables/unified_ratios.tex',table('Paired speedups. Each repeat divides the first named configuration by the second. Entries are the mean and sample SD of three ratios.','tab:ratios',ratios))
+tex('tables/unified_ratios.tex',table('Paired speedups. Each repeat divides the first named configuration by the second. Entries are the mean and sample SD of three ratios. Dashes indicate comparisons without three valid pairs.','tab:ratios',ratios))
 gem=[r for r in stages if r['case']=='gemm' and r['arm']=='stock']
 values=[avg(gem,k) for k in ('rr_load','E2','routing','other')]
 total=sum(values)
@@ -80,7 +83,19 @@ for c in cases:
 qpassed=sum(r['stock_gate']=='True' and r['independent_FULL_STA']=='True' and r['overuse']=='0' for r in qor)
 results=results[:n]+'Stock and STRICT wire-map digests matched on all three cases. Each ALT CPU/CUDA pair passed complete sample-output and wire-map comparison. Against STRICT, ALT changed '+', '.join(clause)+' congestion words on GEMM, BNN and LSTM, respectively. '
 if all(d['delay_word_differences']==d['missing_state_differences']==0 for d in maps.values()):results+='Delay words and missing masks agreed. '
-results+=f'{qpassed} of {len(qor)} routed invocations passed the Stock-relative QoR gate, independent FULL/STA and zero-overuse checks. '
+available=[r for r in qor if r['stock_gate']]
+results+=f"{verification['independently_passed_routes']} of {verification['recorded_routes']} emitted routes passed independent FULL/STA. Of {len(available)} invocations with a valid Stock comparison, {qpassed} met the CPD/WL threshold, zero overuse and independent FULL/STA. "
+missing=sum(bool(r['original_route_sha']) and not r['stock_gate'] for r in qor)
+if missing:
+    results+=f"{missing} emitted routes lacked a qualified repeat-matched Stock reference. "
+failures=[r for r in qor if not r['original_route_sha']]
+if failures:
+    from collections import Counter
+    by_phase=Counter((r['case'],r['arm'],r['phase']) for r in failures)
+    results+='Invocations ending without a route were '+', '.join(f"{c.upper()} {names[a]} {phase} ({n})" for (c,a,phase),n in sorted(by_phase.items()))+'. '
+if not verification['cases']['lstm']['qualification']['routes']:
+    results+='During LSTM qualification, Stock serialized the expected map and then exited on signal 11 during routing. Its elapsed time to failure is retained separately. A completed, verified Stock construction contributes E2 even when routing subsequently fails. '
+
 # Keep the greatest signed deviation for each metric; either can fail the one-sided gate.
 qor_lines=[]
 for arm in arms[1:]:
@@ -88,15 +103,17 @@ for arm in arms[1:]:
     for case in cases:
         observed=[row for row in qor if row['case']==case and row['arm']==arm and row['phase']=='formal']
         assert len(observed)==3
-        cells.extend(f"{max(float(r[metric]) for r in observed):+.2f}" for metric in ('CPD_delta_pct','WL_delta_pct'))
+        for metric in ('CPD_delta_pct','WL_delta_pct'):
+            values=[float(r[metric]) for r in observed if r['stock_gate'] and r[metric]]
+            cells.append(f"{max(values):+.2f}" if len(values)==3 else '---')
     qor_lines.append(cells)
 qor_table=table(
-    r'Maximum signed CPD and WL changes (\%) relative to repeat-matched Stock. Each column takes its maximum over three formal routes. The common upper limit is $+5\%$.',
+    r'Maximum signed CPD and WL changes (\%) relative to repeat-matched Stock. Each entry requires three scored formal routes. A dash denotes insufficient matched references. The common upper limit is $+5\%$.',
     'tab:qor',qor_lines,metrics=('CPD','WL')
 )
 tex('tables/unified_qor.tex',qor_table)
 results+=r'Table~\ref{tab:qor} reports the greatest Stock-relative change for each candidate and workload. '+'\n'+r'\input{tables/unified_qor}'+'\n'
-failed = [r for r in qor if r['stock_gate']!='True' or r['independent_FULL_STA']!='True' or r['overuse']!='0']
+failed = [r for r in qor if r['stock_gate']=='False' or r['independent_FULL_STA']=='False' or (r['original_route_sha'] and r['overuse']!='0')]
 if failed:
     from collections import Counter
     failures=Counter((r['case'],r['arm']) for r in failed)
@@ -105,10 +122,10 @@ results+='The raw records retain CPD, wirelength, overuse, FULL/STA and the comp
 tex('sections/native_results.tex',results)
 intro=draft('sections/introduction.tex')
 intro+=r'\input{figures/motivation}'+'\n'
-intro+=f"On the fixed-input GEMM path, fresh Stock construction takes {values[1]:.2f} s of a {total:.2f} s process (Fig.~\\ref{{fig:motivation}}). Across all three cases, paired Stock/ALT CUDA Process speedups range from {min(val(c,'stock','alt_cuda','Process') for c in cases):.2f} to {max(val(c,'stock','alt_cuda','Process') for c in cases):.2f}.\n"
+intro+=f"On the fixed-input GEMM path, fresh Stock construction takes {values[1]:.2f} s of a {total:.2f} s process (Fig.~\\ref{{fig:motivation}}). Paired Stock/ALT CUDA Process ratios in GEMM, BNN and LSTM order are {series('stock','alt_cuda','Process')}.\n"
 tex('sections/introduction.tex',intro)
 abstract=draft('sections/abstract.tex').split('We specify a single-worker')[0]
-abstract+='On one eight-core/H100 allocation, paired Stock/ALT CUDA Process speedups are '+series('stock','alt_cuda','Process')+' on GEMM, BNN and LSTM. The corresponding construction speedups are '+series('stock','alt_cuda','E2')+'. These results cover complete fixed-input routing on two-layer graphs.'
+abstract+='On one eight-core/H100 allocation, paired Stock/ALT CUDA Process speedups are '+series('stock','alt_cuda','Process')+' on GEMM, BNN and LSTM. The corresponding construction speedups are '+series('stock','alt_cuda','E2')+'. Results apply to fixed-input routing on these two-layer graphs.'
 tex('sections/abstract.tex',abstract)
 p=here/'sections/conclusion.tex'
 s=draft('sections/conclusion.tex').split('Establishing the end-to-end')[0]+'On these two-layer graphs, the same-rule CPU/CUDA comparison yields construction speedups of '+series('alt_cpu','alt_cuda','E2')+'. Ordered STRICT consumption provides a conditional native-map guarantee, while ALT requires independent route qualification.\n'
