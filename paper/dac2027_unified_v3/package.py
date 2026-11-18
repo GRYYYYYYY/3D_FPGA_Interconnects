@@ -6,7 +6,7 @@ review=here/'review';review.mkdir(exist_ok=True)
 def run(args,cwd):
     return subprocess.check_output(args,cwd=cwd,text=True,stderr=subprocess.STDOUT)
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
-files=[here/p for p in ['main.tex','references.bib','IEEEtran.cls','IEEEtran.bst']]
+files=[here/p for p in ['main.tex','references.bib','IEEEtran.cls','IEEEtran.bst','algorithm2e.sty','ifoddpage.sty','relsize.sty']]
 for directory in ('sections','tables','figures'):
     files+=sorted((here/directory).glob('*.tex'))
 for path in files:
@@ -17,7 +17,7 @@ with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
     for p in files:
         info=zipfile.ZipInfo(p.relative_to(here).as_posix(),date_time=(2026,11,18,0,0,0))
         info.compress_type=zipfile.ZIP_DEFLATED;z.writestr(info,p.read_bytes())
-    z.writestr('BUILD.txt','Compile main.tex with latexmk -pdf main.tex. Requires IEEEtran (included), TikZ, algorithm2e and Latin Modern fonts.\n')
+    z.writestr(zipfile.ZipInfo('BUILD.txt', date_time=(2026,11,18,0,0,0)),'Compile main.tex with latexmk -pdf main.tex. Requires TeX Live with TikZ, PGFPlots and Latin Modern fonts. The IEEEtran and algorithm packages are included.\n')
 os.environ['SOURCE_DATE_EPOCH']='1794960000'
 os.environ['FORCE_SOURCE_DATE']='1'
 run(args,here)
@@ -38,6 +38,7 @@ with tempfile.TemporaryDirectory() as tmp:
                  pages=int(re.search(r'Pages:\s+(\d+)',info)[1]),clean_text_identical=True,embedded_fonts=True,
                  overfull_boxes=0,unresolved_references=0,sha256_pdf=sha(here/'main.pdf'),
                  sha256_clean_pdf=sha(clean/'main.pdf'),sha256_zip=sha(archive),files={p.relative_to(here).as_posix():sha(p) for p in files})
+    assert receipt['sha256_pdf']==receipt['sha256_clean_pdf']
     (review/'rebuild.json').write_text(json.dumps(receipt,indent=2)+'\n')
     (review/'fonts.txt').write_text(fonts)
     print({k:v for k,v in receipt.items() if k!='files'})

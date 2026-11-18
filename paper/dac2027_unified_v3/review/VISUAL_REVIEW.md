@@ -1,14 +1,14 @@
-# Internal draft render review
+# V3 internal draft render review
 
-The six rendered pages were inspected after moving the topology float into the workload section.
+Reviewed the six rasterized pages of PDF SHA256 `51509dab770ba2065bcdef64d64cf696fcef91ba8a0301dd3ef916095bf1105b`. The final qualification edits affected pages 4 and 5. Both were inspected again after rebuilding.
 
-| Page | Observed layout |
+| Page | Layout and content checked |
 |---|---|
-| 1 | Title, anonymous byline and pending-measurements notice above two columns. Abstract, introduction and source-relative construction equation fit. |
-| 2 | Two-panel schematic in the left column and bounded pipeline algorithm in the right column. Arrows, proof and captions are inside the margins. |
-| 3 | ALT pseudocode occupies the upper right column with costs and FP32 constraints alongside. Equation numbers and the lower algorithm rule are visible. |
-| 4 | CPU/GPU accounting leads into Section IV. Study protocol and first mechanism subsections fit the columns. |
-| 5 | Full-width topology table followed by configuration and auxiliary BNN profile tables. Pending results and conclusion fit underneath. Space remains for measured results. |
-| 6 | References use the left column. All entries fit on the page. |
+| 1 | The anonymous byline and pending-measurements notice appear beneath the title. The abstract describes the two mechanisms, and the source-relative reduction fits the right column. |
+| 2 | Both panels and the same-bucket return arrow fit the schematic. The pipeline pseudocode, proposition and proof remain readable. |
+| 3 | The FP32 wave pseudocode and cost equations fit their columns. All 20 lines of Algorithm 2 are visible. |
+| 4 | The auxiliary GEMM qualification is identified. The two-column methodology covers timing boundaries, the common QoR threshold and the six arms. Section V-C states that all 54 formal timings are missing. |
+| 5 | The topology table spans both columns. The six-arm and BNN wave tables fit the left column. Both historical subtotal bars have legible labels and a caption identifying their populations. The right column reports BNN qualification and the limits on generalization. |
+| 6 | All 13 bibliography entries fit in the left column with a clear bottom margin. |
 
-No clipped text, overlapping floats or unresolved references appeared. The final measured version requires another render review.
+The render has no visible clipping or collisions. The clean-build receipt records embedded fonts, resolved references and identical PDF bytes.
