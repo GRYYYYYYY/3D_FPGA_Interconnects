@@ -10,6 +10,8 @@ import subprocess
 import zipfile
 from pathlib import Path
 
+from result_figures import build as build_result_figures
+
 ROOT = Path(__file__).resolve().parent
 REVIEW = ROOT / 'review'
 B = '671a31e1c9fd18d2242a5c32c4d53ac5f50ec992'
@@ -162,20 +164,7 @@ def table(filename, caption, label, headers, body):
     lines.append(r'\bottomrule\end{tabular}\end{'+env+'}')
     (ROOT/'tables'/filename).write_text('\n'.join(lines)+'\n')
 
-def cell(row, precision):
-    return f"${row['mean']:.{precision}f} \\pm {row['sd']:.{precision}f}$" if row else '---'
-
-times={(r['arm'],r['case'],r['metric']):r for r in seconds}
-pairs={(r['numerator'],r['denominator'],r['case'],r['metric']):r for r in ratios}
-metrics=['E2','Process']
-time_headers = [r'\shortstack{Lookahead\\Construction Time}', r'\shortstack{End-to-End\\Process Time}']
-speedup_headers = [r'\shortstack{Lookahead\\Construction\\Speedup}', r'\shortstack{End-to-End\\Process\\Speedup}']
-table('unified_times.tex','Time in seconds. Each cell gives the mean and sample SD of three fresh processes. Group and Flat supply construction controls. Each other invocation supplies both observations.','time',time_headers,
-      [(n,[cell(times.get((a,c,m)),2) for c in cases for m in metrics]) for a,n in names.items()])
-comparisons=[('group','flat'),('group','pipeline'),('flat','pipeline'),('stock','pipeline'),('pipeline','alt_cpu'),
-             ('pipeline','alt_cuda'),('alt_cpu','alt_cuda'),('stock','alt_cuda')]
-table('unified_ratios.tex','Paired speedup ($\\times$). Each entry is the mean and sample SD of three first-arm/second-arm ratios within one workload. Dashes mark construction-only comparisons.','ratios',speedup_headers,
-      [(names[a]+' / '+names[b],[cell(pairs.get((a,b,c,m)),3) for c in cases for m in metrics]) for a,b in comparisons])
+build_result_figures(ROOT, seconds, ratios)
 table('unified_qor.tex','Largest signed change (\\%) against repeat-matched Stock among three formal routes per candidate. The common upper bound for each metric is $+5\\%$.','qor',['CPD','WL'],
       [(n,[f"{max(r[field] for r in routes if r['workload']==c and r['phase']=='formal' and r['arm']==a):+.3f}"
            for c in cases for field in ['delta_cpd_pct','delta_wl_pct']]) for a,n in names.items() if a!='stock'])

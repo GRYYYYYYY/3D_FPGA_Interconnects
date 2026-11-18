@@ -1,0 +1,80 @@
+\begin{figure*}[t]\centering
+\definecolor{case0}{HTML}{28577B}
+\definecolor{case1}{HTML}{D68A40}
+\definecolor{case2}{HTML}{86BAB0}
+{\scriptsize \tikz\draw[fill=case0,thin] (0,0) rectangle (.20,.12); GEMM\quad \tikz\draw[fill=case1,thin] (0,0) rectangle (.20,.12); BNN\quad \tikz\draw[fill=case2,thin] (0,0) rectangle (.20,.12); LSTM}\par\smallskip
+\begin{tikzpicture}\begin{axis}[
+width=.51\textwidth,height=1.60cm,scale only axis,
+xmin=-0.5,xmax=5.5,ymin=0,ymax=155,
+xtick={0,1,2,3,4,5},
+xticklabels={Stock,Group,Flat,Pipeline,CPU,CUDA},ytick={0,50,100,150},
+axis lines*=left,axis line style={black!65},tick align=outside,
+ymajorgrids,grid style={black!15},tick style={black!55},
+ticklabel style={font=\scriptsize},xticklabel style={align=center},
+title style={font=\footnotesize},title={\constructiontime{} (s)}]
+\addplot[ybar,mark=none,bar width=6pt,bar shift=0pt,
+fill=case0,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(-0.23,140.18230503266668) +- (0,1.1633858865033768)
+(0.77,39.065608182666665) +- (0,0.11970165979728668)
+(1.77,23.637004686333334) +- (0,0.8318720262857158)
+(2.77,22.338930013) +- (0,0.4616353080562895)
+(3.77,23.148149155333332) +- (0,0.4503530114812652)
+(4.77,6.997617278) +- (0,0.024947916880030434)};
+\addplot[ybar,mark=none,bar width=6pt,bar shift=0pt,
+fill=case1,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(0.00,60.938338222333336) +- (0,0.8755526192406374)
+(1.00,16.308643254333333) +- (0,0.07905595045307107)
+(2.00,9.505911302666666) +- (0,0.1904166650562482)
+(3.00,9.444200262333332) +- (0,0.17160206867198768)
+(4.00,9.712973856333333) +- (0,0.0304056271254575)
+(5.00,3.0523853240000003) +- (0,0.03047936443690681)};
+\addplot[ybar,mark=none,bar width=6pt,bar shift=0pt,
+fill=case2,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(0.23,137.157952097) +- (0,2.3044354098741566)
+(1.23,37.17774984533333) +- (0,0.14877782407561668)
+(2.23,20.536698843) +- (0,0.051966162107062154)
+(3.23,20.851226942666667) +- (0,0.6361453923465862)
+(4.23,18.624362224333332) +- (0,0.7077431866380111)
+(5.23,4.89255753) +- (0,0.20317156040542872)};
+\end{axis}\end{tikzpicture}\hfill\begin{tikzpicture}\begin{axis}[
+width=.39\textwidth,height=1.60cm,scale only axis,
+xmin=-0.5,xmax=3.5,ymin=0,ymax=325,
+xtick={0,1,2,3},
+xticklabels={Stock,Pipeline,CPU,CUDA},ytick={0,100,200,300},
+axis lines*=left,axis line style={black!65},tick align=outside,
+ymajorgrids,grid style={black!15},tick style={black!55},
+ticklabel style={font=\scriptsize},xticklabel style={align=center},
+title style={font=\footnotesize},title={\processtime{} (s)}]
+\addplot[ybar,mark=none,bar width=6pt,bar shift=0pt,
+fill=case0,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(-0.23,300.60983412133334) +- (0,2.0506848891744363)
+(0.77,182.819638069) +- (0,0.46329151925452877)
+(1.77,184.07768122933334) +- (0,0.430727899881681)
+(2.77,167.46740168166667) +- (0,0.06857074494904374)};
+\addplot[ybar,mark=none,bar width=6pt,bar shift=0pt,
+fill=case1,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(0.00,122.80615170633334) +- (0,1.0724484797869251)
+(1.00,71.48325642900001) +- (0,0.2667632626783802)
+(2.00,72.12972406533333) +- (0,0.3721303173980934)
+(3.00,65.36880379933334) +- (0,0.20217268388605567)};
+\addplot[ybar,mark=none,bar width=6pt,bar shift=0pt,
+fill=case2,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(0.23,231.63238133566665) +- (0,3.1697855366863186)
+(1.23,117.11031489266666) +- (0,1.8350226244671388)
+(2.23,112.95158466966667) +- (0,2.8082584207255024)
+(3.23,101.52538924033334) +- (0,1.1098988571036945)};
+\end{axis}\end{tikzpicture}
+\caption{Times for three fresh processes per configuration (mean $\pm$ sample SD). Pipeline denotes STRICT Pipeline. CPU and CUDA denote the ALT backends. Group and Flat measure construction only.}\label{fig:native_times}
+\end{figure*}

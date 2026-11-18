@@ -1,6 +1,6 @@
 # DAC 2027 V3 · author final review
 
-The seven-page anonymous manuscript integrates three measured workloads. The timing-terminology revision descends from the frozen final integration commit 1ebcba19cc8513240c1a1d25b400a896e3f57214. The body ends on page six and the references occupy page seven. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
+The seven-page anonymous manuscript integrates three measured workloads. This figure revision descends from the frozen terminology revision f8798abacb4b31a8b0252557d59a6792a3de1d03. Figures 3 and 4 replace its two performance tables. Each speedup arrow runs from the numerator configuration to the denominator configuration. The body ends on page six and the references occupy page seven. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
 
 | Workload | Frozen allocation | Formal runs | Stock/ALT CUDA Lookahead Construction Speedup | Stock/ALT CUDA End-to-End Process Speedup |
 |---|---|---:|---:|---:|
@@ -13,6 +13,7 @@ Each workload has four full-process arms and two construction-only controls, eac
 All 54 formal routes passed independent FULL/STA, zero-overuse checks and Stock-relative CPD/WL thresholds. Including the qualification invocations gives 65 unique emitted routes and 62 scored passes. A separate original-binary diagnostic also passed. The earlier LSTM Stock fault remains in the qualification record. FPGA migration was observed passively in PAUSED_BY_USER_BUDGET_DECISION_REQUIRED state during integration.
 
 - [Manuscript](main.pdf) and [anonymous source](anonymous_source.zip)
+- [Figure 3, native times](figures/native_times.pdf) and [Figure 4, paired speedups](figures/paired_speedups.pdf)
 - [Raw seconds](review/raw_seconds.csv), [time statistics](review/seconds.csv) and [paired ratios](review/paired.csv)
 - [Distinct route counts](review/route_counts.csv) and [invocation-level QoR](review/routes.csv)
 - [Claim–evidence ledger](review/CLAIM_EVIDENCE.md), [Timing terminology audit](review/E1_AUDIT.md) and [LSTM fault investigation](review/ALLOCATION_B_AND_LSTM_STOCK.md)

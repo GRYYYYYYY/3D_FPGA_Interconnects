@@ -1,0 +1,113 @@
+\begin{figure*}[t]\centering
+\definecolor{case0}{HTML}{28577B}
+\definecolor{case1}{HTML}{D68A40}
+\definecolor{case2}{HTML}{86BAB0}
+{\scriptsize \tikz\draw[fill=case0,thin] (0,0) rectangle (.20,.12); GEMM\quad \tikz\draw[fill=case1,thin] (0,0) rectangle (.20,.12); BNN\quad \tikz\draw[fill=case2,thin] (0,0) rectangle (.20,.12); LSTM}\par\smallskip
+\begin{tikzpicture}\begin{axis}[
+width=.275\textwidth,height=1.60cm,scale only axis,
+xmin=-0.5,xmax=3.5,ymin=0,ymax=2.15,
+xtick={0,1,2,3},
+xticklabels={{\shortstack{Group\\$\downarrow$\\Flat}},{\shortstack{Group\\$\downarrow$\\Pipeline}},{\shortstack{Flat\\$\downarrow$\\Pipeline}},{\shortstack{Pipeline\\$\downarrow$\\CPU}}},ytick={0,1,2},
+axis lines*=left,axis line style={black!65},tick align=outside,
+ymajorgrids,grid style={black!15},tick style={black!55},
+ticklabel style={font=\scriptsize},xticklabel style={align=center},
+title style={font=\footnotesize},title={\constructionspeedup{} ($\times$)}]
+\addplot[ybar,mark=none,bar width=4.5pt,bar shift=0pt,
+fill=case0,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(-0.23,1.654142369417267) +- (0,0.060368463354873704)
+(0.77,1.7492340630467618) +- (0,0.03416243904072742)
+(1.77,1.0589003071551546) +- (0,0.0580893614179229)
+(2.77,0.9652102973561019) +- (0,0.022875207028950763)};
+\addplot[ybar,mark=none,bar width=4.5pt,bar shift=0pt,
+fill=case1,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(0.00,1.7159773300743761) +- (0,0.02589957239309913)
+(1.00,1.7271247033733328) +- (0,0.023515063178125566)
+(2.00,1.0065362484704734) +- (0,0.008791244194167715)
+(3.00,0.9723403744719245) +- (0,0.018399153397085553)};
+\addplot[ybar,mark=none,bar width=4.5pt,bar shift=0pt,
+fill=case2,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(0.23,1.8103097472062641) +- (0,0.006420260236391188)
+(1.23,1.7841606131743777) +- (0,0.057501757733550686)
+(2.23,0.9855864560539557) +- (0,0.03299658841302924)
+(3.23,1.119847479899895) +- (0,0.017717736250505264)};
+\draw[densely dashed,black!80,thin] (axis cs:-0.5,1)--(axis cs:3.5,1);
+\end{axis}\end{tikzpicture}\hfill\begin{tikzpicture}\begin{axis}[
+width=.275\textwidth,height=1.60cm,scale only axis,
+xmin=-0.5,xmax=3.5,ymin=0,ymax=31,
+xtick={0,1,2,3},
+xticklabels={{\shortstack{Stock\\$\downarrow$\\Pipeline}},{\shortstack{Pipeline\\$\downarrow$\\CUDA}},{\shortstack{CPU\\$\downarrow$\\CUDA}},{\shortstack{Stock\\$\downarrow$\\CUDA}}},ytick={0,10,20,30},
+axis lines*=left,axis line style={black!65},tick align=outside,
+ymajorgrids,grid style={black!15},tick style={black!55},
+ticklabel style={font=\scriptsize},xticklabel style={align=center},
+title style={font=\footnotesize},title={\constructionspeedup{} ($\times$)}]
+\addplot[ybar,mark=none,bar width=4.5pt,bar shift=0pt,
+fill=case0,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(-0.23,6.276713461779377) +- (0,0.11681910479417243)
+(0.77,3.192470242792791) +- (0,0.07261175975210413)
+(1.77,3.3081807179573612) +- (0,0.07571360510872836)
+(2.77,20.03342474439164) +- (0,0.23703470908354707)};
+\addplot[ybar,mark=none,bar width=4.5pt,bar shift=0pt,
+fill=case1,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(0.00,6.453279735786582) +- (0,0.10405766399774884)
+(1.00,3.093960755870578) +- (0,0.03814668694165563)
+(2.00,3.182354697529157) +- (0,0.0398932191435435)
+(3.00,19.965791921990114) +- (0,0.3751513241778971)};
+\addplot[ybar,mark=none,bar width=4.5pt,bar shift=0pt,
+fill=case2,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(0.23,6.579799412965772) +- (0,0.09203405812968539)
+(1.23,4.2643971020986795) +- (0,0.1374729405361091)
+(2.23,3.8099441873241564) +- (0,0.18307590202274918)
+(3.23,28.05698750871164) +- (0,0.8961877338794497)};
+\draw[densely dashed,black!80,thin] (axis cs:-0.5,1)--(axis cs:3.5,1);
+\end{axis}\end{tikzpicture}\hfill\begin{tikzpicture}\begin{axis}[
+width=.315\textwidth,height=1.60cm,scale only axis,
+xmin=-0.5,xmax=4.5,ymin=0,ymax=2.55,
+xtick={0,1,2,3,4},
+xticklabels={{\shortstack{Stock\\$\downarrow$\\Pipeline}},{\shortstack{Pipeline\\$\downarrow$\\CPU}},{\shortstack{Pipeline\\$\downarrow$\\CUDA}},{\shortstack{CPU\\$\downarrow$\\CUDA}},{\shortstack{Stock\\$\downarrow$\\CUDA}}},ytick={0,1,2},
+axis lines*=left,axis line style={black!65},tick align=outside,
+ymajorgrids,grid style={black!15},tick style={black!55},
+ticklabel style={font=\scriptsize},xticklabel style={align=center},
+title style={font=\footnotesize},title={\processspeedup{} ($\times$)}]
+\addplot[ybar,mark=none,bar width=4.5pt,bar shift=0pt,
+fill=case0,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(-0.23,1.644293250113961) +- (0,0.00940482694106877)
+(0.77,0.9931662019438047) +- (0,0.0015640392310725172)
+(1.77,1.0916725572223236) +- (0,0.0024604462088010804)
+(2.77,1.0991845758483139) +- (0,0.0021246522554385786)
+(3.77,1.795031837767416) +- (0,0.011524121514102039)};
+\addplot[ybar,mark=none,bar width=4.5pt,bar shift=0pt,
+fill=case1,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(0.00,1.7179495987029136) +- (0,0.008654221378219772)
+(1.00,0.9910658886804893) +- (0,0.008485154266349848)
+(2.00,1.0935517737691587) +- (0,0.007147011036183669)
+(3.00,1.1034293138131352) +- (0,0.005224384724865795)
+(4.00,1.8787078258546266) +- (0,0.021687173232801872)};
+\addplot[ybar,mark=none,bar width=4.5pt,bar shift=0pt,
+fill=case2,draw=black!80,line width=0.25pt,
+error bars/.cd,y dir=both,y explicit,error bar style={black,line width=0.5pt},
+error mark options={mark size=1.3pt,line width=0.5pt}] coordinates {
+(0.23,1.9783808460190824) +- (0,0.051072839934283465)
+(1.23,1.0372903679829444) +- (0,0.032874116023559864)
+(2.23,1.153468168422349) +- (0,0.005608412658864576)
+(3.23,1.112682670203743) +- (0,0.03266762756478037)
+(4.23,2.2818446015716565) +- (0,0.050432056966590436)};
+\draw[densely dashed,black!80,thin] (axis cs:-0.5,1)--(axis cs:4.5,1);
+\end{axis}\end{tikzpicture}
+\caption{Paired speedups. $A\to B$ reports $T_A/T_B$ within each workload and repeat. Bars show the mean of three ratios and whiskers show sample SD. Dashed lines mark $1\times$. The construction panels use different linear scales to resolve near-parity comparisons.}\label{fig:paired_speedups}
+\end{figure*}

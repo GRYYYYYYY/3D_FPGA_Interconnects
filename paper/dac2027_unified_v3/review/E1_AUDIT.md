@@ -11,4 +11,4 @@
 
 The historical E1 service diagnostic on CUDA stopped before the final ABI output copy. Its records remain in the frozen experiment archive. Group and Flat in the formal matrix measure the complete construction call.
 
-Checked the five review CSVs byte for byte against the frozen paper. The bodies of the absolute-time, paired-speedup and QoR tables match the frozen LaTeX rows exactly. Compared numerical tokens throughout the manuscript sections, tables and figures. The only numerical source changes came from table layout commands. The two speedup definitions, figure denominators, within-workload statistics, and all reported seconds and ratios retain their frozen values.
+The five review CSVs agree byte for byte with the terminology revision. The time and speedup figures use all 30 and 39 mean/SD pairs, respectively, from the verified CSVs. The QoR table retains its numerical rows.
