@@ -3,14 +3,14 @@ import csv, json, statistics, sys
 from pathlib import Path
 here=Path(__file__).resolve().parent
 from cohort import run
-from cohort import audit
+from cohort import allocation, audit
 def write(name,fields,rows):
     with (audit/name).open('w') as f:
         w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
 def read(p): return json.loads(p.read_text())
 full=['stock','pipeline','alt_cpu','alt_cuda']
 arms=full+['group','flat']
-cases=['gemm','bnn','lstm']
+cases=['lstm'] if allocation=='c' else ['gemm','bnn','lstm']
 def construction_valid(r):
     if not r.get('e2_ns') or not (0 < r['e2_ns'] < r['wall_ns']) or not r['matches_archived_map']:
         return False

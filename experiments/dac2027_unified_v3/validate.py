@@ -2,8 +2,8 @@
 from pathlib import Path
 import csv,hashlib,json,statistics
 here=Path(__file__).resolve().parent
-from cohort import audit, run
-cases=('gemm','bnn','lstm')
+from cohort import allocation, audit, run
+cases=('lstm',) if allocation=='c' else ('gemm','bnn','lstm')
 full=('stock','pipeline','alt_cpu','alt_cuda')
 controls=('group','flat')
 def read(p):return json.loads(p.read_text())
@@ -40,6 +40,8 @@ status={}
 for c in cases:
     gate_path = run/'qualification'/c/'gate.json'
     gate = read(gate_path) if gate_path.exists() else {}
+    if finished and allocation=='c':
+        gate=read(run/'checkpoint.json')['lstm_qualification']
     if finished:
         assert gate, c
     status[c]=dict(qualification=gate,formal=sum(k[0]==c for k in records))

@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import worker
 
 
-def verify_original_stock(run):
+def verify_original_stock(run, timed_directory=None):
     # A separate, untimed qualification with the original executable checks whether
     # this worker also sees a downstream routing failure without the E2 wrapper.
     directory = run/'diagnostic/lstm_original_stock'
@@ -21,7 +21,8 @@ def verify_original_stock(run):
     directory.mkdir(parents=True, exist_ok=False)
     original = worker.bins['stock']
     assert worker.digest(original['path']) == original['sha256']
-    timed_directory = run/'qualification/lstm/0/stock'
+    if timed_directory is None:
+        timed_directory = run/'qualification/lstm/0/stock'
     invocation = worker.read(timed_directory/'invocation.json')
     args = invocation['command'].copy()
     args[0] = original['path']

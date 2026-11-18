@@ -3,12 +3,14 @@ import ctypes, datetime, json, os, platform, shutil, socket, subprocess, time
 from pathlib import Path
 
 here = Path(__file__).resolve().parent
-from cohort import run
+from cohort import allocation, run
 run.mkdir(exist_ok=False)
 def read(path): return Path(path).read_text().strip()
 def query(*args): return subprocess.check_output(args,text=True).strip()
 def now(): return datetime.datetime.now(datetime.timezone.utc)
 deadline=datetime.datetime.fromisoformat('2026-11-19T13:00:00+00:00')
+if allocation=='c':
+    deadline=min(deadline, now()+datetime.timedelta(minutes=110))
 cg=Path('/sys/fs/cgroup')
 cpus=[]
 cores=set()
@@ -40,6 +42,7 @@ f.write_text(json.dumps(env,indent=2))
 os.environ['CUDA_VISIBLE_DEVICES']=gpu.split(',')[0].strip()
 while now()<deadline:
     if (here/'build/ready').is_file():
-        os.execv(shutil.which('python3'),['python3',str(here/'worker.py')])
+        entry=here/('allocation_c/resume_lstm.py' if allocation=='c' else 'worker.py')
+        os.execv(shutil.which('python3'),['python3','-u',str(entry)])
     time.sleep(10)
 raise SystemExit('Reservation deadline reached')
