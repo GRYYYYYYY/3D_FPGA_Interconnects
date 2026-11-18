@@ -17,3 +17,5 @@ Inspire returned `job_stopped` for the only reserved worker at 13:21:45 UTC on 1
 The paper now reports BNN qualification and the original graph-loader diagnostics. Four BNN routes pass independent FULL/STA with zero original overuse. CPU and CUDA agree on complete ALT captures and final maps. The BNN ALT map differs from STRICT at 24,434 congestion words. Independent readback was performed on the editing host after the reservation ended. The figure explaining historical GEMM denominators is labeled as such.
 
 The anonymous ZIP includes the algorithm2e, ifoddpage and relsize packages. A fresh directory rebuilt the six-page PDF byte for byte using TeX Live 2026. See the page review and the rebuild receipt in `review/`. The paper remains an internal draft pending unified measurements. The complete fallback at `2f43d7147904ec498bd944af127c2c4a463a8b63` remains available.
+
+The independent GEMM Stock readback also passed. All five completed routes reproduced their recorded CPD and wirelength. The experiment archive and verification receipt are pinned at `37d0193538344f0117317eb76d9be530e91f0a66` on `experiment/dac2027-unified-v3-20261118`.
