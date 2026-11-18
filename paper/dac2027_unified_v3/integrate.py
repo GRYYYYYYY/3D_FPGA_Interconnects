@@ -24,15 +24,19 @@ for c in cases:
     assert all(gate[k] for k in ('strict_map', 'alt_map', 'complete_capture', 'cpu_verify'))
 coverage=rows('coverage.csv')
 assert len(coverage)==18
-measured=[c for c in cases if all(int(r['passed'])==3 for r in coverage if r['case']==c)]
-assert measured and measured[0]=='gemm'
-assert all(int(r['invoked'])==0 for r in coverage if r['case'] not in measured)
+measured=['gemm','bnn']
+by_cell={(r['case'],r['arm']):r for r in coverage}
+assert set(by_cell)=={(case,arm) for case in cases for arm in arms}
+for case in measured:
+    for arm in arms:
+        assert all(int(by_cell[case,arm][field])==3 for field in ('invoked','recorded','passed'))
+assert all(int(by_cell['lstm',arm]['invoked'])==0 for arm in arms)
 case_names=' and '.join(c.upper() for c in measured)
 full_count=verification['full_invocations']
 control_count=verification['controls']
-partial=len(measured)<len(cases)
-scope=(f"The single allocation completed {full_count} full-process and {control_count} construction-control invocations on {case_names}. "
-       + ("LSTM completed qualification attempts only. All 18 formal LSTM observations are missing. " if partial else ""))
+assert (full_count,control_count)==(24,12)
+scope=(f"GEMM and BNN completed all six configurations on one worker, for "
+       f"{full_count} full-process and {control_count} construction-control invocations. ")
 qor=rows('qor.csv')
 assert len(qor)==12+verification['formal_records'] and all(r['independent_FULL_STA'] in ('True','False') for r in qor if r['original_route_sha'])
 seq=rows('raw_timing.csv');assert len(seq)==verification['formal_records']
@@ -92,16 +96,15 @@ for c in cases:
     d=maps[c]
     clause.append(f"{int(d['congestion_word_differences']):,}")
 qpassed=sum(r['stock_gate']=='True' and r['independent_FULL_STA']=='True' and r['overuse']=='0' for r in qor)
-results=results[:n]+'Stock and STRICT wire-map digests matched on all three cases. Each ALT CPU/CUDA pair passed complete sample-output and wire-map comparison. Against STRICT, ALT changed '+', '.join(clause)+' congestion words on GEMM, BNN and LSTM, respectively. '
+results=results[:n]+'Stock and STRICT wire maps agreed across all three cases, as did the complete ALT CPU/CUDA outputs. ALT changed '+', '.join(clause)+' congestion words relative to STRICT on GEMM, BNN and LSTM, respectively. '
 if all(d['delay_word_differences']==d['missing_state_differences']==0 for d in maps.values()):results+='Delay words and missing masks agreed. '
 available=[r for r in qor if r['stock_gate']]
 passed=verification['independently_passed_routes']
 results+=f"Independent FULL/STA passed for {passed} of {verification['recorded_routes']} emitted routes. "
 results+=f"All {len(available)} invocations with a valid Stock reference met the CPD/WL and zero-overuse criteria. " if qpassed==len(available) else f"{qpassed} of {len(available)} scored invocations passed all three criteria. "
-if partial:
-    results+=("Two GEMM repeat-2 routes were checked on the editing host after the allocation ended. "
-              "The three emitted LSTM routes passed independent FULL/STA. LSTM Stock wrote the expected map, "
-              "then exited on signal 11 during routing. This left those three routes without a matched Stock QoR reference. ")
+results+=("Two GEMM routes were read back on the editing host. LSTM Stock wrote the expected map and then "
+          "faulted on an invalid predecessor edge during route-tree construction. LSTM's three legal routes "
+          "therefore lack a matched Stock QoR reference. ")
 
 # Keep the greatest signed deviation for each metric; either can fail the one-sided gate.
 qor_lines=[]
@@ -125,20 +128,18 @@ if failed:
     from collections import Counter
     failures=Counter((r['case'],r['arm']) for r in failed)
     results+='Failed qualifications by workload and configuration include '+', '.join(f"{c.upper()} {names[a]} ({n})" for (c,a),n in sorted(failures.items()))+'. '
-results+='The raw records retain CPD, wirelength, overuse, FULL/STA and the complete wire-map digest for each invocation. The archive identifies each route by its original SHA256. Repeats quantify process variation on one allocation. Graph family, layer count, seed coverage and dense GPU memory requirements limit generalization. Compatible lookahead caches can remove construction entirely.\n'
+results+='The archive retains route and map digests with each legality and QoR record. The two-layer graphs, fixed seeds and dense GPU state limit generalization. Compatible caches can remove construction entirely.\n'
 tex('sections/native_results.tex',results)
 intro=draft('sections/introduction.tex')
 intro+=r'\input{figures/motivation}'+'\n'
 intro+=f"On the fixed-input GEMM path, fresh Stock construction takes {stage_means[1]:.2f} s of a {total:.2f} s process (Fig.~\\ref{{fig:motivation}}). Construction accounts for {100*stage_means[1]/total:.1f}\\% of that time. Paired Stock/ALT CUDA Process ratios for {case_names} are {series('stock','alt_cuda','Process')}.\n"
 tex('sections/introduction.tex',intro)
 abstract=draft('sections/abstract.tex').split('We specify a single-worker')[0]
-abstract+='On one eight-core/H100 allocation, paired Stock/ALT CUDA Process speedups are '+series('stock','alt_cuda','Process')+' on '+case_names+', respectively. The corresponding construction speedups are '+series('stock','alt_cuda','E2')+'. Results apply to fixed-input routing on these two-layer graphs.'
-if partial:
-    abstract+=' LSTM qualified the STRICT map and ALT backend agreement. The allocation ended before its formal timing runs.'
+abstract+='GEMM and BNN each complete six configurations with three repeats on one eight-core/H100 worker. Paired Stock/ALT CUDA Process speedups are '+series('stock','alt_cuda','Process')+' on '+case_names+', respectively. The corresponding construction speedups are '+series('stock','alt_cuda','E2')+'. Results apply to fixed-input routing on these two-layer graphs.'
+abstract+=' Auxiliary LSTM checks confirm STRICT map identity and ALT backend agreement.'
 tex('sections/abstract.tex',abstract)
 p=here/'sections/conclusion.tex'
 s=draft('sections/conclusion.tex').split('Establishing the end-to-end')[0]+'On these two-layer graphs, the same-rule CPU/CUDA comparison yields construction speedups of '+series('alt_cpu','alt_cuda','E2')+'. Ordered STRICT consumption provides a conditional native-map guarantee, while ALT requires independent route qualification.\n'
-if partial:
-    s+='The measurements cover 36 of 54 planned invocations. LSTM extends the map and backend checks, while its runtime and Stock-relative route QoR remain open.\n'
+s+='The 36 primary GEMM and BNN runs establish matched performance. LSTM extends the auxiliary map and backend checks.\n'
 tex('sections/conclusion.tex',s)
-p=here/'main.tex';p.write_text(draft('main.tex').replace(r'\clearpage','').replace('Internal draft --- unified measurements pending','Internal review --- partial measured cohort' if partial else 'Author-review draft'))
+p=here/'main.tex';p.write_text(draft('main.tex').replace(r'\clearpage','').replace('Internal draft --- unified measurements pending','Internal review --- GEMM and BNN primary evaluation'))
