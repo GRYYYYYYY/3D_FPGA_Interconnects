@@ -81,10 +81,11 @@ def motivation_figure(root, shares):
     lines = [r'\begin{figure}[t]\centering',
              r'\begin{tikzpicture}[x=.056cm,y=.46cm,font=\footnotesize]',
              r'\definecolor{subtotal}{HTML}{28577B}\definecolor{complete}{HTML}{86BAB0}',
+             r'\node[font=\footnotesize\bfseries] at (42,7.48) {Share of time spent in Lookahead Construction (\%)};',
              r'\draw[fill=subtotal] (-16,6.3) rectangle (-12,6.55);',
-             r'\node[anchor=west] at (-11,6.42) {Component subtotal};',
+             r'\node[anchor=west] at (-11,6.42) {Construction + routing};',
              r'\draw[fill=complete] (47,6.3) rectangle (51,6.55);',
-             r'\node[anchor=west] at (52,6.42) {Complete process};',
+             r'\node[anchor=west] at (52,6.42) {End-to-end process};',
              r'\foreach \x in {0,50,100}{\draw[black!20] (\x,.25)--(\x,5.9);',
              r'\node[below,font=\scriptsize] at (\x,.25) {\x\%};}']
     for i, row in enumerate(shares):
