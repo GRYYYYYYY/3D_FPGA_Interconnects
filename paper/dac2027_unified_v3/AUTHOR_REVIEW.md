@@ -22,3 +22,5 @@ All 54 formal routes passed independent FULL/STA, zero-overuse checks and Stock-
 - [Page-by-page visual review](review/VISUAL_REVIEW.md), [clean-directory rebuild](review/rebuild.json), [freeze manifest](paper_freeze.json) and [checksums](SHA256SUMS)
 
 The supplied B03 and Main13 PDFs are preserved in figures/. The anonymous source uses vector publication copies exported with pdftocairo to remove document metadata and embed fonts. The framework artwork says “Up to K workers.” Its caption specifies the implementation: P workers and up to K live tokens. ALT CPU distributes samples across workers, and the GPU also parallelizes active nodes within each wave.
+
+Figure 3 uses the revised Main13 artwork with an explicit two-candidate ALT wave. Candidate 2 prints 2.8 for both delay operands and 4.0 for their sum. The caption supplies the consistent predecessor pair (2.0, 0.2) and shared destination cost (2.0, 1.0) for the illustrated delay tie.
