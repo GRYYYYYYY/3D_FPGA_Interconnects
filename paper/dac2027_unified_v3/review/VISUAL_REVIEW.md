@@ -4,7 +4,7 @@ Reviewed the seven final PDF page renders at a long-edge resolution of 1100 pixe
 
 | Page | Visual check |
 |---|---|
-| 1 | Title and anonymous byline clear the two columns. The abstract names all three workloads. Figure 1 has two separately labelled bars, 82.96% and 45.18%, with both denominators in the caption. |
+| 1 | Title and anonymous byline clear the two columns. The abstract names all three workloads. Figure 1 gives two labelled percentages per workload. The three pairs share a 0–100% scale, and the caption defines both denominators. |
 | 2 | Figure 2 separates cross-group issue from a single ALT wave. Arrows and tile labels remain distinct. Algorithm 1 fits its column, including the numbered merge and return lines. Section II-C fits in the lower left column and cites the AIR pseudocode by algorithm number. |
 | 3 | The proposition and its proof appear in the first column. Equations (2)–(5) and the twenty lines of Algorithm 2 are visible. The same-bucket loop, closure and shift definitions survive the column breaks. |
 | 4 | Table I fits in the right column. Each of the five resource counts aligns under GEMM, BNN and LSTM. Equations (6) and (7) fit with their tags. Methodology describes both workers, binding, launch-to-exit scope, sample SD and fixed-seed interpretation. No clipped code names or formulas. |

@@ -1,10 +1,27 @@
 \begin{figure}[t]\centering
-\begin{tikzpicture}[x=.066cm,y=.72cm,font=\footnotesize]
-\foreach \y/\share/\labeltext in {1/82.96/Component medians,0/45.18/End-to-End Process Time (mean)}{
-  \node[anchor=west] at (0,\y+.36) {\labeltext};
-  \draw[fill=gray!14] (0,\y-.18) rectangle (100,\y+.18);
-  \draw[fill=blue!35] (0,\y-.18) rectangle (\share,\y+.18);
-  \node at (.5*\share,\y) {\share\%};
-}
+\begin{tikzpicture}[x=.056cm,y=.46cm,font=\footnotesize]
+\definecolor{subtotal}{HTML}{28577B}\definecolor{complete}{HTML}{86BAB0}
+\draw[fill=subtotal] (-16,6.3) rectangle (-12,6.55);
+\node[anchor=west] at (-11,6.42) {Component subtotal};
+\draw[fill=complete] (47,6.3) rectangle (51,6.55);
+\node[anchor=west] at (52,6.42) {Complete process};
+\foreach \x in {0,50,100}{\draw[black!20] (\x,.25)--(\x,5.9);
+\node[below,font=\scriptsize] at (\x,.25) {\x\%};}
+\node[anchor=east] at (0,5.08) {GEMM};
+\draw[fill=subtotal,thin] (0,5.11) rectangle (83.995474,5.69);
+\node[anchor=east,text=white,font=\scriptsize] at (83.995474,5.40) {84.00\%};
+\draw[fill=complete,thin] (0,4.46) rectangle (46.632641,5.04);
+\node[anchor=east,text=black,font=\scriptsize] at (46.632641,4.75) {46.63\%};
+\node[anchor=east] at (0,3.08) {BNN};
+\draw[fill=subtotal,thin] (0,3.11) rectangle (84.755712,3.69);
+\node[anchor=east,text=white,font=\scriptsize] at (84.755712,3.40) {84.76\%};
+\draw[fill=complete,thin] (0,2.46) rectangle (49.621568,3.04);
+\node[anchor=east,text=black,font=\scriptsize] at (49.621568,2.75) {49.62\%};
+\node[anchor=east] at (0,1.08) {LSTM};
+\draw[fill=subtotal,thin] (0,1.11) rectangle (84.292604,1.69);
+\node[anchor=east,text=white,font=\scriptsize] at (84.292604,1.40) {84.29\%};
+\draw[fill=complete,thin] (0,0.46) rectangle (59.213635,1.04);
+\node[anchor=east,text=black,font=\scriptsize] at (59.213635,0.75) {59.21\%};
 \end{tikzpicture}
-\caption{Construction share in one fixed-input GEMM Stock cohort. Top: median \constructiontime{} (148.83 s) divided by the sum of component medians (148.83 s construction and 30.57 s routing). Bottom: mean \constructiontime{} (149.56 s) divided by mean \processtime{} (331.05 s). These motivation runs are separate from the formal timing table.}\label{fig:motivation}\end{figure}
+\caption{Construction share in three formal Stock runs per workload. Upper bars divide median \constructiontime{} by the sum of median construction and median routing times. Lower bars divide mean \constructiontime{} by mean \processtime{}.}\label{fig:motivation}
+\end{figure}

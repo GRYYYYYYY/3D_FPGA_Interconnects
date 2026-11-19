@@ -75,3 +75,28 @@ def build(root: Path, seconds, paired):
         draw_panel(ratios, 'E2', higher, '.275', 31, '0,10,20,30', r'\constructionspeedup{} ($\times$)', 4.5, True),
         draw_panel(ratios, 'Process', end_to_end, '.315', 2.55, '0,1,2', r'\processspeedup{} ($\times$)', 4.5, True),
     ], r'Paired speedups. $A\to B$ reports $T_A/T_B$ within each workload and repeat. Bars show the mean of three ratios and whiskers show sample SD. Dashed lines mark $1\times$. The construction panels use different linear scales to resolve near-parity comparisons.')
+
+
+def motivation_figure(root, shares):
+    lines = [r'\begin{figure}[t]\centering',
+             r'\begin{tikzpicture}[x=.056cm,y=.46cm,font=\footnotesize]',
+             r'\definecolor{subtotal}{HTML}{28577B}\definecolor{complete}{HTML}{86BAB0}',
+             r'\draw[fill=subtotal] (-16,6.3) rectangle (-12,6.55);',
+             r'\node[anchor=west] at (-11,6.42) {Component subtotal};',
+             r'\draw[fill=complete] (47,6.3) rectangle (51,6.55);',
+             r'\node[anchor=west] at (52,6.42) {Complete process};',
+             r'\foreach \x in {0,50,100}{\draw[black!20] (\x,.25)--(\x,5.9);',
+             r'\node[below,font=\scriptsize] at (\x,.25) {\x\%};}']
+    for i, row in enumerate(shares):
+        y = 5.4 - 2*i
+        lines.append(rf"\node[anchor=east] at (0,{y-.32:.2f}) {{{row['case'].upper()}}};")
+        for offset, metric, color, ink in [(0, 'subtotal_pct', 'subtotal', 'white'),
+                                           (-.65, 'process_pct', 'complete', 'black')]:
+            value = row[metric]
+            center = y + offset
+            lines.append(rf'\draw[fill={color},thin] (0,{center-.29:.2f}) rectangle ({value:.6f},{center+.29:.2f});')
+            lines.append(rf'\node[anchor=east,text={ink},font=\scriptsize] at ({value:.6f},{center:.2f}) {{{value:.2f}\%}};')
+    lines += [r'\end{tikzpicture}',
+              r'\caption{Construction share in three formal Stock runs per workload. Upper bars divide median \constructiontime{} by the sum of median construction and median routing times. Lower bars divide mean \constructiontime{} by mean \processtime{}.}\label{fig:motivation}',
+              r'\end{figure}']
+    (root/'figures'/'motivation.tex').write_text('\n'.join(lines)+'\n')

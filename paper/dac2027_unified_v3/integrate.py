@@ -10,7 +10,7 @@ import subprocess
 import zipfile
 from pathlib import Path
 
-from result_figures import build as build_result_figures
+from result_figures import build as build_result_figures, motivation_figure
 
 ROOT = Path(__file__).resolve().parent
 REVIEW = ROOT / 'review'
@@ -46,6 +46,7 @@ def verify(row, values):
 
 
 raw, seconds, ratios, routes = [], [], [], []
+stock_stages = []
 unique_ids, identities = set(), set()
 gold = json.loads(blob(B, 'golden_maps.json'))
 for alloc, rev, workloads in [('B', B, cases[:2]), ('C', C, cases[2:])]:
@@ -75,6 +76,13 @@ for alloc, rev, workloads in [('B', B, cases[:2]), ('C', C, cases[2:])]:
         assert rec['end_ns'] - rec['begin_ns'] == rec['wall_ns']
         full = a not in ('flat','group')
         assert row['Process_ns'] == (str(rec['wall_ns']) if full else '')
+        if a == 'stock':
+            log = z.read(p+'process.log')
+            route_seconds, = re.findall(rb'^#+ Routing took ([.\d]+) seconds', log, re.M)
+            route_s = float(route_seconds)
+            assert route_s == rec['stage_times']['routing']
+            stock_stages.append(dict(allocation=alloc, case=c, repeat=r, construction_s=ns/1e9,
+                                    routing_s=route_s, process_s=rec['wall_ns']/1e9))
         assert (c,a,r) not in timing
         timing[c,a,r] = {'E2':ns,'Process':rec['wall_ns'] if full else None}
         intervals.append((rec['begin_ns'],rec['end_ns']))
@@ -140,6 +148,22 @@ for alloc, rev, workloads in [('B', B, cases[:2]), ('C', C, cases[2:])]:
 
 assert len(raw)==54 and len(seconds)==30 and len(ratios)==39
 assert len(identities)==len(unique_ids)==len(routes)==65
+write_csv('stock_stages.csv', stock_stages)
+motivation = []
+for case in cases:
+    sample = [r for r in stock_stages if r['case'] == case]
+    assert sorted(r['repeat'] for r in sample) == [0, 1, 2]
+    construction = [r['construction_s'] for r in sample]
+    median_c = st.median(construction)
+    median_r = st.median(r['routing_s'] for r in sample)
+    mean_c = st.mean(construction)
+    mean_p = st.mean(r['process_s'] for r in sample)
+    motivation.append(dict(case=case, median_construction_s=median_c, median_routing_s=median_r,
+                           mean_construction_s=mean_c, mean_process_s=mean_p,
+                           subtotal_pct=100*median_c/(median_c+median_r),
+                           process_pct=100*mean_c/mean_p))
+write_csv('motivation_shares.csv', motivation)
+motivation_figure(ROOT, motivation)
 write_csv('raw_seconds.csv',raw)
 write_csv('seconds.csv',seconds)
 write_csv('paired.csv',ratios)
