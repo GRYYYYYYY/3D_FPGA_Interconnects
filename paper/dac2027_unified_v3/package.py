@@ -11,6 +11,7 @@ for directory in ('sections','tables','figures'):
     files+=sorted((here/directory).glob('*.tex'))
 for path in files:
     assert not any(s in path.read_text(errors='replace') for s in ['/inspire/','guoruiyuan','GRYYYYYYY']),path
+files += [here/'figures'/name for name in ('timeline.pdf', 'framework.pdf')]
 args=['latexmk','-g','-pdf','-interaction=nonstopmode','-halt-on-error','main.tex']
 archive=here/'anonymous_source.zip'
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:

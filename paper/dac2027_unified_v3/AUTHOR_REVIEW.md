@@ -13,9 +13,12 @@ Each workload has four full-process arms and two construction-only controls, eac
 All 54 formal routes passed independent FULL/STA, zero-overuse checks and Stock-relative CPD/WL thresholds. Including the qualification invocations gives 65 unique emitted routes and 62 scored passes. A separate original-binary diagnostic also passed. The earlier LSTM Stock fault remains in the qualification record. FPGA migration was observed passively in PAUSED_BY_USER_BUDGET_DECISION_REQUIRED state during integration.
 
 - [Manuscript](main.pdf) and [anonymous source](anonymous_source.zip)
-- [Figure 3, native times](figures/native_times.pdf) and [Figure 4, paired speedups](figures/paired_speedups.pdf)
+- [Figure 2, execution schedules](figures/timeline.pdf) and [Figure 3, construction framework](figures/framework.pdf)
+- [Figure 4, native times](figures/native_times.pdf) and [Figure 5, paired speedups](figures/paired_speedups.pdf)
 - [Figure 1 Stock observations](review/stock_stages.csv) and [construction shares](review/motivation_shares.csv)
 - [Raw seconds](review/raw_seconds.csv), [time statistics](review/seconds.csv) and [paired ratios](review/paired.csv)
 - [Distinct route counts](review/route_counts.csv) and [invocation-level QoR](review/routes.csv)
 - [Claim–evidence ledger](review/CLAIM_EVIDENCE.md), [Timing terminology audit](review/E1_AUDIT.md) and [LSTM fault investigation](review/ALLOCATION_B_AND_LSTM_STOCK.md)
 - [Page-by-page visual review](review/VISUAL_REVIEW.md), [clean-directory rebuild](review/rebuild.json), [freeze manifest](paper_freeze.json) and [checksums](SHA256SUMS)
+
+The supplied B03 and Main13 PDFs are preserved in figures/. The anonymous source uses vector publication copies exported with pdftocairo to remove document metadata and embed fonts. The framework artwork says “Up to K workers.” Its caption specifies the implementation: P workers and up to K live tokens. ALT CPU distributes samples across workers, and the GPU also parallelizes active nodes within each wave.

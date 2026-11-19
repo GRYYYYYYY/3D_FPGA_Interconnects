@@ -1,9 +1,10 @@
 \section{Two Parallelization Regimes for Lookahead Construction}
 \input{sections/contracts_figure}
+Figure~\ref{fig:contracts} compares schedules. Figure~\ref{fig:framework} follows a batch from its ordered starts to the native wire table.
 \subsection{C1: Private Samples and Ordered Consumption}
-Algorithm~\ref{alg:c1} overlaps ordered issue, parallel search and ordered merge (Fig.~\ref{fig:contracts}). A token carries index $a$, which identifies the group, ordinal, source and cell map even when a later group starts early. Worker $p$ resets its private queue, visited costs and expanded bits in $S_p$. Its flood reads the shared graph and preserves native geometry, edge eligibility and arithmetic.
+In Algorithm~\ref{alg:c1}, token $a$ identifies the group, ordinal, source and cell map across group boundaries. Worker $p$ resets its private queue, visited costs and expanded bits in $S_p$. Its flood reads the shared graph with native geometry, edge eligibility and arithmetic.
 
-\begin{algorithm}[t]
+\begin{algorithm}[t]\footnotesize
 \caption{Bounded STRICT sample pipeline (C1)}\label{alg:c1}
 \Input{Graph $G$, ordered starts $(s_{g,j})$, cell maps $\phi_a$, parallelism $P$}
 \Output{Sampled wire table $F$}
@@ -24,9 +25,9 @@ $\operatorname{Pipeline}_K(\textsc{Issue},\textsc{Search},\textsc{Merge})$\;
 \Return $\mathcal I(\mathcal C(\{A_g\}))$\;
 \end{algorithm}
 
-At most $K$ tokens are live. A result $(a,R_a)$ retains its token until the consumer applies $\oplus$ in issue order and releases it. After the join, native group writes and fills follow Section~II. Flat retains all $J$ results for its ordered reduction; Group joins after each group.
+A result retains its token until the consumer applies $\oplus$ in issue order. At most $K$ tokens are live. Native writes and fills follow the join. Flat retains all $J$ results until reduction. Group joins after each group.
 
-\begin{proposition}
+\begin{proposition}\label{prop:strict}
 Assume native sample selection, contexts, visitation, arithmetic, occupancy, commit and interpolation. For finite occupied delays, private floods and original-order strict-delay reduction reproduce the native wire table.
 \end{proposition}
 \noindent\textbf{\emph{Proof.}} Each private flood produces the same per-cell representative as its native execution. For an occupied cell, ordered reduction selects the least delay and retains its earliest sample on equal delay:
@@ -43,7 +44,7 @@ Let $t_a$ include sample reset, traversal and recording, and $W_g=\sum_{a:g(a)=g
  T_{\rm group}&\geq\sum_g\max\{W_g/P,\max_{a:g(a)=g}t_a\},\\
  T_{\rm global}&\geq\max\{\textstyle\sum_a t_a/P,\max_a t_a\}.
 \end{align}
-These are lower bounds, not speedup guarantees: an early slow sample can delay ordered consumption and occupy tokens. If $S(N)$ is native private workspace size including its queue, storage beyond the shared graph is $O(P S(N)+KC+|\mathcal G|C+J)$ for Pipeline; Flat replaces $KC$ by $JC$. This exposes the resource tradeoff of retaining independent results. Dense sample-to-group reduction performs $O(JC)$ cell visits; enumeration, group writes and interpolation add their own work. We do not assume a universal $O(M\log N)$ flood cost: actual queue traffic, termination and reset work depend on the native engine and graph.
+An early slow sample can stall ordered consumption and occupy tokens. For private workspace $S(N)$ including the queue, Pipeline needs $O(P S(N)+KC+|\mathcal G|C+J)$ storage beyond the shared graph. Flat replaces $KC$ with $JC$. Dense reduction visits $O(JC)$ cells, in addition to enumeration, writes and interpolation. Flood work depends on queue traffic, termination and reset.
 
 \subsection{C2: Whole-Pair FP32 Waves}
 ALT\_BUCKET\_FP32\_V1 makes the inner ordering rule explicit. A node label $L[v]=(d,q)$ is compared lexicographically:
@@ -52,11 +53,11 @@ ALT\_BUCKET\_FP32\_V1 makes the inner ordering rule explicit. A node label $L[v]
 \end{equation}
 Both coordinates come from one predecessor label plus the destination cost. Native insertion compares delay alone. ALT initializes the source to $(0,0)$, other labels to an infinity sentinel and output cells to missing.
 
-The scheduling key is $B(d)=\mathrm{bits}_{32}(d)\gg h$. Shift 0 ($h=0$) schedules by the exact FP32 delay bits. Shift 20 ($h=20$), used for native ALT timing, groups delays under a coarser scheduling key. Coarsening this key changes which labels are processed together, without quantizing their stored FP32 delays. Costs and generated candidates must be positive normal FP32 or positive zero: negative values, negative zero, subnormals, NaNs and infinities are rejected as numeric inputs/results. Infinity is only internal unreached state. ALT CPU uses round-to-nearest with contraction and fast math disabled. ALT GPU uses explicit round-to-nearest CUDA addition. The admission pass checks inter-cluster non-SINK node costs and expansion checks each accumulated pair.
+The scheduling key $B(d)=\mathrm{bits}_{32}(d)\gg h$ uses exact delay bits at shift $h=0$. Shift 20, used for native ALT timing, groups delays without quantizing stored labels. Costs and candidates must be positive normal FP32 or positive zero. Admission checks inter-cluster non-SINK node costs, and expansion checks each accumulated pair. Infinity marks unreached nodes internally. ALT CPU uses round-to-nearest with contraction and fast math disabled. ALT GPU uses explicit round-to-nearest CUDA addition.
 
 In Algorithm~\ref{alg:c2}, $T_a$ contains the distinct mapped target cells. $\operatorname{Pop}$ removes bucket $b$ from directory $\mathcal D$; only entries whose current key $\pi[u]=b$ are active. $\operatorname{Publish}$ schedules a new key and suppresses duplicate current notifications. ALT CPU filters stale directory entries. ALT GPU replaces the pending key directly.
 
-\begin{algorithm}[t]
+\begin{algorithm}[t]\footnotesize
 \caption{Whole-pair FP32 waves (C2)}\label{alg:c2}
 \Input{$G$, source $s_a$, cell map $\phi_a$, targets $T_a$, key $B$}
 \Output{Sample map $R_a$}
@@ -92,7 +93,7 @@ $\Gamma(u)$ lists eligible neighbors in native order, including the SINK stoppin
 Clearing $\pi[U]$ allows same-bucket improvements to enter the next wave. $\mathcal H$ collects expanded nodes until the bucket closes, taking $\min\varnothing=+\infty$. At closure, $\min_{\prec}^{\bot}$ accepts a first mapped IPIN pair in a missing cell and otherwise keeps the smaller pair. $\operatorname{dom}(R_a)$ contains occupied cells; exhaustion leaves unreachable cells missing. Invalid numerics or exceeded guards abort without partial output. FP32 rounding can collapse distinct delays and change which congestion tie survives.
 
 \subsection{CPU/GPU Mapping and Costs}
-ALT CPU receives the full job list through the live native interface. An OpenMP dynamic loop assigns independent samples to private scratch arrays with a sparse ordered map of pending buckets. It does not call the STRICT TBB Pipeline. ALT GPU allocates all $J$ samples together: grid dimension $y$ identifies the sample, while $x$ and 256-thread blocks identify nodes. Each active node thread loops over its own adjacency. Candidate edges are not each assigned a separate thread.
+ALT CPU takes the full native job list. An OpenMP dynamic loop distributes samples across workers, each with private scratch arrays and a sparse ordered map of pending buckets. ALT GPU allocates all $J$ samples together. Grid dimension $y$ selects a sample, while $x$ and 256-thread blocks select nodes. Each active node thread scans its own adjacency.
 
 For admitted nonnegative floats the unsigned key
 \begin{equation}
@@ -109,4 +110,4 @@ where $H_a$ counts closure occupancy scans. Atomic contention, launches and host
 
 For the GPU representation, arrays require $25JN+8JC$ bytes for labels/proposals, pending, closed flags, mapping and output, plus $8(N+1)+16N+8M$ for CSR/nodes/edges and cost/job metadata. Admission estimates the complete allocation and requires it to fit within 80\% of free device memory; allocation/API errors remain failures. Native ABI shape checks and finite wave/time guards further bound execution. An auxiliary qualification on the full 9,595,752-node GEMM graph admitted all 40 samples and verified outputs and routes.
 
-The host exports current graph/costs and per-sample geometry, calls exactly one chosen backend, then merges returned samples in original order and completes native writes/interpolation. Graph conversion, allocation, transfer, synchronization and output handoff are charged to \constructiontime{}.
+The host exports graph costs and sample geometry, calls one backend and merges results in native order. \constructiontime{} includes conversion, allocation, transfer, synchronization, handoff and native writes/interpolation.
