@@ -1,6 +1,6 @@
 \section{Experimental Methodology}
 \subsection{Workloads and Unified Experimental Setup}
-GEMM (seed 1, width 100), BNN (seed 1, width 120) and LSTM (seed 2, width 120) use their original architectures, BLIFs, packed netlists, placements, complete RR XML and all 40 samples. One worker ran every GEMM and BNN configuration. A second ran every LSTM configuration. Both had an Intel Xeon Platinum 8462Y+, an NVIDIA H100 80GB, a ten-CPU quota and 200 GiB of memory. Host code used physical cores 0--7 and memory on NUMA node 0. CPU governors used performance mode. GPU clocks were adaptive with a 700 W power limit. We built VTR \texttt{0b912334fdd8} in Release mode at assertion level 2 with GCC 13.3 and CUDA 12.8.
+GEMM (seed 1, width 100), BNN (seed 1, width 120) and LSTM (seed 2, width 120) use their original architectures, BLIFs, packed netlists, placements, complete RR XML and all 40 samples. Each run used an Intel Xeon Platinum 8462Y+, an NVIDIA H100 80GB, a ten-CPU quota and 200 GiB of memory. Host code used physical cores 0--7 and memory on NUMA node 0. CPU governors used performance mode. GPU clocks were adaptive with a 700 W power limit. The VTR baseline was commit \texttt{0b912334fdd8}.
 \begin{table}[t]\centering\caption{Original routing-resource graphs. Local edges lie within one layer. Spanning edges touch resources whose combined extent covers both layers. Each graph has two layers and 40 samples.}\label{tab:rr}
 \begin{tabular}{@{}lrrr@{}}\toprule
 Resource count & GEMM & BNN & LSTM\\\midrule
