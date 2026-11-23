@@ -61,11 +61,11 @@ Both coordinates come from one predecessor label plus the destination cost. Nati
 
 The scheduling key $B(d)=\mathrm{bits}_{32}(d)\gg h$ uses exact delay bits at shift $h=0$. Shift 20, used for native ALT timing, groups delays without quantizing stored labels. Costs and candidates must be positive normal FP32 or positive zero. Admission checks inter-cluster non-SINK node costs, and expansion checks each accumulated pair. Infinity marks unreached nodes internally. ALT CPU uses round-to-nearest with contraction and fast math disabled. ALT GPU uses explicit round-to-nearest CUDA addition.
 
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/Fig_ALT_semantics_compact (1).pdf}
+\includegraphics[width=\columnwidth]{figures/Fig_ALT_semantics_compact (1).pdf}
 \caption{ALT with shift 20. Two proposals reach $v$ with delay 4.25. Whole-pair comparison selects $(4.25,1.5)$ from the wave snapshot. The next wave reaches IPIN $t$ with $(4.375,1.75)$ in the same bucket. The sample records that pair when the bucket closes.}\label{fig:alt_semantics}
-\end{figure*}
+\end{figure}
 Figure~\ref{fig:alt_semantics} follows one equal-delay tie through commit and same-bucket propagation to a target cell.
 
 In Algorithm~\ref{alg:c2}, $T_a$ is the set of mapped targets. $\operatorname{Pop}$ removes bucket $b$ from directory $\mathcal D$. Only nodes with current key $\pi[u]=b$ are active. $\operatorname{Publish}$ schedules new keys and suppresses duplicates. ALT CPU filters stale entries. ALT GPU overwrites the pending key.
