@@ -16,12 +16,13 @@ All 54 formal routes passed independent FULL/STA, zero-overuse checks and Stock-
 - [Figure 2, execution schedules](figures/Fig2_unified_schedule.pdf) and [Figure 3, construction framework](figures/framework.pdf)
 - [Figure 4, STRICT semantics](<figures/Fig_STRICT_semantics_compact (1).pdf>) and [Figure 5, ALT semantics](<figures/Fig_ALT_semantics_compact (1).pdf>)
 - [Figure 6, native times](figures/native_times.pdf) and [Figure 7, paired speedups](figures/paired_speedups.pdf)
-- [Figure 1 Stock observations](review/stock_stages.csv) and [stage means and construction shares](review/motivation_shares.csv)
+- [Figure 1, architecture, CAD flow and measured runtime](figures/lookahead_overview.pdf)
+- [Figure 1(c) Stock observations](review/stock_stages.csv) and [stage means and construction shares](review/motivation_shares.csv)
 - [Raw seconds](review/raw_seconds.csv), [time statistics](review/seconds.csv) and [paired ratios](review/paired.csv)
 - [Distinct route counts](review/route_counts.csv) and [invocation-level QoR](review/routes.csv)
 - [Claim–evidence ledger](review/CLAIM_EVIDENCE.md), [Timing terminology audit](review/E1_AUDIT.md) and [LSTM fault investigation](review/ALLOCATION_B_AND_LSTM_STOCK.md)
 - [Page-by-page visual review](review/VISUAL_REVIEW.md), [clean-directory rebuild](review/rebuild.json), [freeze manifest](paper_freeze.json) and [checksums](SHA256SUMS)
 
-Figures 2, 4 and 5 use the supplied vector PDFs directly. Figure 3 uses a vector publication copy of Main13 with embedded fonts and stripped document metadata. The framework artwork says “Up to K workers.” Its caption specifies the implementation: P workers and up to K live tokens. ALT CPU distributes samples across workers, and the GPU also parallelizes active nodes within each wave.
+Figures 2, 4 and 5 use the supplied vector PDFs directly. Figures 1 and 3 use vector publication copies of the supplied overview and Main13 with embedded fonts and stripped document metadata. The framework artwork says “Up to K workers.” Its caption specifies the implementation: P workers and up to K live tokens. ALT CPU distributes samples across workers, and the GPU also parallelizes active nodes within each wave.
 
 Figure 3 uses the revised Main13 artwork with an explicit two-candidate ALT wave. Candidate 2 prints 2.8 for both delay operands and 4.0 for their sum. The caption supplies the consistent predecessor pair (2.0, 0.2) and shared destination cost (2.0, 1.0) for the illustrated delay tie.

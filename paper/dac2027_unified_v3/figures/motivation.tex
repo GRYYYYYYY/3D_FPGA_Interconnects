@@ -1,40 +1,6 @@
-\begin{figure}[t]\centering
-\begin{tikzpicture}[x=.073cm,y=1cm,font=\footnotesize]
-\draw[fill=gray!35,thin] (0,2.07) rectangle (3,2.23);
-\node[anchor=west] at (4,2.15) {RR XML loading};
-\draw[fill=blue!40,thin] (45,2.07) rectangle (48,2.23);
-\node[anchor=west] at (49,2.15) {Lookahead Construction};
-\draw[fill=orange!50,thin] (0,1.72) rectangle (3,1.88);
-\node[anchor=west] at (4,1.8) {Routing};
-\draw[fill=gray!12,thin] (45,1.72) rectangle (48,1.88);
-\node[anchor=west] at (49,1.8) {Remaining process};
-\node[anchor=east] at (0,1.35) {GEMM};
-\draw[fill=gray!35,thin] (0.00000,1.15) rectangle (14.88862,1.55);
-\node[inner sep=0pt,font=\scriptsize] at (7.44431,1.35) {14.9\%};
-\draw[fill=blue!40,thin] (14.88862,1.15) rectangle (61.52126,1.55);
-\node[inner sep=0pt,font=\scriptsize] at (38.20494,1.35) {46.6\%};
-\draw[fill=orange!50,thin] (61.52126,1.15) rectangle (70.43093,1.55);
-\node[inner sep=0pt,font=\scriptsize] at (65.97610,1.35) {8.9\%};
-\draw[fill=gray!12,thin] (70.43093,1.15) rectangle (100.00000,1.55);
-\node[inner sep=0pt,font=\scriptsize] at (85.21547,1.35) {29.6\%};
-\node[anchor=east] at (0,0.79) {BNN};
-\draw[fill=gray!35,thin] (0.00000,0.59) rectangle (16.54912,0.99);
-\node[inner sep=0pt,font=\scriptsize] at (8.27456,0.79) {16.5\%};
-\draw[fill=blue!40,thin] (16.54912,0.59) rectangle (66.17068,0.99);
-\node[inner sep=0pt,font=\scriptsize] at (41.35990,0.79) {49.6\%};
-\draw[fill=orange!50,thin] (66.17068,0.59) rectangle (75.13332,0.99);
-\node[inner sep=0pt,font=\scriptsize] at (70.65200,0.79) {9.0\%};
-\draw[fill=gray!12,thin] (75.13332,0.59) rectangle (100.00000,0.99);
-\node[inner sep=0pt,font=\scriptsize] at (87.56666,0.79) {24.9\%};
-\node[anchor=east] at (0,0.23) {LSTM};
-\draw[fill=gray!35,thin] (0.00000,0.03) rectangle (10.91816,0.43);
-\node[inner sep=0pt,font=\scriptsize] at (5.45908,0.23) {10.9\%};
-\draw[fill=blue!40,thin] (10.91816,0.03) rectangle (70.13180,0.43);
-\node[inner sep=0pt,font=\scriptsize] at (40.52498,0.23) {59.2\%};
-\draw[fill=orange!50,thin] (70.13180,0.03) rectangle (81.26294,0.43);
-\node[inner sep=0pt,font=\scriptsize] at (75.69737,0.23) {11.1\%};
-\draw[fill=gray!12,thin] (81.26294,0.03) rectangle (100.00000,0.43);
-\node[inner sep=0pt,font=\scriptsize] at (90.63147,0.23) {18.7\%};
-\end{tikzpicture}
-\caption{Stock runtime at fixed routing inputs. Each segment is the mean stage time divided by mean \processtime{} across three runs. The totals are 300.61 s (GEMM), 122.81 s (BNN) and 231.63 s (LSTM). The remainder includes initialization, checking, STA and serialization.}\label{fig:motivation}
-\end{figure}
+\begin{minipage}{\textwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/lookahead_overview.pdf}
+\makeatletter\def\@captype{figure}\makeatother
+\caption{(a) Illustrative 3D interconnect choices change the routing-resource graph. (b) The router estimates remaining cost using a precomputed lookahead table. (c) For each two-layer workload, bars divide mean stage time by mean Stock \processtime{} across three fixed-input runs: 300.61 s (GEMM), 122.81 s (BNN) and 231.63 s (LSTM). Packing, placement and RRG generation are outside this interval.}\label{fig:motivation}
+\end{minipage}

@@ -75,38 +75,3 @@ def build(root: Path, seconds, paired):
         draw_panel(ratios, 'E2', higher, '.275', 31, '0,10,20,30', r'\constructionspeedup{} ($\times$)', 4.5, True),
         draw_panel(ratios, 'Process', end_to_end, '.315', 2.55, '0,1,2', r'\processspeedup{} ($\times$)', 4.5, True),
     ], r'Paired speedups. $A\to B$ reports $T_A/T_B$ within each workload and repeat. Bars show the mean of three ratios and whiskers show sample SD. Dashed lines mark $1\times$. The construction panels use different linear scales to resolve near-parity comparisons.')
-
-
-def motivation_figure(root, shares):
-    stages = [
-        ('mean_rr_xml_s', 'gray!35', 'RR XML loading'),
-        ('mean_construction_s', 'blue!40', 'Lookahead Construction'),
-        ('mean_routing_s', 'orange!50', 'Routing'),
-        ('mean_remaining_s', 'gray!12', 'Remaining process'),
-    ]
-    lines = [r'\begin{figure}[t]\centering',
-             r'\begin{tikzpicture}[x=.073cm,y=1cm,font=\footnotesize]']
-    for (key, color, label), (x, y) in zip(stages, [(0, 2.15), (45, 2.15), (0, 1.80), (45, 1.80)]):
-        lines.append(rf'\draw[fill={color},thin] ({x},{y-.08:.2f}) rectangle ({x+3},{y+.08:.2f});')
-        lines.append(rf'\node[anchor=west] at ({x+4},{y}) {{{label}}};')
-    totals = []
-    for i, row in enumerate(shares):
-        case = row['case'].upper()
-        total = row['mean_process_s']
-        totals.append(f'{total:.2f}')
-        y = 1.35 - .56*i
-        lines.append(rf'\node[anchor=east] at (0,{y:.2f}) {{{case}}};')
-        left = 0
-        for key, color, _ in stages:
-            share = 100 * row[key] / total
-            right = left + share
-            lines.append(rf'\draw[fill={color},thin] ({left:.5f},{y-.20:.2f}) rectangle ({right:.5f},{y+.20:.2f});')
-            lines.append(rf'\node[inner sep=0pt,font=\scriptsize] at ({(left+right)/2:.5f},{y:.2f}) {{{share:.1f}\%}};')
-            left = right
-        assert abs(left - 100) < 1e-9, (case, left)
-    lines += [r'\end{tikzpicture}',
-              r'\caption{Stock runtime at fixed routing inputs. Each segment is the mean stage time divided by mean \processtime{} across three runs. '
-              + f'The totals are {totals[0]} s (GEMM), {totals[1]} s (BNN) and {totals[2]} s (LSTM). '
-              + r'The remainder includes initialization, checking, STA and serialization.}\label{fig:motivation}',
-              r'\end{figure}']
-    (root/'figures'/'motivation.tex').write_text('\n'.join(lines)+'\n')

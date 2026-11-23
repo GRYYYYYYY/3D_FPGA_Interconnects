@@ -10,7 +10,7 @@ import subprocess
 import zipfile
 from pathlib import Path
 
-from result_figures import build as build_result_figures, motivation_figure
+from result_figures import build as build_result_figures
 
 ROOT = Path(__file__).resolve().parent
 REVIEW = ROOT / 'review'
@@ -172,7 +172,6 @@ for case in cases:
                            mean_routing_s=st.mean(r['routing_s'] for r in sample),
                            mean_remaining_s=st.mean(r['remaining_s'] for r in sample)))
 write_csv('motivation_shares.csv', motivation)
-motivation_figure(ROOT, motivation)
 write_csv('raw_seconds.csv',raw)
 write_csv('seconds.csv',seconds)
 write_csv('paired.csv',ratios)
