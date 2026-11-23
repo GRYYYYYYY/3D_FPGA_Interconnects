@@ -1,10 +1,10 @@
 # Seven-page visual review
 
-Reviewed the seven final PDF page renders at a long-edge resolution of 1100 pixels. The PDF is US Letter with an anonymous byline. Fonts are embedded and the clean rebuild has zero unresolved references and zero overfull boxes.
+Reviewed the seven final PDF page renders at a long-edge resolution of 1100 pixels. The PDF is US Letter. Fonts are embedded and the clean rebuild has zero unresolved references and zero overfull boxes.
 
 | Page | Visual check |
 |---|---|
-| 1 | Title and anonymous byline clear the two columns. The abstract names all three workloads. Figure 1 has three aligned 100% stacked bars. All twelve percentages fit inside their segments. The shared legend names Lookahead Construction and the caption gives the denominator and total for each workload. |
+| 1 | The title sits above the abstract and Figure 1 with no author line. The abstract names all three workloads. Figure 1 has three aligned 100% stacked bars. All twelve percentages fit inside their segments. The shared legend names Lookahead Construction and the caption gives the denominator and total for each workload. |
 | 2 | B03 occupies the top of the right column as Figure 2. The group barrier, idle slot, STRICT overlap and ALT waves align with the time axis. Algorithm 1 fits immediately below. |
 | 3 | Main13 spans both columns as Figure 3. The input and output boxes, the two regime paths and the CPU/GPU selector fit inside the margins. The revised ALT panel shows two candidates, whole-pair reduction and commit. Its caption clarifies the candidate arithmetic and identifies P workers and K live tokens. Algorithm 2 fits below the figure in the right column. |
 | 4 | Table I stays in one column at upper right. Equations (6) and (7) and the setup and timing definitions fit their columns. |

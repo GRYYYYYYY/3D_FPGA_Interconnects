@@ -32,7 +32,8 @@ with tempfile.TemporaryDirectory() as tmp:
     fonts=run(['pdffonts','main.pdf'],clean)
     log=(clean/'main.log').read_text(errors='replace')
     assert not re.search(r'Overfull \\[hv]box|LaTeX Warning: (Reference|Citation).*undefined',log)
-    assert not re.search(r'^Author:[ \t]*\S',info,re.M) and 'Anonymous Authors' in text
+    assert not re.search(r'^Author:[ \t]*\S',info,re.M)
+    assert not re.search(r'\bAnonymous\s+Authors?\b',text,re.I)
     assert not any(s in text for s in ['??','/inspire/','guoruiyuan','GRYYYYYYY'])
     assert all(l.split()[-5]=='yes' for l in fonts.splitlines()[2:]) and 'Type 3' not in fonts
     receipt=dict(compiler=run(['pdflatex','--version'],clean).splitlines()[0],complete_anonymous_source=True,

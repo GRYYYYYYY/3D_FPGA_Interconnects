@@ -1,6 +1,6 @@
 # DAC 2027 V3 · author final review
 
-The seven-page anonymous manuscript integrates three measured workloads. Section II-C compares FPGA routing lookahead construction, including the clustered-source estimator of Sharma and Hauck and the map-building pseudocode in AIR (Algorithm 3). The archived arm identifier for the CUDA implementation on the H100 is alt_cuda. The body ends on page six and the references occupy page seven. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
+The seven-page manuscript omits the author byline and integrates three measured workloads. Section II-C compares FPGA routing lookahead construction, including the clustered-source estimator of Sharma and Hauck and the map-building pseudocode in AIR (Algorithm 3). The archived arm identifier for the CUDA implementation on the H100 is alt_cuda. The body ends on page six and the references occupy page seven. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
 
 | Workload | Frozen allocation | Formal runs | Stock/ALT GPU Lookahead Construction Speedup | Stock/ALT GPU End-to-End Process Speedup |
 |---|---|---:|---:|---:|
