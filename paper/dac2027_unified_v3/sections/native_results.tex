@@ -1,4 +1,6 @@
 \section{Results and System Interpretation}
+\input{figures/native_times}
+\input{figures/paired_speedups}
 \subsection{STRICT Cross-Sample Parallelism}
 Group exposes four floods at a time from ten groups of four on eight cores. Flat and Pipeline can issue across groups. Group\,$\to$\,Pipeline \constructionspeedup{} is $1.749\times$, $1.727\times$ and $1.784\times$ on GEMM, BNN and LSTM (Fig.~\ref{fig:paired_speedups}). Flat retains all 40 results. Pipeline admits at most 16 tokens and waits for the next result in native order. Flat\,$\to$\,Pipeline \constructionspeedup{} ranges from 0.986 to 1.059. LSTM \constructiontime{} is 20.54 s for Flat and 20.85 s for Pipeline.
 \subsection{ALT Intra-Search Wave Scheduling}
@@ -10,8 +12,6 @@ CPU & 7.304 & 7.066\\
 GPU & 2.830 & 0.314\\\bottomrule\end{tabular}\end{table}
 On the same 40 BNN samples, a coarser key reduces waves from 19,691 to 2,161. Eligible proposals increase by 4,493,257 (0.35\%) and the edge-weighted frontier grows $6.65\times$, exposing more edges between synchronization points. Both shifts retain FP32 labels and agree on complete outputs. The coarser key reduces service time more on the GPU than on the CPU (Table~\ref{tab:waves}). \batchservice{} includes reset, search, closure and output materialization with device synchronization and readback. It excludes loading, preparation and verification. \constructiontime{} includes conversion, handoff and outer map processing.
 \subsection{\constructiontime{} and \processtime{}}
-\input{figures/native_times}
-\input{figures/paired_speedups}
 Fig.~\ref{fig:native_times} covers 36 full processes and 18 construction controls. In GEMM, BNN and LSTM order, Stock\,$\to$\,Pipeline \constructionspeedup{} is $6.277\times$, $6.453\times$ and $6.580\times$. Stock\,$\to$\,ALT GPU reaches $20.033\times$, $19.966\times$ and $28.057\times$. Its \processspeedup{} is $1.795\times$, $1.879\times$ and $2.282\times$, including downstream routing effects.
 
 For each Pipeline repeat let $P=L+R$, with \processtime{} $P$, \constructiontime{} $L$ and remainder $R$. Eliminating construction gives $P/R$, averaging 1.14, 1.15 and 1.22. Substituting matched ALT GPU time gives $P/(R+L_{\mathrm{GPU}})$, averaging 1.09, 1.10 and 1.16. Observed Pipeline\,$\to$\,ALT GPU \processspeedup{} is 1.092, 1.094 and 1.153. The model holds $R$ fixed while actual routes and residual times can vary.
@@ -20,10 +20,10 @@ With the ALT rule fixed, ALT GPU achieves \constructionspeedup{} of $3.308\times
 \subsection{Three-Workload Evaluation}
 Each two-layer graph has 40 samples (Table~\ref{tab:rr}). No edge has disjoint endpoint layer intervals. Spanning resources such as CHANZ provide vertical connectivity. GEMM has over twice as many nodes as LSTM, yet their Stock \constructiontime{} is similar (140.18 and 137.16 s). The construction share of mean Stock \processtime{} rises from 47\% and 50\% on GEMM and BNN to 59\% on LSTM (Fig.~\ref{fig:motivation}), helping explain LSTM's larger \processspeedup{}.
 \subsection{Semantics, QoR and Applicability}\label{sec:applicability}
-Stock and STRICT wire-map digests agree on every workload. ALT CPU and ALT GPU agree on all 40 captured sample outputs and the final map for each workload. Relative to STRICT, ALT changes 50,789 congestion words on GEMM, 24,434 on BNN and 23,111 on LSTM. Delay words and missing-state masks agree. The observed congestion differences matter because ordered native consumption alone cannot restore a representative already changed inside a search.
+Stock and STRICT wire-map digests agree on every workload. ALT CPU and ALT GPU agree on all 40 captured sample outputs and the final map for each workload. Relative to STRICT, ALT changes 50,789 congestion words on GEMM, 24,434 on BNN and 23,111 on LSTM. Delay words and missing-state masks agree. Ordered consumption cannot restore a congestion representative changed inside a search.
 \input{tables/unified_qor}
 All 18 formal routes per workload passed independent FULL/STA with zero overuse. CPD was 13.2667, 11.0943 and 11.7483 ns on GEMM, BNN and LSTM. The largest signed candidate WL changes were $-0.004\%$, $+0.091\%$ and $+0.040\%$ (Table~\ref{tab:qor}).
 
 Including qualification, deduplication by workload and original route digest yields 22 GEMM, 22 BNN and 21 LSTM routes. All passed independent FULL/STA with zero overuse. All 22, 22 and 18 with Stock references met both thresholds. The three unscored LSTM routes came from the qualification where Stock emitted its expected map, then faulted on an invalid predecessor during route-tree construction. The cause remains unresolved. All three formal Stock repeats and a separate original-binary diagnostic succeeded. The diagnostic is outside these counts.
 
-A compatible cached table can avoid fresh construction. The alternative \texttt{compressed\_map} implementation~\cite{vproptions} has a one-layer input restriction in the evaluated baseline. The separable lookahead was unmeasured. Fixed seeds, two-layer graphs and dense GPU state bound the scope of the measurements. Additional seeds, deeper stacks and other routing architectures require separate evaluation.
+A compatible cache avoids reconstruction. The \texttt{compressed\_map} implementation~\cite{vproptions} has a one-layer input restriction in the evaluated baseline. We did not measure separable lookahead. Fixed seeds, two-layer graphs and dense GPU state limit generalization to other seeds, stacks and architectures.
