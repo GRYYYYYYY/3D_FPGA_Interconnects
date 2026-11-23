@@ -81,8 +81,14 @@ for alloc, rev, workloads in [('B', B, cases[:2]), ('C', C, cases[2:])]:
             route_seconds, = re.findall(rb'^#+ Routing took ([.\d]+) seconds', log, re.M)
             route_s = float(route_seconds)
             assert route_s == rec['stage_times']['routing']
+            load_seconds, = re.findall(rb'^#+ Loading routing resource graph took ([.\d]+) seconds', log, re.M)
+            load_s = float(load_seconds)
+            assert load_s == rec['stage_times']['rr_graph_load']
+            remaining_s = rec['wall_ns']/1e9 - load_s - ns/1e9 - route_s
+            assert remaining_s > 0
             stock_stages.append(dict(allocation=alloc, case=c, repeat=r, construction_s=ns/1e9,
-                                    routing_s=route_s, process_s=rec['wall_ns']/1e9))
+                                    routing_s=route_s, process_s=rec['wall_ns']/1e9,
+                                    rr_xml_s=load_s, remaining_s=remaining_s))
         assert (c,a,r) not in timing
         timing[c,a,r] = {'E2':ns,'Process':rec['wall_ns'] if full else None}
         intervals.append((rec['begin_ns'],rec['end_ns']))
@@ -161,7 +167,10 @@ for case in cases:
     motivation.append(dict(case=case, median_construction_s=median_c, median_routing_s=median_r,
                            mean_construction_s=mean_c, mean_process_s=mean_p,
                            subtotal_pct=100*median_c/(median_c+median_r),
-                           process_pct=100*mean_c/mean_p))
+                           process_pct=100*mean_c/mean_p,
+                           mean_rr_xml_s=st.mean(r['rr_xml_s'] for r in sample),
+                           mean_routing_s=st.mean(r['routing_s'] for r in sample),
+                           mean_remaining_s=st.mean(r['remaining_s'] for r in sample)))
 write_csv('motivation_shares.csv', motivation)
 motivation_figure(ROOT, motivation)
 write_csv('raw_seconds.csv',raw)

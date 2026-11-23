@@ -78,26 +78,35 @@ def build(root: Path, seconds, paired):
 
 
 def motivation_figure(root, shares):
+    stages = [
+        ('mean_rr_xml_s', 'gray!35', 'RR XML loading'),
+        ('mean_construction_s', 'blue!40', 'Lookahead Construction'),
+        ('mean_routing_s', 'orange!50', 'Routing'),
+        ('mean_remaining_s', 'gray!12', 'Remaining process'),
+    ]
     lines = [r'\begin{figure}[t]\centering',
-             r'\begin{tikzpicture}[x=.056cm,y=.46cm,font=\footnotesize]',
-             r'\definecolor{subtotal}{HTML}{28577B}\definecolor{complete}{HTML}{86BAB0}',
-             r'\node[font=\footnotesize\bfseries] at (42,7.48) {Share of time spent in Lookahead Construction (\%)};',
-             r'\draw[fill=subtotal] (-16,6.3) rectangle (-12,6.55);',
-             r'\node[anchor=west] at (-11,6.42) {Construction + routing};',
-             r'\draw[fill=complete] (47,6.3) rectangle (51,6.55);',
-             r'\node[anchor=west] at (52,6.42) {End-to-end process};',
-             r'\foreach \x in {0,50,100}{\draw[black!20] (\x,.25)--(\x,5.9);',
-             r'\node[below,font=\scriptsize] at (\x,.25) {\x\%};}']
+             r'\begin{tikzpicture}[x=.073cm,y=1cm,font=\footnotesize]']
+    for (key, color, label), (x, y) in zip(stages, [(0, 2.15), (45, 2.15), (0, 1.80), (45, 1.80)]):
+        lines.append(rf'\draw[fill={color},thin] ({x},{y-.08:.2f}) rectangle ({x+3},{y+.08:.2f});')
+        lines.append(rf'\node[anchor=west] at ({x+4},{y}) {{{label}}};')
+    totals = []
     for i, row in enumerate(shares):
-        y = 5.4 - 2*i
-        lines.append(rf"\node[anchor=east] at (0,{y-.32:.2f}) {{{row['case'].upper()}}};")
-        for offset, metric, color, ink in [(0, 'subtotal_pct', 'subtotal', 'white'),
-                                           (-.65, 'process_pct', 'complete', 'black')]:
-            value = row[metric]
-            center = y + offset
-            lines.append(rf'\draw[fill={color},thin] (0,{center-.29:.2f}) rectangle ({value:.6f},{center+.29:.2f});')
-            lines.append(rf'\node[anchor=east,text={ink},font=\scriptsize] at ({value:.6f},{center:.2f}) {{{value:.2f}\%}};')
+        case = row['case'].upper()
+        total = row['mean_process_s']
+        totals.append(f'{total:.2f}')
+        y = 1.35 - .56*i
+        lines.append(rf'\node[anchor=east] at (0,{y:.2f}) {{{case}}};')
+        left = 0
+        for key, color, _ in stages:
+            share = 100 * row[key] / total
+            right = left + share
+            lines.append(rf'\draw[fill={color},thin] ({left:.5f},{y-.20:.2f}) rectangle ({right:.5f},{y+.20:.2f});')
+            lines.append(rf'\node[inner sep=0pt,font=\scriptsize] at ({(left+right)/2:.5f},{y:.2f}) {{{share:.1f}\%}};')
+            left = right
+        assert abs(left - 100) < 1e-9, (case, left)
     lines += [r'\end{tikzpicture}',
-              r'\caption{Construction share in three formal Stock runs per workload. Upper bars divide median \constructiontime{} by the sum of median construction and median routing times. Lower bars divide mean \constructiontime{} by mean \processtime{}.}\label{fig:motivation}',
+              r'\caption{Stock runtime at fixed routing inputs. Each segment is the mean stage time divided by mean \processtime{} across three runs. '
+              + f'The totals are {totals[0]} s (GEMM), {totals[1]} s (BNN) and {totals[2]} s (LSTM). '
+              + r'The remainder includes initialization, checking, STA and serialization.}\label{fig:motivation}',
               r'\end{figure}']
     (root/'figures'/'motivation.tex').write_text('\n'.join(lines)+'\n')

@@ -15,7 +15,7 @@ All 54 formal routes passed independent FULL/STA, zero-overuse checks and Stock-
 - [Manuscript](main.pdf) and [anonymous source](anonymous_source.zip)
 - [Figure 2, execution schedules](figures/timeline.pdf) and [Figure 3, construction framework](figures/framework.pdf)
 - [Figure 4, native times](figures/native_times.pdf) and [Figure 5, paired speedups](figures/paired_speedups.pdf)
-- [Figure 1 Stock observations](review/stock_stages.csv) and [construction shares](review/motivation_shares.csv)
+- [Figure 1 Stock observations](review/stock_stages.csv) and [stage means and construction shares](review/motivation_shares.csv)
 - [Raw seconds](review/raw_seconds.csv), [time statistics](review/seconds.csv) and [paired ratios](review/paired.csv)
 - [Distinct route counts](review/route_counts.csv) and [invocation-level QoR](review/routes.csv)
 - [Claim–evidence ledger](review/CLAIM_EVIDENCE.md), [Timing terminology audit](review/E1_AUDIT.md) and [LSTM fault investigation](review/ALLOCATION_B_AND_LSTM_STOCK.md)
