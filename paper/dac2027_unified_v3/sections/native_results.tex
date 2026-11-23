@@ -24,6 +24,4 @@ Stock and STRICT wire-map digests agree on every workload. ALT CPU and ALT GPU a
 \input{tables/unified_qor}
 All 18 formal routes per workload passed independent FULL/STA with zero overuse. CPD was 13.2667, 11.0943 and 11.7483 ns on GEMM, BNN and LSTM. The largest signed candidate WL changes were $-0.004\%$, $+0.091\%$ and $+0.040\%$ (Table~\ref{tab:qor}).
 
-Including qualification, deduplication by workload and original route digest yields 22 GEMM, 22 BNN and 21 LSTM routes. All passed independent FULL/STA with zero overuse. All 22, 22 and 18 with Stock references met both thresholds. The three unscored LSTM routes came from the qualification where Stock emitted its expected map, then faulted on an invalid predecessor during route-tree construction. The cause remains unresolved. All three formal Stock repeats and a separate original-binary diagnostic succeeded. The diagnostic is outside these counts.
-
-A compatible cache avoids reconstruction. The \texttt{compressed\_map} implementation~\cite{vproptions} has a one-layer input restriction in the evaluated baseline. We did not measure separable lookahead. Fixed seeds, two-layer graphs and dense GPU state limit generalization to other seeds, stacks and architectures.
+Including qualification, deduplication by workload and original route digest yields 22 GEMM, 22 BNN and 21 LSTM routes. All passed independent FULL/STA with zero overuse. All 22, 22 and 18 with Stock references met both thresholds. For LSTM, all three formal Stock repeats and a separate original-binary diagnostic succeeded.

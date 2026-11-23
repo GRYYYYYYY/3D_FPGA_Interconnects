@@ -198,7 +198,19 @@ def table(filename, caption, label, headers, body):
     (ROOT/'tables'/filename).write_text('\n'.join(lines)+'\n')
 
 build_result_figures(ROOT, seconds, ratios)
-table('unified_qor.tex','Largest signed change (\\%) against repeat-matched Stock among three formal routes per candidate. The common upper bound for each metric is $+5\\%$.','qor',['CPD','WL'],
-      [(n,[f"{max(r[field] for r in routes if r['workload']==c and r['phase']=='formal' and r['arm']==a):+.3f}"
-           for c in cases for field in ['delta_cpd_pct','delta_wl_pct']]) for a,n in names.items() if a!='stock'])
+qor_rows = []
+for arm, label in names.items():
+    if arm == 'stock':
+        continue
+    cells = []
+    for case in cases:
+        formal = [r for r in routes if r['workload'] == case and r['phase'] == 'formal' and r['arm'] == arm]
+        for field in ('delta_cpd_pct', 'delta_wl_pct'):
+            value = max(r[field] for r in formal)
+            cell = f'{value:+.3f}'
+            if field == 'delta_cpd_pct' and value == 0:
+                cell = r'\textbf{' + cell + '}'
+            cells.append(cell)
+    qor_rows.append((label, cells))
+table('unified_qor.tex','Largest signed change (\\%) against repeat-matched Stock among three formal routes per candidate. The common upper bound for each metric is $+5\\%$.','qor',['CPD','WL'],qor_rows)
 print(summary, 'separate original-binary diagnostic', diagnostic_sha)
