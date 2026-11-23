@@ -13,7 +13,7 @@ Each workload has four full-process arms and two construction-only controls, eac
 All 54 formal routes passed independent FULL/STA, zero-overuse checks and Stock-relative CPD/WL thresholds. Including the qualification invocations gives 65 unique emitted routes and 62 scored passes. A separate original-binary diagnostic also passed. The earlier LSTM Stock fault remains in the qualification record. FPGA migration was observed passively in PAUSED_BY_USER_BUDGET_DECISION_REQUIRED state during integration.
 
 - [Manuscript](main.pdf) and [anonymous source](anonymous_source.zip)
-- [Figure 2, execution schedules](figures/Fig2_unified_schedule.pdf) and [Figure 3, construction framework](<figures/Figure_3_editable (1).pdf>)
+- [Figure 2, execution schedules](figures/Fig2_unified_schedule.pdf) and [Figure 3, construction framework](<figures/publication/Figure_3_editable.pdf>)
 - [Figure 4, STRICT semantics](<figures/Fig_STRICT_semantics_compact (1).pdf>) and [Figure 5, ALT semantics](<figures/Fig_ALT_semantics_compact (1).pdf>)
 - [Figure 6, native times](figures/native_times.pdf) and [Figure 7, paired speedups](figures/paired_speedups.pdf)
 - [Figure 1, architecture, CAD flow and measured runtime](figures/lookahead_overview.pdf)
@@ -23,4 +23,4 @@ All 54 formal routes passed independent FULL/STA, zero-overuse checks and Stock-
 - [Claim–evidence ledger](review/CLAIM_EVIDENCE.md), [Timing terminology audit](review/E1_AUDIT.md) and [LSTM fault investigation](review/ALLOCATION_B_AND_LSTM_STOCK.md)
 - [Page-by-page visual review](review/VISUAL_REVIEW.md), [clean-directory rebuild](review/rebuild.json), [freeze manifest](paper_freeze.json) and [checksums](SHA256SUMS)
 
-Figures 2 through 5 use the supplied vector PDFs directly. Figure 1 uses a single-column vector publication copy with embedded fonts. Figure 3 identifies P CPU workers and K live tokens, and shows both ALT candidates using the shared destination cost (2.0, 1.0).
+Figures 2, 4 and 5 use the supplied vector PDFs directly. Figure 3 is a font-embedded vector export of figures/Figure_3_editable.pdf with the author metadata removed. Figure 1 uses a single-column vector publication copy with embedded fonts. Figure 3 identifies P CPU workers and K live tokens, and shows both ALT candidates using the shared destination cost (2.0, 1.0).
