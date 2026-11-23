@@ -27,12 +27,11 @@ $\operatorname{Pipeline}_K(\textsc{Issue},\textsc{Search},\textsc{Merge})$\;
 
 Pipeline releases a token after ordered consumption (Fig.~\ref{fig:strict_semantics}). Flat retains all $J$ results until reduction. Group joins after each group.
 
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
-\begin{minipage}[c]{.78\textwidth}\includegraphics[width=\linewidth]{figures/Fig_STRICT_semantics_compact.pdf}\end{minipage}\hfill
-\begin{minipage}[c]{.20\textwidth}
-\caption{STRICT preserves source-relative cells, keeps the earliest input pair on equal delay, and applies native writes and interpolation in their prescribed order. A live token retains its result until ordered consumption.}\label{fig:strict_semantics}\end{minipage}
-\end{figure*}
+\includegraphics[width=\columnwidth]{figures/Fig_STRICT_semantics_compact (1).pdf}
+\caption{STRICT records separate cells for two source contexts. Within one cell, consuming $S_0$ first retains $(5,9)$ on an equal-delay tie with $S_1$. Ordered consumption releases the sample token, while group tables survive through the join for native writes and fills.}\label{fig:strict_semantics}
+\end{figure}
 
 \begin{proposition}\label{prop:strict}
 Assume native sample selection, contexts, visitation, arithmetic, occupancy, commit and interpolation. For finite occupied delays, private floods and original-order strict-delay reduction reproduce the native wire table.
@@ -61,6 +60,13 @@ ALT\_BUCKET\_FP32\_V1 makes the inner ordering rule explicit. A node label $L[v]
 Both coordinates come from one predecessor label plus the destination cost. Native insertion compares delay alone. ALT initializes the source to $(0,0)$, other labels to an infinity sentinel and output cells to missing.
 
 The scheduling key $B(d)=\mathrm{bits}_{32}(d)\gg h$ uses exact delay bits at shift $h=0$. Shift 20, used for native ALT timing, groups delays without quantizing stored labels. Costs and candidates must be positive normal FP32 or positive zero. Admission checks inter-cluster non-SINK node costs, and expansion checks each accumulated pair. Infinity marks unreached nodes internally. ALT CPU uses round-to-nearest with contraction and fast math disabled. ALT GPU uses explicit round-to-nearest CUDA addition.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/Fig_ALT_semantics_compact (1).pdf}
+\caption{ALT with shift 20. Two proposals reach $v$ with delay 4.25. Whole-pair comparison selects $(4.25,1.5)$ from the wave snapshot. The next wave reaches IPIN $t$ with $(4.375,1.75)$ in the same bucket. The sample records that pair when the bucket closes.}\label{fig:alt_semantics}
+\end{figure*}
+Figure~\ref{fig:alt_semantics} follows one equal-delay tie through commit and same-bucket propagation to a target cell.
 
 In Algorithm~\ref{alg:c2}, $T_a$ is the set of mapped targets. $\operatorname{Pop}$ removes bucket $b$ from directory $\mathcal D$. Only nodes with current key $\pi[u]=b$ are active. $\operatorname{Publish}$ schedules new keys and suppresses duplicates. ALT CPU filters stale entries. ALT GPU overwrites the pending key.
 

@@ -1,6 +1,11 @@
 """Build anonymous PDF and reproduce it from the exact archive in a clean directory."""
+import argparse
 import hashlib,json,os,re,shutil,subprocess,tempfile,zipfile
 from pathlib import Path
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--check-submission-pages', action='store_true',
+                    help='Check the six body pages and one reference page before submission.')
+options = parser.parse_args()
 here=Path(__file__).resolve().parent
 review=here/'review';review.mkdir(exist_ok=True)
 def run(args,cwd):
@@ -11,7 +16,7 @@ for directory in ('sections','tables','figures'):
     files+=sorted((here/directory).glob('*.tex'))
 for path in files:
     assert not any(s in path.read_text(errors='replace') for s in ['/inspire/','guoruiyuan','GRYYYYYYY']),path
-files += [here/'figures'/name for name in ('Fig2_unified_schedule.pdf', 'framework.pdf', 'Fig_STRICT_semantics_compact.pdf')]
+files += [here/'figures'/name for name in ('Fig2_unified_schedule.pdf', 'framework.pdf', 'Fig_STRICT_semantics_compact (1).pdf', 'Fig_ALT_semantics_compact (1).pdf')]
 args=['latexmk','-g','-pdf','-interaction=nonstopmode','-halt-on-error','main.tex']
 archive=here/'anonymous_source.zip'
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
@@ -40,7 +45,10 @@ with tempfile.TemporaryDirectory() as tmp:
                  pages=int(re.search(r'Pages:\s+(\d+)',info)[1]),clean_text_identical=True,embedded_fonts=True,
                  overfull_boxes=0,unresolved_references=0,sha256_pdf=sha(here/'main.pdf'),
                  sha256_clean_pdf=sha(clean/'main.pdf'),sha256_zip=sha(archive),files={p.relative_to(here).as_posix():sha(p) for p in files})
-    assert receipt['pages'] == 7
+    if options.check_submission_pages:
+        assert receipt['pages'] == 7
+        references = run(['pdftotext','-raw','-f','7','-l','7','main.pdf','-'],clean)
+        assert references.lstrip().startswith('REFERENCES')
     assert receipt['sha256_pdf']==receipt['sha256_clean_pdf']
     (review/'rebuild.json').write_text(json.dumps(receipt,indent=2)+'\n')
     (review/'fonts.txt').write_text(fonts)

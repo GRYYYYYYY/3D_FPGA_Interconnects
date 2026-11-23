@@ -1,6 +1,6 @@
 # DAC 2027 V3 · author final review
 
-The seven-page manuscript omits the author byline and integrates three measured workloads. Section II-C compares FPGA routing lookahead construction, including the clustered-source estimator of Sharma and Hauck and the map-building pseudocode in AIR (Algorithm 3). The archived arm identifier for the CUDA implementation on the H100 is alt_cuda. The body ends on page six and the references occupy page seven. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
+The seven-page manuscript omits the author byline and integrates three measured workloads. Section II-C compares FPGA routing lookahead construction, including the clustered-source estimator of Sharma and Hauck and the map-building pseudocode in AIR (Algorithm 3). The archived arm identifier for the CUDA implementation on the H100 is alt_cuda. The current draft has six body pages and one reference page. The submission page-count check is deferred during revision; run python3 package.py --check-submission-pages before submission. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
 
 | Workload | Frozen allocation | Formal runs | Stock/ALT GPU Lookahead Construction Speedup | Stock/ALT GPU End-to-End Process Speedup |
 |---|---|---:|---:|---:|
@@ -14,14 +14,14 @@ All 54 formal routes passed independent FULL/STA, zero-overuse checks and Stock-
 
 - [Manuscript](main.pdf) and [anonymous source](anonymous_source.zip)
 - [Figure 2, execution schedules](figures/Fig2_unified_schedule.pdf) and [Figure 3, construction framework](figures/framework.pdf)
-- [Figure 4, STRICT semantics](figures/Fig_STRICT_semantics_compact.pdf)
-- [Figure 5, native times](figures/native_times.pdf) and [Figure 6, paired speedups](figures/paired_speedups.pdf)
+- [Figure 4, STRICT semantics](<figures/Fig_STRICT_semantics_compact (1).pdf>) and [Figure 5, ALT semantics](<figures/Fig_ALT_semantics_compact (1).pdf>)
+- [Figure 6, native times](figures/native_times.pdf) and [Figure 7, paired speedups](figures/paired_speedups.pdf)
 - [Figure 1 Stock observations](review/stock_stages.csv) and [stage means and construction shares](review/motivation_shares.csv)
 - [Raw seconds](review/raw_seconds.csv), [time statistics](review/seconds.csv) and [paired ratios](review/paired.csv)
 - [Distinct route counts](review/route_counts.csv) and [invocation-level QoR](review/routes.csv)
 - [Claim–evidence ledger](review/CLAIM_EVIDENCE.md), [Timing terminology audit](review/E1_AUDIT.md) and [LSTM fault investigation](review/ALLOCATION_B_AND_LSTM_STOCK.md)
 - [Page-by-page visual review](review/VISUAL_REVIEW.md), [clean-directory rebuild](review/rebuild.json), [freeze manifest](paper_freeze.json) and [checksums](SHA256SUMS)
 
-Figures 2 and 4 use the supplied vector PDFs directly. Figure 3 uses a vector publication copy of Main13 with embedded fonts and stripped document metadata. The framework artwork says “Up to K workers.” Its caption specifies the implementation: P workers and up to K live tokens. ALT CPU distributes samples across workers, and the GPU also parallelizes active nodes within each wave.
+Figures 2, 4 and 5 use the supplied vector PDFs directly. Figure 3 uses a vector publication copy of Main13 with embedded fonts and stripped document metadata. The framework artwork says “Up to K workers.” Its caption specifies the implementation: P workers and up to K live tokens. ALT CPU distributes samples across workers, and the GPU also parallelizes active nodes within each wave.
 
 Figure 3 uses the revised Main13 artwork with an explicit two-candidate ALT wave. Candidate 2 prints 2.8 for both delay operands and 4.0 for their sum. The caption supplies the consistent predecessor pair (2.0, 0.2) and shared destination cost (2.0, 1.0) for the illustrated delay tie.

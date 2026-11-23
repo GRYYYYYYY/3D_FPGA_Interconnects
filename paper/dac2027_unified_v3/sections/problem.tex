@@ -1,11 +1,4 @@
 \section{Problem and Parallelism Boundary}
-\begin{figure*}[t]
-\centering
-\begin{minipage}[c]{.70\textwidth}\includegraphics[width=\linewidth]{figures/Fig2_unified_schedule.pdf}\end{minipage}\hfill
-\begin{minipage}[c]{.28\textwidth}
-\caption{Illustrative schedules for three samples. With Group, a worker waits for $A_1$ before starting $B_1$. With STRICT, $A_2$ and $B_1$ finish before $A_1$; their results wait for native-order consumption. ALT GPU advances sample-local waves in batch rounds, then synchronizes and returns results in input order.}\label{fig:contracts}
-\end{minipage}
-\end{figure*}
 \subsection{Layer-Aware Construction}
 Let $G=(V,E)$ be the directed routing-resource graph (RRG), with $N=|V|$ nodes and $M=|E|$ edges. Nodes carry resource type, layer, geometry and an indexed delay/congestion cost $w(v)=(d_v,q_v)$. The graph contains planar and cross-layer channels as well as logic, memory and DSP connectivity~\cite{third_dimension,multidie}. PathFinder-style negotiation resolves contention~\cite{pathfinder}; VPR consumes lookahead costs during routing~\cite{vtr8,vtr9}. We accelerate construction of the sampled wire table~\cite{diversity}, not negotiated routing itself.
 
@@ -19,6 +12,11 @@ Each $R_a[u]$ is missing or holds one path's delay and congestion $(d,q)$. Nativ
 $\mathcal C$ and $\mathcal I$ denote native group writes and interpolation in their prescribed interleaving and missing-cell scan order. The table is indexed by $(\ell_s,\ell_t,\tau,\sigma,\Delta x,\Delta y)$. Source/OPIN preprocessing and derived minima remain in the outer computation.
 
 \subsection{Necessary Dependencies and Removable Barriers}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/Fig2_unified_schedule.pdf}
+\caption{Illustrative schedules for three samples. With Group, a worker waits for $A_1$ before starting $B_1$. With STRICT, $A_2$ and $B_1$ finish before $A_1$; their results wait for native-order consumption. ALT GPU advances sample-local waves in batch rounds, then synchronizes and returns results in input order.}\label{fig:contracts}
+\end{figure}
 Two starts can reach the same IPIN yet populate different displacement cells. A multi-source search retaining only the cheaper path loses one contribution. Within a cell, equal delays preserve the earlier sample's entire pair. Independent field minima can produce a pair no path realizes.
 
 Each sample reads shared costs and private labels. It can start before the preceding group joins (Fig.~\ref{fig:contracts}). Changing priority extraction inside a sample can alter its representative and requires a separate search rule.
