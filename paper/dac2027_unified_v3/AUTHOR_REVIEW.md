@@ -1,26 +1,24 @@
-# DAC 2027 V3 · author final review
+# DAC 2027 Main3 author review
 
-The seven-page manuscript omits the author byline and integrates three measured workloads. Section II-C compares FPGA routing lookahead construction, including the clustered-source estimator of Sharma and Hauck and the map-building pseudocode in AIR (Algorithm 3). The archived arm identifier for the CUDA implementation on the H100 is alt_cuda. The current draft has six body pages and one reference page. The submission page-count check is deferred during revision; run python3 package.py --check-submission-pages before submission. V2 is available at b0587c7e310073d04b1ba1e85e26a40ae0212389. Author approval and submission are pending.
+The revision is based on paper/dac2027-v3-fig3-editable-export at 426cdca323ae41594613aceac1c3ca21755dfec6. Its main.pdf has SHA256 b678a652503931410c28c0c3652f69e89a2cb278784eaf49dd28683784183805. That worktree is the rollback copy. The new worktree and branch are independent. The frozen V2 submission remains available. Author review is pending.
 
-| Workload | Frozen allocation | Formal runs | Stock/ALT GPU Lookahead Construction Speedup | Stock/ALT GPU End-to-End Process Speedup |
-|---|---|---:|---:|---:|
-| GEMM | B | 18 | 20.033 ± 0.237 | 1.795 ± 0.012 |
-| BNN | B | 18 | 19.966 ± 0.375 | 1.879 ± 0.022 |
-| LSTM | C | 18 | 28.057 ± 0.896 | 2.282 ± 0.050 |
+## Revision notes
 
-Each workload has four full-process arms and two construction-only controls, each with three fresh processes. The two workers share the CPU/GPU model and resource configuration. The End-to-End Process Time includes routing and all launch-to-exit overhead. A speedup is the mean of three within-workload paired ratios. Each SD describes variation at one fixed input and seed. The paper covers two-layer graphs.
+| Original question | Change in the manuscript | Supporting evidence |
+|---|---|---|
+| What makes the problem layer-aware? | Four introduction paragraphs progress from fabric changes to recording dependencies, related work and two selectable designs. Fig. 1 shows both layer indices, resource types, displacements, the associated pair, native query and measured process. | Locked source and all nine Stock stage records |
+| Where can scheduling change safely? | Figs. 2–4 and Proposition 1 separate issue order, context identity, native priority ties, ordered consumption and prescribed writes/fills. | Stock serial sample loop, bound worker code, Group/Flat/Pipeline controls and equal wire maps |
+| Where does ALT change the answer? | Fig. 5 and Algorithm 2 trace snapshot proposals, whole-pair selection, same-bucket reopening and closure. Results separate changed congestion representatives from agreement between ALT backends. | CPU/GPU source, capture digests and three map-difference reports |
+| What accounts for the time savings? | Section V reports integrated times first, then cross-group availability, shift granularity and same-rule backend gains. The 0.314 s observation is labeled Warm Complete-Batch Service. | Raw process records from B/C, matched repeats, separate BNN40 profiles and warm batches |
+| Which routes support a QoR statement? | Section V-D distinguishes 54 formal routes, 65 distinct emitted routes and 62 with a matched Stock reference. Table IV uses maximum signed change and the common threshold. | Independent readback/STA records joined by original route digest |
+| How broadly can these mechanisms be applied? | The manuscript specifies the dense admission rule and the limits of two layers, fixed samples and one seed. The ledger records what evidence would be needed for stronger claims. | Timed GPU source, workload manifests and qualification archive |
 
-All 54 formal routes passed independent FULL/STA, zero-overuse checks and Stock-relative CPD/WL thresholds. Including the qualification invocations gives 65 unique emitted routes and 62 scored passes. A separate original-binary diagnostic also passed. The earlier LSTM Stock fault remains in the qualification record. FPGA migration was observed passively in PAUSED_BY_USER_BUDGET_DECISION_REQUIRED state during integration.
+[Complete manuscript](main.pdf) · [Anonymous LaTeX and editable figures](anonymous_source.zip) · [Claim-to-evidence ledger and open questions](review/CLAIM_EVIDENCE.md) · [Page review](review/VISUAL_REVIEW.md) · [Clean build receipt](review/rebuild.json)
 
-- [Manuscript](main.pdf) and [anonymous source](anonymous_source.zip)
-- [Figure 2, execution schedules](figures/Fig2_unified_schedule.pdf) and [Figure 3, construction framework](<figures/publication/Figure_3_editable.pdf>)
-- [Figure 4, STRICT semantics](<figures/Fig_STRICT_semantics_compact (1).pdf>) and [Figure 5, ALT semantics](<figures/Fig_ALT_semantics_compact (1).pdf>)
-- [Figure 6, native times](figures/native_times.pdf) and [Figure 7, paired speedups](figures/paired_speedups.pdf)
-- [Figure 1, architecture, CAD flow and measured runtime](figures/lookahead_overview.pdf)
-- [Figure 1(c) Stock observations](review/stock_stages.csv) and [stage means and construction shares](review/motivation_shares.csv)
-- [Raw seconds](review/raw_seconds.csv), [time statistics](review/seconds.csv) and [paired ratios](review/paired.csv)
-- [Distinct route counts](review/route_counts.csv) and [invocation-level QoR](review/routes.csv)
-- [Claim–evidence ledger](review/CLAIM_EVIDENCE.md), [Timing terminology audit](review/E1_AUDIT.md) and [LSTM fault investigation](review/ALLOCATION_B_AND_LSTM_STOCK.md)
-- [Page-by-page visual review](review/VISUAL_REVIEW.md), [clean-directory rebuild](review/rebuild.json), [freeze manifest](paper_freeze.json) and [checksums](SHA256SUMS)
+## Sources and provenance
 
-Figures 2, 4 and 5 use the supplied vector PDFs directly. Figure 3 is a font-embedded vector export of figures/Figure_3_editable.pdf with the author metadata removed. Figure 1 uses a single-column vector publication copy with embedded fonts. Figure 3 identifies P CPU workers and K live tokens, and shows both ALT candidates using the shared destination cost (2.0, 1.0).
+The revision brief and replacement blocks in the rollback worktree have SHA256 6f00bccd3d36d01c0ef22c136815cfb58f732fefd5e5ff8953e40c983e5918e6 and 2f4e51e08bb0f0b63e87f7abd359ae69a79afe10525d38b1900e9343378e4cc3. The replacement blocks informed the abstract, four-paragraph introduction, method framing, results and conclusion. Router statements use the verified invocation records.
+
+All seven publication figures compile directly from LaTeX/TikZ or PGFPlots. The current sources are [Fig. 1](figures/motivation.tex), [Fig. 2](figures/schedules.tex), [Fig. 3](sections/contracts_figure.tex), [Fig. 4](figures/strict_example.tex), [Fig. 5](figures/alt_example.tex), [Fig. 6](figures/native_times.tex) and [Fig. 7](figures/paired_speedups.tex). Earlier vector exports remain in the repository as historical assets. Fig. 1 uses both columns to keep the index, timing band and stage shares readable.
+
+The formal corpus is Allocation B for GEMM/BNN and C for LSTM. The measured inputs, prior captures and raw records remain in those frozen commits. This revision only replayed the archive checks and built the paper. FPGA pause management was outside the editing workflow.

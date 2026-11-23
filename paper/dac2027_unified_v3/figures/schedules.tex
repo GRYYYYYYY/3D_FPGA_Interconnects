@@ -1,0 +1,17 @@
+\begin{tikzpicture}[x=1mm,y=1mm,font=\footnotesize,
+  bar/.style={draw,fill=blue!9},wait/.style={draw,dashed,fill=gray!8}]
+\foreach \yy/\txt in {0/Stock, -7/Group $p_1$, -13/Group $p_2$, -20/STRICT $p_1$, -26/STRICT $p_2$}
+ \node[anchor=west] at (0,\yy) {\txt};
+\foreach \start/\stop/\yy/\job in {19/49/0/$A_1$,49/59/0/$A_2$,59/71/0/$B_1$,19/49/-7/$A_1$,49/61/-7/$B_1$,19/29/-13/$A_2$,19/49/-20/$A_1$,19/29/-26/$A_2$,29/41/-26/$B_1$}{
+ \draw[bar] (\start,\yy-2.4) rectangle (\stop,\yy+2.4);
+ \node at ({(\start+\stop)/2},\yy) {\job};}
+\draw[wait] (29,-15.4) rectangle (49,-10.6);
+\node at (39,-13) {wait};
+\draw[dotted,thick] (49,-4)--(49,-16);
+\node[anchor=west] at (52,-13) {group join};
+\node[anchor=west] at (0,-34) {ALT GPU};
+% Illustrative sample-local keys in two successive GPU batch rounds.
+\node[draw,fill=orange!10] at (32,-34) {$A_1:b,\ B_1:c$};
+\node[draw,fill=orange!10] at (65,-34) {$A_1:b,\ B_1:c'$};
+\draw[->,>=Stealth] (46,-34)--(51,-34);
+\end{tikzpicture}

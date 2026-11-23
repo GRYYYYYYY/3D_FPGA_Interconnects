@@ -69,6 +69,11 @@ for alloc, rev, workloads in [('B', B, cases[:2]), ('C', C, cases[2:])]:
         iv = receipt(p+'invocation.json')
         assert rec['host'] == iv['host'] == row['host'] == env['host']
         assert rec['gpu'] == row['gpu'] == env['gpu'].split(',')[0]
+        argv = iv['command']
+        for flag, expected in [('--router_algorithm', 'parallel'), ('--num_workers', '8'),
+                               ('--router_lookahead', 'map'), ('--check_route', 'full')]:
+            assert argv.count(flag) == 1 and argv[argv.index(flag) + 1] == expected
+        assert b'router_opts.router_algorithm: PARALLEL' in z.read(p+'process.log')
         assert rec['returncode'] == 0 and rec['local_pass'] and c in workloads
         ns = int(row['E2_ns'])
         assert re.findall(rb'^V3_COMPUTE_NS (\d+)',z.read(p+'process.log'),re.M) == [str(ns).encode()]

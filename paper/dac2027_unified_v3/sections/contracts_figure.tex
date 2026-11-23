@@ -1,5 +1,14 @@
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/publication/Figure_3_editable.pdf}
-\caption{Layer-aware lookahead construction on the two-layer routing graph. STRICT distributes up to $K$ live sample tokens across $P$ workers and consumes results in issue order (Proposition~\ref{prop:strict}). ALT runs the same whole-pair rule on CPU or GPU. In the illustrated delay tie, it retains $(4.0,1.2)$ and continues in the same bucket if work remains. Both regimes return group maps for native writes and interpolation.}\label{fig:framework}
+\begin{tikzpicture}[font=\footnotesize,>=Stealth,box/.style={draw,rounded corners=2pt,align=center,inner sep=5pt},arr/.style={->,thick}]
+\node[box,fill=gray!8,text width=33mm] (jobs) at (0,0) {Ordered native starts\\$g=(\ell_s,\sigma,\tau)$\\$a=(g,j)$, source $s_{g,j}$\\target-cell map $\phi_a$};
+\node[box,fill=blue!8,text width=58mm] (strict) at (5.7,.79) {\textbf{STRICT}\quad $P$ private native floods\\Bound $K$ live results, consume in issue order};
+\node[box,fill=orange!12,text width=58mm] (alt) at (5.7,-.79) {\textbf{ALT}\quad CPU or GPU whole-pair waves\\Commit improvements, reopen, record at closure};
+\node[box,fill=gray!8,text width=39mm] (finish) at (12,0) {Ordered group reduction $A_g[u]$\\$u=(\ell_t,\Delta x,\Delta y)$\\Native writes and fills\\Final wire table $F$};
+\draw[arr] (jobs.east) -- ++(.27,0) |- (strict.west);
+\draw[arr] (jobs.east) -- ++(.27,0) |- (alt.west);
+\draw[arr] (strict.east) -- ++(.45,0) |- (finish.west);
+\draw[arr] (alt.east) -- ++(.45,0) |- (finish.west);
+\end{tikzpicture}
+\caption{Two selectable execution regimes for the same ordered starts. STRICT retains native per-sample selection under Proposition~\ref{prop:strict}. ALT chooses a complete FP32 pair inside each search. Both supply source-relative maps to native finalization.}\label{fig:framework}
 \end{figure*}

@@ -1,5 +1,51 @@
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/lookahead_overview.pdf}
-\caption{(a) Illustrative 3D interconnect choices change the routing-resource graph. (b) The router estimates remaining cost using a precomputed lookahead table. (c) For each two-layer workload, bars divide mean stage time by mean Stock \processtime{} across three fixed-input runs: 300.61 s (GEMM), 122.81 s (BNN) and 231.63 s (LSTM). Packing, placement and RRG generation are outside this interval.}\label{fig:motivation}
-\end{figure}
+\begin{tikzpicture}[x=1mm,y=1mm,font=\footnotesize,
+    hdr/.style={anchor=west,font=\small\bfseries},line/.style={-{Stealth[length=1.5mm]},thick},
+    tile/.style={draw,fill=blue!6,rounded corners=1pt,inner sep=2pt}]
+\node[hdr] at (0,0) {(a) Architecture-defined connectivity};
+\node[tile] (logic) at (13,-8) {Logic};
+\node[tile] (mem) at (47,-8) {Memory};
+\node[tile] (logic0) at (13,-18) {Logic};
+\node[tile] (dsp) at (47,-18) {DSP};
+\draw[line] (logic)--node[above,font=\scriptsize]{planar wire}(mem);
+\draw[line] (logic0)--(dsp);
+\draw[line,teal!70!black] (logic0)--node[left]{via}(logic);
+\node[anchor=east] at (70,-8) {Layer 1};
+\node[anchor=east] at (70,-18) {Layer 0};
+\draw[gray!60] (73,2)--(73,-21);
+\node[hdr] at (76,0) {(b) Precomputed layer-aware lookahead table};
+\node[anchor=west] at (76,-6) {$F[\ell_s,\ell_t,\tau,\sigma,\Delta x,\Delta y]=(d,q)$};
+\node[anchor=west] at (76,-11) {$\ell_s,\ell_t$: source and target layers;\quad $\tau,\sigma$: channel and segment types};
+\node[anchor=west] at (76,-16) {$\Delta x,\Delta y$: source-relative offsets;\quad $(d,q)$: delay and congestion};
+\node[anchor=west] at (76,-21) {Router query: look up the pair, then apply native weighting.};
+\draw[fill=blue!5,draw=blue!45!black,rounded corners=1pt] (0,-26) rectangle (177,-39);
+\node[anchor=west,font=\footnotesize\bfseries] at (2,-29.5) {End-to-End Process Time};
+\node[anchor=west] at (46,-29.5) {launch to exit with precomputed packed netlist, placement and RR graph};
+\node at (88.5,-35.5) {Load RR XML and initialize $\longrightarrow$ Lookahead Construction $\longrightarrow$ Route $\longrightarrow$ Check, STA and serialize};
+\node[hdr] at (0,-45) {(c) Stock process runtime breakdown};
+\definecolor{rrstage}{RGB}{189,212,229}
+\definecolor{lastage}{RGB}{34,99,128}
+\definecolor{rtstage}{RGB}{235,183,94}
+\definecolor{reststage}{RGB}{222,223,226}
+\foreach \xx/\col/\lab in {0/rrstage/RR XML loading,43/lastage/Lookahead construction,103/rtstage/Routing,134/reststage/Remaining process} {
+ \fill[\col] (\xx,-51) rectangle ++(3,3);
+ \node[anchor=west] at (\xx+4,-49.5) {\lab};}
+% Segment widths use unrounded means in review/motivation_shares.csv.
+\foreach \yy/\name/\total/\aa/\bb/\cc/\dd in {
+ -56/GEMM/300.61/14.88862359/46.63264109/8.90966638/29.56906894,
+ -62/BNN/122.81/16.54911668/49.62156812/8.96263462/24.86668059,
+ -68/LSTM/231.63/10.91816259/59.21363469/11.13114375/18.73705898}{
+ \node[anchor=west] at (0,\yy) {\name};
+ \node[anchor=east] at (38,\yy) {\total\,s};
+ \def\offset{39}
+ \foreach \vv/\col/\ink in {\aa/rrstage/black,\bb/lastage/white,\cc/rtstage/black,\dd/reststage/black}{
+  \pgfmathsetmacro{\rightedge}{\offset+1.38*\vv}
+  \fill[\col] (\offset,\yy-2.5) rectangle (\rightedge,\yy+2.5);
+  \node[text=\ink] at ({(\offset+\rightedge)/2},\yy) {\pgfmathprintnumber[fixed,precision=1,fixed zerofill]{\vv}\%};
+  \xdef\offset{\rightedge}
+ }}
+\end{tikzpicture}
+\caption{Changing planar or inter-layer connectivity or indexed costs can require a new lookahead. The measured graphs each have two layers. Packing, placement and RR-graph generation precede the timed process. Each bar divides the mean stage time by mean Stock \processtime{} across three runs. Remaining time includes work outside the three named stages. Displayed percentages are rounded.}
+\label{fig:motivation}
+\end{figure*}

@@ -1,6 +1,6 @@
 \section{Experimental Methodology}
 \subsection{Workloads and Unified Experimental Setup}
-GEMM (seed 1, width 100), BNN (seed 1, width 120) and LSTM (seed 2, width 120) use their original architectures, BLIFs, packed netlists, placements, complete RR XML and all 40 samples. Each run used an Intel Xeon Platinum 8462Y+, an NVIDIA H100 80GB, a ten-CPU quota and 200 GiB of memory. Host code used physical cores 0--7 and memory on NUMA node 0. CPU governors used performance mode. GPU clocks were adaptive with a 700 W power limit. The VTR baseline was commit \texttt{0b912334fdd8}.
+GEMM (seed 1, width 100), BNN (seed 1, width 120) and LSTM (seed 2, width 120) use their original architectures, BLIFs, packed netlists, placements, complete RR XML and all 40 samples. Each run used an Intel Xeon Platinum 8462Y+, an NVIDIA H100 80GB, a ten-CPU quota and 200 GiB of memory. Host code used physical cores 0--7 and memory on NUMA node 0. CPU governors used performance mode. GPU clocks were adaptive with a 700 W power limit. At VTR revision \texttt{0b912334fdd8}~\cite{lockedvtr}, every formal command selected map lookahead, the parallel netlist router and eight VPR workers. Native logs confirm the parallel router across arms.
 \begin{table}[t]\centering\caption{Original routing-resource graphs. Local edges lie within one layer. Spanning edges touch resources whose combined extent covers both layers. Each graph has two layers and 40 samples.}\label{tab:rr}
 \begin{tabular}{@{}lrrr@{}}\toprule
 Resource count & GEMM & BNN & LSTM\\\midrule
@@ -12,7 +12,7 @@ CHANZ nodes & 185,856 & 75,264 & 76,614\\
 \bottomrule\end{tabular}
 \end{table}
 \subsection{Timing Metrics and Measurement Protocol}
-\constructiontime{} measures the complete \texttt{MapLookahead::compute} call with a monotonic timer. It includes graph conversion, preparation, service, output handoff, group merge, interpolation, source/OPIN processing and derived minima. \processtime{} runs from native process launch to exit. It includes RR XML loading, initialization, construction, timing-driven routing, checking, STA and serialization. Packing, placement, RR graph generation, input preparation and independent route readback fall outside this interval. The same full invocation supplies both observations in nanoseconds. The original internal timers provide independent scope checks.
+\constructiontime{} measures the complete \texttt{MapLookahead::compute} call with a monotonic timer. It includes any required graph conversion, preparation, service, output handoff, group merge, interpolation, source/OPIN processing and derived minima. \processtime{} runs from native process launch to exit. It includes RR XML loading, initialization, construction, timing-driven routing, checking, STA and serialization. Packing, placement, RR graph generation, input preparation and independent route readback fall outside this interval. The same full invocation supplies both observations in nanoseconds. Internal timers cross-check stage boundaries. \batchservice{} times the prepared BNN40 batch separately (Table~\ref{tab:waves}).
 
 We rotated arm order and ran three fresh processes per arm, one at a time, with fixed affinity and GPU selection. The harness pre-read all inputs before each launch. Each process built a fresh map with capture, profiling and online CPU reference checks disabled. For both speedup metrics we compute $t_{i,r}/t_{j,r}$ within workload, allocation and repeat $r$. We report the mean and sample SD of three times or three paired ratios. Repeats measure process variation at one seed.
 \subsection{Correctness and QoR Qualification}
@@ -27,4 +27,4 @@ M2 Flat & Retain every sample until merge\\
 M3 Pipeline & Bounded ordered STRICT tokens\\
 M4 ALT CPU & Whole-pair waves on CPU\\
 M5 ALT GPU & Whole-pair waves on GPU\\\bottomrule\end{tabular}\end{table}
-Table~\ref{tab:configs} gives the six configurations. C1 compares M1, M2 and M3. C2 compares M4 and M5 under the same rule. M0, M3 and M5 measure integrated implementations. The design reuses M3 construction from its full run in C1.
+Table~\ref{tab:configs} separates the scheduling controls (M1--M3), same-rule backends (M4--M5) and integrated comparison (M0, M3, M5). Group to Flat exposes cross-group jobs. Flat to Pipeline bounds their live results. Shift 0 versus 20 varies ALT wave granularity. There are 36 full-process invocations and 18 construction controls. C1 reuses M3 construction from its full runs. All 54 emit routes.
